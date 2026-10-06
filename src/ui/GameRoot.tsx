@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
+import { localDay } from "../game/dates";
 import { StateFormatError, upgradeGameState, type StateProblem } from "../game/migrate";
 import { useLang } from "../i18n/LangProvider";
 import type { GameStore, LoadedGame } from "../storage/types";
 import { AppRoutes } from "./AppRoutes";
 import { GameProvider } from "./GameProvider";
 import { Header } from "./Header";
+import { downloadText } from "./download";
 import { OnboardingScreen } from "./OnboardingScreen";
 import { Robot } from "./Robot";
 
@@ -26,11 +28,15 @@ export function GameRoot({ store, clock, onReplaced }: { store: GameStore; clock
           // Data saved by an older app is upgraded here; the first event writes it back.
           setLoaded({ ...result, state: upgradeGameState(result.state) });
         } catch (error) {
-          setLoadProblem(error instanceof StateFormatError ? error.problem : "damaged");
+          const problem = error instanceof StateFormatError ? error.problem : "damaged";
+          setLoadProblem(problem);
+          logLoadFailure(store, clock, `${problem}: ${error instanceof Error ? error.message : String(error)}`);
         }
       },
-      () => {
-        if (alive) setLoadProblem("unreadable");
+      (error: unknown) => {
+        if (!alive) return;
+        setLoadProblem("unreadable");
+        logLoadFailure(store, clock, `unreadable: ${error instanceof Error ? error.message : String(error)}`);
       },
     );
     return () => {
@@ -46,6 +52,7 @@ export function GameRoot({ store, clock, onReplaced }: { store: GameStore; clock
           <Robot mood="sad" size={80} />
           <p>{t(loadProblem === "newer-version" ? "app.newerData" : "app.crash")}</p>
           <button onClick={() => window.location.reload()}>{t("app.reload")}</button>
+          {loadProblem !== "newer-version" && <RawExport store={store} clock={clock} />}
         </main>
       </>
     );
@@ -72,5 +79,34 @@ export function GameRoot({ store, clock, onReplaced }: { store: GameStore; clock
     <GameProvider store={store} loaded={loaded} clock={clock} onReplaced={onReplaced}>
       <AppRoutes />
     </GameProvider>
+  );
+}
+
+/** Spec 10: a load failure goes to the error log, which the parent area shows. A failed write is ignored. */
+function logLoadFailure(store: GameStore, clock: () => Date, detail: string): void {
+  store.appendErrorLog({ at: clock().toISOString(), kind: "load-failed", detail }).catch(() => {});
+}
+
+/**
+ * The saved data as it is, damaged state included, so a parent can keep it or send it for support before
+ * anything is lost. It is plain JSON, not a .pypet file: a damaged state cannot be imported.
+ */
+function RawExport({ store, clock }: { store: GameStore; clock: () => Date }) {
+  const { t } = useLang();
+  const [failed, setFailed] = useState(false);
+  async function exportRaw() {
+    setFailed(false);
+    try {
+      const data = { exportedAt: clock().toISOString(), meta: await store.readMeta(), profiles: await store.exportProfiles() };
+      downloadText(`py-pet-data-${localDay(clock())}.json`, JSON.stringify(data, null, 2));
+    } catch {
+      setFailed(true);
+    }
+  }
+  return (
+    <>
+      <button onClick={() => void exportRaw()}>{t("app.exportRaw")}</button>
+      {failed && <p>{t("app.exportRawFailed")}</p>}
+    </>
   );
 }

@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import { fillTemplate } from "../content/exercise";
 import { FILL_BLANK, type FillExercise, type ParsonsExercise } from "../content/types";
 import { isPseudoError, problemFromOutcome } from "../explain/problem";
@@ -60,12 +60,26 @@ export function PuzzleExerciseView({
     if (initialStats?.viewedSolution) onComplete("viewed-solution");
   }, []);
 
+  const linesRef = useRef<HTMLOListElement>(null);
+  /** The line whose button keeps the focus after a move, so the keyboard follows the moved line. */
+  const [focusLine, setFocusLine] = useState<{ index: number; dir: "up" | "down" } | null>(null);
+
+  useEffect(() => {
+    if (!focusLine) return;
+    const row = linesRef.current?.querySelectorAll("li")[focusLine.index];
+    const wanted = row?.querySelector<HTMLButtonElement>(`button[data-dir="${focusLine.dir}"]`);
+    const other = row?.querySelector<HTMLButtonElement>(`button[data-dir="${focusLine.dir === "up" ? "down" : "up"}"]`);
+    (wanted && !wanted.disabled ? wanted : other)?.focus();
+    setFocusLine(null);
+  }, [focusLine]);
+
   function move(index: number, step: -1 | 1) {
     setLines((current) => {
       const next = [...current];
       [next[index], next[index + step]] = [next[index + step] as string, next[index] as string];
       return next;
     });
+    setFocusLine({ index: index + step, dir: step === -1 ? "up" : "down" });
   }
 
   async function handleSubmit() {
@@ -126,16 +140,22 @@ export function PuzzleExerciseView({
         </div>
       )}
       {exercise.type === "parsons" ? (
-        <ol className="parsons-lines" aria-label={t("parsons.lines")}>
+        <ol className="parsons-lines" aria-label={t("parsons.lines")} ref={linesRef}>
           {lines.map((line, i) => (
             <li key={i}>
               <pre className="parsons-line">{line}</pre>
-              <button aria-label={t("parsons.up", { n: i + 1 })} disabled={solved || i === 0} onClick={() => move(i, -1)}>
+              <button
+                data-dir="up"
+                aria-label={t("parsons.up", { n: i + 1 })}
+                disabled={busy || solved || i === 0}
+                onClick={() => move(i, -1)}
+              >
                 ↑
               </button>
               <button
+                data-dir="down"
                 aria-label={t("parsons.down", { n: i + 1 })}
-                disabled={solved || i === lines.length - 1}
+                disabled={busy || solved || i === lines.length - 1}
                 onClick={() => move(i, 1)}
               >
                 ↓
@@ -152,7 +172,7 @@ export function PuzzleExerciseView({
                   <input
                     aria-label={t("fill.blank", { n: i })}
                     value={blanks[i - 1]}
-                    disabled={solved}
+                    disabled={busy || solved}
                     spellCheck={false}
                     size={Math.max(4, (blanks[i - 1] ?? "").length + 1)}
                     onChange={(event) => {

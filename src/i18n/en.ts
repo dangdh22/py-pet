@@ -389,4 +389,6 @@ export const en: Record<MessageKey, string> = {
   "settings.errors": "Error log",
   "settings.noEntries": "No entries.",
   "settings.exportLog": "Export the error log",
+  "app.exportRaw": "Export the data for support",
+  "app.exportRawFailed": "The data could not be exported.",
 };

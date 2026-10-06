@@ -181,6 +181,19 @@ describe("App", () => {
     expect((await store.loadActive())?.state.version).toBe(99);
   });
 
+  test("a damaged profile is logged and its data can be exported as it is", async () => {
+    const store = new MemoryStore({ persistent: true });
+    const damaged = { ...initialGameState(TODAY), wallet: "lots" } as unknown as GameState;
+    await store.createProfile(testProfile(), damaged);
+    render(<App bundle={testBundle()} runnerClient={makeClient().client} store={store} clock={() => FIXED_NOW} />);
+    expect(await screen.findByRole("alert")).toHaveTextContent("Robo bị trục trặc rồi.");
+    await waitFor(async () => expect((await store.readMeta()).errorLog).toMatchObject([{ kind: "load-failed" }]));
+    await userEvent.click(screen.getByRole("button", { name: "Xuất dữ liệu để gửi hỗ trợ" }));
+    const [fileName, text] = vi.mocked(downloadText).mock.calls.at(-1)!;
+    expect(fileName).toBe("py-pet-data-2026-10-06.json");
+    expect(JSON.parse(text).profiles[0].state.wallet).toBe("lots");
+  });
+
   test("shows the other-tab message when the tab does not own the lock", async () => {
     render(<App bundle={testBundle()} runnerClient={makeClient().client} store={new MemoryStore()} ownsTab={false} />);
     expect(screen.getByText("Py-Pet đang mở ở tab khác. Con dùng tab đó nhé.")).toBeInTheDocument();

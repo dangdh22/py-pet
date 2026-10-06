@@ -69,6 +69,29 @@ describe("PuzzleExerciseView: parsons", () => {
   });
 });
 
+describe("PuzzleExerciseView: keyboard and judging", () => {
+  test("the focus follows the moved line", async () => {
+    renderWithApp(<PuzzleExerciseView exercise={reviewParsons} onComplete={() => {}} rng={seededRng(1)} />, {
+      runner: echoRunner(),
+    });
+    screen.getByRole("button", { name: "Đưa dòng 2 lên" }).focus();
+    await userEvent.keyboard("{Enter}");
+    expect(lineTexts()).toEqual(['print("Hi")', 'print("Bye")']);
+    // Line 1 cannot go up any more, so its "down" button keeps the focus.
+    expect(screen.getByRole("button", { name: "Đưa dòng 1 xuống" })).toHaveFocus();
+  });
+
+  test("lines and blanks cannot change while the code is being judged", async () => {
+    let finish!: () => void;
+    const runner = fakeRunner(() => new Promise((resolve) => (finish = () => resolve(okResult("")))));
+    renderWithApp(<PuzzleExerciseView exercise={reviewParsons} onComplete={() => {}} rng={seededRng(1)} />, { runner });
+    await userEvent.click(submit());
+    expect(screen.getByRole("button", { name: "Đưa dòng 2 lên" })).toBeDisabled();
+    finish();
+    await waitFor(() => expect(screen.getByRole("button", { name: "Đưa dòng 2 lên" })).toBeEnabled());
+  });
+});
+
 describe("PuzzleExerciseView: saved stats", () => {
   test("restores hints, fails and the solution, and reports them on the next judged submit", async () => {
     const onComplete = vi.fn();
