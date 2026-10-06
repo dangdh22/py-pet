@@ -1,6 +1,203 @@
+# Thứ tự trong file là độ ưu tiên: mục cụ thể đặt trước mục chung của cùng loại lỗi.
+# Biểu thức chính quy dùng cú pháp JavaScript: nhóm có tên là (?<ten>...).
+# Biến dùng được trong explain/hint: {line}, {type}, {message}, các nhóm có tên, và {suggestion} (check similar-name).
+
+- id: missing-colon
+  match: { type: SyntaxError, message: "^expected ':'$" }
+  explain:
+    vi: "Dòng {line}: thiếu dấu hai chấm (:) ở cuối dòng. Sau if, elif, else, for và while luôn phải có dấu hai chấm."
+    en: "Line {line}: a colon (:) is missing at the end of the line. Put a colon after if, elif, else, for and while."
+  hint:
+    vi: "Thêm dấu : vào cuối dòng {line}."
+    en: "Add : at the end of line {line}."
+  sample: "if True\n    print(1)"
+
+- id: indent-expected
+  match: { type: IndentationError, message: "^expected an indented block after .+ on line (?<header>\\d+)$" }
+  explain:
+    vi: "Dòng {line}: dòng này phải thụt lề vào 4 dấu cách, vì nó nằm trong khối lệnh của dòng {header}."
+    en: "Line {line}: indent this line by 4 spaces. It is inside the block of line {header}."
+  sample: "if True:\nprint(1)"
+
+- id: indent-unexpected
+  match: { type: IndentationError, message: "^unexpected indent$" }
+  explain:
+    vi: "Dòng {line} bị thụt lề thừa. Dòng này không nằm trong khối lệnh nào, nên phải viết sát lề trái."
+    en: "Line {line} has extra indentation. This line is not inside a block, so start it at the left edge."
+  sample: "print(1)\n    print(2)"
+
+- id: indent-unmatched
+  match: { type: IndentationError, message: "^unindent does not match any outer indentation level$" }
+  explain:
+    vi: "Dòng {line}: thụt lề không khớp với các dòng phía trên. Mỗi mức thụt lề nên dùng đúng 4 dấu cách."
+    en: "Line {line}: the indentation does not match the lines above. Use exactly 4 spaces for each level."
+  sample: "if True:\n        print(1)\n    print(2)"
+
+- id: unterminated-string
+  match: { type: SyntaxError, message: "^unterminated (triple-quoted )?string literal" }
+  explain:
+    vi: "Dòng {line}: chuỗi chưa có dấu nháy đóng. Mở chuỗi bằng dấu nháy nào thì phải đóng bằng đúng dấu nháy đó."
+    en: "Line {line}: the string has no closing quote. Close the string with the same quote that opens it."
+  hint:
+    vi: "Ví dụ đúng: print(\"Xin chào\")"
+    en: "Correct example: print(\"Hello\")"
+  sample: "print(\"Xin chào)"
+
+- id: smart-quote
+  match: { type: SyntaxError, message: "^invalid syntax.*intended to be part of the string" }
+  explain:
+    vi: "Dòng {line}: có ký tự lạ {char}. Có thể con đã dán dấu nháy cong từ Word hoặc trang web. Hãy xóa và gõ lại dấu nháy thẳng \" bằng bàn phím."
+    en: "Line {line}: the character {char} is not allowed. Maybe you pasted a curly quote from Word or a web page. Delete it and type a straight quote \" with the keyboard."
+  sample: 'print(""Xin chào"")'
+
+- id: paren-never-closed
+  match: { type: SyntaxError, message: "^'(?<paren>[(\\[{])' was never closed$" }
+  explain:
+    vi: "Dòng {line}: dấu {paren} đã mở nhưng chưa được đóng."
+    en: "Line {line}: the bracket {paren} opens but does not close."
+  sample: "print(\"Robo\""
+
+- id: paren-unmatched
+  match: { type: SyntaxError, message: "^unmatched '(?<paren>[)\\]}])'$" }
+  explain:
+    vi: "Dòng {line}: thừa dấu {paren}, không có dấu mở tương ứng."
+    en: "Line {line}: there is an extra {paren} with no opening bracket."
+  sample: "print(\"Robo\"))"
+
+- id: print-no-paren
+  match: { type: SyntaxError, message: "^Missing parentheses in call to 'print'" }
+  explain:
+    vi: "Dòng {line}: lệnh print cần dấu ngoặc tròn, ví dụ print(\"Robo\")."
+    en: "Line {line}: print needs round brackets, for example print(\"Robo\")."
+  sample: "print \"Robo\""
+
+- id: assign-in-condition
+  match: { type: SyntaxError, message: "Maybe you meant '==' or ':=' instead of '='", check: assign-in-condition }
+  explain:
+    vi: "Dòng {line}: trong điều kiện, so sánh bằng phải viết == (2 dấu bằng). Một dấu = dùng để gán giá trị."
+    en: "Line {line}: in a condition, write == (2 equal signs) to compare. One = gives a value to a variable."
+  sample: "x = 5\nif x = 5:\n    print(x)"
+
+- id: missing-comma
+  match: { type: SyntaxError, message: "Perhaps you forgot a comma\\?" }
+  explain:
+    vi: "Dòng {line}: có thể con quên dấu phẩy giữa các giá trị."
+    en: "Line {line}: maybe a comma is missing between the values."
+  sample: "print(\"a\" \"b\" 1)"
+
+- id: invalid-decimal
+  match: { type: SyntaxError, message: "^invalid decimal literal$" }
+  explain:
+    vi: "Dòng {line}: số và chữ bị viết liền nhau. Tên biến không được bắt đầu bằng số, còn phép nhân phải có dấu *, ví dụ 2*y."
+    en: "Line {line}: a number and letters are written together. A variable name cannot start with a number, and multiplication needs *, for example 2*y."
+  sample: "x = 2y"
+
+- id: syntax-other
+  match: { type: SyntaxError }
+  explain:
+    vi: "Dòng {line}: Python không hiểu cách viết ở dòng này. Hãy kiểm tra dấu ngoặc, dấu nháy và dấu hai chấm."
+    en: "Line {line}: Python does not understand this line. Check the brackets, the quotes and the colons."
+  sample: "class = 1"
+
+- id: name-similar
+  match: { type: NameError, message: "^name '(?<name>\\w+)' is not defined$", check: similar-name }
+  explain:
+    vi: "Dòng {line}: Python không biết \"{name}\" là gì. Có phải con muốn viết \"{suggestion}\" không?"
+    en: "Line {line}: Python does not know \"{name}\". Did you mean \"{suggestion}\"?"
+  hint:
+    vi: "Python phân biệt chữ hoa và chữ thường: print khác Print."
+    en: "Python sees upper-case and lower-case letters as different: print is not Print."
+  sample: "Print(\"Robo\")"
+
+- id: name-undefined
+  match: { type: NameError, message: "^name '(?<name>\\w+)' is not defined$" }
+  explain:
+    vi: "Dòng {line}: Python không biết \"{name}\" là gì. Nếu là chữ cần in ra, hãy đặt trong dấu nháy: \"{name}\". Nếu là biến, con cần gán giá trị cho nó trước khi dùng."
+    en: "Line {line}: Python does not know \"{name}\". If it is text to print, put it in quotes: \"{name}\". If it is a variable, give it a value before you use it."
+  sample: "print(Robo)"
+
+- id: concat-str
+  match: { type: TypeError, message: "^can only concatenate str \\(not \"(?<other>\\w+)\"\\) to str$" }
+  explain:
+    vi: "Dòng {line}: không thể nối chuỗi với giá trị kiểu {other}. Hãy đổi số thành chuỗi bằng str(), hoặc đổi chuỗi thành số bằng int() trước khi cộng."
+    en: "Line {line}: you cannot join a string and a value of type {other}. Change the number to a string with str(), or change the string to a number with int() before you add."
+  sample: "print(\"Tuổi: \" + 11)"
+
+- id: unsupported-operand
+  match: { type: TypeError, message: "^unsupported operand type\\(s\\) for (?<op>.+): '(?<left>\\w+)' and '(?<right>\\w+)'$" }
+  explain:
+    vi: "Dòng {line}: không dùng được phép {op} giữa kiểu {left} và kiểu {right}. Có thể một giá trị là chuỗi (str), ví dụ giá trị đọc từ input()."
+    en: "Line {line}: you cannot use {op} with type {left} and type {right}. Maybe one value is a string (str), for example a value from input()."
+  sample: "print(1 + \"2\")"
+
+- id: not-callable
+  match: { type: TypeError, message: "^'(?<kind>\\w+)' object is not callable$" }
+  explain:
+    vi: "Dòng {line}: con đang gọi một giá trị kiểu {kind} như gọi hàm. Có thể con đã đặt tên biến trùng tên hàm, ví dụ print = 5."
+    en: "Line {line}: you call a value of type {kind} as if it is a function. Maybe a variable has the same name as a function, for example print = 5."
+  sample: "print = 5\nprint(1)"
+
+- id: type-other
+  match: { type: TypeError }
+  explain:
+    vi: "Dòng {line}: kiểu dữ liệu không phù hợp với phép tính hoặc lệnh này."
+    en: "Line {line}: the data type is not correct for this operation."
+  sample: "print(len(5))"
+
+- id: int-invalid
+  match: { type: ValueError, message: "^invalid literal for int\\(\\) with base 10: '(?<value>.*)'$" }
+  explain:
+    vi: "Dòng {line}: không đổi được '{value}' thành số nguyên. int() chỉ nhận chuỗi gồm các chữ số, ví dụ '12'. Với số thập phân như '5.5', hãy dùng float()."
+    en: "Line {line}: '{value}' cannot become an integer. int() accepts only a string of digits, for example '12'. For a decimal number such as '5.5', use float()."
+  sample: "x = int(\"5.5\")"
+
 - id: zero-division
   match: { type: ZeroDivisionError }
   explain:
     vi: "Dòng {line}: không thể chia cho 0."
     en: "Line {line}: you cannot divide by 0."
   sample: "print(5 / 0)"
+
+- id: index-range
+  match: { type: IndexError, message: "^(?<kind>list|string|tuple) index out of range$" }
+  explain:
+    vi: "Dòng {line}: vị trí con lấy vượt quá độ dài. Vị trí đầu tiên là 0, vị trí cuối cùng là độ dài trừ 1."
+    en: "Line {line}: the position is outside the length. The first position is 0 and the last position is the length minus 1."
+  sample: "a = [1, 2]\nprint(a[2])"
+
+- id: eof
+  match: { type: EOFError }
+  explain:
+    vi: "Dòng {line}: chương trình cần thêm dữ liệu nhập, nhưng ô Input đã hết. Con điền dữ liệu vào ô Input nhé, mỗi giá trị một dòng."
+    en: "Line {line}: the program needs more input data, but the Input box has no more lines. Write the data in the Input box, 1 value on each line."
+  sample: "x = input()"
+  sample_input: ""
+
+- id: timeout-while
+  match: { type: Timeout, check: while-loop }
+  explain:
+    vi: "Code chạy lâu quá nên Robo đã dừng lại. Có thể vòng lặp while không bao giờ dừng: hãy kiểm tra điều kiện có thay đổi sau mỗi vòng không."
+    en: "The code ran too long, so Robo stopped it. Maybe the while loop never stops: check that the condition changes in each loop."
+  sample: "i = 0\nwhile i < 5:\n    i = i * 1"
+
+- id: timeout
+  match: { type: Timeout }
+  explain:
+    vi: "Code chạy lâu quá nên Robo đã dừng lại. Hãy kiểm tra xem có vòng lặp nào chạy quá nhiều lần không."
+    en: "The code ran too long, so Robo stopped it. Check if a loop runs too many times."
+  sample: "x = 0\nfor i in range(10 ** 12):\n    x = x + i"
+
+- id: output-limit
+  match: { type: OutputLimit }
+  explain:
+    vi: "Chương trình in ra quá nhiều nên Robo đã dừng lại. Có thể có vòng lặp in ra mãi không dừng."
+    en: "The program printed too much, so Robo stopped it. Maybe a loop prints again and again without end."
+  sample: "for i in range(200000):\n    print(\"Robo\")"
+
+- id: input-prompt
+  match: { type: InputPrompt }
+  explain:
+    vi: "Con đã viết chữ bên trong input(...). Khi chấm bài, chữ này bị tính vào kết quả nên bị sai. Hãy để trống: input()."
+    en: "You wrote text inside input(...). The judge counts this text as output, so the answer is wrong. Leave it empty: input()."
+  sample: "x = input(\"Nhập tên: \")\nprint(x)"
+  sample_input: "Robo"
