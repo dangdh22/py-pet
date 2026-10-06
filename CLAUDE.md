@@ -24,7 +24,7 @@ Hỏi trước khi merge, push, xóa nhánh hoặc làm việc khó hoàn tác.
 
 ## Làm việc trong phiên cloud
 
-- Cài đặt: `npm install`; `python3 -m venv .venv && .venv/bin/pip install -r requirements-dev.txt`; `npx playwright install --with-deps chromium`; `npm run pyodide:copy`. Sau đó chạy `npm run check` để có mốc xanh trước khi sửa code.
+- Cài đặt: hook `.claude/hooks/session-start.sh` tự chạy khi phiên cloud bắt đầu (`npm ci`, tạo `.venv` và cài `requirements-dev.txt`, `npm run pyodide:copy`). Phiên cloud có sẵn Chromium tại `/opt/pw-browsers` nhưng cũ hơn bản Playwright cần, nên hook đặt `PW_CHROMIUM_PATH=/opt/pw-browsers/chromium` và `playwright.config.ts` dùng biến này; không chạy `npx playwright install`. Nếu hook chưa chạy, chạy tay: `CLAUDE_CODE_REMOTE=true CLAUDE_PROJECT_DIR=$PWD .claude/hooks/session-start.sh` rồi `export PW_CHROMIUM_PATH=/opt/pw-browsers/chromium`. Sau đó chạy `npm run check` để có mốc xanh trước khi sửa code.
 - Phiên cloud thường đã chạy trên 1 nhánh riêng; khi đó không cần tạo worktree trong `.worktrees/`.
 - Phiên cloud không mở được trình duyệt trên máy của người bảo trì. Ở bước thử app (bước 3 ở trên), push nhánh và gửi lệnh chạy trên máy local: `git fetch && git switch <nhanh> && npm install && npm run dev`, rồi mở http://localhost:5173/.
 - Dòng trailer của commit (Co-Authored-By và các dòng khác) lấy theo hướng dẫn attribution của phiên hiện tại. Không ghi cứng link session vào kế hoạch.
