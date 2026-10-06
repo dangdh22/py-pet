@@ -36,6 +36,12 @@ describe("AppRoutes", () => {
     renderWithApp(<AppRoutes />);
     expect(screen.getByText("Không tìm thấy bài học này.")).toBeInTheDocument();
   });
+
+  test("shows the not-found message for a malformed lesson hash", () => {
+    window.location.hash = "#/lesson/%E0%A4%A";
+    renderWithApp(<AppRoutes />);
+    expect(screen.getByText("Không tìm thấy bài học này.")).toBeInTheDocument();
+  });
 });
 
 describe("ErrorBoundary", () => {

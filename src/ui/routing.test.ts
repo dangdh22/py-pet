@@ -9,6 +9,10 @@ describe("routing", () => {
     expect(parseHash("#/lesson/s1.lam-quen.l1")).toEqual({ name: "lesson", lessonId: "s1.lam-quen.l1" });
   });
 
+  test("keeps a malformed escape as the raw lesson id", () => {
+    expect(parseHash("#/lesson/%E0%A4%A")).toEqual({ name: "lesson", lessonId: "%E0%A4%A" });
+  });
+
   test("round-trips a lesson route", () => {
     const route = { name: "lesson", lessonId: "s1.a.l2" } as const;
     expect(parseHash(routeToHash(route))).toEqual(route);

@@ -4,7 +4,13 @@ export type Route = { name: "home" } | { name: "lesson"; lessonId: string };
 
 export function parseHash(hash: string): Route {
   const match = /^#\/lesson\/(.+)$/.exec(hash);
-  return match ? { name: "lesson", lessonId: decodeURIComponent(match[1] as string) } : { name: "home" };
+  if (!match) return { name: "home" };
+  const raw = match[1] as string;
+  try {
+    return { name: "lesson", lessonId: decodeURIComponent(raw) };
+  } catch {
+    return { name: "lesson", lessonId: raw };
+  }
 }
 
 export function routeToHash(route: Route): string {
