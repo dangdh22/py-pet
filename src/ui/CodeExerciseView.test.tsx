@@ -2,7 +2,7 @@
 import { screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, test, vi } from "vitest";
-import { fixtureCodeExercise } from "../test/fixtures";
+import { fixtureCodeExercise, testBundle } from "../test/fixtures";
 import { errorResult, fakeRunner, okResult, renderWithApp } from "../test/render";
 import { CodeExerciseView } from "./CodeExerciseView";
 
@@ -111,5 +111,69 @@ describe("CodeExerciseView", () => {
     renderWithApp(<CodeExerciseView exercise={fixtureCodeExercise} onComplete={() => {}} />, { lang: "en" });
     expect(screen.getByText("Print Hi")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Submit" })).toBeInTheDocument();
+  });
+
+  test("does not reveal a hidden test's error", async () => {
+    const exercise = {
+      ...fixtureCodeExercise,
+      tests: [
+        { input: "", output: "Hi", hidden: false },
+        { input: "secret-xyz", output: "Hi", hidden: true },
+      ],
+    };
+    const runner = fakeRunner((_code, stdin) =>
+      stdin === ""
+        ? okResult("Hi\n")
+        : errorResult({
+            type: "ValueError",
+            message: "invalid literal for int() with base 10: 'secret-xyz'",
+            line: 1,
+            lineText: "int(input())",
+          }),
+    );
+    renderWithApp(<CodeExerciseView exercise={exercise} onComplete={() => {}} />, { runner });
+    await userEvent.click(submitButton());
+    expect(await screen.findByText("Đúng 1/2 test. Xem test bị sai ở bên dưới nhé.")).toBeInTheDocument();
+    expect(screen.queryByText(/secret-xyz/)).toBeNull();
+    expect(screen.queryByText(/Xem lỗi gốc/)).toBeNull();
+    expect(editor()).toHaveAttribute("data-error-line", "");
+  });
+
+  test("explains input() with a prompt on a wrong submit", async () => {
+    const base = testBundle();
+    const bundle = {
+      ...base,
+      errors: [
+        ...base.errors,
+        {
+          id: "input-prompt",
+          match: { type: "InputPrompt", message: null, check: null },
+          explain: { vi: "Đừng viết chữ trong input().", en: "No text in input()." },
+          hint: null,
+          misconception: null,
+          sample: "x = input('a')",
+          sampleInput: "a",
+        },
+      ],
+    } as typeof base;
+    renderWithApp(<CodeExerciseView exercise={fixtureCodeExercise} onComplete={() => {}} />, {
+      bundle,
+      runner: fakeRunner(() => okResult("Nhập: Hi\n", { usedInputPrompt: true })),
+    });
+    await userEvent.click(submitButton());
+    expect(await screen.findByText("Đừng viết chữ trong input().")).toBeInTheDocument();
+  });
+
+  test("ignores clicks while a run is in progress", async () => {
+    let resolve: (value: ReturnType<typeof okResult>) => void = () => {};
+    const runner = fakeRunner(() => new Promise((r) => (resolve = r)));
+    renderWithApp(<CodeExerciseView exercise={fixtureCodeExercise} onComplete={() => {}} />, { runner });
+    await userEvent.click(screen.getByRole("button", { name: "Chạy thử" }));
+    expect(screen.getByRole("button", { name: "Chạy thử" })).toBeDisabled();
+    expect(submitButton()).toBeDisabled();
+    await userEvent.click(submitButton());
+    resolve(okResult("Hi\n"));
+    expect(await screen.findByRole("region", { name: "Kết quả" })).toHaveTextContent("Hi");
+    expect(runner.calls).toHaveLength(1);
   });
 });

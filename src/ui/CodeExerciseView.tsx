@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import type { CodeExercise } from "../content/types";
-import { problemFromOutcome } from "../explain/problem";
+import { isPseudoError, problemFromOutcome } from "../explain/problem";
 import { errorMisconceptionFrom } from "../explain/providers";
 import { pick } from "../i18n/lang";
 import { useLang } from "../i18n/LangProvider";
@@ -79,9 +79,11 @@ export function CodeExerciseView({
         return;
       }
       setFailedSubmits((n) => n + 1);
-      const failed = result.tests.find((test) => test.ran && !test.passed);
+      const failedTests = result.tests.filter((test) => test.ran && !test.passed);
+      const failed = failedTests.find((test) => !test.hidden) ?? failedTests[0] ?? null;
       const problem = failed ? problemFromOutcome(failed, true) : null;
-      if (problem) {
+      // A hidden test may only report pass/fail: explain it only when the problem carries no hidden data.
+      if (problem && failed && (!failed.hidden || isPseudoError(problem.type))) {
         setErrorLine(problem.line);
         setFeedback(await feedbackForProblem(problem, code, explain, t));
       } else {
