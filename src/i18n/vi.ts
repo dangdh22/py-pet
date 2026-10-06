@@ -102,6 +102,7 @@ export const vi = {
   "backup.title": "Sao lưu",
   "backup.export": "Xuất file sao lưu",
   "backup.exported": "Đã tạo file {file}",
+  "backup.exportFailed": "Chưa xuất được file sao lưu.",
   "backup.lastBackup": "Lần sao lưu gần nhất: {date}",
   "backup.never": "Chưa sao lưu lần nào",
   "backup.import": "Nhập file sao lưu",

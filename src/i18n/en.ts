@@ -104,6 +104,7 @@ export const en: Record<MessageKey, string> = {
   "backup.title": "Backup",
   "backup.export": "Export a backup file",
   "backup.exported": "Created the file {file}",
+  "backup.exportFailed": "The backup file could not be exported.",
   "backup.lastBackup": "Last backup: {date}",
   "backup.never": "No backup yet",
   "backup.import": "Import a backup file",

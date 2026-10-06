@@ -1,4 +1,4 @@
-import { Component, type ReactNode } from "react";
+import { Component, useState, type ReactNode } from "react";
 import { useLang } from "../i18n/LangProvider";
 import { ErrorLogContext, type LogError } from "./contexts";
 import { downloadText } from "./download";
@@ -8,6 +8,7 @@ import { Robot } from "./Robot";
 function CrashFallback() {
   const { t } = useLang();
   const game = useOptionalGame();
+  const [exportFailed, setExportFailed] = useState(false);
   return (
     <div role="alert" className="crash">
       <Robot mood="sad" size={80} />
@@ -16,13 +17,19 @@ function CrashFallback() {
       {game && (
         <button
           onClick={async () => {
-            const { fileName, text } = await game.exportBackup();
-            downloadText(fileName, text);
+            try {
+              const { fileName, text } = await game.exportBackup();
+              downloadText(fileName, text);
+              setExportFailed(false);
+            } catch {
+              setExportFailed(true);
+            }
           }}
         >
           {t("backup.export")}
         </button>
       )}
+      {exportFailed && <p role="alert">{t("backup.exportFailed")}</p>}
     </div>
   );
 }

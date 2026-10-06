@@ -9,8 +9,11 @@ import { FakeWorker } from "../test/fakeWorker";
 import { testBundle } from "../test/fixtures";
 import { FIXED_NOW, renderWithGame, TODAY, testProfile } from "../test/renderGame";
 import { App } from "./App";
+import { downloadText } from "./download";
 import { AppRoutes } from "./AppRoutes";
 import { ErrorBoundary } from "./ErrorBoundary";
+
+vi.mock("./download", () => ({ downloadText: vi.fn() }));
 
 beforeEach(() => {
   window.location.hash = "";
@@ -112,11 +115,12 @@ describe("App", () => {
   });
 });
 
+function Boom(): never {
+  throw new Error("boom");
+}
+
 describe("crash screen", () => {
   test("logs the crash and offers a backup export", async () => {
-    function Boom(): never {
-      throw new Error("boom");
-    }
     vi.spyOn(console, "error").mockImplementation(() => {});
     const { store } = await renderWithGame(
       <ErrorBoundary>
@@ -125,6 +129,36 @@ describe("crash screen", () => {
     );
     expect(screen.getByRole("button", { name: "Xuất file sao lưu" })).toBeInTheDocument();
     await waitFor(async () => expect((await store.readMeta()).errorLog[0]).toMatchObject({ kind: "ui-crash" }));
+  });
+
+  test("the crash screen exports a backup file", async () => {
+    vi.spyOn(console, "error").mockImplementation(() => {});
+    vi.mocked(downloadText).mockClear();
+    await renderWithGame(
+      <ErrorBoundary>
+        <Boom />
+      </ErrorBoundary>,
+    );
+    await userEvent.click(screen.getByRole("button", { name: "Xuất file sao lưu" }));
+    await waitFor(() => expect(downloadText).toHaveBeenCalledOnce());
+    expect(vi.mocked(downloadText).mock.calls[0]![0]).toMatch(/\.pypet$/);
+  });
+
+  test("the crash screen reports a failed export", async () => {
+    vi.spyOn(console, "error").mockImplementation(() => {});
+    class BrokenStore extends MemoryStore {
+      override async exportProfiles(): Promise<never> {
+        throw new Error("broken");
+      }
+    }
+    await renderWithGame(
+      <ErrorBoundary>
+        <Boom />
+      </ErrorBoundary>,
+      { store: new BrokenStore({ persistent: true }) },
+    );
+    await userEvent.click(screen.getByRole("button", { name: "Xuất file sao lưu" }));
+    expect(await screen.findByText("Chưa xuất được file sao lưu.")).toBeInTheDocument();
   });
 
   test("the backup route opens the backup screen", async () => {

@@ -4,6 +4,7 @@ import userEvent from "@testing-library/user-event";
 import { describe, expect, test, vi } from "vitest";
 import { decodeBackup, encodeBackup } from "../storage/backup";
 import { base64ToUtf8, utf8ToBase64 } from "../storage/encoding";
+import { MemoryStore } from "../storage/memoryStore";
 import { hashPin } from "../storage/pin";
 import { sampleBackupPayload } from "../test/backupSample";
 import { renderWithGame } from "../test/renderGame";
@@ -86,5 +87,24 @@ describe("BackupScreen", () => {
     await waitFor(() => expect(onReplaced).toHaveBeenCalledOnce());
     expect(onReplaced).toHaveBeenCalledTimes(1);
     expect((await store.readMeta()).autoBackups).toHaveLength(1);
+  });
+
+  test("a failed import shows the save error and enables the buttons again", async () => {
+    class FailingStore extends MemoryStore {
+      override async replaceAll(): Promise<void> {
+        throw new Error("disk full");
+      }
+    }
+    const onReplaced = vi.fn();
+    const store = new FailingStore({ persistent: true });
+    await renderWithGame(<BackupScreen />, { store, meta: { pin: await hashPin("1234", 1000) }, onReplaced });
+    await unlock("1234");
+    await userEvent.upload(await screen.findByLabelText("Chọn file .pypet"), fileOf(await encodeBackup(sampleBackupPayload("Bình"))));
+    await userEvent.click(await screen.findByRole("button", { name: "Nhập dữ liệu (thay dữ liệu hiện tại)" }));
+    expect(await screen.findByRole("alert")).toHaveTextContent("Không lưu được tiến độ. Hãy xuất file sao lưu ngay.");
+    expect(screen.getByRole("button", { name: "Nhập dữ liệu (thay dữ liệu hiện tại)" })).toBeEnabled();
+    expect(screen.getByRole("button", { name: "Hủy" })).toBeEnabled();
+    expect(onReplaced).not.toHaveBeenCalled();
+    expect((await store.loadActive())?.profile.childName).toBe("An");
   });
 });
