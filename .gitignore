@@ -22,3 +22,10 @@ build/
 
 # Superpowers brainstorm mockups
 .superpowers/
+
+# Node / build
+node_modules/
+public/pyodide/
+src/generated/
+test-results/
+playwright-report/
