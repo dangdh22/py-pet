@@ -1,7 +1,8 @@
 import { allLessons } from "../content/lookup";
-import type { ContentBundle, Stage } from "../content/types";
+import { isChoiceQuestion, type ContentBundle, type Stage } from "../content/types";
 import { daysBetween, weekStart } from "./dates";
 import { XP } from "./rewards";
+import { REVIEW_SIZE } from "./reviewSet";
 import type { GameState } from "./state";
 
 export type LessonStatus = "done" | "next" | "locked";
@@ -34,17 +35,19 @@ export function currentStage(bundle: ContentBundle, state: GameState): Stage | n
   return bundle.stages[state.pet.stage - 1] ?? bundle.stages[bundle.stages.length - 1] ?? null;
 }
 
-/** The XP a child can earn in a stage from lessons and their exercises. */
+/** The XP a child can earn in a stage from lessons, their exercises and 1 perfect run of each review station. */
 export function stageXpMax(stage: Stage): number {
-  return stage.topics
+  const lessons = stage.topics
     .flatMap((topic) => topic.lessons)
     .reduce(
       (sum, lesson) =>
         sum +
         XP.lesson +
-        lesson.exercises.reduce((part, exercise) => part + (exercise.type === "code" ? XP.codeFirstTry : XP.question), 0),
+        lesson.exercises.reduce((part, exercise) => part + (isChoiceQuestion(exercise) ? XP.question : XP.codeFirstTry), 0),
       0,
     );
+  const stations = stage.topics.reduce((sum, topic) => sum + topic.reviews.length, 0);
+  return lessons + stations * (XP.review + XP.reviewPerCorrect * REVIEW_SIZE);
 }
 
 export function growthPercent(xp: number, max: number): number {
