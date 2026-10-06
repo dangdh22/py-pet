@@ -32,8 +32,8 @@ export function availableItems(bundle: ContentBundle, state: GameState): Map<str
   return items;
 }
 
-/** Items for a concept at the ladder level first, then at the nearest other levels. */
-function conceptItems(bundle: ContentBundle, available: Map<string, Exercise>, conceptId: string, level: number, rng: Rng): Exercise[] {
+/** Items for a concept at the ladder level first, then at the nearest other levels, then its other questions. */
+export function itemsForConcept(bundle: ContentBundle, available: Map<string, Exercise>, conceptId: string, level: number, rng: Rng): Exercise[] {
   const concept = allConcepts(bundle).find((c) => c.id === conceptId);
   if (!concept) return [];
   const order = [...LEVELS].sort((a, b) => Math.abs(LEVELS.indexOf(a) + 1 - level) - Math.abs(LEVELS.indexOf(b) + 1 - level));
@@ -114,7 +114,7 @@ function helpItem(
     .filter(([, m]) => m.needsHelp)
     .sort((a, b) => a[1].score - b[1].score || a[0].localeCompare(b[0]));
   for (const [conceptId, m] of flagged) {
-    const item = conceptItems(bundle, available, conceptId, m.level, rng).find((i) => !chosen.includes(i));
+    const item = itemsForConcept(bundle, available, conceptId, m.level, rng).find((i) => !chosen.includes(i));
     if (item) return item;
   }
   return undefined;
@@ -123,5 +123,5 @@ function helpItem(
 /** 2 practice items for a concept at the child's ladder level (spec 5.9 step 2). */
 export function buildPracticeSet(bundle: ContentBundle, state: GameState, conceptId: string, rng: Rng): Exercise[] {
   const level = state.mastery[conceptId]?.level ?? 1;
-  return conceptItems(bundle, availableItems(bundle, state), conceptId, level, rng).slice(0, PRACTICE_SIZE);
+  return itemsForConcept(bundle, availableItems(bundle, state), conceptId, level, rng).slice(0, PRACTICE_SIZE);
 }
