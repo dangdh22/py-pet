@@ -119,7 +119,7 @@ export const vi = {
   "exam.topicDone": "Xong bài kiểm tra!",
   "exam.score": "Con được {score}/{max} điểm.",
   "exam.passed": "Con đã đạt!",
-  "exam.notPassed": "Lần này chưa đạt 80%, con ôn thêm nhé.",
+  "exam.notPassed": "Lần này chưa đạt {percent}%, con ôn thêm nhé.",
   "exam.locked": "Bài kiểm tra này chưa mở. Con học các bài trước đã nhé.",
   "exam.notFound": "Không tìm thấy bài kiểm tra này.",
   "exam.empty": "Chưa có câu hỏi cho bài kiểm tra này.",

@@ -31,14 +31,22 @@ export function solvedScore(failedSubmitsBefore: number, hintsUsed: number, view
 
 const round2 = (n: number) => Math.round(n * 100) / 100;
 
-function shouldFlag(m: ConceptMastery): boolean {
+function shouldFlag(m: ConceptMastery, helpAccuracy: number): boolean {
   const right = m.recent.filter((s) => s >= MASTERY.rightFrom).length;
-  const lowAccuracy = m.recent.length >= MASTERY.helpMinResults && right / m.recent.length < MASTERY.helpAccuracy;
+  const lowAccuracy = m.recent.length >= MASTERY.helpMinResults && right / m.recent.length < helpAccuracy;
   return lowAccuracy || m.misconceptions >= MASTERY.helpMisconceptions || m.reviewMisses >= MASTERY.helpReviewMisses;
 }
 
-/** Adds 1 result s (0 to 1) to a concept: score, ladder, recent results and the help flag. */
-export function recordResult(current: ConceptMastery, s: number, source: ResultSource): ConceptMastery {
+/**
+ * Adds 1 result s (0 to 1) to a concept: score, ladder, recent results and the help flag. `helpAccuracy` is the
+ * parent's "needs help" share of right answers (spec 5.9 (*)).
+ */
+export function recordResult(
+  current: ConceptMastery,
+  s: number,
+  source: ResultSource,
+  helpAccuracy: number = MASTERY.helpAccuracy,
+): ConceptMastery {
   const m: ConceptMastery = { ...current, recent: [...current.recent, s].slice(-MASTERY.recent) };
   m.score = round2(Math.min(100, Math.max(0, m.score + MASTERY.rate * (s * 100 - m.score))));
   const right = s >= MASTERY.rightFrom;
@@ -56,15 +64,15 @@ export function recordResult(current: ConceptMastery, s: number, source: ResultS
     m.needsHelp = false;
     m.misconceptions = 0;
     m.reviewMisses = 0;
-  } else if (shouldFlag(m)) {
+  } else if (shouldFlag(m, helpAccuracy)) {
     m.needsHelp = true;
   }
   return m;
 }
 
 /** Counts 1 sighting of the misconception that belongs to this concept. */
-export function recordMisconception(current: ConceptMastery): ConceptMastery {
+export function recordMisconception(current: ConceptMastery, helpAccuracy: number = MASTERY.helpAccuracy): ConceptMastery {
   const m = { ...current, misconceptions: current.misconceptions + 1 };
-  if (shouldFlag(m)) m.needsHelp = true;
+  if (shouldFlag(m, helpAccuracy)) m.needsHelp = true;
   return m;
 }

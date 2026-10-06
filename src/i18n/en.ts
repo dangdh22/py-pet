@@ -121,7 +121,7 @@ export const en: Record<MessageKey, string> = {
   "exam.topicDone": "Test finished!",
   "exam.score": "You got {score} of {max} points.",
   "exam.passed": "You passed!",
-  "exam.notPassed": "You did not reach 80% this time. Let us review a little more.",
+  "exam.notPassed": "You did not reach {percent}% this time. Let us review a little more.",
   "exam.locked": "This test is not open yet. Finish the lessons before it first.",
   "exam.notFound": "This test does not exist.",
   "exam.empty": "This test has no questions yet.",

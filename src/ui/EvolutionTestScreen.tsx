@@ -80,7 +80,7 @@ function EvolutionAttempt({
     );
   }
   if (grade) {
-    return isPass(grade.score, grade.max) ? (
+    return isPass(grade.score, grade.max, game.state.settings.passPercent) ? (
       <EvolutionPassed before={before} after={game.state} grade={grade} onExit={onExit} />
     ) : (
       <EvolutionFailed after={game.state} grade={grade} stageId={stage.id} onRetake={onRetake} onExit={onExit} />
@@ -92,7 +92,7 @@ function EvolutionAttempt({
       items={items}
       onFinish={(answers) => {
         const result = gradePaper(items, answers);
-        const remedial = isPass(result.score, result.max)
+        const remedial = isPass(result.score, result.max, game.state.settings.passPercent)
           ? []
           : buildRemedialSet(bundle, game.state, result.wrongConcepts, rng);
         game.dispatch({

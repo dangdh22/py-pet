@@ -26,7 +26,8 @@ export function errorResult(
 }
 
 export interface FakeRunner extends RunnerApi {
-  calls: { code: string; stdin: string }[];
+  /** Each run; `timeoutMs` only when the caller gave one. */
+  calls: { code: string; stdin: string; timeoutMs?: number }[];
   retry: Mock<() => void>;
 }
 
@@ -34,13 +35,13 @@ export function fakeRunner(
   impl: (code: string, stdin: string) => RunResult | Promise<RunResult>,
   status: RunnerStatus = "ready",
 ): FakeRunner {
-  const calls: { code: string; stdin: string }[] = [];
+  const calls: FakeRunner["calls"] = [];
   return {
     status,
     calls,
     retry: vi.fn(),
-    run: async (code, stdin) => {
-      calls.push({ code, stdin });
+    run: async (code, stdin, timeoutMs) => {
+      calls.push(timeoutMs === undefined ? { code, stdin } : { code, stdin, timeoutMs });
       return impl(code, stdin);
     },
   };

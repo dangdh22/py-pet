@@ -39,7 +39,10 @@ export const CORRECT_RUN_FOR_VUI = 3;
 /** A test is passed from this share of its points (spec 5.11; the parent can change it in M4). */
 export const PASS_RATIO = 0.8;
 
-/** True when `score` reaches PASS_RATIO of `max`. The tolerance keeps 11.2 of 14 a pass despite float rounding. */
-export function isPass(score: number, max: number): boolean {
-  return max > 0 && score >= max * PASS_RATIO - 1e-9;
+/**
+ * True when `score` reaches `percent` of `max` (the parent's pass mark, spec 5.11 (*)). The tolerance keeps 11.2 of
+ * 14 a pass at 80% despite float rounding.
+ */
+export function isPass(score: number, max: number, percent: number = PASS_RATIO * 100): boolean {
+  return max > 0 && score >= (max * percent) / 100 - 1e-9;
 }

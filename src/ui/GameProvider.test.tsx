@@ -11,7 +11,8 @@ import type { AppMeta, ProfileBundle } from "../storage/types";
 import { hashPin } from "../storage/pin";
 import { sampleBackupPayload } from "../test/backupSample";
 import { FIXED_NOW, renderWithGame, TODAY } from "../test/renderGame";
-import { useLogError } from "./contexts";
+import { fakeRunner, okResult } from "../test/render";
+import { useLogError, useRunner } from "./contexts";
 import { DRAFT_SAVE_DELAY_MS, useGame } from "./GameProvider";
 
 afterEach(() => {
@@ -377,5 +378,28 @@ describe("GameProvider import race", () => {
     await waitFor(async () =>
       expect((await store.loadActive())?.state.progress.completedLessons).toContain("t.l1"),
     );
+  });
+});
+
+describe("the parent's settings in the app", () => {
+  test("code runs with the time limit and questions start in the default question language", async () => {
+    const state = initialGameState(TODAY);
+    state.settings.runSeconds = 5;
+    state.settings.questionLang = "both";
+    const runner = fakeRunner(() => okResult(""));
+    function Probe() {
+      const { run } = useRunner();
+      const { questionLang } = useLang();
+      return (
+        <>
+          <p>{questionLang}</p>
+          <button onClick={() => void run("x", "")}>run</button>
+        </>
+      );
+    }
+    await renderWithGame(<Probe />, { state, runner });
+    expect(await screen.findByText("both")).toBeInTheDocument();
+    await userEvent.click(screen.getByRole("button", { name: "run" }));
+    expect(runner.calls.at(-1)).toMatchObject({ code: "x", timeoutMs: 5000 });
   });
 });

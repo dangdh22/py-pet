@@ -24,7 +24,7 @@ import {
   type LoadedGame,
   type StoredProfile,
 } from "../storage/types";
-import { ErrorLogContext, type LogError } from "./contexts";
+import { ErrorLogContext, RunnerTimeout, type LogError } from "./contexts";
 
 export const BACKUP_REMINDER_DAYS = 7;
 export const DRAFT_SAVE_DELAY_MS = 400;
@@ -68,7 +68,7 @@ export interface GameProviderProps {
 }
 
 export function GameProvider({ store, loaded, clock, onReplaced, children }: GameProviderProps) {
-  const { uiLang, setUiLang } = useLang();
+  const { uiLang, setUiLang, setQuestionLang } = useLang();
   const profile = loaded.profile;
   const [state, setState] = useState<GameState>(loaded.state);
   const stateRef = useRef<GameState>(loaded.state);
@@ -149,6 +149,10 @@ export function GameProvider({ store, loaded, clock, onReplaced, children }: Gam
     }
     if (uiLang !== saved) dispatch({ type: "SettingsChanged", patch: { uiLang } });
   }, [uiLang, setUiLang, dispatch]);
+
+  // The parent's default question language (spec 7.2); each question can still switch with VI/EN.
+  const questionLang = state.settings.questionLang;
+  useEffect(() => setQuestionLang(questionLang), [questionLang, setQuestionLang]);
 
   const draftFor = useCallback((itemId: string) => drafts.current.get(itemId), []);
 
@@ -277,7 +281,9 @@ export function GameProvider({ store, loaded, clock, onReplaced, children }: Gam
 
   return (
     <GameContext.Provider value={api}>
-      <ErrorLogContext.Provider value={logError}>{children}</ErrorLogContext.Provider>
+      <ErrorLogContext.Provider value={logError}>
+        <RunnerTimeout seconds={state.settings.runSeconds}>{children}</RunnerTimeout>
+      </ErrorLogContext.Provider>
     </GameContext.Provider>
   );
 }

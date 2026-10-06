@@ -27,6 +27,7 @@ import {
   type RewardItem,
 } from "./state";
 import { cleanCatalog, freeXu, requestBlock, trimRequests } from "./realRewards";
+import { cleanSettings } from "./settings";
 import { findShopItem, isConsumable, MAX_CONSUMABLES, STREAK_GIFTS } from "./shop";
 import { cancelVacation, pruneVacations, scheduleVacation, toggleVacation, weekTarget, workDaysBetween } from "./vacation";
 import { changeXu } from "./wallet";
@@ -121,7 +122,7 @@ export function apply(state: GameState, event: GameEvent, now: Date): GameState 
     case "DayRollover":
       break;
     case "SettingsChanged":
-      next.settings = { ...next.settings, ...event.patch };
+      next.settings = cleanSettings(next.settings, event.patch);
       break;
     case "LessonCompleted":
       completeLesson(next, event.lessonId, today, rollback);
@@ -289,16 +290,21 @@ function statsFor(s: GameState, exerciseId: string): ExerciseStats {
   return (all[exerciseId] ??= { fails: 0, hints: 0, viewedSolution: false });
 }
 
+/** The parent's "needs help" share of right answers (spec 5.9 (*)). */
+function helpAccuracy(s: GameState): number {
+  return s.settings.helpPercent / 100;
+}
+
 function updateMastery(s: GameState, conceptId: string, change: (m: ConceptMastery) => ConceptMastery): void {
   s.mastery[conceptId] = change(s.mastery[conceptId] ?? emptyMastery());
 }
 
 function judgeExercise(s: GameState, e: Extract<GameEvent, { type: "ExerciseJudged" }>, today: string): void {
   const source = e.source ?? "lesson";
-  for (const id of e.misconceptions ?? []) updateMastery(s, id, recordMisconception);
+  for (const id of e.misconceptions ?? []) updateMastery(s, id, (m) => recordMisconception(m, helpAccuracy(s)));
   if (e.accepted) {
     const score = solvedScore(e.failedSubmitsBefore, e.hintsUsed, e.viewedSolution);
-    for (const id of e.concepts ?? []) updateMastery(s, id, (m) => recordResult(m, score, source));
+    for (const id of e.concepts ?? []) updateMastery(s, id, (m) => recordResult(m, score, source, helpAccuracy(s)));
     if (!e.viewedSolution) delete s.retry[e.exerciseId];
   }
   // A review station or a test pays as a whole (ReviewCompleted, TopicTestCompleted, EvolutionTestCompleted), not per
@@ -343,8 +349,8 @@ function judgeExercise(s: GameState, e: Extract<GameEvent, { type: "ExerciseJudg
 function answerQuestion(s: GameState, e: Extract<GameEvent, { type: "QuestionAnswered" }>, today: string): void {
   const source = e.source ?? "lesson";
   const score = e.correct ? MASTERY.score.firstTry : MASTERY.score.wrong;
-  for (const id of e.concepts ?? []) updateMastery(s, id, (m) => recordResult(m, score, source));
-  if (!e.correct && e.misconception) updateMastery(s, e.misconception, recordMisconception);
+  for (const id of e.concepts ?? []) updateMastery(s, id, (m) => recordResult(m, score, source, helpAccuracy(s)));
+  if (!e.correct && e.misconception) updateMastery(s, e.misconception, (m) => recordMisconception(m, helpAccuracy(s)));
   s.reviews[e.questionId] = reviewCard(s.reviews[e.questionId], e.correct, today);
   if (source === "review" || source === "test") {
     // No XP for a review or test answer, but it counts for the correct run that raises Vui.
@@ -388,7 +394,7 @@ function raiseVui(s: GameState): void {
 /** Spec 5.4-5.6: the first completion pays 30 XP; the first pass pays 20 xu and Vui +1. Any score moves the path on. */
 function completeTopicTest(s: GameState, e: Extract<GameEvent, { type: "TopicTestCompleted" }>, today: string): void {
   const previous = s.progress.topicTests[e.topicId];
-  const passed = isPass(e.score, e.max);
+  const passed = isPass(e.score, e.max, s.settings.passPercent);
   s.progress.topicTests[e.topicId] = {
     attempts: (previous?.attempts ?? 0) + 1,
     best: Math.max(previous?.best ?? 0, e.score),
@@ -412,7 +418,7 @@ function completeEvolutionTest(
   e: Extract<GameEvent, { type: "EvolutionTestCompleted" }>,
   now: Date,
 ): void {
-  const passed = isPass(e.score, e.max);
+  const passed = isPass(e.score, e.max, s.settings.passPercent);
   s.progress.evolutionTests.push({
     at: now.toISOString(),
     stage: e.stage,

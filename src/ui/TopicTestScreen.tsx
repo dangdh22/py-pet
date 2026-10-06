@@ -18,7 +18,8 @@ export function TopicTestScreen({ topic, onExit, rng = Math.random }: { topic: T
   const [grade, setGrade] = useState<ExamGrade | null>(null);
 
   if (grade) {
-    const verdict = t(isPass(grade.score, grade.max) ? "exam.passed" : "exam.notPassed");
+    const percent = game.state.settings.passPercent;
+    const verdict = isPass(grade.score, grade.max, percent) ? t("exam.passed") : t("exam.notPassed", { percent });
     return (
       <ResultView
         before={before}

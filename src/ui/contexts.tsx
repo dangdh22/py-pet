@@ -40,6 +40,16 @@ export function AppProviders({
   );
 }
 
+/** Runs code with the parent's time limit (spec 9.5) unless a caller gives its own. */
+export function RunnerTimeout({ seconds, children }: { seconds: number; children: ReactNode }) {
+  const runner = useRunner();
+  const value = useMemo<RunnerApi>(
+    () => ({ ...runner, run: (code, stdin, timeoutMs) => runner.run(code, stdin, timeoutMs ?? seconds * 1000) }),
+    [runner, seconds],
+  );
+  return <RunnerContext.Provider value={value}>{children}</RunnerContext.Provider>;
+}
+
 function required<T>(value: T | null, name: string): T {
   if (value === null) throw new Error(`${name} must be used inside <AppProviders>`);
   return value;
