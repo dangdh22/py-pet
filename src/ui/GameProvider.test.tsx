@@ -10,7 +10,7 @@ import { hashPin } from "../storage/pin";
 import { sampleBackupPayload } from "../test/backupSample";
 import { FIXED_NOW, renderWithGame, TODAY } from "../test/renderGame";
 import { useLogError } from "./contexts";
-import { useGame } from "./GameProvider";
+import { DRAFT_SAVE_DELAY_MS, useGame } from "./GameProvider";
 
 afterEach(() => {
   vi.useRealTimers();
@@ -184,5 +184,64 @@ describe("GameProvider backups", () => {
     expect(meta.autoBackups).toHaveLength(1);
     const kept = await decodeBackup(meta.autoBackups[0]!);
     expect(kept.ok && kept.payload.profiles[0]!.profile.childName).toBe("An");
+  });
+});
+
+describe("GameProvider import race", () => {
+  function RaceProbe() {
+    const game = useGame();
+    return (
+      <div>
+        <button
+          onClick={() => {
+            void game.importBackup(sampleBackupPayload("Bình"));
+            game.dispatch({ type: "LessonCompleted", lessonId: "t.l1" });
+            game.saveDraft("t.l1.ex1", "print(9)");
+          }}
+        >
+          race
+        </button>
+        <button
+          onClick={() => {
+            game.importBackup(sampleBackupPayload("Bình")).catch(() => {
+              document.title = "import-failed";
+            });
+          }}
+        >
+          failing
+        </button>
+        <button onClick={() => game.dispatch({ type: "LessonCompleted", lessonId: "t.l1" })}>complete</button>
+      </div>
+    );
+  }
+
+  test("writes made after an import starts do not overwrite the imported data", async () => {
+    const onReplaced = vi.fn();
+    const { store } = await renderWithGame(<RaceProbe />, { onReplaced });
+    await userEvent.click(screen.getByRole("button", { name: "race" }));
+    await waitFor(() => expect(onReplaced).toHaveBeenCalledOnce());
+    await new Promise((resolve) => setTimeout(resolve, DRAFT_SAVE_DELAY_MS + 200));
+    const loaded = await store.loadActive();
+    expect(loaded?.profile.childName).toBe("Bình");
+    expect(loaded?.state.wallet.xu).toBe(120);
+    expect(loaded?.state.progress.completedLessons).toEqual([]);
+    expect(loaded?.drafts.get("t.l1.ex1")).toBeUndefined();
+  });
+
+  test("a failing import rejects, skips onReplaced and lets later saves through", async () => {
+    class FailingReplace extends MemoryStore {
+      override async replaceAll(): Promise<void> {
+        throw new Error("boom");
+      }
+    }
+    const onReplaced = vi.fn();
+    const { store } = await renderWithGame(<RaceProbe />, { store: new FailingReplace({ persistent: true }), onReplaced });
+    await userEvent.click(screen.getByRole("button", { name: "failing" }));
+    await waitFor(() => expect(document.title).toBe("import-failed"));
+    expect(onReplaced).not.toHaveBeenCalled();
+    await userEvent.click(screen.getByRole("button", { name: "complete" }));
+    await waitFor(async () =>
+      expect((await store.loadActive())?.state.progress.completedLessons).toContain("t.l1"),
+    );
   });
 });

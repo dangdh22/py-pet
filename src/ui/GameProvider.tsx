@@ -68,9 +68,12 @@ export function GameProvider({ store, loaded, clock, onReplaced, children }: Gam
   const drafts = useRef(new Map(loaded.drafts));
   const draftTimers = useRef(new Map<string, ReturnType<typeof setTimeout>>());
   const queue = useRef<Promise<void>>(Promise.resolve());
+  /** Set while an import replaces the store: later writes are dropped because the page reloads. */
+  const replacing = useRef(false);
 
   /** Writes run one after another; a failed write is retried once, then flagged. */
   const enqueue = useCallback((work: () => Promise<void>) => {
+    if (replacing.current) return;
     queue.current = queue.current.then(async () => {
       try {
         await work();
@@ -182,12 +185,23 @@ export function GameProvider({ store, loaded, clock, onReplaced, children }: Gam
 
   const importBackup = useCallback(
     async (payload: BackupPayload) => {
-      await queue.current;
-      const current = await encodeBackup(await buildBackupPayload(store, clock()));
-      const existing = await store.readMeta();
-      const autoBackups = [current, ...existing.autoBackups].slice(0, AUTO_BACKUPS);
-      const activeProfileId = payload.meta.activeProfileId ?? payload.profiles[0]?.profile.id ?? null;
-      await store.replaceAll({ ...payload.meta, activeProfileId, autoBackups }, payload.profiles);
+      replacing.current = true;
+      for (const timer of draftTimers.current.values()) clearTimeout(timer);
+      draftTimers.current.clear();
+      const run = queue.current.then(async () => {
+        const current = await encodeBackup(await buildBackupPayload(store, clock()));
+        const existing = await store.readMeta();
+        const autoBackups = [current, ...existing.autoBackups].slice(0, AUTO_BACKUPS);
+        const activeProfileId = payload.meta.activeProfileId ?? payload.profiles[0]?.profile.id ?? null;
+        await store.replaceAll({ ...payload.meta, activeProfileId, autoBackups }, payload.profiles);
+      });
+      queue.current = run.catch(() => {});
+      try {
+        await run;
+      } catch (error) {
+        replacing.current = false;
+        throw error;
+      }
       onReplaced();
     },
     [clock, store, onReplaced],
