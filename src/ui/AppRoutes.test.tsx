@@ -160,6 +160,13 @@ describe("App", () => {
     delete old.progress.completedReviews;
     delete old.progress.topicTests;
     delete old.progress.evolutionTests;
+    delete old.wallet.history;
+    delete old.activity.seconds;
+    delete old.inventory;
+    delete old.rewards;
+    delete old.vacation;
+    delete old.assigned;
+    delete old.badges;
     await store.createProfile(testProfile(), old);
     render(<App bundle={testBundle()} runnerClient={makeClient().client} store={store} clock={() => FIXED_NOW} />);
     expect(await screen.findByRole("heading", { name: "Phòng của Robo" })).toBeInTheDocument();

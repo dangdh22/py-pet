@@ -30,7 +30,7 @@ describe("LessonCompleted", () => {
     expect(once.progress.completedLessons).toEqual(["a"]);
     expect(once.week.lessonsDone).toBe(1);
     expect(once.streak).toMatchObject({ pointsDay: "2026-10-06", points: 1, current: 0 });
-    expect(once.activity).toEqual({ lastActiveDay: "2026-10-06", decayApplied: 0 });
+    expect(once.activity).toMatchObject({ lastActiveDay: "2026-10-06", decayApplied: 0 });
     const twice = apply(once, lesson("a"), at("2026-10-06", 11));
     expect(twice.pet.xp).toBe(10);
     expect(twice.week.lessonsDone).toBe(1);
@@ -265,7 +265,7 @@ describe("day rollover", () => {
     const next = apply(activeOn("2026-10-01"), lesson("a"), at("2026-10-06"));
     expect(next.pet.pin).toBe(2);
     expect(next.pet.vui).toBe(1);
-    expect(next.activity).toEqual({ lastActiveDay: "2026-10-06", decayApplied: 0 });
+    expect(next.activity).toMatchObject({ lastActiveDay: "2026-10-06", decayApplied: 0 });
   });
 
   test("a new week pays the weekly plan bonus and resets the count", () => {

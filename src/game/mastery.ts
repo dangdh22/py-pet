@@ -20,7 +20,7 @@ export const MASTERY = {
 export type ResultSource = "lesson" | "review" | "practice" | "test";
 
 export function emptyMastery(): ConceptMastery {
-  return { score: 0, level: 1, run: 0, needsHelp: false, misconceptions: 0, recent: [], reviewMisses: 0 };
+  return { score: 0, level: 1, run: 0, needsHelp: false, misconceptions: 0, recent: [], reviewMisses: 0, coachedAt: null };
 }
 
 /** The s of a solved exercise (spec 5.9). */

@@ -13,7 +13,10 @@ const masterySchema = z.object({
   misconceptions: count,
   recent: z.array(z.number().min(0).max(1)),
   reviewMisses: count,
+  coachedAt: day.nullable(),
 });
+
+const itemId = z.string().min(1);
 
 /** The shape of a saved GameState of the current version. Unknown keys are dropped. */
 export const gameStateSchema: z.ZodType<GameState> = z.object({
@@ -26,8 +29,18 @@ export const gameStateSchema: z.ZodType<GameState> = z.object({
     vui: stat,
     correctRun: count,
   }),
-  wallet: z.object({ xu: count }),
-  activity: z.object({ lastActiveDay: day.nullable(), decayApplied: count }),
+  wallet: z.object({
+    xu: count,
+    history: z.array(
+      z.object({
+        day,
+        delta: z.number().int(),
+        reason: z.enum(["code", "review", "topicTest", "evolution", "streak", "week", "shop", "reward"]),
+        ref: z.string().nullable(),
+      }),
+    ),
+  }),
+  activity: z.object({ lastActiveDay: day.nullable(), decayApplied: count, seconds: z.record(day, count) }),
   streak: z.object({
     current: count,
     best: count,
@@ -42,11 +55,37 @@ export const gameStateSchema: z.ZodType<GameState> = z.object({
     weeklyTarget: count,
     graceDays: count,
     uiLang: z.enum(["vi", "en"]),
+    questionLang: z.enum(["vi", "en", "both"]),
+    passPercent: z.number().int().min(1).max(100),
+    helpPercent: z.number().int().min(1).max(100),
+    runSeconds: z.number().int().min(1).max(30),
   }),
   mastery: z.record(z.string(), masterySchema),
   reviews: z.record(z.string(), z.object({ box: z.number().int().min(1).max(5), due: day })),
   retry: z.record(z.string(), day),
   remedial: z.object({ stage: z.number().int().min(1), items: z.array(z.string()) }).nullable(),
+  inventory: z.object({
+    consumables: z.record(itemId, count),
+    owned: z.array(itemId),
+    equipped: z.array(itemId),
+  }),
+  rewards: z.object({
+    catalog: z.array(z.object({ id: itemId, name: z.string().min(1), price: count, weeklyLimit: count })),
+    requests: z.array(
+      z.object({
+        id: itemId,
+        rewardId: itemId,
+        name: z.string(),
+        price: count,
+        at: z.string(),
+        status: z.enum(["pending", "approved", "rejected"]),
+        decidedAt: z.string().nullable(),
+      }),
+    ),
+  }),
+  vacation: z.object({ since: day.nullable(), ranges: z.array(z.object({ start: day, end: day })) }),
+  assigned: z.array(z.object({ id: itemId, conceptId: itemId, items: z.array(z.string()), day })),
+  badges: z.record(z.string(), day),
   progress: z.object({
     completedLessons: z.array(z.string()),
     solvedExercises: z.array(z.string()),

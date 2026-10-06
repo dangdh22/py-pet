@@ -1,5 +1,5 @@
 import { gameStateSchema } from "./schema";
-import { GAME_STATE_VERSION, type GameState } from "./state";
+import { DEFAULT_SETTINGS, GAME_STATE_VERSION, type GameState } from "./state";
 
 export type StateProblem = "newer-version" | "damaged";
 
@@ -36,6 +36,24 @@ const STEPS: Record<number, (state: RawState) => RawState> = {
     remedial: null,
     progress: { ...(isRecord(state.progress) ? state.progress : {}), topicTests: {}, evolutionTests: [] },
   }),
+  3: (state) => {
+    const mastery = isRecord(state.mastery) ? state.mastery : {};
+    return {
+      ...state,
+      version: 4,
+      wallet: { ...(isRecord(state.wallet) ? state.wallet : {}), history: [] },
+      activity: { ...(isRecord(state.activity) ? state.activity : {}), seconds: {} },
+      settings: { ...DEFAULT_SETTINGS, ...(isRecord(state.settings) ? state.settings : {}) },
+      mastery: Object.fromEntries(
+        Object.entries(mastery).map(([id, m]) => [id, { ...(isRecord(m) ? m : {}), coachedAt: null }]),
+      ),
+      inventory: { consumables: {}, owned: [], equipped: [] },
+      rewards: { catalog: [], requests: [] },
+      vacation: { since: null, ranges: [] },
+      assigned: [],
+      badges: {},
+    };
+  },
 };
 
 /** Brings a saved state up to GAME_STATE_VERSION and checks its shape. Throws StateFormatError. */

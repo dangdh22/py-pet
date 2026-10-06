@@ -1,12 +1,28 @@
 import { describe, expect, test } from "vitest";
 import { StateFormatError, upgradeGameState } from "./migrate";
-import { GAME_STATE_VERSION, initialGameState } from "./state";
+import { emptyMastery } from "./mastery";
+import { DEFAULT_SETTINGS, GAME_STATE_VERSION, initialGameState, type GameState } from "./state";
+
+/** A state as the M3b app saved it (version 3), with 1 concept record and 25 xu. */
+function versionThreeState(): Record<string, unknown> {
+  const { inventory, rewards, vacation, assigned, badges, ...rest } = initialGameState("2026-10-06");
+  const { questionLang, passPercent, helpPercent, runSeconds, ...settings } = rest.settings;
+  const { coachedAt, ...concept } = emptyMastery();
+  return {
+    ...rest,
+    version: 3,
+    wallet: { xu: 25 },
+    activity: { lastActiveDay: "2026-10-05", decayApplied: 0 },
+    settings: { ...settings, dailyGoal: 3 },
+    mastery: { k1: { ...concept, score: 42 } },
+  };
+}
 
 /** A state as the M3a app saved it (version 2). */
 function versionTwoState(): Record<string, unknown> {
-  const { remedial, ...rest } = initialGameState("2026-10-06");
-  const { topicTests, evolutionTests, ...progress } = rest.progress;
-  const { stageStartXp, ...pet } = rest.pet;
+  const { remedial, ...rest } = versionThreeState();
+  const { topicTests, evolutionTests, ...progress } = rest.progress as GameState["progress"];
+  const { stageStartXp, ...pet } = rest.pet as GameState["pet"];
   return { ...rest, version: 2, pet: { ...pet, xp: 70 }, progress: { ...progress, completedReviews: ["s1.lam-quen.r1"] } };
 }
 
@@ -53,6 +69,20 @@ describe("upgradeGameState", () => {
     expect(upgraded.progress.topicTests).toEqual({});
     expect(upgraded.progress.evolutionTests).toEqual([]);
     expect(upgraded.remedial).toBeNull();
+  });
+
+  test("upgrades a version 3 state: shop, rewards, vacation and settings start empty or default", () => {
+    const upgraded = upgradeGameState(versionThreeState());
+    expect(upgraded.version).toBe(GAME_STATE_VERSION);
+    expect(upgraded.wallet).toEqual({ xu: 25, history: [] });
+    expect(upgraded.activity).toEqual({ lastActiveDay: "2026-10-05", decayApplied: 0, seconds: {} });
+    expect(upgraded.settings).toEqual({ ...DEFAULT_SETTINGS, dailyGoal: 3 });
+    expect(upgraded.mastery.k1).toEqual({ ...emptyMastery(), score: 42, coachedAt: null });
+    expect(upgraded.inventory).toEqual({ consumables: {}, owned: [], equipped: [] });
+    expect(upgraded.rewards).toEqual({ catalog: [], requests: [] });
+    expect(upgraded.vacation).toEqual({ since: null, ranges: [] });
+    expect(upgraded.assigned).toEqual([]);
+    expect(upgraded.badges).toEqual({});
   });
 
   test("keeps the optional exercise stats", () => {

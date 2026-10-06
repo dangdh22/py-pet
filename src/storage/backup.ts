@@ -45,6 +45,8 @@ const MIGRATIONS: Record<number, (payload: BackupPayload) => BackupPayload> = {
   1: (payload) => ({ ...payload, schemaVersion: 2, meta: { ...payload.meta, schemaVersion: 2 } }),
   // Schema 3 only changed the game state (GameState version 3).
   2: (payload) => ({ ...payload, schemaVersion: 3, meta: { ...payload.meta, schemaVersion: 3 } }),
+  // Schema 4 only changed the game state (GameState version 4).
+  3: (payload) => ({ ...payload, schemaVersion: 4, meta: { ...payload.meta, schemaVersion: 4 } }),
 };
 
 const profileBundleSchema = z.object({

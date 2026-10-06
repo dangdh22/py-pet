@@ -128,10 +128,19 @@ describe("backup file", () => {
     expect(result.payload.profiles[0]!.state.remedial).toBeNull();
   });
 
-  test("decodes the committed schema 3 sample file", async () => {
+  test("decodes the committed schema 3 sample file and upgrades it", async () => {
     const result = await decodeBackup(readFileSync("src/storage/fixtures/backup-v3.pypet", "utf8"));
+    if (!result.ok) throw new Error("the sample file must decode");
+    expect(result.checksumValid).toBe(true);
+    expect(result.payload.schemaVersion).toBe(SCHEMA_VERSION);
+    expect(result.payload.profiles[0]!.state.progress.topicTests).toEqual({});
+    expect(result.payload.profiles[0]!.state.wallet).toEqual({ xu: 120, history: [] });
+  });
+
+  test("decodes the committed schema 4 sample file", async () => {
+    const result = await decodeBackup(readFileSync("src/storage/fixtures/backup-v4.pypet", "utf8"));
     expect(result.ok && result.checksumValid).toBe(true);
-    expect(result.ok && result.payload.profiles[0]!.state.progress.topicTests).toEqual({});
+    expect(result.ok && result.payload.profiles[0]!.state.inventory).toEqual({ consumables: {}, owned: [], equipped: [] });
   });
 
   test("refuses a file whose profile or state is damaged", async () => {
