@@ -1,0 +1,6 @@
+- id: zero-division
+  match: { type: ZeroDivisionError }
+  explain:
+    vi: "Dòng {line}: không thể chia cho 0."
+    en: "Line {line}: you cannot divide by 0."
+  sample: "print(5 / 0)"

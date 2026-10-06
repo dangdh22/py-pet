@@ -6,13 +6,14 @@
     "doc": "docs"
   },
   "scripts": {
-    "test": "vitest run",
+    "test": "npm run content:build && vitest run",
     "pyodide:copy": "node tools/copy_pyodide.mjs",
-    "dev": "npm run pyodide:copy && vite",
-    "build": "npm run pyodide:copy && tsc --noEmit && vite build",
+    "dev": "npm run pyodide:copy && npm run content:build && vite",
+    "build": "npm run pyodide:copy && npm run content:build && tsc --noEmit && vite build",
     "preview": "vite preview --port 4173 --strictPort",
-    "typecheck": "tsc --noEmit",
-    "test:py": ".venv/bin/python -m pytest tools/tests -q"
+    "typecheck": "npm run content:build && tsc --noEmit",
+    "test:py": ".venv/bin/python -m pytest tools/tests -q",
+    "content:build": "tsx tools/build_content.ts content src/generated/content.json"
   },
   "keywords": [],
   "type": "module",
