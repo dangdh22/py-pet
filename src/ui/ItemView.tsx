@@ -72,7 +72,9 @@ export function ItemView({
   const onJudged = (info: JudgedInfo) => {
     const accepted = info.result.status === "accepted";
     firstTry.current ??= accepted && info.hintsUsed === 0 && !info.viewedSolution;
-    showHelp(accepted ? null : (info.result.misconceptions.find(isConcept) ?? null));
+    // A built-in misconception with no concept yet (like input-prompt) gets no mastery entry and no card.
+    const misconceptions = info.result.misconceptions.filter(isConcept);
+    showHelp(accepted ? null : (misconceptions[0] ?? null));
     game.dispatch(
       {
         type: "ExerciseJudged",
@@ -82,7 +84,7 @@ export function ItemView({
         hintsUsed: info.hintsUsed,
         viewedSolution: info.viewedSolution,
         concepts: item.concepts,
-        misconceptions: info.result.misconceptions,
+        misconceptions,
         source,
       },
       {

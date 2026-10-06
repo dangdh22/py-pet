@@ -114,4 +114,40 @@ describe("ItemView", () => {
     expect(screen.getByRole("region", { name: "Hiểu lầm thường gặp" })).toHaveTextContent("Khái niệm c2");
     expect(onMisconception).toHaveBeenCalledWith("c2");
   });
+
+  test("misconception ids that are not concepts are dropped before the event and the card", async () => {
+    const code = {
+      ...reviewCode,
+      commonWrong: [
+        { test: 0, output: "hi", misconception: "nope", sample: 'print("hi")' },
+        { test: 0, output: "hi", misconception: "c2", sample: 'print("hi")' },
+      ],
+    };
+    const onMisconception = vi.fn();
+    const { store } = await renderWithGame(
+      <ItemView item={code} source="lesson" onDone={() => {}} onMisconception={onMisconception} />,
+      { bundle, runner: fakeRunner(() => okResult("hi\n", { usedInputPrompt: true })) },
+    );
+    await userEvent.click(screen.getByRole("button", { name: "Nộp bài" }));
+    await userEvent.click(await screen.findByRole("button", { name: "Xem thẻ Hiểu lầm thường gặp" }));
+    expect(screen.getByRole("region", { name: "Hiểu lầm thường gặp" })).toHaveTextContent("Khái niệm c2");
+    expect(onMisconception.mock.calls).toEqual([["c2"]]);
+    await waitFor(async () => expect((await savedState(store)).mastery.c2).toMatchObject({ misconceptions: 1 }));
+    const mastery = (await savedState(store)).mastery;
+    expect(mastery.nope).toBeUndefined();
+    expect(mastery["input-prompt"]).toBeUndefined();
+  });
+
+  test("a misconception that is not a concept shows no card", async () => {
+    const onMisconception = vi.fn();
+    const { store } = await renderWithGame(
+      <ItemView item={reviewCode} source="lesson" onDone={() => {}} onMisconception={onMisconception} />,
+      { bundle, runner: fakeRunner(() => okResult("Nhập: Hi\n", { usedInputPrompt: true })) },
+    );
+    await userEvent.click(screen.getByRole("button", { name: "Nộp bài" }));
+    await waitFor(async () => expect((await savedState(store)).progress.exerciseStats?.[reviewCode.id]?.fails).toBe(1));
+    expect(screen.queryByRole("button", { name: "Xem thẻ Hiểu lầm thường gặp" })).not.toBeInTheDocument();
+    expect(onMisconception).not.toHaveBeenCalled();
+    expect((await savedState(store)).mastery["input-prompt"]).toBeUndefined();
+  });
 });
