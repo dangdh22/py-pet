@@ -23,6 +23,7 @@ import {
   type GameSettings,
   type GameState,
 } from "./state";
+import { changeXu } from "./wallet";
 
 export type GameEvent =
   | { type: "DayRollover" }
@@ -97,7 +98,7 @@ export function apply(state: GameState, event: GameEvent, now: Date): GameState 
       completeLesson(next, event.lessonId, today, rollback);
       break;
     case "ExerciseJudged":
-      judgeExercise(next, event);
+      judgeExercise(next, event, today);
       break;
     case "QuestionAnswered":
       answerQuestion(next, event, today);
@@ -106,7 +107,7 @@ export function apply(state: GameState, event: GameEvent, now: Date): GameState 
       completeReview(next, event, today, rollback);
       break;
     case "TopicTestCompleted":
-      completeTopicTest(next, event);
+      completeTopicTest(next, event, today);
       break;
     case "EvolutionTestCompleted":
       completeEvolutionTest(next, event, now);
@@ -153,8 +154,8 @@ function settleWeek(s: GameState, today: string): void {
   const current = weekStart(today);
   if (s.week.start >= current) return;
   const target = s.settings.weeklyTarget;
-  if (target > 0 && s.week.lessonsDone >= target * WEEK_EXCEED_RATIO) s.wallet.xu += XU.weekPlanExceeded;
-  else if (target > 0 && s.week.lessonsDone >= target) s.wallet.xu += XU.weekPlanMet;
+  if (target > 0 && s.week.lessonsDone >= target * WEEK_EXCEED_RATIO) changeXu(s, XU.weekPlanExceeded, "week", s.week.start, today);
+  else if (target > 0 && s.week.lessonsDone >= target) changeXu(s, XU.weekPlanMet, "week", s.week.start, today);
   s.week = { start: current, lessonsDone: 0 };
 }
 
@@ -196,7 +197,7 @@ function achieveDay(s: GameState, today: string): void {
   s.streak.lastAchievedDay = today;
   s.streak.best = Math.max(s.streak.best, s.streak.current);
   const bonus = STREAK_MILESTONES[s.streak.current];
-  if (bonus) s.wallet.xu += bonus;
+  if (bonus) changeXu(s, bonus, "streak", String(s.streak.current), today);
   if (s.streak.current % FREEZE_EVERY === 0) s.streak.freezes = Math.min(MAX_FREEZES, s.streak.freezes + 1);
 }
 
@@ -214,7 +215,7 @@ function updateMastery(s: GameState, conceptId: string, change: (m: ConceptMaste
   s.mastery[conceptId] = change(s.mastery[conceptId] ?? emptyMastery());
 }
 
-function judgeExercise(s: GameState, e: Extract<GameEvent, { type: "ExerciseJudged" }>): void {
+function judgeExercise(s: GameState, e: Extract<GameEvent, { type: "ExerciseJudged" }>, today: string): void {
   const source = e.source ?? "lesson";
   for (const id of e.misconceptions ?? []) updateMastery(s, id, recordMisconception);
   if (e.accepted) {
@@ -249,12 +250,12 @@ function judgeExercise(s: GameState, e: Extract<GameEvent, { type: "ExerciseJudg
   }
   if (failedSubmitsBefore === 0) {
     s.pet.xp += XP.codeFirstTry;
-    s.wallet.xu += XU.codeFirstSubmit + (hintsUsed === 0 ? XU.noHintBonus : 0);
+    changeXu(s, XU.codeFirstSubmit + (hintsUsed === 0 ? XU.noHintBonus : 0), "code", e.exerciseId, today);
     bumpCorrectRun(s);
     return;
   }
   s.pet.xp += XP.codeAfterRetries;
-  if (failedSubmitsBefore >= PERSISTENCE_FAILS) s.wallet.xu += XU.persistenceBonus;
+  if (failedSubmitsBefore >= PERSISTENCE_FAILS) changeXu(s, XU.persistenceBonus, "code", e.exerciseId, today);
   s.pet.correctRun = 0;
 }
 
@@ -294,7 +295,7 @@ function completeReview(
   s.pet.xp += XP.review + XP.reviewPerCorrect * correct;
   s.pet.pin = Math.min(STAT_MAX, s.pet.pin + PIN_REVIEW);
   // Xu only for the first run of a station on the map, so repeated reviews cannot farm xu.
-  if (first) s.wallet.xu += XU.review + (total > 0 && correct === total ? XU.reviewPerfect : 0);
+  if (first) changeXu(s, XU.review + (total > 0 && correct === total ? XU.reviewPerfect : 0), "review", e.stationId, today);
   if (!rollback) addPoints(s, POINTS.review, today);
 }
 
@@ -303,7 +304,7 @@ function raiseVui(s: GameState): void {
 }
 
 /** Spec 5.4-5.6: the first completion pays 30 XP; the first pass pays 20 xu and Vui +1. Any score moves the path on. */
-function completeTopicTest(s: GameState, e: Extract<GameEvent, { type: "TopicTestCompleted" }>): void {
+function completeTopicTest(s: GameState, e: Extract<GameEvent, { type: "TopicTestCompleted" }>, today: string): void {
   const previous = s.progress.topicTests[e.topicId];
   const passed = isPass(e.score, e.max);
   s.progress.topicTests[e.topicId] = {
@@ -315,7 +316,7 @@ function completeTopicTest(s: GameState, e: Extract<GameEvent, { type: "TopicTes
   };
   if (!previous) s.pet.xp += XP.topicTest;
   if (passed && !previous?.passed) {
-    s.wallet.xu += XU.topicTestPassed;
+    changeXu(s, XU.topicTestPassed, "topicTest", e.topicId, today);
     raiseVui(s);
   }
 }
@@ -350,6 +351,6 @@ function completeEvolutionTest(
   if (s.pet.stage !== e.stage) return;
   s.pet.stage += 1;
   s.pet.stageStartXp = s.pet.xp;
-  s.wallet.xu += XU.evolution;
+  changeXu(s, XU.evolution, "evolution", String(e.stage), localDay(now));
   raiseVui(s);
 }
