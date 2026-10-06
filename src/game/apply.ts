@@ -340,6 +340,8 @@ function completeEvolutionTest(
     wrongConcepts: e.wrongConcepts,
   });
   if (!passed) {
+    // A test of a stage the robot already passed (a retake from the map) must not open a review set.
+    if (e.stage !== s.pet.stage) return;
     s.remedial = e.remedialItems.length > 0 ? { stage: e.stage, items: e.remedialItems } : null;
     return;
   }

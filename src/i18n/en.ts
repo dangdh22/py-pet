@@ -130,6 +130,7 @@ export const en: Record<MessageKey, string> = {
   "evolution.weakTitle": "Parts to review",
   "evolution.startRemedial": "Start the focused review",
   "evolution.remedialFirst": "Finish the focused review first, then take the test again.",
+  "evolution.alreadyDone": "{name} has already evolved in this stage!",
   "remedial.title": "Focused review",
   "remedial.doneTitle": "Focused review done! You can take the test again.",
   "remedial.none": "You have no focused review.",

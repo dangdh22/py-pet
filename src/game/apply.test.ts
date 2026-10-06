@@ -527,6 +527,16 @@ describe("tests", () => {
     ...extra,
   });
 
+  test("a failed test of an earlier stage is recorded but opens no focused review set", () => {
+    const start = initialGameState("2026-10-06");
+    start.pet.stage = 2;
+    const next = apply(start, evolution(5), at("2026-10-06"));
+    expect(next.progress.evolutionTests).toHaveLength(1);
+    expect(next.progress.evolutionTests[0]).toMatchObject({ stage: 1, passed: false });
+    expect(next.remedial).toBeNull();
+    expect(next.pet.stage).toBe(2);
+  });
+
   test("isPass uses 80% with a float tolerance", () => {
     expect(isPass(11.2, 14)).toBe(true);
     expect(isPass(11.19, 14)).toBe(false);

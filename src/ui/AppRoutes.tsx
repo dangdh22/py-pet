@@ -1,4 +1,6 @@
+import { useState } from "react";
 import { evolutionTestId, findLesson, findStage, findTopic, topicTestId } from "../content/lookup";
+import type { Stage } from "../content/types";
 import { findNode, nodeStatuses } from "../game/path";
 import { useLang } from "../i18n/LangProvider";
 import { BackupScreen } from "./BackupScreen";
@@ -67,7 +69,7 @@ export function AppRoutes() {
     } else if (nodeStatuses(bundle, game.state).get(node.id) === "locked") {
       screen = <Notice message={t("exam.locked")} />;
     } else {
-      screen = <EvolutionTestScreen key={stage.id} stage={stage} stageNumber={node.stage} onExit={goHome} />;
+      screen = <EvolutionRoute key={stage.id} stage={stage} stageNumber={node.stage} onExit={goHome} />;
     }
   } else if (route.name === "remedial") {
     screen = <RemedialScreen onExit={goHome} />;
@@ -82,6 +84,18 @@ export function AppRoutes() {
       <ErrorBoundary key={routeToHash(route)}>{screen}</ErrorBoundary>
     </>
   );
+}
+
+/**
+ * A passed evolution test is not offered again. Checked once on opening: passing the test marks its node done, and
+ * the result screen must stay.
+ */
+function EvolutionRoute({ stage, stageNumber, onExit }: { stage: Stage; stageNumber: number; onExit(): void }) {
+  const { t } = useLang();
+  const game = useGame();
+  const [alreadyDone] = useState(() => game.state.pet.stage > stageNumber);
+  if (alreadyDone) return <Notice message={t("evolution.alreadyDone", { name: game.profile.robotName })} />;
+  return <EvolutionTestScreen stage={stage} stageNumber={stageNumber} onExit={onExit} />;
 }
 
 function Notice({ message }: { message: string }) {

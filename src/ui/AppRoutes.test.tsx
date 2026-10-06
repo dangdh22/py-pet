@@ -264,6 +264,17 @@ describe("tests and evolution", () => {
     expect(screen.getByRole("link", { name: "Bắt đầu ôn tập trọng tâm" })).toHaveAttribute("href", "#/remedial");
   });
 
+  test("a passed evolution test cannot be taken again from the map", async () => {
+    const state = initialGameState(TODAY);
+    state.progress.completedLessons = ["x.l1", "x.l2"];
+    state.progress.topicTests["x.t"] = { attempts: 1, best: 6, max: 6, passed: true, lastItems: [] };
+    state.pet.stage = 2;
+    window.location.hash = "#/evolution/x";
+    await renderWithGame(<AppRoutes />, { bundle: examBundle(), state });
+    expect(screen.getByText("Robo đã tiến hóa ở giai đoạn này rồi!")).toBeInTheDocument();
+    expect(screen.queryByRole("heading", { name: "Kiểm tra tiến hóa" })).not.toBeInTheDocument();
+  });
+
   test("topic test, failed evolution, focused review, retake, evolution", async () => {
     let output = "Hi\n";
     const state = initialGameState(TODAY);
