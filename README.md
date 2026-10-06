@@ -5,6 +5,7 @@
 - Thiết kế: `docs/superpowers/specs/2026-10-06-py-pet-design.md`
 - Kế hoạch M1: `docs/superpowers/plans/2026-10-06-m1-lat-cat-doc.md`
 - Kế hoạch M2: `docs/superpowers/plans/2026-10-06-m2-vong-choi-pet.md`
+- Trạng thái dự án và việc tiếp theo: `docs/superpowers/STATUS.md`
 
 Tiến độ được lưu trong IndexedDB của trình duyệt. Hãy xuất file sao lưu `.pypet` thường xuyên (màn hình Sao lưu). Khi đổi cấu trúc dữ liệu, tăng `SCHEMA_VERSION`, thêm migration trong `src/storage/backup.ts` và chạy `npx tsx tools/make_backup_fixture.ts` để lưu file mẫu của phiên bản mới.
 
