@@ -19,3 +19,16 @@ Các quyết định thiết kế 1–13 trong `docs/superpowers/plans/2026-10-0
 5. **Chuyển sang M4**: chuỗi "chưa đạt 80%" đang ghi cứng 80%; khi phụ huynh chỉnh được ngưỡng đạt (M4) cần thêm placeholder. Bản ghi kiểm tra chủ đề chưa giới hạn điểm trong `[0, max]` và giữ `best` khi `max` đổi (cần xử lý trước khi M5 đổi cỡ đề).
 6. **Dòng trailer của commit** ghi model của subagent viết commit đó (Haiku, Sonnet hoặc Opus), không viết lại lịch sử.
 
+## M4a
+
+Người bảo trì chưa duyệt kế hoạch M4a; Claude tự chốt theo yêu cầu chạy liên tục. Chi tiết trong mục "Quyết định thiết kế" của `docs/superpowers/plans/2026-10-06-m4a-cua-hang-nghi.md`.
+
+1. **Chia M4 thành M4a (luật chơi và màn hình của con) và M4b (khu phụ huynh).** Mọi dữ liệu mới của M4 vào GameState version 4 một lần. Giá nếu sai: không đáng kể.
+2. **Giá và danh mục cửa hàng** (dầu nhớt 15, pin sạc nhanh 30, quả bóng 15, phụ kiện 40–120, đồ trang trí 40–90 xu; 4 phụ kiện chỉ là quà chuỗi ngày). Là ước tính; sửa trong `src/game/shop.ts` sau khi phụ huynh xem số xu trung bình/ngày.
+3. **Đồ chơi tăng Vui +1** theo spec 5.6. Quyết định M3a "Vui chỉ tăng khi trả lời đúng" được hiểu là cho việc sạc bằng ôn tập. Cần xác nhận; nếu sai thì bỏ món "Quả bóng" hoặc đổi tác dụng.
+4. **Đổi thưởng thật:** con chỉ xin được khi số xu chưa bị giữ đủ giá; giới hạn tuần tính cả yêu cầu đang chờ; duyệt mà con thiếu xu thì yêu cầu vẫn chờ.
+5. **Chế độ nghỉ:** thêm sự kiện hủy lịch nghỉ (spec không có); kế hoạch tuần = làm tròn lên `mục tiêu × số ngày không nghỉ / 7`.
+6. **Thời gian học:** phút đầu khi mở màn hình học được tính cả khi con chỉ đọc; sau đó cần thao tác trong 60 giây.
+7. **16 huy hiệu** do Claude đặt (spec không liệt kê). Sửa danh sách trong `src/game/badges.ts`.
+8. **Phụ kiện chỉ hiện bằng chữ** trong Phòng robot cho tới M6.
+
