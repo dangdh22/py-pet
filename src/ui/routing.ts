@@ -15,7 +15,9 @@ export type Route =
   /** Practice a parent gave (spec 9.2). */
   | { name: "assigned"; id: string }
   | { name: "shop" }
-  | { name: "achievements" };
+  | { name: "achievements" }
+  /** Spec 9: behind the PIN. */
+  | { name: "parent" };
 
 function decode(raw: string): string {
   try {
@@ -32,6 +34,7 @@ export function parseHash(hash: string): Route {
   if (hash === "#/remedial") return { name: "remedial" };
   if (hash === "#/shop") return { name: "shop" };
   if (hash === "#/achievements") return { name: "achievements" };
+  if (hash === "#/parent") return { name: "parent" };
   const match = /^#\/(lesson|review|practice|topic-test|evolution|assigned)\/(.+)$/.exec(hash);
   if (!match) return { name: "home" };
   const id = decode(match[2] as string);
@@ -71,6 +74,8 @@ export function routeToHash(route: Route): string {
       return "#/shop";
     case "achievements":
       return "#/achievements";
+    case "parent":
+      return "#/parent";
     case "map":
       return "#/map";
     case "backup":

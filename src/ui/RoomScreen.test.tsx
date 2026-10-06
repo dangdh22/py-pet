@@ -131,6 +131,7 @@ describe("RoomScreen", () => {
     expect(screen.getByText("Trong phòng: Chậu cây, Bức tranh")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Cửa hàng" })).toHaveAttribute("href", "#/shop");
     expect(screen.getByRole("link", { name: "Sổ thành tích" })).toHaveAttribute("href", "#/achievements");
+    expect(screen.getByRole("link", { name: "Khu phụ huynh" })).toHaveAttribute("href", "#/parent");
   });
 
   test("practice from the parents comes first", async () => {

@@ -14,6 +14,7 @@ import { useGame } from "./GameProvider";
 import { Header } from "./Header";
 import { LessonScreen } from "./LessonScreen";
 import { MapScreen } from "./MapScreen";
+import { ParentScreen } from "./ParentScreen";
 import { PracticeScreen } from "./PracticeScreen";
 import { RemedialScreen } from "./RemedialScreen";
 import { ReviewScreen } from "./ReviewScreen";
@@ -49,6 +50,8 @@ export function AppRoutes() {
     screen = <ShopScreen />;
   } else if (route.name === "achievements") {
     screen = <AchievementsScreen />;
+  } else if (route.name === "parent") {
+    screen = <ParentScreen />;
   } else if (route.name === "assigned") {
     screen = <AssignedPracticeScreen key={route.id} id={route.id} onExit={goHome} />;
   } else if (route.name === "backup") {

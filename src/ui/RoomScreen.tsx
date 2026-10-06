@@ -113,6 +113,9 @@ export function RoomScreen() {
         <a className="button" href={routeToHash({ name: "achievements" })}>
           {t("room.achievements")}
         </a>
+        <a className="button" href={routeToHash({ name: "parent" })}>
+          {t("room.parent")}
+        </a>
         <a className="button" href="#/backup">
           {t("room.backup")}
         </a>

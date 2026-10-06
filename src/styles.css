@@ -166,3 +166,13 @@ a.button.primary { background: var(--primary); border-color: var(--primary); col
 .badge-locked { color: var(--muted); }
 .form-locked { color: var(--muted); }
 .condition-vacation { background: #e6f6ff; }
+
+/* M4b: parent area */
+.parent-top { display: flex; justify-content: space-between; align-items: center; }
+.parent-gate form { display: grid; gap: 8px; max-width: 360px; }
+.alerts { color: #8a4b00; }
+.minutes-chart { list-style: none; padding: 0; display: grid; gap: 4px; max-width: 480px; }
+.minutes-day { position: relative; padding: 2px 8px; }
+.minutes-bar { position: absolute; inset: 0 auto 0 0; background: #d8e3ff; border-radius: 4px; z-index: -1; }
+.minutes-vacation { color: var(--muted); }
+.minutes-vacation .minutes-bar { background: #e5e5e5; }
