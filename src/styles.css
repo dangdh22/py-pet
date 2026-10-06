@@ -1,0 +1,108 @@
+:root {
+  --bg: #f6f8fc;
+  --surface: #ffffff;
+  --text: #1d2440;
+  --muted: #5b6475;
+  --primary: #4f7cff;
+  --success: #2a9d4a;
+  --danger: #d33a3a;
+  --border: #d5dcea;
+  --code-bg: #1e1e2e;
+  --code-text: #e6e9f2;
+  --radius: 10px;
+  --mono: ui-monospace, Menlo, Consolas, monospace;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  color: var(--text);
+  background: var(--bg);
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; }
+
+button {
+  font: inherit;
+  padding: 6px 14px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  cursor: pointer;
+}
+button.primary { background: var(--primary); border-color: var(--primary); color: #fff; }
+button:disabled { opacity: 0.5; cursor: not-allowed; }
+button[aria-pressed="true"] { background: var(--text); border-color: var(--text); color: #fff; }
+
+.app-header { display: flex; align-items: center; gap: 16px; padding: 10px 20px; background: var(--text); color: #fff; }
+.app-title { color: #fff; font-weight: 700; font-size: 1.2rem; text-decoration: none; }
+.runner-status { margin-left: auto; font-size: 0.9rem; }
+.lang-switch { display: flex; gap: 4px; }
+
+.home, .lesson { max-width: 1200px; margin: 0 auto; padding: 20px; }
+.lesson-list a { color: var(--primary); font-size: 1.1rem; }
+.badge-done { margin-left: 8px; color: var(--success); font-weight: 600; }
+.lesson-top { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; }
+.lesson-nav { display: flex; justify-content: space-between; margin-top: 16px; }
+.lesson-done, .crash { text-align: center; padding: 40px; }
+
+.card, .question-card {
+  max-width: 760px;
+  margin: 0 auto;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+.code-block, .output pre, .exercise-left pre, .diff pre, .bubble pre {
+  background: var(--code-bg);
+  color: var(--code-text);
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-family: var(--mono);
+  font-size: 1rem;
+  white-space: pre-wrap;
+  overflow-x: auto;
+}
+.output { margin-top: 8px; }
+
+.exercise-split { display: grid; grid-template-columns: minmax(280px, 1fr) minmax(360px, 1.3fr); gap: 20px; }
+.exercise-left, .exercise-right {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+}
+.exercise-prompt { white-space: pre-wrap; font-size: 1.1rem; }
+.input-label { display: block; margin-top: 8px; }
+.input-label textarea { display: block; width: 100%; font-family: var(--mono); font-size: 1rem; }
+.exercise-actions { display: flex; gap: 8px; margin: 8px 0; }
+.hint { color: var(--muted); }
+
+.code-editor { border: 1px solid var(--border); border-radius: 8px; font-size: 1.05rem; }
+.code-editor .cm-editor { min-height: 220px; }
+.cm-error-line { background: rgba(211, 58, 58, 0.18); }
+
+.robot-bubble { display: flex; gap: 10px; align-items: flex-start; margin-top: 12px; }
+.bubble { background: #fff8ea; border: 1px solid #f0d9a8; border-radius: var(--radius); padding: 8px 12px; }
+.bubble-hint { color: var(--muted); }
+
+.test-results { padding-left: 20px; }
+.test-results .pass { color: var(--success); }
+.test-results .fail { color: var(--danger); }
+.diff { color: var(--text); }
+.diff-line { display: block; background: rgba(211, 58, 58, 0.35); }
+
+.question-card fieldset { border: none; padding: 0; margin: 12px 0; display: grid; gap: 8px; }
+.choice { display: flex; gap: 8px; align-items: flex-start; border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px; }
+.choice-text { white-space: pre-wrap; }
+.choice-text.code { font-family: var(--mono); }
+.choice-correct { border-color: var(--success); background: #e6f7ea; }
+.choice-wrong { border-color: var(--danger); background: #fdecec; }
+
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+@media (max-width: 900px) {
+  .exercise-split { grid-template-columns: 1fr; }
+}
