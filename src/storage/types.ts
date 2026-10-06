@@ -56,7 +56,7 @@ export interface PinHash {
 
 export interface ErrorLogEntry {
   at: string;
-  kind: "unknown-python-error" | "ui-crash";
+  kind: "unknown-python-error" | "ui-crash" | "load-failed";
   detail: string;
 }
 
@@ -67,6 +67,8 @@ export interface AppMeta {
   lastBackupAt: string | null;
   errorLog: ErrorLogEntry[];
   autoBackups: string[];
+  /** When the PIN was last reset without the old one (spec 6.3: the parent area shows it), or null. */
+  pinResetAt: string | null;
 }
 
 export interface ProfileBundle {
@@ -94,10 +96,20 @@ export interface GameStore {
   saveDraft(profileId: string, itemId: string, code: string): Promise<void>;
   exportProfiles(): Promise<ProfileBundle[]>;
   replaceAll(meta: AppMeta, profiles: ProfileBundle[]): Promise<void>;
+  /** The saved attempts of these items for a profile, oldest first (spec 9.2: the evidence for a parent). */
+  attemptsFor(profileId: string, itemIds: string[]): Promise<AttemptRecord[]>;
 }
 
 export function emptyMeta(): AppMeta {
-  return { schemaVersion: SCHEMA_VERSION, activeProfileId: null, pin: null, lastBackupAt: null, errorLog: [], autoBackups: [] };
+  return {
+    schemaVersion: SCHEMA_VERSION,
+    activeProfileId: null,
+    pin: null,
+    lastBackupAt: null,
+    errorLog: [],
+    autoBackups: [],
+    pinResetAt: null,
+  };
 }
 
 export function appendErrorLog(log: ErrorLogEntry[], entry: ErrorLogEntry): ErrorLogEntry[] {

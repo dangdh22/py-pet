@@ -160,4 +160,20 @@ describe("backup file", () => {
     newerState.profiles[0]!.state.version = GAME_STATE_VERSION + 1;
     expect(await decodeBackup(await encodeBackup(newerState))).toEqual({ ok: false, reason: "damaged" });
   });
+
+  test("checks the shared data: a file without profiles or with a broken PIN is damaged", async () => {
+    const empty = { ...sampleBackupPayload(), profiles: [] };
+    expect(await decodeBackup(await encodeBackup(empty))).toEqual({ ok: false, reason: "damaged" });
+    const badPin = sampleBackupPayload();
+    (badPin.meta as unknown as { pin: unknown }).pin = { salt: "", hash: "x", iterations: 1 };
+    expect(await decodeBackup(await encodeBackup(badPin))).toEqual({ ok: false, reason: "damaged" });
+  });
+
+  test("an active profile that is not in the file becomes its first profile", async () => {
+    const payload = sampleBackupPayload();
+    payload.meta.activeProfileId = "someone-else";
+    const result = await decodeBackup(await encodeBackup(payload));
+    expect(result.ok && result.payload.meta.activeProfileId).toBe(payload.profiles[0]!.profile.id);
+    expect(result.ok && result.payload.meta.pinResetAt).toBeNull();
+  });
 });

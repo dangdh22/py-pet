@@ -11,7 +11,7 @@ import {
   type ActiveSnapshot,
   type BackupPayload,
 } from "../storage/backup";
-import { verifyPin } from "../storage/pin";
+import { hashPin, verifyPin } from "../storage/pin";
 import {
   appendErrorLog,
   AUTO_BACKUPS,
@@ -45,6 +45,15 @@ export interface GameApi {
   importBackup(payload: BackupPayload): Promise<void>;
   /** The encoded automatic backups, newest first. */
   autoBackups(): Promise<string[]>;
+  /** When the PIN was last reset without the old one (spec 6.3), or null. */
+  pinResetAt: string | null;
+  errorLog: ErrorLogEntry[];
+  /** Sets a new PIN; `reset` marks that the old one was not given (spec 6.3). */
+  setPin(pin: string, reset: boolean): Promise<void>;
+  /** The saved attempts of these items for this profile, oldest first. */
+  attemptsFor(itemIds: string[]): Promise<AttemptRecord[]>;
+  /** Deletes every profile and setting on this device; the app starts again (spec 9.5). */
+  eraseAll(): Promise<void>;
 }
 
 const GameContext = createContext<GameApi | null>(null);
@@ -239,7 +248,9 @@ export function GameProvider({ store, loaded, clock, onReplaced, children }: Gam
         const existing = await store.readMeta();
         const autoBackups = [current, ...existing.autoBackups].slice(0, AUTO_BACKUPS);
         const activeProfileId = payload.meta.activeProfileId ?? payload.profiles[0]?.profile.id ?? null;
-        await store.replaceAll({ ...emptyMeta(), ...payload.meta, activeProfileId, autoBackups }, payload.profiles);
+        // A file without a PIN keeps this device's PIN, so importing never leaves the parent area open.
+        const pin = payload.meta.pin ?? existing.pin;
+        await store.replaceAll({ ...emptyMeta(), ...payload.meta, pin, activeProfileId, autoBackups }, payload.profiles);
       });
       queue.current = run.catch(() => {});
       try {
@@ -254,6 +265,33 @@ export function GameProvider({ store, loaded, clock, onReplaced, children }: Gam
   );
 
   const autoBackups = useCallback(async () => (await store.readMeta()).autoBackups, [store]);
+
+  const setPin = useCallback(
+    async (pin: string, reset: boolean) => {
+      const hash = await hashPin(pin);
+      const patch: Partial<AppMeta> = reset ? { pin: hash, pinResetAt: clock().toISOString() } : { pin: hash };
+      await store.writeMeta(patch);
+      setMeta((current) => ({ ...current, ...patch }));
+    },
+    [clock, store],
+  );
+
+  const attemptsFor = useCallback((itemIds: string[]) => store.attemptsFor(profile.id, itemIds), [store, profile.id]);
+
+  const eraseAll = useCallback(async () => {
+    replacing.current = true;
+    for (const timer of draftTimers.current.values()) clearTimeout(timer);
+    draftTimers.current.clear();
+    const run = queue.current.then(() => store.replaceAll(emptyMeta(), []));
+    queue.current = run.catch(() => {});
+    try {
+      await run;
+    } catch (error) {
+      replacing.current = false;
+      throw error;
+    }
+    onReplaced();
+  }, [store, onReplaced]);
 
   const today = localDay(clock());
   const reference = meta.lastBackupAt ?? profile.createdAt;
@@ -275,8 +313,33 @@ export function GameProvider({ store, loaded, clock, onReplaced, children }: Gam
       checkPin,
       importBackup,
       autoBackups,
+      pinResetAt: meta.pinResetAt ?? null,
+      errorLog: meta.errorLog,
+      setPin,
+      attemptsFor,
+      eraseAll,
     }),
-    [profile, state, today, store.persistent, writeFailed, meta.lastBackupAt, needsBackupReminder, dispatch, draftFor, saveDraft, exportBackup, checkPin, importBackup, autoBackups],
+    [
+      profile,
+      state,
+      today,
+      store.persistent,
+      writeFailed,
+      meta.lastBackupAt,
+      meta.pinResetAt,
+      meta.errorLog,
+      needsBackupReminder,
+      dispatch,
+      draftFor,
+      saveDraft,
+      exportBackup,
+      checkPin,
+      importBackup,
+      autoBackups,
+      setPin,
+      attemptsFor,
+      eraseAll,
+    ],
   );
 
   return (

@@ -92,4 +92,9 @@ export class MemoryStore implements GameStore {
     this.drafts = new Map(profiles.flatMap((p) => p.drafts).map((d) => [draftKey(d.profileId, d.itemId), clone(d)]));
     this.nextAttemptId = Math.max(0, ...this.attempts.map((a) => a.id ?? 0)) + 1;
   }
+
+  async attemptsFor(profileId: string, itemIds: string[]): Promise<AttemptRecord[]> {
+    const wanted = new Set(itemIds);
+    return clone(this.attempts.filter((a) => a.profileId === profileId && wanted.has(a.itemId)));
+  }
 }

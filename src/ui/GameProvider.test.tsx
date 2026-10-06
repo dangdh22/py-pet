@@ -403,3 +403,42 @@ describe("the parent's settings in the app", () => {
     expect(runner.calls.at(-1)).toMatchObject({ code: "x", timeoutMs: 5000 });
   });
 });
+
+describe("PIN, attempts and erasing", () => {
+  function Api({ onApi }: { onApi(api: ReturnType<typeof useGame>): void }) {
+    onApi(useGame());
+    return null;
+  }
+
+  test("a reset PIN replaces the old one and records when", async () => {
+    let api!: ReturnType<typeof useGame>;
+    const { store } = await renderWithGame(<Api onApi={(a) => (api = a)} />, { meta: { pin: await hashPin("1111") } });
+    await act(() => api.setPin("2222", true));
+    expect(await api.checkPin("2222")).toBe(true);
+    expect(await api.checkPin("1111")).toBe(false);
+    expect(api.pinResetAt).toBe(FIXED_NOW.toISOString());
+    expect((await store.readMeta()).pinResetAt).toBe(FIXED_NOW.toISOString());
+    await act(() => api.setPin("3333", false));
+    expect(api.pinResetAt).toBe(FIXED_NOW.toISOString());
+  });
+
+  test("importing a file without a PIN keeps this device's PIN", async () => {
+    let api!: ReturnType<typeof useGame>;
+    const pin = await hashPin("1111");
+    const { store } = await renderWithGame(<Api onApi={(a) => (api = a)} />, { meta: { pin } });
+    const payload = sampleBackupPayload();
+    payload.meta.pin = null;
+    await act(() => api.importBackup(payload));
+    expect((await store.readMeta()).pin).toEqual(pin);
+  });
+
+  test("eraseAll empties the store and asks the app to start again", async () => {
+    let api!: ReturnType<typeof useGame>;
+    const onReplaced = vi.fn();
+    const { store } = await renderWithGame(<Api onApi={(a) => (api = a)} />, { onReplaced });
+    await act(() => api.eraseAll());
+    expect(onReplaced).toHaveBeenCalledOnce();
+    expect(await store.loadActive()).toBeNull();
+    expect(await store.exportProfiles()).toEqual([]);
+  });
+});

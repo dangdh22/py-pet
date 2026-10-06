@@ -56,8 +56,20 @@ const profileBundleSchema = z.object({
   drafts: z.array(z.object({ profileId: z.string(), itemId: z.string(), code: z.string() })),
 });
 
-/** Checks every profile of a migrated payload and upgrades its state. Null when a profile is damaged. */
+const metaSchema = z.object({
+  pin: z.object({ salt: z.string().min(1), hash: z.string().min(1), iterations: z.number().int().positive() }).nullable(),
+  activeProfileId: z.string().nullable(),
+  lastBackupAt: z.string().nullable(),
+  errorLog: z.array(z.object({ at: z.string(), kind: z.string(), detail: z.string() })),
+});
+
+/**
+ * Checks every profile of a migrated payload and upgrades its state, and checks the shared data (PIN shape, active
+ * profile). Null when something is damaged or there is no profile. An active profile that is not in the file becomes
+ * its first profile.
+ */
 function checkProfiles(payload: BackupPayload): BackupPayload | null {
+  if (payload.profiles.length === 0 || !metaSchema.safeParse(payload.meta).success) return null;
   const profiles: BackupPayload["profiles"] = [];
   for (const bundle of payload.profiles as unknown[]) {
     if (!profileBundleSchema.safeParse(bundle).success) return null;
@@ -71,7 +83,10 @@ function checkProfiles(payload: BackupPayload): BackupPayload | null {
     }
     profiles.push({ ...checked, state });
   }
-  return { ...payload, profiles };
+  const ids = profiles.map((p) => p.profile.id);
+  const active = payload.meta.activeProfileId;
+  const activeProfileId = active !== null && ids.includes(active) ? active : (ids[0] as string);
+  return { ...payload, meta: { ...payload.meta, pinResetAt: payload.meta.pinResetAt ?? null, activeProfileId }, profiles };
 }
 
 /** The active profile as the app holds it in memory: newer than the store when a write failed. */

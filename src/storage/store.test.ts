@@ -62,6 +62,24 @@ describe.each(stores)("%s", (_name, makeStore) => {
     expect(bundle!.attempts.filter((a) => a.itemId === "ex2")).toHaveLength(1);
   });
 
+  test("attemptsFor returns the attempts of the given items, oldest first", async () => {
+    const store = await makeStore();
+    await store.createProfile(profile, initialGameState("2026-10-06"));
+    const state = initialGameState("2026-10-06");
+    await store.saveState("p1", state, codeAttempt("ex1", 1));
+    await store.saveState("p1", state, codeAttempt("ex2", 2));
+    await store.saveState("p1", state, codeAttempt("ex3", 3));
+    await store.saveState("p1", state, codeAttempt("ex1", 4));
+    const found = await store.attemptsFor("p1", ["ex1", "ex3"]);
+    expect(found.map((a) => [a.itemId, a.at.slice(-7, -5)])).toEqual([
+      ["ex1", "01"],
+      ["ex3", "03"],
+      ["ex1", "04"],
+    ]);
+    expect(await store.attemptsFor("p1", [])).toEqual([]);
+    expect(await store.attemptsFor("p2", ["ex1"])).toEqual([]);
+  });
+
   test("drafts are saved per item and loaded with the profile", async () => {
     const store = await makeStore();
     await store.createProfile(profile, initialGameState("2026-10-06"));

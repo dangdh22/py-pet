@@ -137,4 +137,13 @@ export class DexieStore implements GameStore {
       await this.db.drafts.bulkPut(profiles.flatMap((p) => p.drafts));
     });
   }
+
+  async attemptsFor(profileId: string, itemIds: string[]): Promise<AttemptRecord[]> {
+    if (itemIds.length === 0) return [];
+    const rows = await this.db.attempts
+      .where("[profileId+itemId]")
+      .anyOf(itemIds.map((itemId) => [profileId, itemId]))
+      .toArray();
+    return rows.sort((a, b) => (a.id ?? 0) - (b.id ?? 0));
+  }
 }
