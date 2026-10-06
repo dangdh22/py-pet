@@ -1,5 +1,6 @@
 // @vitest-environment jsdom
 import { screen, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { describe, expect, test } from "vitest";
 import { seededRng } from "../game/random";
 import { initialGameState } from "../game/state";
@@ -52,5 +53,23 @@ describe("EvolutionTestScreen", () => {
     const saved = (await store.loadActive())!.state;
     expect(saved.pet.stage).toBe(1);
     expect(saved.progress.evolutionTests).toHaveLength(1);
+  });
+
+  test("a fail with no review items offers the retake instead of the focused review", async () => {
+    // No finished lesson: the paper is drawn, but no item is available for a focused review set.
+    await renderWithGame(
+      <EvolutionTestScreen stage={stage} stageNumber={1} onExit={() => {}} rng={seededRng(3)} />,
+      { bundle, runner: fakeRunner(() => okResult("Ho\n")), state: initialGameState(TODAY) },
+    );
+    await answerPaper("Sai");
+
+    expect(screen.getByRole("heading", { name: "Lần này chưa đạt" })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Thi lại" })).toHaveAttribute("href", "#/evolution/x");
+    expect(screen.queryByRole("link", { name: "Bắt đầu ôn tập trọng tâm" })).not.toBeInTheDocument();
+
+    // The link points at this very screen, so clicking it must open a new paper by itself.
+    await userEvent.click(screen.getByRole("link", { name: "Thi lại" }));
+    expect(screen.getByRole("heading", { name: "Kiểm tra tiến hóa" })).toBeInTheDocument();
+    expect(screen.getByText("Câu 1/5")).toBeInTheDocument();
   });
 });

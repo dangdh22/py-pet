@@ -129,6 +129,7 @@ export const vi = {
   "evolution.startRemedial": "Bắt đầu ôn tập trọng tâm",
   "evolution.remedialFirst": "Con làm xong bộ ôn tập trọng tâm trước rồi thi lại nhé.",
   "evolution.alreadyDone": "{name} đã tiến hóa ở giai đoạn này rồi!",
+  "evolution.retake": "Thi lại",
   "remedial.title": "Ôn tập trọng tâm",
   "remedial.doneTitle": "Xong ôn tập trọng tâm! Con có thể thi lại.",
   "remedial.none": "Con không có bộ ôn tập trọng tâm nào.",

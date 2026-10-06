@@ -29,6 +29,33 @@ export function EvolutionTestScreen({
   onExit(): void;
   rng?: Rng;
 }) {
+  // The retake link leads to the hash of this very screen, which changes nothing by itself: it starts a new paper.
+  const [round, setRound] = useState(0);
+  return (
+    <EvolutionAttempt
+      key={round}
+      stage={stage}
+      stageNumber={stageNumber}
+      onExit={onExit}
+      onRetake={() => setRound((n) => n + 1)}
+      rng={rng}
+    />
+  );
+}
+
+function EvolutionAttempt({
+  stage,
+  stageNumber,
+  onExit,
+  onRetake,
+  rng,
+}: {
+  stage: Stage;
+  stageNumber: number;
+  onExit(): void;
+  onRetake(): void;
+  rng: Rng;
+}) {
   const { t } = useLang();
   const game = useGame();
   const bundle = useContent();
@@ -56,7 +83,7 @@ export function EvolutionTestScreen({
     return isPass(grade.score, grade.max) ? (
       <EvolutionPassed before={before} after={game.state} grade={grade} onExit={onExit} />
     ) : (
-      <EvolutionFailed after={game.state} grade={grade} onExit={onExit} />
+      <EvolutionFailed after={game.state} grade={grade} stageId={stage.id} onRetake={onRetake} onExit={onExit} />
     );
   }
   return (
@@ -124,7 +151,19 @@ function EvolutionPassed({
   );
 }
 
-function EvolutionFailed({ after, grade, onExit }: { after: GameState; grade: ExamGrade; onExit(): void }) {
+function EvolutionFailed({
+  after,
+  grade,
+  stageId,
+  onRetake,
+  onExit,
+}: {
+  after: GameState;
+  grade: ExamGrade;
+  stageId: string;
+  onRetake(): void;
+  onExit(): void;
+}) {
   const { t, uiLang } = useLang();
   const bundle = useContent();
   const weak = grade.wrongConcepts
@@ -147,9 +186,20 @@ function EvolutionFailed({ after, grade, onExit }: { after: GameState; grade: Ex
         </section>
       )}
       <nav className="room-actions">
-        {after.remedial && (
+        {after.remedial ? (
           <a className="button primary" href={routeToHash({ name: "remedial" })}>
             {t("evolution.startRemedial")}
+          </a>
+        ) : (
+          <a
+            className="button primary"
+            href={routeToHash({ name: "evolution", stageId })}
+            onClick={(event) => {
+              event.preventDefault();
+              onRetake();
+            }}
+          >
+            {t("evolution.retake")}
           </a>
         )}
         <button onClick={onExit}>{t("nav.room")}</button>
