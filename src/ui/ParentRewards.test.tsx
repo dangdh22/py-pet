@@ -52,4 +52,31 @@ describe("ParentRewards", () => {
       ]),
     );
   });
+
+  test("shows cleaned values after save (clamped price, removed blank rows)", async () => {
+    const { store } = await renderWithGame(<ParentRewards newId={() => "new"} />, { state: stateWithRequests() });
+    await userEvent.click(screen.getByRole("button", { name: "Thêm phần thưởng" }));
+    const rows = screen.getAllByRole("listitem").filter((li) => li.closest("ol"));
+    const fresh = rows.at(-1) as HTMLElement;
+    await userEvent.type(within(fresh).getByLabelText("Tên"), "Xe đạp");
+    await userEvent.clear(within(fresh).getByLabelText("Giá (xu)"));
+    await userEvent.type(within(fresh).getByLabelText("Giá (xu)"), "150000");
+    await userEvent.click(screen.getByRole("button", { name: "Thêm phần thưởng" }));
+    const allRows = screen.getAllByRole("listitem").filter((li) => li.closest("ol"));
+    const blankRow = allRows.at(-1) as HTMLElement;
+    await userEvent.clear(within(blankRow).getByLabelText("Giá (xu)"));
+    await userEvent.type(within(blankRow).getByLabelText("Giá (xu)"), "20");
+    await userEvent.click(screen.getByRole("button", { name: "Lưu danh sách" }));
+    expect(screen.getByRole("status")).toHaveTextContent("Đã lưu danh sách.");
+    const priceInput = within(allRows[1] as HTMLElement).getByLabelText("Giá (xu)") as HTMLInputElement;
+    expect(priceInput.value).toBe("100000");
+    await waitFor(async () =>
+      expect((await store.loadActive())!.state.rewards.catalog).toEqual([
+        { id: "park", name: "Đi công viên", price: 100, weeklyLimit: 1 },
+        { id: "new", name: "Xe đạp", price: 100000, weeklyLimit: 1 },
+      ]),
+    );
+    const finalRows = screen.getAllByRole("listitem").filter((li) => li.closest("ol"));
+    expect(finalRows).toHaveLength(2);
+  });
 });

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { averageXuPerDay } from "../game/parentStats";
-import { REWARD_MAX_PER_WEEK, REWARD_MAX_PRICE } from "../game/realRewards";
+import { cleanCatalog, REWARD_MAX_PER_WEEK, REWARD_MAX_PRICE } from "../game/realRewards";
 import type { RewardItem } from "../game/state";
 import { useLang } from "../i18n/LangProvider";
 import { formatDateTime } from "./format";
@@ -70,7 +70,13 @@ export function ParentRewards({ newId = () => crypto.randomUUID() }: { newId?: (
             </label>
             <label>
               {t("rewardsTab.price")}
-              <input type="number" min={0} max={REWARD_MAX_PRICE} value={row.price} onChange={(e) => edit(index, { price: Number(e.target.value) })} />
+              <input
+                type="number"
+                min={0}
+                max={REWARD_MAX_PRICE}
+                value={row.price}
+                onChange={(e) => edit(index, { price: Number(e.target.value) })}
+              />
             </label>
             <label>
               {t("rewardsTab.limit")}
@@ -104,7 +110,9 @@ export function ParentRewards({ newId = () => crypto.randomUUID() }: { newId?: (
       <button
         className="primary"
         onClick={() => {
-          game.dispatch({ type: "RewardsEdited", catalog: rows });
+          const cleaned = cleanCatalog(rows);
+          game.dispatch({ type: "RewardsEdited", catalog: cleaned });
+          setRows(cleaned);
           setSaved(true);
         }}
       >
