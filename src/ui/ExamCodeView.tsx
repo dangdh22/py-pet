@@ -1,16 +1,22 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import type { CodeExercise } from "../content/types";
+import { problemFromOutcome } from "../explain/problem";
+import { errorMisconceptionFrom } from "../explain/providers";
 import type { QuestionLang } from "../i18n/lang";
 import { useLang } from "../i18n/LangProvider";
 import { judge, type JudgeResult } from "../runner/judge";
 import { CodeEditor } from "./CodeEditor";
-import { useRunner } from "./contexts";
+import { useContent, useRunner } from "./contexts";
+import { feedbackForProblem, type Feedback } from "./feedback";
 import { LangSwitch, Prompt } from "./LangSwitch";
 import { OutputPanel } from "./OutputPanel";
+import { RobotBubble } from "./RobotBubble";
+import { useExplain } from "./useExplain";
 
 /**
  * A code exercise in a test: the child may run the code with their own input, then submits once. The result stays
- * hidden until the end of the test; no hints, no solution, no lesson draft.
+ * hidden until the end of the test; no hints, no solution, no lesson draft. A trial run explains its errors like a
+ * lesson run does; a submit shows nothing.
  */
 export function ExamCodeView({
   exercise,
@@ -21,6 +27,9 @@ export function ExamCodeView({
 }) {
   const { t, questionLang } = useLang();
   const runner = useRunner();
+  const bundle = useContent();
+  const explain = useExplain();
+  const misconceptionOf = useMemo(() => errorMisconceptionFrom(bundle.errors), [bundle]);
   const example = exercise.tests.find((test) => !test.hidden) ?? null;
   const [lang, setLang] = useState<QuestionLang>(questionLang);
   const [code, setCode] = useState(exercise.starter);
@@ -29,12 +38,22 @@ export function ExamCodeView({
   const [busy, setBusy] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [failed, setFailed] = useState(false);
+  const [feedback, setFeedback] = useState<Feedback | null>(null);
+  const [errorLine, setErrorLine] = useState<number | null>(null);
 
   async function handleRun() {
     setBusy(true);
     setFailed(false);
+    setFeedback(null);
+    setErrorLine(null);
     try {
-      setOutput((await runner.run(code, stdin)).stdout);
+      const result = await runner.run(code, stdin);
+      setOutput(result.stdout);
+      const problem = problemFromOutcome(result, false);
+      if (problem) {
+        setErrorLine(problem.line);
+        setFeedback(await feedbackForProblem(problem, code, explain, t));
+      }
     } catch {
       setFailed(true);
     } finally {
@@ -45,8 +64,10 @@ export function ExamCodeView({
   async function handleSubmit() {
     setBusy(true);
     setFailed(false);
+    setFeedback(null);
+    setErrorLine(null);
     try {
-      const result = await judge(exercise, code, runner.run);
+      const result = await judge(exercise, code, runner.run, misconceptionOf);
       setSubmitted(true);
       onSubmitted({ result, code });
     } catch {
@@ -77,7 +98,7 @@ export function ExamCodeView({
         )}
       </section>
       <section className="exercise-right">
-        <CodeEditor value={code} onChange={setCode} errorLine={null} ariaLabel={t("code.editorLabel")} />
+        <CodeEditor value={code} onChange={setCode} errorLine={errorLine} ariaLabel={t("code.editorLabel")} />
         <label className="input-label">
           {t("code.inputLabel")}
           <textarea value={stdin} onChange={(event) => setStdin(event.target.value)} rows={3} />
@@ -92,6 +113,7 @@ export function ExamCodeView({
         </div>
         {busy && <p>{t("code.running")}</p>}
         {failed && <p role="alert">{t("app.crash")}</p>}
+        {feedback && <RobotBubble {...feedback} />}
         {output !== null && <OutputPanel stdout={output} />}
         {submitted && <p className="exam-answered">{t("exam.submitted")}</p>}
       </section>
