@@ -23,6 +23,7 @@ import {
   type GameSettings,
   type GameState,
 } from "./state";
+import { findShopItem, isConsumable, MAX_CONSUMABLES, STREAK_GIFTS } from "./shop";
 import { changeXu } from "./wallet";
 
 export type GameEvent =
@@ -66,6 +67,9 @@ export type GameEvent =
       remedialItems: string[];
     }
   | { type: "RemedialCompleted" }
+  | { type: "ItemBought"; itemId: string }
+  /** Uses a Pin or Vui item, or puts an accessory on or takes it off. */
+  | { type: "ItemUsed"; itemId: string }
   | { type: "HintShown"; exerciseId: string }
   | { type: "SolutionViewed"; exerciseId: string };
 
@@ -114,6 +118,12 @@ export function apply(state: GameState, event: GameEvent, now: Date): GameState 
       break;
     case "RemedialCompleted":
       next.remedial = null;
+      break;
+    case "ItemBought":
+      buyItem(next, event.itemId, today);
+      break;
+    case "ItemUsed":
+      useItem(next, event.itemId);
       break;
     case "HintShown":
       statsFor(next, event.exerciseId).hints += 1;
@@ -198,6 +208,8 @@ function achieveDay(s: GameState, today: string): void {
   s.streak.best = Math.max(s.streak.best, s.streak.current);
   const bonus = STREAK_MILESTONES[s.streak.current];
   if (bonus) changeXu(s, bonus, "streak", String(s.streak.current), today);
+  const gift = STREAK_GIFTS[s.streak.current];
+  if (gift && !s.inventory.owned.includes(gift)) s.inventory.owned.push(gift);
   if (s.streak.current % FREEZE_EVERY === 0) s.streak.freezes = Math.min(MAX_FREEZES, s.streak.freezes + 1);
 }
 
@@ -353,4 +365,43 @@ function completeEvolutionTest(
   s.pet.stageStartXp = s.pet.xp;
   changeXu(s, XU.evolution, "evolution", String(e.stage), localDay(now));
   raiseVui(s);
+}
+
+/** Spec 5.12. A purchase needs enough xu; an accessory or a decoration is bought once, a Pin or Vui item up to 9. */
+function buyItem(s: GameState, itemId: string, today: string): void {
+  const item = findShopItem(itemId);
+  if (!item || item.price === null || s.wallet.xu < item.price) return;
+  if (isConsumable(item)) {
+    const have = s.inventory.consumables[itemId] ?? 0;
+    if (have >= MAX_CONSUMABLES) return;
+    s.inventory.consumables[itemId] = have + 1;
+  } else {
+    if (s.inventory.owned.includes(itemId)) return;
+    s.inventory.owned.push(itemId);
+  }
+  changeXu(s, -item.price, "shop", itemId, today);
+}
+
+/** A Pin or Vui item is used only when it can raise its stat; an accessory is worn alone in its slot. */
+function useItem(s: GameState, itemId: string): void {
+  const item = findShopItem(itemId);
+  if (!item) return;
+  if (isConsumable(item)) {
+    const have = s.inventory.consumables[itemId] ?? 0;
+    const stat = item.kind === "pin" ? "pin" : "vui";
+    if (have === 0 || s.pet[stat] >= STAT_MAX) return;
+    s.pet[stat] = Math.min(STAT_MAX, s.pet[stat] + (item.effect ?? 0));
+    if (have === 1) delete s.inventory.consumables[itemId];
+    else s.inventory.consumables[itemId] = have - 1;
+    return;
+  }
+  if (item.kind !== "accessory" || !s.inventory.owned.includes(itemId)) return;
+  if (s.inventory.equipped.includes(itemId)) {
+    s.inventory.equipped = s.inventory.equipped.filter((id) => id !== itemId);
+    return;
+  }
+  s.inventory.equipped = [
+    ...s.inventory.equipped.filter((id) => findShopItem(id)?.slot !== item.slot),
+    itemId,
+  ];
 }
