@@ -1,4 +1,4 @@
-import { allConcepts, findItem } from "../content/lookup";
+import { allConcepts } from "../content/lookup";
 import { isChoiceQuestion, type ChoiceQuestion, type ContentBundle, type Exercise } from "../content/types";
 import { isDue } from "./leitner";
 import { shuffled, type Rng } from "./random";
@@ -106,7 +106,7 @@ function helpItem(
 ): Exercise | undefined {
   const retry = Object.entries(state.retry)
     .filter(([, day]) => day <= today)
-    .map(([id]) => findItem(bundle, id))
+    .map(([id]) => available.get(id))
     .filter((item): item is Exercise => item !== undefined && !chosen.includes(item))
     .sort((a, b) => a.id.localeCompare(b.id));
   if (retry[0]) return retry[0];

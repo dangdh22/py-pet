@@ -73,6 +73,12 @@ describe("buildReviewSet", () => {
     for (const seed of SEEDS) expect(ids(state, ["r.l2"], seed)).toContain("r.l1.ex1");
   });
 
+  test("does not bring back a due exercise of a lesson not finished", () => {
+    const state = stateWith(["r.l2"]);
+    state.retry = { "r.l1.ex1": TODAY };
+    for (const seed of SEEDS) expect(ids(state, ["r.l2"], seed)).not.toContain("r.l1.ex1");
+  });
+
   test("returns fewer items when little is learned, and the same set for the same seed", () => {
     expect([...ids(stateWith(["r.l1"]), ["r.l1"], 3)].sort()).toEqual(["r.q1", "r.q2", "r.q6"]);
     expect(ids(stateWith([]), [], 3)).toEqual([]);
