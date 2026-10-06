@@ -32,3 +32,9 @@ Người bảo trì chưa duyệt kế hoạch M4a; Claude tự chốt theo yêu
 7. **16 huy hiệu** do Claude đặt (spec không liệt kê). Sửa danh sách trong `src/game/badges.ts`.
 8. **Phụ kiện chỉ hiện bằng chữ** trong Phòng robot cho tới M6.
 
+9. **Xu đang được giữ cho phần thưởng chờ duyệt thì không tiêu được trong cửa hàng** (phát sinh khi review cuối). Nút Mua báo "Xu đang được giữ cho phần thưởng chờ duyệt". Con chưa tự hủy được yêu cầu; phụ huynh từ chối thì xu được nhả ra.
+10. **Huy hiệu "Kiên trì"** (spec 5.9 có nhắc) được thêm: nhận khi đúng sau ít nhất 3 lần nộp sai. Mục 7 ở trên ghi "spec không liệt kê" là chưa đúng: spec nhắc đúng 1 huy hiệu này.
+11. **Tắt chế độ nghỉ** cũng kết thúc khoảng nghỉ đã lên lịch đang diễn ra hôm nay.
+12. **Tuần nghỉ trọn** (kế hoạch tuần bằng 0): Phòng robot hiện "Tuần này là tuần nghỉ"; con học trong tuần đó không được thưởng tuần. Cần người bảo trì xác nhận cách thưởng.
+13. **Các trường hợp kiểm tra bằng tay ở bản sau:** con thấy ngày dạng 2026-10-06 trong Sổ thành tích (chưa đổi sang 06/10/2026).
+
