@@ -316,6 +316,25 @@ describe("buildBundle", () => {
     );
   });
 
+  test("an AI concept needs practice at level 1 only", () => {
+    const concepts = [
+      "concepts:",
+      "  - id: print-call",
+      "    name: { vi: Lệnh print }",
+      "  - { id: ai-x, name: { vi: A }, ai: true, misconception_card: C, parent_tip: T, practice: { level1: [s1.a.b1] } }",
+      "  - { id: ai-y, name: { vi: B }, ai: true, misconception_card: C, parent_tip: T }",
+      "",
+    ].join("\n");
+    const tree = minimalTree({ "stage-1/01-a/concepts.yaml": concepts });
+    tree["stage-1/01-a/questions.yaml"] = (tree["stage-1/01-a/questions.yaml"] as string).replace(
+      "    type: mcq\n",
+      "    type: mcq\n    concepts: [ai-x]\n",
+    );
+    const warnings = contentWarnings(buildBundle(writeTree(tree)));
+    expect(warnings.filter((w) => w.startsWith("ai-x"))).toEqual([]);
+    expect(warnings).toContain("ai-y: thiếu bài luyện level1");
+  });
+
   test("warns when a bank is too small for its tests (spec 3.9 rule 9)", () => {
     const bundle = buildBundle(writeTree(minimalTree()));
     expect(contentWarnings(bundle).slice(1)).toEqual([

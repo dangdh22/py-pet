@@ -25,6 +25,7 @@ import {
   type GameSettings,
   type GameState,
   type RewardItem,
+  type TopicTestRecord,
 } from "./state";
 import { cleanCatalog, freeXu, requestBlock, trimRequests } from "./realRewards";
 import { cleanSettings } from "./settings";
@@ -392,12 +393,28 @@ function raiseVui(s: GameState): void {
 }
 
 /** Spec 5.4-5.6: the first completion pays 30 XP; the first pass pays 20 xu and Vui +1. Any score moves the path on. */
+/** A test score inside [0, max]; a score that is not a number counts as 0. */
+function testScore(score: number, max: number): number {
+  return Number.isFinite(score) ? Math.min(max, Math.max(0, score)) : 0;
+}
+
+/**
+ * The best score of earlier papers on the scale of a paper worth `max` (spec 6.7: new content can change the size of
+ * a topic test, so a best score of 6 of 6 becomes 14 of 14, not 6 of 14).
+ */
+function rescaledBest(previous: TopicTestRecord | undefined, max: number): number {
+  if (!previous || previous.max <= 0) return 0;
+  if (previous.max === max) return previous.best;
+  return Math.round(((previous.best * max) / previous.max) * 100) / 100;
+}
+
 function completeTopicTest(s: GameState, e: Extract<GameEvent, { type: "TopicTestCompleted" }>, today: string): void {
   const previous = s.progress.topicTests[e.topicId];
-  const passed = isPass(e.score, e.max, s.settings.passPercent);
+  const score = testScore(e.score, e.max);
+  const passed = isPass(score, e.max, s.settings.passPercent);
   s.progress.topicTests[e.topicId] = {
     attempts: (previous?.attempts ?? 0) + 1,
-    best: Math.max(previous?.best ?? 0, e.score),
+    best: Math.min(e.max, Math.max(rescaledBest(previous, e.max), score)),
     max: e.max,
     passed: passed || (previous?.passed ?? false),
     lastItems: e.items,
@@ -418,11 +435,12 @@ function completeEvolutionTest(
   e: Extract<GameEvent, { type: "EvolutionTestCompleted" }>,
   now: Date,
 ): void {
-  const passed = isPass(e.score, e.max, s.settings.passPercent);
+  const score = testScore(e.score, e.max);
+  const passed = isPass(score, e.max, s.settings.passPercent);
   s.progress.evolutionTests.push({
     at: now.toISOString(),
     stage: e.stage,
-    score: e.score,
+    score,
     max: e.max,
     passed,
     items: e.items,

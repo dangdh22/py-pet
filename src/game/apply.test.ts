@@ -578,6 +578,29 @@ describe("tests", () => {
     expect(again.progress.topicTests.t1!.best).toBe(14);
   });
 
+  test("a test score stays inside [0, max]", () => {
+    const start = initialGameState("2026-10-06");
+    const high = apply(start, topicTest(20), at("2026-10-06"));
+    expect(high.progress.topicTests.t1).toMatchObject({ best: 14, max: 14, passed: true });
+    const low = apply(start, topicTest(-3), at("2026-10-06"));
+    expect(low.progress.topicTests.t1).toMatchObject({ best: 0, passed: false });
+    const nan = apply(start, evolution(Number.NaN), at("2026-10-06"));
+    expect(nan.progress.evolutionTests[0]).toMatchObject({ score: 0, passed: false });
+    const over = apply(start, evolution(30), at("2026-10-06"));
+    expect(over.progress.evolutionTests[0]).toMatchObject({ score: 24, passed: true });
+  });
+
+  test("a best score from a paper of another size is rescaled to the new paper", () => {
+    const start = initialGameState("2026-10-06");
+    const small = apply(start, topicTest(6, 6), at("2026-10-06"));
+    const bigger = apply(small, topicTest(4, 14), at("2026-10-07"));
+    expect(bigger.progress.topicTests.t1).toMatchObject({ best: 14, max: 14, attempts: 2, passed: true });
+    const half = apply(apply(start, topicTest(3, 6), at("2026-10-06")), topicTest(5, 14), at("2026-10-07"));
+    expect(half.progress.topicTests.t1).toMatchObject({ best: 7, max: 14 });
+    const thirds = apply(apply(start, topicTest(1, 3), at("2026-10-06")), topicTest(0, 14), at("2026-10-07"));
+    expect(thirds.progress.topicTests.t1?.best).toBe(4.67);
+  });
+
   test("a failed evolution test opens the focused review set and takes nothing away", () => {
     const start = initialGameState("2026-10-06");
     start.pet.xp = 120;

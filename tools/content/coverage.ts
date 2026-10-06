@@ -32,8 +32,8 @@ function testWarnings(bundle: ContentBundle): string[] {
 }
 
 /**
- * Spec 3.9 rule 8: every concept has a misconception card, a parent tip and practice at the 3 levels. The content
- * of M5 completes it, so a gap is a warning for now, not an error.
+ * Spec 3.9 rule 8: every concept has a misconception card, a parent tip and practice at the 3 levels. An AI concept
+ * (knowledge, no code) needs only level 1. The content of M5 completes it, so a gap is a warning for now, not an error.
  */
 export function contentWarnings(bundle: ContentBundle): string[] {
   const warnings: string[] = [];
@@ -41,7 +41,8 @@ export function contentWarnings(bundle: ContentBundle): string[] {
     const missing: string[] = [];
     if (concept.misconceptionCard === null) missing.push("thẻ hiểu lầm");
     if (concept.parentTip === null) missing.push("gợi ý cho phụ huynh");
-    for (const level of ["level1", "level2", "level3"] as const) {
+    const levels = concept.ai ? (["level1"] as const) : (["level1", "level2", "level3"] as const);
+    for (const level of levels) {
       if (concept.practice[level].length === 0) missing.push(`bài luyện ${level}`);
     }
     if (missing.length > 0) warnings.push(`${concept.id}: thiếu ${missing.join(", ")}`);
