@@ -6,6 +6,10 @@ export const REWARD_HISTORY_LIMIT = 100;
 
 export type RequestBlock = "xu" | "limit";
 
+/** The largest price and weekly limit a parent can set (larger numbers would not fit the saved state). */
+export const REWARD_MAX_PRICE = 100_000;
+export const REWARD_MAX_PER_WEEK = 50;
+
 /** Xu still free to ask with: the balance minus the pending requests. */
 export function freeXu(state: GameState): number {
   const pending = state.rewards.requests.filter((r) => r.status === "pending").reduce((sum, r) => sum + r.price, 0);
@@ -43,8 +47,8 @@ export function cleanCatalog(catalog: RewardItem[]): RewardItem[] {
     clean.push({
       id: item.id,
       name,
-      price: Math.max(0, Math.floor(item.price)),
-      weeklyLimit: Math.max(0, Math.floor(item.weeklyLimit)),
+      price: Math.min(REWARD_MAX_PRICE, Math.max(0, Math.floor(item.price))),
+      weeklyLimit: Math.min(REWARD_MAX_PER_WEEK, Math.max(0, Math.floor(item.weeklyLimit))),
     });
   }
   return clean;

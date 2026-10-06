@@ -1,7 +1,14 @@
 import { describe, expect, test } from "vitest";
 import { at, run } from "../test/gameSteps";
 import { apply, type GameEvent } from "./apply";
-import { cleanCatalog, freeXu, REWARD_HISTORY_LIMIT, requestBlock } from "./realRewards";
+import {
+  cleanCatalog,
+  freeXu,
+  REWARD_HISTORY_LIMIT,
+  REWARD_MAX_PER_WEEK,
+  REWARD_MAX_PRICE,
+  requestBlock,
+} from "./realRewards";
 import { initialGameState, type GameState, type RewardItem } from "./state";
 
 const MONDAY = "2026-10-05";
@@ -15,6 +22,14 @@ function withRewards(xu: number): GameState {
 }
 
 const ask = (requestId: string, rewardId: string): GameEvent => ({ type: "RewardRequested", requestId, rewardId });
+
+describe("reward limits", () => {
+  test("a price or a weekly limit above the maximum is brought down", () => {
+    expect(cleanCatalog([{ id: "a", name: "Xe đạp", price: 1e300, weeklyLimit: 999 }])).toEqual([
+      { id: "a", name: "Xe đạp", price: REWARD_MAX_PRICE, weeklyLimit: REWARD_MAX_PER_WEEK },
+    ]);
+  });
+});
 
 describe("RewardsEdited", () => {
   test("cleans the parent's list", () => {

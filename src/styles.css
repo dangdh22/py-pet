@@ -180,3 +180,7 @@ a.button.primary { background: var(--primary); border-color: var(--primary); col
 .help-numbers { display: flex; flex-wrap: wrap; gap: 16px; list-style: none; padding: 0; }
 .help-tip { background: #fff8ea; padding: 8px 12px; border-radius: var(--radius); }
 .help-actions { display: flex; gap: 8px; }
+.requests li, .reward-rows li { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 4px 0; }
+.reward-rows input { width: 10em; }
+.parent-progress table { border-collapse: collapse; }
+.parent-progress th, .parent-progress td { border: 1px solid #dde3ef; padding: 4px 8px; text-align: left; }
