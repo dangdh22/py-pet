@@ -1,0 +1,11 @@
+id: s1.chuoi
+title: { vi: "print và chuỗi", en: "print and strings" }
+lessons:
+  - 01-chuoi-la-gi.md
+  - 02-dau-nhay-trong-chuoi.md
+  - 03-noi-chuoi.md
+  - 04-lap-chuoi.md
+  - 05-xuong-dong.md
+reviews:
+  - { id: s1.chuoi.r1, after: s1.chuoi.l2 }
+  - { id: s1.chuoi.r2, after: s1.chuoi.l5 }

@@ -1,0 +1,210 @@
+exercises:
+  - id: s1.chuoi.p1
+    type: fill
+    concepts: [string-exact]
+    prompt:
+      vi: "Điền vào chỗ trống để Robo in ra đúng dòng chữ: 2 + 3 = 5"
+      en: "Fill the blank so that Robo prints exactly this text: 2 + 3 = 5"
+    template: |
+      print(___)
+    answers: ['"2 + 3 = 5"']
+    tests:
+      - { output: "2 + 3 = 5" }
+    hints:
+      - { vi: "Dòng chữ cần in y nguyên, kể cả các dấu cách, dấu + và dấu =. Hãy đặt cả dòng chữ vào trong 1 chuỗi.", en: "The text must be printed exactly, with its spaces, + and =. Put the whole text inside 1 string." }
+      - { vi: "Viết 2 + 3 = 5 vào giữa 2 dấu nháy kép.", en: "Write 2 + 3 = 5 between 2 double quotes." }
+
+  - id: s1.chuoi.p2
+    type: fill
+    concepts: [quote-inside]
+    prompt:
+      vi: "Điền dấu nháy vào 2 chỗ trống để in ra: It's Robo"
+      en: "Fill the 2 blanks with quotes to print: It's Robo"
+    template: |
+      print(___It's Robo___)
+    answers: ['"', '"']
+    tests:
+      - { output: "It's Robo" }
+    hints:
+      - { vi: "Bên trong chuỗi đã có 1 dấu nháy đơn. Hãy bao ngoài bằng loại dấu nháy còn lại.", en: "There is already a single quote inside the string. Put the other type of quote around it." }
+
+  - id: s1.chuoi.p3
+    type: fill
+    concepts: [concat-no-space]
+    prompt:
+      vi: "Điền 1 chuỗi vào chỗ trống để in ra Robo Pet, với đúng 1 dấu cách ở giữa."
+      en: "Fill the blank with a string to print Robo Pet, with exactly 1 space in the middle."
+    template: |
+      print("Robo" + ___ + "Pet")
+    answers: ['" "']
+    tests:
+      - { output: "Robo Pet" }
+    hints:
+      - { vi: "Dấu + không tự thêm dấu cách. Chuỗi ở giữa chỉ cần chứa 1 dấu cách.", en: "+ does not add a space by itself. The string in the middle only needs 1 space." }
+
+  - id: s1.chuoi.p4
+    type: parsons
+    concepts: [string-repeat, concat-no-space]
+    prompt:
+      vi: "Sắp xếp các dòng lệnh để in ra biển tên như phần Ví dụ: 8 dấu bằng, rồi Py-Pet, rồi 8 dấu gạch ngang."
+      en: "Put the lines in order to print the name sign in the Example: 8 equal signs, then Py-Pet, then 8 dashes."
+    solution: |
+      print("=" * 8)
+      print("Py" + "-" + "Pet")
+      print("-" * 8)
+    tests:
+      - output: |
+          ========
+          Py-Pet
+          --------
+    hints:
+      - { vi: "Đọc từng dòng lệnh và đoán nó in ra gì. \"=\" * 8 in ra 8 dấu bằng.", en: "Read each line and guess what it prints. \"=\" * 8 prints 8 equal signs." }
+
+  - id: s1.chuoi.p5
+    type: fill
+    concepts: [string-repeat]
+    prompt:
+      vi: "Robo đang cười. Điền vào 2 chỗ trống để in ra: hahaha"
+      en: "Robo is laughing. Fill the 2 blanks to print: hahaha"
+    template: |
+      print("ha" ___ ___)
+    answers: ["*", "3"]
+    tests:
+      - { output: "hahaha" }
+    hints:
+      - { vi: "Dùng phép lặp chuỗi: chuỗi, rồi 1 dấu, rồi số lần lặp.", en: "Repeat the string: the string, then a sign, then the number of times." }
+      - { vi: "Chuỗi ha cần lặp 3 lần.", en: "The string ha must be repeated 3 times." }
+
+  - id: s1.chuoi.p6
+    type: fill
+    concepts: [newline-escape]
+    prompt:
+      vi: "Chỉ với 1 lệnh print, in ra 2 dòng: Py và Pet. Điền vào chỗ trống."
+      en: "With only 1 print statement, print 2 lines: Py and Pet. Fill the blank."
+    template: |
+      print("Py___Pet")
+    answers: ['\n']
+    tests:
+      - output: |
+          Py
+          Pet
+    hints:
+      - { vi: 'Chỗ trống cần ký tự xuống dòng.', en: 'The blank needs the new-line character.' }
+      - { vi: 'Ký tự xuống dòng viết là \n, với dấu gạch chéo ngược.', en: 'The new-line character is written \n, with a backslash.' }
+
+  - id: s1.chuoi.p7
+    type: parsons
+    concepts: [newline-escape]
+    prompt:
+      vi: "Sắp xếp các dòng lệnh để in ra 4 dòng như phần Ví dụ: Robo, Py, 4 dấu gạch ngang, rồi Pet."
+      en: "Put the lines in order to print the 4 lines in the Example: Robo, Py, 4 dashes, then Pet."
+    solution: |
+      print("Robo\nPy")
+      print("-" * 4)
+      print("Pet")
+    tests:
+      - output: |
+          Robo
+          Py
+          ----
+          Pet
+    hints:
+      - { vi: 'Lệnh có \n in ra 2 dòng. Hãy tìm lệnh in ra 2 dòng đầu tiên.', en: 'The statement with \n prints 2 lines. Find the statement that prints the first 2 lines.' }
+
+  - id: s1.chuoi.c1
+    type: code
+    concepts: [string-repeat, concat-no-space]
+    prompt:
+      vi: "Robo vừa thắng một trò chơi. Dùng phép * và dấu + trong 1 lệnh print để in ra tiếng reo đúng như phần Ví dụ."
+      en: "Robo has just won a game. Use * and + in 1 print statement to print the cheer exactly as in the Example."
+    starter: |
+      # Viết 1 lệnh print ở dưới dòng này
+    solution: |
+      print("Hoan hô! " * 2 + "Robo thắng rồi!")
+    tests:
+      - { output: "Hoan hô! Hoan hô! Robo thắng rồi!" }
+    common_wrong:
+      - output: "Hoan hô!Hoan hô!Robo thắng rồi!"
+        misconception: string-repeat
+        sample: |
+          print("Hoan hô!" * 2 + "Robo thắng rồi!")
+    hints:
+      - { vi: "Phần Hoan hô! lặp lại 2 lần, nên con dùng phép * cho phần này, rồi dùng dấu + để nối phần còn lại.", en: "The part Hoan hô! is repeated 2 times, so use * for this part, then use + to join the rest." }
+      - { vi: "Các lần lặp nối sát nhau, nên hãy đặt 1 dấu cách ở cuối chuỗi \"Hoan hô! \" trước khi lặp.", en: "The copies are joined with no space, so put 1 space at the end of the string \"Hoan hô! \" before you repeat it." }
+    test_eligible: true
+
+  - id: s1.chuoi.c2
+    type: code
+    concepts: [string-repeat]
+    prompt:
+      vi: "Dùng phép * và dấu + để vẽ hàng rào 3 ô, đúng 3 dòng như phần Ví dụ."
+      en: "Use * and + to draw a fence with 3 cells: 3 lines, exactly as in the Example."
+    starter: |
+      # Viết lệnh của con ở dưới dòng này
+    solution: |
+      print("+--" * 3 + "+")
+      print("|  " * 3 + "|")
+      print("+--" * 3 + "+")
+    tests:
+      - output: |
+          +--+--+--+
+          |  |  |  |
+          +--+--+--+
+    hints:
+      - { vi: "Dòng 1 gồm 3 lần \"+--\", rồi thêm 1 dấu + ở cuối.", en: "Line 1 is \"+--\" 3 times, then 1 more + at the end." }
+      - { vi: "Dòng 1 là print(\"+--\" * 3 + \"+\"). Dòng 2 làm tương tự với \"|  \" (dấu | và 2 dấu cách).", en: "Line 1 is print(\"+--\" * 3 + \"+\"). Do line 2 the same way with \"|  \" (a | and 2 spaces)." }
+    test_eligible: true
+
+  - id: s1.chuoi.c3
+    type: code
+    concepts: [newline-escape]
+    prompt:
+      vi: "Ở chủ đề trước, con đã in khuôn mặt Robo bằng 4 lệnh print. Lần này hãy in đúng khuôn mặt đó, như phần Ví dụ, chỉ bằng 1 lệnh print."
+      en: "In the previous topic, you printed the face of Robo with 4 print statements. This time print the same face, as in the Example, with only 1 print statement."
+    starter: |
+      # Viết 1 lệnh print ở dưới dòng này
+    solution: |
+      print("+-----+\n| o o |\n|  -  |\n+-----+")
+    tests:
+      - output: |
+          +-----+
+          | o o |
+          |  -  |
+          +-----+
+    common_wrong:
+      - output: "+-----+/n| o o |/n|  -  |/n+-----+"
+        misconception: newline-escape
+        sample: |
+          print("+-----+/n| o o |/n|  -  |/n+-----+")
+    hints:
+      - { vi: 'Viết cả 4 dòng vào 1 chuỗi và đặt \n vào giữa 2 dòng liền nhau.', en: 'Write all 4 lines in 1 string and put \n between each 2 lines.' }
+      - { vi: 'Có 4 dòng nên cần 3 lần \n. Không đặt dấu cách ngay sau \n.', en: 'There are 4 lines, so you need \n 3 times. Do not put a space right after \n.' }
+    test_eligible: true
+
+  - id: s1.chuoi.c4
+    type: code
+    concepts: [quote-inside]
+    prompt:
+      vi: "Robo và An nói chuyện với nhau. In ra đúng 2 dòng như phần Ví dụ, có đủ các dấu nháy kép."
+      en: "Robo and An talk to each other. Print the 2 lines exactly as in the Example, with all the double quotes."
+    starter: |
+      # Viết lệnh của con ở dưới dòng này
+    solution: |
+      print('Robo hỏi: "Con tên là gì?"')
+      print('An trả lời: "Con tên là An."')
+    tests:
+      - output: |
+          Robo hỏi: "Con tên là gì?"
+          An trả lời: "Con tên là An."
+    common_wrong:
+      - output: |
+          Robo hỏi: Con tên là gì?
+          An trả lời: Con tên là An.
+        misconception: quote-inside
+        sample: |
+          print("Robo hỏi: Con tên là gì?")
+          print("An trả lời: Con tên là An.")
+    hints:
+      - { vi: "Mỗi dòng có dấu nháy kép bên trong. Hãy bao ngoài mỗi chuỗi bằng dấu nháy đơn.", en: "Each line has double quotes inside. Put single quotes around each string." }
+      - { vi: "Dòng 1 là print('Robo hỏi: \"Con tên là gì?\"'). Dòng 2 làm tương tự.", en: "Line 1 is print('Robo hỏi: \"Con tên là gì?\"'). Do line 2 the same way." }
+    test_eligible: true

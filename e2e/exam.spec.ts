@@ -60,7 +60,7 @@ async function answerPaper(page: Page) {
   return total;
 }
 
-test("after the 5 lessons of the topic come the topic test and then the evolution test", async ({ page }) => {
+test("after the lessons of the first topic come its test and then the next topic", async ({ page }) => {
   test.setTimeout(120_000);
   await startApp(page);
   await readCards(page);
@@ -91,10 +91,10 @@ test("after the 5 lessons of the topic come the topic test and then the evolutio
   await expect(page.getByText("+30 XP")).toBeVisible();
 
   await page.getByRole("link", { name: "Học tiếp" }).click();
-  await expect(page.getByRole("heading", { name: "Kiểm tra tiến hóa" })).toBeVisible();
-  await expect(page.getByText(/^Câu 1\/\d+$/)).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Chuỗi là gì?" })).toBeVisible();
   await page.getByRole("link", { name: "Py-Pet" }).click();
   await page.getByRole("link", { name: "Bản đồ học" }).click();
-  await expect(page.getByRole("listitem").filter({ hasText: "Kiểm tra chủ đề" })).toContainText("Đã xong");
-  await expect(page.getByRole("listitem").filter({ hasText: "Kiểm tra tiến hóa" })).toContainText("Bài tiếp theo");
+  // The map lists the topics in order: the first topic test is the one of topic 1.
+  await expect(page.getByRole("listitem").filter({ hasText: "Kiểm tra chủ đề" }).first()).toContainText("Đã xong");
+  await expect(page.getByRole("listitem").filter({ hasText: "Chuỗi là gì?" })).toContainText("Bài tiếp theo");
 });

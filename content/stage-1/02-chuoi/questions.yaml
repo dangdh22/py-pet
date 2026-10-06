@@ -1,0 +1,272 @@
+questions:
+  - id: s1.chuoi.b1
+    type: mcq
+    concepts: [string-exact]
+    lessons: [s1.chuoi.l1]
+    prompt: { vi: "Trong Python, chuỗi là gì?", en: "In Python, what is a string?" }
+    choices:
+      - { vi: "Một dãy ký tự nằm trong dấu nháy", en: "A sequence of characters inside quotes", correct: true }
+      - { vi: "Chỉ gồm chữ cái, không có chữ số hay dấu cách", en: "Only letters, with no digits or spaces", misconception: string-exact }
+      - { vi: "Một phép tính mà Python sẽ tính ra kết quả", en: "A calculation that Python works out", misconception: string-exact }
+      - { vi: "Tên của một lệnh trong Python", en: "The name of a Python statement" }
+    explanation:
+      vi: "Chuỗi là một dãy ký tự nằm trong dấu nháy. Chữ cái, chữ số, dấu cách và dấu câu đều là ký tự, và Python in chúng ra y nguyên."
+      en: "A string is a sequence of characters inside quotes. Letters, digits, spaces and punctuation marks are all characters, and Python prints them exactly as they are."
+
+  - id: s1.chuoi.b2
+    type: predict
+    concepts: [string-exact]
+    lessons: [s1.chuoi.l1]
+    code: |
+      print("Hi")
+      print("")
+      print("Bo")
+    prompt: { vi: "Đoạn code in ra gì?", en: "What is the output of this code?" }
+    choices:
+      - { text: "Hi\n\nBo", correct: true }
+      - { text: "Hi\n\"\"\nBo", misconception: string-quotes }
+      - { text: "Hi\nBo" }
+      - { text: "HiBo" }
+    explanation:
+      vi: "\"\" là chuỗi rỗng, không có ký tự nào. print(\"\") in ra 1 dòng trống, giống print()."
+      en: "\"\" is the empty string. It has no characters. print(\"\") prints 1 empty line, just like print()."
+
+  - id: s1.chuoi.b3
+    type: predict
+    concepts: [string-exact]
+    lessons: [s1.chuoi.l1]
+    code: |
+      print("2 + 2 = 5")
+    prompt: { vi: "Đoạn code in ra gì?", en: "What is the output of this code?" }
+    choices:
+      - { text: "2 + 2 = 5", correct: true }
+      - { text: "2 + 2 = 4", misconception: string-exact }
+      - { text: "4 = 5", misconception: string-exact }
+      - { vi: "Báo lỗi vì phép tính sai", en: "An error, because the sum is wrong", error: true, misconception: string-exact }
+    explanation:
+      vi: "Mọi thứ trong chuỗi đều được in y nguyên. Python không tính và không sửa phép tính nằm trong dấu nháy."
+      en: "Everything in a string is printed exactly as it is. Python does not work out or fix a calculation inside quotes."
+
+  - id: s1.chuoi.b4
+    type: predict
+    concepts: [quote-inside]
+    lessons: [s1.chuoi.l2]
+    code: |
+      print("I'm Robo")
+    prompt: { vi: "Đoạn code in ra gì?", en: "What is the output of this code?" }
+    choices:
+      - { text: "I'm Robo", correct: true }
+      - { vi: "Báo lỗi ở dòng 1", en: "An error on line 1", error: true, misconception: quote-inside }
+      - { text: "Im Robo", misconception: quote-inside }
+      - { text: "\"I'm Robo\"", misconception: string-quotes }
+    explanation:
+      vi: "Chuỗi mở và đóng bằng dấu nháy kép, nên dấu nháy đơn ở giữa chỉ là 1 ký tự bình thường và được in ra."
+      en: "The string opens and closes with double quotes, so the single quote inside is an ordinary character and is printed."
+
+  - id: s1.chuoi.b5
+    type: predict
+    concepts: [quote-inside]
+    lessons: [s1.chuoi.l2]
+    code: |
+      print("A \"B\" C")
+    prompt: { vi: "Đoạn code in ra gì?", en: "What is the output of this code?" }
+    choices:
+      - { text: 'A "B" C', correct: true }
+      - { text: 'A \"B\" C', misconception: quote-inside }
+      - { text: "A B C", misconception: quote-inside }
+      - { vi: "Báo lỗi ở dòng 1", en: "An error on line 1", error: true, misconception: quote-inside }
+    explanation:
+      vi: 'Dấu \" là dấu nháy kép để in ra, không phải dấu đóng chuỗi. Python in dấu nháy, còn dấu \ thì không in.'
+      en: '\" is a double quote to print. It does not close the string. Python prints the quote but not the \ sign.'
+
+  - id: s1.chuoi.b6
+    type: mcq
+    concepts: [quote-inside, string-quotes]
+    lessons: [s1.chuoi.l2]
+    prompt:
+      vi: 'Lệnh nào in ra đúng dòng chữ: He said "Hi"'
+      en: 'Which statement prints exactly this text: He said "Hi"'
+    choices:
+      - { text: "print('He said \"Hi\"')", correct: true }
+      - { text: 'print("He said "Hi"")', misconception: quote-inside }
+      - { text: 'print(He said "Hi")', misconception: string-quotes }
+      - { text: "print('He said \"Hi\"\")", misconception: string-quotes }
+    explanation:
+      vi: "Chuỗi có dấu nháy kép bên trong thì bao ngoài bằng dấu nháy đơn, và đóng chuỗi bằng đúng dấu nháy đơn đó."
+      en: "A string with double quotes inside goes between single quotes, and it must close with a single quote too."
+
+  - id: s1.chuoi.b7
+    type: predict
+    concepts: [concat-no-space]
+    lessons: [s1.chuoi.l3]
+    code: |
+      print("Py" + "-" + "Pet")
+    prompt: { vi: "Đoạn code in ra gì?", en: "What is the output of this code?" }
+    choices:
+      - { text: "Py-Pet", correct: true }
+      - { text: "Py - Pet", misconception: concat-no-space }
+      - { text: "PyPet" }
+      - { text: "Py+-+Pet" }
+    explanation:
+      vi: "Dấu + nối 3 chuỗi sát nhau, không thêm dấu cách: Py, rồi dấu -, rồi Pet."
+      en: "+ joins the 3 strings right next to each other with no spaces: Py, then -, then Pet."
+
+  - id: s1.chuoi.b8
+    type: predict
+    concepts: [concat-no-space, string-exact]
+    lessons: [s1.chuoi.l3]
+    code: |
+      print("Hi " + " Bo")
+    prompt: { vi: "Đoạn code in ra gì?", en: "What is the output of this code?" }
+    choices:
+      - { text: "Hi  Bo", correct: true }
+      - { text: "Hi Bo", misconception: string-exact }
+      - { text: "HiBo" }
+      - { text: "Hi   Bo", misconception: concat-no-space }
+    explanation:
+      vi: "Chuỗi \"Hi \" có 1 dấu cách ở cuối, chuỗi \" Bo\" có 1 dấu cách ở đầu. Dấu + giữ nguyên cả 2 dấu cách và không thêm dấu cách nào, nên giữa Hi và Bo có đúng 2 dấu cách."
+      en: "The string \"Hi \" ends with 1 space and \" Bo\" starts with 1 space. + keeps both spaces and adds none, so there are exactly 2 spaces between Hi and Bo."
+
+  - id: s1.chuoi.b9
+    type: mcq
+    concepts: [concat-no-space]
+    lessons: [s1.chuoi.l3]
+    prompt:
+      vi: "Lệnh nào in ra Robo Pet, với đúng 1 dấu cách ở giữa?"
+      en: "Which statement prints Robo Pet, with exactly 1 space in the middle?"
+    choices:
+      - { text: 'print("Robo" + " " + "Pet")', correct: true }
+      - { text: 'print("Robo" + "Pet")', misconception: concat-no-space }
+      - { text: 'print("Robo " + " Pet")', misconception: string-exact }
+      - { text: 'print("Robo" + "Pet" + " ")', misconception: concat-no-space }
+    explanation:
+      vi: "Dấu + không tự thêm dấu cách. Muốn có 1 dấu cách giữa Robo và Pet, con nối thêm chuỗi \" \" vào giữa."
+      en: "+ does not add a space by itself. To get 1 space between Robo and Pet, join the string \" \" in the middle."
+
+  - id: s1.chuoi.b10
+    type: predict
+    concepts: [string-repeat]
+    lessons: [s1.chuoi.l4]
+    code: |
+      print("Hi" * 2)
+    prompt: { vi: "Đoạn code in ra gì?", en: "What is the output of this code?" }
+    choices:
+      - { text: "HiHi", correct: true }
+      - { text: "Hi Hi", misconception: string-repeat }
+      - { text: "Hi2", misconception: string-repeat }
+      - { text: "Hi\nHi", misconception: string-repeat }
+    explanation:
+      vi: "\"Hi\" * 2 lặp chuỗi Hi 2 lần, nối sát nhau trên cùng 1 dòng: HiHi."
+      en: "\"Hi\" * 2 repeats the string Hi 2 times, right next to each other on the same line: HiHi."
+
+  - id: s1.chuoi.b11
+    type: predict
+    concepts: [string-repeat]
+    lessons: [s1.chuoi.l4]
+    code: |
+      print("x" * 2 + "y" * 3)
+    prompt: { vi: "Đoạn code in ra gì?", en: "What is the output of this code?" }
+    choices:
+      - { text: "xxyyy", correct: true }
+      - { text: "xxyxxyxxy", misconception: string-repeat }
+      - { text: "x2y3", misconception: string-repeat }
+      - { text: "xx yyy", misconception: concat-no-space }
+    explanation:
+      vi: "Các phép * làm trước: \"x\" * 2 ra xx, \"y\" * 3 ra yyy. Sau đó dấu + nối chúng sát nhau: xxyyy."
+      en: "The * parts come first: \"x\" * 2 gives xx and \"y\" * 3 gives yyy. Then + joins them with no space: xxyyy."
+
+  - id: s1.chuoi.b12
+    type: mcq
+    concepts: [string-repeat]
+    lessons: [s1.chuoi.l4]
+    prompt:
+      vi: "Lệnh nào in ra 1 đường kẻ gồm 10 dấu gạch ngang: ----------"
+      en: "Which statement prints a line of 10 dashes: ----------"
+    choices:
+      - { text: 'print("-" * 10)', correct: true }
+      - { text: 'print("-" * "10")', misconception: string-repeat }
+      - { text: 'print("-" + 10)', misconception: string-repeat }
+      - { text: 'print("-10")', misconception: string-repeat }
+    explanation:
+      vi: "Viết chuỗi cần lặp, dấu *, rồi số lần lặp. Số lần lặp nằm ngoài dấu nháy. Viết \"-10\" thì Python chỉ in ra -10."
+      en: "Write the string to repeat, then *, then the number of times. The number goes outside the quotes. \"-10\" only prints -10."
+
+  - id: s1.chuoi.b13
+    type: predict
+    concepts: [newline-escape]
+    lessons: [s1.chuoi.l5]
+    code: |
+      print("1\n2\n3")
+    prompt: { vi: "Đoạn code in ra gì?", en: "What is the output of this code?" }
+    choices:
+      - { text: "1\n2\n3", correct: true }
+      - { text: '1\n2\n3', misconception: newline-escape }
+      - { text: "123" }
+      - { text: "1 2 3" }
+    explanation:
+      vi: 'Mỗi \n là 1 lần xuống dòng. Chuỗi có 2 ký tự \n nên in ra 3 dòng: 1, 2 và 3.'
+      en: 'Each \n starts a new line. The string has 2 new-line characters, so it prints 3 lines: 1, 2 and 3.'
+
+  - id: s1.chuoi.b14
+    type: predict
+    concepts: [newline-escape]
+    lessons: [s1.chuoi.l5]
+    code: |
+      print("Hi/nBo")
+    prompt: { vi: "Đoạn code in ra gì?", en: "What is the output of this code?" }
+    choices:
+      - { text: "Hi/nBo", correct: true }
+      - { text: "Hi\nBo", misconception: newline-escape }
+      - { text: "HiBo" }
+      - { vi: "Báo lỗi ở dòng 1", en: "An error on line 1", error: true }
+    explanation:
+      vi: 'Ký tự xuống dòng là \n, với dấu gạch chéo ngược. Ở đây là dấu gạch chéo /, nên /n chỉ là 2 ký tự bình thường và được in y nguyên.'
+      en: 'The new-line character is \n, with a backslash. Here it is a forward slash, so /n is just 2 ordinary characters and is printed as it is.'
+
+  - id: s1.chuoi.b15
+    type: mcq
+    concepts: [newline-escape]
+    lessons: [s1.chuoi.l5]
+    code: |
+      print("Py\nPet\n!")
+    prompt: { vi: "Lệnh này in ra mấy dòng?", en: "How many lines does this statement print?" }
+    choices:
+      - { text: "3", correct: true }
+      - { text: "1", misconception: newline-escape }
+      - { text: "2" }
+      - { text: "5" }
+    explanation:
+      vi: 'Chuỗi có 2 ký tự \n, nên được chia thành 3 dòng: Py, Pet và dấu chấm than.'
+      en: 'The string has 2 new-line characters, so it is split into 3 lines: Py, Pet and the exclamation mark.'
+
+  - id: s1.chuoi.b16
+    type: predict
+    concepts: [newline-escape, string-repeat]
+    lessons: [s1.chuoi.l5]
+    code: |
+      print("Hi\n" * 2 + "Bo")
+    prompt: { vi: "Đoạn code in ra gì?", en: "What is the output of this code?" }
+    choices:
+      - { text: "Hi\nHi\nBo", correct: true }
+      - { text: "Hi\nBoHi\nBo", misconception: string-repeat }
+      - { text: 'Hi\nHi\nBo', misconception: newline-escape }
+      - { text: "HiHiBo", misconception: newline-escape }
+    explanation:
+      vi: 'Phép * làm trước: chuỗi "Hi\n" được lặp 2 lần, mỗi lần có 1 ký tự xuống dòng ở cuối. Sau đó dấu + nối thêm Bo, nên in ra 3 dòng: Hi, Hi và Bo.'
+      en: '* comes first: the string "Hi\n" is repeated 2 times, and each copy ends with a new-line character. Then + adds Bo, so it prints 3 lines: Hi, Hi and Bo.'
+
+  - id: s1.chuoi.b17
+    type: predict
+    concepts: [newline-escape, concat-no-space]
+    lessons: [s1.chuoi.l5]
+    code: |
+      print("Ro" + "\n" + "bo")
+    prompt: { vi: "Đoạn code in ra gì?", en: "What is the output of this code?" }
+    choices:
+      - { text: "Ro\nbo", correct: true }
+      - { text: "Robo", misconception: newline-escape }
+      - { text: "Ro bo", misconception: concat-no-space }
+      - { text: 'Ro\nbo', misconception: newline-escape }
+    explanation:
+      vi: 'Chuỗi "\n" chỉ có 1 ký tự: ký tự xuống dòng. Nối nó vào giữa Ro và bo thì Ro và bo nằm trên 2 dòng.'
+      en: 'The string "\n" has only 1 character: the new-line character. Joining it between Ro and bo puts Ro and bo on 2 lines.'

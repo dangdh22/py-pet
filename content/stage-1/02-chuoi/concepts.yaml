@@ -1,0 +1,51 @@
+concepts:
+  - id: string-exact
+    name: { vi: "Chuỗi được in y nguyên", en: "A string prints exactly as written" }
+    misconception_card: |
+      Nhiều bạn nghĩ Python sẽ bỏ bớt dấu cách thừa, hoặc tính phép tính viết trong chuỗi. Thực ra Python in chuỗi **y nguyên**, từng ký tự một: viết bao nhiêu dấu cách thì in ra bấy nhiêu dấu cách. `print("2 + 2 = 5")` in ra đúng 2 + 2 = 5.
+    parent_tip: |
+      Viết lên giấy 1 dòng như "Số nhà 007, tầng 2" rồi nhờ con chép lại thật giống, kể cả dấu cách và dấu phẩy. Python in chuỗi cũng giống hệt như vậy.
+    practice:
+      level1: [s1.chuoi.l1.q1, s1.chuoi.l1.q2, s1.chuoi.b3, s1.chuoi.b8, s1.chuoi.l3.q2]
+      level2: [s1.chuoi.p1]
+      level3: [s1.chuoi.l1.ex1, s1.chuoi.l3.ex1]
+  - id: quote-inside
+    name: { vi: "Dấu nháy bên trong chuỗi", en: "Quotes inside a string" }
+    misconception_card: |
+      Nhiều bạn viết `print("Robo nói: "Chào"")` rồi gặp lỗi. Dấu nháy kép thứ 2 đã **đóng chuỗi** mất rồi. Chuỗi có dấu nháy kép bên trong thì bao ngoài bằng dấu nháy đơn: `print('Robo nói: "Chào"')`. Nếu cần cả 2 loại dấu nháy, hãy viết `\"` hoặc `\'`.
+    parent_tip: |
+      Viết lên giấy 1 câu trích lời nói, rồi cùng con tô 2 màu: 1 màu cho cặp dấu nháy bao ngoài, 1 màu cho dấu nháy nằm bên trong.
+    practice:
+      level1: [s1.chuoi.l2.q1, s1.chuoi.l2.q2, s1.chuoi.b4, s1.chuoi.b5, s1.chuoi.b6]
+      level2: [s1.chuoi.p2]
+      level3: [s1.chuoi.l2.ex1, s1.chuoi.c4]
+  - id: concat-no-space
+    name: { vi: "Dấu + không tự thêm dấu cách", en: "+ does not add a space" }
+    misconception_card: |
+      Nhiều bạn nghĩ dấu `+` tự thêm dấu cách giữa 2 chuỗi. Thực ra `"Xin" + "chào"` ra Xinchào, 2 chuỗi dính sát nhau. Muốn có dấu cách, con phải tự đặt nó vào chuỗi: `"Xin " + "chào"` ra Xin chào.
+    parent_tip: |
+      Viết "Py" và "Pet" lên 2 mảnh giấy rồi đặt sát nhau: con sẽ đọc được PyPet. Muốn có khoảng trống thì phải chèn thêm 1 mảnh giấy trắng vào giữa.
+    practice:
+      level1: [s1.chuoi.l3.q1, s1.chuoi.b7, s1.chuoi.b9, s1.chuoi.b17]
+      level2: [s1.chuoi.p3, s1.chuoi.p4]
+      level3: [s1.chuoi.l3.ex1, s1.chuoi.c1]
+  - id: string-repeat
+    name: { vi: "Lặp chuỗi bằng dấu *", en: "Repeating a string with *" }
+    misconception_card: |
+      Nhiều bạn nghĩ `"ab" * 3` ra aaabbb, hoặc có dấu cách giữa các lần lặp. Thực ra cả chuỗi được lặp lại và nối sát nhau: ababab. Khi có cả `*` và `+`, phép `*` làm trước: `"A" + "B" * 2` ra ABB.
+    parent_tip: |
+      Cho con xếp 1 hàng gồm cặp "1 cúc áo, 1 hạt đậu" lặp lại 3 lần. Con sẽ thấy cả cặp được lặp: cúc, đậu, cúc, đậu, cúc, đậu.
+    practice:
+      level1: [s1.chuoi.l4.q1, s1.chuoi.l4.q2, s1.chuoi.b10, s1.chuoi.b11, s1.chuoi.b12]
+      level2: [s1.chuoi.p5, s1.chuoi.p4]
+      level3: [s1.chuoi.l4.ex1, s1.chuoi.c2, s1.chuoi.c1]
+  - id: newline-escape
+    name: { vi: '\n là ký tự xuống dòng', en: '\n is the new-line character' }
+    misconception_card: |
+      Nhiều bạn nghĩ `\n` sẽ được in ra thành 2 ký tự. Thực ra Python hiểu `\n` là **1 ký tự xuống dòng**: `print("A\nB")` in A và B trên 2 dòng. Nhớ dùng dấu gạch chéo ngược `\`, vì `"A/nB"` chỉ in ra A/nB trên 1 dòng.
+    parent_tip: |
+      Đọc cho con chép 1 đoạn thơ ngắn. Mỗi khi bố mẹ nói "xuống dòng", con viết sang dòng mới. Ký hiệu \n trong chuỗi chính là lời nhắc "xuống dòng" đó.
+    practice:
+      level1: [s1.chuoi.l5.q1, s1.chuoi.l5.q2, s1.chuoi.b13, s1.chuoi.b14, s1.chuoi.b15]
+      level2: [s1.chuoi.p6, s1.chuoi.p7]
+      level3: [s1.chuoi.l5.ex1, s1.chuoi.c3]
