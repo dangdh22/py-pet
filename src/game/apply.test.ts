@@ -537,6 +537,18 @@ describe("tests", () => {
     expect(next.pet.stage).toBe(2);
   });
 
+  test("a wrong answer in a test is not a review miss and resets the correct run", () => {
+    const start = initialGameState("2026-10-06");
+    start.pet.correctRun = 3;
+    const next = apply(
+      start,
+      { type: "QuestionAnswered", questionId: "q1", concepts: ["k1"], correct: false, source: "test" },
+      at("2026-10-06"),
+    );
+    expect(next.mastery.k1?.reviewMisses ?? 0).toBe(0);
+    expect(next.pet.correctRun).toBe(0);
+  });
+
   test("isPass uses 80% with a float tolerance", () => {
     expect(isPass(11.2, 14)).toBe(true);
     expect(isPass(11.19, 14)).toBe(false);
