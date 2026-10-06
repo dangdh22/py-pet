@@ -16,6 +16,7 @@ export function BackupScreen() {
   const game = useGame();
   const { t } = useLang();
   const [exported, setExported] = useState<string | null>(null);
+  const [exportFailed, setExportFailed] = useState(false);
   const [pin, setPin] = useState("");
   const [pinWrong, setPinWrong] = useState(false);
   const [step, setStep] = useState<ImportStep>({ kind: "locked" });
@@ -34,9 +35,15 @@ export function BackupScreen() {
   }
 
   async function onExport() {
-    const { fileName, text } = await game.exportBackup();
-    downloadText(fileName, text);
-    setExported(fileName);
+    setExportFailed(false);
+    try {
+      const { fileName, text } = await game.exportBackup();
+      downloadText(fileName, text);
+      setExported(fileName);
+    } catch {
+      setExported(null);
+      setExportFailed(true);
+    }
   }
 
   async function onPin(event: FormEvent) {
@@ -74,6 +81,7 @@ export function BackupScreen() {
           {t("backup.export")}
         </button>
         {exported && <p role="status">{t("backup.exported", { file: exported })}</p>}
+        {exportFailed && <p role="alert">{t("backup.exportFailed")}</p>}
       </section>
       <section>
         <h2>{t("backup.import")}</h2>

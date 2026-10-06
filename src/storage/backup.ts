@@ -1,5 +1,13 @@
+import type { GameState } from "../game/state";
 import { base64ToUtf8, sha256Hex, utf8ToBase64 } from "./encoding";
-import { SCHEMA_VERSION, type AppMeta, type GameStore, type ProfileBundle } from "./types";
+import {
+  SCHEMA_VERSION,
+  type AppMeta,
+  type DraftRecord,
+  type GameStore,
+  type ProfileBundle,
+  type StoredProfile,
+} from "./types";
 
 export const BACKUP_FORMAT = "py-pet-backup";
 export const APP_VERSION = "0.2.0";
@@ -29,15 +37,48 @@ export interface BackupPreview {
 /** schemaVersion N -> function that turns an N payload into an N+1 payload. */
 const MIGRATIONS: Record<number, (payload: BackupPayload) => BackupPayload> = {};
 
-export async function buildBackupPayload(store: GameStore, now: Date): Promise<BackupPayload> {
+/** The active profile as the app holds it in memory: newer than the store when a write failed. */
+export interface ActiveSnapshot {
+  profile: StoredProfile;
+  state: GameState;
+  drafts: DraftRecord[];
+}
+
+/**
+ * Without `active`, every profile comes from the store. With `active`, that profile's state and drafts come
+ * from memory; its attempts and the other profiles come from the store, or are left out when the store cannot
+ * read them.
+ */
+export async function buildBackupPayload(store: GameStore, now: Date, active?: ActiveSnapshot): Promise<BackupPayload> {
   const meta = await store.readMeta();
+  let profiles: ProfileBundle[];
+  if (!active) {
+    profiles = await store.exportProfiles();
+  } else {
+    let stored: ProfileBundle[] = [];
+    try {
+      stored = await store.exportProfiles();
+    } catch {
+      // Keep the export working: the in-memory progress matters more than the attempt history.
+    }
+    const id = active.profile.id;
+    const bundle: ProfileBundle = {
+      profile: active.profile,
+      state: active.state,
+      attempts: stored.find((p) => p.profile.id === id)?.attempts ?? [],
+      drafts: active.drafts,
+    };
+    profiles = stored.some((p) => p.profile.id === id)
+      ? stored.map((p) => (p.profile.id === id ? bundle : p))
+      : [...stored, bundle];
+  }
   return {
     format: BACKUP_FORMAT,
     schemaVersion: SCHEMA_VERSION,
     appVersion: APP_VERSION,
     exportedAt: now.toISOString(),
     meta: { ...meta, autoBackups: [] },
-    profiles: await store.exportProfiles(),
+    profiles,
   };
 }
 

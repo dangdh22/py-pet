@@ -1,5 +1,6 @@
 // @vitest-environment jsdom
 import { act, screen, waitFor } from "@testing-library/react";
+import { useState } from "react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, describe, expect, test, vi } from "vitest";
 import { initialGameState } from "../game/state";
@@ -166,6 +167,89 @@ describe("GameProvider backups", () => {
     await waitFor(() => expect(document.title).toBe("py-pet-an-2026-10-06.pypet|true"));
     expect(screen.getByText(`last:${FIXED_NOW.toISOString()}`)).toBeInTheDocument();
     expect((await store.readMeta()).lastBackupAt).toBe(FIXED_NOW.toISOString());
+  });
+
+  function ExportProbe() {
+    const game = useGame();
+    const [exported, setExported] = useState<string | null>(null);
+    return (
+      <div>
+        <p>last:{game.lastBackupAt ?? "none"}</p>
+        <button onClick={() => game.dispatch({ type: "LessonCompleted", lessonId: "t.l1" })}>complete</button>
+        <button onClick={() => game.saveDraft("t.l1.ex1", "print(7)")}>draft</button>
+        <button onClick={async () => setExported((await game.exportBackup()).text)}>export</button>
+        <button onClick={() => void game.importBackup(sampleBackupPayload("Bình"))}>import</button>
+        {exported && <p data-testid="exported">{exported}</p>}
+      </div>
+    );
+  }
+
+  async function exportedPayload() {
+    const result = await decodeBackup((await screen.findByTestId("exported")).textContent ?? "");
+    if (!result.ok) throw new Error("the exported file does not decode");
+    return result.payload;
+  }
+
+  test("exportBackup saves the in-memory progress when saving the state fails", async () => {
+    class NoSaveStore extends MemoryStore {
+      override async saveState(): Promise<void> {
+        throw new Error("QuotaExceededError");
+      }
+    }
+    await renderWithGame(<ExportProbe />, { store: new NoSaveStore({ persistent: true }) });
+    await userEvent.click(screen.getByRole("button", { name: "complete" }));
+    await userEvent.click(screen.getByRole("button", { name: "draft" }));
+    await userEvent.click(screen.getByRole("button", { name: "export" }));
+    const payload = await exportedPayload();
+    expect(payload.profiles).toHaveLength(1);
+    expect(payload.profiles[0]!.state.pet.xp).toBe(10);
+    expect(payload.profiles[0]!.state.progress.completedLessons).toEqual(["t.l1"]);
+    expect(payload.profiles[0]!.drafts).toEqual([{ profileId: "p1", itemId: "t.l1.ex1", code: "print(7)" }]);
+  });
+
+  test("exportBackup still returns the file when no write works", async () => {
+    class NoWriteStore extends MemoryStore {
+      override async saveState(): Promise<void> {
+        throw new Error("QuotaExceededError");
+      }
+      override async writeMeta(): Promise<void> {
+        throw new Error("QuotaExceededError");
+      }
+    }
+    await renderWithGame(<ExportProbe />, { store: new NoWriteStore({ persistent: true }) });
+    await userEvent.click(screen.getByRole("button", { name: "complete" }));
+    await userEvent.click(screen.getByRole("button", { name: "export" }));
+    expect((await exportedPayload()).profiles[0]!.state.pet.xp).toBe(10);
+    expect(screen.getByText(`last:${FIXED_NOW.toISOString()}`)).toBeInTheDocument();
+  });
+
+  test("exportBackup exports no attempts when they cannot be read", async () => {
+    class NoReadStore extends MemoryStore {
+      override async exportProfiles(): Promise<never> {
+        throw new Error("read failed");
+      }
+    }
+    await renderWithGame(<ExportProbe />, { store: new NoReadStore({ persistent: true }) });
+    await userEvent.click(screen.getByRole("button", { name: "complete" }));
+    await userEvent.click(screen.getByRole("button", { name: "export" }));
+    const payload = await exportedPayload();
+    expect(payload.profiles[0]!.state.pet.xp).toBe(10);
+    expect(payload.profiles[0]!.attempts).toEqual([]);
+  });
+
+  test("the automatic backup taken by an import keeps the in-memory progress", async () => {
+    class NoSaveStore extends MemoryStore {
+      override async saveState(): Promise<void> {
+        throw new Error("QuotaExceededError");
+      }
+    }
+    const onReplaced = vi.fn();
+    const { store } = await renderWithGame(<ExportProbe />, { store: new NoSaveStore({ persistent: true }), onReplaced });
+    await userEvent.click(screen.getByRole("button", { name: "complete" }));
+    await userEvent.click(screen.getByRole("button", { name: "import" }));
+    await waitFor(() => expect(onReplaced).toHaveBeenCalledOnce());
+    const kept = await decodeBackup((await store.readMeta()).autoBackups[0]!);
+    expect(kept.ok && kept.payload.profiles[0]!.state.pet.xp).toBe(10);
   });
 
   test("checkPin verifies against the stored hash", async () => {

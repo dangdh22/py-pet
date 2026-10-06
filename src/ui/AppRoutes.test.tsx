@@ -147,16 +147,23 @@ describe("crash screen", () => {
   test("the crash screen reports a failed export", async () => {
     vi.spyOn(console, "error").mockImplementation(() => {});
     class BrokenStore extends MemoryStore {
+      broken = false;
+      override async readMeta() {
+        if (this.broken) throw new Error("broken");
+        return super.readMeta();
+      }
       override async exportProfiles(): Promise<never> {
         throw new Error("broken");
       }
     }
+    const store = new BrokenStore({ persistent: true });
     await renderWithGame(
       <ErrorBoundary>
         <Boom />
       </ErrorBoundary>,
-      { store: new BrokenStore({ persistent: true }) },
+      { store },
     );
+    store.broken = true;
     await userEvent.click(screen.getByRole("button", { name: "Xuất file sao lưu" }));
     expect(await screen.findByText("Chưa xuất được file sao lưu.")).toBeInTheDocument();
   });

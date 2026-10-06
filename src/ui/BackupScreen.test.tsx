@@ -35,6 +35,25 @@ describe("BackupScreen", () => {
     expect(screen.getByText("Lần sao lưu gần nhất: 2026-10-06")).toBeInTheDocument();
   });
 
+  test("shows an error when the export fails", async () => {
+    class BrokenStore extends MemoryStore {
+      broken = false;
+      override async readMeta() {
+        if (this.broken) throw new Error("read failed");
+        return super.readMeta();
+      }
+      override async exportProfiles(): Promise<never> {
+        throw new Error("read failed");
+      }
+    }
+    const store = new BrokenStore({ persistent: true });
+    await renderWithGame(<BackupScreen />, { store });
+    store.broken = true;
+    await userEvent.click(screen.getByRole("button", { name: "Xuất file sao lưu" }));
+    expect(await screen.findByRole("alert")).toHaveTextContent("Chưa xuất được file sao lưu.");
+    expect(screen.queryByRole("status")).not.toBeInTheDocument();
+  });
+
   test("wrong PIN keeps the file picker hidden", async () => {
     await renderWithGame(<BackupScreen />, { meta: { pin: await hashPin("1234", 1000) } });
     await unlock("9999");

@@ -4,7 +4,13 @@ import { daysBetween, localDay } from "../game/dates";
 import type { GameState } from "../game/state";
 import type { Lang } from "../i18n/lang";
 import { useLang } from "../i18n/LangProvider";
-import { backupFileName, buildBackupPayload, encodeBackup, type BackupPayload } from "../storage/backup";
+import {
+  backupFileName,
+  buildBackupPayload,
+  encodeBackup,
+  type ActiveSnapshot,
+  type BackupPayload,
+} from "../storage/backup";
 import { verifyPin } from "../storage/pin";
 import {
   appendErrorLog,
@@ -168,15 +174,29 @@ export function GameProvider({ store, loaded, clock, onReplaced, children }: Gam
     [clock, enqueue, store],
   );
 
+  /** The active profile as held in memory: it stays correct when the store cannot save. */
+  const activeSnapshot = useCallback(
+    (): ActiveSnapshot => ({
+      profile,
+      state: stateRef.current,
+      drafts: [...drafts.current].map(([itemId, code]) => ({ profileId: profile.id, itemId, code })),
+    }),
+    [profile],
+  );
+
   const exportBackup = useCallback(async () => {
     await queue.current;
     const now = clock();
-    const text = await encodeBackup(await buildBackupPayload(store, now));
+    const text = await encodeBackup(await buildBackupPayload(store, now, activeSnapshot()));
     const lastBackupAt = now.toISOString();
-    await store.writeMeta({ lastBackupAt });
+    try {
+      await store.writeMeta({ lastBackupAt });
+    } catch {
+      // The file is ready; a failed write only loses the reminder date after a reload.
+    }
     setMeta((current) => ({ ...current, lastBackupAt }));
     return { fileName: backupFileName(profile.childName, localDay(now)), text };
-  }, [clock, store, profile.childName]);
+  }, [clock, store, activeSnapshot, profile.childName]);
 
   const checkPin = useCallback(
     async (pin: string) => (meta.pin ? verifyPin(pin, meta.pin) : false),
@@ -189,7 +209,7 @@ export function GameProvider({ store, loaded, clock, onReplaced, children }: Gam
       for (const timer of draftTimers.current.values()) clearTimeout(timer);
       draftTimers.current.clear();
       const run = queue.current.then(async () => {
-        const current = await encodeBackup(await buildBackupPayload(store, clock()));
+        const current = await encodeBackup(await buildBackupPayload(store, clock(), activeSnapshot()));
         const existing = await store.readMeta();
         const autoBackups = [current, ...existing.autoBackups].slice(0, AUTO_BACKUPS);
         const activeProfileId = payload.meta.activeProfileId ?? payload.profiles[0]?.profile.id ?? null;
@@ -204,7 +224,7 @@ export function GameProvider({ store, loaded, clock, onReplaced, children }: Gam
       }
       onReplaced();
     },
-    [clock, store, onReplaced],
+    [clock, store, activeSnapshot, onReplaced],
   );
 
   const today = localDay(clock());
