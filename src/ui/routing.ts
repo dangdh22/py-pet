@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import type { PathNode } from "../game/path";
+import type { NextStep, PathNode } from "../game/path";
 
 export type Route =
   | { name: "home" }
@@ -8,7 +8,10 @@ export type Route =
   | { name: "lesson"; lessonId: string }
   /** stationId null: a free review, for example to charge the robot. */
   | { name: "review"; stationId: string | null }
-  | { name: "practice"; conceptId: string };
+  | { name: "practice"; conceptId: string }
+  | { name: "topicTest"; topicId: string }
+  | { name: "evolution"; stageId: string }
+  | { name: "remedial" };
 
 function decode(raw: string): string {
   try {
@@ -22,12 +25,22 @@ export function parseHash(hash: string): Route {
   if (hash === "#/map") return { name: "map" };
   if (hash === "#/backup") return { name: "backup" };
   if (hash === "#/review") return { name: "review", stationId: null };
-  const match = /^#\/(lesson|review|practice)\/(.+)$/.exec(hash);
+  if (hash === "#/remedial") return { name: "remedial" };
+  const match = /^#\/(lesson|review|practice|topic-test|evolution)\/(.+)$/.exec(hash);
   if (!match) return { name: "home" };
   const id = decode(match[2] as string);
-  if (match[1] === "lesson") return { name: "lesson", lessonId: id };
-  if (match[1] === "review") return { name: "review", stationId: id };
-  return { name: "practice", conceptId: id };
+  switch (match[1]) {
+    case "lesson":
+      return { name: "lesson", lessonId: id };
+    case "review":
+      return { name: "review", stationId: id };
+    case "practice":
+      return { name: "practice", conceptId: id };
+    case "topic-test":
+      return { name: "topicTest", topicId: id };
+    default:
+      return { name: "evolution", stageId: id };
+  }
 }
 
 export function routeToHash(route: Route): string {
@@ -38,6 +51,12 @@ export function routeToHash(route: Route): string {
       return route.stationId === null ? "#/review" : `#/review/${encodeURIComponent(route.stationId)}`;
     case "practice":
       return `#/practice/${encodeURIComponent(route.conceptId)}`;
+    case "topicTest":
+      return `#/topic-test/${encodeURIComponent(route.topicId)}`;
+    case "evolution":
+      return `#/evolution/${encodeURIComponent(route.stageId)}`;
+    case "remedial":
+      return "#/remedial";
     case "map":
       return "#/map";
     case "backup":
@@ -49,7 +68,21 @@ export function routeToHash(route: Route): string {
 
 /** The route that opens a node of the map. */
 export function nodeRoute(node: PathNode): Route {
-  return node.kind === "lesson" ? { name: "lesson", lessonId: node.id } : { name: "review", stationId: node.id };
+  switch (node.kind) {
+    case "lesson":
+      return { name: "lesson", lessonId: node.id };
+    case "review":
+      return { name: "review", stationId: node.id };
+    case "topicTest":
+      return { name: "topicTest", topicId: node.topicId };
+    case "evolution":
+      return { name: "evolution", stageId: node.stageId };
+  }
+}
+
+/** The route that "Học tiếp" opens. */
+export function stepRoute(step: NextStep): Route {
+  return step.kind === "remedial" ? { name: "remedial" } : nodeRoute(step.node);
 }
 
 export function useHashRoute(): [Route, (route: Route) => void] {

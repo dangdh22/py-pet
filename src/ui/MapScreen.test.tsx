@@ -2,6 +2,7 @@
 import { screen, within } from "@testing-library/react";
 import { expect, test } from "vitest";
 import { initialGameState } from "../game/state";
+import { examBundle } from "../test/examBundle";
 import { renderWithGame, TODAY } from "../test/renderGame";
 import { reviewBundle } from "../test/reviewBundle";
 import { MapScreen } from "./MapScreen";
@@ -39,4 +40,21 @@ test("shows the review station between the lessons", async () => {
     "Bài r.l3Chưa mở",
   ]);
   expect(within(items[2]!).getByRole("link", { name: "Trạm ôn" })).toHaveAttribute("href", "#/review/r.r1");
+});
+
+test("shows the topic test after the lessons and the evolution test at the end of the stage", async () => {
+  const state = initialGameState(TODAY);
+  state.progress.completedLessons = ["x.l1", "x.l2"];
+  await renderWithGame(<MapScreen />, { state, bundle: examBundle() });
+  const items = screen.getAllByRole("listitem");
+  expect(items.map((item) => item.textContent)).toEqual([
+    "Bài x.l1Đã xong",
+    "Bài x.l2Đã xong",
+    "Kiểm tra chủ đềBài tiếp theo",
+    "Kiểm tra tiến hóaChưa mở",
+  ]);
+  expect(within(items[2]!).getByRole("link", { name: "Kiểm tra chủ đề" })).toHaveAttribute(
+    "href",
+    "#/topic-test/x.t",
+  );
 });

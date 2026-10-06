@@ -16,7 +16,23 @@ export function MapScreen() {
   );
   const label = (node: PathNode) => {
     const title = lessonTitles.get(node.id);
-    return node.kind === "lesson" && title ? pick(title, uiLang) : t("map.review");
+    if (node.kind === "lesson" && title) return pick(title, uiLang);
+    if (node.kind === "topicTest") return t("map.topicTest");
+    if (node.kind === "evolution") return t("map.evolution");
+    return t("map.review");
+  };
+  const item = (node: PathNode) => {
+    const status = statuses.get(node.id) ?? "locked";
+    return (
+      <li key={node.id} className={`map-node node-${status} node-${node.kind}`}>
+        {status === "locked" ? (
+          <span aria-disabled="true">{label(node)}</span>
+        ) : (
+          <a href={routeToHash(nodeRoute(node))}>{label(node)}</a>
+        )}
+        <span className="node-status">{t(`map.${status}`)}</span>
+      </li>
+    );
   };
   return (
     <main className="map">
@@ -28,24 +44,13 @@ export function MapScreen() {
             <div key={topic.id} className="topic">
               <h3>{pick(topic.title, uiLang)}</h3>
               <ol className="map-path">
-                {nodes
-                  .filter((node) => node.topicId === topic.id)
-                  .map((node) => {
-                    const status = statuses.get(node.id) ?? "locked";
-                    return (
-                      <li key={node.id} className={`map-node node-${status} node-${node.kind}`}>
-                        {status === "locked" ? (
-                          <span aria-disabled="true">{label(node)}</span>
-                        ) : (
-                          <a href={routeToHash(nodeRoute(node))}>{label(node)}</a>
-                        )}
-                        <span className="node-status">{t(`map.${status}`)}</span>
-                      </li>
-                    );
-                  })}
+                {nodes.filter((node) => node.kind !== "evolution" && node.topicId === topic.id).map(item)}
               </ol>
             </div>
           ))}
+          <ol className="map-path">
+            {nodes.filter((node) => node.kind === "evolution" && node.stageId === stage.id).map(item)}
+          </ol>
         </section>
       ))}
       <a href="#/">{t("nav.room")}</a>

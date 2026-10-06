@@ -1,5 +1,6 @@
 import { isChoiceQuestion, type ContentBundle, type Stage } from "../content/types";
 import { daysBetween, weekStart } from "./dates";
+import { hasTest } from "./path";
 import { XP } from "./rewards";
 import { REVIEW_SIZE } from "./reviewSet";
 import type { GameState } from "./state";
@@ -11,7 +12,15 @@ export function currentStage(bundle: ContentBundle, state: GameState): Stage | n
   return bundle.stages[state.pet.stage - 1] ?? bundle.stages[bundle.stages.length - 1] ?? null;
 }
 
-/** The XP a child can earn in a stage from lessons, their exercises and 1 perfect run of each review station. */
+/** The XP of the current stage: all XP minus the XP the robot had when the stage began. */
+export function stageXp(state: GameState): number {
+  return state.pet.xp - state.pet.stageStartXp;
+}
+
+/**
+ * The XP a child can earn in a stage from lessons, their exercises, 1 perfect run of each review station and each topic
+ * test.
+ */
 export function stageXpMax(stage: Stage): number {
   const lessons = stage.topics
     .flatMap((topic) => topic.lessons)
@@ -23,7 +32,8 @@ export function stageXpMax(stage: Stage): number {
       0,
     );
   const stations = stage.topics.reduce((sum, topic) => sum + topic.reviews.length, 0);
-  return lessons + stations * (XP.review + XP.reviewPerCorrect * REVIEW_SIZE);
+  const tests = stage.topics.filter((topic) => hasTest(topic.test)).length;
+  return lessons + stations * (XP.review + XP.reviewPerCorrect * REVIEW_SIZE) + tests * XP.topicTest;
 }
 
 export function growthPercent(xp: number, max: number): number {

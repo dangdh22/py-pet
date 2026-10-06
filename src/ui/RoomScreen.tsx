@@ -1,10 +1,11 @@
-import { nextNode } from "../game/path";
+import { nextStep } from "../game/path";
 import {
   currentStage,
   displayStreak,
   growthPercent,
   growthSize,
   petCondition,
+  stageXp,
   stageXpMax,
   todayPoints,
   weekLessons,
@@ -16,7 +17,7 @@ import { useLang } from "../i18n/LangProvider";
 import { useContent } from "./contexts";
 import { useGame } from "./GameProvider";
 import { Robot, type RobotMood } from "./Robot";
-import { nodeRoute, routeToHash } from "./routing";
+import { routeToHash, stepRoute } from "./routing";
 
 export const ROBOT_SIZES: Record<GrowthSize, number> = { 1: 96, 2: 128, 3: 160 };
 
@@ -35,7 +36,8 @@ export function RoomScreen() {
   const stage = currentStage(bundle, state);
   const max = stage ? stageXpMax(stage) : 0;
   const condition = petCondition(state);
-  const next = nextNode(bundle, state);
+  const next = nextStep(bundle, state);
+  const xp = stageXp(state);
   const canReview = state.progress.completedLessons.length > 0;
   const recharge = condition === "drained" && canReview;
   // An empty battery wins over an empty joy: charging by review fixes the battery first.
@@ -46,7 +48,7 @@ export function RoomScreen() {
       <h1>{t("room.title", { name: profile.robotName })}</h1>
       <p>{t("room.greeting", { child: profile.childName })}</p>
       <div className={`room-scene condition-${condition}`}>
-        <Robot mood={CONDITION_MOOD[condition]} size={ROBOT_SIZES[growthSize(state.pet.xp, max)]} />
+        <Robot mood={CONDITION_MOOD[condition]} size={ROBOT_SIZES[growthSize(xp, max)]} />
         <p className="pet-says">{t(message, { name: profile.robotName })}</p>
       </div>
       <ul className="room-stats">
@@ -57,7 +59,7 @@ export function RoomScreen() {
           {t("room.vui")}: {state.pet.vui}/{STAT_MAX}
         </li>
         <li>
-          {t("room.growth")}: {growthPercent(state.pet.xp, max)}%
+          {t("room.growth")}: {growthPercent(xp, max)}%
         </li>
       </ul>
       <ul className="room-goals">
@@ -74,7 +76,7 @@ export function RoomScreen() {
           </a>
         )}
         {next ? (
-          <a className={recharge ? "button" : "button primary"} href={routeToHash(nodeRoute(next))}>
+          <a className={recharge ? "button" : "button primary"} href={routeToHash(stepRoute(next))}>
             {t("room.continue")}
           </a>
         ) : (

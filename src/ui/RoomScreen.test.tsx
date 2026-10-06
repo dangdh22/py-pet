@@ -2,6 +2,7 @@
 import { screen } from "@testing-library/react";
 import { describe, expect, test } from "vitest";
 import { initialGameState } from "../game/state";
+import { examBundle } from "../test/examBundle";
 import { renderWithGame, TODAY } from "../test/renderGame";
 import { reviewBundle } from "../test/reviewBundle";
 import { RoomScreen } from "./RoomScreen";
@@ -80,5 +81,25 @@ describe("RoomScreen", () => {
     state.pet.vui = 0;
     await renderWithGame(<RoomScreen />, { state });
     expect(screen.getByText("Robo hết pin rồi. Con làm 1 trạm ôn để sạc cho Robo nhé!")).toBeInTheDocument();
+  });
+
+  test("an open focused review set comes first", async () => {
+    const state = initialGameState(TODAY);
+    state.progress.completedLessons = ["x.l1", "x.l2"];
+    state.progress.topicTests["x.t"] = { attempts: 1, best: 2, max: 6, passed: false, lastItems: [] };
+    state.remedial = { stage: 1, items: ["x.q1"] };
+    await renderWithGame(<RoomScreen />, { state, bundle: examBundle() });
+    expect(screen.getByRole("link", { name: "Học tiếp" })).toHaveAttribute("href", "#/remedial");
+  });
+
+  test("after the topic test comes the evolution test, and the growth counts only the XP of this stage", async () => {
+    const state = initialGameState(TODAY);
+    state.progress.completedLessons = ["x.l1", "x.l2"];
+    state.progress.topicTests["x.t"] = { attempts: 1, best: 6, max: 6, passed: true, lastItems: [] };
+    state.pet.xp = 500;
+    state.pet.stageStartXp = 500;
+    await renderWithGame(<RoomScreen />, { state, bundle: examBundle() });
+    expect(screen.getByRole("link", { name: "Học tiếp" })).toHaveAttribute("href", "#/evolution/x");
+    expect(screen.getByText("Lớn lên: 0%")).toBeInTheDocument();
   });
 });

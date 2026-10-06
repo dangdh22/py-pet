@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 import { isBrowserSupported } from "./browserSupport";
-import { nodeRoute, parseHash, routeToHash } from "./routing";
+import { nodeRoute, parseHash, routeToHash, stepRoute } from "./routing";
 
 describe("routing", () => {
   test("parses the home and lesson hashes", () => {
@@ -43,6 +43,29 @@ describe("review and practice routes", () => {
   test("nodeRoute opens a lesson or a station", () => {
     expect(nodeRoute({ kind: "lesson", id: "a.l1", topicId: "a" })).toEqual({ name: "lesson", lessonId: "a.l1" });
     expect(nodeRoute({ kind: "review", id: "a.r1", topicId: "a", lessons: [] })).toEqual({ name: "review", stationId: "a.r1" });
+  });
+});
+
+describe("test routes", () => {
+  test("parse and round-trip", () => {
+    for (const route of [
+      { name: "topicTest", topicId: "s1.lam-quen" },
+      { name: "evolution", stageId: "s1" },
+      { name: "remedial" },
+    ] as const) {
+      expect(parseHash(routeToHash(route))).toEqual(route);
+    }
+    expect(routeToHash({ name: "topicTest", topicId: "s1.a" })).toBe("#/topic-test/s1.a");
+    expect(routeToHash({ name: "evolution", stageId: "s1" })).toBe("#/evolution/s1");
+  });
+
+  test("nodeRoute and stepRoute open tests and the focused review set", () => {
+    expect(nodeRoute({ kind: "topicTest", id: "a.test", topicId: "a" })).toEqual({ name: "topicTest", topicId: "a" });
+    expect(nodeRoute({ kind: "evolution", id: "s.evolution", stageId: "s", stage: 1 })).toEqual({
+      name: "evolution",
+      stageId: "s",
+    });
+    expect(stepRoute({ kind: "remedial" })).toEqual({ name: "remedial" });
   });
 });
 

@@ -1,6 +1,6 @@
 import { findConcept } from "../content/lookup";
 import type { Concept } from "../content/types";
-import { nextNode } from "../game/path";
+import { nextStep } from "../game/path";
 import { displayStreak, todayPoints } from "../game/progress";
 import { buildPracticeSet } from "../game/reviewSet";
 import type { GameState } from "../game/state";
@@ -9,7 +9,7 @@ import { useLang } from "../i18n/LangProvider";
 import { useContent } from "./contexts";
 import { useGame } from "./GameProvider";
 import { Robot } from "./Robot";
-import { nodeRoute, routeToHash } from "./routing";
+import { routeToHash, stepRoute } from "./routing";
 
 export function ResultView({
   before,
@@ -33,7 +33,8 @@ export function ResultView({
   const xp = after.pet.xp - before.pet.xp;
   const xu = after.wallet.xu - before.wallet.xu;
   const pin = after.pet.pin - before.pet.pin;
-  const next = nextNode(bundle, after);
+  const vui = after.pet.vui - before.pet.vui;
+  const next = nextStep(bundle, after);
   const practice = practiceConcepts
     .map((id) => findConcept(bundle, id))
     .filter((concept): concept is Concept => concept !== undefined)
@@ -47,12 +48,13 @@ export function ResultView({
         {xp > 0 && <li>{t("result.xp", { n: xp })}</li>}
         {xu > 0 && <li>{t("result.xu", { n: xu })}</li>}
         {pin > 0 && <li>{t("result.pin", { n: pin })}</li>}
+        {vui > 0 && <li>{t("result.vui", { n: vui })}</li>}
       </ul>
       <p>{t("room.today", { done: todayPoints(after, today), goal: after.settings.dailyGoal })}</p>
       <p>{t("room.streak", { days: displayStreak(after, today) })}</p>
       <nav className="room-actions">
         {next && (
-          <a className="button primary" href={routeToHash(nodeRoute(next))}>
+          <a className="button primary" href={routeToHash(stepRoute(next))}>
             {t("room.continue")}
           </a>
         )}
