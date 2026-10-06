@@ -68,8 +68,7 @@ test("exports a backup and imports it on another device", async ({ page, browser
   await other.getByLabel("Chọn file .pypet").setInputFiles(file);
   await expect(other.getByText(/Hồ sơ trong file: An, giai đoạn 1/)).toBeVisible();
   await other.getByRole("button", { name: "Nhập dữ liệu (thay dữ liệu hiện tại)" }).click();
-  // The page reloads on the same #/backup route, so go back to the room.
-  await other.getByRole("link", { name: "Về phòng" }).click();
+  // The page reloads on the room.
   await expect(other.getByText("Chào An!")).toBeVisible();
   await otherContext.close();
 });

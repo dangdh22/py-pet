@@ -40,4 +40,4 @@ Chạy trước mỗi lần phát hành. Ghi kết quả (Đạt / Không đạt
 - [ ] Xuất file sao lưu, nhập lại trên Edge hoặc máy khác: đúng tên con, xu, bài đã xong
 - [ ] Nhập file bằng PIN sai: không nhập được
 - [ ] Đổi giờ máy lùi 2 ngày rồi học: chuỗi ngày không tăng
-- [ ] Không học 3 ngày (hoặc chỉnh giờ máy tiến 3 ngày): Pin và Vui giảm 2, robot buồn ngủ
+- [ ] Không học 3 ngày liền (hoặc chỉnh giờ máy tiến 4 ngày): Pin và Vui giảm 2, robot buồn ngủ

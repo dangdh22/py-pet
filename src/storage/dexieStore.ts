@@ -59,7 +59,8 @@ export class DexieStore implements GameStore {
   }
 
   async readMeta(): Promise<AppMeta> {
-    return (await this.db.meta.get("app"))?.value ?? emptyMeta();
+    // A meta written by an older app or imported from a file may lack fields: fill in the defaults.
+    return { ...emptyMeta(), ...(await this.db.meta.get("app"))?.value };
   }
 
   async writeMeta(patch: Partial<AppMeta>): Promise<void> {

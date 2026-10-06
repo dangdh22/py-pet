@@ -2,7 +2,7 @@
 import { act, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, test, vi } from "vitest";
-import { initialGameState } from "../game/state";
+import { initialGameState, type GameState } from "../game/state";
 import { RunnerClient } from "../runner/client";
 import { MemoryStore } from "../storage/memoryStore";
 import { FakeWorker } from "../test/fakeWorker";
@@ -107,6 +107,20 @@ describe("App", () => {
     expect(await screen.findByRole("alert")).toHaveTextContent("Robo bị trục trặc rồi.");
     expect(screen.getByRole("button", { name: "Tải lại trang" })).toBeInTheDocument();
     expect(screen.queryByRole("heading", { name: "Chào mừng đến với Py-Pet!" })).not.toBeInTheDocument();
+  });
+
+  test("a crash while the game starts shows the crash screen, not a blank page", async () => {
+    vi.spyOn(console, "error").mockImplementation(() => {});
+    class BrokenStateStore extends MemoryStore {
+      override async loadActive() {
+        const loaded = await super.loadActive();
+        return loaded && { ...loaded, state: {} as GameState };
+      }
+    }
+    const store = new BrokenStateStore({ persistent: true });
+    await store.createProfile(testProfile(), initialGameState(TODAY));
+    render(<App bundle={testBundle()} runnerClient={makeClient().client} store={store} clock={() => FIXED_NOW} />);
+    expect(await screen.findByRole("alert")).toHaveTextContent("Robo bị trục trặc rồi.");
   });
 
   test("shows the other-tab message when the tab does not own the lock", async () => {

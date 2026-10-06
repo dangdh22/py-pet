@@ -89,6 +89,14 @@ describe("BackupScreen", () => {
     expect(await screen.findByText("File này từ phiên bản mới hơn. Hãy tải lại trang để cập nhật app.")).toBeInTheDocument();
   });
 
+  test("a backup envelope with broken profiles is not a backup", async () => {
+    await renderWithGame(<BackupScreen />, { meta: { pin: await hashPin("1234", 1000) } });
+    await unlock("1234");
+    const broken = await encodeBackup({ ...sampleBackupPayload(), profiles: [{}] as never });
+    await userEvent.upload(await screen.findByLabelText("Chọn file .pypet"), fileOf(broken));
+    expect(await screen.findByText("File này không phải file sao lưu của Py-Pet.")).toBeInTheDocument();
+  });
+
   test("import keeps an automatic backup and replaces the data", async () => {
     const onReplaced = vi.fn();
     const { store } = await renderWithGame(<BackupScreen />, { meta: { pin: await hashPin("1234", 1000) }, onReplaced });

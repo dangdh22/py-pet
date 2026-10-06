@@ -102,6 +102,8 @@ export async function decodeBackup(text: string): Promise<DecodeResult> {
     !isRecord(parsed) ||
     parsed.format !== BACKUP_FORMAT ||
     typeof parsed.schemaVersion !== "number" ||
+    !Number.isInteger(parsed.schemaVersion) ||
+    parsed.schemaVersion < 1 ||
     !Array.isArray(parsed.profiles) ||
     !isRecord(parsed.meta)
   ) {
@@ -110,7 +112,13 @@ export async function decodeBackup(text: string): Promise<DecodeResult> {
   if (parsed.schemaVersion > SCHEMA_VERSION) return { ok: false, reason: "newer-version" };
   const { checksum, ...rest } = parsed;
   const expected = await sha256Hex(JSON.stringify(rest) + CHECKSUM_SECRET);
-  return { ok: true, payload: migrateBackup(rest as unknown as BackupPayload), checksumValid: checksum === expected };
+  let payload: BackupPayload;
+  try {
+    payload = migrateBackup(rest as unknown as BackupPayload);
+  } catch {
+    return { ok: false, reason: "not-a-backup" };
+  }
+  return { ok: true, payload, checksumValid: checksum === expected };
 }
 
 export function migrateBackup(payload: BackupPayload): BackupPayload {

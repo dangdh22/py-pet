@@ -31,7 +31,7 @@ export class MemoryStore implements GameStore {
   }
 
   async readMeta(): Promise<AppMeta> {
-    return clone(this.meta);
+    return clone({ ...emptyMeta(), ...this.meta });
   }
 
   async writeMeta(patch: Partial<AppMeta>): Promise<void> {
@@ -85,7 +85,7 @@ export class MemoryStore implements GameStore {
   }
 
   async replaceAll(meta: AppMeta, profiles: ProfileBundle[]): Promise<void> {
-    this.meta = clone(meta);
+    this.meta = { ...emptyMeta(), ...clone(meta) };
     this.profiles = new Map(profiles.map((p) => [p.profile.id, clone(p.profile)]));
     this.states = new Map(profiles.map((p) => [p.profile.id, clone(p.state)]));
     this.attempts = clone(profiles.flatMap((p) => p.attempts));

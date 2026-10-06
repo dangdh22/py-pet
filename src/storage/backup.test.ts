@@ -66,6 +66,15 @@ describe("backup file", () => {
     expect(await decodeBackup(utf8ToBase64("[1,2]"))).toEqual({ ok: false, reason: "not-a-backup" });
   });
 
+  test("rejects a schema version that is not a positive whole number", async () => {
+    for (const schemaVersion of [0, 0.5, -1]) {
+      expect(await decodeBackup(await encodeBackup({ ...sampleBackupPayload(), schemaVersion }))).toEqual({
+        ok: false,
+        reason: "not-a-backup",
+      });
+    }
+  });
+
   test("refuses a newer schema", async () => {
     const text = await encodeBackup({ ...sampleBackupPayload(), schemaVersion: 99 });
     expect(await decodeBackup(text)).toEqual({ ok: false, reason: "newer-version" });

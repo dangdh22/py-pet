@@ -15,6 +15,7 @@ import { verifyPin } from "../storage/pin";
 import {
   appendErrorLog,
   AUTO_BACKUPS,
+  emptyMeta,
   type AppMeta,
   type AttemptInput,
   type AttemptRecord,
@@ -155,15 +156,21 @@ export function GameProvider({ store, loaded, clock, onReplaced, children }: Gam
     [enqueue, store, profile.id],
   );
 
+  // Save the drafts still waiting for their delay when the page goes away or the provider unmounts.
   useEffect(() => {
     const timers = draftTimers.current;
-    return () => {
+    const flush = () => {
       for (const [itemId, timer] of timers) {
         clearTimeout(timer);
         const code = drafts.current.get(itemId);
         if (code !== undefined) enqueue(() => store.saveDraft(profile.id, itemId, code));
       }
       timers.clear();
+    };
+    window.addEventListener("pagehide", flush);
+    return () => {
+      window.removeEventListener("pagehide", flush);
+      flush();
     };
   }, [enqueue, store, profile.id]);
 
@@ -215,7 +222,7 @@ export function GameProvider({ store, loaded, clock, onReplaced, children }: Gam
         const existing = await store.readMeta();
         const autoBackups = [current, ...existing.autoBackups].slice(0, AUTO_BACKUPS);
         const activeProfileId = payload.meta.activeProfileId ?? payload.profiles[0]?.profile.id ?? null;
-        await store.replaceAll({ ...payload.meta, activeProfileId, autoBackups }, payload.profiles);
+        await store.replaceAll({ ...emptyMeta(), ...payload.meta, activeProfileId, autoBackups }, payload.profiles);
       });
       queue.current = run.catch(() => {});
       try {

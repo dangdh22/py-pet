@@ -86,17 +86,22 @@ export function BackupScreen() {
   async function onFile(event: ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
     if (!file) return;
-    const result = await decodeBackup(await file.text());
-    if (!result.ok) {
-      setStep({ kind: "error", message: result.reason === "newer-version" ? "backup.newerVersion" : "backup.notABackup" });
-      return;
-    }
-    const preview = previewOf(result.payload);
-    if (!preview) {
+    try {
+      const result = await decodeBackup(await file.text());
+      if (!result.ok) {
+        setStep({ kind: "error", message: result.reason === "newer-version" ? "backup.newerVersion" : "backup.notABackup" });
+        return;
+      }
+      const preview = previewOf(result.payload);
+      if (!preview) {
+        setStep({ kind: "error", message: "backup.notABackup" });
+        return;
+      }
+      setStep({ kind: "preview", payload: result.payload, preview, tampered: !result.checksumValid });
+    } catch {
+      // A file with the right envelope but broken content.
       setStep({ kind: "error", message: "backup.notABackup" });
-      return;
     }
-    setStep({ kind: "preview", payload: result.payload, preview, tampered: !result.checksumValid });
   }
 
   return (

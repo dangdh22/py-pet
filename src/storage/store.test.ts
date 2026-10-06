@@ -3,7 +3,7 @@ import { describe, expect, test } from "vitest";
 import { initialGameState } from "../game/state";
 import { DexieStore } from "./dexieStore";
 import { MemoryStore } from "./memoryStore";
-import { emptyMeta, type AttemptRecord, type GameStore, type StoredProfile } from "./types";
+import { emptyMeta, type AppMeta, type AttemptRecord, type GameStore, type StoredProfile } from "./types";
 
 const profile: StoredProfile = { id: "p1", childName: "An", robotName: "Robo", createdAt: "2026-10-06T02:00:00.000Z" };
 
@@ -82,6 +82,15 @@ describe.each(stores)("%s", (_name, makeStore) => {
     expect(meta.lastBackupAt).toBe("2026-10-06T02:00:00.000Z");
     expect(meta.errorLog).toHaveLength(50);
     expect(meta.errorLog[0]!.detail).toBe("e5");
+  });
+
+  test("a meta with missing fields gets the defaults and still takes error log entries", async () => {
+    const store = await makeStore();
+    const partial = { schemaVersion: 1, activeProfileId: "p1" } as unknown as AppMeta;
+    await store.replaceAll(partial, []);
+    expect(await store.readMeta()).toEqual({ ...emptyMeta(), activeProfileId: "p1" });
+    await store.appendErrorLog({ at: "2026-10-06T02:00:00.000Z", kind: "ui-crash", detail: "boom" });
+    expect((await store.readMeta()).errorLog).toEqual([{ at: "2026-10-06T02:00:00.000Z", kind: "ui-crash", detail: "boom" }]);
   });
 
   test("exportProfiles and replaceAll round-trip into another store", async () => {

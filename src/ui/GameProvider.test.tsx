@@ -7,6 +7,7 @@ import { initialGameState } from "../game/state";
 import { useLang } from "../i18n/LangProvider";
 import { decodeBackup } from "../storage/backup";
 import { MemoryStore } from "../storage/memoryStore";
+import type { AppMeta, ProfileBundle } from "../storage/types";
 import { hashPin } from "../storage/pin";
 import { sampleBackupPayload } from "../test/backupSample";
 import { FIXED_NOW, renderWithGame, TODAY } from "../test/renderGame";
@@ -95,6 +96,16 @@ describe("GameProvider", () => {
     await userEvent.click(screen.getByRole("button", { name: "to-en" }));
     expect(await screen.findByText("lang:en")).toBeInTheDocument();
     await waitFor(async () => expect((await store.loadActive())?.state.settings.uiLang).toBe("en"));
+  });
+
+  test("saves a pending draft at once when the page is hidden", async () => {
+    const { store } = await renderWithGame(<Probe />);
+    await userEvent.click(screen.getByRole("button", { name: "draft" }));
+    act(() => {
+      window.dispatchEvent(new Event("pagehide"));
+    });
+    await new Promise((resolve) => setTimeout(resolve, 20));
+    expect((await store.loadActive())?.drafts.get("t.l1.ex1")).toBe("print(1)");
   });
 
   test("saves a draft after a short delay", async () => {
@@ -250,6 +261,28 @@ describe("GameProvider backups", () => {
     await waitFor(() => expect(onReplaced).toHaveBeenCalledOnce());
     const kept = await decodeBackup((await store.readMeta()).autoBackups[0]!);
     expect(kept.ok && kept.payload.profiles[0]!.state.pet.xp).toBe(10);
+  });
+
+  test("importBackup fills in the meta fields the file does not have", async () => {
+    let written: AppMeta | null = null;
+    class RecordingStore extends MemoryStore {
+      override async replaceAll(meta: AppMeta, profiles: ProfileBundle[]): Promise<void> {
+        written = meta;
+        await super.replaceAll(meta, profiles);
+      }
+    }
+    function PartialImport() {
+      const game = useGame();
+      const payload = sampleBackupPayload("Bình");
+      const meta = { schemaVersion: 1, activeProfileId: "p1" } as unknown as AppMeta;
+      return <button onClick={() => void game.importBackup({ ...payload, meta })}>import</button>;
+    }
+    const onReplaced = vi.fn();
+    await renderWithGame(<PartialImport />, { store: new RecordingStore({ persistent: true }), onReplaced });
+    await userEvent.click(screen.getByRole("button", { name: "import" }));
+    await waitFor(() => expect(onReplaced).toHaveBeenCalledOnce());
+    expect(written).toMatchObject({ errorLog: [], pin: null, lastBackupAt: null, activeProfileId: "p1" });
+    expect(written!.autoBackups).toHaveLength(1);
   });
 
   test("checkPin verifies against the stored hash", async () => {
