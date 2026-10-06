@@ -140,3 +140,6 @@ a.button.primary { background: var(--primary); border-color: var(--primary); col
 .fill-template input { font-family: var(--mono); font-size: 1rem; margin: 0 2px; }
 .misconception-card { margin-top: 12px; padding: 12px 16px; border: 1px solid #f0d9a8; border-radius: var(--radius); background: #fff8ea; }
 .result-rewards { list-style: none; padding: 0; display: flex; justify-content: center; gap: 16px; font-size: 1.3rem; font-weight: 700; color: var(--success); }
+
+/* M3b: tests and evolution */
+.exam-answered { color: var(--muted); font-style: italic; }

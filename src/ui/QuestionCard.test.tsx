@@ -56,3 +56,19 @@ describe("QuestionCard", () => {
     expect(onAnswered).toHaveBeenCalledWith(false, { choiceIndex: 1, lang: "en" });
   });
 });
+
+describe("QuestionCard in a test", () => {
+  test("records the answer without marks or explanation", async () => {
+    const onAnswered = vi.fn();
+    renderWithApp(<QuestionCard question={fixtureQuestion} onAnswered={onAnswered} exam />);
+    expect(screen.queryByRole("button", { name: "Kiểm tra" })).not.toBeInTheDocument();
+    await userEvent.click(screen.getByRole("radio", { name: "Lỗi" }));
+    await userEvent.click(screen.getByRole("button", { name: "Chọn đáp án này" }));
+    expect(onAnswered).toHaveBeenCalledWith(false, { choiceIndex: 1, lang: "vi" });
+    expect(screen.getByText("Đã ghi nhận câu trả lời. Kết quả hiện ở cuối bài.")).toBeInTheDocument();
+    expect(screen.queryByText("Chưa đúng rồi.")).not.toBeInTheDocument();
+    expect(screen.queryByText("Lệnh print in ra A.")).not.toBeInTheDocument();
+    expect(document.querySelector(".choice-wrong, .choice-correct")).toBeNull();
+    expect(screen.getByRole("radio", { name: "Lỗi" })).toBeDisabled();
+  });
+});

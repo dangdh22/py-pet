@@ -1,25 +1,22 @@
 import { useState } from "react";
-import type { ChoiceQuestion, LocalizedText } from "../content/types";
-import { pick, pickBoth, type QuestionLang } from "../i18n/lang";
+import type { ChoiceQuestion } from "../content/types";
+import type { QuestionLang } from "../i18n/lang";
 import { useLang } from "../i18n/LangProvider";
+import { LangSwitch, Prompt, showText } from "./LangSwitch";
 import { RobotBubble } from "./RobotBubble";
 
-const LANG_BUTTONS = [
-  { lang: "vi", label: "question.langVi" },
-  { lang: "en", label: "question.langEn" },
-  { lang: "both", label: "question.langBoth" },
-] as const;
-
-function show(text: LocalizedText, lang: QuestionLang): string {
-  return lang === "both" ? pickBoth(text) : pick(text, lang);
-}
-
+/**
+ * 1 predict/mcq question. In a test (`exam`), the answer is only recorded: no right/wrong marks and no explanation
+ * until the end (spec 8.2.4).
+ */
 export function QuestionCard({
   question,
   onAnswered,
+  exam = false,
 }: {
   question: ChoiceQuestion;
   onAnswered(correct: boolean, detail: { choiceIndex: number; lang: QuestionLang }): void;
+  exam?: boolean;
 }) {
   const { t, questionLang } = useLang();
   const [lang, setLang] = useState<QuestionLang>(questionLang);
@@ -35,7 +32,7 @@ export function QuestionCard({
   }
 
   function choiceClass(i: number): string {
-    if (!checked) return "choice";
+    if (!checked || exam) return "choice";
     if (i === correctIndex) return "choice choice-correct";
     if (i === selected) return "choice choice-wrong";
     return "choice";
@@ -43,25 +40,8 @@ export function QuestionCard({
 
   return (
     <div className="question-card">
-      <div role="group" aria-label={t("question.lang")} className="lang-switch">
-        {LANG_BUTTONS.map((button) => (
-          <button key={button.lang} aria-pressed={lang === button.lang} onClick={() => setLang(button.lang)}>
-            {t(button.label)}
-          </button>
-        ))}
-      </div>
-      {lang === "both" ? (
-        <>
-          <p className="question-prompt">{question.prompt.vi}</p>
-          {question.prompt.en && (
-            <p className="question-prompt" lang="en">
-              {question.prompt.en}
-            </p>
-          )}
-        </>
-      ) : (
-        <p className="question-prompt">{pick(question.prompt, lang)}</p>
-      )}
+      <LangSwitch lang={lang} onChange={setLang} />
+      <Prompt text={question.prompt} lang={lang} />
       {question.code && (
         <pre className="code-block">
           <code>{question.code.trimEnd()}</code>
@@ -72,20 +52,21 @@ export function QuestionCard({
         {question.choices.map((choice, i) => (
           <label key={i} className={choiceClass(i)}>
             <input type="radio" name={question.id} checked={selected === i} onChange={() => setSelected(i)} />
-            <span className={question.type === "predict" ? "choice-text code" : "choice-text"}>{show(choice.text, lang)}</span>
+            <span className={question.type === "predict" ? "choice-text code" : "choice-text"}>{showText(choice.text, lang)}</span>
           </label>
         ))}
       </fieldset>
       {!checked && (
         <button className="primary" disabled={selected === null} onClick={check}>
-          {t("question.check")}
+          {t(exam ? "exam.choose" : "question.check")}
         </button>
       )}
-      {checked && (
+      {checked && exam && <p className="exam-answered">{t("exam.answered")}</p>}
+      {checked && !exam && (
         <RobotBubble
           mood={isCorrect ? "happy" : "sad"}
           message={isCorrect ? t("question.correct") : t("question.incorrect")}
-          hint={show(question.explanation, lang)}
+          hint={showText(question.explanation, lang)}
         />
       )}
     </div>
