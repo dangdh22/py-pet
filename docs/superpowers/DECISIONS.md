@@ -1,0 +1,21 @@
+# Quyết định cần xem lại
+
+File này ghi các quyết định Claude tự chốt khi chạy liên tục các mốc M3b đến M6 (người bảo trì yêu cầu ngày 2026-10-06: "chạy implement, push, rồi lần lượt plan và implement các phần tiếp theo; các quyết định cần chú ý note down lại để revisit sau"). Mỗi mục ghi: quyết định, lý do, cái giá nếu sai, và nơi sửa.
+
+Quyết định đã có người bảo trì duyệt nằm trong `STATUS.md` và kế hoạch của từng mốc; file này chỉ chứa các điểm chưa được duyệt.
+
+## Chung
+
+- **Bỏ qua bước thử bằng mắt giữa các mốc.** `CLAUDE.md` yêu cầu người bảo trì thử app (`npm run dev`) trước khi merge. Người bảo trì yêu cầu chạy liên tục, nên mỗi mốc được merge và push khi `npm run check` xanh và review cuối sạch. Giá nếu sai: lỗi giao diện chỉ thấy khi nhìn bằng mắt sẽ tích lũy qua nhiều mốc. Việc cần làm: thử lần lượt từng mốc theo danh sách trong `STATUS.md`.
+
+## M3b
+
+Các quyết định thiết kế 1–13 trong `docs/superpowers/plans/2026-10-06-m3b-kiem-tra-tien-hoa.md` đã được người bảo trì xem qua khi duyệt kế hoạch (người bảo trì trả lời "Chạy implement"). Các điểm dưới đây phát sinh khi chạy và chưa được duyệt.
+
+1. **Trong bài kiểm tra, "Chạy thử" hiện giải thích lỗi như trong bài học** (lệch khỏi kế hoạch, Task 6). Lý do: nếu không, code lỗi trông như "không có đầu ra" và con nộp bài sai mà không biết. Điểm vẫn chỉ hiện ở cuối bài. Giá nếu sai: bài kiểm tra dễ hơn ý định một chút. Nơi sửa: `src/ui/ExamCodeView.tsx` (`handleRun`).
+2. **Bài kiểm tra tiến hóa đã đạt không làm lại được**: nút trên bản đồ báo "{tên robot} đã tiến hóa ở giai đoạn này rồi!". Lần thi chưa đạt cho giai đoạn cũ không mở bộ ôn tập. Lý do: tránh chúc mừng giả và tránh bộ ôn tập thừa chiếm nút "Học tiếp". Giá nếu sai: con không ôn lại được bằng đề tiến hóa cũ (vẫn ôn bằng trạm ôn và ôn tập tự do).
+3. **Chưa đạt mà không có bài nào để ôn**: màn hình hiện nút "Thi lại" thay cho "Bắt đầu ôn tập trọng tâm".
+4. **Robot trông nhỏ lại sau khi tiến hóa**: thanh "Lớn lên" của giai đoạn mới bắt đầu từ 0 (quyết định 5 của kế hoạch) và hình robot theo dạng để dành cho M6. Cần người bảo trì nhìn Phòng robot ngay sau khi tiến hóa.
+5. **Chuyển sang M4**: chuỗi "chưa đạt 80%" đang ghi cứng 80%; khi phụ huynh chỉnh được ngưỡng đạt (M4) cần thêm placeholder. Bản ghi kiểm tra chủ đề chưa giới hạn điểm trong `[0, max]` và giữ `best` khi `max` đổi (cần xử lý trước khi M5 đổi cỡ đề).
+6. **Dòng trailer của commit** ghi model của subagent viết commit đó (Haiku, Sonnet hoặc Opus), không viết lại lịch sử.
+
