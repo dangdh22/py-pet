@@ -5,6 +5,7 @@ import type { ExplainProvider } from "../explain/types";
 import { LangProvider } from "../i18n/LangProvider";
 import type { RunnerStatus } from "../runner/client";
 import type { RunFn } from "../runner/types";
+import type { ErrorLogEntry } from "../storage/types";
 
 export interface RunnerApi {
   status: RunnerStatus;
@@ -54,4 +55,13 @@ export function useRunner(): RunnerApi {
 
 export function useExplainProviders(): ExplainProvider[] {
   return required(useContext(ExplainContext), "useExplainProviders");
+}
+
+export type LogError = (entry: Omit<ErrorLogEntry, "at">) => void;
+
+/** Defaults to doing nothing outside a GameProvider. */
+export const ErrorLogContext = createContext<LogError>(() => {});
+
+export function useLogError(): LogError {
+  return useContext(ErrorLogContext);
 }
