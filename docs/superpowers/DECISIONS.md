@@ -38,3 +38,16 @@ Người bảo trì chưa duyệt kế hoạch M4a; Claude tự chốt theo yêu
 12. **Tuần nghỉ trọn** (kế hoạch tuần bằng 0): Phòng robot hiện "Tuần này là tuần nghỉ"; con học trong tuần đó không được thưởng tuần. Cần người bảo trì xác nhận cách thưởng.
 13. **Các trường hợp kiểm tra bằng tay ở bản sau:** con thấy ngày dạng 2026-10-06 trong Sổ thành tích (chưa đổi sang 06/10/2026).
 
+
+## M4b
+
+Người bảo trì chưa duyệt kế hoạch M4b; Claude tự chốt theo yêu cầu chạy liên tục. Chi tiết trong mục "Quyết định thiết kế" của `docs/superpowers/plans/2026-10-06-m4b-khu-phu-huynh.md`.
+
+1. **Duyệt phần thưởng không hỏi PIN lần nữa**: duyệt trong khu phụ huynh (đã mở bằng PIN) được coi là "duyệt bằng PIN" của spec 5.5.
+2. **Đặt lại PIN không cần PIN cũ** và không có câu hỏi bảo mật; chỉ để lại dấu vết "Mã PIN đã được đặt lại lúc …" luôn hiện trong khu phụ huynh. Giá nếu sai: con biết lối "Quên mã PIN?" thì tự mở được khu phụ huynh (bố mẹ sẽ thấy dấu vết). Nơi sửa: `src/ui/ParentScreen.tsx` (`ParentGate`).
+3. **Bằng chứng "Con cần hỗ trợ"** chỉ có code của con, số test qua, đáp án đã chọn; chưa có đầu ra so với đầu ra mong đợi (lịch sử làm bài chưa lưu đầu ra).
+4. **Giới hạn phụ huynh chỉnh được**: mục tiêu ngày 1–10, kế hoạch tuần 0–50, ngày vắng được miễn 0–7, ngưỡng đạt 50–100%, ngưỡng "Cần hỗ trợ" 30–90%, thời gian chạy code 1–10 giây; giá phần thưởng tối đa 100000 xu, tối đa 50 lần mỗi tuần. Các con số này do Claude đặt. Nơi sửa: `src/game/settings.ts`, `src/game/realRewards.ts`.
+5. **Xóa hồ sơ** xóa toàn bộ dữ liệu trên máy (gồm PIN), không chỉ hồ sơ của con, vì bản đầu chỉ có 1 hồ sơ.
+6. **Xu trung bình/ngày** tính trên 14 ngày, chỉ tính xu kiếm được.
+7. **Dữ liệu hỏng** được xuất dưới dạng JSON thô (không phải `.pypet`), vì state hỏng không nhập lại được.
+8. **Tự khóa** sau 5 phút không có phím, chạm hoặc cuộn; chỉ di chuột không tính là thao tác.
