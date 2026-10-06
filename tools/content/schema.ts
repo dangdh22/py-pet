@@ -1,12 +1,18 @@
+import { marked } from "marked";
 import { z } from "zod";
+import { fillTemplate, parsonsLines } from "../../src/content/exercise";
 import {
   CHECK_NAMES,
+  FILL_BLANK,
   type Choice,
   type ChoiceQuestion,
   type CodeExercise,
+  type CompareMode,
   type Concept,
   type ErrorEntry,
   type Exercise,
+  type FillExercise,
+  type ParsonsExercise,
 } from "../../src/content/types";
 import type { LocalizedText } from "../../src/i18n/lang";
 
@@ -28,6 +34,70 @@ const commonWrongSchema = z
   })
   .strict();
 
+type TestedRaw = {
+  prompt: { vi: string; en?: string | undefined };
+  tests: unknown[];
+  compare: "exact" | "float";
+  tolerance?: number | undefined;
+  test_eligible: boolean;
+};
+
+/** Rules shared by every exercise graded with test cases. */
+function refineTested(ex: TestedRaw, ctx: z.RefinementCtx): void {
+  if (ex.test_eligible && ex.prompt.en === undefined) {
+    ctx.addIssue({
+      code: "custom",
+      path: ["prompt", "en"],
+      message: "Bài code dùng trong đề kiểm tra (test_eligible) phải có bản tiếng Anh",
+    });
+  }
+  if (ex.compare === "float" && ex.tolerance === undefined) {
+    ctx.addIssue({ code: "custom", path: ["tolerance"], message: "compare: float cần có tolerance" });
+  }
+}
+
+const testedFields = {
+  id: idSchema,
+  concepts: z.array(idSchema).default([]),
+  prompt: localizedSchema,
+  tests: z.array(testCaseSchema).min(1),
+  hints: z.array(localizedSchema).default([]),
+  compare: z.enum(["exact", "float"]).default("exact"),
+  tolerance: z.number().positive().optional(),
+  test_eligible: z.boolean().default(false),
+};
+
+const parsonsSchema = z
+  .object({ ...testedFields, type: z.literal("parsons"), solution: z.string().min(1) })
+  .strict()
+  .superRefine((ex, ctx) => {
+    refineTested(ex, ctx);
+    const lines = parsonsLines(ex.solution);
+    if (new Set(lines).size < 2) {
+      ctx.addIssue({ code: "custom", path: ["solution"], message: "Bài parsons cần ít nhất 2 dòng khác nhau" });
+    }
+  });
+
+const fillSchema = z
+  .object({
+    ...testedFields,
+    type: z.literal("fill"),
+    template: z.string().min(1),
+    answers: z.array(z.string().min(1).regex(/^[^\n]*$/, "Đáp án chỉ có 1 dòng")).min(1),
+  })
+  .strict()
+  .superRefine((ex, ctx) => {
+    refineTested(ex, ctx);
+    const blanks = ex.template.split(FILL_BLANK).length - 1;
+    if (blanks !== ex.answers.length) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["answers"],
+        message: `Mẫu có ${blanks} chỗ trống ___ nhưng có ${ex.answers.length} đáp án`,
+      });
+    }
+  });
+
 const codeExerciseSchema = z
   .object({
     id: idSchema,
@@ -45,16 +115,7 @@ const codeExerciseSchema = z
   })
   .strict()
   .superRefine((ex, ctx) => {
-    if (ex.test_eligible && ex.prompt.en === undefined) {
-      ctx.addIssue({
-        code: "custom",
-        path: ["prompt", "en"],
-        message: "Bài code dùng trong đề kiểm tra (test_eligible) phải có bản tiếng Anh",
-      });
-    }
-    if (ex.compare === "float" && ex.tolerance === undefined) {
-      ctx.addIssue({ code: "custom", path: ["tolerance"], message: "compare: float cần có tolerance" });
-    }
+    refineTested(ex, ctx);
     ex.common_wrong.forEach((cw, i) => {
       if (cw.test >= ex.tests.length) {
         ctx.addIssue({ code: "custom", path: ["common_wrong", i, "test"], message: "test vượt quá số test case" });
@@ -108,7 +169,12 @@ export const stageFileSchema = z
   .strict();
 
 export const topicFileSchema = z
-  .object({ id: idSchema, title: localizedSchema, lessons: z.array(z.string().min(1)).min(1) })
+  .object({
+    id: idSchema,
+    title: localizedSchema,
+    lessons: z.array(z.string().min(1)).min(1),
+    reviews: z.array(z.object({ id: idSchema, after: idSchema }).strict()).default([]),
+  })
   .strict();
 
 const conceptSchema = z
@@ -117,12 +183,22 @@ const conceptSchema = z
     name: localizedSchema,
     misconception_card: z.string().min(1).optional(),
     parent_tip: z.string().min(1).optional(),
+    practice: z
+      .object({
+        level1: z.array(idSchema).default([]),
+        level2: z.array(idSchema).default([]),
+        level3: z.array(idSchema).default([]),
+      })
+      .strict()
+      .default({ level1: [], level2: [], level3: [] }),
   })
   .strict();
 
 export const conceptsFileSchema = z.object({ concepts: z.array(conceptSchema) }).strict();
 
 export const questionsFileSchema = z.object({ questions: z.array(z.unknown()) }).strict();
+
+export const practiceFileSchema = z.object({ exercises: z.array(z.unknown()) }).strict();
 
 export const lessonFrontmatterSchema = z
   .object({ id: idSchema, title: localizedSchema, exercises: z.array(z.unknown()).default([]) })
@@ -180,6 +256,46 @@ function toChoice(raw: z.infer<typeof choiceSchema>): Choice {
   return { text, correct: raw.correct, error: raw.error, misconception: raw.misconception ?? null };
 }
 
+function toCompare(raw: { compare: "exact" | "float"; tolerance?: number | undefined }): CompareMode {
+  return raw.compare === "float" ? { kind: "float", tolerance: raw.tolerance ?? 0 } : { kind: "exact" };
+}
+
+function toTests(raw: { tests: { input: string; output: string; hidden: boolean }[] }) {
+  return raw.tests.map((t) => ({ input: t.input, output: t.output, hidden: t.hidden }));
+}
+
+function toParsons(raw: z.infer<typeof parsonsSchema>): ParsonsExercise {
+  const lines = parsonsLines(raw.solution);
+  return {
+    id: raw.id,
+    type: "parsons",
+    concepts: raw.concepts,
+    prompt: toLocalized(raw.prompt),
+    lines,
+    solution: `${lines.join("\n")}\n`,
+    tests: toTests(raw),
+    hints: raw.hints.map(toLocalized),
+    compare: toCompare(raw),
+    testEligible: raw.test_eligible,
+  };
+}
+
+function toFill(raw: z.infer<typeof fillSchema>): FillExercise {
+  return {
+    id: raw.id,
+    type: "fill",
+    concepts: raw.concepts,
+    prompt: toLocalized(raw.prompt),
+    template: raw.template,
+    answers: raw.answers,
+    solution: fillTemplate(raw.template, raw.answers),
+    tests: toTests(raw),
+    hints: raw.hints.map(toLocalized),
+    compare: toCompare(raw),
+    testEligible: raw.test_eligible,
+  };
+}
+
 function toCodeExercise(raw: z.infer<typeof codeExerciseSchema>): CodeExercise {
   return {
     id: raw.id,
@@ -188,7 +304,7 @@ function toCodeExercise(raw: z.infer<typeof codeExerciseSchema>): CodeExercise {
     prompt: toLocalized(raw.prompt),
     starter: raw.starter,
     solution: raw.solution,
-    tests: raw.tests.map((t) => ({ input: t.input, output: t.output, hidden: t.hidden })),
+    tests: toTests(raw),
     commonWrong: raw.common_wrong.map((cw) => ({
       test: cw.test,
       output: cw.output,
@@ -196,7 +312,7 @@ function toCodeExercise(raw: z.infer<typeof codeExerciseSchema>): CodeExercise {
       sample: cw.sample,
     })),
     hints: raw.hints.map(toLocalized),
-    compare: raw.compare === "float" ? { kind: "float", tolerance: raw.tolerance ?? 0 } : { kind: "exact" },
+    compare: toCompare(raw),
     testEligible: raw.test_eligible,
   };
 }
@@ -221,11 +337,19 @@ export function parseExercise(raw: unknown, ownerLessonId: string | null, where:
     const result = parseWith(codeExerciseSchema.safeParse(raw), where);
     return result.ok ? { ok: true, value: toCodeExercise(result.value) } : result;
   }
+  if (type === "parsons") {
+    const result = parseWith(parsonsSchema.safeParse(raw), where);
+    return result.ok ? { ok: true, value: toParsons(result.value) } : result;
+  }
+  if (type === "fill") {
+    const result = parseWith(fillSchema.safeParse(raw), where);
+    return result.ok ? { ok: true, value: toFill(result.value) } : result;
+  }
   if (type === "predict" || type === "mcq") {
     const result = parseWith(choiceQuestionSchema.safeParse(raw), where);
     return result.ok ? { ok: true, value: toChoiceQuestion(result.value, ownerLessonId) } : result;
   }
-  return { ok: false, issues: [`${where}: type phải là code, predict hoặc mcq`] };
+  return { ok: false, issues: [`${where}: type phải là code, parsons, fill, predict hoặc mcq`] };
 }
 
 export function toConcept(raw: z.infer<typeof conceptSchema>): Concept {
@@ -233,7 +357,10 @@ export function toConcept(raw: z.infer<typeof conceptSchema>): Concept {
     id: raw.id,
     name: toLocalized(raw.name),
     misconceptionCard: raw.misconception_card ?? null,
+    misconceptionHtml:
+      raw.misconception_card === undefined ? null : (marked.parse(raw.misconception_card, { async: false }) as string),
     parentTip: raw.parent_tip ?? null,
+    practice: raw.practice,
   };
 }
 

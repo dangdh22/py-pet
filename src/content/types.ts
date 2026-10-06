@@ -32,6 +32,44 @@ export interface CodeExercise {
   testEligible: boolean;
 }
 
+/** Lines of a correct program in a shuffled order; the child puts them back in order (spec 3.4). */
+export interface ParsonsExercise {
+  id: string;
+  type: "parsons";
+  concepts: string[];
+  prompt: LocalizedText;
+  /** The program's lines in the right order, indentation included. */
+  lines: string[];
+  solution: string;
+  tests: TestCase[];
+  hints: LocalizedText[];
+  compare: CompareMode;
+  testEligible: boolean;
+}
+
+/** The marker of a blank in a fill template. */
+export const FILL_BLANK = "___";
+
+/** A program with blanks; the child types the missing parts (spec 3.4). */
+export interface FillExercise {
+  id: string;
+  type: "fill";
+  concepts: string[];
+  prompt: LocalizedText;
+  /** The program with each blank written as ___. */
+  template: string;
+  /** 1 answer per blank, in order. */
+  answers: string[];
+  solution: string;
+  tests: TestCase[];
+  hints: LocalizedText[];
+  compare: CompareMode;
+  testEligible: boolean;
+}
+
+/** An exercise graded by running code against test cases. */
+export type TestedExercise = CodeExercise | ParsonsExercise | FillExercise;
+
 export interface Choice {
   text: LocalizedText;
   correct: boolean;
@@ -51,7 +89,11 @@ export interface ChoiceQuestion {
   explanation: LocalizedText;
 }
 
-export type Exercise = CodeExercise | ChoiceQuestion;
+export type Exercise = TestedExercise | ChoiceQuestion;
+
+export function isChoiceQuestion(item: Exercise): item is ChoiceQuestion {
+  return item.type === "predict" || item.type === "mcq";
+}
 
 export type CardSegment =
   | { kind: "html"; html: string }
@@ -68,11 +110,28 @@ export interface Lesson {
   exercises: Exercise[];
 }
 
+/** Practice item IDs per ladder level (spec 3.6): 1 = predict/mcq, 2 = parsons/fill, 3 = code. */
+export interface ConceptPractice {
+  level1: string[];
+  level2: string[];
+  level3: string[];
+}
+
 export interface Concept {
   id: string;
   name: LocalizedText;
+  /** Markdown, as written in concepts.yaml. */
   misconceptionCard: string | null;
+  /** The misconception card as HTML, ready to show. */
+  misconceptionHtml: string | null;
   parentTip: string | null;
+  practice: ConceptPractice;
+}
+
+/** A review station on the map, placed after a lesson of its topic. */
+export interface ReviewStation {
+  id: string;
+  after: string;
 }
 
 export interface Topic {
@@ -81,6 +140,9 @@ export interface Topic {
   lessons: Lesson[];
   concepts: Concept[];
   questions: ChoiceQuestion[];
+  reviews: ReviewStation[];
+  /** Practice exercises that belong to no lesson (practice.yaml). */
+  practice: TestedExercise[];
 }
 
 export interface Stage {

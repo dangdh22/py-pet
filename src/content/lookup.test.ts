@@ -1,6 +1,6 @@
 import { expect, test } from "vitest";
-import { allExercises, allLessons, findLesson } from "./lookup";
-import type { ChoiceQuestion, CodeExercise, ContentBundle, Lesson } from "./types";
+import { allExercises, allLessons, findConcept, findItem, findLesson } from "./lookup";
+import type { ChoiceQuestion, CodeExercise, ContentBundle, FillExercise, Lesson } from "./types";
 
 const code: CodeExercise = {
   id: "a.l1.ex1",
@@ -35,7 +35,9 @@ const bundle: ContentBundle = {
     {
       id: "s1",
       title: { vi: "Giai đoạn 1" },
-      topics: [{ id: "a", title: { vi: "A" }, lessons: [lesson1, lesson2], concepts: [], questions: [question] }],
+      topics: [
+        { id: "a", title: { vi: "A" }, lessons: [lesson1, lesson2], concepts: [], questions: [question], reviews: [], practice: [] },
+      ],
     },
   ],
   errors: [],
@@ -52,4 +54,38 @@ test("findLesson finds by id", () => {
 
 test("allExercises includes lesson exercises and bank questions", () => {
   expect(allExercises(bundle).map((e) => e.id)).toEqual(["a.l1.ex1", "a.b1"]);
+});
+
+test("findItem and findConcept look in lessons, banks and practice files", () => {
+  const concept = {
+    id: "c1",
+    name: { vi: "K" },
+    misconceptionCard: null,
+    misconceptionHtml: null,
+    parentTip: null,
+    practice: { level1: [], level2: [], level3: [] },
+  };
+  const fill: FillExercise = {
+    id: "a.f1",
+    type: "fill",
+    concepts: [],
+    prompt: { vi: "Điền" },
+    template: "print(___)",
+    answers: ['"Hi"'],
+    solution: 'print("Hi")',
+    tests: code.tests,
+    hints: [],
+    compare: { kind: "exact" },
+    testEligible: false,
+  };
+  const withPractice: ContentBundle = {
+    ...bundle,
+    stages: [{ ...bundle.stages[0]!, topics: [{ ...bundle.stages[0]!.topics[0]!, concepts: [concept], practice: [fill] }] }],
+  };
+  expect(findItem(withPractice, "a.l1.ex1")).toBe(code);
+  expect(findItem(withPractice, "a.b1")).toBe(question);
+  expect(findItem(withPractice, "a.f1")).toBe(fill);
+  expect(findItem(withPractice, "nope")).toBeUndefined();
+  expect(findConcept(withPractice, "c1")).toBe(concept);
+  expect(findConcept(withPractice, "nope")).toBeUndefined();
 });

@@ -2,7 +2,9 @@ import { mkdirSync, mkdtempSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { describe, expect, test } from "vitest";
+import { fillTemplate, parsonsLines } from "../../src/content/exercise";
 import { buildBundle, ContentError } from "./buildBundle";
+import { contentWarnings } from "./coverage";
 
 function writeTree(files: Record<string, string>): string {
   const root = mkdtempSync(join(tmpdir(), "py-pet-content-"));
@@ -92,8 +94,17 @@ describe("buildBundle", () => {
       { text: { vi: "Không", en: "No" }, correct: false, error: false, misconception: null },
     ]);
     expect(topic.concepts).toEqual([
-      { id: "print-call", name: { vi: "Lệnh print" }, misconceptionCard: null, parentTip: null },
+      {
+        id: "print-call",
+        name: { vi: "Lệnh print" },
+        misconceptionCard: null,
+        misconceptionHtml: null,
+        parentTip: null,
+        practice: { level1: [], level2: [], level3: [] },
+      },
     ]);
+    expect(topic.reviews).toEqual([]);
+    expect(topic.practice).toEqual([]);
     expect(bundle.errors).toEqual([
       {
         id: "zero-division",
@@ -210,5 +221,99 @@ describe("buildBundle", () => {
     );
     const bundle = buildBundle(writeTree({ ...tree, ...stage10 }));
     expect(bundle.stages.map((s) => s.id)).toEqual(["s1", "s10"]);
+  });
+
+  test("builds parsons and fill exercises, practice files, review stations and concept practice", () => {
+    const practice = [
+      "exercises:",
+      "  - id: s1.a.p1",
+      "    type: parsons",
+      "    concepts: [print-call]",
+      "    prompt: { vi: Sắp xếp }",
+      "    solution: |",
+      "      print(\"A\")",
+      "",
+      "      print(\"B\")",
+      "    tests:",
+      "      - { output: \"A\\nB\" }",
+      "  - id: s1.a.f1",
+      "    type: fill",
+      "    concepts: [print-call]",
+      "    prompt: { vi: Điền }",
+      "    template: |",
+      "      print(___)",
+      "    answers: ['\"Hi\"']",
+      "    tests:",
+      "      - { output: Hi }",
+      "",
+    ].join("\n");
+    const concepts = [
+      "concepts:",
+      "  - id: print-call",
+      "    name: { vi: Lệnh print }",
+      "    misconception_card: Viết **print** thường.",
+      "    parent_tip: Đọc to lệnh print.",
+      "    practice: { level1: [s1.a.b1], level2: [s1.a.p1, s1.a.f1], level3: [s1.a.l1.ex1] }",
+      "",
+    ].join("\n");
+    const questions = minimalTree()["stage-1/01-a/questions.yaml"]!.replace("    type: mcq\n", "    type: mcq\n    concepts: [print-call]\n");
+    const bundle = buildBundle(
+      writeTree(
+        minimalTree({
+          "stage-1/01-a/topic.yaml":
+            "id: s1.a\ntitle: { vi: Chủ đề A }\nlessons: [01-x.md]\nreviews:\n  - { id: s1.a.r1, after: s1.a.l1 }\n",
+          "stage-1/01-a/concepts.yaml": concepts,
+          "stage-1/01-a/questions.yaml": questions,
+          "stage-1/01-a/practice.yaml": practice,
+        }),
+      ),
+    );
+    const topic = bundle.stages[0]!.topics[0]!;
+    expect(topic.reviews).toEqual([{ id: "s1.a.r1", after: "s1.a.l1" }]);
+    expect(topic.practice[0]).toMatchObject({ type: "parsons", lines: ['print("A")', 'print("B")'], solution: 'print("A")\nprint("B")\n' });
+    expect(topic.practice[1]).toMatchObject({ type: "fill", template: "print(___)\n", answers: ['"Hi"'], solution: 'print("Hi")\n' });
+    expect(topic.concepts[0]!.misconceptionHtml).toBe("<p>Viết <strong>print</strong> thường.</p>\n");
+    expect(topic.concepts[0]!.practice).toEqual({ level1: ["s1.a.b1"], level2: ["s1.a.p1", "s1.a.f1"], level3: ["s1.a.l1.ex1"] });
+    expect(contentWarnings(bundle)).toEqual([]);
+  });
+
+  test("reports bad parsons and fill exercises", () => {
+    const practice = [
+      "exercises:",
+      "  - { id: s1.a.p1, type: parsons, prompt: { vi: P }, solution: 'print(1)', tests: [{ output: '1' }] }",
+      "  - { id: s1.a.f1, type: fill, prompt: { vi: F }, template: 'print(___, ___)', answers: ['1'], tests: [{ output: '1' }] }",
+      "  - { id: s1.a.q9, type: mcq, prompt: { vi: Q, en: Q }, choices: [{ text: A, correct: true }, { text: B }], explanation: { vi: E, en: E } }",
+      "",
+    ].join("\n");
+    expect(problemsOf(minimalTree({ "stage-1/01-a/practice.yaml": practice }))).toEqual([
+      expect.stringContaining("Bài parsons cần ít nhất 2 dòng khác nhau"),
+      expect.stringContaining("Mẫu có 2 chỗ trống ___ nhưng có 1 đáp án"),
+      expect.stringContaining("practice.yaml chỉ chứa bài code, parsons hoặc fill"),
+    ]);
+  });
+
+  test("reports bad review stations and practice references", () => {
+    const topic = "id: s1.a\ntitle: { vi: A }\nlessons: [01-x.md]\nreviews:\n  - { id: s1.a.r1, after: s1.a.l9 }\n  - { id: s1.a.b1, after: s1.a.l1 }\n";
+    const concepts =
+      "concepts:\n  - id: print-call\n    name: { vi: P }\n    practice: { level1: [s1.a.l1.ex1], level3: [nope] }\n";
+    expect(problemsOf(minimalTree({ "stage-1/01-a/topic.yaml": topic, "stage-1/01-a/concepts.yaml": concepts }))).toEqual([
+      's1.a.r1: trạm ôn phải đặt sau 1 bài học của chủ đề s1.a, không có "s1.a.l9"',
+      'ID trùng "s1.a.b1": câu hỏi và trạm ôn',
+      'print-call: practice.level1: bài "s1.a.l1.ex1" có type code, mức này cần predict hoặc mcq',
+      'print-call: practice.level3: bài "nope" không tồn tại',
+    ]);
+  });
+
+  test("warns about concepts without a card, a tip or practice at every level", () => {
+    const bundle = buildBundle(writeTree(minimalTree()));
+    expect(contentWarnings(bundle)).toEqual([
+      "print-call: thiếu thẻ hiểu lầm, gợi ý cho phụ huynh, bài luyện level1, bài luyện level2, bài luyện level3",
+    ]);
+  });
+
+  test("parsonsLines and fillTemplate", () => {
+    expect(parsonsLines("a\r\n\n  b  \n")).toEqual(["a", "  b"]);
+    expect(fillTemplate("x = ___ + ___", ["1", "2"])).toBe("x = 1 + 2");
+    expect(fillTemplate("print(1)", [])).toBe("print(1)");
   });
 });

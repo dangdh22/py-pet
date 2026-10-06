@@ -2,7 +2,17 @@ import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { load } from "js-yaml";
 import type { z } from "zod";
-import type { ChoiceQuestion, ContentBundle, ErrorEntry, Exercise, Lesson, Stage, Topic } from "../../src/content/types";
+import {
+  isChoiceQuestion,
+  type ChoiceQuestion,
+  type ContentBundle,
+  type ErrorEntry,
+  type Exercise,
+  type Lesson,
+  type Stage,
+  type TestedExercise,
+  type Topic,
+} from "../../src/content/types";
 import { LessonFormatError, parseLessonFile } from "./parseLesson";
 import { checkReferences } from "./references";
 import {
@@ -11,6 +21,7 @@ import {
   lessonFrontmatterSchema,
   parseExercise,
   parseWith,
+  practiceFileSchema,
   questionsFileSchema,
   stageFileSchema,
   toConcept,
@@ -101,6 +112,8 @@ function buildTopic(c: Collector, dir: string): Topic | undefined {
     lessons,
     concepts: rawConcepts ? rawConcepts.concepts.map(toConcept) : [],
     questions: buildQuestions(c, `${dir}/questions.yaml`),
+    reviews: raw.reviews,
+    practice: buildPractice(c, `${dir}/practice.yaml`),
   };
 }
 
@@ -141,7 +154,7 @@ function buildQuestions(c: Collector, file: string): ChoiceQuestion[] {
       c.problems.push(...result.issues);
       return;
     }
-    if (result.value.type === "code") {
+    if (!isChoiceQuestion(result.value)) {
       c.problems.push(`${where}: questions.yaml chỉ chứa câu predict hoặc mcq`);
       return;
     }
@@ -152,4 +165,25 @@ function buildQuestions(c: Collector, file: string): ChoiceQuestion[] {
     questions.push(result.value);
   });
   return questions;
+}
+
+function buildPractice(c: Collector, file: string): TestedExercise[] {
+  if (!c.exists(file)) return [];
+  const raw = c.parse(practiceFileSchema, c.readYaml(file), file);
+  if (!raw) return [];
+  const exercises: TestedExercise[] = [];
+  raw.exercises.forEach((rawExercise, i) => {
+    const where = `${file}: exercises.${i}`;
+    const result = parseExercise(rawExercise, null, where);
+    if (!result.ok) {
+      c.problems.push(...result.issues);
+      return;
+    }
+    if (isChoiceQuestion(result.value)) {
+      c.problems.push(`${where}: practice.yaml chỉ chứa bài code, parsons hoặc fill`);
+      return;
+    }
+    exercises.push(result.value);
+  });
+  return exercises;
 }

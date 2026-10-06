@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import type { Card, Exercise, Lesson } from "../content/types";
+import { isChoiceQuestion, type Card, type Exercise, type Lesson } from "../content/types";
 import { pick } from "../i18n/lang";
 import { useLang } from "../i18n/LangProvider";
 import { CardView } from "./CardView";
@@ -91,7 +91,7 @@ export function LessonScreen({ lesson, onExit }: LessonScreenProps) {
         onComplete={() => markDone(index)}
       />
     );
-  } else {
+  } else if (isChoiceQuestion(step.exercise)) {
     const question = step.exercise;
     body = (
       <QuestionCard
@@ -106,6 +106,9 @@ export function LessonScreen({ lesson, onExit }: LessonScreenProps) {
         }}
       />
     );
+  } else {
+    // Parsons and fill exercises get their views in Task 8; no content uses them before that.
+    body = null;
   }
 
   return (

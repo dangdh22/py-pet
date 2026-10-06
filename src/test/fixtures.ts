@@ -87,6 +87,8 @@ export function testBundle(): ContentBundle {
             lessons: [fixtureLesson, fixtureLesson2],
             concepts: [],
             questions: [],
+            reviews: [],
+            practice: [],
           },
         ],
       },
