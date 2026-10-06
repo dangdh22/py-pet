@@ -1,5 +1,5 @@
 import { describe, expect, test } from "vitest";
-import { addDays, daysBetween, localDay, weekStart } from "./dates";
+import { addDays, daysBetween, localDay, msUntilNextDay, weekStart } from "./dates";
 import { initialGameState } from "./state";
 
 describe("dates", () => {
@@ -19,6 +19,12 @@ describe("dates", () => {
     expect(daysBetween("2026-10-05", "2026-10-08")).toBe(3);
     expect(daysBetween("2026-10-08", "2026-10-05")).toBe(-3);
     expect(daysBetween("2026-12-31", "2027-01-01")).toBe(1);
+  });
+
+  test("msUntilNextDay reaches 1 second after the next local midnight", () => {
+    expect(msUntilNextDay(new Date(2026, 9, 6, 23, 59, 0))).toBe(61_000);
+    expect(msUntilNextDay(new Date(2026, 9, 6, 0, 0, 1))).toBe(86_400_000);
+    expect(msUntilNextDay(new Date(2026, 11, 31, 23, 59, 59))).toBe(2_000);
   });
 
   test("weekStart returns the Monday", () => {

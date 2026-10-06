@@ -20,12 +20,18 @@ test("goes through the lesson, records the attempts and shows the rewards", asyn
   });
 
   expect(screen.getByText("Thẻ 1/2")).toBeInTheDocument();
+  expect(screen.getByRole("button", { name: "Quay lại" })).toBeDisabled();
   await userEvent.click(screen.getByRole("button", { name: "Tiếp" }));
+  expect(screen.getByText("Thẻ 2/2")).toBeInTheDocument();
+  expect(screen.getByRole("button", { name: "Quay lại" })).toBeEnabled();
   await userEvent.click(screen.getByRole("button", { name: "Tiếp" }));
+  expect(screen.getByText("Bài tập 1/2")).toBeInTheDocument();
   expect(screen.getByRole("button", { name: "Tiếp" })).toBeDisabled();
   await userEvent.click(screen.getByRole("button", { name: "Nộp bài" }));
   expect(await screen.findByText("Đúng hết 2/2 test!")).toBeInTheDocument();
   await userEvent.click(screen.getByRole("button", { name: "Tiếp" }));
+  expect(screen.getByText("Bài tập 2/2")).toBeInTheDocument();
+  expect(screen.getByRole("button", { name: "Hoàn thành" })).toBeDisabled();
   await userEvent.click(screen.getByRole("radio", { name: "A" }));
   await userEvent.click(screen.getByRole("button", { name: "Kiểm tra" }));
   await userEvent.click(screen.getByRole("button", { name: "Hoàn thành" }));

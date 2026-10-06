@@ -26,3 +26,9 @@ export function weekStart(day: string): string {
   const weekday = new Date(toUtcMs(day)).getUTCDay();
   return addDays(day, -((weekday + 6) % 7));
 }
+
+/** Milliseconds from `now` to 1 second after the next local midnight. */
+export function msUntilNextDay(now: Date): number {
+  const next = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 1);
+  return next.getTime() - now.getTime();
+}

@@ -1,6 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { apply, type GameEvent } from "../game/apply";
-import { daysBetween, localDay } from "../game/dates";
+import { daysBetween, localDay, msUntilNextDay } from "../game/dates";
 import type { GameState } from "../game/state";
 import type { Lang } from "../i18n/lang";
 import { useLang } from "../i18n/LangProvider";
@@ -116,6 +116,19 @@ export function GameProvider({ store, loaded, clock, onReplaced, children }: Gam
     document.addEventListener("visibilitychange", onVisibility);
     return () => document.removeEventListener("visibilitychange", onVisibility);
   }, [dispatch]);
+
+  // An app left open past midnight starts the new day on time: rewards, decay and the room's goals.
+  useEffect(() => {
+    let timer: ReturnType<typeof setTimeout>;
+    const schedule = () => {
+      timer = setTimeout(() => {
+        dispatch({ type: "DayRollover" });
+        schedule();
+      }, msUntilNextDay(clock()));
+    };
+    schedule();
+    return () => clearTimeout(timer);
+  }, [clock, dispatch]);
 
   // First run: show the saved language. Later runs: save the language the child picks.
   const langInitialised = useRef(false);

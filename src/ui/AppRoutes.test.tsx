@@ -49,8 +49,8 @@ describe("AppRoutes", () => {
     expect((await store.loadActive())?.state.progress.completedLessons).toEqual(["t.l1", "t.l2"]);
   });
 
-  test("shows a message for an unknown or malformed lesson", async () => {
-    window.location.hash = "#/lesson/%E0%A4%A";
+  test.each(["#/lesson/khong-co", "#/lesson/%E0%A4%A"])("shows a message for the unknown lesson %s", async (hash) => {
+    window.location.hash = hash;
     await renderWithGame(<AppRoutes />);
     expect(screen.getByText("Không tìm thấy bài học này.")).toBeInTheDocument();
   });

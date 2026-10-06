@@ -26,6 +26,7 @@ function Probe() {
     <div>
       <p>xp:{game.state.pet.xp}</p>
       <p>pin:{game.state.pet.pin}</p>
+      <p>today:{game.today}</p>
       <p>lang:{game.state.settings.uiLang}</p>
       <p>{t("lesson.next")}</p>
       <p>failed:{String(game.writeFailed)}</p>
@@ -66,6 +67,22 @@ describe("GameProvider", () => {
     state.activity.lastActiveDay = "2026-10-01";
     await renderWithGame(<Probe />, { state });
     expect(await screen.findByText("pin:1")).toBeInTheDocument();
+  });
+
+  test("runs a day rollover at midnight while the app stays open", async () => {
+    vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
+    let now = new Date(2026, 9, 6, 23, 59, 30);
+    const state = initialGameState(TODAY);
+    state.activity.lastActiveDay = "2026-10-04";
+    await renderWithGame(<Probe />, { state, clock: () => now });
+    expect(screen.getByText("pin:4")).toBeInTheDocument();
+    expect(screen.getByText("today:2026-10-06")).toBeInTheDocument();
+    now = new Date(2026, 9, 7, 0, 0, 1);
+    act(() => {
+      vi.advanceTimersByTime(31_000);
+    });
+    expect(screen.getByText("pin:3")).toBeInTheDocument();
+    expect(screen.getByText("today:2026-10-07")).toBeInTheDocument();
   });
 
   test("runs a day rollover when the page becomes visible again", async () => {
