@@ -125,3 +125,5 @@ Final: re-review — F1..F6 ADDRESSED, no new Critical/Important
 Final: parked — ResultView calls buildPracticeSet with Math.random on every render — Ruling: only emptiness is used and it does not depend on rng; tidy later — cost if wrong: a little wasted work per render
 Final: parked — onMisconception fires for a concept without card text, so a practice link can appear without a card — Ruling: no current concept lacks a card; M5 content keeps cards mandatory by rule 8 — cost if wrong: an unexplained practice link for such a concept
 Final: complete (commits 62405cb..3edb436)
+Maintainer decision (2026-10-06): Vui rises only from correct answers (no guaranteed Vui >= 1 after a recharge review) — matches the current code, no change
+Maintainer decision (2026-10-06): free review stays unlimited per day (XP, Pin and 1 activity point each time) — matches the current code, no change
