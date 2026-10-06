@@ -9,6 +9,7 @@ import { useGame } from "./GameProvider";
 import { Header } from "./Header";
 import { LessonScreen } from "./LessonScreen";
 import { MapScreen } from "./MapScreen";
+import { PracticeScreen } from "./PracticeScreen";
 import { ReviewScreen } from "./ReviewScreen";
 import { RoomScreen } from "./RoomScreen";
 import { routeToHash, useHashRoute } from "./routing";
@@ -43,6 +44,8 @@ export function AppRoutes() {
     } else {
       screen = <ReviewScreen key={route.stationId ?? "free"} stationId={route.stationId} onExit={goHome} />;
     }
+  } else if (route.name === "practice") {
+    screen = <PracticeScreen key={route.conceptId} conceptId={route.conceptId} onExit={goHome} />;
   } else {
     screen = <RoomScreen />;
   }

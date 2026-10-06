@@ -138,4 +138,5 @@ a.button.primary { background: var(--primary); border-color: var(--primary); col
 .parsons-line { flex: 1; margin: 0; padding: 8px 12px; border-radius: 8px; background: var(--code-bg); color: var(--code-text); font-family: var(--mono); font-size: 1rem; white-space: pre; }
 .fill-template { background: var(--code-bg); color: var(--code-text); padding: 10px 12px; border-radius: 8px; font-family: var(--mono); font-size: 1rem; white-space: pre-wrap; }
 .fill-template input { font-family: var(--mono); font-size: 1rem; margin: 0 2px; }
+.misconception-card { margin-top: 12px; padding: 12px 16px; border: 1px solid #f0d9a8; border-radius: var(--radius); background: #fff8ea; }
 .result-rewards { list-style: none; padding: 0; display: flex; justify-content: center; gap: 16px; font-size: 1.3rem; font-weight: 700; color: var(--success); }

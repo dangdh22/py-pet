@@ -1,8 +1,9 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { isChoiceQuestion, type Exercise } from "../content/types";
 import type { ResultSource } from "../game/mastery";
 import { CodeExerciseView, type ExerciseOutcome, type JudgedInfo } from "./CodeExerciseView";
 import { useGame } from "./GameProvider";
+import { MisconceptionHelp } from "./MisconceptionHelp";
 import { PuzzleExerciseView } from "./PuzzleExerciseView";
 import { QuestionCard } from "./QuestionCard";
 
@@ -15,36 +16,52 @@ export interface ItemDone {
  * Shows 1 exercise or question of any type and sends its events with the concepts and the source. Outside a lesson,
  * the view starts clean: no saved draft, no saved hint counts.
  */
-export function ItemView({ item, source, onDone }: { item: Exercise; source: ResultSource; onDone(result: ItemDone): void }) {
+export function ItemView({
+  item,
+  source,
+  onDone,
+}: {
+  item: Exercise;
+  source: ResultSource;
+  onDone(result: ItemDone): void;
+}) {
   const game = useGame();
   const firstTry = useRef<boolean | null>(null);
+  const [misconception, setMisconception] = useState<string | null>(null);
   const inLesson = source === "lesson";
+  const help = misconception && <MisconceptionHelp conceptId={misconception} offerPractice={source !== "practice"} />;
 
   if (isChoiceQuestion(item)) {
     return (
-      <QuestionCard
-        question={item}
-        onAnswered={(correct, detail) => {
-          game.dispatch(
-            {
-              type: "QuestionAnswered",
-              questionId: item.id,
-              correct,
-              concepts: item.concepts,
-              misconception: item.choices[detail.choiceIndex]?.misconception ?? null,
-              source,
-            },
-            { kind: "choice", itemId: item.id, choiceIndex: detail.choiceIndex, correct, lang: detail.lang },
-          );
-          onDone({ correct });
-        }}
-      />
+      <>
+        <QuestionCard
+          question={item}
+          onAnswered={(correct, detail) => {
+            const chosen = item.choices[detail.choiceIndex]?.misconception ?? null;
+            game.dispatch(
+              {
+                type: "QuestionAnswered",
+                questionId: item.id,
+                correct,
+                concepts: item.concepts,
+                misconception: chosen,
+                source,
+              },
+              { kind: "choice", itemId: item.id, choiceIndex: detail.choiceIndex, correct, lang: detail.lang },
+            );
+            if (!correct && chosen) setMisconception(chosen);
+            onDone({ correct });
+          }}
+        />
+        {help}
+      </>
     );
   }
 
   const onJudged = (info: JudgedInfo) => {
     const accepted = info.result.status === "accepted";
     firstTry.current ??= accepted && info.hintsUsed === 0 && !info.viewedSolution;
+    setMisconception(accepted ? null : (info.result.misconceptions[0] ?? null));
     game.dispatch(
       {
         type: "ExerciseJudged",
@@ -68,32 +85,39 @@ export function ItemView({ item, source, onDone }: { item: Exercise; source: Res
       },
     );
   };
-  const onComplete = (outcome: ExerciseOutcome) => onDone({ correct: outcome === "solved" && firstTry.current === true });
+  const onComplete = (outcome: ExerciseOutcome) =>
+    onDone({ correct: outcome === "solved" && firstTry.current === true });
   const onHint = inLesson ? () => game.dispatch({ type: "HintShown", exerciseId: item.id }) : undefined;
   const onSolutionViewed = () => game.dispatch({ type: "SolutionViewed", exerciseId: item.id });
 
   if (item.type === "code") {
     return (
-      <CodeExerciseView
+      <>
+        <CodeExerciseView
+          exercise={item}
+          initialCode={inLesson ? game.draftFor(item.id) : undefined}
+          onCodeChange={inLesson ? (code) => game.saveDraft(item.id, code) : undefined}
+          initialStats={inLesson ? game.state.progress.exerciseStats?.[item.id] : undefined}
+          onHint={onHint}
+          onSolutionViewed={onSolutionViewed}
+          onJudged={onJudged}
+          onComplete={onComplete}
+        />
+        {help}
+      </>
+    );
+  }
+  return (
+    <>
+      <PuzzleExerciseView
         exercise={item}
-        initialCode={inLesson ? game.draftFor(item.id) : undefined}
-        onCodeChange={inLesson ? (code) => game.saveDraft(item.id, code) : undefined}
         initialStats={inLesson ? game.state.progress.exerciseStats?.[item.id] : undefined}
         onHint={onHint}
         onSolutionViewed={onSolutionViewed}
         onJudged={onJudged}
         onComplete={onComplete}
       />
-    );
-  }
-  return (
-    <PuzzleExerciseView
-      exercise={item}
-      initialStats={inLesson ? game.state.progress.exerciseStats?.[item.id] : undefined}
-      onHint={onHint}
-      onSolutionViewed={onSolutionViewed}
-      onJudged={onJudged}
-      onComplete={onComplete}
-    />
+      {help}
+    </>
   );
 }

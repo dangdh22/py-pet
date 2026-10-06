@@ -75,4 +75,34 @@ describe("ItemView", () => {
     await userEvent.click(submit);
     await waitFor(() => expect(onDone).toHaveBeenCalledWith({ correct: false }));
   });
+
+  test("a wrong answer with a misconception offers its card and 2 practice items", async () => {
+    await renderWithGame(<ItemView item={question} source="lesson" onDone={() => {}} />, { bundle });
+    await userEvent.click(screen.getByRole("radio", { name: "Sai" }));
+    await userEvent.click(screen.getByRole("button", { name: "Kiểm tra" }));
+    await userEvent.click(screen.getByRole("button", { name: "Xem thẻ Hiểu lầm thường gặp" }));
+    const card = screen.getByRole("region", { name: "Hiểu lầm thường gặp" });
+    expect(card).toHaveTextContent("Hiểu lầm thường gặp: Khái niệm c1");
+    expect(card).toHaveTextContent("Hiểu lầm về c1.");
+    expect(screen.getByRole("link", { name: "Luyện thêm 2 bài" })).toHaveAttribute("href", "#/practice/c1");
+  });
+
+  test("a right answer or a practice set does not offer more practice", async () => {
+    await renderWithGame(<ItemView item={question} source="practice" onDone={() => {}} />, { bundle });
+    await userEvent.click(screen.getByRole("radio", { name: "Sai" }));
+    await userEvent.click(screen.getByRole("button", { name: "Kiểm tra" }));
+    await userEvent.click(screen.getByRole("button", { name: "Xem thẻ Hiểu lầm thường gặp" }));
+    expect(screen.queryByRole("link", { name: "Luyện thêm 2 bài" })).not.toBeInTheDocument();
+  });
+
+  test("a code misconception found by the judge offers its card", async () => {
+    const code = { ...reviewCode, commonWrong: [{ test: 0, output: "hi", misconception: "c2", sample: 'print("hi")' }] };
+    await renderWithGame(<ItemView item={code} source="lesson" onDone={() => {}} />, {
+      bundle,
+      runner: fakeRunner(() => okResult("hi\n")),
+    });
+    await userEvent.click(screen.getByRole("button", { name: "Nộp bài" }));
+    await userEvent.click(await screen.findByRole("button", { name: "Xem thẻ Hiểu lầm thường gặp" }));
+    expect(screen.getByRole("region", { name: "Hiểu lầm thường gặp" })).toHaveTextContent("Khái niệm c2");
+  });
 });
