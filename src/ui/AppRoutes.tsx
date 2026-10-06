@@ -1,6 +1,7 @@
 import { findLesson } from "../content/lookup";
 import { lessonStatuses } from "../game/progress";
 import { useLang } from "../i18n/LangProvider";
+import { BackupScreen } from "./BackupScreen";
 import { Banners } from "./Banners";
 import { useContent } from "./contexts";
 import { ErrorBoundary } from "./ErrorBoundary";
@@ -20,6 +21,8 @@ export function AppRoutes() {
   let screen;
   if (route.name === "map") {
     screen = <MapScreen />;
+  } else if (route.name === "backup") {
+    screen = <BackupScreen />;
   } else if (route.name === "lesson") {
     const lesson = findLesson(bundle, route.lessonId);
     if (!lesson) {

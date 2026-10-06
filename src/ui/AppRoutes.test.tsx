@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { act, render, screen } from "@testing-library/react";
+import { act, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, test, vi } from "vitest";
 import { initialGameState } from "../game/state";
@@ -109,5 +109,27 @@ describe("App", () => {
   test("shows the other-tab message when the tab does not own the lock", async () => {
     render(<App bundle={testBundle()} runnerClient={makeClient().client} store={new MemoryStore()} ownsTab={false} />);
     expect(screen.getByText("Py-Pet đang mở ở tab khác. Con dùng tab đó nhé.")).toBeInTheDocument();
+  });
+});
+
+describe("crash screen", () => {
+  test("logs the crash and offers a backup export", async () => {
+    function Boom(): never {
+      throw new Error("boom");
+    }
+    vi.spyOn(console, "error").mockImplementation(() => {});
+    const { store } = await renderWithGame(
+      <ErrorBoundary>
+        <Boom />
+      </ErrorBoundary>,
+    );
+    expect(screen.getByRole("button", { name: "Xuất file sao lưu" })).toBeInTheDocument();
+    await waitFor(async () => expect((await store.readMeta()).errorLog[0]).toMatchObject({ kind: "ui-crash" }));
+  });
+
+  test("the backup route opens the backup screen", async () => {
+    window.location.hash = "#/backup";
+    await renderWithGame(<AppRoutes />);
+    expect(screen.getByRole("heading", { name: "Sao lưu" })).toBeInTheDocument();
   });
 });
