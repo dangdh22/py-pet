@@ -24,7 +24,7 @@ export interface JudgedInfo {
   viewedSolution: boolean;
 }
 
-const FAILED_SUBMITS_BEFORE_SOLUTION = 3;
+export const FAILED_SUBMITS_BEFORE_SOLUTION = 3;
 
 export function CodeExerciseView({
   exercise,

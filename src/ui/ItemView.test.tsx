@@ -1,0 +1,78 @@
+// @vitest-environment jsdom
+import { screen, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { describe, expect, test, vi } from "vitest";
+import { fixtureCodeExercise } from "../test/fixtures";
+import { fakeRunner, okResult } from "../test/render";
+import { renderWithGame } from "../test/renderGame";
+import { reviewBundle, reviewCode, reviewFill } from "../test/reviewBundle";
+import { ItemView } from "./ItemView";
+
+vi.mock("./CodeEditor", () => ({
+  CodeEditor: (props: { value: string; onChange(value: string): void; ariaLabel: string }) => (
+    <textarea aria-label={props.ariaLabel} value={props.value} onChange={(e) => props.onChange(e.target.value)} />
+  ),
+}));
+
+const bundle = reviewBundle();
+const question = bundle.stages[0]!.topics[0]!.questions[0]!;
+
+async function savedState(store: Awaited<ReturnType<typeof renderWithGame>>["store"]) {
+  return (await store.loadActive())!.state;
+}
+
+describe("ItemView", () => {
+  test("a wrong answer records the concept, the misconception, the Leitner box and the attempt", async () => {
+    const onDone = vi.fn();
+    const { store } = await renderWithGame(<ItemView item={question} source="review" onDone={onDone} />, { bundle });
+    await userEvent.click(screen.getByRole("radio", { name: "Sai" }));
+    await userEvent.click(screen.getByRole("button", { name: "Kiểm tra" }));
+    expect(onDone).toHaveBeenCalledWith({ correct: false });
+    await waitFor(async () => expect((await savedState(store)).reviews["r.q1"]).toEqual({ box: 1, due: "2026-10-07" }));
+    const state = await savedState(store);
+    expect(state.mastery.c1).toMatchObject({ score: 0, recent: [0], reviewMisses: 1, misconceptions: 1 });
+    expect(state.pet.xp).toBe(0);
+    const [bundleOut] = await store.exportProfiles();
+    expect(bundleOut!.attempts).toMatchObject([{ kind: "choice", itemId: "r.q1", correct: false }]);
+  });
+
+  test("a code exercise solved at the first submit is correct and updates the concept", async () => {
+    const onDone = vi.fn();
+    const { store } = await renderWithGame(<ItemView item={reviewCode} source="practice" onDone={onDone} />, {
+      bundle,
+      runner: fakeRunner(() => okResult("Hi\n")),
+    });
+    await userEvent.click(screen.getByRole("button", { name: "Nộp bài" }));
+    await waitFor(() => expect(onDone).toHaveBeenCalledWith({ correct: true }));
+    await waitFor(async () => expect((await savedState(store)).mastery.c1?.score).toBe(30));
+    expect((await savedState(store)).pet.xp).toBe(15);
+  });
+
+  test("outside a lesson the code starts from the starter, not from the lesson draft", async () => {
+    await renderWithGame(<ItemView item={fixtureCodeExercise} source="review" onDone={() => {}} />, {
+      drafts: { [fixtureCodeExercise.id]: 'print("Hi")' },
+    });
+    expect(screen.getByRole("textbox", { name: "Trình soạn code" })).toHaveValue("");
+  });
+
+  test("in a lesson the code starts from the saved draft", async () => {
+    await renderWithGame(<ItemView item={fixtureCodeExercise} source="lesson" onDone={() => {}} />, {
+      drafts: { [fixtureCodeExercise.id]: 'print("Hi")' },
+    });
+    expect(screen.getByRole("textbox", { name: "Trình soạn code" })).toHaveValue('print("Hi")');
+  });
+
+  test("a fill exercise solved after a failed submit is not counted as correct", async () => {
+    const onDone = vi.fn();
+    await renderWithGame(<ItemView item={reviewFill} source="review" onDone={onDone} />, {
+      bundle,
+      runner: fakeRunner((code) => okResult(code.includes('"Hi"') ? "Hi\n" : "")),
+    });
+    const submit = screen.getByRole("button", { name: "Nộp bài" });
+    await userEvent.click(submit);
+    await waitFor(() => expect(submit).toBeEnabled());
+    await userEvent.type(screen.getByRole("textbox", { name: "Chỗ trống 1" }), '"Hi"');
+    await userEvent.click(submit);
+    await waitFor(() => expect(onDone).toHaveBeenCalledWith({ correct: false }));
+  });
+});
