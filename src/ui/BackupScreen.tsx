@@ -2,7 +2,14 @@ import { useState, type ChangeEvent, type FormEvent } from "react";
 import { localDay } from "../game/dates";
 import { useLang } from "../i18n/LangProvider";
 import type { MessageKey } from "../i18n/vi";
-import { backupFileName, decodeBackup, previewOf, type BackupPayload, type BackupPreview } from "../storage/backup";
+import {
+  backupFileName,
+  decodeBackup,
+  previewOf,
+  type BackupPayload,
+  type BackupPreview,
+  type DecodeResult,
+} from "../storage/backup";
 import { downloadText } from "./download";
 import { useGame } from "./GameProvider";
 
@@ -11,6 +18,12 @@ type ImportStep =
   | { kind: "choose" }
   | { kind: "error"; message: MessageKey }
   | { kind: "preview"; payload: BackupPayload; preview: BackupPreview; tampered: boolean };
+
+const REASON_MESSAGE: Record<Extract<DecodeResult, { ok: false }>["reason"], MessageKey> = {
+  "not-a-backup": "backup.notABackup",
+  "newer-version": "backup.newerVersion",
+  damaged: "backup.damaged",
+};
 
 interface AutoBackupItem {
   text: string;
@@ -89,7 +102,7 @@ export function BackupScreen() {
     try {
       const result = await decodeBackup(await file.text());
       if (!result.ok) {
-        setStep({ kind: "error", message: result.reason === "newer-version" ? "backup.newerVersion" : "backup.notABackup" });
+        setStep({ kind: "error", message: REASON_MESSAGE[result.reason] });
         return;
       }
       const preview = previewOf(result.payload);

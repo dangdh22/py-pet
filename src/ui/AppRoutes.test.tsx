@@ -123,6 +123,28 @@ describe("App", () => {
     expect(await screen.findByRole("alert")).toHaveTextContent("Robo bị trục trặc rồi.");
   });
 
+  test("a profile saved by an older app is upgraded when it opens", async () => {
+    const store = new MemoryStore({ persistent: true });
+    const old = JSON.parse(JSON.stringify(initialGameState(TODAY)));
+    old.version = 1;
+    delete old.mastery;
+    delete old.reviews;
+    delete old.retry;
+    delete old.progress.completedReviews;
+    await store.createProfile(testProfile(), old);
+    render(<App bundle={testBundle()} runnerClient={makeClient().client} store={store} clock={() => FIXED_NOW} />);
+    expect(await screen.findByRole("heading", { name: "Phòng của Robo" })).toBeInTheDocument();
+    await waitFor(async () => expect((await store.loadActive())?.state.version).toBe(2));
+  });
+
+  test("a profile saved by a newer app is not opened", async () => {
+    const store = new MemoryStore({ persistent: true });
+    await store.createProfile(testProfile(), { ...initialGameState(TODAY), version: 99 });
+    render(<App bundle={testBundle()} runnerClient={makeClient().client} store={store} clock={() => FIXED_NOW} />);
+    expect(await screen.findByRole("alert")).toHaveTextContent("phiên bản Py-Pet mới hơn");
+    expect((await store.loadActive())?.state.version).toBe(99);
+  });
+
   test("shows the other-tab message when the tab does not own the lock", async () => {
     render(<App bundle={testBundle()} runnerClient={makeClient().client} store={new MemoryStore()} ownsTab={false} />);
     expect(screen.getByText("Py-Pet đang mở ở tab khác. Con dùng tab đó nhé.")).toBeInTheDocument();

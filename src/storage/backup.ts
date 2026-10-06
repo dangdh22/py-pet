@@ -1,3 +1,5 @@
+import { z } from "zod";
+import { StateFormatError, upgradeGameState } from "../game/migrate";
 import type { GameState } from "../game/state";
 import { base64ToUtf8, sha256Hex, utf8ToBase64 } from "./encoding";
 import {
@@ -25,7 +27,7 @@ export interface BackupPayload {
 
 export type DecodeResult =
   | { ok: true; payload: BackupPayload; checksumValid: boolean }
-  | { ok: false; reason: "not-a-backup" | "newer-version" };
+  | { ok: false; reason: "not-a-backup" | "newer-version" | "damaged" };
 
 export interface BackupPreview {
   childName: string;
@@ -34,8 +36,39 @@ export interface BackupPreview {
   lastActiveDay: string | null;
 }
 
-/** schemaVersion N -> function that turns an N payload into an N+1 payload. */
-const MIGRATIONS: Record<number, (payload: BackupPayload) => BackupPayload> = {};
+/**
+ * schemaVersion N -> function that turns an N payload into an N+1 payload. A profile's state carries its own
+ * version and is upgraded by upgradeGameState after these steps.
+ */
+const MIGRATIONS: Record<number, (payload: BackupPayload) => BackupPayload> = {
+  // Schema 2 only changed the game state (GameState version 2).
+  1: (payload) => ({ ...payload, schemaVersion: 2, meta: { ...payload.meta, schemaVersion: 2 } }),
+};
+
+const profileBundleSchema = z.object({
+  profile: z.object({ id: z.string().min(1), childName: z.string(), robotName: z.string(), createdAt: z.string() }),
+  state: z.unknown(),
+  attempts: z.array(z.object({ profileId: z.string(), itemId: z.string(), kind: z.enum(["code", "choice"]) })),
+  drafts: z.array(z.object({ profileId: z.string(), itemId: z.string(), code: z.string() })),
+});
+
+/** Checks every profile of a migrated payload and upgrades its state. Null when a profile is damaged. */
+function checkProfiles(payload: BackupPayload): BackupPayload | null {
+  const profiles: BackupPayload["profiles"] = [];
+  for (const bundle of payload.profiles as unknown[]) {
+    if (!profileBundleSchema.safeParse(bundle).success) return null;
+    const checked = bundle as BackupPayload["profiles"][number];
+    let state: GameState;
+    try {
+      state = upgradeGameState(checked.state);
+    } catch (error) {
+      if (error instanceof StateFormatError) return null;
+      throw error;
+    }
+    profiles.push({ ...checked, state });
+  }
+  return { ...payload, profiles };
+}
 
 /** The active profile as the app holds it in memory: newer than the store when a write failed. */
 export interface ActiveSnapshot {
@@ -112,12 +145,14 @@ export async function decodeBackup(text: string): Promise<DecodeResult> {
   if (parsed.schemaVersion > SCHEMA_VERSION) return { ok: false, reason: "newer-version" };
   const { checksum, ...rest } = parsed;
   const expected = await sha256Hex(JSON.stringify(rest) + CHECKSUM_SECRET);
-  let payload: BackupPayload;
+  let migrated: BackupPayload;
   try {
-    payload = migrateBackup(rest as unknown as BackupPayload);
+    migrated = migrateBackup(rest as unknown as BackupPayload);
   } catch {
     return { ok: false, reason: "not-a-backup" };
   }
+  const payload = checkProfiles(migrated);
+  if (!payload) return { ok: false, reason: "damaged" };
   return { ok: true, payload, checksumValid: checksum === expected };
 }
 

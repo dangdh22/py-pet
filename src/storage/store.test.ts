@@ -88,7 +88,7 @@ describe.each(stores)("%s", (_name, makeStore) => {
     const store = await makeStore();
     const partial = { schemaVersion: 1, activeProfileId: "p1" } as unknown as AppMeta;
     await store.replaceAll(partial, []);
-    expect(await store.readMeta()).toEqual({ ...emptyMeta(), activeProfileId: "p1" });
+    expect(await store.readMeta()).toEqual({ ...emptyMeta(), schemaVersion: 1, activeProfileId: "p1" });
     await store.appendErrorLog({ at: "2026-10-06T02:00:00.000Z", kind: "ui-crash", detail: "boom" });
     expect((await store.readMeta()).errorLog).toEqual([{ at: "2026-10-06T02:00:00.000Z", kind: "ui-crash", detail: "boom" }]);
   });

@@ -1,6 +1,6 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, test } from "vitest";
-import { initialGameState } from "../game/state";
+import { GAME_STATE_VERSION, initialGameState } from "../game/state";
 import { sampleBackupPayload } from "../test/backupSample";
 import {
   backupFileName,
@@ -9,10 +9,12 @@ import {
   encodeBackup,
   migrateBackup,
   previewOf,
+  type BackupPayload,
 } from "./backup";
 import { base64ToUtf8, sha256Hex, utf8ToBase64 } from "./encoding";
 import { MemoryStore } from "./memoryStore";
 import { hashPin, isValidPin, verifyPin } from "./pin";
+import { SCHEMA_VERSION } from "./types";
 
 describe("encoding", () => {
   test("UTF-8 base64 round-trips Vietnamese text", () => {
@@ -104,10 +106,33 @@ describe("backup file", () => {
     expect(payload.profiles).toHaveLength(1);
   });
 
-  test("decodes the committed schema 1 sample file", async () => {
+  test("decodes the committed schema 1 sample file and upgrades it", async () => {
     const text = readFileSync("src/storage/fixtures/backup-v1.pypet", "utf8");
     const result = await decodeBackup(text);
+    if (!result.ok) throw new Error("the sample file must decode");
+    expect(result.checksumValid).toBe(true);
+    expect(previewOf(result.payload)?.childName).toBe("An");
+    expect(result.payload.schemaVersion).toBe(SCHEMA_VERSION);
+    const state = result.payload.profiles[0]!.state;
+    expect(state.version).toBe(GAME_STATE_VERSION);
+    expect(state.progress.completedReviews).toEqual([]);
+    expect(state.wallet.xu).toBe(120);
+  });
+
+  test("decodes the committed schema 2 sample file", async () => {
+    const result = await decodeBackup(readFileSync("src/storage/fixtures/backup-v2.pypet", "utf8"));
     expect(result.ok && result.checksumValid).toBe(true);
-    expect(result.ok && previewOf(result.payload)?.childName).toBe("An");
+    expect(result.ok && result.payload.profiles[0]!.state.mastery).toEqual({});
+  });
+
+  test("refuses a file whose profile or state is damaged", async () => {
+    const broken = sampleBackupPayload();
+    (broken.profiles[0]!.state as unknown as { wallet: unknown }).wallet = "lots";
+    expect(await decodeBackup(await encodeBackup(broken))).toEqual({ ok: false, reason: "damaged" });
+    const noProfile = { ...sampleBackupPayload(), profiles: [{}] } as unknown as BackupPayload;
+    expect(await decodeBackup(await encodeBackup(noProfile))).toEqual({ ok: false, reason: "damaged" });
+    const newerState = sampleBackupPayload();
+    newerState.profiles[0]!.state.version = GAME_STATE_VERSION + 1;
+    expect(await decodeBackup(await encodeBackup(newerState))).toEqual({ ok: false, reason: "damaged" });
   });
 });

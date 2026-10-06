@@ -2,7 +2,7 @@ import type { GameState } from "../game/state";
 import type { QuestionLang } from "../i18n/lang";
 import type { JudgeStatus } from "../runner/judge";
 
-export const SCHEMA_VERSION = 1;
+export const SCHEMA_VERSION = 2;
 export const ATTEMPTS_PER_ITEM = 10;
 export const ERROR_LOG_LIMIT = 50;
 export const AUTO_BACKUPS = 3;
