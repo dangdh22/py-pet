@@ -36,6 +36,15 @@ describe("acquireTabLock", () => {
     expect(await acquireTabLock(locks)).toBe(true);
     expect(await acquireTabLock(locks)).toBe(false);
   });
+
+  test("allows writing when the lock request fails", async () => {
+    class FailingLocks implements LocksLike {
+      async request(): Promise<unknown> {
+        return Promise.reject(new Error("SecurityError"));
+      }
+    }
+    expect(await acquireTabLock(new FailingLocks())).toBe(true);
+  });
 });
 
 describe("requestPersistence", () => {

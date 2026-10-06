@@ -24,14 +24,14 @@ function browserLocks(): LocksLike | undefined {
 export function acquireTabLock(locks: LocksLike | undefined = browserLocks()): Promise<boolean> {
   if (!locks) return Promise.resolve(true);
   return new Promise((resolve) => {
-    void locks.request(LOCK_NAME, { ifAvailable: true }, (lock) => {
+    locks.request(LOCK_NAME, { ifAvailable: true }, (lock) => {
       if (lock === null) {
         resolve(false);
         return Promise.resolve();
       }
       resolve(true);
       return new Promise<void>(() => {});
-    });
+    }).catch(() => resolve(true));
   });
 }
 
