@@ -102,4 +102,32 @@ describe("RoomScreen", () => {
     expect(screen.getByRole("link", { name: "Học tiếp" })).toHaveAttribute("href", "#/evolution/x");
     expect(screen.getByText("Lớn lên: 0%")).toBeInTheDocument();
   });
+
+  test("on vacation: the robot wears sunglasses and the week plan leaves out the vacation days", async () => {
+    const state = initialGameState(TODAY);
+    state.pet.pin = 0;
+    state.vacation = { since: TODAY, ranges: [] };
+    await renderWithGame(<RoomScreen />, { state });
+    expect(screen.getByText("Robo đang đi nghỉ. Con vẫn học được nếu muốn!")).toBeInTheDocument();
+    expect(screen.getByRole("img", { name: "Robo" })).toHaveAttribute("data-mood", "vacation");
+    expect(screen.getByText("Tuần này: 0/2 bài")).toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: "Sạc cho Robo" })).not.toBeInTheDocument();
+  });
+
+  test("shows what the robot wears and the room decorations, and links to the shop and the book", async () => {
+    const state = initialGameState(TODAY);
+    state.inventory = { consumables: {}, owned: ["kinh-ram", "tranh", "chau-cay"], equipped: ["kinh-ram"] };
+    await renderWithGame(<RoomScreen />, { state });
+    expect(screen.getByText("Đang đeo: Kính râm")).toBeInTheDocument();
+    expect(screen.getByText("Trong phòng: Chậu cây, Bức tranh")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Cửa hàng" })).toHaveAttribute("href", "#/shop");
+    expect(screen.getByRole("link", { name: "Sổ thành tích" })).toHaveAttribute("href", "#/achievements");
+  });
+
+  test("practice from the parents comes first", async () => {
+    const state = initialGameState(TODAY);
+    state.assigned = [{ id: "p1", conceptId: "k1", items: ["q1"], day: TODAY }];
+    await renderWithGame(<RoomScreen />, { state });
+    expect(screen.getByRole("link", { name: "Học tiếp" })).toHaveAttribute("href", "#/assigned/p1");
+  });
 });

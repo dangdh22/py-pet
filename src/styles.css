@@ -151,3 +151,18 @@ a.button.primary { background: var(--primary); border-color: var(--primary); col
   100% { transform: scale(1); filter: none; }
 }
 @media (prefers-reduced-motion: reduce) { .evolve { animation: none; } }
+
+/* M4a: shop, achievements, room extras */
+.tabs { display: flex; gap: 8px; margin: 12px 0; }
+.tabs [aria-selected="true"] { background: var(--primary); border-color: var(--primary); color: #fff; }
+.shop-items { list-style: none; padding: 0; display: grid; gap: 8px; }
+.shop-item { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 8px 12px; border: 1px solid #dde3ef; border-radius: var(--radius); }
+.shop-name { font-weight: 700; min-width: 10em; }
+.shop-price, .shop-detail { color: var(--muted); }
+.shop-actions { margin-left: auto; display: flex; gap: 8px; align-items: center; }
+.badges { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 8px; }
+.badge { padding: 8px 12px; border-radius: var(--radius); border: 1px solid #dde3ef; display: flex; flex-direction: column; }
+.badge-earned { border-color: var(--success); }
+.badge-locked { color: var(--muted); }
+.form-locked { color: var(--muted); }
+.condition-vacation { background: #e6f6ff; }
