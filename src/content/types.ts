@@ -120,12 +120,27 @@ export interface ConceptPractice {
 export interface Concept {
   id: string;
   name: LocalizedText;
+  /** True for AI knowledge (spec 5.11: the evolution test has a share of AI questions). */
+  ai: boolean;
   /** Markdown, as written in concepts.yaml. */
   misconceptionCard: string | null;
   /** The misconception card as HTML, ready to show. */
   misconceptionHtml: string | null;
   parentTip: string | null;
   practice: ConceptPractice;
+}
+
+/** The paper of a topic test: predict/mcq questions worth 1 point, test-eligible code exercises worth 3. 0 + 0 = no test. */
+export interface TopicTestConfig {
+  questions: number;
+  code: number;
+}
+
+/** The paper of an evolution test (spec 5.11); `ai` of the questions are about AI. 0 + 0 = no test. */
+export interface EvolutionTestConfig {
+  questions: number;
+  ai: number;
+  code: number;
 }
 
 /** A review station on the map, placed after a lesson of its topic. */
@@ -143,12 +158,14 @@ export interface Topic {
   reviews: ReviewStation[];
   /** Practice exercises that belong to no lesson (practice.yaml). */
   practice: TestedExercise[];
+  test: TopicTestConfig;
 }
 
 export interface Stage {
   id: string;
   title: LocalizedText;
   topics: Topic[];
+  evolution: EvolutionTestConfig;
 }
 
 export const CHECK_NAMES = ["similar-name", "assign-in-condition", "while-loop"] as const;

@@ -97,6 +97,7 @@ describe("buildBundle", () => {
       {
         id: "print-call",
         name: { vi: "Lệnh print" },
+        ai: false,
         misconceptionCard: null,
         misconceptionHtml: null,
         parentTip: null,
@@ -105,6 +106,8 @@ describe("buildBundle", () => {
     ]);
     expect(topic.reviews).toEqual([]);
     expect(topic.practice).toEqual([]);
+    expect(topic.test).toEqual({ questions: 8, code: 2 });
+    expect(bundle.stages[0]!.evolution).toEqual({ questions: 15, ai: 3, code: 3 });
     expect(bundle.errors).toEqual([
       {
         id: "zero-division",
@@ -260,8 +263,10 @@ describe("buildBundle", () => {
     const bundle = buildBundle(
       writeTree(
         minimalTree({
+          "stage-1/stage.yaml":
+            "id: s1\ntitle: { vi: Khởi động }\ntopics: [01-a]\nevolution: { questions: 0, ai: 0, code: 0 }\n",
           "stage-1/01-a/topic.yaml":
-            "id: s1.a\ntitle: { vi: Chủ đề A }\nlessons: [01-x.md]\nreviews:\n  - { id: s1.a.r1, after: s1.a.l1 }\n",
+            "id: s1.a\ntitle: { vi: Chủ đề A }\nlessons: [01-x.md]\nreviews:\n  - { id: s1.a.r1, after: s1.a.l1 }\ntest: { questions: 1, code: 0 }\n",
           "stage-1/01-a/concepts.yaml": concepts,
           "stage-1/01-a/questions.yaml": questions,
           "stage-1/01-a/practice.yaml": practice,
@@ -306,8 +311,45 @@ describe("buildBundle", () => {
 
   test("warns about concepts without a card, a tip or practice at every level", () => {
     const bundle = buildBundle(writeTree(minimalTree()));
-    expect(contentWarnings(bundle)).toEqual([
+    expect(contentWarnings(bundle)).toContain(
       "print-call: thiếu thẻ hiểu lầm, gợi ý cho phụ huynh, bài luyện level1, bài luyện level2, bài luyện level3",
+    );
+  });
+
+  test("warns when a bank is too small for its tests (spec 3.9 rule 9)", () => {
+    const bundle = buildBundle(writeTree(minimalTree()));
+    expect(contentWarnings(bundle).slice(1)).toEqual([
+      "s1: ngân hàng có 1 câu, cần ít nhất 30 câu cho đề tiến hóa",
+      "s1: có 0 câu AI, đề tiến hóa cần 3",
+      "s1: có 0 bài code test_eligible, đề tiến hóa cần 3",
+      "s1.a: có 1 câu, kiểm tra chủ đề cần 8",
+      "s1.a: có 0 bài code test_eligible, kiểm tra chủ đề cần 2",
+    ]);
+  });
+
+  test("reads test configs and the AI flag, and reports a test larger than its AI share allows", () => {
+    const bundle = buildBundle(
+      writeTree(
+        minimalTree({
+          "stage-1/stage.yaml": "id: s1\ntitle: { vi: K }\ntopics: [01-a]\nevolution: { questions: 4, ai: 1, code: 1 }\n",
+          "stage-1/01-a/topic.yaml": "id: s1.a\ntitle: { vi: A }\nlessons: [01-x.md]\ntest: { questions: 3, code: 1 }\n",
+          "stage-1/01-a/concepts.yaml": "concepts:\n  - id: print-call\n    name: { vi: P }\n    ai: true\n",
+        }),
+      ),
+    );
+    expect(bundle.stages[0]!.evolution).toEqual({ questions: 4, ai: 1, code: 1 });
+    expect(bundle.stages[0]!.topics[0]!.test).toEqual({ questions: 3, code: 1 });
+    expect(bundle.stages[0]!.topics[0]!.concepts[0]!.ai).toBe(true);
+    const badStage = "id: s1\ntitle: { vi: K }\ntopics: [01-a]\nevolution: { questions: 2, ai: 3, code: 0 }\n";
+    expect(problemsOf(minimalTree({ "stage-1/stage.yaml": badStage }))).toEqual([
+      expect.stringContaining("Số câu AI không được lớn hơn số câu hỏi"),
+    ]);
+  });
+
+  test("reports an item whose ID is a test node ID", () => {
+    const questions = minimalTree()["stage-1/01-a/questions.yaml"]!.replace("id: s1.a.b1", "id: s1.a.test");
+    expect(problemsOf(minimalTree({ "stage-1/01-a/questions.yaml": questions }))).toEqual([
+      'ID trùng "s1.a.test": kiểm tra chủ đề và câu hỏi',
     ]);
   });
 

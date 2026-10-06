@@ -164,8 +164,24 @@ const choiceQuestionSchema = z
     }
   });
 
+const countSchema = z.number().int().min(0);
+
+/** Spec 5.11 defaults: 15 questions (3 about AI) and 3 code exercises. */
+export const DEFAULT_EVOLUTION = { questions: 15, ai: 3, code: 3 } as const;
+/** Maintainer decision (2026-10-06): 8 questions and 2 code exercises. */
+export const DEFAULT_TOPIC_TEST = { questions: 8, code: 2 } as const;
+
 export const stageFileSchema = z
-  .object({ id: idSchema, title: localizedSchema, topics: z.array(z.string().min(1)).min(1) })
+  .object({
+    id: idSchema,
+    title: localizedSchema,
+    topics: z.array(z.string().min(1)).min(1),
+    evolution: z
+      .object({ questions: countSchema, ai: countSchema, code: countSchema })
+      .strict()
+      .refine((e) => e.ai <= e.questions, { message: "Số câu AI không được lớn hơn số câu hỏi" })
+      .default({ ...DEFAULT_EVOLUTION }),
+  })
   .strict();
 
 export const topicFileSchema = z
@@ -174,6 +190,7 @@ export const topicFileSchema = z
     title: localizedSchema,
     lessons: z.array(z.string().min(1)).min(1),
     reviews: z.array(z.object({ id: idSchema, after: idSchema }).strict()).default([]),
+    test: z.object({ questions: countSchema, code: countSchema }).strict().default({ ...DEFAULT_TOPIC_TEST }),
   })
   .strict();
 
@@ -181,6 +198,7 @@ const conceptSchema = z
   .object({
     id: idSchema,
     name: localizedSchema,
+    ai: z.boolean().default(false),
     misconception_card: z.string().min(1).optional(),
     parent_tip: z.string().min(1).optional(),
     practice: z
@@ -356,6 +374,7 @@ export function toConcept(raw: z.infer<typeof conceptSchema>): Concept {
   return {
     id: raw.id,
     name: toLocalized(raw.name),
+    ai: raw.ai,
     misconceptionCard: raw.misconception_card ?? null,
     misconceptionHtml:
       raw.misconception_card === undefined ? null : (marked.parse(raw.misconception_card, { async: false }) as string),

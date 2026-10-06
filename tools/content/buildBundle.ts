@@ -96,7 +96,7 @@ function buildStage(c: Collector, dir: string): Stage | undefined {
   const raw = c.parse(stageFileSchema, c.readYaml(file), file);
   if (!raw) return undefined;
   const topics = raw.topics.map((name) => buildTopic(c, `${dir}/${name}`)).filter((t): t is Topic => t !== undefined);
-  return { id: raw.id, title: toLocalized(raw.title), topics };
+  return { id: raw.id, title: toLocalized(raw.title), topics, evolution: raw.evolution };
 }
 
 function buildTopic(c: Collector, dir: string): Topic | undefined {
@@ -114,6 +114,7 @@ function buildTopic(c: Collector, dir: string): Topic | undefined {
     questions: buildQuestions(c, `${dir}/questions.yaml`),
     reviews: raw.reviews,
     practice: buildPractice(c, `${dir}/practice.yaml`),
+    test: raw.test,
   };
 }
 

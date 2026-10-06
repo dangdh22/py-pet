@@ -1,4 +1,35 @@
+import { allConcepts, topicQuestions, topicTestCode } from "../../src/content/lookup";
 import type { ContentBundle } from "../../src/content/types";
+
+/**
+ * Spec 3.9 rule 9 and the test configs: a stage's bank holds at least twice the evolution test's questions, with
+ * enough AI questions and test-eligible code; a topic has enough items for its test. Short banks make shorter papers
+ * (maintainer decision 2026-10-06), so these are warnings until the content of M5.
+ */
+function testWarnings(bundle: ContentBundle): string[] {
+  const warnings: string[] = [];
+  const aiConcepts = new Set(allConcepts(bundle).filter((concept) => concept.ai).map((concept) => concept.id));
+  for (const stage of bundle.stages) {
+    const questions = stage.topics.flatMap(topicQuestions);
+    const ai = questions.filter((q) => q.concepts.some((id) => aiConcepts.has(id))).length;
+    const code = stage.topics.flatMap(topicTestCode).length;
+    const { evolution } = stage;
+    if (questions.length < 2 * evolution.questions) {
+      warnings.push(`${stage.id}: ngân hàng có ${questions.length} câu, cần ít nhất ${2 * evolution.questions} câu cho đề tiến hóa`);
+    }
+    if (ai < evolution.ai) warnings.push(`${stage.id}: có ${ai} câu AI, đề tiến hóa cần ${evolution.ai}`);
+    if (code < evolution.code) warnings.push(`${stage.id}: có ${code} bài code test_eligible, đề tiến hóa cần ${evolution.code}`);
+    for (const topic of stage.topics) {
+      const topicQ = topicQuestions(topic).length;
+      const topicCode = topicTestCode(topic).length;
+      if (topicQ < topic.test.questions) warnings.push(`${topic.id}: có ${topicQ} câu, kiểm tra chủ đề cần ${topic.test.questions}`);
+      if (topicCode < topic.test.code) {
+        warnings.push(`${topic.id}: có ${topicCode} bài code test_eligible, kiểm tra chủ đề cần ${topic.test.code}`);
+      }
+    }
+  }
+  return warnings;
+}
 
 /**
  * Spec 3.9 rule 8: every concept has a misconception card, a parent tip and practice at the 3 levels. The content
@@ -15,5 +46,5 @@ export function contentWarnings(bundle: ContentBundle): string[] {
     }
     if (missing.length > 0) warnings.push(`${concept.id}: thiếu ${missing.join(", ")}`);
   }
-  return warnings;
+  return [...warnings, ...testWarnings(bundle)];
 }

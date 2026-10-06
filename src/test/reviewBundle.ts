@@ -76,6 +76,7 @@ function concept(id: string, practice: Concept["practice"]): Concept {
   return {
     id,
     name: { vi: `Khái niệm ${id}`, en: `Concept ${id}` },
+    ai: false,
     misconceptionCard: `Hiểu lầm về **${id}**.`,
     misconceptionHtml: `<p>Hiểu lầm về <strong>${id}</strong>.</p>`,
     parentTip: null,
@@ -112,8 +113,10 @@ export function reviewBundle(): ContentBundle {
             ],
             reviews: [{ id: "r.r1", after: "r.l2" }],
             practice: [reviewParsons, reviewFill],
+            test: { questions: 0, code: 0 },
           },
         ],
+        evolution: { questions: 0, ai: 0, code: 0 },
       },
     ],
     errors: fixtureErrors,

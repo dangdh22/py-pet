@@ -36,6 +36,7 @@ concepts:
     practice: { level1: [s1.lam-quen.b8, s1.lam-quen.b6, s1.lam-quen.l4.q1], level3: [s1.lam-quen.l4.ex1] }
   - id: ai-basics
     name: { vi: "AI là gì", en: "What AI is" }
+    ai: true
     misconception_card: |
       AI không phải phép thuật. AI là chương trình máy tính học từ rất nhiều ví dụ để làm những việc giống con người, như nhận ra khuôn mặt hay hiểu giọng nói.
     parent_tip: |

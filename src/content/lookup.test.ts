@@ -36,8 +36,18 @@ const bundle: ContentBundle = {
       id: "s1",
       title: { vi: "Giai đoạn 1" },
       topics: [
-        { id: "a", title: { vi: "A" }, lessons: [lesson1, lesson2], concepts: [], questions: [question], reviews: [], practice: [] },
+        {
+          id: "a",
+          title: { vi: "A" },
+          lessons: [lesson1, lesson2],
+          concepts: [],
+          questions: [question],
+          reviews: [],
+          practice: [],
+          test: { questions: 0, code: 0 },
+        },
       ],
+      evolution: { questions: 0, ai: 0, code: 0 },
     },
   ],
   errors: [],
@@ -60,6 +70,7 @@ test("findItem and findConcept look in lessons, banks and practice files", () =>
   const concept = {
     id: "c1",
     name: { vi: "K" },
+    ai: false,
     misconceptionCard: null,
     misconceptionHtml: null,
     parentTip: null,

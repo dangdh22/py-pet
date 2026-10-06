@@ -1,3 +1,4 @@
+import { evolutionTestId, topicTestId } from "../../src/content/lookup";
 import { isChoiceQuestion, type ContentBundle, type Exercise } from "../../src/content/types";
 
 /** The item types allowed at each ladder level (spec 5.9). */
@@ -23,8 +24,10 @@ export function checkReferences(bundle: ContentBundle): string[] {
 
   for (const stage of bundle.stages) {
     claim(stage.id, "giai đoạn");
+    claim(evolutionTestId(stage), "kiểm tra tiến hóa");
     for (const topic of stage.topics) {
       claim(topic.id, "chủ đề");
+      claim(topicTestId(topic), "kiểm tra chủ đề");
       for (const concept of topic.concepts) {
         if (conceptIds.has(concept.id)) problems.push(`Khái niệm trùng "${concept.id}"`);
         conceptIds.add(concept.id);
