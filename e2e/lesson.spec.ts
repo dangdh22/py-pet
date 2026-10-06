@@ -12,7 +12,7 @@ async function startApp(page: Page) {
 async function openFirstExercise(page: Page) {
   await startApp(page);
   await expect(page.getByText("Robo sẵn sàng")).toBeVisible({ timeout: 60_000 });
-  await page.getByRole("link", { name: "Chương trình là gì?" }).click();
+  await page.getByRole("link", { name: "Học tiếp" }).click();
   await page.getByRole("button", { name: "Tiếp" }).click();
   await page.getByRole("button", { name: "Tiếp" }).click();
   await expect(page.getByText("Bài tập 1/2")).toBeVisible();
@@ -28,7 +28,7 @@ async function typeCode(page: Page, code: string) {
 test("runs an example on a card with real Pyodide", async ({ page }) => {
   await startApp(page);
   await expect(page.getByText("Robo sẵn sàng")).toBeVisible({ timeout: 60_000 });
-  await page.getByRole("link", { name: "Chương trình là gì?" }).click();
+  await page.getByRole("link", { name: "Học tiếp" }).click();
   await page.getByRole("button", { name: "Chạy thử" }).click();
   await expect(page.getByRole("region", { name: "Kết quả" })).toContainText("Xin chào, mình là Robo!");
 });

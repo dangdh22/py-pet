@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 
-export type RobotMood = "happy" | "neutral" | "sad" | "thinking";
+export type RobotMood = "happy" | "neutral" | "sad" | "thinking" | "sleepy" | "drained";
 
 const EYES: Record<RobotMood, ReactNode> = {
   happy: <path d="M20 21 q3 -5 6 0 M30 21 q3 -5 6 0" stroke="#6ff" strokeWidth="2" fill="none" />,
@@ -15,6 +15,13 @@ const EYES: Record<RobotMood, ReactNode> = {
     <>
       <circle cx="23" cy="20" r="2.5" fill="#6ff" />
       <path d="M30 20 h6" stroke="#6ff" strokeWidth="2" />
+    </>
+  ),
+  sleepy: <path d="M20 21 h6 M30 21 h6" stroke="#6ff" strokeWidth="2" />,
+  drained: (
+    <>
+      <circle cx="23" cy="20" r="2.5" fill="#4a5578" />
+      <circle cx="33" cy="20" r="2.5" fill="#4a5578" />
     </>
   ),
 };

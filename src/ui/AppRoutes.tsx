@@ -4,8 +4,8 @@ import { Banners } from "./Banners";
 import { useContent } from "./contexts";
 import { ErrorBoundary } from "./ErrorBoundary";
 import { Header } from "./Header";
-import { HomeScreen } from "./HomeScreen";
 import { LessonScreen } from "./LessonScreen";
+import { RoomScreen } from "./RoomScreen";
 import { routeToHash, useHashRoute } from "./routing";
 
 export function AppRoutes() {
@@ -29,7 +29,7 @@ export function AppRoutes() {
       </main>
     );
   } else {
-    screen = <HomeScreen />;
+    screen = <RoomScreen />;
   }
 
   return (

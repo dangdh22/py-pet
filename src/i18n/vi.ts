@@ -9,8 +9,6 @@ export const vi = {
   "runner.failed": "Robo chưa khởi động được.",
   "runner.retry": "Thử lại",
   "runner.reloadHint": "Nếu vẫn lỗi, con tải lại trang nhé.",
-  "home.title": "Bài học",
-  "home.done": "Đã xong",
   "lesson.cardOf": "Thẻ {current}/{total}",
   "lesson.exerciseOf": "Bài tập {current}/{total}",
   "lesson.next": "Tiếp",

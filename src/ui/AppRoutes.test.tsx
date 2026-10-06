@@ -27,20 +27,22 @@ function makeClient() {
 }
 
 describe("AppRoutes", () => {
-  test("lists the lessons and opens one", async () => {
+  test("the room opens the next lesson", async () => {
     await renderWithGame(<AppRoutes />);
-    expect(screen.getByText("Giai đoạn thử")).toBeInTheDocument();
-    await userEvent.click(screen.getByRole("link", { name: "Bài thử" }));
+    expect(screen.getByRole("heading", { name: "Phòng của Robo" })).toBeInTheDocument();
+    await userEvent.click(screen.getByRole("link", { name: "Học tiếp" }));
     expect(await screen.findByText("Thẻ 1/2")).toBeInTheDocument();
   });
 
-  test("a finished lesson is saved and shown as done", async () => {
-    const { store } = await renderWithGame(<AppRoutes />);
-    await userEvent.click(screen.getByRole("link", { name: "Bài thử 2" }));
+  test("a finished lesson is saved and counted in today's goal", async () => {
+    const state = initialGameState(TODAY);
+    state.progress.completedLessons = ["t.l1"];
+    const { store } = await renderWithGame(<AppRoutes />, { state });
+    await userEvent.click(screen.getByRole("link", { name: "Học tiếp" }));
     await userEvent.click(await screen.findByRole("button", { name: "Hoàn thành" }));
     await userEvent.click(screen.getByRole("button", { name: "Về danh sách bài" }));
-    expect(await screen.findByText("Đã xong")).toBeInTheDocument();
-    expect((await store.loadActive())?.state.progress.completedLessons).toEqual(["t.l2"]);
+    expect(await screen.findByText("Mục tiêu hôm nay: 1/2")).toBeInTheDocument();
+    expect((await store.loadActive())?.state.progress.completedLessons).toEqual(["t.l1", "t.l2"]);
   });
 
   test("shows a message for an unknown or malformed lesson", async () => {
@@ -81,7 +83,7 @@ describe("App", () => {
     state.progress.completedLessons = ["t.l1"];
     await store.createProfile(testProfile(), state);
     render(<App bundle={testBundle()} runnerClient={makeClient().client} store={store} clock={() => FIXED_NOW} />);
-    expect(await screen.findByText("Đã xong")).toBeInTheDocument();
+    expect(await screen.findByRole("heading", { name: "Phòng của Robo" })).toBeInTheDocument();
   });
 
   test("a failed profile read shows an error and never the onboarding screen", async () => {

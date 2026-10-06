@@ -37,6 +37,12 @@ describe("Robot", () => {
     render(<Robot mood="happy" />);
     expect(screen.getByRole("img", { name: "Robo" })).toHaveAttribute("data-mood", "happy");
   });
+
+  test("has sleepy and drained moods", () => {
+    render(<Robot mood="sleepy" />);
+    render(<Robot mood="drained" />);
+    expect(screen.getAllByRole("img", { name: "Robo" }).map((el) => el.getAttribute("data-mood"))).toEqual(["sleepy", "drained"]);
+  });
 });
 
 describe("RobotBubble", () => {
