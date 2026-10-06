@@ -325,3 +325,20 @@ describe("tests and evolution", () => {
     expect(attempts.map((attempt) => attempt.passed)).toEqual([false, true]);
   });
 });
+
+describe("M4a routes", () => {
+  test.each([
+    ["#/shop", "Cửa hàng"],
+    ["#/achievements", "Sổ thành tích"],
+  ])("%s opens its screen", async (hash, heading) => {
+    window.location.hash = hash;
+    await renderWithGame(<AppRoutes />);
+    expect(screen.getByRole("heading", { name: heading })).toBeInTheDocument();
+  });
+
+  test("an unknown practice from the parents says so", async () => {
+    window.location.hash = "#/assigned/nope";
+    await renderWithGame(<AppRoutes />);
+    expect(screen.getByText("Không tìm thấy bài luyện này.")).toBeInTheDocument();
+  });
+});

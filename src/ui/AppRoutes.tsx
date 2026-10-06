@@ -3,6 +3,8 @@ import { evolutionTestId, findLesson, findStage, findTopic, topicTestId } from "
 import type { Stage } from "../content/types";
 import { findNode, nodeStatuses } from "../game/path";
 import { useLang } from "../i18n/LangProvider";
+import { AchievementsScreen } from "./AchievementsScreen";
+import { AssignedPracticeScreen } from "./AssignedPracticeScreen";
 import { BackupScreen } from "./BackupScreen";
 import { Banners } from "./Banners";
 import { useContent } from "./contexts";
@@ -16,8 +18,21 @@ import { PracticeScreen } from "./PracticeScreen";
 import { RemedialScreen } from "./RemedialScreen";
 import { ReviewScreen } from "./ReviewScreen";
 import { RoomScreen } from "./RoomScreen";
-import { routeToHash, useHashRoute } from "./routing";
+import { routeToHash, useHashRoute, type Route } from "./routing";
+import { ShopScreen } from "./ShopScreen";
 import { TopicTestScreen } from "./TopicTestScreen";
+import { useStudyTimer } from "./useStudyTimer";
+
+/** The screens whose time counts as study time (spec 5.13). */
+const STUDY_ROUTES: ReadonlySet<Route["name"]> = new Set([
+  "lesson",
+  "review",
+  "practice",
+  "topicTest",
+  "evolution",
+  "remedial",
+  "assigned",
+]);
 
 export function AppRoutes() {
   const [route, navigate] = useHashRoute();
@@ -25,10 +40,17 @@ export function AppRoutes() {
   const { t } = useLang();
 
   const game = useGame();
+  useStudyTimer(STUDY_ROUTES.has(route.name));
   const goHome = () => navigate({ name: "home" });
   let screen;
   if (route.name === "map") {
     screen = <MapScreen />;
+  } else if (route.name === "shop") {
+    screen = <ShopScreen />;
+  } else if (route.name === "achievements") {
+    screen = <AchievementsScreen />;
+  } else if (route.name === "assigned") {
+    screen = <AssignedPracticeScreen key={route.id} id={route.id} onExit={goHome} />;
   } else if (route.name === "backup") {
     screen = <BackupScreen />;
   } else if (route.name === "lesson") {
