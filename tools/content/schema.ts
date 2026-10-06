@@ -64,7 +64,7 @@ const codeExerciseSchema = z
 
 const choiceSchema = z
   .object({
-    text: z.string().optional(),
+    text: z.string().min(1).optional(),
     vi: z.string().optional(),
     en: z.string().optional(),
     correct: z.boolean().default(false),

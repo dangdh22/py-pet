@@ -35,7 +35,7 @@ function stripStringsAndComments(code: string): string {
 
 /** A known or used name that looks like `name`: same letters in another case, or a small typo. */
 export function findSimilarName(name: string, code: string): string | null {
-  const used = stripStringsAndComments(code).match(/[A-Za-z_][A-Za-z0-9_]*/g) ?? [];
+  const used = stripStringsAndComments(code).match(/[\p{L}_][\p{L}\p{N}_]*/gu) ?? [];
   const candidates = new Set<string>([...KNOWN_NAMES, ...used]);
   candidates.delete(name);
   const lower = name.toLowerCase();

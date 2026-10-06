@@ -14,7 +14,7 @@ export function Header() {
         {runner.status === "ready" && t("runner.ready")}
         {runner.status === "failed" && (
           <>
-            {t("runner.failed")} <button onClick={runner.retry}>{t("runner.retry")}</button>
+            {t("runner.failed")} <button onClick={runner.retry}>{t("runner.retry")}</button> <span>{t("runner.reloadHint")}</span>
           </>
         )}
       </span>

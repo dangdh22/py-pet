@@ -33,6 +33,13 @@
     en: "Line {line}: the indentation does not match the lines above. Use exactly 4 spaces for each level."
   sample: "if True:\n        print(1)\n    print(2)"
 
+- id: tab-error
+  match: { type: TabError }
+  explain:
+    vi: "Dòng {line}: code trộn lẫn phím Tab và dấu cách khi thụt lề. Hãy xóa phần thụt lề và gõ lại bằng 4 dấu cách."
+    en: "Line {line}: the code mixes Tab and spaces for indentation. Delete the indentation and type 4 spaces again."
+  sample: "if True:\n        print(1)\n\tprint(2)"
+
 - id: smart-quote
   match: { type: SyntaxError, message: "^invalid character '(?<char>.)' \\(U\\+(?<code>[0-9A-F]+)\\)$" }
   misconception: string-quotes
@@ -103,7 +110,7 @@
   sample: "class = 1"
 
 - id: name-similar
-  match: { type: NameError, message: "^name '(?<name>\\w+)' is not defined$", check: similar-name }
+  match: { type: NameError, message: "^name '(?<name>[^']+)' is not defined$", check: similar-name }
   misconception: case-sensitive
   explain:
     vi: "Dòng {line}: Python không biết \"{name}\" là gì. Có phải con muốn viết \"{suggestion}\" không?"
@@ -114,7 +121,7 @@
   sample: "Print(\"Robo\")"
 
 - id: name-undefined
-  match: { type: NameError, message: "^name '(?<name>\\w+)' is not defined$" }
+  match: { type: NameError, message: "^name '(?<name>[^']+)' is not defined$" }
   misconception: string-quotes
   explain:
     vi: "Dòng {line}: Python không biết \"{name}\" là gì. Nếu là chữ cần in ra, hãy đặt trong dấu nháy: \"{name}\". Nếu là biến, con cần gán giá trị cho nó trước khi dùng."

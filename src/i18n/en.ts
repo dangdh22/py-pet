@@ -10,6 +10,7 @@ export const en: Record<MessageKey, string> = {
   "runner.ready": "Robo is ready",
   "runner.failed": "Robo could not start.",
   "runner.retry": "Try again",
+  "runner.reloadHint": "If it still fails, reload the page.",
   "home.title": "Lessons",
   "home.done": "Done",
   "lesson.cardOf": "Card {current}/{total}",

@@ -123,6 +123,30 @@ describe("RunnerClient", () => {
     expect(client.status).toBe("ready");
   });
 
+  test("a run-failed message rejects the run with RunnerCrashError and keeps the worker", async () => {
+    const { client, workers, current } = setup();
+    current().emit({ type: "ready" });
+    const pending = client.run("print(1)", "");
+    await flush();
+    const request = current().lastRun()!;
+    current().emit({ type: "run-failed", id: request.id, message: "boom" });
+    await expect(pending).rejects.toBeInstanceOf(RunnerCrashError);
+    expect(workers).toHaveLength(1);
+    expect(client.status).toBe("ready");
+    const next = client.run("print(2)", "");
+    await flush();
+    expect(current().lastRun()).toMatchObject({ code: "print(2)" });
+    current().emit({ type: "result", id: current().lastRun()!.id, result: ok("2\n") });
+    await expect(next).resolves.toEqual(ok("2\n"));
+  });
+
+  test("retry while loading does nothing", () => {
+    const { client, workers } = setup();
+    client.retry();
+    expect(workers).toHaveLength(1);
+    expect(workers[0]!.terminated).toBe(false);
+  });
+
   describe("timeouts", () => {
     beforeEach(() => {
       vi.useFakeTimers();

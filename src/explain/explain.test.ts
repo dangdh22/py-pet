@@ -24,7 +24,7 @@ function error(type: string, message = "", line: number | null = 1, lineText = "
   return { type, message, line, column: null, lineText };
 }
 
-const NAME_MESSAGE = "^name '(?<name>\\w+)' is not defined$";
+const NAME_MESSAGE = "^name '(?<name>[^']+)' is not defined$";
 const entries: ErrorEntry[] = [
   entry("name-similar", "NameError", {
     match: { type: "NameError", message: NAME_MESSAGE, check: "similar-name" },
@@ -58,6 +58,7 @@ describe("checks", () => {
     expect(findSimilarName("Print", "Print('hi')")).toBe("print");
     expect(findSimilarName("prnt", "prnt(1)")).toBe("print");
     expect(findSimilarName("tuoii", "tuoi = 11\nprint(tuoii)")).toBe("tuoi");
+    expect(findSimilarName("tênn", "tên = 1\nprint(tênn)")).toBe("tên");
   });
 
   test("findSimilarName ignores far names, other first letters and words inside strings", () => {
@@ -72,6 +73,12 @@ describe("matchError", () => {
     const match = matchError(entries, error("NameError", "name 'Print' is not defined", 3), "Print('hi')");
     expect(match?.entry.id).toBe("name-similar");
     expect(match?.vars).toMatchObject({ line: "3", name: "Print", suggestion: "print" });
+  });
+
+  test("captures a Vietnamese variable name", () => {
+    const match = matchError(entries, error("NameError", "name 'tên' is not defined", 2), "print(tên)");
+    expect(match?.entry.id).toBe("name-undefined");
+    expect(match?.vars.name).toBe("tên");
   });
 
   test("falls through when a check fails", () => {

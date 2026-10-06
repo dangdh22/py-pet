@@ -18,6 +18,7 @@ export function CodeExample({ code }: { code: string }) {
   async function handleRun() {
     setRunning(true);
     setFeedback(null);
+    setStdout(null);
     try {
       const result = await runner.run(code, "");
       setStdout(result.stdout);

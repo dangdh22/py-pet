@@ -43,6 +43,21 @@ describe("CardView", () => {
     expect(await screen.findByText("Robo bị trục trặc rồi. Con tải lại trang nhé.")).toBeInTheDocument();
   });
 
+  test("a crash on a second run removes the old output", async () => {
+    let calls = 0;
+    const runner = fakeRunner(() => {
+      calls += 1;
+      if (calls === 1) return okResult("Xin chào\n");
+      throw new RunnerCrashError("worker crashed");
+    });
+    renderWithApp(<CardView card={card} />, { runner });
+    await userEvent.click(screen.getByRole("button", { name: "Chạy thử" }));
+    expect(await screen.findByRole("region", { name: "Kết quả" })).toBeInTheDocument();
+    await userEvent.click(screen.getByRole("button", { name: "Chạy thử" }));
+    expect(await screen.findByText("Robo bị trục trặc rồi. Con tải lại trang nhé.")).toBeInTheDocument();
+    expect(screen.queryByRole("region", { name: "Kết quả" })).not.toBeInTheDocument();
+  });
+
   test("disables Run until the runner is ready", () => {
     renderWithApp(<CardView card={card} />, { runner: fakeRunner(() => okResult(""), "loading") });
     expect(screen.getByRole("button", { name: "Chạy thử" })).toBeDisabled();

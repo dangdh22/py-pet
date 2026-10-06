@@ -23,7 +23,7 @@ beforeAll(async () => {
 
 describe("error dictionary on Pyodide", () => {
   test("has the expected number of entries", () => {
-    expect(bundle.errors.length).toBe(27);
+    expect(bundle.errors.length).toBe(28);
   });
 
   for (const entry of bundle.errors) {
@@ -39,6 +39,14 @@ describe("error dictionary on Pyodide", () => {
       expect(matchError(bundle.errors, problem!, entry.sample)?.entry.id).toBe(entry.id);
     });
   }
+
+  test("NameError with a Vietnamese name is explained", () => {
+    const code = "print(tên)";
+    const problem = problemFromOutcome(run(code, ""), false);
+    const match = matchError(bundle.errors, problem!, code);
+    expect(match?.entry.id).toBe("name-undefined");
+    expect(match?.vars.name).toBe("tên");
+  });
 
   test("smart-quote: real curly quotes pasted from Word are recognized (added test)", () => {
     const code = "print(“Xin chào”)";

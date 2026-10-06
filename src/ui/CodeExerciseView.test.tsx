@@ -33,6 +33,17 @@ describe("CodeExerciseView", () => {
     expect(editor()).toHaveValue("# code");
   });
 
+  test("the example box shows the output without the trailing newline", () => {
+    const exercise = {
+      ...fixtureCodeExercise,
+      tests: [{ input: "", output: "Hi\n", hidden: false }],
+    };
+    renderWithApp(<CodeExerciseView exercise={exercise} onComplete={() => {}} />);
+    const pre = screen.getByText("Kết quả mong đợi").nextElementSibling;
+    expect(pre?.tagName).toBe("PRE");
+    expect(pre?.textContent).toBe("Hi");
+  });
+
   test("Run sends the code and the input, then shows the output", async () => {
     const runner = fakeRunner(() => okResult("Hi\n"));
     renderWithApp(<CodeExerciseView exercise={fixtureCodeExercise} onComplete={() => {}} />, { runner });

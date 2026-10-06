@@ -1,4 +1,4 @@
-import { createContext, useContext, useMemo, useState, type ReactNode } from "react";
+import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 import type { Lang, QuestionLang } from "./lang";
 import { translate, type MessageVars } from "./translate";
 import type { MessageKey } from "./vi";
@@ -16,6 +16,9 @@ const LangContext = createContext<LangState | null>(null);
 export function LangProvider({ initialLang = "vi", children }: { initialLang?: Lang; children: ReactNode }) {
   const [uiLang, setUiLang] = useState<Lang>(initialLang);
   const [questionLang, setQuestionLang] = useState<QuestionLang>("vi");
+  useEffect(() => {
+    if (typeof document !== "undefined") document.documentElement.lang = uiLang;
+  }, [uiLang]);
   const value = useMemo<LangState>(
     () => ({
       uiLang,

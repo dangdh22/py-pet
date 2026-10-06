@@ -20,6 +20,7 @@ describe("Header", () => {
     expect(screen.getByText("Robo chưa khởi động được.")).toBeInTheDocument();
     await userEvent.click(screen.getByRole("button", { name: "Thử lại" }));
     expect(runner.retry).toHaveBeenCalledOnce();
+    expect(screen.getByText("Nếu vẫn lỗi, con tải lại trang nhé.")).toBeInTheDocument();
   });
 
   test("switches the interface language", async () => {

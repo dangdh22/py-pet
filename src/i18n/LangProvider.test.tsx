@@ -27,6 +27,7 @@ test("switches the interface language", async () => {
   await userEvent.click(screen.getByRole("button", { name: "to-en" }));
   expect(screen.getByText("Next")).toBeInTheDocument();
   expect(screen.getByText("ui:en")).toBeInTheDocument();
+  expect(document.documentElement.lang).toBe("en");
 });
 
 test("starts with the given language", () => {

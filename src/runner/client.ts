@@ -64,6 +64,7 @@ export class RunnerClient {
   }
 
   retry(): void {
+    if (this.currentStatus !== "failed") return;
     this.crashes = 0;
     this.restart();
   }

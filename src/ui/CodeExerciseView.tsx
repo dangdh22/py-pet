@@ -113,11 +113,11 @@ export function CodeExerciseView({
             {example.input !== "" && (
               <>
                 <span>{t("judge.input")}</span>
-                <pre>{example.input}</pre>
+                <pre>{example.input.trimEnd()}</pre>
               </>
             )}
             <span>{t("exercise.expectedOutput")}</span>
-            <pre>{example.output}</pre>
+            <pre>{example.output.trimEnd()}</pre>
           </div>
         )}
         {exercise.hints.slice(0, hintsShown).map((hint, i) => (

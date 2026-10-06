@@ -128,6 +128,12 @@ describe("buildBundle", () => {
     expect(question).toMatchObject({ id: "s1.a.l1.q1", lessons: ["s1.a.l1"], code: "print(1)" });
   });
 
+  test("reports a neutral choice with empty text", () => {
+    const questions = minimalTree()["stage-1/01-a/questions.yaml"]!.replace("{ text: A, correct: true }", '{ text: "", correct: true }');
+    const problems = problemsOf(minimalTree({ "stage-1/01-a/questions.yaml": questions }));
+    expect(problems).not.toEqual([]);
+  });
+
   test("requires English for a test-eligible code exercise", () => {
     const lesson = LESSON.replace("    prompt: { vi: In ra Hi }", "    prompt: { vi: In ra Hi }\n    test_eligible: true");
     const problems = problemsOf(minimalTree({ "stage-1/01-a/01-x.md": lesson }));

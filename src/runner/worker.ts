@@ -30,5 +30,9 @@ scope.onmessage = async (event) => {
     scope.postMessage({ type: "run-failed", id: message.id, message: "Pyodide is not ready" });
     return;
   }
-  scope.postMessage({ type: "result", id: message.id, result: runner(message.code, message.stdin) });
+  try {
+    scope.postMessage({ type: "result", id: message.id, result: runner(message.code, message.stdin) });
+  } catch (error) {
+    scope.postMessage({ type: "run-failed", id: message.id, message: String(error) });
+  }
 };
