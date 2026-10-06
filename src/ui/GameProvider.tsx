@@ -42,6 +42,8 @@ export interface GameApi {
   exportBackup(): Promise<{ fileName: string; text: string }>;
   checkPin(pin: string): Promise<boolean>;
   importBackup(payload: BackupPayload): Promise<void>;
+  /** The encoded automatic backups, newest first. */
+  autoBackups(): Promise<string[]>;
 }
 
 const GameContext = createContext<GameApi | null>(null);
@@ -227,6 +229,8 @@ export function GameProvider({ store, loaded, clock, onReplaced, children }: Gam
     [clock, store, activeSnapshot, onReplaced],
   );
 
+  const autoBackups = useCallback(async () => (await store.readMeta()).autoBackups, [store]);
+
   const today = localDay(clock());
   const reference = meta.lastBackupAt ?? profile.createdAt;
   const needsBackupReminder = daysBetween(localDay(new Date(reference)), today) >= BACKUP_REMINDER_DAYS;
@@ -246,8 +250,9 @@ export function GameProvider({ store, loaded, clock, onReplaced, children }: Gam
       exportBackup,
       checkPin,
       importBackup,
+      autoBackups,
     }),
-    [profile, state, today, store.persistent, writeFailed, meta.lastBackupAt, needsBackupReminder, dispatch, draftFor, saveDraft, exportBackup, checkPin, importBackup],
+    [profile, state, today, store.persistent, writeFailed, meta.lastBackupAt, needsBackupReminder, dispatch, draftFor, saveDraft, exportBackup, checkPin, importBackup, autoBackups],
   );
 
   return (

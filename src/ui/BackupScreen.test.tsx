@@ -61,6 +61,24 @@ describe("BackupScreen", () => {
     expect(screen.queryByLabelText("Chọn file .pypet")).not.toBeInTheDocument();
   });
 
+  test("after the PIN, lists the automatic backups and downloads one", async () => {
+    const text = await encodeBackup({ ...sampleBackupPayload("Bình"), exportedAt: new Date(2026, 9, 5, 9).toISOString() });
+    await renderWithGame(<BackupScreen />, { meta: { pin: await hashPin("1234", 1000), autoBackups: [text] } });
+    expect(screen.queryByText("Bản sao lưu tự động")).not.toBeInTheDocument();
+    await unlock("1234");
+    expect(await screen.findByText("Bản sao lưu tự động")).toBeInTheDocument();
+    expect(await screen.findByText("2026-10-05 — Bình")).toBeInTheDocument();
+    vi.mocked(downloadText).mockClear();
+    await userEvent.click(screen.getByRole("button", { name: "Tải về" }));
+    expect(downloadText).toHaveBeenCalledWith("py-pet-binh-2026-10-05.pypet", text);
+  });
+
+  test("says when there is no automatic backup", async () => {
+    await renderWithGame(<BackupScreen />, { meta: { pin: await hashPin("1234", 1000) } });
+    await unlock("1234");
+    expect(await screen.findByText("Chưa có bản sao lưu tự động.")).toBeInTheDocument();
+  });
+
   test("rejects files that are not backups or come from a newer version", async () => {
     await renderWithGame(<BackupScreen />, { meta: { pin: await hashPin("1234", 1000) } });
     await unlock("1234");
