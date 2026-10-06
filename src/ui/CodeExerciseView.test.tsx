@@ -198,6 +198,52 @@ describe("CodeExerciseView", () => {
     expect(onCodeChange).toHaveBeenLastCalledWith("print(1)2");
   });
 
+  test("starts from the saved stats: hints, solution and failure count", async () => {
+    const onComplete = vi.fn();
+    const onJudged = vi.fn();
+    renderWithApp(
+      <CodeExerciseView
+        exercise={fixtureCodeExercise}
+        initialStats={{ fails: 3, hints: 1, viewedSolution: true }}
+        onJudged={onJudged}
+        onComplete={onComplete}
+      />,
+      { runner: fakeRunner(() => okResult("Hi\n")) },
+    );
+    expect(screen.getByText("Gợi ý 1: Dùng print")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Gợi ý tiếp" })).toBeInTheDocument();
+    expect(screen.getByText("Lời giải mẫu")).toBeInTheDocument();
+    expect(onComplete).toHaveBeenCalledWith("viewed-solution");
+    await submitOnce();
+    expect(onJudged.mock.calls.map(([info]) => [info.failedSubmitsBefore, info.hintsUsed, info.viewedSolution])).toEqual([[3, 1, true]]);
+  });
+
+  test("offers the solution after 3 saved failures", () => {
+    renderWithApp(
+      <CodeExerciseView exercise={fixtureCodeExercise} initialStats={{ fails: 3, hints: 0, viewedSolution: false }} onComplete={() => {}} />,
+    );
+    expect(screen.getByRole("button", { name: "Xem lời giải" })).toBeInTheDocument();
+  });
+
+  test("reports revealed hints and the viewed solution", async () => {
+    const onHint = vi.fn();
+    const onSolutionViewed = vi.fn();
+    renderWithApp(
+      <CodeExerciseView
+        exercise={fixtureCodeExercise}
+        initialStats={{ fails: 3, hints: 0, viewedSolution: false }}
+        onHint={onHint}
+        onSolutionViewed={onSolutionViewed}
+        onComplete={() => {}}
+      />,
+    );
+    await userEvent.click(screen.getByRole("button", { name: "Gợi ý" }));
+    await userEvent.click(screen.getByRole("button", { name: "Gợi ý tiếp" }));
+    expect(onHint).toHaveBeenCalledTimes(2);
+    await userEvent.click(screen.getByRole("button", { name: "Xem lời giải" }));
+    expect(onSolutionViewed).toHaveBeenCalledOnce();
+  });
+
   test("reports every judged submit with the counts before it", async () => {
     const onJudged = vi.fn();
     let stdout = "x\n";

@@ -143,6 +143,68 @@ describe("ExerciseJudged", () => {
   });
 });
 
+describe("exercise stats", () => {
+  const hint: GameEvent = { type: "HintShown", exerciseId: "x" };
+  const solution: GameEvent = { type: "SolutionViewed", exerciseId: "x" };
+
+  test("HintShown and SolutionViewed are stored and do not count as activity", () => {
+    const next = run(initialGameState("2026-10-06"), [
+      ["2026-10-06", hint],
+      ["2026-10-06", hint],
+      ["2026-10-06", solution],
+    ]);
+    expect(next.progress.exerciseStats?.x).toEqual({ fails: 0, hints: 2, viewedSolution: true });
+    expect(next.activity.lastActiveDay).toBeNull();
+    expect(next.pet.xp).toBe(0);
+  });
+
+  test("a rejected submit counts a failure until the exercise is solved", () => {
+    const next = run(initialGameState("2026-10-06"), [
+      ["2026-10-06", solved("x", { accepted: false })],
+      ["2026-10-06", solved("x", { accepted: false })],
+      ["2026-10-06", solved("x", { failedSubmitsBefore: 2 })],
+      ["2026-10-06", solved("x", { accepted: false })],
+    ]);
+    expect(next.progress.exerciseStats?.x?.fails).toBe(2);
+  });
+
+  test("accepted after a stored solution view pays 3 XP and no xu even if the event says first try", () => {
+    const next = run(initialGameState("2026-10-06"), [
+      ["2026-10-06", solution],
+      ["2026-10-06", solved("x")],
+    ]);
+    expect(next.pet.xp).toBe(3);
+    expect(next.wallet.xu).toBe(0);
+  });
+
+  test("accepted after stored failures and hints pays the retry reward", () => {
+    const next = run(initialGameState("2026-10-06"), [
+      ["2026-10-06", hint],
+      ["2026-10-06", solved("x", { accepted: false })],
+      ["2026-10-06", solved("x", { accepted: false })],
+      ["2026-10-06", solved("x", { accepted: false })],
+      ["2026-10-06", solved("x")],
+    ]);
+    expect(next.pet.xp).toBe(10);
+    expect(next.wallet.xu).toBe(5);
+  });
+
+  test("a stored hint removes the no-hint bonus", () => {
+    const next = run(initialGameState("2026-10-06"), [
+      ["2026-10-06", hint],
+      ["2026-10-06", solved("x")],
+    ]);
+    expect(next.pet.xp).toBe(15);
+    expect(next.wallet.xu).toBe(5);
+  });
+
+  test("a saved state without exercise stats still applies", () => {
+    const old = initialGameState("2026-10-06");
+    delete old.progress.exerciseStats;
+    expect(apply(old, solved("x"), at("2026-10-06")).wallet.xu).toBe(8);
+  });
+});
+
 describe("QuestionAnswered and Vui", () => {
   test("only a correct first answer pays 3 XP", () => {
     const state = run(initialGameState("2026-10-06"), [

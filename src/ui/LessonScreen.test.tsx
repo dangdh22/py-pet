@@ -72,3 +72,39 @@ test("a new card starts without the output of the previous card", async () => {
   await userEvent.click(screen.getByRole("button", { name: "Tiếp" }));
   expect(screen.queryByRole("region", { name: "Kết quả" })).not.toBeInTheDocument();
 });
+
+test("a reload keeps the viewed solution, so a later correct submit pays only 3 XP", async () => {
+  const lesson = { ...fixtureLesson, cards: [], exercises: [fixtureLesson.exercises[0]!] };
+  const first = await renderWithGame(<LessonScreen lesson={lesson} onExit={() => {}} />, {
+    runner: fakeRunner(() => okResult("x\n")),
+  });
+  for (let n = 0; n < 3; n += 1) {
+    await userEvent.click(screen.getByRole("button", { name: "Nộp bài" }));
+    await waitFor(() => expect(screen.getByRole("button", { name: "Nộp bài" })).toBeEnabled());
+  }
+  await userEvent.click(screen.getByRole("button", { name: "Gợi ý" }));
+  await userEvent.click(screen.getByRole("button", { name: "Xem lời giải" }));
+  await waitFor(async () =>
+    expect((await first.store.loadActive())?.state.progress.exerciseStats?.["t.l1.ex1"]).toEqual({
+      fails: 3,
+      hints: 1,
+      viewedSolution: true,
+    }),
+  );
+  const saved = (await first.store.loadActive())!.state;
+  first.unmount();
+
+  const second = await renderWithGame(<LessonScreen lesson={lesson} onExit={() => {}} />, {
+    state: saved,
+    runner: fakeRunner(() => okResult("Hi\n")),
+  });
+  expect(screen.getByText("Lời giải mẫu")).toBeInTheDocument();
+  expect(screen.getByText("Gợi ý 1: Dùng print")).toBeInTheDocument();
+  expect(screen.getByRole("button", { name: "Hoàn thành" })).toBeEnabled();
+  await userEvent.click(screen.getByRole("button", { name: "Nộp bài" }));
+  expect(await screen.findByText("Đúng hết 2/2 test!")).toBeInTheDocument();
+  await waitFor(async () => expect((await second.store.loadActive())?.state.progress.solvedExercises).toEqual(["t.l1.ex1"]));
+  const after = (await second.store.loadActive())!.state;
+  expect(after.pet.xp).toBe(3);
+  expect(after.wallet.xu).toBe(0);
+});

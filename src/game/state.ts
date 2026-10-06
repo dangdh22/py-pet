@@ -13,6 +13,13 @@ export interface GameSettings {
   uiLang: Lang;
 }
 
+/** What the child did on an unsolved code exercise; it decides the reward and survives a reload. */
+export interface ExerciseStats {
+  fails: number;
+  hints: number;
+  viewedSolution: boolean;
+}
+
 export interface GameState {
   version: number;
   pet: { stage: number; xp: number; pin: number; vui: number; correctRun: number };
@@ -28,7 +35,13 @@ export interface GameState {
   };
   week: { start: string; lessonsDone: number };
   settings: GameSettings;
-  progress: { completedLessons: string[]; solvedExercises: string[]; answeredQuestions: string[] };
+  progress: {
+    completedLessons: string[];
+    solvedExercises: string[];
+    answeredQuestions: string[];
+    /** Optional: states saved before it existed have no stats. Read it with `?? {}`. */
+    exerciseStats?: Record<string, ExerciseStats>;
+  };
   warnings: { at: string; kind: "clock-rollback" }[];
 }
 

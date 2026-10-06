@@ -64,6 +64,9 @@ export function LessonScreen({ lesson, onExit }: LessonScreenProps) {
         exercise={exercise}
         initialCode={game.draftFor(exercise.id)}
         onCodeChange={(code) => game.saveDraft(exercise.id, code)}
+        initialStats={game.state.progress.exerciseStats?.[exercise.id]}
+        onHint={() => game.dispatch({ type: "HintShown", exerciseId: exercise.id })}
+        onSolutionViewed={() => game.dispatch({ type: "SolutionViewed", exerciseId: exercise.id })}
         onJudged={(info) =>
           game.dispatch(
             {

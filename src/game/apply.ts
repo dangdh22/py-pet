@@ -10,7 +10,7 @@ import {
   XP,
   XU,
 } from "./rewards";
-import { STAT_MAX, WARNING_LIMIT, type GameSettings, type GameState } from "./state";
+import { STAT_MAX, WARNING_LIMIT, type ExerciseStats, type GameSettings, type GameState } from "./state";
 
 export type GameEvent =
   | { type: "DayRollover" }
@@ -24,7 +24,9 @@ export type GameEvent =
       hintsUsed: number;
       viewedSolution: boolean;
     }
-  | { type: "QuestionAnswered"; questionId: string; correct: boolean };
+  | { type: "QuestionAnswered"; questionId: string; correct: boolean }
+  | { type: "HintShown"; exerciseId: string }
+  | { type: "SolutionViewed"; exerciseId: string };
 
 const ACTIVITY_EVENTS: ReadonlySet<GameEvent["type"]> = new Set([
   "LessonCompleted",
@@ -55,6 +57,12 @@ export function apply(state: GameState, event: GameEvent, now: Date): GameState 
       break;
     case "QuestionAnswered":
       answerQuestion(next, event);
+      break;
+    case "HintShown":
+      statsFor(next, event.exerciseId).hints += 1;
+      break;
+    case "SolutionViewed":
+      statsFor(next, event.exerciseId).viewedSolution = true;
       break;
   }
 
@@ -140,26 +148,38 @@ function bumpCorrectRun(s: GameState): void {
   if (s.pet.correctRun % CORRECT_RUN_FOR_VUI === 0) s.pet.vui = Math.min(STAT_MAX, s.pet.vui + 1);
 }
 
+function statsFor(s: GameState, exerciseId: string): ExerciseStats {
+  const all = (s.progress.exerciseStats ??= {});
+  return (all[exerciseId] ??= { fails: 0, hints: 0, viewedSolution: false });
+}
+
 function judgeExercise(s: GameState, e: Extract<GameEvent, { type: "ExerciseJudged" }>): void {
+  const solved = s.progress.solvedExercises.includes(e.exerciseId);
   if (!e.accepted) {
     s.pet.correctRun = 0;
+    if (!solved) statsFor(s, e.exerciseId).fails += 1;
     return;
   }
-  if (s.progress.solvedExercises.includes(e.exerciseId)) return;
+  if (solved) return;
   s.progress.solvedExercises.push(e.exerciseId);
-  if (e.viewedSolution) {
+  // The stored stats survive a reload; the event only knows what the current screen saw.
+  const stored = s.progress.exerciseStats?.[e.exerciseId];
+  const failedSubmitsBefore = Math.max(e.failedSubmitsBefore, stored?.fails ?? 0);
+  const hintsUsed = Math.max(e.hintsUsed, stored?.hints ?? 0);
+  const viewedSolution = e.viewedSolution || (stored?.viewedSolution ?? false);
+  if (viewedSolution) {
     s.pet.xp += XP.codeAfterSolution;
     s.pet.correctRun = 0;
     return;
   }
-  if (e.failedSubmitsBefore === 0) {
+  if (failedSubmitsBefore === 0) {
     s.pet.xp += XP.codeFirstTry;
-    s.wallet.xu += XU.codeFirstSubmit + (e.hintsUsed === 0 ? XU.noHintBonus : 0);
+    s.wallet.xu += XU.codeFirstSubmit + (hintsUsed === 0 ? XU.noHintBonus : 0);
     bumpCorrectRun(s);
     return;
   }
   s.pet.xp += XP.codeAfterRetries;
-  if (e.failedSubmitsBefore >= PERSISTENCE_FAILS) s.wallet.xu += XU.persistenceBonus;
+  if (failedSubmitsBefore >= PERSISTENCE_FAILS) s.wallet.xu += XU.persistenceBonus;
   s.pet.correctRun = 0;
 }
 

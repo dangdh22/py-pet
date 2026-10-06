@@ -1,5 +1,6 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { CodeExercise } from "../content/types";
+import type { ExerciseStats } from "../game/state";
 import { isPseudoError, problemFromOutcome } from "../explain/problem";
 import { errorMisconceptionFrom } from "../explain/providers";
 import { pick } from "../i18n/lang";
@@ -31,12 +32,19 @@ export function CodeExerciseView({
   initialCode,
   onCodeChange,
   onJudged,
+  initialStats,
+  onHint,
+  onSolutionViewed,
 }: {
   exercise: CodeExercise;
   onComplete(outcome: ExerciseOutcome): void;
   initialCode?: string;
   onCodeChange?(code: string): void;
   onJudged?(info: JudgedInfo): void;
+  /** Saved counts from an earlier visit, so a reload does not reset them. */
+  initialStats?: ExerciseStats;
+  onHint?(): void;
+  onSolutionViewed?(): void;
 }) {
   const { t, uiLang } = useLang();
   const runner = useRunner();
@@ -52,9 +60,14 @@ export function CodeExerciseView({
   const [judgeResult, setJudgeResult] = useState<JudgeResult | null>(null);
   const [feedback, setFeedback] = useState<Feedback | null>(null);
   const [errorLine, setErrorLine] = useState<number | null>(null);
-  const [hintsShown, setHintsShown] = useState(0);
-  const [failedSubmits, setFailedSubmits] = useState(0);
-  const [solutionShown, setSolutionShown] = useState(false);
+  const [hintsShown, setHintsShown] = useState(() => Math.min(initialStats?.hints ?? 0, exercise.hints.length));
+  const [failedSubmits, setFailedSubmits] = useState(initialStats?.fails ?? 0);
+  const [solutionShown, setSolutionShown] = useState(initialStats?.viewedSolution ?? false);
+
+  // A solution seen before a reload still counts as this step's outcome. Runs once, on mount.
+  useEffect(() => {
+    if (initialStats?.viewedSolution) onComplete("viewed-solution");
+  }, []);
 
   function reset() {
     setFeedback(null);
@@ -111,8 +124,14 @@ export function CodeExerciseView({
     }
   }
 
+  function showHint() {
+    setHintsShown((n) => n + 1);
+    onHint?.();
+  }
+
   function showSolution() {
     setSolutionShown(true);
+    onSolutionViewed?.();
     onComplete("viewed-solution");
   }
 
@@ -141,7 +160,7 @@ export function CodeExerciseView({
           </p>
         ))}
         {hintsShown < exercise.hints.length && (
-          <button onClick={() => setHintsShown((n) => n + 1)}>{hintsShown === 0 ? t("hint.show") : t("hint.next")}</button>
+          <button onClick={showHint}>{hintsShown === 0 ? t("hint.show") : t("hint.next")}</button>
         )}
         {failedSubmits >= FAILED_SUBMITS_BEFORE_SOLUTION && !solutionShown && (
           <button onClick={showSolution}>{t("solution.show")}</button>
