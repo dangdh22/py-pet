@@ -2,7 +2,7 @@
 import { act, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, test, vi } from "vitest";
-import { initialGameState, type GameState } from "../game/state";
+import { GAME_STATE_VERSION, initialGameState, type GameState } from "../game/state";
 import { RunnerClient } from "../runner/client";
 import { MemoryStore } from "../storage/memoryStore";
 import { FakeWorker } from "../test/fakeWorker";
@@ -152,11 +152,15 @@ describe("App", () => {
     delete old.mastery;
     delete old.reviews;
     delete old.retry;
+    delete old.remedial;
+    delete old.pet.stageStartXp;
     delete old.progress.completedReviews;
+    delete old.progress.topicTests;
+    delete old.progress.evolutionTests;
     await store.createProfile(testProfile(), old);
     render(<App bundle={testBundle()} runnerClient={makeClient().client} store={store} clock={() => FIXED_NOW} />);
     expect(await screen.findByRole("heading", { name: "Phòng của Robo" })).toBeInTheDocument();
-    await waitFor(async () => expect((await store.loadActive())?.state.version).toBe(2));
+    await waitFor(async () => expect((await store.loadActive())?.state.version).toBe(GAME_STATE_VERSION));
   });
 
   test("a profile saved by a newer app is not opened", async () => {

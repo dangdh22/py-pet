@@ -43,6 +43,8 @@ export interface BackupPreview {
 const MIGRATIONS: Record<number, (payload: BackupPayload) => BackupPayload> = {
   // Schema 2 only changed the game state (GameState version 2).
   1: (payload) => ({ ...payload, schemaVersion: 2, meta: { ...payload.meta, schemaVersion: 2 } }),
+  // Schema 3 only changed the game state (GameState version 3).
+  2: (payload) => ({ ...payload, schemaVersion: 3, meta: { ...payload.meta, schemaVersion: 3 } }),
 };
 
 const profileBundleSchema = z.object({

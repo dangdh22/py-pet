@@ -18,7 +18,14 @@ const masterySchema = z.object({
 /** The shape of a saved GameState of the current version. Unknown keys are dropped. */
 export const gameStateSchema: z.ZodType<GameState> = z.object({
   version: z.number().int(),
-  pet: z.object({ stage: z.number().int().min(1), xp: count, pin: stat, vui: stat, correctRun: count }),
+  pet: z.object({
+    stage: z.number().int().min(1),
+    xp: count,
+    stageStartXp: count,
+    pin: stat,
+    vui: stat,
+    correctRun: count,
+  }),
   wallet: z.object({ xu: count }),
   activity: z.object({ lastActiveDay: day.nullable(), decayApplied: count }),
   streak: z.object({
@@ -39,11 +46,33 @@ export const gameStateSchema: z.ZodType<GameState> = z.object({
   mastery: z.record(z.string(), masterySchema),
   reviews: z.record(z.string(), z.object({ box: z.number().int().min(1).max(5), due: day })),
   retry: z.record(z.string(), day),
+  remedial: z.object({ stage: z.number().int().min(1), items: z.array(z.string()) }).nullable(),
   progress: z.object({
     completedLessons: z.array(z.string()),
     solvedExercises: z.array(z.string()),
     answeredQuestions: z.array(z.string()),
     completedReviews: z.array(z.string()),
+    topicTests: z.record(
+      z.string(),
+      z.object({
+        attempts: count,
+        best: z.number().min(0),
+        max: z.number().min(0),
+        passed: z.boolean(),
+        lastItems: z.array(z.string()),
+      }),
+    ),
+    evolutionTests: z.array(
+      z.object({
+        at: z.string(),
+        stage: z.number().int().min(1),
+        score: z.number().min(0),
+        max: z.number().min(0),
+        passed: z.boolean(),
+        items: z.array(z.string()),
+        wrongConcepts: z.array(z.string()),
+      }),
+    ),
     exerciseStats: z
       .record(z.string(), z.object({ fails: count, hints: count, viewedSolution: z.boolean() }))
       .optional(),

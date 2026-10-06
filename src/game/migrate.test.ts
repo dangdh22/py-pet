@@ -2,10 +2,18 @@ import { describe, expect, test } from "vitest";
 import { StateFormatError, upgradeGameState } from "./migrate";
 import { GAME_STATE_VERSION, initialGameState } from "./state";
 
+/** A state as the M3a app saved it (version 2). */
+function versionTwoState(): Record<string, unknown> {
+  const { remedial, ...rest } = initialGameState("2026-10-06");
+  const { topicTests, evolutionTests, ...progress } = rest.progress;
+  const { stageStartXp, ...pet } = rest.pet;
+  return { ...rest, version: 2, pet: { ...pet, xp: 70 }, progress: { ...progress, completedReviews: ["s1.lam-quen.r1"] } };
+}
+
 /** A state as the M2 app saved it (version 1). */
 function versionOneState(): Record<string, unknown> {
-  const { mastery, reviews, retry, ...rest } = initialGameState("2026-10-06");
-  const { completedReviews, ...progress } = rest.progress;
+  const { mastery, reviews, retry, ...rest } = versionTwoState();
+  const { completedReviews, ...progress } = rest.progress as Record<string, unknown>;
   return { ...rest, version: 1, progress: { ...progress, completedLessons: ["s1.lam-quen.l1"] } };
 }
 
@@ -33,6 +41,18 @@ describe("upgradeGameState", () => {
     expect(upgraded.retry).toEqual({});
     expect(upgraded.progress.completedReviews).toEqual([]);
     expect(upgraded.progress.completedLessons).toEqual(["s1.lam-quen.l1"]);
+    expect(upgraded.progress.topicTests).toEqual({});
+    expect(upgraded.remedial).toBeNull();
+  });
+
+  test("upgrades a version 2 state and keeps its review stations", () => {
+    const upgraded = upgradeGameState(versionTwoState());
+    expect(upgraded.version).toBe(GAME_STATE_VERSION);
+    expect(upgraded.progress.completedReviews).toEqual(["s1.lam-quen.r1"]);
+    expect(upgraded.pet).toMatchObject({ xp: 70, stageStartXp: 0 });
+    expect(upgraded.progress.topicTests).toEqual({});
+    expect(upgraded.progress.evolutionTests).toEqual([]);
+    expect(upgraded.remedial).toBeNull();
   });
 
   test("keeps the optional exercise stats", () => {

@@ -29,6 +29,13 @@ const STEPS: Record<number, (state: RawState) => RawState> = {
     retry: {},
     progress: { ...(isRecord(state.progress) ? state.progress : {}), completedReviews: [] },
   }),
+  2: (state) => ({
+    ...state,
+    version: 3,
+    pet: { ...(isRecord(state.pet) ? state.pet : {}), stageStartXp: 0 },
+    remedial: null,
+    progress: { ...(isRecord(state.progress) ? state.progress : {}), topicTests: {}, evolutionTests: [] },
+  }),
 };
 
 /** Brings a saved state up to GAME_STATE_VERSION and checks its shape. Throws StateFormatError. */

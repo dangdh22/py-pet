@@ -119,10 +119,19 @@ describe("backup file", () => {
     expect(state.wallet.xu).toBe(120);
   });
 
-  test("decodes the committed schema 2 sample file", async () => {
+  test("decodes the committed schema 2 sample file and upgrades it", async () => {
     const result = await decodeBackup(readFileSync("src/storage/fixtures/backup-v2.pypet", "utf8"));
+    if (!result.ok) throw new Error("the sample file must decode");
+    expect(result.checksumValid).toBe(true);
+    expect(result.payload.schemaVersion).toBe(SCHEMA_VERSION);
+    expect(result.payload.profiles[0]!.state.mastery).toEqual({});
+    expect(result.payload.profiles[0]!.state.remedial).toBeNull();
+  });
+
+  test("decodes the committed schema 3 sample file", async () => {
+    const result = await decodeBackup(readFileSync("src/storage/fixtures/backup-v3.pypet", "utf8"));
     expect(result.ok && result.checksumValid).toBe(true);
-    expect(result.ok && result.payload.profiles[0]!.state.mastery).toEqual({});
+    expect(result.ok && result.payload.profiles[0]!.state.progress.topicTests).toEqual({});
   });
 
   test("refuses a file whose profile or state is damaged", async () => {

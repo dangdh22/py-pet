@@ -1,7 +1,7 @@
 import type { Lang } from "../i18n/lang";
 import { weekStart } from "./dates";
 
-export const GAME_STATE_VERSION = 2;
+export const GAME_STATE_VERSION = 3;
 export const STAT_MAX = 5;
 export const STAT_START = 4;
 export const WARNING_LIMIT = 20;
@@ -43,9 +43,45 @@ export interface ReviewCard {
   due: string;
 }
 
+/** The best result and the latest paper of a topic test (spec 5.3: it never blocks the path). */
+export interface TopicTestRecord {
+  attempts: number;
+  best: number;
+  max: number;
+  passed: boolean;
+  /** The items of the latest attempt, avoided by the next one when the bank allows. */
+  lastItems: string[];
+}
+
+/** One evolution test (spec 5.11). */
+export interface EvolutionAttempt {
+  at: string;
+  stage: number;
+  score: number;
+  max: number;
+  passed: boolean;
+  items: string[];
+  wrongConcepts: string[];
+}
+
+/** The focused review set opened by a failed evolution test; the retake waits until it is done (spec 5.11). */
+export interface RemedialSet {
+  stage: number;
+  items: string[];
+}
+
 export interface GameState {
   version: number;
-  pet: { stage: number; xp: number; pin: number; vui: number; correctRun: number };
+  pet: {
+    stage: number;
+    /** All XP ever earned; it is never lost (spec 5.4). */
+    xp: number;
+    /** pet.xp when the current stage began: the growth bar shows xp - stageStartXp. */
+    stageStartXp: number;
+    pin: number;
+    vui: number;
+    correctRun: number;
+  };
   wallet: { xu: number };
   activity: { lastActiveDay: string | null; decayApplied: number };
   streak: {
@@ -62,11 +98,14 @@ export interface GameState {
   reviews: Record<string, ReviewCard>;
   /** Exercises whose solution was shown -> the day they come back in a review station (spec 5.9). */
   retry: Record<string, string>;
+  remedial: RemedialSet | null;
   progress: {
     completedLessons: string[];
     solvedExercises: string[];
     answeredQuestions: string[];
     completedReviews: string[];
+    topicTests: Record<string, TopicTestRecord>;
+    evolutionTests: EvolutionAttempt[];
     /** Optional: states saved before it existed have no stats. Read it with `?? {}`. */
     exerciseStats?: Record<string, ExerciseStats>;
   };
@@ -78,7 +117,7 @@ export const DEFAULT_SETTINGS: GameSettings = { dailyGoal: 2, weeklyTarget: 10, 
 export function initialGameState(today: string): GameState {
   return {
     version: GAME_STATE_VERSION,
-    pet: { stage: 1, xp: 0, pin: STAT_START, vui: STAT_START, correctRun: 0 },
+    pet: { stage: 1, xp: 0, stageStartXp: 0, pin: STAT_START, vui: STAT_START, correctRun: 0 },
     wallet: { xu: 0 },
     activity: { lastActiveDay: null, decayApplied: 0 },
     streak: { current: 0, best: 0, freezes: 0, lastAchievedDay: null, pointsDay: null, points: 0 },
@@ -87,7 +126,15 @@ export function initialGameState(today: string): GameState {
     mastery: {},
     reviews: {},
     retry: {},
-    progress: { completedLessons: [], solvedExercises: [], answeredQuestions: [], completedReviews: [] },
+    remedial: null,
+    progress: {
+      completedLessons: [],
+      solvedExercises: [],
+      answeredQuestions: [],
+      completedReviews: [],
+      topicTests: {},
+      evolutionTests: [],
+    },
     warnings: [],
   };
 }

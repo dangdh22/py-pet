@@ -38,8 +38,8 @@ describe("dates", () => {
 describe("initialGameState", () => {
   test("starts with full defaults", () => {
     expect(initialGameState("2026-10-06")).toEqual({
-      version: 2,
-      pet: { stage: 1, xp: 0, pin: 4, vui: 4, correctRun: 0 },
+      version: 3,
+      pet: { stage: 1, xp: 0, stageStartXp: 0, pin: 4, vui: 4, correctRun: 0 },
       wallet: { xu: 0 },
       activity: { lastActiveDay: null, decayApplied: 0 },
       streak: { current: 0, best: 0, freezes: 0, lastAchievedDay: null, pointsDay: null, points: 0 },
@@ -48,7 +48,15 @@ describe("initialGameState", () => {
       mastery: {},
       reviews: {},
       retry: {},
-      progress: { completedLessons: [], solvedExercises: [], answeredQuestions: [], completedReviews: [] },
+      remedial: null,
+      progress: {
+        completedLessons: [],
+        solvedExercises: [],
+        answeredQuestions: [],
+        completedReviews: [],
+        topicTests: {},
+        evolutionTests: [],
+      },
       warnings: [],
     });
   });
