@@ -123,3 +123,51 @@ questions:
     explanation:
       vi: "Thông báo lỗi cho biết lỗi ở dòng nào và là loại lỗi gì. Con dùng thông tin đó để tự tìm cách sửa."
       en: "An error message tells you the line and the type of the error. You use this information to find the fix."
+
+  - id: s1.lam-quen.b9
+    type: mcq
+    concepts: [ai-basics]
+    lessons: [s1.lam-quen.l1]
+    prompt:
+      vi: "Một chương trình AI nhận ra được ảnh con mèo. Nó làm được điều đó bằng cách nào?"
+      en: "An AI program can recognize a photo of a cat. How did it learn to do that?"
+    choices:
+      - { vi: "Nó học từ rất nhiều ví dụ, là những bức ảnh đã được cho biết có mèo hay không có mèo", en: "It learned from a huge number of examples: photos that were labeled as cat or not cat", correct: true }
+      - { vi: "Có người viết sẵn từng bức ảnh con mèo trên thế giới vào chương trình", en: "Someone typed every cat photo in the world into the program", misconception: ai-basics }
+      - { vi: "Nó biết tất cả mọi thứ ngay từ lúc được bật lên lần đầu", en: "It knew everything from the first moment it was switched on", misconception: ai-basics }
+      - { vi: "Nó hỏi một con mèo thật ở trong máy tính", en: "It asks a real cat that lives inside the computer" }
+    explanation:
+      vi: "AI không biết sẵn mọi thứ. Nó học từ rất nhiều ví dụ, rồi dùng điều đã học để nhận ra những ảnh mới."
+      en: "AI does not know everything in advance. It learns from a huge number of examples, then uses what it learned to recognize new photos."
+
+  - id: s1.lam-quen.b10
+    type: mcq
+    concepts: [ai-basics]
+    lessons: [s1.lam-quen.l1]
+    prompt:
+      vi: "Một trợ lý AI trả lời bài tập của con bằng giọng rất chắc chắn. Con nên làm gì?"
+      en: "An AI assistant answers your homework in a very confident voice. What should you do?"
+    choices:
+      - { vi: "Tin ngay, vì AI không bao giờ sai", en: "Trust it right away, because AI is never wrong", misconception: ai-basics }
+      - { vi: "Kiểm tra lại bằng sách, thầy cô hoặc tự tính, vì AI cũng có thể sai", en: "Check it with a book, a teacher or your own work, because AI can also be wrong", correct: true }
+      - { vi: "Chép nguyên văn vào bài, vì AI giỏi hơn con", en: "Copy it word for word, because AI is smarter than you", misconception: ai-basics }
+      - { vi: "Không bao giờ dùng AI nữa", en: "Never use AI again" }
+    explanation:
+      vi: "AI học từ ví dụ nên có lúc trả lời sai dù nghe rất chắc chắn. Con người cần kiểm tra lại trước khi dùng."
+      en: "AI learns from examples, so sometimes it gives a wrong answer even when it sounds very sure. People need to check it before using it."
+
+  - id: s1.lam-quen.b11
+    type: mcq
+    concepts: [ai-basics]
+    lessons: [s1.lam-quen.l1]
+    prompt:
+      vi: "Đèn giao thông chuyển màu theo một bảng giờ đã đặt sẵn: đỏ 30 giây, rồi xanh 30 giây. Chiếc đèn này có dùng AI không?"
+      en: "A traffic light changes color by a timetable that was set in advance: red for 30 seconds, then green for 30 seconds. Does this light use AI?"
+    choices:
+      - { vi: "Không, vì nó chỉ làm theo quy tắc cố định đã đặt sẵn", en: "No, because it only follows a fixed rule that was set in advance", correct: true }
+      - { vi: "Có, vì nó tự chạy mà không cần người bấm nút", en: "Yes, because it runs by itself without a person pressing a button", misconception: ai-basics }
+      - { vi: "Có, vì nó là một loại máy tính", en: "Yes, because it is a kind of computer", misconception: ai-basics }
+      - { vi: "Không, vì nó chạy mà không cần điện", en: "No, because it runs without electricity" }
+    explanation:
+      vi: "Tự chạy chưa phải là AI. Chiếc đèn chỉ làm đúng bảng giờ có sẵn, không học gì từ ví dụ cả."
+      en: "Running by itself is not the same as AI. This light just follows its timetable and does not learn anything from examples."

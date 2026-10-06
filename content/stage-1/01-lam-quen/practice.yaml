@@ -1,0 +1,102 @@
+exercises:
+  - id: s1.lam-quen.p1
+    type: parsons
+    concepts: [run-order]
+    prompt:
+      vi: "Robo đang đếm ngược. Sắp xếp các dòng lệnh để chương trình in ra 4 dòng: 3, 2, 1, Go!"
+      en: "Robo is counting down. Put the lines in order so that the program prints 4 lines: 3, 2, 1, Go!"
+    solution: |
+      print("3")
+      print("2")
+      print("1")
+      print("Go!")
+    tests:
+      - output: |
+          3
+          2
+          1
+          Go!
+    hints:
+      - { vi: "Máy tính chạy từ trên xuống dưới. Dòng nào cần in ra đầu tiên thì đặt ở trên cùng.", en: "The computer runs from top to bottom. The line that must be printed first goes at the top." }
+  - id: s1.lam-quen.p2
+    type: fill
+    concepts: [print-call]
+    prompt:
+      vi: "Lệnh print cần dấu ngoặc tròn. Điền dấu ngoặc vào 2 chỗ trống để in ra: Robo"
+      en: "The print statement needs round brackets. Fill the 2 blanks with brackets to print: Robo"
+    template: |
+      print___"Robo"___
+    answers: ["(", ")"]
+    tests:
+      - { output: "Robo" }
+    hints:
+      - { vi: "Chữ cần in được đặt vào trong cặp ngoặc tròn.", en: "The text to print goes inside a pair of round brackets." }
+  - id: s1.lam-quen.p3
+    type: fill
+    concepts: [string-quotes]
+    prompt:
+      vi: "Chữ Robo ở dòng 1 đang thiếu dấu nháy. Điền dấu nháy kép vào 2 chỗ trống để in ra 2 dòng: Robo và Py"
+      en: "The text Robo on line 1 has no quotes. Fill the 2 blanks with double quotes to print 2 lines: Robo and Py"
+    template: |
+      print(___Robo___)
+      print("Py")
+    answers: ['"', '"']
+    tests:
+      - output: |
+          Robo
+          Py
+    hints:
+      - { vi: "Chữ cần in phải nằm giữa 2 dấu nháy. Mở bằng dấu nháy nào thì đóng bằng dấu nháy đó.", en: "The text to print must sit between 2 quotes. Close with the same quote you opened with." }
+  - id: s1.lam-quen.p4
+    type: fill
+    concepts: [case-sensitive]
+    prompt:
+      vi: "Python phân biệt chữ hoa và chữ thường. Điền tên lệnh in vào 2 chỗ trống để in ra 2 dòng: Py và Pet"
+      en: "Python treats upper-case and lower-case letters as different. Fill the 2 blanks with the name of the print statement to print 2 lines: Py and Pet"
+    template: |
+      ___("Py")
+      ___("Pet")
+    answers: ["print", "print"]
+    tests:
+      - output: |
+          Py
+          Pet
+    hints:
+      - { vi: "Lệnh in viết toàn bằng chữ thường.", en: "The print statement is written in all lower-case letters." }
+  - id: s1.lam-quen.p5
+    type: fill
+    concepts: [read-error, string-quotes]
+    prompt:
+      vi: "Python báo lỗi: SyntaxError ở dòng 3 (unterminated string literal, nghĩa là chuỗi chưa được đóng). Hãy nhìn dòng 3 và điền vào chỗ trống để chương trình in ra 4 dòng: Robo, Py, Pet và !"
+      en: "Python reports: SyntaxError on line 3 (unterminated string literal, which means a string was not closed). Look at line 3 and fill the blank so that the program prints 4 lines: Robo, Py, Pet and !"
+    template: |
+      print("Robo")
+      print("Py")
+      print("Pet___
+      print("!")
+    answers: ['")']
+    tests:
+      - output: |
+          Robo
+          Py
+          Pet
+          !
+    hints:
+      - { vi: "Số dòng trong thông báo lỗi cho biết dòng cần sửa. Dòng đó đang thiếu phần kết thúc.", en: "The line number in the error message tells you which line to fix. That line is missing its ending." }
+  - id: s1.lam-quen.p6
+    type: parsons
+    concepts: [print-call, run-order]
+    prompt:
+      vi: "Sắp xếp các dòng lệnh để chương trình in ra: Py, rồi 1 dòng trống, rồi Pet"
+      en: "Put the lines in order so that the program prints: Py, then 1 empty line, then Pet"
+    solution: |
+      print("Py")
+      print()
+      print("Pet")
+    tests:
+      - output: |
+          Py
+
+          Pet
+    hints:
+      - { vi: "print() để trống in ra 1 dòng trống. Dòng trống nằm giữa Py và Pet.", en: "An empty print() prints 1 empty line. The empty line sits between Py and Pet." }
