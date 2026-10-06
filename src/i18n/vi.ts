@@ -16,7 +16,6 @@ export const vi = {
   "lesson.finish": "Hoàn thành",
   "lesson.doneTitle": "Hoàn thành bài học!",
   "lesson.doneBody": "Robo tự hào về con!",
-  "lesson.backHome": "Về danh sách bài",
   "lesson.notFound": "Không tìm thấy bài học này.",
   "code.run": "Chạy thử",
   "code.submit": "Nộp bài",

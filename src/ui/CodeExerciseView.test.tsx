@@ -187,4 +187,30 @@ describe("CodeExerciseView", () => {
     expect(await screen.findByRole("region", { name: "Kết quả" })).toHaveTextContent("Hi");
     expect(runner.calls).toHaveLength(1);
   });
+
+  test("starts from a saved draft and reports edits", async () => {
+    const onCodeChange = vi.fn();
+    renderWithApp(
+      <CodeExerciseView exercise={fixtureCodeExercise} initialCode="print(1)" onCodeChange={onCodeChange} onComplete={() => {}} />,
+    );
+    expect(editor()).toHaveValue("print(1)");
+    await userEvent.type(editor(), "2");
+    expect(onCodeChange).toHaveBeenLastCalledWith("print(1)2");
+  });
+
+  test("reports every judged submit with the counts before it", async () => {
+    const onJudged = vi.fn();
+    let stdout = "x\n";
+    renderWithApp(<CodeExerciseView exercise={fixtureCodeExercise} onJudged={onJudged} onComplete={() => {}} />, {
+      runner: fakeRunner(() => okResult(stdout)),
+    });
+    await userEvent.click(screen.getByRole("button", { name: "Gợi ý" }));
+    await submitOnce();
+    stdout = "Hi\n";
+    await submitOnce();
+    expect(onJudged.mock.calls.map(([info]) => [info.result.status, info.failedSubmitsBefore, info.hintsUsed, info.viewedSolution])).toEqual([
+      ["wrong-answer", 0, 1, false],
+      ["accepted", 1, 1, false],
+    ]);
+  });
 });

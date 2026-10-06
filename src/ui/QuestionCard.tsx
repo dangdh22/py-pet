@@ -19,7 +19,7 @@ export function QuestionCard({
   onAnswered,
 }: {
   question: ChoiceQuestion;
-  onAnswered(correct: boolean): void;
+  onAnswered(correct: boolean, detail: { choiceIndex: number; lang: QuestionLang }): void;
 }) {
   const { t, questionLang } = useLang();
   const [lang, setLang] = useState<QuestionLang>(questionLang);
@@ -31,7 +31,7 @@ export function QuestionCard({
   function check() {
     if (selected === null) return;
     setChecked(true);
-    onAnswered(isCorrect);
+    onAnswered(isCorrect, { choiceIndex: selected, lang });
   }
 
   function choiceClass(i: number): string {

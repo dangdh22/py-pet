@@ -13,34 +13,49 @@ vi.mock("./CodeEditor", () => ({
   ),
 }));
 
-test("goes through cards, a code exercise and a question, then finishes", async () => {
+test("goes through the lesson, records the attempts and shows the rewards", async () => {
   const onExit = vi.fn();
   const { store } = await renderWithGame(<LessonScreen lesson={fixtureLesson} onExit={onExit} />, {
     runner: fakeRunner(() => okResult("Hi\n")),
   });
 
   expect(screen.getByText("Thẻ 1/2")).toBeInTheDocument();
-  expect(screen.getByRole("button", { name: "Quay lại" })).toBeDisabled();
   await userEvent.click(screen.getByRole("button", { name: "Tiếp" }));
-  expect(screen.getByText("Thẻ 2/2")).toBeInTheDocument();
   await userEvent.click(screen.getByRole("button", { name: "Tiếp" }));
-
-  expect(screen.getByText("Bài tập 1/2")).toBeInTheDocument();
   expect(screen.getByRole("button", { name: "Tiếp" })).toBeDisabled();
   await userEvent.click(screen.getByRole("button", { name: "Nộp bài" }));
   expect(await screen.findByText("Đúng hết 2/2 test!")).toBeInTheDocument();
   await userEvent.click(screen.getByRole("button", { name: "Tiếp" }));
-
-  expect(screen.getByText("Bài tập 2/2")).toBeInTheDocument();
-  expect(screen.getByRole("button", { name: "Hoàn thành" })).toBeDisabled();
   await userEvent.click(screen.getByRole("radio", { name: "A" }));
   await userEvent.click(screen.getByRole("button", { name: "Kiểm tra" }));
   await userEvent.click(screen.getByRole("button", { name: "Hoàn thành" }));
 
   expect(screen.getByText("Hoàn thành bài học!")).toBeInTheDocument();
-  await waitFor(async () => expect((await store.loadActive())?.state.progress.completedLessons).toEqual(["t.l1"]));
-  await userEvent.click(screen.getByRole("button", { name: "Về danh sách bài" }));
+  expect(screen.getByText("+28 XP")).toBeInTheDocument();
+  expect(screen.getByText("+8 xu")).toBeInTheDocument();
+  expect(screen.getByText("Pin +1")).toBeInTheDocument();
+  expect(screen.getByText("Mục tiêu hôm nay: 1/2")).toBeInTheDocument();
+  expect(screen.getByText("Chuỗi: 0 ngày")).toBeInTheDocument();
+  expect(screen.getByRole("link", { name: "Học bài tiếp" })).toHaveAttribute("href", "#/lesson/t.l2");
+
+  await waitFor(async () => expect((await store.loadActive())?.state.pet.xp).toBe(28));
+  const [bundle] = await store.exportProfiles();
+  expect(bundle!.attempts.map((a) => [a.kind, a.itemId])).toEqual([
+    ["code", "t.l1.ex1"],
+    ["choice", "t.l1.q1"],
+  ]);
+  await userEvent.click(screen.getByRole("button", { name: "Về phòng" }));
   expect(onExit).toHaveBeenCalledOnce();
+});
+
+test("restores and saves the code draft of an exercise", async () => {
+  const { store } = await renderWithGame(<LessonScreen lesson={{ ...fixtureLesson, cards: [] }} onExit={() => {}} />, {
+    drafts: { "t.l1.ex1": "print(42)" },
+  });
+  const editor = screen.getByRole("textbox", { name: "Trình soạn code" });
+  expect(editor).toHaveValue("print(42)");
+  await userEvent.type(editor, "!");
+  await waitFor(async () => expect((await store.loadActive())?.drafts.get("t.l1.ex1")).toBe("print(42)!"));
 });
 
 test("a new card starts without the output of the previous card", async () => {

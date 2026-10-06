@@ -18,7 +18,6 @@ export const en: Record<MessageKey, string> = {
   "lesson.finish": "Finish",
   "lesson.doneTitle": "Lesson complete!",
   "lesson.doneBody": "Robo is proud of you!",
-  "lesson.backHome": "Back to the lessons",
   "lesson.notFound": "This lesson does not exist.",
   "code.run": "Run",
   "code.submit": "Submit",

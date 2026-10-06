@@ -6,7 +6,7 @@ import { CardView } from "./CardView";
 import { CodeExerciseView } from "./CodeExerciseView";
 import { useGame } from "./GameProvider";
 import { QuestionCard } from "./QuestionCard";
-import { Robot } from "./Robot";
+import { ResultView } from "./ResultView";
 
 type Step = { kind: "card"; card: Card } | { kind: "exercise"; exercise: Exercise };
 
@@ -18,6 +18,7 @@ export interface LessonScreenProps {
 export function LessonScreen({ lesson, onExit }: LessonScreenProps) {
   const { t, uiLang } = useLang();
   const game = useGame();
+  const [before] = useState(() => game.state);
   const steps = useMemo<Step[]>(
     () => [
       ...lesson.cards.map((card): Step => ({ kind: "card", card })),
@@ -31,16 +32,7 @@ export function LessonScreen({ lesson, onExit }: LessonScreenProps) {
 
   const step = steps[index];
   if (finished || step === undefined) {
-    return (
-      <main className="lesson-done">
-        <Robot mood="happy" size={96} />
-        <h2>{t("lesson.doneTitle")}</h2>
-        <p>{t("lesson.doneBody")}</p>
-        <button className="primary" onClick={onExit}>
-          {t("lesson.backHome")}
-        </button>
-      </main>
-    );
+    return <ResultView before={before} after={game.state} onExit={onExit} />;
   }
 
   const markDone = (stepIndex: number) => setDoneSteps((previous) => new Set(previous).add(stepIndex));
@@ -65,9 +57,52 @@ export function LessonScreen({ lesson, onExit }: LessonScreenProps) {
   if (step.kind === "card") {
     body = <CardView key={`card-${index}`} card={step.card} />;
   } else if (step.exercise.type === "code") {
-    body = <CodeExerciseView key={step.exercise.id} exercise={step.exercise} onComplete={() => markDone(index)} />;
+    const exercise = step.exercise;
+    body = (
+      <CodeExerciseView
+        key={exercise.id}
+        exercise={exercise}
+        initialCode={game.draftFor(exercise.id)}
+        onCodeChange={(code) => game.saveDraft(exercise.id, code)}
+        onJudged={(info) =>
+          game.dispatch(
+            {
+              type: "ExerciseJudged",
+              exerciseId: exercise.id,
+              accepted: info.result.status === "accepted",
+              failedSubmitsBefore: info.failedSubmitsBefore,
+              hintsUsed: info.hintsUsed,
+              viewedSolution: info.viewedSolution,
+            },
+            {
+              kind: "code",
+              itemId: exercise.id,
+              code: info.code,
+              status: info.result.status,
+              passedCount: info.result.passedCount,
+              total: info.result.total,
+              misconceptions: info.result.misconceptions,
+            },
+          )
+        }
+        onComplete={() => markDone(index)}
+      />
+    );
   } else {
-    body = <QuestionCard key={step.exercise.id} question={step.exercise} onAnswered={() => markDone(index)} />;
+    const question = step.exercise;
+    body = (
+      <QuestionCard
+        key={question.id}
+        question={question}
+        onAnswered={(correct, detail) => {
+          markDone(index);
+          game.dispatch(
+            { type: "QuestionAnswered", questionId: question.id, correct },
+            { kind: "choice", itemId: question.id, choiceIndex: detail.choiceIndex, correct, lang: detail.lang },
+          );
+        }}
+      />
+    );
   }
 
   return (

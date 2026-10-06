@@ -40,7 +40,7 @@ describe("AppRoutes", () => {
     const { store } = await renderWithGame(<AppRoutes />, { state });
     await userEvent.click(screen.getByRole("link", { name: "Học tiếp" }));
     await userEvent.click(await screen.findByRole("button", { name: "Hoàn thành" }));
-    await userEvent.click(screen.getByRole("button", { name: "Về danh sách bài" }));
+    await userEvent.click(screen.getByRole("button", { name: "Về phòng" }));
     expect(await screen.findByText("Mục tiêu hôm nay: 1/2")).toBeInTheDocument();
     expect((await store.loadActive())?.state.progress.completedLessons).toEqual(["t.l1", "t.l2"]);
   });

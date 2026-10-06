@@ -20,7 +20,7 @@ describe("QuestionCard", () => {
     expect(check).toBeDisabled();
     await userEvent.click(screen.getByRole("radio", { name: "A" }));
     await userEvent.click(check);
-    expect(onAnswered).toHaveBeenCalledWith(true);
+    expect(onAnswered).toHaveBeenCalledWith(true, { choiceIndex: 0, lang: "vi" });
     expect(screen.getByText("Chính xác!")).toBeInTheDocument();
     expect(screen.getByText("Lệnh print in ra A.")).toBeInTheDocument();
     expect(screen.getByRole("radio", { name: "A" })).toBeDisabled();
@@ -32,7 +32,7 @@ describe("QuestionCard", () => {
     renderWithApp(<QuestionCard question={fixtureQuestion} onAnswered={onAnswered} />);
     await userEvent.click(screen.getByRole("radio", { name: "Lỗi" }));
     await userEvent.click(screen.getByRole("button", { name: "Kiểm tra" }));
-    expect(onAnswered).toHaveBeenCalledWith(false);
+    expect(onAnswered).toHaveBeenCalledWith(false, { choiceIndex: 1, lang: "vi" });
     expect(screen.getByText("Chưa đúng rồi.")).toBeInTheDocument();
   });
 
@@ -45,5 +45,14 @@ describe("QuestionCard", () => {
     expect(screen.getByText("In ra gì?")).toBeInTheDocument();
     expect(screen.getByText("What is printed?")).toBeInTheDocument();
     expect(screen.getByRole("radio", { name: "Lỗi / Error" })).toBeInTheDocument();
+  });
+
+  test("reports the chosen index and the question language", async () => {
+    const onAnswered = vi.fn();
+    renderWithApp(<QuestionCard question={fixtureQuestion} onAnswered={onAnswered} />);
+    await userEvent.click(screen.getByRole("button", { name: "EN" }));
+    await userEvent.click(screen.getByRole("radio", { name: "Error" }));
+    await userEvent.click(screen.getByRole("button", { name: "Kiểm tra" }));
+    expect(onAnswered).toHaveBeenCalledWith(false, { choiceIndex: 1, lang: "en" });
   });
 });

@@ -15,14 +15,28 @@ import { useExplain } from "./useExplain";
 
 export type ExerciseOutcome = "solved" | "viewed-solution";
 
+export interface JudgedInfo {
+  result: JudgeResult;
+  code: string;
+  failedSubmitsBefore: number;
+  hintsUsed: number;
+  viewedSolution: boolean;
+}
+
 const FAILED_SUBMITS_BEFORE_SOLUTION = 3;
 
 export function CodeExerciseView({
   exercise,
   onComplete,
+  initialCode,
+  onCodeChange,
+  onJudged,
 }: {
   exercise: CodeExercise;
   onComplete(outcome: ExerciseOutcome): void;
+  initialCode?: string;
+  onCodeChange?(code: string): void;
+  onJudged?(info: JudgedInfo): void;
 }) {
   const { t, uiLang } = useLang();
   const runner = useRunner();
@@ -31,7 +45,7 @@ export function CodeExerciseView({
   const misconceptionOf = useMemo(() => errorMisconceptionFrom(bundle.errors), [bundle]);
   const example = exercise.tests.find((test) => !test.hidden) ?? null;
 
-  const [code, setCode] = useState(exercise.starter);
+  const [code, setCode] = useState(initialCode ?? exercise.starter);
   const [stdin, setStdin] = useState(example?.input ?? "");
   const [busy, setBusy] = useState(false);
   const [runOutput, setRunOutput] = useState<string | null>(null);
@@ -73,6 +87,7 @@ export function CodeExerciseView({
     try {
       const result = await judge(exercise, code, runner.run, misconceptionOf);
       setJudgeResult(result);
+      onJudged?.({ result, code, failedSubmitsBefore: failedSubmits, hintsUsed: hintsShown, viewedSolution: solutionShown });
       if (result.status === "accepted") {
         setFeedback({ mood: "happy", message: t("judge.accepted", { passed: result.passedCount, total: result.total }), hint: null, rawError: null });
         onComplete("solved");
@@ -140,7 +155,11 @@ export function CodeExerciseView({
         {feedback && <RobotBubble {...feedback} />}
       </section>
       <section className="exercise-right">
-        <CodeEditor value={code} onChange={setCode} errorLine={errorLine} ariaLabel={t("code.editorLabel")} />
+        <CodeEditor value={code} onChange={(value) => {
+            setCode(value);
+            onCodeChange?.(value);
+          }}
+          errorLine={errorLine} ariaLabel={t("code.editorLabel")} />
         <label className="input-label">
           {t("code.inputLabel")}
           <textarea
