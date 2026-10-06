@@ -58,3 +58,14 @@ Người bảo trì chưa duyệt kế hoạch M4b; Claude tự chốt theo yêu
 13. **Hệ quả gộp của mục 2 và mục 5**: ai biết lối "Quên mã PIN?" cũng xóa được toàn bộ dữ liệu bằng cách gõ đúng tên của con, và việc xóa không giữ bản sao lưu tự động. Bố mẹ nên xuất file `.pypet` định kỳ. Nơi sửa nếu muốn an toàn hơn: giữ 1 bản sao lưu tự động khi xóa (`eraseAll` trong `src/ui/GameProvider.tsx`).
 14. **File xuất khi dữ liệu hỏng** không chứa mã băm PIN và các bản sao lưu tự động (file này để gửi hỗ trợ).
 15. **Thẻ "Con cần hỗ trợ"** chỉ hiện số lần mắc lỗi hiểu sai, chưa hiện nội dung "hiểu lầm hay gặp" (spec 9.2). Để dành cho bản sau.
+
+## M5a
+
+Người bảo trì chưa duyệt kế hoạch M5a; Claude tự chốt theo yêu cầu chạy liên tục. Chi tiết trong mục "Quyết định thiết kế" của `docs/superpowers/plans/2026-10-06-m5a-noi-dung-giai-doan-1.md`.
+
+1. **M5 chia theo giai đoạn** thành M5a–M5d, mỗi phần merge vào `main` khi xong.
+2. **Dàn ý giai đoạn 1** do Claude đặt (spec chỉ nêu tên chủ đề): chủ đề 2 "print và chuỗi" 5 bài, chủ đề 3 "Chú thích và đọc thông báo lỗi" 4 bài, chủ đề 4 "In nhiều giá trị: sep và end" 5 bài; cùng chủ đề 1 là 18 bài. Nơi sửa: `content/stage-1/`.
+3. **Nội dung do Claude soạn theo yêu cầu**, chưa qua phụ huynh duyệt (spec 3.10). Bảng tổng hợp để duyệt: `docs/superpowers/content-stage-1.md`.
+4. **Khái niệm AI chỉ cần bài luyện mức 1.** Luật 8 của spec 3.9 được hiểu theo cách này. Nơi sửa: `tools/content/coverage.ts`.
+5. **Điểm cao nhất của kiểm tra chủ đề được quy đổi** theo cỡ đề mới khi cỡ đề đổi (6/6 thành 14/14). Giá nếu sai: con có thể giữ điểm "cao nhất" mà chưa làm đề mới.
+6. **E2E "thi tiến hóa chưa đạt → ôn → thi lại"** vẫn chỉ có test tích hợp jsdom (đi hết 18 bài trong Playwright quá chậm).
