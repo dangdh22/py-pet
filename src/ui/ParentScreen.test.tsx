@@ -42,14 +42,29 @@ describe("ParentScreen gate", () => {
     expect((await store.readMeta()).pinResetAt).toBe(FIXED_NOW.toISOString());
   });
 
+  test("the reset form can cancel and go back to the PIN form", async () => {
+    await renderWithGame(<ParentScreen />, { meta: { pin: await hashPin("1234", 1000) } });
+    await userEvent.click(screen.getByRole("button", { name: "Quên mã PIN?" }));
+    expect(screen.getByLabelText("Mã PIN mới (4 đến 6 chữ số)")).toBeInTheDocument();
+    await userEvent.click(screen.getByRole("button", { name: "Hủy" }));
+    expect(screen.getByLabelText("Mã PIN")).toBeInTheDocument();
+  });
+
   test("locks itself after 5 minutes without use", async () => {
     vi.useFakeTimers({ shouldAdvanceTime: true });
     await renderWithGame(<ParentScreen />, { meta: { pin: await hashPin("1234", 1000) } });
     await openWith("1234");
     expect(await screen.findByRole("tab", { name: "Tổng quan" })).toBeInTheDocument();
+    // After 4 min 10s, it should not be locked yet
     await act(async () => {
-      vi.advanceTimersByTime(LOCK_AFTER_MS + 10_000);
+      vi.advanceTimersByTime(4 * 60_000 + 10_000);
     });
+    expect(screen.queryByText("Khu phụ huynh đã tự khóa sau 5 phút không dùng.")).not.toBeInTheDocument();
+    // Advance 2 more minutes (now at 6 min 10s, past the 5 min threshold)
+    await act(async () => {
+      vi.advanceTimersByTime(2 * 60_000);
+    });
+    // Now it should be locked
     expect(screen.getByText("Khu phụ huynh đã tự khóa sau 5 phút không dùng.")).toBeInTheDocument();
     expect(screen.getByLabelText("Mã PIN")).toBeInTheDocument();
   });

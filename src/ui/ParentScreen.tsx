@@ -1,4 +1,4 @@
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import { useLang } from "../i18n/LangProvider";
 import type { MessageKey } from "../i18n/vi";
 import { isValidPin } from "../storage/pin";
@@ -50,10 +50,15 @@ function ParentGate({ autoLocked, onOpen }: { autoLocked: boolean; onOpen(): voi
   async function check(event: FormEvent) {
     event.preventDefault();
     setBusy(true);
-    const ok = await game.checkPin(pin);
-    setBusy(false);
-    if (ok) onOpen();
-    else setError("backup.pinWrong");
+    try {
+      const ok = await game.checkPin(pin);
+      if (ok) onOpen();
+      else setError("backup.pinWrong");
+    } catch {
+      setError("banner.writeFailed");
+    } finally {
+      setBusy(false);
+    }
   }
 
   async function reset(event: FormEvent) {
@@ -61,9 +66,14 @@ function ParentGate({ autoLocked, onOpen }: { autoLocked: boolean; onOpen(): voi
     if (!isValidPin(pin)) return setError("onboarding.errorPin");
     if (pin !== again) return setError("onboarding.errorPinMatch");
     setBusy(true);
-    await game.setPin(pin, true);
-    setBusy(false);
-    onOpen();
+    try {
+      await game.setPin(pin, true);
+      onOpen();
+    } catch {
+      setError("banner.writeFailed");
+    } finally {
+      setBusy(false);
+    }
   }
 
   return (
@@ -112,6 +122,17 @@ function ParentGate({ autoLocked, onOpen }: { autoLocked: boolean; onOpen(): voi
           <button className="primary" type="submit" disabled={busy}>
             {t("parent.resetSave")}
           </button>
+          <button
+            type="button"
+            onClick={() => {
+              setMode("pin");
+              setPin("");
+              setAgain("");
+              setError(null);
+            }}
+          >
+            {t("backup.cancel")}
+          </button>
         </form>
       )}
       {error && <p role="alert">{t(error)}</p>}
@@ -124,6 +145,8 @@ function ParentArea({ onLock }: { onLock(auto: boolean): void }) {
   const { t } = useLang();
   const game = useGame();
   const [tab, setTab] = useState<Tab>("overview");
+  const lockRef = useRef(onLock);
+  lockRef.current = onLock;
 
   useEffect(() => {
     let last = Date.now();
@@ -133,13 +156,13 @@ function ParentArea({ onLock }: { onLock(auto: boolean): void }) {
     const events = ["keydown", "pointerdown", "wheel", "touchstart"] as const;
     for (const name of events) window.addEventListener(name, onInput, { passive: true });
     const timer = setInterval(() => {
-      if (Date.now() - last >= LOCK_AFTER_MS) onLock(true);
+      if (Date.now() - last >= LOCK_AFTER_MS) lockRef.current(true);
     }, LOCK_CHECK_MS);
     return () => {
       clearInterval(timer);
       for (const name of events) window.removeEventListener(name, onInput);
     };
-  }, [onLock]);
+  }, []);
 
   return (
     <main className="parent">
@@ -148,7 +171,7 @@ function ParentArea({ onLock }: { onLock(auto: boolean): void }) {
         <button onClick={() => onLock(false)}>{t("parent.lock")}</button>
       </div>
       {game.pinResetAt && (
-        <p role="alert" className="banner">
+        <p role="status" className="banner">
           {t("parent.resetAt", { time: formatDateTime(game.pinResetAt) })}
         </p>
       )}
