@@ -1,9 +1,10 @@
 import { isChoiceQuestion, type ContentBundle, type Stage } from "../content/types";
-import { daysBetween, weekStart } from "./dates";
+import { weekStart } from "./dates";
 import { hasTest } from "./path";
 import { XP } from "./rewards";
 import { REVIEW_SIZE } from "./reviewSet";
 import type { GameState } from "./state";
+import { isVacationDay, workDaysBetween } from "./vacation";
 
 export type PetCondition = "happy" | "normal" | "sleepy" | "drained";
 export type GrowthSize = 1 | 2 | 3;
@@ -48,6 +49,11 @@ export function growthSize(xp: number, max: number): GrowthSize {
   return 1;
 }
 
+/** What the room shows (spec 5.6): on vacation first, then the pet's condition. */
+export function roomCondition(state: GameState, today: string): PetCondition | "vacation" {
+  return isVacationDay(state, today) ? "vacation" : petCondition(state);
+}
+
 export function petCondition(state: GameState): PetCondition {
   const { pin, vui } = state.pet;
   if (pin === 0 || vui === 0) return "drained";
@@ -60,7 +66,7 @@ export function petCondition(state: GameState): PetCondition {
 export function displayStreak(state: GameState, today: string): number {
   const { current, freezes, lastAchievedDay } = state.streak;
   if (lastAchievedDay === null) return 0;
-  const missed = daysBetween(lastAchievedDay, today) - 1;
+  const missed = workDaysBetween(state, lastAchievedDay, today);
   if (missed <= 0) return current;
   return freezes >= missed ? current : 0;
 }

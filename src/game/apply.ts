@@ -1,4 +1,4 @@
-import { addDays, daysBetween, localDay, weekStart } from "./dates";
+import { addDays, localDay, weekStart } from "./dates";
 import { reviewCard } from "./leitner";
 import { emptyMastery, MASTERY, recordMisconception, recordResult, solvedScore, type ResultSource } from "./mastery";
 import {
@@ -26,6 +26,7 @@ import {
 } from "./state";
 import { cleanCatalog, requestBlock, trimRequests } from "./realRewards";
 import { findShopItem, isConsumable, MAX_CONSUMABLES, STREAK_GIFTS } from "./shop";
+import { cancelVacation, pruneVacations, scheduleVacation, toggleVacation, weekTarget, workDaysBetween } from "./vacation";
 import { changeXu } from "./wallet";
 
 export type GameEvent =
@@ -78,6 +79,10 @@ export type GameEvent =
   | { type: "RewardRequested"; requestId: string; rewardId: string }
   | { type: "RewardApproved"; requestId: string }
   | { type: "RewardRejected"; requestId: string }
+  /** Spec 5.7: the parent switches the vacation on now, or off. */
+  | { type: "VacationToggled"; on: boolean }
+  | { type: "VacationScheduled"; start: string; end: string }
+  | { type: "VacationCancelled"; start: string }
   | { type: "HintShown"; exerciseId: string }
   | { type: "SolutionViewed"; exerciseId: string };
 
@@ -145,6 +150,15 @@ export function apply(state: GameState, event: GameEvent, now: Date): GameState 
     case "RewardRejected":
       decideReward(next, event.requestId, false, now, today);
       break;
+    case "VacationToggled":
+      toggleVacation(next, event.on, today);
+      break;
+    case "VacationScheduled":
+      scheduleVacation(next, event.start, event.end, today);
+      break;
+    case "VacationCancelled":
+      cancelVacation(next, event.start, today);
+      break;
     case "HintShown":
       statsFor(next, event.exerciseId).hints += 1;
       break;
@@ -169,9 +183,11 @@ function recordRollback(s: GameState, now: Date, today: string): void {
 
 function rollover(s: GameState, today: string): void {
   settleWeek(s, today);
+  pruneVacations(s, today);
   const lastActive = s.activity.lastActiveDay;
   if (lastActive === null) return;
-  const absentDays = daysBetween(lastActive, today) - 1;
+  // Spec 5.6-5.7: vacation days are not absent days.
+  const absentDays = workDaysBetween(s, lastActive, today);
   const due = Math.max(0, absentDays - s.settings.graceDays);
   const delta = due - s.activity.decayApplied;
   if (delta <= 0) return;
@@ -183,7 +199,8 @@ function rollover(s: GameState, today: string): void {
 function settleWeek(s: GameState, today: string): void {
   const current = weekStart(today);
   if (s.week.start >= current) return;
-  const target = s.settings.weeklyTarget;
+  // Spec 5.7: vacation days do not count in the week plan.
+  const target = weekTarget(s, s.week.start);
   if (target > 0 && s.week.lessonsDone >= target * WEEK_EXCEED_RATIO) changeXu(s, XU.weekPlanExceeded, "week", s.week.start, today);
   else if (target > 0 && s.week.lessonsDone >= target) changeXu(s, XU.weekPlanMet, "week", s.week.start, today);
   s.week = { start: current, lessonsDone: 0 };
@@ -214,7 +231,7 @@ function achieveDay(s: GameState, today: string): void {
   if (last === null) {
     s.streak.current = 1;
   } else {
-    const missed = daysBetween(last, today) - 1;
+    const missed = workDaysBetween(s, last, today);
     if (missed <= 0) {
       s.streak.current += 1;
     } else if (s.streak.freezes >= missed) {
