@@ -259,4 +259,10 @@ export const en: Record<MessageKey, string> = {
   "badge.evolution-2": "First evolution",
   "badge.evolution-3": "Second evolution",
   "badge.evolution-4": "Third evolution",
+  "shop.noXu": "Not enough coins",
+  "shop.maxed": "You already have {n}",
+  "shop.pinFull": "Battery is full",
+  "shop.vuiFull": "Joy is full",
+  "shop.noneLeft": "None left",
+  "rewards.freeXu": "Coins not reserved: {xu}",
 };

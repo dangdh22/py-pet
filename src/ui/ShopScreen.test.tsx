@@ -6,7 +6,7 @@ import { BADGES } from "../game/badges";
 import { SHOP_ITEMS } from "../game/shop";
 import { initialGameState } from "../game/state";
 import { vi } from "../i18n/vi";
-import { renderWithGame, TODAY } from "../test/renderGame";
+import { FIXED_NOW, renderWithGame, TODAY } from "../test/renderGame";
 import { badgeKey, formKey, FORM_COUNT, itemKey } from "./names";
 import { ShopScreen } from "./ShopScreen";
 
@@ -56,6 +56,18 @@ describe("ShopScreen: things for the robot", () => {
     await renderWithGame(<ShopScreen />, { state: richState(20) });
     expect(screen.getByRole("button", { name: "Mua Kệ sách" })).toBeDisabled();
     expect(screen.getByRole("button", { name: "Mua Dầu nhớt" })).toBeEnabled();
+    expect(within(row("Kệ sách")).getByText("Chưa đủ xu")).toBeInTheDocument();
+  });
+
+  test("a disabled button says why", async () => {
+    const state = richState(100);
+    state.pet.pin = 5;
+    state.inventory.consumables = { "pin-sac": 9 };
+    await renderWithGame(<ShopScreen />, { state });
+    const charger = row("Pin sạc nhanh");
+    expect(within(charger).getByText("Đã có đủ 9 món")).toBeInTheDocument();
+    expect(within(charger).getByText("Pin đã đầy")).toBeInTheDocument();
+    expect(within(row("Quả bóng")).getByText("Chưa có món này")).toBeInTheDocument();
   });
 });
 
@@ -83,5 +95,43 @@ describe("ShopScreen: rewards from the parents", () => {
       expect((await store.loadActive())!.state.rewards.requests).toMatchObject([{ id: "q1", status: "pending" }]),
     );
     expect((await store.loadActive())!.state.wallet.xu).toBe(120);
+  });
+
+  test("a reward with no turns left this week says so", async () => {
+    const state = richState(120);
+    state.rewards.catalog = [{ id: "park", name: "Đi công viên", price: 100, weeklyLimit: 1 }];
+    state.rewards.requests = [
+      {
+        id: "q0",
+        rewardId: "park",
+        name: "Đi công viên",
+        price: 100,
+        at: FIXED_NOW.toISOString(),
+        status: "approved",
+        decidedAt: FIXED_NOW.toISOString(),
+      },
+    ];
+    await renderWithGame(<ShopScreen />, { state });
+    await userEvent.click(screen.getByRole("tab", { name: "Phần thưởng từ bố mẹ" }));
+    expect(within(row("Đi công viên")).getByText("Hết lượt tuần này")).toBeInTheDocument();
+  });
+
+  test("a pending request holds back its price", async () => {
+    const state = richState(120);
+    state.rewards.catalog = [{ id: "ice", name: "Kem", price: 30, weeklyLimit: 5 }];
+    state.rewards.requests = [
+      {
+        id: "q0",
+        rewardId: "ice",
+        name: "Kem",
+        price: 30,
+        at: FIXED_NOW.toISOString(),
+        status: "pending",
+        decidedAt: null,
+      },
+    ];
+    await renderWithGame(<ShopScreen />, { state });
+    await userEvent.click(screen.getByRole("tab", { name: "Phần thưởng từ bố mẹ" }));
+    expect(screen.getByText("Xu chưa bị giữ: 90")).toBeInTheDocument();
   });
 });

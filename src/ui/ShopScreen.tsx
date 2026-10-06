@@ -74,13 +74,19 @@ function ShopRow({ item, state }: { item: ShopItem; state: GameState }) {
   if (isConsumable(item)) {
     const full = state.pet[item.kind === "pin" ? "pin" : "vui"] >= STAT_MAX;
     detail = t(item.kind === "pin" ? "result.pin" : "result.vui", { n: item.effect ?? 0 });
+    const maxed = count >= MAX_CONSUMABLES;
+    const buyReason = maxed ? t("shop.maxed", { n: MAX_CONSUMABLES }) : !canAfford ? t("shop.noXu") : null;
+    const useReason =
+      count === 0 ? t("shop.noneLeft") : full ? t(item.kind === "pin" ? "shop.pinFull" : "shop.vuiFull") : null;
     actions = (
       <>
         <span>{t("shop.have", { n: count })}</span>
-        <button onClick={buy} disabled={!canAfford || count >= MAX_CONSUMABLES} aria-label={`${t("shop.buy")} ${name}`}>
+        {buyReason && <span className="shop-reason">{buyReason}</span>}
+        <button onClick={buy} disabled={buyReason !== null} aria-label={`${t("shop.buy")} ${name}`}>
           {t("shop.buy")}
         </button>
-        <button onClick={use} disabled={count === 0 || full} aria-label={`${t("shop.use")} ${name}`}>
+        {useReason && <span className="shop-reason">{useReason}</span>}
+        <button onClick={use} disabled={useReason !== null} aria-label={`${t("shop.use")} ${name}`}>
           {t("shop.use")}
         </button>
       </>
@@ -99,9 +105,12 @@ function ShopRow({ item, state }: { item: ShopItem; state: GameState }) {
     detail = t("shop.gift", { days: giftDays(item.id) ?? 0 });
   } else {
     actions = (
-      <button onClick={buy} disabled={!canAfford} aria-label={`${t("shop.buy")} ${name}`}>
-        {t("shop.buy")}
-      </button>
+      <>
+        {!canAfford && <span className="shop-reason">{t("shop.noXu")}</span>}
+        <button onClick={buy} disabled={!canAfford} aria-label={`${t("shop.buy")} ${name}`}>
+          {t("shop.buy")}
+        </button>
+      </>
     );
   }
   return (
@@ -164,7 +173,7 @@ function RewardShop({ newId }: { newId(): string }) {
               </li>
             ))}
           </ul>
-          <p>{t("shop.balance", { xu: freeXu(state) })}</p>
+          <p>{t("rewards.freeXu", { xu: freeXu(state) })}</p>
         </>
       )}
       {decided.length > 0 && (

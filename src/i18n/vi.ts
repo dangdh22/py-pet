@@ -257,6 +257,12 @@ export const vi = {
   "badge.evolution-2": "Tiến hóa lần 1",
   "badge.evolution-3": "Tiến hóa lần 2",
   "badge.evolution-4": "Tiến hóa lần 3",
+  "shop.noXu": "Chưa đủ xu",
+  "shop.maxed": "Đã có đủ {n} món",
+  "shop.pinFull": "Pin đã đầy",
+  "shop.vuiFull": "Vui đã đầy",
+  "shop.noneLeft": "Chưa có món này",
+  "rewards.freeXu": "Xu chưa bị giữ: {xu}",
 } as const;
 
 export type MessageKey = keyof typeof vi;
