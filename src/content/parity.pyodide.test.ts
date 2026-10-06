@@ -33,20 +33,13 @@ describe("error dictionary on Pyodide", () => {
     });
   }
 
-  // Additional test: smart-quote entry can match code with curly quotes
-  // Note: Pyodide reports "unterminated string literal" for curly quotes, not "invalid character"
-  test("smart-quote: detects real curly quotes from word processor", () => {
-    const code = 'print("“Xin chào”)';
+  test("smart-quote: real curly quotes pasted from Word are recognized (added test)", () => {
+    const code = "print(“Xin chào”)";
     const result = run(code, "");
     const problem = problemFromOutcome(result, false);
     expect(problem?.type).toBe("SyntaxError");
-    // The smart-quote entry should be checked before unterminated-string
-    // since it comes first in the error dictionary, but Pyodide's error message
-    // "unterminated string literal" matches both. We only require that smart-quote
-    // is placed before unterminated-string to establish priority.
     const match = matchError(bundle.errors, problem!, code);
-    // Due to Pyodide's error messages, unterminated-string may match first
-    // if it has priority. Check that either smart-quote or unterminated-string matches.
-    expect(["smart-quote", "unterminated-string"]).toContain(match?.entry.id);
+    expect(match?.entry.id).toBe("smart-quote");
+    expect(match?.vars.char).toBe("“");
   });
 });
