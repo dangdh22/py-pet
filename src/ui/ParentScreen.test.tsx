@@ -1,7 +1,8 @@
 // @vitest-environment jsdom
-import { act, screen } from "@testing-library/react";
+import { act, fireEvent, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, describe, expect, test, vi } from "vitest";
+import { useState } from "react";
 import { emptyMastery } from "../game/mastery";
 import { initialGameState } from "../game/state";
 import { hashPin } from "../storage/pin";
@@ -15,6 +16,23 @@ afterEach(() => {
 async function openWith(pin: string) {
   await userEvent.type(screen.getByLabelText("Mã PIN"), pin);
   await userEvent.click(screen.getByRole("button", { name: "Mở" }));
+}
+
+/** Wrapper component that triggers re-renders within provider context. */
+function ParentScreenWrapper() {
+  const [, setRenderCount] = useState(0);
+  return (
+    <>
+      <ParentScreen key="parent" />
+      <button
+        onClick={() => setRenderCount((c) => c + 1)}
+        style={{ display: "none" }}
+        data-testid="force-rerender"
+      >
+        Force Rerender
+      </button>
+    </>
+  );
 }
 
 describe("ParentScreen gate", () => {
@@ -65,6 +83,28 @@ describe("ParentScreen gate", () => {
       vi.advanceTimersByTime(2 * 60_000);
     });
     // Now it should be locked
+    expect(screen.getByText("Khu phụ huynh đã tự khóa sau 5 phút không dùng.")).toBeInTheDocument();
+    expect(screen.getByLabelText("Mã PIN")).toBeInTheDocument();
+  });
+
+  test("the auto-lock clock survives a re-render", async () => {
+    vi.useFakeTimers({ shouldAdvanceTime: true });
+    await renderWithGame(<ParentScreenWrapper />, { meta: { pin: await hashPin("1234", 1000) } });
+    await openWith("1234");
+    expect(await screen.findByRole("tab", { name: "Tổng quan" })).toBeInTheDocument();
+    // Advance close to the lock threshold (5 min - 1 min = 4 min, plus 10s check interval)
+    await act(async () => {
+      vi.advanceTimersByTime(LOCK_AFTER_MS - 60_000 + 10_000);
+    });
+    expect(screen.queryByText("Khu phụ huynh đã tự khóa sau 5 phút không dùng.")).not.toBeInTheDocument();
+    // Force a re-render of ParentScreen (simulates game state change like DayRollover)
+    // This creates a new onLock callback, which would have reset the effect with the old code
+    fireEvent.click(screen.getByTestId("force-rerender"));
+    // Advance 2 more minutes (past the 5 min threshold)
+    await act(async () => {
+      vi.advanceTimersByTime(2 * 60_000);
+    });
+    // The auto-lock should have triggered despite the re-render
     expect(screen.getByText("Khu phụ huynh đã tự khóa sau 5 phút không dùng.")).toBeInTheDocument();
     expect(screen.getByLabelText("Mã PIN")).toBeInTheDocument();
   });
