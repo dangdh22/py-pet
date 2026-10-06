@@ -51,3 +51,10 @@ Người bảo trì chưa duyệt kế hoạch M4b; Claude tự chốt theo yêu
 6. **Xu trung bình/ngày** tính trên 14 ngày, chỉ tính xu kiếm được.
 7. **Dữ liệu hỏng** được xuất dưới dạng JSON thô (không phải `.pypet`), vì state hỏng không nhập lại được.
 8. **Tự khóa** sau 5 phút không có phím, chạm hoặc cuộn; chỉ di chuột không tính là thao tác.
+9. **Ngưỡng đạt của phụ huynh áp dụng cho cả kiểm tra chủ đề**, không chỉ kiểm tra tiến hóa (spec 9.5 chỉ nói "ngưỡng đạt tiến hóa", spec 5.5 ghi kiểm tra chủ đề đạt từ 80% không có (*)). Giá nếu sai: hạ ngưỡng thì con cũng dễ nhận 20 xu của kiểm tra chủ đề hơn. Nơi sửa: `src/game/apply.ts` (`completeTopicTest`), `src/ui/TopicTestScreen.tsx`.
+10. **Giao thêm bài luyện** lấy 2 bài theo mức bậc thang hiện tại; nút bị tắt khi khái niệm đã có bài được giao chưa làm xong.
+11. **Tiến độ chi tiết chưa có thời gian học từng bài và ngôn ngữ câu hỏi từng bài** (spec 9.3 có). Lịch sử làm bài chưa lưu 2 thông tin này theo bài.
+12. **Quy tắc nhập file**: file phải có ít nhất 1 hồ sơ và `meta` đúng dạng; hồ sơ đang dùng không có trong file thì lấy hồ sơ đầu tiên; file không có PIN thì giữ PIN của máy; dấu vết đặt lại PIN giữ mốc muộn nhất giữa máy và file.
+13. **Hệ quả gộp của mục 2 và mục 5**: ai biết lối "Quên mã PIN?" cũng xóa được toàn bộ dữ liệu bằng cách gõ đúng tên của con, và việc xóa không giữ bản sao lưu tự động. Bố mẹ nên xuất file `.pypet` định kỳ. Nơi sửa nếu muốn an toàn hơn: giữ 1 bản sao lưu tự động khi xóa (`eraseAll` trong `src/ui/GameProvider.tsx`).
+14. **File xuất khi dữ liệu hỏng** không chứa mã băm PIN và các bản sao lưu tự động (file này để gửi hỗ trợ).
+15. **Thẻ "Con cần hỗ trợ"** chỉ hiện số lần mắc lỗi hiểu sai, chưa hiện nội dung "hiểu lầm hay gặp" (spec 9.2). Để dành cho bản sau.
