@@ -13,7 +13,8 @@
     "preview": "vite preview --port 4173 --strictPort",
     "typecheck": "npm run content:build && tsc --noEmit",
     "test:py": ".venv/bin/python -m pytest tools/tests -q",
-    "content:build": "tsx tools/build_content.ts content src/generated/content.json"
+    "content:build": "tsx tools/build_content.ts content src/generated/content.json",
+    "content:validate": "npm run content:build && python3 tools/validate_content.py src/generated/content.json"
   },
   "keywords": [],
   "type": "module",
