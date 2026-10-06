@@ -1,0 +1,125 @@
+questions:
+  - id: s1.lam-quen.b1
+    type: mcq
+    concepts: [ai-basics]
+    lessons: [s1.lam-quen.l1]
+    prompt:
+      vi: "Trí tuệ nhân tạo (AI) là gì?"
+      en: "What is artificial intelligence (AI)?"
+    choices:
+      - { vi: "Một chương trình chỉ làm theo một bộ quy tắc cố định, không bao giờ thay đổi", en: "A program that only follows a fixed set of rules and never changes" }
+      - { vi: "Một hệ thống máy tính làm được những việc thường cần trí thông minh của con người", en: "A computer system that can do tasks that usually need human intelligence", correct: true }
+      - { vi: "Một loại máy tính chạy không cần điện", en: "A type of computer that runs without electricity" }
+      - { vi: "Một trò chơi do robot chơi", en: "A game that robots play" }
+    explanation:
+      vi: "AI giúp máy tính làm những việc như nhận ra giọng nói, hiểu ngôn ngữ hay đưa ra quyết định."
+      en: "AI lets computers do tasks such as recognizing speech, understanding language or making decisions."
+
+  - id: s1.lam-quen.b2
+    type: mcq
+    concepts: [ai-basics]
+    lessons: [s1.lam-quen.l1]
+    prompt: { vi: "Ví dụ nào dưới đây có dùng AI?", en: "Which example uses AI?" }
+    choices:
+      - { vi: "Máy tính cầm tay cộng 2 số", en: "A calculator adds 2 numbers" }
+      - { vi: "Điện thoại nhận ra khuôn mặt để mở khóa", en: "A phone recognizes a face to unlock", correct: true }
+      - { vi: "Bóng đèn bật khi nhấn công tắc", en: "A light turns on when you press the switch" }
+      - { vi: "Đồng hồ báo thức kêu lúc 6 giờ", en: "An alarm clock rings at 6 o'clock" }
+    explanation:
+      vi: "Nhận ra khuôn mặt cần học từ rất nhiều ảnh, đó là việc của AI. Các ví dụ khác chỉ làm theo một quy tắc cố định."
+      en: "To recognize a face, a system learns from many photos. That is AI. The other examples only follow a fixed rule."
+
+  - id: s1.lam-quen.b3
+    type: mcq
+    concepts: [run-order]
+    lessons: [s1.lam-quen.l3]
+    prompt: { vi: "Máy tính chạy các lệnh trong chương trình theo thứ tự nào?", en: "In which order does the computer run the statements of a program?" }
+    choices:
+      - { vi: "Lần lượt từ trên xuống dưới", en: "One by one, from top to bottom", correct: true }
+      - { vi: "Từ dưới lên trên", en: "From bottom to top", misconception: run-order }
+      - { vi: "Lệnh ngắn chạy trước, lệnh dài chạy sau", en: "Short statements first, long statements last", misconception: run-order }
+      - { vi: "Tất cả cùng một lúc", en: "All at the same time", misconception: run-order }
+    explanation:
+      vi: "Máy tính chạy từng lệnh một, từ dòng đầu tiên tới dòng cuối cùng."
+      en: "The computer runs one statement at a time, from the first line to the last line."
+
+  - id: s1.lam-quen.b4
+    type: predict
+    concepts: [run-order]
+    lessons: [s1.lam-quen.l3]
+    code: |
+      print("Py")
+      print("Pet")
+    prompt: { vi: "Đoạn code in ra gì?", en: "What is the output of this code?" }
+    choices:
+      - { text: "Py\nPet", correct: true }
+      - { text: "Pet\nPy", misconception: run-order }
+      - { text: "PyPet" }
+      - { text: "Py Pet" }
+    explanation:
+      vi: "Mỗi print in 1 dòng, theo thứ tự từ trên xuống."
+      en: "Each print shows 1 line, in order from top to bottom."
+
+  - id: s1.lam-quen.b5
+    type: predict
+    concepts: [print-call]
+    lessons: [s1.lam-quen.l3]
+    code: |
+      print("Xin")
+      print()
+      print()
+      print("chào")
+    prompt: { vi: "Đoạn code in ra gì?", en: "What is the output of this code?" }
+    choices:
+      - { text: "Xin\n\n\nchào", correct: true }
+      - { text: "Xin\n\nchào", misconception: print-call }
+      - { text: "Xin chào" }
+      - { text: "Xin\nchào", misconception: print-call }
+    explanation:
+      vi: "Mỗi print() để trống in ra 1 dòng trống. Có 2 lệnh như vậy nên có 2 dòng trống."
+      en: "Each empty print() prints 1 empty line. There are 2 of them, so there are 2 empty lines."
+
+  - id: s1.lam-quen.b6
+    type: predict
+    concepts: [case-sensitive, read-error]
+    lessons: [s1.lam-quen.l2]
+    code: |
+      print('Hi')
+      Print('Bye')
+    prompt: { vi: "Chuyện gì xảy ra khi chạy đoạn code này?", en: "What happens when this code runs?" }
+    choices:
+      - { vi: "In ra Hi, rồi báo lỗi NameError ở dòng 2", en: "It prints Hi, then shows a NameError on line 2", correct: true, error: true }
+      - { text: "Hi\nBye", misconception: case-sensitive }
+      - { text: "Hi" }
+      - { vi: "Không in ra gì", en: "Nothing is printed" }
+    explanation:
+      vi: "Dòng 1 in ra Hi. Ở dòng 2, Print viết hoa nên Python không biết đó là lệnh gì và báo lỗi NameError."
+      en: "Line 1 prints Hi. On line 2, Print has an upper-case P, so Python does not know it and shows a NameError."
+
+  - id: s1.lam-quen.b7
+    type: mcq
+    concepts: [case-sensitive, string-quotes]
+    lessons: [s1.lam-quen.l2]
+    prompt: { vi: "Dòng code nào viết đúng?", en: "Which line of code is correct?" }
+    choices:
+      - { text: "print(\"Robo\")", correct: true }
+      - { text: "PRINT(\"Robo\")", misconception: case-sensitive }
+      - { text: "print(Robo)", misconception: string-quotes }
+      - { text: "print(\"Robo')", misconception: string-quotes }
+    explanation:
+      vi: "print phải viết thường, và chữ phải mở, đóng bằng cùng một loại dấu nháy."
+      en: "print must be in lower-case letters, and the text must open and close with the same type of quote."
+
+  - id: s1.lam-quen.b8
+    type: mcq
+    concepts: [read-error]
+    lessons: [s1.lam-quen.l4]
+    prompt: { vi: "Thông báo lỗi của Python cho con biết điều gì?", en: "What does a Python error message tell you?" }
+    choices:
+      - { vi: "Dòng bị lỗi và tên loại lỗi", en: "The line with the error and the type of error", correct: true }
+      - { vi: "Cách sửa lỗi đúng hoàn toàn", en: "The complete correct fix", misconception: read-error }
+      - { vi: "Máy tính đã bị hỏng", en: "The computer is broken" }
+      - { vi: "Không có thông tin gì quan trọng", en: "Nothing important", misconception: read-error }
+    explanation:
+      vi: "Thông báo lỗi cho biết lỗi ở dòng nào và là loại lỗi gì. Con dùng thông tin đó để tự tìm cách sửa."
+      en: "An error message tells you the line and the type of the error. You use this information to find the fix."

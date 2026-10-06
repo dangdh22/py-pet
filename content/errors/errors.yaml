@@ -35,6 +35,7 @@
 
 - id: smart-quote
   match: { type: SyntaxError, message: "^invalid character '(?<char>.)' \\(U\\+(?<code>[0-9A-F]+)\\)$" }
+  misconception: string-quotes
   explain:
     vi: "Dòng {line}: có ký tự lạ {char}. Có thể con đã dán dấu nháy cong từ Word hoặc trang web. Hãy xóa và gõ lại dấu nháy thẳng \" bằng bàn phím."
     en: "Line {line}: the character {char} is not allowed. Maybe you pasted a curly quote from Word or a web page. Delete it and type a straight quote \" with the keyboard."
@@ -42,6 +43,7 @@
 
 - id: unterminated-string
   match: { type: SyntaxError, message: "^unterminated (triple-quoted )?string literal" }
+  misconception: string-quotes
   explain:
     vi: "Dòng {line}: chuỗi chưa có dấu nháy đóng. Mở chuỗi bằng dấu nháy nào thì phải đóng bằng đúng dấu nháy đó."
     en: "Line {line}: the string has no closing quote. Close the string with the same quote that opens it."
@@ -66,6 +68,7 @@
 
 - id: print-no-paren
   match: { type: SyntaxError, message: "^Missing parentheses in call to 'print'" }
+  misconception: print-call
   explain:
     vi: "Dòng {line}: lệnh print cần dấu ngoặc tròn, ví dụ print(\"Robo\")."
     en: "Line {line}: print needs round brackets, for example print(\"Robo\")."
@@ -101,6 +104,7 @@
 
 - id: name-similar
   match: { type: NameError, message: "^name '(?<name>\\w+)' is not defined$", check: similar-name }
+  misconception: case-sensitive
   explain:
     vi: "Dòng {line}: Python không biết \"{name}\" là gì. Có phải con muốn viết \"{suggestion}\" không?"
     en: "Line {line}: Python does not know \"{name}\". Did you mean \"{suggestion}\"?"
@@ -111,6 +115,7 @@
 
 - id: name-undefined
   match: { type: NameError, message: "^name '(?<name>\\w+)' is not defined$" }
+  misconception: string-quotes
   explain:
     vi: "Dòng {line}: Python không biết \"{name}\" là gì. Nếu là chữ cần in ra, hãy đặt trong dấu nháy: \"{name}\". Nếu là biến, con cần gán giá trị cho nó trước khi dùng."
     en: "Line {line}: Python does not know \"{name}\". If it is text to print, put it in quotes: \"{name}\". If it is a variable, give it a value before you use it."

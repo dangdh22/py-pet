@@ -1,0 +1,7 @@
+id: s1.lam-quen
+title: { vi: "Làm quen với chương trình", en: "Meet your first program" }
+lessons:
+  - 01-chuong-trinh-la-gi.md
+  - 02-chu-hoa-dau-nhay.md
+  - 03-tu-tren-xuong.md
+  - 04-khi-may-khong-hieu.md
