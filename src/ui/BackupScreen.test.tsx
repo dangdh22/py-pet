@@ -57,7 +57,7 @@ describe("BackupScreen", () => {
   test("wrong PIN keeps the file picker hidden", async () => {
     await renderWithGame(<BackupScreen />, { meta: { pin: await hashPin("1234", 1000) } });
     await unlock("9999");
-    expect(screen.getByRole("alert")).toHaveTextContent("Mã PIN chưa đúng.");
+    expect(await screen.findByRole("alert")).toHaveTextContent("Mã PIN chưa đúng.");
     expect(screen.queryByLabelText("Chọn file .pypet")).not.toBeInTheDocument();
   });
 
