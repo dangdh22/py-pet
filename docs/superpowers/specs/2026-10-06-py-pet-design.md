@@ -17,14 +17,14 @@
 1. Dạy nền tảng lập trình và ngôn ngữ Python từ con số 0.
 2. Chuẩn bị cho 2 dạng thi:
    - Dạng Tin học trẻ / học sinh giỏi Tin: tự viết chương trình, chấm bằng test case. Đây là phần chính.
-   - Dạng SCO IAIO: trắc nghiệm đọc code chọn đầu ra và kiến thức AI/Machine Learning, có bản tiếng Anh. Tham chiếu: `ref/SAIO Vietnamese/` (35 câu, 60 phút; đề lớp 6 gồm khoảng 25 câu AI/ML và khoảng 10 câu đọc code Python).
+   - Dạng SCO IAIO: trắc nghiệm đọc code chọn đầu ra và kiến thức AI/Machine Learning, có bản tiếng Anh. Tham chiếu: đề mẫu SCO IAIO lưu ngoài repo (thư mục `ref/` trên máy local, bị git bỏ qua vì lý do bản quyền) (35 câu, 60 phút; đề lớp 6 gồm khoảng 25 câu AI/ML và khoảng 10 câu đọc code Python).
 3. Duy trì động lực bằng cơ chế nuôi robot ảo: làm bài thì robot lớn lên; qua bài kiểm tra tiến hóa thì robot tiến hóa.
 
 ### 1.3. Tiêu chí thành công
 
-1. Con tự học được giai đoạn 1 mà không cần phụ huynh ngồi cạnh, ngoại trừ các lúc app báo "Con cần hỗ trợ".
-2. Con duy trì 15 đến 30 phút/ngày trong ít nhất 4 tuần liên tục, không tính các ngày nghỉ.
-3. Khu phụ huynh chỉ ra đúng khái niệm con đang vướng, kèm bằng chứng cụ thể.
+1. Học sinh tự học được giai đoạn 1 mà không cần phụ huynh ngồi cạnh, ngoại trừ các lúc app báo "Con cần hỗ trợ".
+2. Học sinh duy trì 15 đến 30 phút/ngày trong ít nhất 4 tuần liên tục, không tính các ngày nghỉ.
+3. Khu phụ huynh chỉ ra đúng khái niệm học sinh đang vướng, kèm bằng chứng cụ thể.
 4. Script kiểm tra nội dung, test Pyodide và test đầu cuối đều qua trước mỗi lần deploy.
 
 ### 1.4. Các quyết định đã chốt
@@ -79,7 +79,7 @@ py-pet/
 | `i18n` | Tra chuỗi giao diện theo khóa và ngôn ngữ | Không phụ thuộc module khác |
 | `ui` | Màn hình và component | `store`, `runner`, `explain`, `content`, `i18n` |
 
-### 2.3. Luồng dữ liệu khi con nộp bài
+### 2.3. Luồng dữ liệu khi học sinh nộp bài
 
 1. UI gọi `runner.judge(exercise, code)` và nhận `JudgeResult`.
 2. Store gửi sự kiện `ExerciseJudged` vào `game.apply` để cập nhật XP, xu, Pin/Vui, điểm thành thạo, hiểu lầm, hộp Leitner và kiểm tra mốc tiến hóa.
@@ -262,7 +262,7 @@ runCode(code, stdin, timeoutMs) -> {
 
 ### 4.2. Chấm bài
 
-- "Chạy thử" chạy 1 lần với Input con tự nhập. "Nộp bài" chạy lần lượt mọi test, mỗi test dùng không gian biến mới.
+- "Chạy thử" chạy 1 lần với Input học sinh tự nhập. "Nộp bài" chạy lần lượt mọi test, mỗi test dùng không gian biến mới.
 
 ```
 JudgeResult {
@@ -295,7 +295,7 @@ JudgeResult {
 ```
 
 - Tra cứu theo thứ tự từ cụ thể đến chung. Không khớp mục cụ thể thì dùng mục chung của loại lỗi. Loại lỗi chưa có thì hiện thông báo gốc kèm câu "Lỗi này lạ quá, con hỏi bố mẹ nhé" và ghi nhật ký.
-- Kiểm tra phụ trên code của con: tên gần giống (`Print` → `print`), dùng `=` thay `==` trong `if`, vòng `while` có điều kiện không đổi khi bị quá thời gian.
+- Kiểm tra phụ trên code của học sinh: tên gần giống (`Print` → `print`), dùng `=` thay `==` trong `if`, vòng `while` có điều kiện không đổi khi bị quá thời gian.
 - Bản đầu khoảng 20 mục: thiếu `:`; `IndentationError`; chuỗi thiếu nháy đóng; ngoặc không khớp; `NameError` (gõ sai tên, viết hoa `Print`, dùng biến trước khi gán); `TypeError` cộng chuỗi với số; `ValueError` từ `int("abc")` và `int("5.5")`; `ZeroDivisionError`; `IndexError`; `EOFError` (thiếu dữ liệu Input); `=` trong `if`; quá thời gian; quá nhiều đầu ra; các mục chung theo loại lỗi.
 - Hiển thị: robot nói lời giải thích trong bong bóng thoại, dòng lỗi tô đỏ trong trình soạn code, thông báo gốc tiếng Anh nằm trong mục "Xem lỗi gốc" thu gọn.
 
@@ -325,7 +325,7 @@ Toàn bộ nằm trong `src/game/` dưới dạng hàm thuần. Các giá trị 
 ### 5.2. Trạng thái của 1 hồ sơ
 
 ```
-profile:  tên con, tên robot, ngày tạo, cài đặt (gồm uiLanguage, questionLanguage)
+profile:  tên học sinh, tên robot, ngày tạo, cài đặt (gồm uiLanguage, questionLanguage)
 pet:      giai đoạn, XP trong giai đoạn, Pin 0-5, Vui 0-5, đang đi nghỉ, lịch nghỉ, phụ kiện đang đeo, đồ sở hữu
 wallet:   xu, lịch sử giao dịch
 streak:   số ngày hiện tại, kỷ lục, số thẻ giữ chuỗi, ngày hoạt động cuối, điểm hoạt động hôm nay
@@ -383,7 +383,7 @@ XP trong giai đoạn chia thành 3 kích cỡ hiển thị: nhỏ, vừa, lớn
 ### 5.7. Chế độ nghỉ
 
 - Phụ huynh bật ngay hoặc lên lịch theo khoảng ngày (ví dụ đợt ôn thi học kỳ).
-- Trong thời gian nghỉ: Pin/Vui giữ nguyên, chuỗi ngày đóng băng, ngày nghỉ không tính vào kế hoạch tuần. Con vẫn học được nếu muốn; ngày có học vẫn được tính điểm hoạt động.
+- Trong thời gian nghỉ: Pin/Vui giữ nguyên, chuỗi ngày đóng băng, ngày nghỉ không tính vào kế hoạch tuần. Học sinh vẫn học được nếu muốn; ngày có học vẫn được tính điểm hoạt động.
 
 ### 5.8. Chuỗi ngày và kế hoạch tuần
 
@@ -413,18 +413,18 @@ XP trong giai đoạn chia thành 3 kích cỡ hiển thị: nhỏ, vừa, lớn
 
 - Cấu trúc (*): 15 câu `predict`/`mcq` (trong đó 3 câu kiến thức AI), mỗi câu 1 điểm; 3 bài `code` có `test_eligible: true`, mỗi bài 3 điểm, chấm theo tỷ lệ số test qua. Tổng 24 điểm. Đạt khi điểm ≥ 80% (≥ 19,2 điểm).
 - Đề rút ngẫu nhiên từ ngân hàng câu hỏi của giai đoạn, tránh câu của lần thi trước.
-- Ngôn ngữ đề lấy theo `questionLanguage`; con đổi được từng câu bằng nút VI/EN.
+- Ngôn ngữ đề lấy theo `questionLanguage`; học sinh đổi được từng câu bằng nút VI/EN.
 - Đạt: hoạt cảnh tiến hóa, robot lên dạng mới, +100 xu, mở giai đoạn tiếp theo.
 - Chưa đạt: không bị trừ gì. App liệt kê các khái niệm sai và tạo bộ ôn tập trọng tâm (2 đến 3 bài cho mỗi khái niệm sai, ở mức bậc thang phù hợp). Làm xong bộ ôn tập thì được thi lại.
 
 ### 5.12. Cửa hàng và phần thưởng
 
 - Khu "Đồ cho Robo": pin sạc nhanh, dầu nhớt (hồi Pin), đồ chơi (hồi Vui), phụ kiện, đồ trang trí phòng.
-- Khu "Phần thưởng từ bố mẹ": danh sách do phụ huynh tạo, có giá và giới hạn số lần mỗi tuần. Con bấm Đổi thì tạo yêu cầu "Chờ bố mẹ duyệt"; xu chỉ bị trừ khi phụ huynh nhập PIN duyệt.
+- Khu "Phần thưởng từ bố mẹ": danh sách do phụ huynh tạo, có giá và giới hạn số lần mỗi tuần. Học sinh bấm Đổi thì tạo yêu cầu "Chờ bố mẹ duyệt"; xu chỉ bị trừ khi phụ huynh nhập PIN duyệt.
 
 ### 5.13. Thời gian học
 
-Chỉ tính khi con đang ở màn hình học và có thao tác trong 60 giây gần nhất. Lưu số phút theo ngày.
+Chỉ tính khi học sinh đang ở màn hình học và có thao tác trong 60 giây gần nhất. Lưu số phút theo ngày.
 
 ### 5.14. Chống chỉnh đồng hồ
 
@@ -437,7 +437,7 @@ Nếu thời gian hiện tại sớm hơn ngày hoạt động cuối: không c�
 | Bảng | Khóa | Nội dung |
 |---|---|---|
 | `meta` | key | Phiên bản dữ liệu, hồ sơ đang dùng, mã băm PIN, ngày sao lưu cuối, nhật ký cảnh báo, nhật ký lỗi (50 mục), 3 bản sao lưu tự động gần nhất |
-| `profiles` | profileId | Tên con, tên robot, ngày tạo |
+| `profiles` | profileId | Tên học sinh, tên robot, ngày tạo |
 | `states` | profileId | Trạng thái game (mục 5.2), JSON |
 | `attempts` | tự tăng | Lịch sử làm bài: mã bài, code, đầu ra, kết quả, hiểu lầm, ngôn ngữ câu hỏi, thời gian. Giữ 10 lượt gần nhất mỗi bài |
 | `drafts` | profileId + mã bài | Code đang làm dở |
@@ -448,7 +448,7 @@ Nếu thời gian hiện tại sớm hơn ngày hoạt động cuối: không c�
 
 ### 6.2. Hồ sơ
 
-Lần đầu mở app: chọn ngôn ngữ giao diện, nhập tên con, đặt tên robot, phụ huynh đặt PIN. App tạo 1 hồ sơ. Mọi dữ liệu gắn với `profileId`; màn hình chọn hồ sơ ẩn trong bản đầu. PIN, cài đặt chung và khu phụ huynh dùng chung cho mọi hồ sơ.
+Lần đầu mở app: chọn ngôn ngữ giao diện, nhập tên học sinh, đặt tên robot, phụ huynh đặt PIN. App tạo 1 hồ sơ. Mọi dữ liệu gắn với `profileId`; màn hình chọn hồ sơ ẩn trong bản đầu. PIN, cài đặt chung và khu phụ huynh dùng chung cho mọi hồ sơ.
 
 ### 6.3. Mã PIN
 
@@ -474,7 +474,7 @@ Lần đầu mở app: chọn ngôn ngữ giao diện, nhập tên con, đặt t
 2. Kiểm tra định dạng và checksum. Checksum sai thì cảnh báo "File đã bị chỉnh sửa"; phụ huynh vẫn có thể chọn nhập tiếp.
 3. File từ phiên bản mới hơn app thì từ chối và hướng dẫn tải lại trang.
 4. Chạy migration nếu file từ phiên bản cũ.
-5. Hiện bản xem trước (tên con, giai đoạn, xu, ngày hoạt động cuối) để xác nhận.
+5. Hiện bản xem trước (tên học sinh, giai đoạn, xu, ngày hoạt động cuối) để xác nhận.
 6. Tự sao lưu dữ liệu hiện tại trước khi ghi đè (giữ 3 bản gần nhất).
 
 ### 6.6. Migration
@@ -502,22 +502,22 @@ Bài bị xóa khỏi nội dung: tiến độ được giữ nhưng không hi�
 
 - `uiLanguage`: `vi` hoặc `en`. Đổi được trong cài đặt; mặc định `vi`.
 - `questionLanguage`: `vi`, `en` hoặc `both` (hiện 2 bản song song). Phụ huynh đặt mặc định.
-- Trên mỗi câu hỏi có nút VI/EN để con đổi tạm cho câu đó.
+- Trên mỗi câu hỏi có nút VI/EN để học sinh đổi tạm cho câu đó.
 - Khi giao diện là `en` mà phần nội dung chỉ có `vi`, app hiện bản `vi` (không để trống).
 
 ### 7.3. Triển khai
 
 - Bộ chuỗi giao diện đặt trong `src/i18n/vi.ts` và `src/i18n/en.ts`. Kiểu TypeScript bắt buộc 2 bộ có cùng tập khóa; thiếu khóa là lỗi biên dịch.
 - Nội dung dùng trường `{ vi, en }` (mục 3.5). Hàm `pick(text, lang)` trả về bản đúng ngôn ngữ, hoặc bản `vi` nếu không có bản `en`.
-- Lịch sử làm bài ghi lại ngôn ngữ câu hỏi, để khu phụ huynh thấy con làm bản nào.
+- Lịch sử làm bài ghi lại ngôn ngữ câu hỏi, để khu phụ huynh thấy học sinh làm bản nào.
 
 ## 8. Giao diện
 
 ### 8.1. Luồng chính
 
-Lần đầu: chào hỏi (ngôn ngữ, tên con, tên robot, PIN). Sau đó: Phòng robot → Bản đồ học → Bài học / Trạm ôn / Kiểm tra → Màn hình kết quả → Phòng robot. Từ Phòng robot còn vào được Cửa hàng, Sổ thành tích, Khu phụ huynh, Sao lưu.
+Lần đầu: chào hỏi (ngôn ngữ, tên học sinh, tên robot, PIN). Sau đó: Phòng robot → Bản đồ học → Bài học / Trạm ôn / Kiểm tra → Màn hình kết quả → Phòng robot. Từ Phòng robot còn vào được Cửa hàng, Sổ thành tích, Khu phụ huynh, Sao lưu.
 
-### 8.2. Các màn hình của con
+### 8.2. Các màn hình của học sinh
 
 1. **Phòng robot:** robot trong phòng; thanh Pin, Vui, Lớn lên; mục tiêu hôm nay và tuần; chuỗi ngày; xu; nút "Học tiếp".
 2. **Bản đồ học:** đường đi các nút theo chủ đề, màu theo trạng thái (đã xong, tiếp theo, trạm ôn, kiểm tra, khóa); danh sách chủ đề; ô "Kiểm tra tiến hóa".
@@ -543,7 +543,7 @@ Lần đầu: chào hỏi (ngôn ngữ, tên con, tên robot, PIN). Sau đó: Ph
 Vào bằng PIN; tự khóa sau 5 phút không thao tác hoặc khi rời khu.
 
 1. **Tổng quan:** cảnh báo (yêu cầu đổi thưởng, khái niệm cần hỗ trợ, nhắc sao lưu); biểu đồ số phút học 7 ngày (ngày nghỉ màu xám); giai đoạn hiện tại, kế hoạch tuần, chuỗi ngày, xu.
-2. **Con cần hỗ trợ:** mỗi khái niệm yếu hiện điểm thành thạo, tỷ lệ đúng, hiểu lầm hay gặp, mức bậc thang; bằng chứng là bài làm thật của con (code, input, đầu ra so với mong đợi); gợi ý giảng ngoài đời; nút "Giao thêm bài luyện"; nút "Đánh dấu đã kèm con". Bên dưới là các khái niệm đang luyện (điểm 40 đến 70).
+2. **Con cần hỗ trợ:** mỗi khái niệm yếu hiện điểm thành thạo, tỷ lệ đúng, hiểu lầm hay gặp, mức bậc thang; bằng chứng là bài làm thật của học sinh (code, input, đầu ra so với mong đợi); gợi ý giảng ngoài đời; nút "Giao thêm bài luyện"; nút "Đánh dấu đã kèm con". Bên dưới là các khái niệm đang luyện (điểm 40 đến 70).
 3. **Tiến độ chi tiết:** bảng theo chủ đề (số bài, thành thạo, điểm kiểm tra chủ đề); lịch sử kiểm tra tiến hóa; chi tiết từng bài (số lần nộp, gợi ý đã dùng, thời gian, ngôn ngữ câu hỏi).
 4. **Phần thưởng:** duyệt/từ chối yêu cầu; quản lý danh sách (tên, giá, giới hạn/tuần); số xu trung bình/ngày để tham khảo; lịch sử.
 5. **Cài đặt:** chế độ nghỉ (bật ngay hoặc lên lịch); mục tiêu ngày, kế hoạch tuần, số ngày vắng được miễn; ngưỡng đạt tiến hóa, ngưỡng "Cần hỗ trợ", giới hạn thời gian chạy code; ngôn ngữ giao diện và ngôn ngữ câu hỏi mặc định; xuất/nhập file, đổi PIN, xóa hồ sơ; nhật ký cảnh báo và nhật ký lỗi.
@@ -573,7 +573,7 @@ Viết test trước khi viết code (TDD). `now` và `rng` luôn được truy�
 3. **Test tích hợp với Pyodide thật (Node.js):** stdin, quá thời gian, giới hạn đầu ra, số dòng lỗi, không gian biến mới; chạy toàn bộ lời giải mẫu và code của câu `predict` trên Pyodide để đối chiếu với CPython.
 4. **Test component (React Testing Library):** màn hình bài tập chia đôi, thẻ trắc nghiệm có nút VI/EN, cửa nhập PIN, bong bóng giải thích lỗi.
 5. **Test đầu cuối (Playwright, Chromium)** với bộ nội dung mẫu và đồng hồ giả lập: lần đầu mở app đến bài đầu tiên và nhận XP; trạm ôn; thi tiến hóa không đạt, ôn trọng tâm, thi lại đạt; đổi thưởng và duyệt bằng PIN; xuất và nhập file; chế độ nghỉ; chuyển giao diện sang tiếng Anh.
-6. **Kiểm thử thủ công trước mỗi lần phát hành:** gõ tiếng Việt bằng Unikey và bộ gõ macOS trong trình soạn code; laptop 13 và 15 inch; quan sát con dùng thử 1 buổi.
+6. **Kiểm thử thủ công trước mỗi lần phát hành:** gõ tiếng Việt bằng Unikey và bộ gõ macOS trong trình soạn code; laptop 13 và 15 inch; quan sát học sinh dùng thử 1 buổi.
 7. **CI (GitHub Actions):** mỗi lần push chạy lint, kiểm tra kiểu, unit test, kiểm tra nội dung, test Pyodide, test đầu cuối. Merge vào `main` thì build và deploy GitHub Pages.
 
 ## 12. Phạm vi bản đầu và các mốc
@@ -607,7 +607,7 @@ Mỗi mốc có kế hoạch triển khai riêng và kết thúc bằng 1 bản 
 3. **M3 – Ôn tập và hỗ trợ:** điểm thành thạo, Leitner, trạm ôn, kiểm tra chủ đề và tiến hóa, bậc thang, `parsons` và `fill`, bộ ôn tập trọng tâm.
 4. **M4 – Cửa hàng và khu phụ huynh.**
 5. **M5 – Nội dung giai đoạn 1 đến 4:** bắt đầu song song sau M1. Mỗi giai đoạn: soạn, chạy script kiểm tra, phụ huynh duyệt.
-6. **M6 – Hoàn thiện:** hình robot đầy đủ, hoạt cảnh, CI/CD, con dùng thử và chỉnh theo phản hồi.
+6. **M6 – Hoàn thiện:** hình robot đầy đủ, hoạt cảnh, CI/CD, học sinh dùng thử và chỉnh theo phản hồi.
 
 ## 13. Giả định cần kiểm chứng
 

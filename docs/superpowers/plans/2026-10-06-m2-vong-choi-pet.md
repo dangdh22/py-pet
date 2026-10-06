@@ -24,7 +24,7 @@
 - File sao lưu (spec 6.4, 6.5): tên `py-pet-<ten-con>-YYYY-MM-DD.pypet` (tên con bỏ dấu, chữ thường, nối bằng `-`); nội dung là base64 của JSON `{ format: "py-pet-backup", schemaVersion, appVersion, exportedAt, meta, profiles, checksum }`; `checksum` = SHA-256 (hex) của JSON phần còn lại nối với 1 chuỗi bí mật cố định. Nhập file bắt buộc PIN, từ chối file từ phiên bản mới hơn, cảnh báo khi checksum sai, hiện bản xem trước, tự sao lưu dữ liệu hiện tại trước khi ghi đè.
 - Mọi chuỗi giao diện đi qua `t(key)` với 2 bộ `vi`/`en` cùng khóa và cùng placeholder.
 - Không gọi mạng. Không thêm thư viện ngoài Dexie và fake-indexeddb.
-- Mọi commit message kết thúc bằng 2 dòng trailer, đúng như các lệnh commit trong kế hoạch:
+- Mọi commit message kết thúc bằng dòng trailer, đúng như các lệnh commit trong kế hoạch:
   ```
   Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
   ```

@@ -24,7 +24,7 @@
 - Phiên bản gói được ghim như trong lệnh cài đặt của Task 1. TypeScript ghim 5.9.3 (không dùng 7.x trong M1 để tránh rủi ro tương thích).
 - Không gọi bất kỳ dịch vụ AI nào.
 - Script kiểm tra nội dung gồm 2 bước chạy liền nhau trong `npm run content:validate`: `build_content.ts` kiểm tra cấu trúc, song ngữ, ID và tham chiếu (spec 3.9 mục 1 và 10); `validate_content.py` chạy code (spec 3.9 mục 2 đến 7). Việc "mục từ điển lỗi được đúng mục đó nhận diện" (spec 3.9 mục 7) được kiểm tra trong test Pyodide `src/content/parity.pyodide.test.ts`, vì logic nhận diện viết bằng TypeScript. Mục 8 và 9 của spec 3.9 thuộc M3.
-- Mọi commit message kết thúc bằng 2 dòng trailer, đúng như các lệnh commit trong kế hoạch:
+- Mọi commit message kết thúc bằng dòng trailer, đúng như các lệnh commit trong kế hoạch:
   ```
   Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
   ```

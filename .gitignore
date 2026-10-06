@@ -16,6 +16,10 @@ build/
 
 # Claude Code local settings
 .claude/settings.local.json
+CLAUDE.local.md
+
+# Reference exam papers (copyrighted, local only)
+ref/
 
 # Superpowers worktrees
 .worktrees/
