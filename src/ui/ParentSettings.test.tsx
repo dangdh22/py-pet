@@ -3,7 +3,7 @@ import { fireEvent, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, test, vi } from "vitest";
 import { initialGameState } from "../game/state";
-import { hashPin } from "../storage/pin";
+import { hashPin, verifyPin } from "../storage/pin";
 import { FIXED_NOW, renderWithGame, TODAY } from "../test/renderGame";
 import { downloadText } from "./download";
 import { ParentSettings } from "./ParentSettings";
@@ -31,6 +31,11 @@ describe("ParentSettings", () => {
     await waitFor(async () =>
       expect((await store.loadActive())!.state.vacation.ranges).toEqual([{ start: "2026-10-12", end: "2026-10-16" }]),
     );
+    // Duplicate ranges are refused: same start and end should not be added again.
+    await userEvent.click(within(vacation).getByRole("button", { name: "Lên lịch nghỉ" }));
+    await waitFor(async () =>
+      expect((await store.loadActive())!.state.vacation.ranges).toEqual([{ start: "2026-10-12", end: "2026-10-16" }]),
+    );
     await userEvent.click(within(vacation).getByRole("button", { name: "Hủy" }));
     await waitFor(async () => expect((await store.loadActive())!.state.vacation.ranges).toEqual([]));
   });
@@ -40,10 +45,13 @@ describe("ParentSettings", () => {
     const goals = section("Mục tiêu và ngưỡng");
     await userEvent.clear(within(goals).getByLabelText("Mục tiêu mỗi ngày (điểm hoạt động)"));
     await userEvent.type(within(goals).getByLabelText("Mục tiêu mỗi ngày (điểm hoạt động)"), "3");
-    await userEvent.clear(within(goals).getByLabelText("Ngưỡng đạt kiểm tra (%)"));
-    await userEvent.type(within(goals).getByLabelText("Ngưỡng đạt kiểm tra (%)"), "30");
+    const passInput = within(goals).getByLabelText("Ngưỡng đạt kiểm tra (%)") as HTMLInputElement;
+    await userEvent.clear(passInput);
+    await userEvent.type(passInput, "30");
     await userEvent.click(within(goals).getByRole("button", { name: "Lưu cài đặt" }));
     expect(within(goals).getByRole("status")).toHaveTextContent("Đã lưu cài đặt.");
+    // The field shows what was saved (cleaned: 30 was clamped to 50).
+    expect(passInput.value).toBe("50");
     await userEvent.selectOptions(screen.getByLabelText("Ngôn ngữ câu hỏi mặc định"), "both");
     await waitFor(async () =>
       expect((await store.loadActive())!.state.settings).toMatchObject({ dailyGoal: 3, passPercent: 50, questionLang: "both" }),
@@ -57,7 +65,11 @@ describe("ParentSettings", () => {
     await userEvent.type(within(data).getByLabelText("Nhập lại mã PIN mới"), "2468");
     await userEvent.click(within(data).getByRole("button", { name: "Đổi mã PIN" }));
     expect(await within(data).findByText("Đã đổi mã PIN.")).toBeInTheDocument();
-    expect((await store.readMeta()).pinResetAt).toBeNull();
+    const meta = await store.readMeta();
+    expect(meta.pinResetAt).toBeNull();
+    // Verify the new PIN works.
+    expect(meta.pin).toBeTruthy();
+    expect(await verifyPin("2468", meta.pin!)).toBe(true);
   });
 
   test("deletes everything only after the child's name is typed", async () => {

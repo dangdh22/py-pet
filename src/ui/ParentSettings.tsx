@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from "react";
-import { SETTING_LIMITS, type NumberSetting } from "../game/settings";
+import { cleanSettings, SETTING_LIMITS, type NumberSetting } from "../game/settings";
 import type { GameSettings } from "../game/state";
 import type { Lang, QuestionLang } from "../i18n/lang";
 import { useLang } from "../i18n/LangProvider";
@@ -48,6 +48,8 @@ function VacationSettings() {
   function schedule(event: FormEvent) {
     event.preventDefault();
     if (start === "" || end === "" || start < today || start > end) return setBad(true);
+    // Refuse exact duplicates.
+    if (upcoming.some((range) => range.start === start && range.end === end)) return;
     setBad(false);
     game.dispatch({ type: "VacationScheduled", start, end });
     setStart("");
@@ -106,6 +108,11 @@ function NumberSettings() {
     const patch: Partial<GameSettings> = {};
     for (const { key } of NUMBER_FIELDS) patch[key] = Number(values[key]);
     game.dispatch({ type: "SettingsChanged", patch });
+    // Refill the field values from the cleaned settings.
+    const cleaned = cleanSettings(game.state.settings, patch);
+    setValues((current) =>
+      Object.fromEntries(NUMBER_FIELDS.map(({ key }) => [key, String(cleaned[key])])) as Record<NumberSetting, string>,
+    );
     setSaved(true);
   }
   return (
@@ -174,15 +181,31 @@ function DataSettings() {
   const [pin, setPin] = useState("");
   const [again, setAgain] = useState("");
   const [pinMessage, setPinMessage] = useState<MessageKey | null>(null);
+  const [pinError, setPinError] = useState(false);
   const [name, setName] = useState("");
+  const [eraseError, setEraseError] = useState(false);
   async function changePin(event: FormEvent) {
     event.preventDefault();
     if (!isValidPin(pin)) return setPinMessage("onboarding.errorPin");
     if (pin !== again) return setPinMessage("onboarding.errorPinMatch");
-    await game.setPin(pin, false);
-    setPin("");
-    setAgain("");
-    setPinMessage("settings.pinChanged");
+    setPinError(false);
+    try {
+      await game.setPin(pin, false);
+      setPin("");
+      setAgain("");
+      setPinMessage("settings.pinChanged");
+    } catch {
+      setPinError(true);
+      setPinMessage("banner.writeFailed");
+    }
+  }
+  async function erase() {
+    setEraseError(false);
+    try {
+      await game.eraseAll();
+    } catch {
+      setEraseError(true);
+    }
   }
   return (
     <div>
@@ -201,7 +224,7 @@ function DataSettings() {
           <input type="password" inputMode="numeric" autoComplete="new-password" value={again} onChange={(e) => setAgain(e.target.value)} />
         </label>
         <button type="submit">{t("settings.changePin")}</button>
-        {pinMessage && <p role="status">{t(pinMessage)}</p>}
+        {pinMessage && <p role={pinError ? "alert" : "status"}>{t(pinMessage)}</p>}
       </form>
       <h3>{t("settings.erase")}</h3>
       <p>{t("settings.eraseNote")}</p>
@@ -209,9 +232,10 @@ function DataSettings() {
         {t("settings.eraseConfirm")}
         <input value={name} onChange={(e) => setName(e.target.value)} />
       </label>
-      <button className="danger" disabled={name.trim() !== game.profile.childName} onClick={() => void game.eraseAll()}>
+      <button className="danger" disabled={name.trim() !== game.profile.childName} onClick={() => void erase()}>
         {t("settings.eraseButton")}
       </button>
+      {eraseError && <p role="alert">{t("banner.writeFailed")}</p>}
     </div>
   );
 }
