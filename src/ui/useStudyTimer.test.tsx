@@ -48,6 +48,18 @@ describe("useStudyTimer", () => {
     expect(container.textContent).toBe("120");
   });
 
+  test("saves the seconds left when the page is being closed", async () => {
+    const view = await renderWithGame(<Timer active />);
+    await act(async () => {
+      vi.advanceTimersByTime(30_000);
+    });
+    expect(view.container.textContent).toBe("0");
+    await act(async () => {
+      window.dispatchEvent(new Event("pagehide"));
+    });
+    expect(view.container.textContent).toBe("30");
+  });
+
   test("saves the seconds left when the study screen closes", async () => {
     const view = await renderWithGame(<Closable />);
     const seconds = () => view.container.querySelector("p")!.textContent;

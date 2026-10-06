@@ -27,11 +27,16 @@ export function requestBlock(state: GameState, reward: RewardItem, today: string
   return null;
 }
 
-/** A clean reward list: trimmed names, whole non-negative numbers, no empty names, no repeated ids. */
+/**
+ * A clean reward list: trimmed names, whole non-negative numbers, no empty names, no repeated ids; an item whose
+ * name is not text or whose numbers are not finite is skipped. A weekly limit of 0 means the reward cannot be asked
+ * for now.
+ */
 export function cleanCatalog(catalog: RewardItem[]): RewardItem[] {
   const seen = new Set<string>();
   const clean: RewardItem[] = [];
   for (const item of catalog) {
+    if (typeof item.name !== "string" || !Number.isFinite(item.price) || !Number.isFinite(item.weeklyLimit)) continue;
     const name = item.name.trim();
     if (!item.id || seen.has(item.id) || name === "") continue;
     seen.add(item.id);

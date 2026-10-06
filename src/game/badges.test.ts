@@ -35,6 +35,20 @@ describe("badges", () => {
     });
   });
 
+  test("a right answer after 3 failed tries gives the persistence badge, after 2 it does not", () => {
+    const solved = (failedSubmitsBefore: number): GameEvent => ({
+      type: "ExerciseJudged",
+      exerciseId: "x",
+      accepted: true,
+      failedSubmitsBefore,
+      hintsUsed: 0,
+      viewedSolution: false,
+    });
+    const day = at("2026-10-05");
+    expect(apply(initialGameState("2026-10-05"), solved(3), day).badges).toEqual({ persistence: "2026-10-05" });
+    expect(apply(initialGameState("2026-10-05"), solved(2), day).badges).toEqual({});
+  });
+
   test("the week plan badge comes with the week's reward", () => {
     const start = initialGameState("2026-10-05");
     start.settings.weeklyTarget = 1;

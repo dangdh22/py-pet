@@ -59,6 +59,17 @@ describe("ShopScreen: things for the robot", () => {
     expect(within(row("Kệ sách")).getByText("Chưa đủ xu")).toBeInTheDocument();
   });
 
+  test("xu held for a pending reward cannot be spent here", async () => {
+    const state = richState(100);
+    state.rewards.requests = [
+      { id: "q0", rewardId: "park", name: "Đi công viên", price: 100, at: FIXED_NOW.toISOString(), status: "pending", decidedAt: null },
+    ];
+    await renderWithGame(<ShopScreen />, { state });
+    expect(screen.getByRole("button", { name: "Mua Kệ sách" })).toBeDisabled();
+    expect(screen.getByRole("button", { name: "Mua Dầu nhớt" })).toBeDisabled();
+    expect(within(row("Dầu nhớt")).getByText("Xu đang được giữ cho phần thưởng chờ duyệt")).toBeInTheDocument();
+  });
+
   test("a disabled button says why", async () => {
     const state = richState(100);
     state.pet.pin = 5;

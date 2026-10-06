@@ -1,6 +1,8 @@
 import { addDays, daysBetween } from "./dates";
 import { KEEP_DAYS, type GameState } from "./state";
 
+const DAY_FORMAT = /^\d{4}-\d{2}-\d{2}$/;
+
 /** Spec 5.7: a day of the vacation switched on now (from `since`) or of a scheduled or past range. */
 export function isVacationDay(state: GameState, day: string): boolean {
   const { since, ranges } = state.vacation;
@@ -29,22 +31,26 @@ export function weekTarget(state: GameState, monday: string): number {
   return Math.ceil((state.settings.weeklyTarget * workDaysOfWeek(state, monday)) / 7);
 }
 
-/** Switches the vacation on from `today`, or off: the days already taken become a past range. */
+/** Switches the vacation on from `today`, or off: the days already taken become a past range, and a scheduled range that covers today ends yesterday. */
 export function toggleVacation(s: GameState, on: boolean, today: string): void {
   const { since } = s.vacation;
   if (on) {
     if (since === null) s.vacation.since = today;
     return;
   }
-  if (since === null) return;
   const yesterday = addDays(today, -1);
+  s.vacation.ranges = s.vacation.ranges.flatMap((range) => {
+    if (range.start > today || range.end < today) return [range];
+    return range.start <= yesterday ? [{ start: range.start, end: yesterday }] : [];
+  });
+  if (since === null) return;
   if (since <= yesterday) s.vacation.ranges.push({ start: since, end: yesterday });
   s.vacation.since = null;
 }
 
 /** Schedules a vacation from today or later. */
 export function scheduleVacation(s: GameState, start: string, end: string, today: string): void {
-  if (start > end || start < today) return;
+  if (!DAY_FORMAT.test(start) || !DAY_FORMAT.test(end) || start > end || start < today) return;
   s.vacation.ranges.push({ start, end });
 }
 

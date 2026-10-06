@@ -67,7 +67,9 @@ function ShopRow({ item, state }: { item: ShopItem; state: GameState }) {
   const count = state.inventory.consumables[item.id] ?? 0;
   const buy = () => game.dispatch({ type: "ItemBought", itemId: item.id });
   const use = () => game.dispatch({ type: "ItemUsed", itemId: item.id });
-  const canAfford = item.price !== null && state.wallet.xu >= item.price;
+  const canAfford = item.price !== null && freeXu(state) >= item.price;
+  // Xu the child has but a pending reward holds back.
+  const noXuReason = t(item.price !== null && state.wallet.xu >= item.price ? "shop.reserved" : "shop.noXu");
 
   let detail;
   let actions;
@@ -75,7 +77,7 @@ function ShopRow({ item, state }: { item: ShopItem; state: GameState }) {
     const full = state.pet[item.kind === "pin" ? "pin" : "vui"] >= STAT_MAX;
     detail = t(item.kind === "pin" ? "result.pin" : "result.vui", { n: item.effect ?? 0 });
     const maxed = count >= MAX_CONSUMABLES;
-    const buyReason = maxed ? t("shop.maxed", { n: MAX_CONSUMABLES }) : !canAfford ? t("shop.noXu") : null;
+    const buyReason = maxed ? t("shop.maxed", { n: MAX_CONSUMABLES }) : !canAfford ? noXuReason : null;
     const useReason =
       count === 0 ? t("shop.noneLeft") : full ? t(item.kind === "pin" ? "shop.pinFull" : "shop.vuiFull") : null;
     actions = (
@@ -106,7 +108,7 @@ function ShopRow({ item, state }: { item: ShopItem; state: GameState }) {
   } else {
     actions = (
       <>
-        {!canAfford && <span className="shop-reason">{t("shop.noXu")}</span>}
+        {!canAfford && <span className="shop-reason">{noXuReason}</span>}
         <button onClick={buy} disabled={!canAfford} aria-label={`${t("shop.buy")} ${name}`}>
           {t("shop.buy")}
         </button>
@@ -145,7 +147,9 @@ function RewardShop({ newId }: { newId(): string }) {
                 <span className="shop-price">{t("shop.price", { n: reward.price })}</span>
                 <span className="shop-detail">{t("rewards.limit", { n: reward.weeklyLimit })}</span>
                 <span className="shop-actions">
-                  {block && <span>{t(block === "xu" ? "rewards.noXu" : "rewards.limitReached")}</span>}
+                  {block && (
+                    <span className="shop-reason">{t(block === "xu" ? "rewards.noXu" : "rewards.limitReached")}</span>
+                  )}
                   <button
                     disabled={block !== null}
                     aria-label={`${t("rewards.ask")} ${reward.name}`}

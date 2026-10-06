@@ -77,7 +77,11 @@ export function RoomScreen() {
       </ul>
       <ul className="room-goals">
         <li>{t("room.today", { done: todayPoints(state, today), goal: state.settings.dailyGoal })}</li>
-        <li>{t("room.week", { done: weekLessons(state, today), target: weekTarget(state, weekStart(today)) })}</li>
+        <li>
+          {weekTarget(state, weekStart(today)) === 0
+            ? t("room.weekOff")
+            : t("room.week", { done: weekLessons(state, today), target: weekTarget(state, weekStart(today)) })}
+        </li>
         <li>{t("room.streak", { days: displayStreak(state, today) })}</li>
         <li>{t("room.freezes", { count: state.streak.freezes })}</li>
         <li>{t("room.xu", { xu: state.wallet.xu })}</li>

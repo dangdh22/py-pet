@@ -12,6 +12,7 @@ export const BADGES = [
   "streak-14",
   "streak-30",
   "perfect-review",
+  "persistence",
   "topic-test",
   "week-plan",
   "concepts-5",

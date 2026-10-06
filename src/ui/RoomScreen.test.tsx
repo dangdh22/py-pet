@@ -1,6 +1,7 @@
 // @vitest-environment jsdom
 import { screen } from "@testing-library/react";
 import { describe, expect, test } from "vitest";
+import { addDays, weekStart } from "../game/dates";
 import { initialGameState } from "../game/state";
 import { examBundle } from "../test/examBundle";
 import { renderWithGame, TODAY } from "../test/renderGame";
@@ -112,6 +113,14 @@ describe("RoomScreen", () => {
     expect(screen.getByRole("img", { name: "Robo" })).toHaveAttribute("data-mood", "vacation");
     expect(screen.getByText("Tuần này: 0/2 bài")).toBeInTheDocument();
     expect(screen.queryByRole("link", { name: "Sạc cho Robo" })).not.toBeInTheDocument();
+  });
+
+  test("a week fully on vacation says so instead of 0 lessons", async () => {
+    const state = initialGameState(TODAY);
+    state.vacation = { since: null, ranges: [{ start: weekStart(TODAY), end: addDays(weekStart(TODAY), 6) }] };
+    await renderWithGame(<RoomScreen />, { state });
+    expect(screen.getByText("Tuần này là tuần nghỉ")).toBeInTheDocument();
+    expect(screen.queryByText(/Tuần này: /)).not.toBeInTheDocument();
   });
 
   test("shows what the robot wears and the room decorations, and links to the shop and the book", async () => {

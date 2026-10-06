@@ -27,6 +27,16 @@ describe("RewardsEdited", () => {
       ]),
     ).toEqual([{ id: "a", name: "Kem", price: 30, weeklyLimit: 0 }]);
   });
+
+  test("skips an item with a name that is not text or a number that is not finite", () => {
+    const bad = [
+      { id: "a", name: 5, price: 10, weeklyLimit: 1 },
+      { id: "b", name: "B", price: Number.NaN, weeklyLimit: 1 },
+      { id: "c", name: "C", price: 10, weeklyLimit: Number.POSITIVE_INFINITY },
+      { id: "d", name: "D", price: 10, weeklyLimit: 1 },
+    ] as unknown as RewardItem[];
+    expect(cleanCatalog(bad)).toEqual([{ id: "d", name: "D", price: 10, weeklyLimit: 1 }]);
+  });
 });
 
 describe("RewardRequested", () => {
@@ -63,6 +73,17 @@ describe("RewardRequested", () => {
   });
 });
 
+describe("the shop and a pending request", () => {
+  test("xu held for a pending request cannot be spent in the shop", () => {
+    const asked = apply(withRewards(100), ask("q1", "park"), at(MONDAY));
+    const state = apply(asked, { type: "ItemBought", itemId: "kinh-tron" }, at(MONDAY));
+    expect(state.wallet.xu).toBe(100);
+    expect(state.inventory.owned).toEqual([]);
+    expect(state.rewards.requests).toMatchObject([{ id: "q1", status: "pending" }]);
+    expect(freeXu(state)).toBe(0);
+  });
+});
+
 describe("RewardApproved and RewardRejected", () => {
   test("approving takes the xu and records it; rejecting takes nothing", () => {
     const state = run(withRewards(150), [
@@ -87,6 +108,29 @@ describe("RewardApproved and RewardRejected", () => {
     const state = apply(spent, { type: "RewardApproved", requestId: "q1" }, at(MONDAY));
     expect(state.wallet.xu).toBe(40);
     expect(state.rewards.requests[0]!.status).toBe("pending");
+  });
+
+  test("approving the same request twice takes the xu once", () => {
+    const state = run(withRewards(150), [
+      [MONDAY, ask("q1", "park")],
+      ["2026-10-06", { type: "RewardApproved", requestId: "q1" }],
+      ["2026-10-06", { type: "RewardApproved", requestId: "q1" }],
+    ]);
+    expect(state.wallet.xu).toBe(50);
+    expect(state.wallet.history).toHaveLength(1);
+  });
+
+  test("a rejected request does not count toward the weekly limit, an approved one does", () => {
+    const rejected = run(withRewards(500), [
+      [MONDAY, ask("q1", "park")],
+      [MONDAY, { type: "RewardRejected", requestId: "q1" }],
+    ]);
+    expect(requestBlock(rejected, PARK, MONDAY)).toBeNull();
+    const approved = run(withRewards(500), [
+      [MONDAY, ask("q1", "park")],
+      [MONDAY, { type: "RewardApproved", requestId: "q1" }],
+    ]);
+    expect(requestBlock(approved, PARK, MONDAY)).toBe("limit");
   });
 
   test("keeps every pending request and the latest decided ones", () => {

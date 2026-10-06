@@ -11,7 +11,7 @@ const INPUT_EVENTS = ["keydown", "pointerdown", "wheel", "touchstart"] as const;
 
 /**
  * Counts active study time while `active` (a study screen is open, spec 5.13): every 15 seconds, if the page is
- * visible and the child did something in the last minute. The seconds are saved once a minute and when it stops.
+ * visible and the child did something in the last minute. The seconds are saved once a minute, when it stops and when the page is being closed.
  */
 export function useStudyTimer(active: boolean): void {
   const { dispatch } = useGame();
@@ -27,6 +27,7 @@ export function useStudyTimer(active: boolean): void {
       pending = 0;
     };
     for (const name of INPUT_EVENTS) window.addEventListener(name, onInput, { passive: true });
+    window.addEventListener("pagehide", flush);
     const timer = setInterval(() => {
       if (document.visibilityState === "visible" && Date.now() - lastInput <= IDLE_MS) pending += TICK_MS / 1000;
       if (pending >= FLUSH_SECONDS) flush();
@@ -34,6 +35,7 @@ export function useStudyTimer(active: boolean): void {
     return () => {
       clearInterval(timer);
       for (const name of INPUT_EVENTS) window.removeEventListener(name, onInput);
+      window.removeEventListener("pagehide", flush);
       flush();
     };
   }, [active, dispatch]);

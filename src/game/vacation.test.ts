@@ -38,6 +38,25 @@ describe("vacation days", () => {
     expect(state.vacation.ranges).toEqual([{ start: "2026-10-12", end: "2026-10-13" }]);
   });
 
+  test("switching it off also ends a scheduled vacation that covers today", () => {
+    const state = run(initialGameState("2026-10-05"), [
+      ["2026-10-05", { type: "VacationScheduled", start: "2026-10-05", end: "2026-10-12" }],
+      ["2026-10-05", { type: "VacationScheduled", start: "2026-10-07", end: "2026-10-12" }],
+      ["2026-10-05", { type: "VacationScheduled", start: "2026-10-20", end: "2026-10-22" }],
+      ["2026-10-08", { type: "VacationToggled", on: false }],
+    ]);
+    expect(state.vacation.ranges).toEqual([
+      { start: "2026-10-05", end: "2026-10-07" },
+      { start: "2026-10-07", end: "2026-10-07" },
+      { start: "2026-10-20", end: "2026-10-22" },
+    ]);
+    const today = run(initialGameState("2026-10-05"), [
+      ["2026-10-05", { type: "VacationScheduled", start: "2026-10-08", end: "2026-10-12" }],
+      ["2026-10-08", { type: "VacationToggled", on: false }],
+    ]);
+    expect(today.vacation.ranges).toEqual([]);
+  });
+
   test("counts only the days that are not vacation days", () => {
     const state = initialGameState("2026-10-05");
     state.vacation.ranges = [{ start: "2026-10-07", end: "2026-10-08" }];

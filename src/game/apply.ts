@@ -26,7 +26,7 @@ import {
   type GameState,
   type RewardItem,
 } from "./state";
-import { cleanCatalog, requestBlock, trimRequests } from "./realRewards";
+import { cleanCatalog, freeXu, requestBlock, trimRequests } from "./realRewards";
 import { findShopItem, isConsumable, MAX_CONSUMABLES, STREAK_GIFTS } from "./shop";
 import { cancelVacation, pruneVacations, scheduleVacation, toggleVacation, weekTarget, workDaysBetween } from "./vacation";
 import { changeXu } from "./wallet";
@@ -176,7 +176,7 @@ export function apply(state: GameState, event: GameEvent, now: Date): GameState 
       recordTime(next, event.seconds, today);
       break;
     case "PracticeAssigned":
-      if (event.items.length > 0 && !next.assigned.some((a) => a.id === event.id)) {
+      if (event.id && event.conceptId && event.items.length > 0 && !next.assigned.some((a) => a.id === event.id)) {
         next.assigned.push({ id: event.id, conceptId: event.conceptId, items: event.items, day: today });
       }
       break;
@@ -333,7 +333,10 @@ function judgeExercise(s: GameState, e: Extract<GameEvent, { type: "ExerciseJudg
     return;
   }
   s.pet.xp += XP.codeAfterRetries;
-  if (failedSubmitsBefore >= PERSISTENCE_FAILS) changeXu(s, XU.persistenceBonus, "code", e.exerciseId, today);
+  if (failedSubmitsBefore >= PERSISTENCE_FAILS) {
+    changeXu(s, XU.persistenceBonus, "code", e.exerciseId, today);
+    giveBadge(s, "persistence", today);
+  }
   s.pet.correctRun = 0;
 }
 
@@ -434,10 +437,10 @@ function completeEvolutionTest(
   raiseVui(s);
 }
 
-/** Spec 5.12. A purchase needs enough xu; an accessory or a decoration is bought once, a Pin or Vui item up to 9. */
+/** Spec 5.12. A purchase needs enough free xu (not held for a pending reward); an accessory or a decoration is bought once, a Pin or Vui item up to 9. */
 function buyItem(s: GameState, itemId: string, today: string): void {
   const item = findShopItem(itemId);
-  if (!item || item.price === null || s.wallet.xu < item.price) return;
+  if (!item || item.price === null || freeXu(s) < item.price) return;
   if (isConsumable(item)) {
     const have = s.inventory.consumables[itemId] ?? 0;
     if (have >= MAX_CONSUMABLES) return;
