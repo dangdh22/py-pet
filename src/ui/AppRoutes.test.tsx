@@ -5,8 +5,11 @@ import { beforeEach, describe, expect, test, vi } from "vitest";
 import { GAME_STATE_VERSION, initialGameState, type GameState } from "../game/state";
 import { RunnerClient } from "../runner/client";
 import { MemoryStore } from "../storage/memoryStore";
+import { answerPaper } from "../test/answerExam";
+import { examBundle } from "../test/examBundle";
 import { FakeWorker } from "../test/fakeWorker";
 import { testBundle } from "../test/fixtures";
+import { fakeRunner, okResult } from "../test/render";
 import { FIXED_NOW, renderWithGame, TODAY, testProfile } from "../test/renderGame";
 import { reviewBundle } from "../test/reviewBundle";
 import { App } from "./App";
@@ -234,5 +237,73 @@ describe("crash screen", () => {
     window.location.hash = "#/backup";
     await renderWithGame(<AppRoutes />);
     expect(screen.getByRole("heading", { name: "Sao lưu" })).toBeInTheDocument();
+  });
+});
+
+describe("tests and evolution", () => {
+  test.each([
+    ["#/topic-test/khong-co", "Không tìm thấy bài kiểm tra này."],
+    ["#/topic-test/x.l1", "Không tìm thấy bài kiểm tra này."],
+    ["#/evolution/khong-co", "Không tìm thấy bài kiểm tra này."],
+    ["#/topic-test/x.t", "Bài kiểm tra này chưa mở. Con học các bài trước đã nhé."],
+    ["#/evolution/x", "Bài kiểm tra này chưa mở. Con học các bài trước đã nhé."],
+  ])("%s shows a message", async (hash, message) => {
+    window.location.hash = hash;
+    await renderWithGame(<AppRoutes />, { bundle: examBundle() });
+    expect(screen.getByText(message)).toBeInTheDocument();
+  });
+
+  test("an open focused review set comes before the retake", async () => {
+    const state = initialGameState(TODAY);
+    state.progress.completedLessons = ["x.l1", "x.l2"];
+    state.progress.topicTests["x.t"] = { attempts: 1, best: 6, max: 6, passed: true, lastItems: [] };
+    state.remedial = { stage: 1, items: ["x.q1"] };
+    window.location.hash = "#/evolution/x";
+    await renderWithGame(<AppRoutes />, { bundle: examBundle(), state });
+    expect(screen.getByText("Con làm xong bộ ôn tập trọng tâm trước rồi thi lại nhé.")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Bắt đầu ôn tập trọng tâm" })).toHaveAttribute("href", "#/remedial");
+  });
+
+  test("topic test, failed evolution, focused review, retake, evolution", async () => {
+    let output = "Hi\n";
+    const state = initialGameState(TODAY);
+    state.progress.completedLessons = ["x.l1", "x.l2"];
+    const { store } = await renderWithGame(<AppRoutes />, {
+      bundle: examBundle(),
+      state,
+      runner: fakeRunner(() => okResult(output)),
+    });
+    const saved = async () => (await store.loadActive())!.state;
+
+    await userEvent.click(screen.getByRole("link", { name: "Học tiếp" }));
+    expect(await screen.findByRole("heading", { name: "Kiểm tra chủ đề: Chủ đề thi" })).toBeInTheDocument();
+    await answerPaper("Đúng");
+    await userEvent.click(screen.getByRole("link", { name: "Học tiếp" }));
+
+    output = "Ho\n";
+    expect(await screen.findByRole("heading", { name: "Kiểm tra tiến hóa" })).toBeInTheDocument();
+    await answerPaper("Sai");
+    expect(screen.getByRole("heading", { name: "Lần này chưa đạt" })).toBeInTheDocument();
+    await waitFor(async () => expect((await saved()).remedial).not.toBeNull());
+    await userEvent.click(screen.getByRole("button", { name: "Về phòng" }));
+    await userEvent.click(await screen.findByRole("link", { name: "Học tiếp" }));
+
+    expect(await screen.findByRole("heading", { name: "Ôn tập trọng tâm" })).toBeInTheDocument();
+    const remedialCount = (await saved()).remedial!.items.length;
+    for (let n = 0; n < remedialCount; n += 1) {
+      await userEvent.click(screen.getByRole("radio", { name: "Đúng" }));
+      await userEvent.click(screen.getByRole("button", { name: "Kiểm tra" }));
+      await userEvent.click(screen.getByRole("button", { name: /^(Tiếp|Hoàn thành)$/ }));
+    }
+    await waitFor(async () => expect((await saved()).remedial).toBeNull());
+    await userEvent.click(screen.getByRole("link", { name: "Học tiếp" }));
+
+    output = "Hi\n";
+    expect(await screen.findByRole("heading", { name: "Kiểm tra tiến hóa" })).toBeInTheDocument();
+    await answerPaper("Đúng");
+    expect(screen.getByRole("heading", { name: "Robo đã tiến hóa!" })).toBeInTheDocument();
+    await waitFor(async () => expect((await saved()).pet.stage).toBe(2));
+    const attempts = (await saved()).progress.evolutionTests;
+    expect(attempts.map((attempt) => attempt.passed)).toEqual([false, true]);
   });
 });

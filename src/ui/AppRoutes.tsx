@@ -1,18 +1,21 @@
-import { findLesson } from "../content/lookup";
+import { evolutionTestId, findLesson, findStage, findTopic, topicTestId } from "../content/lookup";
 import { findNode, nodeStatuses } from "../game/path";
 import { useLang } from "../i18n/LangProvider";
 import { BackupScreen } from "./BackupScreen";
 import { Banners } from "./Banners";
 import { useContent } from "./contexts";
 import { ErrorBoundary } from "./ErrorBoundary";
+import { EvolutionTestScreen } from "./EvolutionTestScreen";
 import { useGame } from "./GameProvider";
 import { Header } from "./Header";
 import { LessonScreen } from "./LessonScreen";
 import { MapScreen } from "./MapScreen";
 import { PracticeScreen } from "./PracticeScreen";
+import { RemedialScreen } from "./RemedialScreen";
 import { ReviewScreen } from "./ReviewScreen";
 import { RoomScreen } from "./RoomScreen";
 import { routeToHash, useHashRoute } from "./routing";
+import { TopicTestScreen } from "./TopicTestScreen";
 
 export function AppRoutes() {
   const [route, navigate] = useHashRoute();
@@ -46,6 +49,28 @@ export function AppRoutes() {
     }
   } else if (route.name === "practice") {
     screen = <PracticeScreen key={route.conceptId} conceptId={route.conceptId} onExit={goHome} />;
+  } else if (route.name === "topicTest") {
+    const topic = findTopic(bundle, route.topicId);
+    const node = topic && findNode(bundle, topicTestId(topic));
+    if (!topic || node?.kind !== "topicTest") {
+      screen = <Notice message={t("exam.notFound")} />;
+    } else if (nodeStatuses(bundle, game.state).get(node.id) === "locked") {
+      screen = <Notice message={t("exam.locked")} />;
+    } else {
+      screen = <TopicTestScreen key={topic.id} topic={topic} onExit={goHome} />;
+    }
+  } else if (route.name === "evolution") {
+    const stage = findStage(bundle, route.stageId);
+    const node = stage && findNode(bundle, evolutionTestId(stage));
+    if (!stage || node?.kind !== "evolution") {
+      screen = <Notice message={t("exam.notFound")} />;
+    } else if (nodeStatuses(bundle, game.state).get(node.id) === "locked") {
+      screen = <Notice message={t("exam.locked")} />;
+    } else {
+      screen = <EvolutionTestScreen key={stage.id} stage={stage} stageNumber={node.stage} onExit={goHome} />;
+    }
+  } else if (route.name === "remedial") {
+    screen = <RemedialScreen onExit={goHome} />;
   } else {
     screen = <RoomScreen />;
   }

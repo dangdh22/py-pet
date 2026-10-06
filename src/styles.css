@@ -143,3 +143,11 @@ a.button.primary { background: var(--primary); border-color: var(--primary); col
 
 /* M3b: tests and evolution */
 .exam-answered { color: var(--muted); font-style: italic; }
+.evolution-done { text-align: center; padding: 40px; }
+.evolve { display: inline-block; animation: evolve 1.2s ease-out both; }
+@keyframes evolve {
+  0% { transform: scale(0.6); filter: brightness(2); opacity: 0; }
+  60% { transform: scale(1.1); filter: brightness(1.4); opacity: 1; }
+  100% { transform: scale(1); filter: none; }
+}
+@media (prefers-reduced-motion: reduce) { .evolve { animation: none; } }
