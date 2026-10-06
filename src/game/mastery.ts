@@ -16,7 +16,8 @@ export const MASTERY = {
   ladderStep: 2,
 } as const;
 
-export type ResultSource = "lesson" | "review" | "practice";
+/** Where an answer was given. "test" is a topic or evolution test: it pays per test, not per answer. */
+export type ResultSource = "lesson" | "review" | "practice" | "test";
 
 export function emptyMastery(): ConceptMastery {
   return { score: 0, level: 1, run: 0, needsHelp: false, misconceptions: 0, recent: [], reviewMisses: 0 };

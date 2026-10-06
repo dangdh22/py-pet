@@ -1,5 +1,6 @@
 import { describe, expect, test } from "vitest";
 import { apply, type GameEvent } from "./apply";
+import { isPass } from "./rewards";
 import { petCondition } from "./progress";
 import { initialGameState, type GameState } from "./state";
 
@@ -501,5 +502,110 @@ describe("review answers and Vui", () => {
       expect(state.pet.correctRun).toBe(0);
       expect(state.progress.exerciseStats ?? {}).toEqual({});
     }
+  });
+});
+
+describe("tests", () => {
+  const topicTest = (score: number, max = 14, items = ["a", "b"]): GameEvent => ({
+    type: "TopicTestCompleted",
+    topicId: "t1",
+    score,
+    max,
+    items,
+  });
+  const evolution = (
+    score: number,
+    extra: Partial<Extract<GameEvent, { type: "EvolutionTestCompleted" }>> = {},
+  ): GameEvent => ({
+    type: "EvolutionTestCompleted",
+    stage: 1,
+    score,
+    max: 24,
+    items: ["q1", "c1"],
+    wrongConcepts: ["k1"],
+    remedialItems: ["p1", "p2"],
+    ...extra,
+  });
+
+  test("isPass uses 80% with a float tolerance", () => {
+    expect(isPass(11.2, 14)).toBe(true);
+    expect(isPass(11.19, 14)).toBe(false);
+    expect(isPass(19.2, 24)).toBe(true);
+    expect(isPass(0, 0)).toBe(false);
+  });
+
+  test("a topic test pays 30 XP once, and 20 xu with Vui +1 at the first pass", () => {
+    const start = initialGameState("2026-10-06");
+    const failed = apply(start, topicTest(8), at("2026-10-06"));
+    expect(failed.pet.xp).toBe(30);
+    expect(failed.wallet.xu).toBe(0);
+    expect(failed.progress.topicTests.t1).toEqual({
+      attempts: 1,
+      best: 8,
+      max: 14,
+      passed: false,
+      lastItems: ["a", "b"],
+    });
+    const passed = apply(failed, topicTest(12, 14, ["c"]), at("2026-10-06"));
+    expect(passed.pet.xp).toBe(30);
+    expect(passed.wallet.xu).toBe(20);
+    expect(passed.pet.vui).toBe(5);
+    expect(passed.progress.topicTests.t1).toEqual({ attempts: 2, best: 12, max: 14, passed: true, lastItems: ["c"] });
+    const again = apply(passed, topicTest(14), at("2026-10-06"));
+    expect(again.wallet.xu).toBe(20);
+    expect(again.progress.topicTests.t1!.best).toBe(14);
+  });
+
+  test("a failed evolution test opens the focused review set and takes nothing away", () => {
+    const start = initialGameState("2026-10-06");
+    start.pet.xp = 120;
+    const failed = apply(start, evolution(10), at("2026-10-06"));
+    expect(failed.pet).toMatchObject({ stage: 1, xp: 120, stageStartXp: 0 });
+    expect(failed.wallet.xu).toBe(0);
+    expect(failed.remedial).toEqual({ stage: 1, items: ["p1", "p2"] });
+    expect(failed.progress.evolutionTests).toEqual([
+      {
+        at: at("2026-10-06").toISOString(),
+        stage: 1,
+        score: 10,
+        max: 24,
+        passed: false,
+        items: ["q1", "c1"],
+        wrongConcepts: ["k1"],
+      },
+    ]);
+    const done = apply(failed, { type: "RemedialCompleted" }, at("2026-10-06"));
+    expect(done.remedial).toBeNull();
+  });
+
+  test("a failed test with nothing to practise opens no review set", () => {
+    const failed = apply(initialGameState("2026-10-06"), evolution(10, { remedialItems: [] }), at("2026-10-06"));
+    expect(failed.remedial).toBeNull();
+  });
+
+  test("a passed evolution test evolves the robot once, pays 100 xu and Vui +1, and keeps the XP", () => {
+    const start = initialGameState("2026-10-06");
+    start.pet.xp = 120;
+    start.pet.vui = 3;
+    start.remedial = { stage: 1, items: ["p1"] };
+    const passed = apply(start, evolution(20, { wrongConcepts: [] }), at("2026-10-06"));
+    expect(passed.pet).toMatchObject({ stage: 2, xp: 120, stageStartXp: 120, vui: 4 });
+    expect(passed.wallet.xu).toBe(100);
+    expect(passed.remedial).toBeNull();
+    const twice = apply(passed, evolution(24), at("2026-10-06"));
+    expect(twice.pet.stage).toBe(2);
+    expect(twice.wallet.xu).toBe(100);
+  });
+
+  test("test answers pay no XP but count for the Vui run", () => {
+    const state = run(initialGameState("2026-10-06"), [
+      ["2026-10-06", { type: "QuestionAnswered", questionId: "q1", correct: true, source: "test" }],
+      ["2026-10-06", { type: "QuestionAnswered", questionId: "q2", correct: true, source: "test" }],
+      ["2026-10-06", solved("c1", { source: "test" })],
+    ]);
+    expect(state.pet.xp).toBe(0);
+    expect(state.pet.vui).toBe(5);
+    expect(state.progress.answeredQuestions).toEqual([]);
+    expect(state.progress.solvedExercises).toEqual([]);
   });
 });

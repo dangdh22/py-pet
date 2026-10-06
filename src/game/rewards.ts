@@ -6,6 +6,7 @@ export const XP = {
   question: 3,
   review: 5,
   reviewPerCorrect: 2,
+  topicTest: 30,
 } as const;
 
 export const XU = {
@@ -16,6 +17,8 @@ export const XU = {
   weekPlanExceeded: 100,
   review: 10,
   reviewPerfect: 5,
+  topicTestPassed: 20,
+  evolution: 100,
 } as const;
 
 /** Failed submits before a correct one that earn the persistence bonus. */
@@ -33,3 +36,10 @@ export const PIN_REVIEW = 2;
 /** Days before an exercise whose solution was shown comes back (spec 5.9: 1 to 2 days). */
 export const RETRY_AFTER_DAYS = 1;
 export const CORRECT_RUN_FOR_VUI = 3;
+/** A test is passed from this share of its points (spec 5.11; the parent can change it in M4). */
+export const PASS_RATIO = 0.8;
+
+/** True when `score` reaches PASS_RATIO of `max`. The tolerance keeps 11.2 of 14 a pass despite float rounding. */
+export function isPass(score: number, max: number): boolean {
+  return max > 0 && score >= max * PASS_RATIO - 1e-9;
+}

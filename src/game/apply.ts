@@ -6,6 +6,7 @@ import {
   FREEZE_EVERY,
   MAX_FREEZES,
   PERSISTENCE_FAILS,
+  isPass,
   PIN_REVIEW,
   POINTS,
   RETRY_AFTER_DAYS,
@@ -51,6 +52,19 @@ export type GameEvent =
       source?: ResultSource;
     }
   | { type: "ReviewCompleted"; stationId: string | null; correct: number; total: number }
+  | { type: "TopicTestCompleted"; topicId: string; score: number; max: number; items: string[] }
+  | {
+      type: "EvolutionTestCompleted";
+      /** The stage the test was for (1-based). */
+      stage: number;
+      score: number;
+      max: number;
+      items: string[];
+      wrongConcepts: string[];
+      /** The focused review set to open if the test is failed (built by the caller with buildRemedialSet). */
+      remedialItems: string[];
+    }
+  | { type: "RemedialCompleted" }
   | { type: "HintShown"; exerciseId: string }
   | { type: "SolutionViewed"; exerciseId: string };
 
@@ -59,6 +73,9 @@ const ACTIVITY_EVENTS: ReadonlySet<GameEvent["type"]> = new Set([
   "ExerciseJudged",
   "QuestionAnswered",
   "ReviewCompleted",
+  "TopicTestCompleted",
+  "EvolutionTestCompleted",
+  "RemedialCompleted",
 ]);
 
 export function apply(state: GameState, event: GameEvent, now: Date): GameState {
@@ -87,6 +104,15 @@ export function apply(state: GameState, event: GameEvent, now: Date): GameState 
       break;
     case "ReviewCompleted":
       completeReview(next, event, today, rollback);
+      break;
+    case "TopicTestCompleted":
+      completeTopicTest(next, event);
+      break;
+    case "EvolutionTestCompleted":
+      completeEvolutionTest(next, event, now);
+      break;
+    case "RemedialCompleted":
+      next.remedial = null;
       break;
     case "HintShown":
       statsFor(next, event.exerciseId).hints += 1;
@@ -196,9 +222,9 @@ function judgeExercise(s: GameState, e: Extract<GameEvent, { type: "ExerciseJudg
     for (const id of e.concepts ?? []) updateMastery(s, id, (m) => recordResult(m, score, source));
     if (!e.viewedSolution) delete s.retry[e.exerciseId];
   }
-  // A review station pays for the whole station (ReviewCompleted), not per exercise,
-  // but its answers still count for the correct run that raises Vui.
-  if (source === "review") {
+  // A review station or a test pays as a whole (ReviewCompleted, TopicTestCompleted, EvolutionTestCompleted), not per
+  // exercise, but its answers still count for the correct run that raises Vui.
+  if (source === "review" || source === "test") {
     if (e.accepted && e.failedSubmitsBefore === 0 && e.hintsUsed === 0 && !e.viewedSolution) bumpCorrectRun(s);
     else s.pet.correctRun = 0;
     return;
@@ -238,8 +264,8 @@ function answerQuestion(s: GameState, e: Extract<GameEvent, { type: "QuestionAns
   for (const id of e.concepts ?? []) updateMastery(s, id, (m) => recordResult(m, score, source));
   if (!e.correct && e.misconception) updateMastery(s, e.misconception, recordMisconception);
   s.reviews[e.questionId] = reviewCard(s.reviews[e.questionId], e.correct, today);
-  if (source === "review") {
-    // No XP for a review answer, but it counts for the correct run that raises Vui.
+  if (source === "review" || source === "test") {
+    // No XP for a review or test answer, but it counts for the correct run that raises Vui.
     if (e.correct) bumpCorrectRun(s);
     else s.pet.correctRun = 0;
     return;
@@ -270,4 +296,58 @@ function completeReview(
   // Xu only for the first run of a station on the map, so repeated reviews cannot farm xu.
   if (first) s.wallet.xu += XU.review + (total > 0 && correct === total ? XU.reviewPerfect : 0);
   if (!rollback) addPoints(s, POINTS.review, today);
+}
+
+function raiseVui(s: GameState): void {
+  s.pet.vui = Math.min(STAT_MAX, s.pet.vui + 1);
+}
+
+/** Spec 5.4-5.6: the first completion pays 30 XP; the first pass pays 20 xu and Vui +1. Any score moves the path on. */
+function completeTopicTest(s: GameState, e: Extract<GameEvent, { type: "TopicTestCompleted" }>): void {
+  const previous = s.progress.topicTests[e.topicId];
+  const passed = isPass(e.score, e.max);
+  s.progress.topicTests[e.topicId] = {
+    attempts: (previous?.attempts ?? 0) + 1,
+    best: Math.max(previous?.best ?? 0, e.score),
+    max: e.max,
+    passed: passed || (previous?.passed ?? false),
+    lastItems: e.items,
+  };
+  if (!previous) s.pet.xp += XP.topicTest;
+  if (passed && !previous?.passed) {
+    s.wallet.xu += XU.topicTestPassed;
+    raiseVui(s);
+  }
+}
+
+/**
+ * Spec 5.11. Passed: the robot evolves to the next stage, +100 xu, Vui +1; the growth bar starts again. Failed: nothing
+ * is taken away, and the focused review set opens; the retake waits for it.
+ */
+function completeEvolutionTest(
+  s: GameState,
+  e: Extract<GameEvent, { type: "EvolutionTestCompleted" }>,
+  now: Date,
+): void {
+  const passed = isPass(e.score, e.max);
+  s.progress.evolutionTests.push({
+    at: now.toISOString(),
+    stage: e.stage,
+    score: e.score,
+    max: e.max,
+    passed,
+    items: e.items,
+    wrongConcepts: e.wrongConcepts,
+  });
+  if (!passed) {
+    s.remedial = e.remedialItems.length > 0 ? { stage: e.stage, items: e.remedialItems } : null;
+    return;
+  }
+  s.remedial = null;
+  // A second pass of the same stage changes nothing more.
+  if (s.pet.stage !== e.stage) return;
+  s.pet.stage += 1;
+  s.pet.stageStartXp = s.pet.xp;
+  s.wallet.xu += XU.evolution;
+  raiseVui(s);
 }
