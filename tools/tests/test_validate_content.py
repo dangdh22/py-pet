@@ -100,6 +100,50 @@ def test_check_code_exercise_checks_common_wrong_samples():
     assert problems == ["[ex] common_wrong 0: code mẫu in ra '11\\n', không phải '99'"]
 
 
+def graded(kind, **overrides):
+    exercise = {
+        "id": kind[0],
+        "type": kind,
+        "concepts": [],
+        "prompt": {"vi": "p"},
+        "solution": "a = int(input())\nprint(a + 1)\n",
+        "tests": [{"input": "1", "output": "2", "hidden": False}],
+        "hints": [],
+        "compare": EXACT,
+        "testEligible": False,
+    }
+    if kind == "parsons":
+        exercise["lines"] = ["a = int(input())", "print(a + 1)"]
+    else:
+        exercise["template"] = "a = int(input())\nprint(a + ___)\n"
+        exercise["answers"] = ["1"]
+    exercise.update(overrides)
+    return exercise
+
+
+def test_check_tested_exercise_accepts_valid_parsons_and_fill():
+    assert vc.check_tested_exercise(graded("parsons")) == []
+    assert vc.check_tested_exercise(graded("fill")) == []
+
+
+def test_check_tested_exercise_reports_a_wrong_solution():
+    problems = vc.check_tested_exercise(graded("parsons", solution="print(3)\n"))
+    assert problems == ["[p] lời giải mẫu sai ở test 0: mong đợi '2', nhận '3\\n'"]
+
+
+def test_check_tested_exercise_reports_a_fill_template_that_passes_when_empty():
+    exercise = graded("fill", template="print(2)___\n", answers=["#"], solution="print(2)#\n")
+    assert vc.check_tested_exercise(exercise) == ["[f] mẫu để trống vẫn qua hết test, bài tập không có ý nghĩa"]
+
+
+def test_validate_bundle_checks_practice_exercises():
+    bundle = {
+        "stages": [{"topics": [{"lessons": [], "questions": [], "practice": [graded("fill", solution="print(0)\n")]}]}],
+        "errors": [],
+    }
+    assert vc.validate_bundle(bundle) == ["[f] lời giải mẫu sai ở test 0: mong đợi '2', nhận '0\\n'"]
+
+
 def test_check_choice_question_accepts_matching_output():
     question = predict("print('A')\nprint('B')", [choice("A\nB", correct=True), choice("AB")])
     assert vc.check_choice_question(question) == []

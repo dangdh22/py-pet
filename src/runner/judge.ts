@@ -1,4 +1,4 @@
-import type { CodeExercise } from "../content/types";
+import type { CommonWrong, CompareMode, TestCase } from "../content/types";
 import { compareOutput } from "./compare";
 import type { PyErrorInfo, RunFn, RunOutcome } from "./types";
 
@@ -31,8 +31,15 @@ export type ErrorMisconceptionFn = (error: PyErrorInfo, code: string) => string 
 // Built-in misconception id with no concepts.yaml entry yet; the input() topic arrives in stage 2.
 export const INPUT_PROMPT_MISCONCEPTION = "input-prompt";
 
+/** What judging needs from a code, parsons or fill exercise. */
+export interface JudgeSpec {
+  tests: TestCase[];
+  compare: CompareMode;
+  commonWrong?: CommonWrong[];
+}
+
 export async function judge(
-  exercise: CodeExercise,
+  exercise: JudgeSpec,
   code: string,
   run: RunFn,
   errorMisconception: ErrorMisconceptionFn = () => undefined,
@@ -79,7 +86,7 @@ export async function judge(
 }
 
 function collectMisconceptions(
-  exercise: CodeExercise,
+  exercise: JudgeSpec,
   code: string,
   tests: TestOutcome[],
   errorMisconception: ErrorMisconceptionFn,
@@ -88,7 +95,7 @@ function collectMisconceptions(
   for (const test of tests) {
     if (!test.ran || test.passed) continue;
     if (test.outcome === "ok") {
-      for (const wrong of exercise.commonWrong) {
+      for (const wrong of exercise.commonWrong ?? []) {
         if (wrong.test === test.index && compareOutput(wrong.output, test.actual, { kind: "exact" }).equal) {
           found.add(wrong.misconception);
         }

@@ -8,7 +8,7 @@ import type { PyRunner } from "../runner/pyRun";
 import { DEFAULT_TIMEOUT_MS, type RunFn } from "../runner/types";
 import { getPyRunner } from "../test/pyodide";
 import { allExercises, allLessons } from "./lookup";
-import type { ChoiceQuestion, CodeExercise, ContentBundle } from "./types";
+import { FILL_BLANK, type ChoiceQuestion, type CodeExercise, type ContentBundle } from "./types";
 
 const bundle = JSON.parse(readFileSync("src/generated/content.json", "utf8")) as ContentBundle;
 const exact = { kind: "exact" } as const;
@@ -59,12 +59,41 @@ describe("error dictionary on Pyodide", () => {
   });
 });
 
+describe("parsons and fill on Pyodide", () => {
+  const tests = [{ input: "4", output: "5", hidden: false }];
+
+  test("a parsons program in the right order passes and a shuffled one does not", async () => {
+    const lines = ["n = int(input())", "n = n + 1", "print(n)"];
+    const spec = { tests, compare: exact };
+    expect((await judge(spec, lines.join("\n"), runAsync)).status).toBe("accepted");
+    expect((await judge(spec, [lines[0], lines[2], lines[1]].join("\n"), runAsync)).status).toBe("wrong-answer");
+  });
+
+  test("a filled template passes and an empty one does not", async () => {
+    const template = "n = int(input())\nprint(n ___ 1)\n";
+    const spec = { tests, compare: exact };
+    expect((await judge(spec, template.replace(FILL_BLANK, "+"), runAsync)).status).toBe("accepted");
+    expect((await judge(spec, template.replace(FILL_BLANK, ""), runAsync)).status).toBe("error");
+  });
+});
+
 describe("lesson content on Pyodide", () => {
   test("stage 1 has content", () => {
     expect(allLessons(bundle).length).toBeGreaterThan(0);
   });
 
   const exercises = allExercises(bundle);
+
+  for (const exercise of exercises) {
+    if (exercise.type !== "parsons" && exercise.type !== "fill") continue;
+    test(`${exercise.id}: the ${exercise.type} solution passes on Pyodide`, async () => {
+      expect((await judge(exercise, exercise.solution, runAsync)).status).toBe("accepted");
+      if (exercise.type === "fill") {
+        const empty = exercise.template.replaceAll(FILL_BLANK, "");
+        expect((await judge(exercise, empty, runAsync)).status).not.toBe("accepted");
+      }
+    });
+  }
 
   for (const exercise of exercises.filter((e): e is CodeExercise => e.type === "code")) {
     test(`${exercise.id}: solution passes fast, starter fails, common wrong outputs match`, async () => {

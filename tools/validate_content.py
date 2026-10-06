@@ -110,10 +110,10 @@ def _describe(result: RunResult) -> str:
     return result.outcome if result.error_type is None else f"{result.outcome} ({result.error_type})"
 
 
-def check_code_exercise(exercise: dict) -> list[str]:
-    ex_id, compare, tests = exercise["id"], exercise["compare"], exercise["tests"]
+def _check_solution(exercise: dict) -> list[str]:
+    ex_id, compare = exercise["id"], exercise["compare"]
     problems = []
-    for index, test in enumerate(tests):
+    for index, test in enumerate(exercise["tests"]):
         result = run_code(exercise["solution"], test["input"])
         if result.outcome != "ok":
             problems.append(f"[{ex_id}] lời giải mẫu bị {_describe(result)} ở test {index}")
@@ -121,13 +121,22 @@ def check_code_exercise(exercise: dict) -> list[str]:
             problems.append(
                 f"[{ex_id}] lời giải mẫu sai ở test {index}: mong đợi {test['output']!r}, nhận {result.stdout!r}"
             )
-    starter_passes = True
-    for test in tests:
-        result = run_code(exercise["starter"], test["input"])
-        if result.outcome != "ok" or not outputs_match(test["output"], result.stdout, compare):
-            starter_passes = False
-            break
-    if starter_passes:
+    return problems
+
+
+def _passes_all(code: str, exercise: dict) -> bool:
+    for test in exercise["tests"]:
+        result = run_code(code, test["input"])
+        if result.outcome != "ok" or not outputs_match(test["output"], result.stdout, exercise["compare"]):
+            return False
+    return True
+
+
+def check_code_exercise(exercise: dict) -> list[str]:
+    ex_id, tests = exercise["id"], exercise["tests"]
+    problems = _check_solution(exercise)
+    compare = exercise["compare"]
+    if _passes_all(exercise["starter"], exercise):
         problems.append(f"[{ex_id}] code starter qua hết test, bài tập không có ý nghĩa")
     for index, wrong in enumerate(exercise["commonWrong"]):
         test = tests[wrong["test"]]
@@ -138,6 +147,17 @@ def check_code_exercise(exercise: dict) -> list[str]:
             )
         if outputs_match(test["output"], wrong["output"], compare):
             problems.append(f"[{ex_id}] common_wrong {index}: đầu ra trùng với đáp án đúng")
+    return problems
+
+
+FILL_BLANK = "___"
+
+
+def check_tested_exercise(exercise: dict) -> list[str]:
+    """Parsons and fill: the solution passes every test; a fill template with empty blanks does not."""
+    problems = _check_solution(exercise)
+    if exercise["type"] == "fill" and _passes_all(exercise["template"].replace(FILL_BLANK, ""), exercise):
+        problems.append(f"[{exercise['id']}] mẫu để trống vẫn qua hết test, bài tập không có ý nghĩa")
     return problems
 
 
@@ -210,6 +230,8 @@ def _items(bundle: dict):
                     yield "item", exercise
             for question in topic["questions"]:
                 yield "item", question
+            for exercise in topic.get("practice", []):
+                yield "item", exercise
 
 
 def validate_bundle(bundle: dict) -> list[str]:
@@ -219,6 +241,8 @@ def validate_bundle(bundle: dict) -> list[str]:
             problems += check_examples(item)
         elif item["type"] == "code":
             problems += check_code_exercise(item)
+        elif item["type"] in ("parsons", "fill"):
+            problems += check_tested_exercise(item)
         else:
             problems += check_choice_question(item)
     problems += check_error_entries(bundle["errors"])
