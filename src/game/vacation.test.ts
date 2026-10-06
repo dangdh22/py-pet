@@ -2,7 +2,7 @@ import { describe, expect, test } from "vitest";
 import { at, run } from "../test/gameSteps";
 import { apply, type GameEvent } from "./apply";
 import { displayStreak, roomCondition } from "./progress";
-import { initialGameState, type GameState } from "./state";
+import { initialGameState } from "./state";
 import { isVacationDay, weekTarget, workDaysBetween } from "./vacation";
 
 const lessons = (day: string): [string, GameEvent][] => [
@@ -95,5 +95,51 @@ describe("vacation and the game", () => {
     ];
     const state = apply(start, { type: "DayRollover" }, at("2026-10-05"));
     expect(state.vacation.ranges).toEqual([{ start: "2026-09-01", end: "2026-09-02" }]);
+  });
+
+  test("days outside a vacation still cost streak savers", () => {
+    // 2 work days missed, 1 saver: the streak starts again
+    const start = initialGameState("2026-10-05");
+    start.streak = { current: 5, best: 5, freezes: 1, lastAchievedDay: "2026-10-05", pointsDay: "2026-10-05", points: 2 };
+    start.vacation.ranges = [{ start: "2026-10-07", end: "2026-10-08" }];
+    const state = run(start, lessons("2026-10-10"));
+    expect(state.streak).toMatchObject({ current: 1, freezes: 1 });
+
+    // 1 work day missed, 1 saver used
+    const start2 = initialGameState("2026-10-05");
+    start2.streak = { current: 5, best: 5, freezes: 1, lastAchievedDay: "2026-10-05", pointsDay: "2026-10-05", points: 2 };
+    start2.vacation.ranges = [{ start: "2026-10-06", end: "2026-10-08" }];
+    const state2 = run(start2, lessons("2026-10-10"));
+    expect(state2.streak).toMatchObject({ current: 6, freezes: 0 });
+  });
+
+  test("decay starts again after the vacation, after the free first day", () => {
+    const state = run(initialGameState("2026-10-05"), [
+      ...lessons("2026-10-05"),
+      ["2026-10-05", { type: "VacationScheduled", start: "2026-10-06", end: "2026-10-08" }],
+      ["2026-10-11", { type: "DayRollover" }],
+    ]);
+    expect(state.pet).toMatchObject({ pin: 4, vui: 3 });
+  });
+
+  test("a week fully on vacation pays nothing", () => {
+    const start = initialGameState("2026-10-05");
+    start.settings.weeklyTarget = 1;
+    const state = run(start, [
+      ["2026-10-05", { type: "VacationScheduled", start: "2026-10-05", end: "2026-10-11" }],
+      ...lessons("2026-10-05"),
+      ["2026-10-12", { type: "DayRollover" }],
+    ]);
+    expect(state.wallet.history.filter((e) => e.reason === "week")).toEqual([]);
+    expect(weekTarget(state, "2026-10-05")).toBe(0);
+  });
+
+  test("vacation changes are ignored while the clock is set back", () => {
+    const state = run(initialGameState("2026-10-05"), [
+      ["2026-10-10", { type: "LessonCompleted", lessonId: "a" }],
+      ["2026-10-08", { type: "VacationToggled", on: true }],
+      ["2026-10-08", { type: "VacationScheduled", start: "2026-10-08", end: "2026-10-09" }],
+    ]);
+    expect(state.vacation).toEqual({ since: null, ranges: [] });
   });
 });

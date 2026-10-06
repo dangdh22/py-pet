@@ -1,9 +1,6 @@
 import { addDays, daysBetween } from "./dates";
 import { KEEP_DAYS, type GameState } from "./state";
 
-/** Longer gaps are counted without looking at each day (vacations are kept for KEEP_DAYS days only). */
-const COUNT_LIMIT = 400;
-
 /** Spec 5.7: a day of the vacation switched on now (from `since`) or of a scheduled or past range. */
 export function isVacationDay(state: GameState, day: string): boolean {
   const { since, ranges } = state.vacation;
@@ -15,7 +12,6 @@ export function isVacationDay(state: GameState, day: string): boolean {
 export function workDaysBetween(state: GameState, from: string, to: string): number {
   const gap = daysBetween(from, to) - 1;
   if (gap <= 0) return 0;
-  if (gap > COUNT_LIMIT) return gap;
   let count = 0;
   for (let i = 1; i <= gap; i += 1) if (!isVacationDay(state, addDays(from, i))) count += 1;
   return count;

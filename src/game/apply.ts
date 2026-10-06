@@ -150,14 +150,15 @@ export function apply(state: GameState, event: GameEvent, now: Date): GameState 
     case "RewardRejected":
       decideReward(next, event.requestId, false, now, today);
       break;
+    // Spec 5.14: no vacation change while the clock is set back (it would date the vacation in the past).
     case "VacationToggled":
-      toggleVacation(next, event.on, today);
+      if (!rollback) toggleVacation(next, event.on, today);
       break;
     case "VacationScheduled":
-      scheduleVacation(next, event.start, event.end, today);
+      if (!rollback) scheduleVacation(next, event.start, event.end, today);
       break;
     case "VacationCancelled":
-      cancelVacation(next, event.start, today);
+      if (!rollback) cancelVacation(next, event.start, today);
       break;
     case "HintShown":
       statsFor(next, event.exerciseId).hints += 1;
