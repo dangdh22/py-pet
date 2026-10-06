@@ -69,6 +69,19 @@ describe("test routes", () => {
   });
 });
 
+describe("M4a routes", () => {
+  test("parse and round-trip", () => {
+    for (const route of [{ name: "assigned", id: "p 1" }, { name: "shop" }, { name: "achievements" }] as const) {
+      expect(parseHash(routeToHash(route))).toEqual(route);
+    }
+    expect(routeToHash({ name: "assigned", id: "p1" })).toBe("#/assigned/p1");
+  });
+
+  test("stepRoute opens the practice a parent gave", () => {
+    expect(stepRoute({ kind: "assigned", id: "p1" })).toEqual({ name: "assigned", id: "p1" });
+  });
+});
+
 describe("isBrowserSupported", () => {
   test("needs WebAssembly and Worker", () => {
     expect(isBrowserSupported({ WebAssembly: {}, Worker: function Worker() {} })).toBe(true);

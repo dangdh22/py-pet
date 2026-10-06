@@ -100,3 +100,12 @@ describe("tests on the path", () => {
     expect(stageXp(state)).toBe(30);
   });
 });
+
+describe("practice from the parent on the path", () => {
+  test("comes before the focused review set and the map", () => {
+    const state = initialGameState("2026-10-06");
+    state.remedial = { stage: 1, items: ["x"] };
+    state.assigned = [{ id: "p1", conceptId: "k1", items: ["q1"], day: "2026-10-06" }];
+    expect(nextStep(reviewBundle(), state)).toEqual({ kind: "assigned", id: "p1" });
+  });
+});

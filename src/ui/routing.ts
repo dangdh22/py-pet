@@ -11,7 +11,11 @@ export type Route =
   | { name: "practice"; conceptId: string }
   | { name: "topicTest"; topicId: string }
   | { name: "evolution"; stageId: string }
-  | { name: "remedial" };
+  | { name: "remedial" }
+  /** Practice a parent gave (spec 9.2). */
+  | { name: "assigned"; id: string }
+  | { name: "shop" }
+  | { name: "achievements" };
 
 function decode(raw: string): string {
   try {
@@ -26,7 +30,9 @@ export function parseHash(hash: string): Route {
   if (hash === "#/backup") return { name: "backup" };
   if (hash === "#/review") return { name: "review", stationId: null };
   if (hash === "#/remedial") return { name: "remedial" };
-  const match = /^#\/(lesson|review|practice|topic-test|evolution)\/(.+)$/.exec(hash);
+  if (hash === "#/shop") return { name: "shop" };
+  if (hash === "#/achievements") return { name: "achievements" };
+  const match = /^#\/(lesson|review|practice|topic-test|evolution|assigned)\/(.+)$/.exec(hash);
   if (!match) return { name: "home" };
   const id = decode(match[2] as string);
   switch (match[1]) {
@@ -38,6 +44,8 @@ export function parseHash(hash: string): Route {
       return { name: "practice", conceptId: id };
     case "topic-test":
       return { name: "topicTest", topicId: id };
+    case "assigned":
+      return { name: "assigned", id };
     default:
       return { name: "evolution", stageId: id };
   }
@@ -57,6 +65,12 @@ export function routeToHash(route: Route): string {
       return `#/evolution/${encodeURIComponent(route.stageId)}`;
     case "remedial":
       return "#/remedial";
+    case "assigned":
+      return `#/assigned/${encodeURIComponent(route.id)}`;
+    case "shop":
+      return "#/shop";
+    case "achievements":
+      return "#/achievements";
     case "map":
       return "#/map";
     case "backup":
@@ -82,7 +96,14 @@ export function nodeRoute(node: PathNode): Route {
 
 /** The route that "Học tiếp" opens. */
 export function stepRoute(step: NextStep): Route {
-  return step.kind === "remedial" ? { name: "remedial" } : nodeRoute(step.node);
+  switch (step.kind) {
+    case "assigned":
+      return { name: "assigned", id: step.id };
+    case "remedial":
+      return { name: "remedial" };
+    case "node":
+      return nodeRoute(step.node);
+  }
 }
 
 export function useHashRoute(): [Route, (route: Route) => void] {

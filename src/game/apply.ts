@@ -1,4 +1,5 @@
 import { addDays, localDay, weekStart } from "./dates";
+import { awardBadges, giveBadge } from "./badges";
 import { reviewCard } from "./leitner";
 import { emptyMastery, MASTERY, recordMisconception, recordResult, solvedScore, type ResultSource } from "./mastery";
 import {
@@ -16,6 +17,7 @@ import {
   XU,
 } from "./rewards";
 import {
+  KEEP_DAYS,
   STAT_MAX,
   WARNING_LIMIT,
   type ConceptMastery,
@@ -83,8 +85,17 @@ export type GameEvent =
   | { type: "VacationToggled"; on: boolean }
   | { type: "VacationScheduled"; start: string; end: string }
   | { type: "VacationCancelled"; start: string }
+  /** Spec 5.13: active study seconds, sent about once a minute. */
+  | { type: "ActiveTimeRecorded"; seconds: number }
+  /** Spec 9.2: practice a parent gives; `id` is made by the caller. */
+  | { type: "PracticeAssigned"; id: string; conceptId: string; items: string[] }
+  | { type: "AssignedPracticeDone"; id: string }
+  /** Spec 9.2 "Đánh dấu đã kèm con": the parent helped with this concept. */
+  | { type: "SupportGiven"; conceptId: string }
   | { type: "HintShown"; exerciseId: string }
   | { type: "SolutionViewed"; exerciseId: string };
+
+const DAY_SECONDS = 86_400;
 
 const ACTIVITY_EVENTS: ReadonlySet<GameEvent["type"]> = new Set([
   "LessonCompleted",
@@ -94,6 +105,7 @@ const ACTIVITY_EVENTS: ReadonlySet<GameEvent["type"]> = new Set([
   "TopicTestCompleted",
   "EvolutionTestCompleted",
   "RemedialCompleted",
+  "AssignedPracticeDone",
 ]);
 
 export function apply(state: GameState, event: GameEvent, now: Date): GameState {
@@ -160,6 +172,20 @@ export function apply(state: GameState, event: GameEvent, now: Date): GameState 
     case "VacationCancelled":
       if (!rollback) cancelVacation(next, event.start, today);
       break;
+    case "ActiveTimeRecorded":
+      recordTime(next, event.seconds, today);
+      break;
+    case "PracticeAssigned":
+      if (event.items.length > 0 && !next.assigned.some((a) => a.id === event.id)) {
+        next.assigned.push({ id: event.id, conceptId: event.conceptId, items: event.items, day: today });
+      }
+      break;
+    case "AssignedPracticeDone":
+      next.assigned = next.assigned.filter((a) => a.id !== event.id);
+      break;
+    case "SupportGiven":
+      giveSupport(next, event.conceptId, today);
+      break;
     case "HintShown":
       statsFor(next, event.exerciseId).hints += 1;
       break;
@@ -173,6 +199,7 @@ export function apply(state: GameState, event: GameEvent, now: Date): GameState 
     next.activity.lastActiveDay = today;
     next.activity.decayApplied = 0;
   }
+  if (!rollback) awardBadges(next, today);
   return next;
 }
 
@@ -204,6 +231,7 @@ function settleWeek(s: GameState, today: string): void {
   const target = weekTarget(s, s.week.start);
   if (target > 0 && s.week.lessonsDone >= target * WEEK_EXCEED_RATIO) changeXu(s, XU.weekPlanExceeded, "week", s.week.start, today);
   else if (target > 0 && s.week.lessonsDone >= target) changeXu(s, XU.weekPlanMet, "week", s.week.start, today);
+  if (target > 0 && s.week.lessonsDone >= target) giveBadge(s, "week-plan", today);
   s.week = { start: current, lessonsDone: 0 };
 }
 
@@ -346,6 +374,7 @@ function completeReview(
   s.pet.pin = Math.min(STAT_MAX, s.pet.pin + PIN_REVIEW);
   // Xu only for the first run of a station on the map, so repeated reviews cannot farm xu.
   if (first) changeXu(s, XU.review + (total > 0 && correct === total ? XU.reviewPerfect : 0), "review", e.stationId, today);
+  if (total > 0 && correct === total) giveBadge(s, "perfect-review", today);
   if (!rollback) addPoints(s, POINTS.review, today);
 }
 
@@ -475,4 +504,26 @@ function decideReward(s: GameState, requestId: string, approve: boolean, now: Da
   request.status = approve ? "approved" : "rejected";
   request.decidedAt = now.toISOString();
   s.rewards.requests = trimRequests(s.rewards.requests);
+}
+
+/** Spec 5.13: seconds per day, at most a whole day, the last KEEP_DAYS days. */
+function recordTime(s: GameState, seconds: number, today: string): void {
+  if (!(seconds > 0)) return;
+  const total = (s.activity.seconds[today] ?? 0) + Math.round(seconds);
+  const oldest = addDays(today, -KEEP_DAYS);
+  s.activity.seconds = Object.fromEntries(
+    Object.entries({ ...s.activity.seconds, [today]: Math.min(DAY_SECONDS, total) }).filter(([day]) => day >= oldest),
+  );
+}
+
+/** The parent helped: the flag and its counters start again, as when the score passes 70 (spec 5.9). */
+function giveSupport(s: GameState, conceptId: string, today: string): void {
+  updateMastery(s, conceptId, (m) => ({
+    ...m,
+    needsHelp: false,
+    misconceptions: 0,
+    recent: [],
+    reviewMisses: 0,
+    coachedAt: today,
+  }));
 }

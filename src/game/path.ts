@@ -14,8 +14,8 @@ export type PathNode =
 
 export type NodeStatus = "done" | "next" | "locked";
 
-/** What "Học tiếp" opens (spec 5.3): an open focused review set first, then the next node of the map. */
-export type NextStep = { kind: "remedial" } | { kind: "node"; node: PathNode };
+/** What "Học tiếp" opens (spec 5.3): practice from the parent, an open focused review set, then the next node. */
+export type NextStep = { kind: "assigned"; id: string } | { kind: "remedial" } | { kind: "node"; node: PathNode };
 
 /** A test with no items in its config does not exist. */
 export function hasTest(config: TopicTestConfig | EvolutionTestConfig): boolean {
@@ -81,6 +81,8 @@ export function nextNode(bundle: ContentBundle, state: GameState): PathNode | nu
 }
 
 export function nextStep(bundle: ContentBundle, state: GameState): NextStep | null {
+  const assigned = state.assigned[0];
+  if (assigned) return { kind: "assigned", id: assigned.id };
   if (state.remedial !== null) return { kind: "remedial" };
   const node = nextNode(bundle, state);
   return node ? { kind: "node", node } : null;
