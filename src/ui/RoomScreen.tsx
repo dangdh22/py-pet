@@ -1,9 +1,9 @@
+import { nextNode } from "../game/path";
 import {
   currentStage,
   displayStreak,
   growthPercent,
   growthSize,
-  nextLessonId,
   petCondition,
   stageXpMax,
   todayPoints,
@@ -16,7 +16,7 @@ import { useLang } from "../i18n/LangProvider";
 import { useContent } from "./contexts";
 import { useGame } from "./GameProvider";
 import { Robot, type RobotMood } from "./Robot";
-import { routeToHash } from "./routing";
+import { nodeRoute, routeToHash } from "./routing";
 
 export const ROBOT_SIZES: Record<GrowthSize, number> = { 1: 96, 2: 128, 3: 160 };
 
@@ -35,7 +35,8 @@ export function RoomScreen() {
   const stage = currentStage(bundle, state);
   const max = stage ? stageXpMax(stage) : 0;
   const condition = petCondition(state);
-  const nextId = nextLessonId(bundle, state);
+  const next = nextNode(bundle, state);
+  const canReview = state.progress.completedLessons.length > 0;
 
   return (
     <main className="room">
@@ -64,12 +65,22 @@ export function RoomScreen() {
         <li>{t("room.xu", { xu: state.wallet.xu })}</li>
       </ul>
       <nav className="room-actions">
-        {nextId ? (
-          <a className="button primary" href={routeToHash({ name: "lesson", lessonId: nextId })}>
+        {condition === "drained" && (
+          <a className="button primary" href={routeToHash({ name: "review", stationId: null })}>
+            {t("room.recharge", { name: profile.robotName })}
+          </a>
+        )}
+        {next ? (
+          <a className={condition === "drained" ? "button" : "button primary"} href={routeToHash(nodeRoute(next))}>
             {t("room.continue")}
           </a>
         ) : (
           <p>{t("room.allDone")}</p>
+        )}
+        {canReview && condition !== "drained" && (
+          <a className="button" href={routeToHash({ name: "review", stationId: null })}>
+            {t("room.review")}
+          </a>
         )}
         <a className="button" href="#/map">
           {t("room.map")}

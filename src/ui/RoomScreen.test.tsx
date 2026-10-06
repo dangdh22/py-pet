@@ -3,6 +3,7 @@ import { screen } from "@testing-library/react";
 import { describe, expect, test } from "vitest";
 import { initialGameState } from "../game/state";
 import { renderWithGame, TODAY } from "../test/renderGame";
+import { reviewBundle } from "../test/reviewBundle";
 import { RoomScreen } from "./RoomScreen";
 
 describe("RoomScreen", () => {
@@ -24,6 +25,16 @@ describe("RoomScreen", () => {
     expect(screen.getByRole("link", { name: "Học tiếp" })).toHaveAttribute("href", "#/lesson/t.l1");
     expect(screen.getByRole("link", { name: "Bản đồ học" })).toHaveAttribute("href", "#/map");
     expect(screen.getByRole("link", { name: "Sao lưu" })).toHaveAttribute("href", "#/backup");
+    expect(screen.queryByRole("link", { name: "Ôn tập" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: "Sạc cho Robo" })).not.toBeInTheDocument();
+  });
+
+  test("offers a free review once a lesson is done, and the next node of the map", async () => {
+    const state = initialGameState(TODAY);
+    state.progress.completedLessons = ["r.l1", "r.l2"];
+    await renderWithGame(<RoomScreen />, { state, bundle: reviewBundle() });
+    expect(screen.getByRole("link", { name: "Ôn tập" })).toHaveAttribute("href", "#/review");
+    expect(screen.getByRole("link", { name: "Học tiếp" })).toHaveAttribute("href", "#/review/r.r1");
   });
 
   test("a grown, tired robot after progress and absence", async () => {
@@ -35,7 +46,8 @@ describe("RoomScreen", () => {
     await renderWithGame(<RoomScreen />, { state });
     expect(screen.getByRole("img", { name: "Robo" })).toHaveAttribute("data-mood", "drained");
     expect(screen.getByRole("img", { name: "Robo" })).toHaveAttribute("width", "160");
-    expect(screen.getByText("Robo hết pin rồi. Con học 1 bài để sạc cho Robo nhé!")).toBeInTheDocument();
+    expect(screen.getByText("Robo hết pin rồi. Con làm 1 trạm ôn để sạc cho Robo nhé!")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Sạc cho Robo" })).toHaveAttribute("href", "#/review");
     expect(screen.getByText("Lớn lên: 79%")).toBeInTheDocument();
     expect(screen.getByText("Xu: 75")).toBeInTheDocument();
     expect(screen.queryByRole("link", { name: "Học tiếp" })).not.toBeInTheDocument();

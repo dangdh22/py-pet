@@ -8,6 +8,7 @@ import { MemoryStore } from "../storage/memoryStore";
 import { FakeWorker } from "../test/fakeWorker";
 import { testBundle } from "../test/fixtures";
 import { FIXED_NOW, renderWithGame, TODAY, testProfile } from "../test/renderGame";
+import { reviewBundle } from "../test/reviewBundle";
 import { App } from "./App";
 import { downloadText } from "./download";
 import { AppRoutes } from "./AppRoutes";
@@ -60,6 +61,27 @@ describe("AppRoutes", () => {
     expect(await screen.findByRole("heading", { name: "Bản đồ học" })).toBeInTheDocument();
     window.location.hash = "#/lesson/t.l2";
     expect(await screen.findByText("Bài này chưa mở. Con học các bài trước đã nhé.")).toBeInTheDocument();
+  });
+});
+
+describe("review routes", () => {
+  test.each([
+    ["#/review/r.r1", "Trạm ôn này chưa mở. Con học các bài trước đã nhé."],
+    ["#/review/nope", "Không tìm thấy trạm ôn này."],
+    ["#/review/r.l1", "Không tìm thấy trạm ôn này."],
+  ])("%s shows a message", async (hash, message) => {
+    window.location.hash = hash;
+    await renderWithGame(<AppRoutes />, { bundle: reviewBundle() });
+    expect(screen.getByText(message)).toBeInTheDocument();
+  });
+
+  test("the room opens the station once its lessons are done", async () => {
+    const state = initialGameState(TODAY);
+    state.progress.completedLessons = ["r.l1", "r.l2"];
+    await renderWithGame(<AppRoutes />, { bundle: reviewBundle(), state });
+    await userEvent.click(screen.getByRole("link", { name: "Học tiếp" }));
+    expect(await screen.findByRole("heading", { name: "Trạm ôn" })).toBeInTheDocument();
+    expect(screen.getByText("Câu 1/5")).toBeInTheDocument();
   });
 });
 

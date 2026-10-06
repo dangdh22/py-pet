@@ -1,35 +1,11 @@
-import { allLessons } from "../content/lookup";
 import { isChoiceQuestion, type ContentBundle, type Stage } from "../content/types";
 import { daysBetween, weekStart } from "./dates";
 import { XP } from "./rewards";
 import { REVIEW_SIZE } from "./reviewSet";
 import type { GameState } from "./state";
 
-export type LessonStatus = "done" | "next" | "locked";
 export type PetCondition = "happy" | "normal" | "sleepy" | "drained";
 export type GrowthSize = 1 | 2 | 3;
-
-export function lessonStatuses(bundle: ContentBundle, state: GameState): Map<string, LessonStatus> {
-  const done = new Set(state.progress.completedLessons);
-  const statuses = new Map<string, LessonStatus>();
-  let nextGiven = false;
-  for (const lesson of allLessons(bundle)) {
-    if (done.has(lesson.id)) {
-      statuses.set(lesson.id, "done");
-    } else if (!nextGiven) {
-      statuses.set(lesson.id, "next");
-      nextGiven = true;
-    } else {
-      statuses.set(lesson.id, "locked");
-    }
-  }
-  return statuses;
-}
-
-export function nextLessonId(bundle: ContentBundle, state: GameState): string | null {
-  const done = new Set(state.progress.completedLessons);
-  return allLessons(bundle).find((lesson) => !done.has(lesson.id))?.id ?? null;
-}
 
 export function currentStage(bundle: ContentBundle, state: GameState): Stage | null {
   return bundle.stages[state.pet.stage - 1] ?? bundle.stages[bundle.stages.length - 1] ?? null;

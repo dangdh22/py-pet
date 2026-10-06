@@ -5,8 +5,6 @@ import {
   displayStreak,
   growthPercent,
   growthSize,
-  lessonStatuses,
-  nextLessonId,
   petCondition,
   stageXpMax,
   todayPoints,
@@ -16,23 +14,7 @@ import { initialGameState } from "./state";
 
 const bundle = testBundle();
 
-describe("lessons", () => {
-  test("the first unfinished lesson is next, the rest are locked", () => {
-    const state = initialGameState("2026-10-06");
-    expect([...lessonStatuses(bundle, state)]).toEqual([
-      ["t.l1", "next"],
-      ["t.l2", "locked"],
-    ]);
-    expect(nextLessonId(bundle, state)).toBe("t.l1");
-    state.progress.completedLessons = ["t.l1"];
-    expect([...lessonStatuses(bundle, state)]).toEqual([
-      ["t.l1", "done"],
-      ["t.l2", "next"],
-    ]);
-    state.progress.completedLessons = ["t.l1", "t.l2"];
-    expect(nextLessonId(bundle, state)).toBeNull();
-  });
-
+describe("stage", () => {
   test("currentStage follows pet.stage", () => {
     expect(currentStage(bundle, initialGameState("2026-10-06"))?.id).toBe("t");
   });

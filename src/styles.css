@@ -131,6 +131,7 @@ a.button.primary { background: var(--primary); border-color: var(--primary); col
 .node-done { border-color: var(--success); background: #e6f7ea; }
 .node-next { border-color: var(--primary); font-weight: 700; }
 .node-locked { color: var(--muted); }
+.node-review { border-style: dashed; }
 .puzzle { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; }
 .parsons-lines { list-style: none; padding: 0; display: grid; gap: 6px; }
 .parsons-lines li { display: flex; gap: 6px; align-items: center; }

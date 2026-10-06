@@ -1,24 +1,37 @@
-import { displayStreak, nextLessonId, todayPoints } from "../game/progress";
+import { nextNode } from "../game/path";
+import { displayStreak, todayPoints } from "../game/progress";
 import type { GameState } from "../game/state";
 import { useLang } from "../i18n/LangProvider";
 import { useContent } from "./contexts";
 import { useGame } from "./GameProvider";
 import { Robot } from "./Robot";
-import { routeToHash } from "./routing";
+import { nodeRoute, routeToHash } from "./routing";
 
-export function ResultView({ before, after, onExit }: { before: GameState; after: GameState; onExit(): void }) {
+export function ResultView({
+  before,
+  after,
+  title,
+  message,
+  onExit,
+}: {
+  before: GameState;
+  after: GameState;
+  title: string;
+  message: string;
+  onExit(): void;
+}) {
   const { t } = useLang();
   const bundle = useContent();
   const { today } = useGame();
   const xp = after.pet.xp - before.pet.xp;
   const xu = after.wallet.xu - before.wallet.xu;
   const pin = after.pet.pin - before.pet.pin;
-  const nextId = nextLessonId(bundle, after);
+  const next = nextNode(bundle, after);
   return (
     <main className="lesson-done">
       <Robot mood="happy" size={96} />
-      <h2>{t("lesson.doneTitle")}</h2>
-      <p>{t("lesson.doneBody")}</p>
+      <h2>{title}</h2>
+      <p>{message}</p>
       <ul className="result-rewards">
         {xp > 0 && <li>{t("result.xp", { n: xp })}</li>}
         {xu > 0 && <li>{t("result.xu", { n: xu })}</li>}
@@ -27,9 +40,9 @@ export function ResultView({ before, after, onExit }: { before: GameState; after
       <p>{t("room.today", { done: todayPoints(after, today), goal: after.settings.dailyGoal })}</p>
       <p>{t("room.streak", { days: displayStreak(after, today) })}</p>
       <nav className="room-actions">
-        {nextId && (
-          <a className="button primary" href={routeToHash({ name: "lesson", lessonId: nextId })}>
-            {t("result.next")}
+        {next && (
+          <a className="button primary" href={routeToHash(nodeRoute(next))}>
+            {t("room.continue")}
           </a>
         )}
         <button onClick={onExit}>{t("nav.room")}</button>

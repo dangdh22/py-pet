@@ -5,33 +5,39 @@ concepts:
       Nhiều bạn nghĩ máy tính tự chọn lệnh để chạy. Thực ra máy tính chạy **lần lượt từng dòng, từ trên xuống dưới**.
     parent_tip: |
       Cho con đọc to từng dòng code như đọc công thức nấu ăn: làm xong bước 1 mới tới bước 2.
+    practice: { level1: [s1.lam-quen.b3, s1.lam-quen.b4], level3: [s1.lam-quen.l3.ex1] }
   - id: print-call
     name: { vi: "Lệnh print cần dấu ngoặc tròn", en: "print needs round brackets" }
     misconception_card: |
       `print "Robo"` là cách viết của Python cũ. Bây giờ phải viết `print("Robo")`. Lệnh `print()` để trống sẽ in ra 1 dòng trống.
     parent_tip: |
       So sánh print với cái hộp: thứ cần in phải được đặt vào trong hộp ( ).
+    practice: { level1: [s1.lam-quen.b5, s1.lam-quen.l3.q1, s1.lam-quen.l1.q1], level3: [s1.lam-quen.l1.ex1, s1.lam-quen.l3.ex1] }
   - id: string-quotes
     name: { vi: "Chữ cần in phải nằm trong dấu nháy", en: "Text must be inside quotes" }
     misconception_card: |
       Không có dấu nháy, Python nghĩ `Robo` là tên biến. Có dấu nháy, `"Robo"` là chữ để in ra. Mở bằng dấu nháy nào thì đóng bằng dấu nháy đó.
     parent_tip: |
       Dấu nháy giống cặp ngoặc kép khi trích lời nói: những gì nằm trong đó được in ra y nguyên.
+    practice: { level1: [s1.lam-quen.l2.q1, s1.lam-quen.b7, s1.lam-quen.l1.q1], level3: [s1.lam-quen.l1.ex1, s1.lam-quen.l2.ex1, s1.lam-quen.l4.ex1] }
   - id: case-sensitive
     name: { vi: "Python phân biệt chữ hoa và chữ thường", en: "Python is case-sensitive" }
     misconception_card: |
       Với Python, `print`, `Print` và `PRINT` là 3 tên khác nhau. Chỉ có `print` là lệnh in.
     parent_tip: |
       Viết "an" và "An" lên giấy rồi hỏi con: với máy tính, 2 chữ này có giống nhau không? (Không.)
+    practice: { level1: [s1.lam-quen.b6, s1.lam-quen.b7, s1.lam-quen.l1.q1], level3: [s1.lam-quen.l2.ex1] }
   - id: read-error
     name: { vi: "Đọc thông báo lỗi", en: "Reading error messages" }
     misconception_card: |
       Thông báo lỗi luôn có **số dòng** và **tên lỗi**. Hãy nhìn số dòng trước, rồi mới đọc tên lỗi.
     parent_tip: |
       Khi con gặp lỗi, hỏi con: "Lỗi ở dòng mấy? Tên lỗi là gì?" trước khi sửa.
+    practice: { level1: [s1.lam-quen.b8, s1.lam-quen.b6, s1.lam-quen.l4.q1], level3: [s1.lam-quen.l4.ex1] }
   - id: ai-basics
     name: { vi: "AI là gì", en: "What AI is" }
     misconception_card: |
       AI không phải phép thuật. AI là chương trình máy tính học từ rất nhiều ví dụ để làm những việc giống con người, như nhận ra khuôn mặt hay hiểu giọng nói.
     parent_tip: |
       Tìm cùng con 3 thứ trong nhà có dùng AI, ví dụ mở khóa điện thoại bằng khuôn mặt hoặc trợ lý giọng nói.
+    practice: { level1: [s1.lam-quen.b1, s1.lam-quen.b2], level3: [] }

@@ -31,7 +31,15 @@ export function LessonScreen({ lesson, onExit }: LessonScreenProps) {
 
   const step = steps[index];
   if (finished || step === undefined) {
-    return <ResultView before={before} after={game.state} onExit={onExit} />;
+    return (
+      <ResultView
+        before={before}
+        after={game.state}
+        title={t("lesson.doneTitle")}
+        message={t("lesson.doneBody")}
+        onExit={onExit}
+      />
+    );
   }
 
   const markDone = (stepIndex: number) => setDoneSteps((previous) => new Set(previous).add(stepIndex));

@@ -36,7 +36,7 @@ test("goes through the lesson, records the attempts and shows the rewards", asyn
   expect(screen.getByText("Pin +1")).toBeInTheDocument();
   expect(screen.getByText("Mục tiêu hôm nay: 1/2")).toBeInTheDocument();
   expect(screen.getByText("Chuỗi: 0 ngày")).toBeInTheDocument();
-  expect(screen.getByRole("link", { name: "Học bài tiếp" })).toHaveAttribute("href", "#/lesson/t.l2");
+  expect(screen.getByRole("link", { name: "Học tiếp" })).toHaveAttribute("href", "#/lesson/t.l2");
 
   await waitFor(async () => expect((await store.loadActive())?.state.pet.xp).toBe(28));
   const [bundle] = await store.exportProfiles();
