@@ -89,6 +89,7 @@ export function ItemView({ item, source, onDone }: { item: Exercise; source: Res
   return (
     <PuzzleExerciseView
       exercise={item}
+      initialStats={inLesson ? game.state.progress.exerciseStats?.[item.id] : undefined}
       onHint={onHint}
       onSolutionViewed={onSolutionViewed}
       onJudged={onJudged}

@@ -1,8 +1,9 @@
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { fillTemplate } from "../content/exercise";
 import { FILL_BLANK, type FillExercise, type ParsonsExercise } from "../content/types";
 import { isPseudoError, problemFromOutcome } from "../explain/problem";
 import { shuffled, type Rng } from "../game/random";
+import type { ExerciseStats } from "../game/state";
 import { pick } from "../i18n/lang";
 import { useLang } from "../i18n/LangProvider";
 import { judge, type JudgeResult } from "../runner/judge";
@@ -25,6 +26,7 @@ export function PuzzleExerciseView({
   exercise,
   onComplete,
   onJudged,
+  initialStats,
   onHint,
   onSolutionViewed,
   rng = Math.random,
@@ -32,6 +34,8 @@ export function PuzzleExerciseView({
   exercise: ParsonsExercise | FillExercise;
   onComplete(outcome: ExerciseOutcome): void;
   onJudged?(info: JudgedInfo): void;
+  /** Saved counts from an earlier visit, so a reload does not reset them. */
+  initialStats?: ExerciseStats;
   onHint?(): void;
   onSolutionViewed?(): void;
   rng?: Rng;
@@ -45,11 +49,16 @@ export function PuzzleExerciseView({
   const [solved, setSolved] = useState(false);
   const [judgeResult, setJudgeResult] = useState<JudgeResult | null>(null);
   const [feedback, setFeedback] = useState<Feedback | null>(null);
-  const [hintsShown, setHintsShown] = useState(0);
-  const [failedSubmits, setFailedSubmits] = useState(0);
-  const [solutionShown, setSolutionShown] = useState(false);
+  const [hintsShown, setHintsShown] = useState(() => Math.min(initialStats?.hints ?? 0, exercise.hints.length));
+  const [failedSubmits, setFailedSubmits] = useState(initialStats?.fails ?? 0);
+  const [solutionShown, setSolutionShown] = useState(initialStats?.viewedSolution ?? false);
   const example = exercise.tests.find((test) => !test.hidden) ?? null;
   const code = exercise.type === "parsons" ? `${lines.join("\n")}\n` : fillTemplate(exercise.template, blanks);
+
+  // A solution seen before a reload still counts as this step's outcome. Runs once, on mount.
+  useEffect(() => {
+    if (initialStats?.viewedSolution) onComplete("viewed-solution");
+  }, []);
 
   function move(index: number, step: -1 | 1) {
     setLines((current) => {

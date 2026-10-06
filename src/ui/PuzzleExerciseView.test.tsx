@@ -69,6 +69,31 @@ describe("PuzzleExerciseView: parsons", () => {
   });
 });
 
+describe("PuzzleExerciseView: saved stats", () => {
+  test("restores hints, fails and the solution, and reports them on the next judged submit", async () => {
+    const onComplete = vi.fn();
+    const onJudged = vi.fn();
+    renderWithApp(
+      <PuzzleExerciseView
+        exercise={reviewParsons}
+        initialStats={{ fails: 3, hints: 1, viewedSolution: true }}
+        onComplete={onComplete}
+        onJudged={onJudged}
+        rng={seededRng(1)}
+      />,
+      { runner: echoRunner() },
+    );
+    expect(screen.getByText("Gợi ý 1: Hi đứng trước.")).toBeInTheDocument();
+    expect(screen.getByText("Lời giải mẫu")).toBeInTheDocument();
+    expect(onComplete).toHaveBeenCalledWith("viewed-solution");
+    await userEvent.click(screen.getByRole("button", { name: "Đưa dòng 2 lên" }));
+    await userEvent.click(submit());
+    await waitFor(() => expect(onJudged).toHaveBeenCalled());
+    expect(onJudged.mock.calls[0]![0]).toMatchObject({ failedSubmitsBefore: 3, hintsUsed: 1, viewedSolution: true });
+    expect(onJudged.mock.calls[0]![0].result.status).toBe("accepted");
+  });
+});
+
 describe("PuzzleExerciseView: fill", () => {
   test("puts the typed text into the blank", async () => {
     const onComplete = vi.fn();
