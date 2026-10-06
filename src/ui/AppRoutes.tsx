@@ -1,6 +1,6 @@
-import { useState } from "react";
 import { findLesson } from "../content/lookup";
 import { useLang } from "../i18n/LangProvider";
+import { Banners } from "./Banners";
 import { useContent } from "./contexts";
 import { ErrorBoundary } from "./ErrorBoundary";
 import { Header } from "./Header";
@@ -12,7 +12,6 @@ export function AppRoutes() {
   const [route, navigate] = useHashRoute();
   const bundle = useContent();
   const { t } = useLang();
-  const [completed, setCompleted] = useState<ReadonlySet<string>>(() => new Set());
 
   let screen;
   if (route.name === "lesson") {
@@ -21,7 +20,6 @@ export function AppRoutes() {
       <LessonScreen
         key={lesson.id}
         lesson={lesson}
-        onComplete={(id) => setCompleted((previous) => new Set(previous).add(id))}
         onExit={() => navigate({ name: "home" })}
       />
     ) : (
@@ -31,12 +29,13 @@ export function AppRoutes() {
       </main>
     );
   } else {
-    screen = <HomeScreen completed={completed} />;
+    screen = <HomeScreen />;
   }
 
   return (
     <>
       <Header />
+      <Banners />
       <ErrorBoundary key={routeToHash(route)}>{screen}</ErrorBoundary>
     </>
   );

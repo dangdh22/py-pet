@@ -1,9 +1,10 @@
 // @vitest-environment jsdom
-import { screen } from "@testing-library/react";
+import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { expect, test, vi } from "vitest";
 import { fixtureLesson } from "../test/fixtures";
-import { fakeRunner, okResult, renderWithApp } from "../test/render";
+import { fakeRunner, okResult } from "../test/render";
+import { renderWithGame } from "../test/renderGame";
 import { LessonScreen } from "./LessonScreen";
 
 vi.mock("./CodeEditor", () => ({
@@ -13,9 +14,8 @@ vi.mock("./CodeEditor", () => ({
 }));
 
 test("goes through cards, a code exercise and a question, then finishes", async () => {
-  const onComplete = vi.fn();
   const onExit = vi.fn();
-  renderWithApp(<LessonScreen lesson={fixtureLesson} onComplete={onComplete} onExit={onExit} />, {
+  const { store } = await renderWithGame(<LessonScreen lesson={fixtureLesson} onExit={onExit} />, {
     runner: fakeRunner(() => okResult("Hi\n")),
   });
 
@@ -38,7 +38,7 @@ test("goes through cards, a code exercise and a question, then finishes", async 
   await userEvent.click(screen.getByRole("button", { name: "Hoàn thành" }));
 
   expect(screen.getByText("Hoàn thành bài học!")).toBeInTheDocument();
-  expect(onComplete).toHaveBeenCalledWith("t.l1");
+  await waitFor(async () => expect((await store.loadActive())?.state.progress.completedLessons).toEqual(["t.l1"]));
   await userEvent.click(screen.getByRole("button", { name: "Về danh sách bài" }));
   expect(onExit).toHaveBeenCalledOnce();
 });
@@ -49,7 +49,7 @@ test("a new card starts without the output of the previous card", async () => {
     cards: [fixtureLesson.cards[0]!, { segments: [{ kind: "code" as const, code: "print(2)", run: true, expectError: false }] }],
     exercises: [],
   };
-  renderWithApp(<LessonScreen lesson={lesson} onComplete={() => {}} onExit={() => {}} />, {
+  await renderWithGame(<LessonScreen lesson={lesson} onExit={() => {}} />, {
     runner: fakeRunner(() => okResult("Xin chào\n")),
   });
   await userEvent.click(screen.getByRole("button", { name: "Chạy thử" }));

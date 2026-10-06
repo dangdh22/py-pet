@@ -112,3 +112,7 @@ button[aria-pressed="true"] { background: var(--text); border-color: var(--text)
 .onboarding label, .backup label { display: grid; gap: 4px; font-weight: 600; }
 .onboarding input, .backup input { font: inherit; padding: 8px 10px; border: 1px solid var(--border); border-radius: 6px; }
 [role="alert"] { color: var(--danger); }
+
+.banners { max-width: 1200px; margin: 8px auto 0; padding: 0 20px; display: grid; gap: 6px; }
+.banner { margin: 0; padding: 8px 12px; border-radius: var(--radius); background: #fff8ea; border: 1px solid #f0d9a8; }
+.banner-danger { background: #fdecec; border-color: var(--danger); }

@@ -1,7 +1,16 @@
 import { expect, test, type Page } from "@playwright/test";
 
-async function openFirstExercise(page: Page) {
+async function startApp(page: Page) {
   await page.goto("./");
+  await expect(page.getByRole("heading", { name: "Chào mừng đến với Py-Pet!" })).toBeVisible();
+  await page.getByLabel("Tên của con").fill("An");
+  await page.getByLabel("Mã PIN của bố mẹ (4 đến 6 chữ số)").fill("1234");
+  await page.getByLabel("Nhập lại mã PIN").fill("1234");
+  await page.getByRole("button", { name: "Bắt đầu" }).click();
+}
+
+async function openFirstExercise(page: Page) {
+  await startApp(page);
   await expect(page.getByText("Robo sẵn sàng")).toBeVisible({ timeout: 60_000 });
   await page.getByRole("link", { name: "Chương trình là gì?" }).click();
   await page.getByRole("button", { name: "Tiếp" }).click();
@@ -17,7 +26,7 @@ async function typeCode(page: Page, code: string) {
 }
 
 test("runs an example on a card with real Pyodide", async ({ page }) => {
-  await page.goto("./");
+  await startApp(page);
   await expect(page.getByText("Robo sẵn sàng")).toBeVisible({ timeout: 60_000 });
   await page.getByRole("link", { name: "Chương trình là gì?" }).click();
   await page.getByRole("button", { name: "Chạy thử" }).click();

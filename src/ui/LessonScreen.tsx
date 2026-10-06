@@ -4,6 +4,7 @@ import { pick } from "../i18n/lang";
 import { useLang } from "../i18n/LangProvider";
 import { CardView } from "./CardView";
 import { CodeExerciseView } from "./CodeExerciseView";
+import { useGame } from "./GameProvider";
 import { QuestionCard } from "./QuestionCard";
 import { Robot } from "./Robot";
 
@@ -11,12 +12,12 @@ type Step = { kind: "card"; card: Card } | { kind: "exercise"; exercise: Exercis
 
 export interface LessonScreenProps {
   lesson: Lesson;
-  onComplete(lessonId: string): void;
   onExit(): void;
 }
 
-export function LessonScreen({ lesson, onComplete, onExit }: LessonScreenProps) {
+export function LessonScreen({ lesson, onExit }: LessonScreenProps) {
   const { t, uiLang } = useLang();
+  const game = useGame();
   const steps = useMemo<Step[]>(
     () => [
       ...lesson.cards.map((card): Step => ({ kind: "card", card })),
@@ -48,7 +49,7 @@ export function LessonScreen({ lesson, onComplete, onExit }: LessonScreenProps) 
       setIndex(index + 1);
     } else {
       setFinished(true);
-      onComplete(lesson.id);
+      game.dispatch({ type: "LessonCompleted", lessonId: lesson.id });
     }
   };
 

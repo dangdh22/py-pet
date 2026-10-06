@@ -1,10 +1,12 @@
 import { pick } from "../i18n/lang";
 import { useLang } from "../i18n/LangProvider";
 import { useContent } from "./contexts";
+import { useGame } from "./GameProvider";
 import { routeToHash } from "./routing";
 
-export function HomeScreen({ completed }: { completed: ReadonlySet<string> }) {
+export function HomeScreen() {
   const bundle = useContent();
+  const completed = new Set(useGame().state.progress.completedLessons);
   const { t, uiLang } = useLang();
   return (
     <main className="home">
