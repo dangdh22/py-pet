@@ -33,6 +33,13 @@
     en: "Line {line}: the indentation does not match the lines above. Use exactly 4 spaces for each level."
   sample: "if True:\n        print(1)\n    print(2)"
 
+- id: smart-quote
+  match: { type: SyntaxError, message: "^invalid character '(?<char>.)' \\(U\\+(?<code>[0-9A-F]+)\\)$" }
+  explain:
+    vi: "Dòng {line}: có ký tự lạ {char}. Có thể con đã dán dấu nháy cong từ Word hoặc trang web. Hãy xóa và gõ lại dấu nháy thẳng \" bằng bàn phím."
+    en: "Line {line}: the character {char} is not allowed. Maybe you pasted a curly quote from Word or a web page. Delete it and type a straight quote \" with the keyboard."
+  sample: "print(“Xin chào”)"
+
 - id: unterminated-string
   match: { type: SyntaxError, message: "^unterminated (triple-quoted )?string literal" }
   explain:
@@ -42,13 +49,6 @@
     vi: "Ví dụ đúng: print(\"Xin chào\")"
     en: "Correct example: print(\"Hello\")"
   sample: "print(\"Xin chào)"
-
-- id: smart-quote
-  match: { type: SyntaxError, message: "^invalid syntax.*intended to be part of the string" }
-  explain:
-    vi: "Dòng {line}: có ký tự lạ {char}. Có thể con đã dán dấu nháy cong từ Word hoặc trang web. Hãy xóa và gõ lại dấu nháy thẳng \" bằng bàn phím."
-    en: "Line {line}: the character {char} is not allowed. Maybe you pasted a curly quote from Word or a web page. Delete it and type a straight quote \" with the keyboard."
-  sample: 'print(""Xin chào"")'
 
 - id: paren-never-closed
   match: { type: SyntaxError, message: "^'(?<paren>[(\\[{])' was never closed$" }
