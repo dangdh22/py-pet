@@ -238,20 +238,12 @@ export function GameProvider({ store, loaded, clock, onReplaced, children }: Gam
     [meta.pin],
   );
 
-  const importBackup = useCallback(
-    async (payload: BackupPayload) => {
+  const replaceData = useCallback(
+    async (write: () => Promise<void>) => {
       replacing.current = true;
       for (const timer of draftTimers.current.values()) clearTimeout(timer);
       draftTimers.current.clear();
-      const run = queue.current.then(async () => {
-        const current = await encodeBackup(await buildBackupPayload(store, clock(), activeSnapshot()));
-        const existing = await store.readMeta();
-        const autoBackups = [current, ...existing.autoBackups].slice(0, AUTO_BACKUPS);
-        const activeProfileId = payload.meta.activeProfileId ?? payload.profiles[0]?.profile.id ?? null;
-        // A file without a PIN keeps this device's PIN, so importing never leaves the parent area open.
-        const pin = payload.meta.pin ?? existing.pin;
-        await store.replaceAll({ ...emptyMeta(), ...payload.meta, pin, activeProfileId, autoBackups }, payload.profiles);
-      });
+      const run = queue.current.then(write);
       queue.current = run.catch(() => {});
       try {
         await run;
@@ -261,7 +253,24 @@ export function GameProvider({ store, loaded, clock, onReplaced, children }: Gam
       }
       onReplaced();
     },
-    [clock, store, activeSnapshot, onReplaced],
+    [onReplaced],
+  );
+
+  const importBackup = useCallback(
+    async (payload: BackupPayload) => {
+      await replaceData(async () => {
+        const current = await encodeBackup(await buildBackupPayload(store, clock(), activeSnapshot()));
+        const existing = await store.readMeta();
+        const autoBackups = [current, ...existing.autoBackups].slice(0, AUTO_BACKUPS);
+        const activeProfileId = payload.meta.activeProfileId ?? payload.profiles[0]?.profile.id ?? null;
+        // A file without a PIN keeps this device's PIN, so importing never leaves the parent area open.
+        // Also keep the device's pinResetAt when the file has no PIN.
+        const pin = payload.meta.pin ?? existing.pin;
+        const pinResetAt = payload.meta.pin ? payload.meta.pinResetAt : existing.pinResetAt;
+        await store.replaceAll({ ...emptyMeta(), ...payload.meta, pin, pinResetAt, activeProfileId, autoBackups }, payload.profiles);
+      });
+    },
+    [replaceData, store, clock, activeSnapshot],
   );
 
   const autoBackups = useCallback(async () => (await store.readMeta()).autoBackups, [store]);
@@ -269,8 +278,13 @@ export function GameProvider({ store, loaded, clock, onReplaced, children }: Gam
   const setPin = useCallback(
     async (pin: string, reset: boolean) => {
       const hash = await hashPin(pin);
-      const patch: Partial<AppMeta> = reset ? { pin: hash, pinResetAt: clock().toISOString() } : { pin: hash };
-      await store.writeMeta(patch);
+      const now = clock().toISOString();
+      const patch: Partial<AppMeta> = reset ? { pin: hash, pinResetAt: now } : { pin: hash };
+      const run = queue.current.then(async () => {
+        await store.writeMeta(patch);
+      });
+      queue.current = run.catch(() => {});
+      await run;
       setMeta((current) => ({ ...current, ...patch }));
     },
     [clock, store],
@@ -278,20 +292,10 @@ export function GameProvider({ store, loaded, clock, onReplaced, children }: Gam
 
   const attemptsFor = useCallback((itemIds: string[]) => store.attemptsFor(profile.id, itemIds), [store, profile.id]);
 
-  const eraseAll = useCallback(async () => {
-    replacing.current = true;
-    for (const timer of draftTimers.current.values()) clearTimeout(timer);
-    draftTimers.current.clear();
-    const run = queue.current.then(() => store.replaceAll(emptyMeta(), []));
-    queue.current = run.catch(() => {});
-    try {
-      await run;
-    } catch (error) {
-      replacing.current = false;
-      throw error;
-    }
-    onReplaced();
-  }, [store, onReplaced]);
+  const eraseAll = useCallback(
+    () => replaceData(() => store.replaceAll(emptyMeta(), [])),
+    [replaceData, store],
+  );
 
   const today = localDay(clock());
   const reference = meta.lastBackupAt ?? profile.createdAt;

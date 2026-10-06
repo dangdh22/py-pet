@@ -176,4 +176,16 @@ describe("backup file", () => {
     expect(result.ok && result.payload.meta.activeProfileId).toBe(payload.profiles[0]!.profile.id);
     expect(result.ok && result.payload.meta.pinResetAt).toBeNull();
   });
+
+  test("a file whose meta.errorLog is not an array is refused", async () => {
+    const badLog = sampleBackupPayload();
+    (badLog.meta as unknown as { errorLog: unknown }).errorLog = "not-an-array";
+    expect(await decodeBackup(await encodeBackup(badLog))).toEqual({ ok: false, reason: "damaged" });
+  });
+
+  test("a file whose meta.pinResetAt is a number is refused", async () => {
+    const badPinResetAt = sampleBackupPayload();
+    (badPinResetAt.meta as unknown as { pinResetAt: unknown }).pinResetAt = 12345;
+    expect(await decodeBackup(await encodeBackup(badPinResetAt))).toEqual({ ok: false, reason: "damaged" });
+  });
 });

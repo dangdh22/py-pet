@@ -420,16 +420,20 @@ describe("PIN, attempts and erasing", () => {
     expect((await store.readMeta()).pinResetAt).toBe(FIXED_NOW.toISOString());
     await act(() => api.setPin("3333", false));
     expect(api.pinResetAt).toBe(FIXED_NOW.toISOString());
+    expect(await api.checkPin("3333")).toBe(true);
   });
 
   test("importing a file without a PIN keeps this device's PIN", async () => {
     let api!: ReturnType<typeof useGame>;
-    const pin = await hashPin("1111");
-    const { store } = await renderWithGame(<Api onApi={(a) => (api = a)} />, { meta: { pin } });
+    const { store } = await renderWithGame(<Api onApi={(a) => (api = a)} />);
+    await act(() => api.setPin("1111", true));
+    const devicePin = (await store.readMeta()).pin;
+    const devicePinResetAt = api.pinResetAt;
     const payload = sampleBackupPayload();
     payload.meta.pin = null;
     await act(() => api.importBackup(payload));
-    expect((await store.readMeta()).pin).toEqual(pin);
+    expect((await store.readMeta()).pin).toEqual(devicePin);
+    expect((await store.readMeta()).pinResetAt).toBe(devicePinResetAt);
   });
 
   test("eraseAll empties the store and asks the app to start again", async () => {

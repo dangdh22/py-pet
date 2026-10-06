@@ -61,6 +61,7 @@ const metaSchema = z.object({
   activeProfileId: z.string().nullable(),
   lastBackupAt: z.string().nullable(),
   errorLog: z.array(z.object({ at: z.string(), kind: z.string(), detail: z.string() })),
+  pinResetAt: z.string().nullable().optional(),
 });
 
 /**
