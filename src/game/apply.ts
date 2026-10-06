@@ -196,8 +196,13 @@ function judgeExercise(s: GameState, e: Extract<GameEvent, { type: "ExerciseJudg
     for (const id of e.concepts ?? []) updateMastery(s, id, (m) => recordResult(m, score, source));
     if (!e.viewedSolution) delete s.retry[e.exerciseId];
   }
-  // A review station pays for the whole station (ReviewCompleted), not per exercise.
-  if (source === "review") return;
+  // A review station pays for the whole station (ReviewCompleted), not per exercise,
+  // but its answers still count for the correct run that raises Vui.
+  if (source === "review") {
+    if (e.accepted && e.failedSubmitsBefore === 0 && e.hintsUsed === 0 && !e.viewedSolution) bumpCorrectRun(s);
+    else s.pet.correctRun = 0;
+    return;
+  }
   const solved = s.progress.solvedExercises.includes(e.exerciseId);
   if (!e.accepted) {
     s.pet.correctRun = 0;
@@ -233,7 +238,12 @@ function answerQuestion(s: GameState, e: Extract<GameEvent, { type: "QuestionAns
   for (const id of e.concepts ?? []) updateMastery(s, id, (m) => recordResult(m, score, source));
   if (!e.correct && e.misconception) updateMastery(s, e.misconception, recordMisconception);
   s.reviews[e.questionId] = reviewCard(s.reviews[e.questionId], e.correct, today);
-  if (source === "review") return;
+  if (source === "review") {
+    // No XP for a review answer, but it counts for the correct run that raises Vui.
+    if (e.correct) bumpCorrectRun(s);
+    else s.pet.correctRun = 0;
+    return;
+  }
   const first = !s.progress.answeredQuestions.includes(e.questionId);
   if (first) s.progress.answeredQuestions.push(e.questionId);
   if (!e.correct) {

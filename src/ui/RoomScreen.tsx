@@ -37,6 +37,9 @@ export function RoomScreen() {
   const condition = petCondition(state);
   const next = nextNode(bundle, state);
   const canReview = state.progress.completedLessons.length > 0;
+  const recharge = condition === "drained" && canReview;
+  // An empty battery wins over an empty joy: charging by review fixes the battery first.
+  const message = condition === "drained" && state.pet.pin > 0 ? "pet.drainedVui" : (`pet.${condition}` as const);
 
   return (
     <main className="room">
@@ -44,7 +47,7 @@ export function RoomScreen() {
       <p>{t("room.greeting", { child: profile.childName })}</p>
       <div className={`room-scene condition-${condition}`}>
         <Robot mood={CONDITION_MOOD[condition]} size={ROBOT_SIZES[growthSize(state.pet.xp, max)]} />
-        <p className="pet-says">{t(`pet.${condition}`, { name: profile.robotName })}</p>
+        <p className="pet-says">{t(message, { name: profile.robotName })}</p>
       </div>
       <ul className="room-stats">
         <li>
@@ -65,13 +68,13 @@ export function RoomScreen() {
         <li>{t("room.xu", { xu: state.wallet.xu })}</li>
       </ul>
       <nav className="room-actions">
-        {condition === "drained" && (
+        {recharge && (
           <a className="button primary" href={routeToHash({ name: "review", stationId: null })}>
             {t("room.recharge", { name: profile.robotName })}
           </a>
         )}
         {next ? (
-          <a className={condition === "drained" ? "button" : "button primary"} href={routeToHash(nodeRoute(next))}>
+          <a className={recharge ? "button" : "button primary"} href={routeToHash(nodeRoute(next))}>
             {t("room.continue")}
           </a>
         ) : (

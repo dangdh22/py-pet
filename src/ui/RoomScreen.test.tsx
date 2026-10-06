@@ -53,4 +53,32 @@ describe("RoomScreen", () => {
     expect(screen.queryByRole("link", { name: "Học tiếp" })).not.toBeInTheDocument();
     expect(screen.getByText("Con đã học hết các bài hiện có. Robo chờ bài mới nhé!")).toBeInTheDocument();
   });
+  test("a drained robot before the first lesson offers no charging and keeps learning first", async () => {
+    const state = initialGameState(TODAY);
+    state.pet.pin = 0;
+    state.pet.vui = 0;
+    await renderWithGame(<RoomScreen />, { state });
+    expect(screen.getByRole("img", { name: "Robo" })).toHaveAttribute("data-mood", "drained");
+    expect(screen.queryByRole("link", { name: "Sạc cho Robo" })).not.toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Học tiếp" })).toHaveClass("button", "primary");
+  });
+
+  test("a robot with battery but no joy asks for 3 right answers in a row", async () => {
+    const state = initialGameState(TODAY);
+    state.pet.pin = 3;
+    state.pet.vui = 0;
+    state.progress.completedLessons = ["t.l1"];
+    await renderWithGame(<RoomScreen />, { state });
+    expect(screen.getByText("Robo buồn quá. Con trả lời đúng 3 câu liên tiếp để Robo vui lại nhé!")).toBeInTheDocument();
+    expect(screen.queryByText(/hết pin/)).not.toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Sạc cho Robo" })).toHaveAttribute("href", "#/review");
+  });
+
+  test("an empty battery wins over an empty joy in the message", async () => {
+    const state = initialGameState(TODAY);
+    state.pet.pin = 0;
+    state.pet.vui = 0;
+    await renderWithGame(<RoomScreen />, { state });
+    expect(screen.getByText("Robo hết pin rồi. Con làm 1 trạm ôn để sạc cho Robo nhé!")).toBeInTheDocument();
+  });
 });

@@ -1,5 +1,6 @@
 import { describe, expect, test } from "vitest";
 import { apply, type GameEvent } from "./apply";
+import { petCondition } from "./progress";
 import { initialGameState, type GameState } from "./state";
 
 const at = (day: string, hour = 10) => new Date(`${day}T${String(hour).padStart(2, "0")}:00:00`);
@@ -431,5 +432,74 @@ describe("ReviewCompleted", () => {
       ["2026-10-06", review("s.r1", 3)],
     ]);
     expect(state.streak).toMatchObject({ points: 2, current: 1 });
+  });
+});
+
+describe("review answers and Vui", () => {
+  const reviewAnswer = (questionId: string, correct: boolean): GameEvent => ({
+    type: "QuestionAnswered",
+    questionId,
+    correct,
+    concepts: ["c1"],
+    source: "review",
+  });
+
+  test("charging by review after a long absence wakes the robot up", () => {
+    const start = initialGameState("2026-10-06");
+    start.activity.lastActiveDay = "2026-10-06";
+    const away = apply(start, { type: "DayRollover" }, at("2026-10-17"));
+    expect(away.pet).toMatchObject({ pin: 0, vui: 0 });
+    expect(petCondition(away)).toBe("drained");
+    const state = run(away, [
+      ["2026-10-17", reviewAnswer("q1", true)],
+      ["2026-10-17", reviewAnswer("q2", true)],
+      ["2026-10-17", reviewAnswer("q3", true)],
+      ["2026-10-17", { type: "ReviewCompleted", stationId: null, correct: 3, total: 3 }],
+    ]);
+    expect(state.pet).toMatchObject({ pin: 2, vui: 1 });
+    expect(petCondition(state)).not.toBe("drained");
+  });
+
+  test("a wrong review answer resets the correct run", () => {
+    const state = run(initialGameState("2026-10-06"), [
+      ["2026-10-06", reviewAnswer("q1", true)],
+      ["2026-10-06", reviewAnswer("q2", true)],
+      ["2026-10-06", reviewAnswer("q3", false)],
+    ]);
+    expect(state.pet.correctRun).toBe(0);
+    expect(state.pet.vui).toBe(4);
+  });
+
+  test("review answers count for the run but still pay no XP", () => {
+    const state = run(initialGameState("2026-10-06"), [
+      ["2026-10-06", reviewAnswer("q1", true)],
+      ["2026-10-06", reviewAnswer("q2", true)],
+    ]);
+    expect(state.pet.correctRun).toBe(2);
+    expect(state.pet.xp).toBe(0);
+    expect(state.progress.answeredQuestions).toEqual([]);
+  });
+
+  test("a review exercise accepted at the first submit without help counts for the run", () => {
+    const state = run(initialGameState("2026-10-06"), [
+      ["2026-10-06", solved("x", { source: "review" })],
+      ["2026-10-06", solved("y", { source: "review" })],
+      ["2026-10-06", reviewAnswer("q1", true)],
+    ]);
+    expect(state.pet).toMatchObject({ correctRun: 3, vui: 5, xp: 0 });
+    expect(state.wallet.xu).toBe(0);
+    expect(state.progress.solvedExercises).toEqual([]);
+    expect(state.progress.exerciseStats ?? {}).toEqual({});
+  });
+
+  test("any other judged review submit resets the run", () => {
+    for (const extra of [{ accepted: false }, { failedSubmitsBefore: 1 }, { hintsUsed: 1 }, { viewedSolution: true }]) {
+      const state = run(initialGameState("2026-10-06"), [
+        ["2026-10-06", reviewAnswer("q1", true)],
+        ["2026-10-06", solved("x", { source: "review", ...extra })],
+      ]);
+      expect(state.pet.correctRun).toBe(0);
+      expect(state.progress.exerciseStats ?? {}).toEqual({});
+    }
   });
 });

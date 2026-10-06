@@ -82,6 +82,7 @@ export const vi = {
   "pet.normal": "{name} đang chờ con học.",
   "pet.sleepy": "{name} buồn ngủ quá, nhớ con lắm!",
   "pet.drained": "{name} hết pin rồi. Con làm 1 trạm ôn để sạc cho {name} nhé!",
+  "pet.drainedVui": "{name} buồn quá. Con trả lời đúng 3 câu liên tiếp để {name} vui lại nhé!",
   "map.title": "Bản đồ học",
   "map.done": "Đã xong",
   "map.next": "Bài tiếp theo",

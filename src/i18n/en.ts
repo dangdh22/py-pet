@@ -84,6 +84,7 @@ export const en: Record<MessageKey, string> = {
   "pet.normal": "{name} is waiting for you.",
   "pet.sleepy": "{name} is sleepy and misses you!",
   "pet.drained": "{name} has no battery. Do 1 review to charge {name}!",
+  "pet.drainedVui": "{name} is very sad. Answer 3 questions in a row correctly to cheer {name} up!",
   "map.title": "Lesson map",
   "map.done": "Done",
   "map.next": "Next lesson",
