@@ -22,7 +22,9 @@ import {
   type ExerciseStats,
   type GameSettings,
   type GameState,
+  type RewardItem,
 } from "./state";
+import { cleanCatalog, requestBlock, trimRequests } from "./realRewards";
 import { findShopItem, isConsumable, MAX_CONSUMABLES, STREAK_GIFTS } from "./shop";
 import { changeXu } from "./wallet";
 
@@ -70,6 +72,12 @@ export type GameEvent =
   | { type: "ItemBought"; itemId: string }
   /** Uses a Pin or Vui item, or puts an accessory on or takes it off. */
   | { type: "ItemUsed"; itemId: string }
+  /** The parent's list of real rewards (spec 5.12), replaced as a whole. */
+  | { type: "RewardsEdited"; catalog: RewardItem[] }
+  /** `requestId` is made by the caller (the UI), so the rule stays pure. */
+  | { type: "RewardRequested"; requestId: string; rewardId: string }
+  | { type: "RewardApproved"; requestId: string }
+  | { type: "RewardRejected"; requestId: string }
   | { type: "HintShown"; exerciseId: string }
   | { type: "SolutionViewed"; exerciseId: string };
 
@@ -124,6 +132,18 @@ export function apply(state: GameState, event: GameEvent, now: Date): GameState 
       break;
     case "ItemUsed":
       useItem(next, event.itemId);
+      break;
+    case "RewardsEdited":
+      next.rewards.catalog = cleanCatalog(event.catalog);
+      break;
+    case "RewardRequested":
+      requestReward(next, event, now, today);
+      break;
+    case "RewardApproved":
+      decideReward(next, event.requestId, true, now, today);
+      break;
+    case "RewardRejected":
+      decideReward(next, event.requestId, false, now, today);
       break;
     case "HintShown":
       statsFor(next, event.exerciseId).hints += 1;
@@ -404,4 +424,37 @@ function useItem(s: GameState, itemId: string): void {
     ...s.inventory.equipped.filter((id) => findShopItem(id)?.slot !== item.slot),
     itemId,
   ];
+}
+
+/** Spec 5.12: asking creates a request waiting for the parent; no xu is taken yet. */
+function requestReward(
+  s: GameState,
+  e: Extract<GameEvent, { type: "RewardRequested" }>,
+  now: Date,
+  today: string,
+): void {
+  const reward = s.rewards.catalog.find((item) => item.id === e.rewardId);
+  if (!reward || s.rewards.requests.some((r) => r.id === e.requestId) || requestBlock(s, reward, today) !== null) return;
+  s.rewards.requests.push({
+    id: e.requestId,
+    rewardId: reward.id,
+    name: reward.name,
+    price: reward.price,
+    at: now.toISOString(),
+    status: "pending",
+    decidedAt: null,
+  });
+}
+
+/** Spec 5.12: xu are taken only when the parent approves (with the PIN), and only if the child still has them. */
+function decideReward(s: GameState, requestId: string, approve: boolean, now: Date, today: string): void {
+  const request = s.rewards.requests.find((r) => r.id === requestId);
+  if (!request || request.status !== "pending") return;
+  if (approve) {
+    if (s.wallet.xu < request.price) return;
+    changeXu(s, -request.price, "reward", request.rewardId, today);
+  }
+  request.status = approve ? "approved" : "rejected";
+  request.decidedAt = now.toISOString();
+  s.rewards.requests = trimRequests(s.rewards.requests);
 }
