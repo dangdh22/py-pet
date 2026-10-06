@@ -103,6 +103,7 @@ export const en: Record<MessageKey, string> = {
   "onboarding.errorName": "Please type your name.",
   "onboarding.errorPin": "The PIN must have 4 to 6 digits.",
   "onboarding.errorPinMatch": "The 2 PINs are not the same.",
+  "onboarding.errorSave": "The profile could not be saved. Please try again.",
   "backup.title": "Backup",
   "backup.export": "Export a backup file",
   "backup.exported": "Created the file {file}",

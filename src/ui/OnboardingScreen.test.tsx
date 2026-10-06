@@ -64,4 +64,19 @@ describe("OnboardingScreen", () => {
     expect(screen.getByRole("alert")).toHaveTextContent(message);
     expect(onCreated).not.toHaveBeenCalled();
   });
+
+  test("shows an error and re-enables the button when the profile cannot be saved", async () => {
+    class FailingStore extends MemoryStore {
+      override async createProfile(): Promise<void> {
+        throw new Error("disk full");
+      }
+    }
+    const onCreated = vi.fn();
+    renderWithApp(<OnboardingScreen store={new FailingStore()} clock={() => FIXED_NOW} onCreated={onCreated} requestPersist={async () => true} />);
+    await fill("An", "1234");
+    await userEvent.click(screen.getByRole("button", { name: "Bắt đầu" }));
+    expect(await screen.findByRole("alert")).toHaveTextContent("Chưa lưu được hồ sơ. Bố mẹ thử lại nhé.");
+    expect(onCreated).not.toHaveBeenCalled();
+    expect(screen.getByRole("button", { name: "Bắt đầu" })).toBeEnabled();
+  });
 });

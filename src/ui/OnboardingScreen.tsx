@@ -31,20 +31,28 @@ export function OnboardingScreen({ store, clock, onCreated, requestPersist = req
     if (pin !== pinAgain) return setError("onboarding.errorPinMatch");
     setError(null);
     setBusy(true);
-    const now = clock();
-    const profile: StoredProfile = {
-      id: crypto.randomUUID(),
-      childName: childName.trim(),
-      robotName: robotName.trim() || "Robo",
-      createdAt: now.toISOString(),
-    };
-    const state = initialGameState(localDay(now));
-    state.settings.uiLang = uiLang;
-    await store.createProfile(profile, state);
-    await store.writeMeta({ pin: await hashPin(pin) });
-    void requestPersist();
-    const loaded = await store.loadActive();
-    if (loaded) onCreated(loaded);
+    try {
+      const now = clock();
+      const profile: StoredProfile = {
+        id: crypto.randomUUID(),
+        childName: childName.trim(),
+        robotName: robotName.trim() || "Robo",
+        createdAt: now.toISOString(),
+      };
+      const state = initialGameState(localDay(now));
+      state.settings.uiLang = uiLang;
+      const pinHash = await hashPin(pin);
+      await store.writeMeta({ pin: pinHash });
+      await store.createProfile(profile, state);
+      void requestPersist();
+      const loaded = await store.loadActive();
+      if (!loaded) throw new Error("profile was not found after creating it");
+      onCreated(loaded);
+    } catch {
+      setError("onboarding.errorSave");
+    } finally {
+      setBusy(false);
+    }
   }
 
   return (

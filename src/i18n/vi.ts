@@ -101,6 +101,7 @@ export const vi = {
   "onboarding.errorName": "Con hãy nhập tên nhé.",
   "onboarding.errorPin": "Mã PIN phải gồm 4 đến 6 chữ số.",
   "onboarding.errorPinMatch": "Hai mã PIN chưa giống nhau.",
+  "onboarding.errorSave": "Chưa lưu được hồ sơ. Bố mẹ thử lại nhé.",
   "backup.title": "Sao lưu",
   "backup.export": "Xuất file sao lưu",
   "backup.exported": "Đã tạo file {file}",
