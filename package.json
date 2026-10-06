@@ -14,7 +14,9 @@
     "typecheck": "npm run content:build && tsc --noEmit",
     "test:py": ".venv/bin/python -m pytest tools/tests -q",
     "content:build": "tsx tools/build_content.ts content src/generated/content.json",
-    "content:validate": "npm run content:build && python3 tools/validate_content.py src/generated/content.json"
+    "content:validate": "npm run content:build && python3 tools/validate_content.py src/generated/content.json",
+    "test:e2e": "playwright test",
+    "check": "npm run typecheck && npm test && npm run test:py && npm run content:validate && npm run test:e2e"
   },
   "keywords": [],
   "type": "module",
