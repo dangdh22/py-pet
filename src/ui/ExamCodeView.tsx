@@ -37,13 +37,13 @@ export function ExamCodeView({
   const [output, setOutput] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-  const [failed, setFailed] = useState(false);
+  const [failed, setFailed] = useState<"run" | "submit" | null>(null);
   const [feedback, setFeedback] = useState<Feedback | null>(null);
   const [errorLine, setErrorLine] = useState<number | null>(null);
 
   async function handleRun() {
     setBusy(true);
-    setFailed(false);
+    setFailed(null);
     setFeedback(null);
     setErrorLine(null);
     try {
@@ -55,7 +55,7 @@ export function ExamCodeView({
         setFeedback(await feedbackForProblem(problem, code, explain, t));
       }
     } catch {
-      setFailed(true);
+      setFailed("run");
     } finally {
       setBusy(false);
     }
@@ -63,7 +63,7 @@ export function ExamCodeView({
 
   async function handleSubmit() {
     setBusy(true);
-    setFailed(false);
+    setFailed(null);
     setFeedback(null);
     setErrorLine(null);
     try {
@@ -71,7 +71,7 @@ export function ExamCodeView({
       setSubmitted(true);
       onSubmitted({ result, code });
     } catch {
-      setFailed(true);
+      setFailed("submit");
     } finally {
       setBusy(false);
     }
@@ -112,7 +112,7 @@ export function ExamCodeView({
           </button>
         </div>
         {busy && <p>{t("code.running")}</p>}
-        {failed && <p role="alert">{t("app.crash")}</p>}
+        {failed && <p role="alert">{t(failed === "submit" ? "exam.submitFailed" : "app.crash")}</p>}
         {feedback && <RobotBubble {...feedback} />}
         {output !== null && <OutputPanel stdout={output} />}
         {submitted && <p className="exam-answered">{t("exam.submitted")}</p>}

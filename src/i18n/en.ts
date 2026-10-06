@@ -113,6 +113,7 @@ export const en: Record<MessageKey, string> = {
   "exam.choose": "Choose this answer",
   "exam.answered": "Your answer is saved. You see the results at the end.",
   "exam.submitted": "Your code is submitted. You see the results at the end.",
+  "exam.submitFailed": "Your code was not submitted. Click Submit again.",
   "exam.finish": "Finish the test",
   "exam.topicTitle": "Topic test: {topic}",
   "exam.evolutionTitle": "Evolution test",

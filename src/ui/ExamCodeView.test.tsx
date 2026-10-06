@@ -45,4 +45,27 @@ describe("ExamCodeView", () => {
     expect(await screen.findByRole("region", { name: "Kết quả" })).toHaveTextContent("Hi");
     expect(screen.getByRole("textbox", { name: "Trình soạn code" })).toHaveAttribute("data-error-line", "");
   });
+
+  test("a failed submit asks the child to submit again, not to reload", async () => {
+    const onSubmitted = vi.fn();
+    const runner = fakeRunner(() => {
+      throw new Error("worker died");
+    });
+    renderWithApp(<ExamCodeView exercise={exercise} onSubmitted={onSubmitted} />, { runner });
+    await userEvent.click(screen.getByRole("button", { name: "Nộp bài" }));
+    expect(await screen.findByRole("alert")).toHaveTextContent("Chưa nộp được bài. Con bấm Nộp bài lần nữa nhé.");
+    expect(screen.queryByText(/tải lại trang/)).not.toBeInTheDocument();
+    expect(onSubmitted).not.toHaveBeenCalled();
+    expect(screen.getByRole("button", { name: "Nộp bài" })).toBeEnabled();
+  });
+
+  test("a failed trial run still says Robo has a problem", async () => {
+    const runner = fakeRunner(() => {
+      throw new Error("worker died");
+    });
+    renderWithApp(<ExamCodeView exercise={exercise} onSubmitted={() => {}} />, { runner });
+    await userEvent.click(screen.getByRole("button", { name: "Chạy thử" }));
+    expect(await screen.findByRole("alert")).toHaveTextContent(/Robo/);
+    expect(screen.queryByText(/Chưa nộp được bài/)).not.toBeInTheDocument();
+  });
 });

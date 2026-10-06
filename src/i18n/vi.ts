@@ -111,6 +111,7 @@ export const vi = {
   "exam.choose": "Chọn đáp án này",
   "exam.answered": "Đã ghi nhận câu trả lời. Kết quả hiện ở cuối bài.",
   "exam.submitted": "Đã nộp bài. Kết quả hiện ở cuối bài.",
+  "exam.submitFailed": "Chưa nộp được bài. Con bấm Nộp bài lần nữa nhé.",
   "exam.finish": "Nộp bài kiểm tra",
   "exam.topicTitle": "Kiểm tra chủ đề: {topic}",
   "exam.evolutionTitle": "Kiểm tra tiến hóa",
