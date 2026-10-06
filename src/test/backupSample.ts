@@ -7,6 +7,12 @@ export function sampleBackupPayload(childName = "An"): BackupPayload {
   state.wallet.xu = 120;
   state.pet.xp = 30;
   state.activity.lastActiveDay = "2026-10-06";
+  state.wallet.history = [{ day: "2026-10-06", delta: 8, reason: "code", ref: "s1.lam-quen.l1.ex1" }];
+  state.activity.seconds = { "2026-10-06": 300 };
+  state.inventory = { consumables: { bong: 1 }, owned: ["kinh-ram"], equipped: ["kinh-ram"] };
+  state.rewards = { catalog: [{ id: "r1", name: "Đọc truyện", price: 50, weeklyLimit: 1 }], requests: [] };
+  state.vacation = { since: null, ranges: [{ start: "2026-10-20", end: "2026-10-22" }] };
+  state.badges = { "first-lesson": "2026-10-06" };
   return {
     format: BACKUP_FORMAT,
     schemaVersion: SCHEMA_VERSION,

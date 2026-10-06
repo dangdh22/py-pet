@@ -139,8 +139,15 @@ describe("backup file", () => {
 
   test("decodes the committed schema 4 sample file", async () => {
     const result = await decodeBackup(readFileSync("src/storage/fixtures/backup-v4.pypet", "utf8"));
-    expect(result.ok && result.checksumValid).toBe(true);
-    expect(result.ok && result.payload.profiles[0]!.state.inventory).toEqual({ consumables: {}, owned: [], equipped: [] });
+    if (!result.ok) throw new Error("the sample file must decode");
+    expect(result.checksumValid).toBe(true);
+    const state = result.payload.profiles[0]!.state;
+    expect(state.inventory).toEqual({ consumables: { bong: 1 }, owned: ["kinh-ram"], equipped: ["kinh-ram"] });
+    expect(state.rewards.catalog).toEqual([{ id: "r1", name: "Đọc truyện", price: 50, weeklyLimit: 1 }]);
+    expect(state.badges).toEqual({ "first-lesson": "2026-10-06" });
+    expect(state.vacation.ranges).toEqual([{ start: "2026-10-20", end: "2026-10-22" }]);
+    expect(state.activity.seconds).toEqual({ "2026-10-06": 300 });
+    expect(state.wallet.history).toHaveLength(1);
   });
 
   test("refuses a file whose profile or state is damaged", async () => {
