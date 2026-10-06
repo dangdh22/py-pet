@@ -5,6 +5,7 @@ lessons:
   - 02-chu-hoa-dau-nhay.md
   - 03-tu-tren-xuong.md
   - 04-khi-may-khong-hieu.md
+  - 05-ai-la-gi.md
 reviews:
   - { id: s1.lam-quen.r1, after: s1.lam-quen.l2 }
   - { id: s1.lam-quen.r2, after: s1.lam-quen.l4 }

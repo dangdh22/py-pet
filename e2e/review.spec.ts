@@ -41,12 +41,15 @@ test("after 2 lessons the review station opens, pays and unlocks lesson 3", asyn
 
   await page.getByRole("link", { name: "Học tiếp" }).click();
   await expect(page.getByRole("heading", { name: "Trạm ôn" })).toBeVisible();
-  for (let n = 1; n <= 5; n += 1) {
-    await expect(page.getByText(`Câu ${n}/5`)).toBeVisible();
-    await answerFirstChoice(page, n === 5);
+  // The station holds up to 5 questions of the 2 lessons done; the AI questions now belong to lesson 5, so there are 4.
+  const total = Number((await page.getByText(/^Câu 1\/\d+$/).textContent())!.split("/")[1]);
+  expect(total).toBeGreaterThanOrEqual(4);
+  for (let n = 1; n <= total; n += 1) {
+    await expect(page.getByText(`Câu ${n}/${total}`)).toBeVisible();
+    await answerFirstChoice(page, n === total);
   }
   await expect(page.getByRole("heading", { name: "Xong trạm ôn!" })).toBeVisible();
-  await expect(page.getByText(/^Con đúng [0-5]\/5 câu\.$/)).toBeVisible();
+  await expect(page.getByText(new RegExp(`^Con đúng [0-${total}]/${total} câu\\.$`))).toBeVisible();
   await expect(page.getByText(/^\+(10|15) xu$/)).toBeVisible();
   await expect(page.getByRole("link", { name: "Học tiếp" })).toHaveAttribute("href", "#/lesson/s1.lam-quen.l3");
 

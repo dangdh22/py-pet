@@ -41,4 +41,4 @@ concepts:
       AI không phải phép thuật. AI là chương trình máy tính học từ rất nhiều ví dụ để làm những việc giống con người, như nhận ra khuôn mặt hay hiểu giọng nói.
     parent_tip: |
       Tìm cùng con 3 thứ trong nhà có dùng AI, ví dụ mở khóa điện thoại bằng khuôn mặt hoặc trợ lý giọng nói.
-    practice: { level1: [s1.lam-quen.b1, s1.lam-quen.b2, s1.lam-quen.b9, s1.lam-quen.b10, s1.lam-quen.b11], level3: [] }
+    practice: { level1: [s1.lam-quen.b1, s1.lam-quen.b2, s1.lam-quen.b9, s1.lam-quen.b10, s1.lam-quen.b11, s1.lam-quen.l5.q1, s1.lam-quen.l5.q2], level3: [] }

@@ -60,7 +60,7 @@ async function answerPaper(page: Page) {
   return total;
 }
 
-test("after the 4 lessons of the topic come the topic test and then the evolution test", async ({ page }) => {
+test("after the 5 lessons of the topic come the topic test and then the evolution test", async ({ page }) => {
   test.setTimeout(120_000);
   await startApp(page);
   await readCards(page);
@@ -79,6 +79,9 @@ test("after the 4 lessons of the topic come the topic test and then the evolutio
   await submitCode(page, 'print("Robo")\nprint("đang học")\nprint("Python")', true);
   await reviewStation(page);
   await page.getByRole("button", { name: "Về phòng" }).click();
+  await readCards(page);
+  await answerFirstChoice(page, false);
+  await answerFirstChoice(page, true);
 
   await page.getByRole("link", { name: "Học tiếp" }).click();
   await expect(page.getByRole("heading", { name: "Kiểm tra chủ đề: Làm quen với chương trình" })).toBeVisible();

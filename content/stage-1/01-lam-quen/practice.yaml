@@ -35,8 +35,8 @@ exercises:
     type: fill
     concepts: [string-quotes]
     prompt:
-      vi: "Chữ Robo ở dòng 1 đang thiếu dấu nháy. Điền dấu nháy kép vào 2 chỗ trống để in ra 2 dòng: Robo và Py"
-      en: "The text Robo on line 1 has no quotes. Fill the 2 blanks with double quotes to print 2 lines: Robo and Py"
+      vi: "Chữ Robo ở dòng 1 đang thiếu dấu nháy. Điền dấu nháy kép hoặc nháy đơn vào 2 chỗ trống (2 dấu giống nhau) để in ra 2 dòng: Robo và Py"
+      en: "The text Robo on line 1 has no quotes. Fill the 2 blanks with double quotes or single quotes (the same on both sides) to print 2 lines: Robo and Py"
     template: |
       print(___Robo___)
       print("Py")
@@ -83,6 +83,7 @@ exercises:
           !
     hints:
       - { vi: "Số dòng trong thông báo lỗi cho biết dòng cần sửa. Dòng đó đang thiếu phần kết thúc.", en: "The line number in the error message tells you which line to fix. That line is missing its ending." }
+      - { vi: "Dòng 3 đã mở 1 dấu nháy và 1 dấu ngoặc tròn. Cả 2 đều phải được đóng lại.", en: "Line 3 opened a quote and a round bracket. Both must be closed." }
   - id: s1.lam-quen.p6
     type: parsons
     concepts: [print-call, run-order]
