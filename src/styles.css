@@ -184,3 +184,7 @@ a.button.primary { background: var(--primary); border-color: var(--primary); col
 .reward-rows input { width: 10em; }
 .parent-progress table { border-collapse: collapse; }
 .parent-progress th, .parent-progress td { border: 1px solid #dde3ef; padding: 4px 8px; text-align: left; }
+.settings-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 6px 0; }
+.parent-settings h2 { margin-top: 24px; }
+button.danger { background: #c62828; border-color: #c62828; color: #fff; }
+button.danger:disabled { opacity: 0.5; }

@@ -8,18 +8,20 @@ import { ParentHelp } from "./ParentHelp";
 import { ParentOverview } from "./ParentOverview";
 import { ParentProgress } from "./ParentProgress";
 import { ParentRewards } from "./ParentRewards";
+import { ParentSettings } from "./ParentSettings";
 
 /** Spec 9: the parent area locks itself after 5 minutes without use, and when the parent leaves it. */
 export const LOCK_AFTER_MS = 5 * 60_000;
 const LOCK_CHECK_MS = 10_000;
 
-type Tab = "overview" | "help" | "progress" | "rewards";
+type Tab = "overview" | "help" | "progress" | "rewards" | "settings";
 
 const TABS: { id: Tab; label: MessageKey }[] = [
   { id: "overview", label: "parent.tabOverview" },
   { id: "help", label: "parent.tabHelp" },
   { id: "progress", label: "parent.tabProgress" },
   { id: "rewards", label: "parent.tabRewards" },
+  { id: "settings", label: "parent.tabSettings" },
 ];
 
 export function ParentScreen() {
@@ -194,6 +196,7 @@ function ParentArea({ onLock }: { onLock(auto: boolean): void }) {
       {tab === "help" && <ParentHelp />}
       {tab === "progress" && <ParentProgress />}
       {tab === "rewards" && <ParentRewards />}
+      {tab === "settings" && <ParentSettings />}
       <a href="#/">{t("nav.room")}</a>
     </main>
   );
