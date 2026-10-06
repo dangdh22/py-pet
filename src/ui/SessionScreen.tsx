@@ -24,6 +24,8 @@ export function SessionScreen({ title, items, source, onFinish, doneTitle, onExi
   const [index, setIndex] = useState(0);
   const [results, setResults] = useState<(boolean | undefined)[]>(() => items.map(() => undefined));
   const [finished, setFinished] = useState(false);
+  // The practice for a misconception comes after the session; a practice set offers no more practice.
+  const [practiceConcepts, setPracticeConcepts] = useState<string[]>([]);
   const correct = results.filter((r) => r === true).length;
 
   if (finished) {
@@ -33,6 +35,7 @@ export function SessionScreen({ title, items, source, onFinish, doneTitle, onExi
         after={game.state}
         title={doneTitle}
         message={t("review.score", { correct, total: items.length })}
+        practiceConcepts={source === "practice" ? undefined : practiceConcepts}
         onExit={onExit}
       />
     );
@@ -63,6 +66,7 @@ export function SessionScreen({ title, items, source, onFinish, doneTitle, onExi
           onDone={(result) =>
             setResults((current) => current.map((old, i) => (i === index && old === undefined ? result.correct : old)))
           }
+          onMisconception={(id) => setPracticeConcepts((current) => (current.includes(id) ? current : [...current, id]))}
         />
       ) : (
         <p>{t("review.empty")}</p>

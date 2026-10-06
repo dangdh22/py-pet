@@ -45,6 +45,7 @@ describe("ReviewScreen", () => {
     expect(screen.getByText("+10 xu")).toBeInTheDocument();
     expect(screen.getByText("Pin +1")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Học tiếp" })).toHaveAttribute("href", "#/lesson/r.l3");
+    expect(screen.getAllByRole("link", { name: /^Luyện thêm: Khái niệm c[12]$/ })).toHaveLength(1);
     await waitFor(async () => expect((await store.loadActive())?.state.progress.completedReviews).toEqual(["r.r1"]));
     expect(Object.keys((await store.loadActive())!.state.reviews)).toHaveLength(5);
   });
@@ -69,6 +70,7 @@ describe("ReviewScreen", () => {
     await answer("Đúng", true);
     expect(screen.getByText("Pin +2")).toBeInTheDocument();
     expect(screen.queryByText(/xu$/)).not.toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: /^Luyện thêm/ })).not.toBeInTheDocument();
     await waitFor(async () => expect((await store.loadActive())?.state.pet.pin).toBe(2));
     expect((await store.loadActive())!.state.progress.completedReviews).toEqual([]);
     await userEvent.click(screen.getByRole("button", { name: "Về phòng" }));

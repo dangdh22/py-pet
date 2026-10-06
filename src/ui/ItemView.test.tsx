@@ -76,33 +76,42 @@ describe("ItemView", () => {
     await waitFor(() => expect(onDone).toHaveBeenCalledWith({ correct: false }));
   });
 
-  test("a wrong answer with a misconception offers its card and 2 practice items", async () => {
-    await renderWithGame(<ItemView item={question} source="lesson" onDone={() => {}} />, { bundle });
+  test("a wrong answer with a misconception shows its card, reports the concept and offers no practice inside", async () => {
+    const onMisconception = vi.fn();
+    await renderWithGame(<ItemView item={question} source="lesson" onDone={() => {}} onMisconception={onMisconception} />, {
+      bundle,
+    });
     await userEvent.click(screen.getByRole("radio", { name: "Sai" }));
     await userEvent.click(screen.getByRole("button", { name: "Kiểm tra" }));
     await userEvent.click(screen.getByRole("button", { name: "Xem thẻ Hiểu lầm thường gặp" }));
     const card = screen.getByRole("region", { name: "Hiểu lầm thường gặp" });
     expect(card).toHaveTextContent("Hiểu lầm thường gặp: Khái niệm c1");
     expect(card).toHaveTextContent("Hiểu lầm về c1.");
-    expect(screen.getByRole("link", { name: "Luyện thêm 2 bài" })).toHaveAttribute("href", "#/practice/c1");
+    expect(onMisconception).toHaveBeenCalledWith("c1");
+    expect(screen.queryByRole("link", { name: /Luyện thêm/ })).not.toBeInTheDocument();
   });
 
-  test("a right answer or a practice set does not offer more practice", async () => {
-    await renderWithGame(<ItemView item={question} source="practice" onDone={() => {}} />, { bundle });
-    await userEvent.click(screen.getByRole("radio", { name: "Sai" }));
+  test("a right answer shows no card and reports no misconception", async () => {
+    const onMisconception = vi.fn();
+    await renderWithGame(<ItemView item={question} source="lesson" onDone={() => {}} onMisconception={onMisconception} />, {
+      bundle,
+    });
+    await userEvent.click(screen.getByRole("radio", { name: "Đúng" }));
     await userEvent.click(screen.getByRole("button", { name: "Kiểm tra" }));
-    await userEvent.click(screen.getByRole("button", { name: "Xem thẻ Hiểu lầm thường gặp" }));
-    expect(screen.queryByRole("link", { name: "Luyện thêm 2 bài" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Xem thẻ Hiểu lầm thường gặp" })).not.toBeInTheDocument();
+    expect(onMisconception).not.toHaveBeenCalled();
   });
 
   test("a code misconception found by the judge offers its card", async () => {
     const code = { ...reviewCode, commonWrong: [{ test: 0, output: "hi", misconception: "c2", sample: 'print("hi")' }] };
-    await renderWithGame(<ItemView item={code} source="lesson" onDone={() => {}} />, {
+    const onMisconception = vi.fn();
+    await renderWithGame(<ItemView item={code} source="lesson" onDone={() => {}} onMisconception={onMisconception} />, {
       bundle,
       runner: fakeRunner(() => okResult("hi\n")),
     });
     await userEvent.click(screen.getByRole("button", { name: "Nộp bài" }));
     await userEvent.click(await screen.findByRole("button", { name: "Xem thẻ Hiểu lầm thường gặp" }));
     expect(screen.getByRole("region", { name: "Hiểu lầm thường gặp" })).toHaveTextContent("Khái niệm c2");
+    expect(onMisconception).toHaveBeenCalledWith("c2");
   });
 });

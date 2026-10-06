@@ -5,6 +5,7 @@ import { expect, test, vi } from "vitest";
 import { fixtureLesson } from "../test/fixtures";
 import { fakeRunner, okResult } from "../test/render";
 import { renderWithGame } from "../test/renderGame";
+import { reviewBundle } from "../test/reviewBundle";
 import { LessonScreen } from "./LessonScreen";
 
 vi.mock("./CodeEditor", () => ({
@@ -113,4 +114,43 @@ test("a reload keeps the viewed solution, so a later correct submit pays only 3 
   const after = (await second.store.loadActive())!.state;
   expect(after.pet.xp).toBe(3);
   expect(after.wallet.xu).toBe(0);
+});
+
+/** Lesson r.l1 of the review bundle with 1 question whose wrong answer shows the misconception card of `misconception`. */
+function misconceptionLesson(misconception: string) {
+  const bundle = reviewBundle();
+  const topic = bundle.stages[0]!.topics[0]!;
+  const base = topic.questions[0]!;
+  const question = {
+    ...base,
+    id: "r.l1.q",
+    choices: base.choices.map((choice) => (choice.correct ? choice : { ...choice, misconception })),
+  };
+  topic.lessons[0] = { ...topic.lessons[0]!, exercises: [question] };
+  return { bundle, lesson: topic.lessons[0] };
+}
+
+async function finishWithWrongAnswer() {
+  await userEvent.click(screen.getByRole("button", { name: "Tiếp" }));
+  await userEvent.click(screen.getByRole("radio", { name: "Sai" }));
+  await userEvent.click(screen.getByRole("button", { name: "Kiểm tra" }));
+  await userEvent.click(screen.getByRole("button", { name: "Hoàn thành" }));
+  expect(screen.getByText("Hoàn thành bài học!")).toBeInTheDocument();
+}
+
+test("a misconception in the lesson offers its practice after the lesson", async () => {
+  const { bundle, lesson } = misconceptionLesson("c1");
+  await renderWithGame(<LessonScreen lesson={lesson} onExit={() => {}} />, { bundle });
+  await finishWithWrongAnswer();
+  expect(screen.getByRole("link", { name: "Luyện thêm: Khái niệm c1" })).toHaveAttribute("href", "#/practice/c1");
+});
+
+test("a misconception without practice items offers no practice link", async () => {
+  const { bundle, lesson } = misconceptionLesson("c2");
+  const topic = bundle.stages[0]!.topics[0]!;
+  topic.questions = topic.questions.filter((q) => q.id !== "r.q6");
+  topic.practice = topic.practice.filter((item) => item.id !== "r.f1");
+  await renderWithGame(<LessonScreen lesson={lesson} onExit={() => {}} />, { bundle });
+  await finishWithWrongAnswer();
+  expect(screen.queryByRole("link", { name: /^Luyện thêm/ })).not.toBeInTheDocument();
 });

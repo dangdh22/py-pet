@@ -41,4 +41,21 @@ describe("PracticeScreen", () => {
     await renderWithGame(<PracticeScreen conceptId="c1" onExit={() => {}} />, { bundle });
     expect(screen.getByText("Chưa có bài luyện cho phần này. Con học thêm bài nhé!")).toBeInTheDocument();
   });
+
+  test("a wrong answer in a practice set offers no more practice", async () => {
+    const state = initialGameState(TODAY);
+    state.progress.completedLessons = ["r.l1"];
+    await renderWithGame(<PracticeScreen conceptId="c1" onExit={() => {}} />, {
+      bundle,
+      state,
+      runner: fakeRunner(() => okResult("Hi\nBye\n")),
+    });
+    await userEvent.click(screen.getByRole("radio", { name: "Sai" }));
+    await userEvent.click(screen.getByRole("button", { name: "Kiểm tra" }));
+    await userEvent.click(screen.getByRole("button", { name: "Tiếp" }));
+    await userEvent.click(screen.getByRole("button", { name: "Nộp bài" }));
+    await userEvent.click(await screen.findByRole("button", { name: "Hoàn thành" }));
+    expect(screen.getByText("Con đúng 1/2 câu.")).toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: /Luyện thêm/ })).not.toBeInTheDocument();
+  });
 });

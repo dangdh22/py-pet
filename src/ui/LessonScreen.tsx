@@ -28,6 +28,7 @@ export function LessonScreen({ lesson, onExit }: LessonScreenProps) {
   const [index, setIndex] = useState(0);
   const [doneSteps, setDoneSteps] = useState<ReadonlySet<number>>(() => new Set());
   const [finished, setFinished] = useState(false);
+  const [practiceConcepts, setPracticeConcepts] = useState<string[]>([]);
 
   const step = steps[index];
   if (finished || step === undefined) {
@@ -37,6 +38,7 @@ export function LessonScreen({ lesson, onExit }: LessonScreenProps) {
         after={game.state}
         title={t("lesson.doneTitle")}
         message={t("lesson.doneBody")}
+        practiceConcepts={practiceConcepts}
         onExit={onExit}
       />
     );
@@ -64,7 +66,13 @@ export function LessonScreen({ lesson, onExit }: LessonScreenProps) {
     step.kind === "card" ? (
       <CardView key={`card-${index}`} card={step.card} />
     ) : (
-      <ItemView key={step.exercise.id} item={step.exercise} source="lesson" onDone={() => markDone(index)} />
+      <ItemView
+        key={step.exercise.id}
+        item={step.exercise}
+        source="lesson"
+        onDone={() => markDone(index)}
+        onMisconception={(id) => setPracticeConcepts((current) => (current.includes(id) ? current : [...current, id]))}
+      />
     );
 
   return (
