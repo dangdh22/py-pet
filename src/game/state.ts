@@ -1,7 +1,7 @@
 import type { Lang } from "../i18n/lang";
 import { weekStart } from "./dates";
 
-export const GAME_STATE_VERSION = 1;
+export const GAME_STATE_VERSION = 2;
 export const STAT_MAX = 5;
 export const STAT_START = 4;
 export const WARNING_LIMIT = 20;
@@ -20,6 +20,29 @@ export interface ExerciseStats {
   viewedSolution: boolean;
 }
 
+/** One concept's learning record (spec 5.9). */
+export interface ConceptMastery {
+  /** 0 to 100, updated with m <- m + 0.3 * (s * 100 - m). */
+  score: number;
+  /** The ladder level: 1 = predict/mcq, 2 = parsons/fill, 3 = code. */
+  level: 1 | 2 | 3;
+  /** Results in a row on the ladder: +n right, -n wrong. */
+  run: number;
+  needsHelp: boolean;
+  /** How often this concept's misconception was seen since the help flag was last cleared. */
+  misconceptions: number;
+  /** The last results, newest last, each from 0 to 1. */
+  recent: number[];
+  /** Wrong review-station answers in a row. */
+  reviewMisses: number;
+}
+
+/** The Leitner box (1 to 5) of a question and the day it is due again (spec 5.10). */
+export interface ReviewCard {
+  box: number;
+  due: string;
+}
+
 export interface GameState {
   version: number;
   pet: { stage: number; xp: number; pin: number; vui: number; correctRun: number };
@@ -35,10 +58,15 @@ export interface GameState {
   };
   week: { start: string; lessonsDone: number };
   settings: GameSettings;
+  mastery: Record<string, ConceptMastery>;
+  reviews: Record<string, ReviewCard>;
+  /** Exercises whose solution was shown -> the day they come back in a review station (spec 5.9). */
+  retry: Record<string, string>;
   progress: {
     completedLessons: string[];
     solvedExercises: string[];
     answeredQuestions: string[];
+    completedReviews: string[];
     /** Optional: states saved before it existed have no stats. Read it with `?? {}`. */
     exerciseStats?: Record<string, ExerciseStats>;
   };
@@ -56,7 +84,10 @@ export function initialGameState(today: string): GameState {
     streak: { current: 0, best: 0, freezes: 0, lastAchievedDay: null, pointsDay: null, points: 0 },
     week: { start: weekStart(today), lessonsDone: 0 },
     settings: { ...DEFAULT_SETTINGS },
-    progress: { completedLessons: [], solvedExercises: [], answeredQuestions: [] },
+    mastery: {},
+    reviews: {},
+    retry: {},
+    progress: { completedLessons: [], solvedExercises: [], answeredQuestions: [], completedReviews: [] },
     warnings: [],
   };
 }
