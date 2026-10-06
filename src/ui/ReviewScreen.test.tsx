@@ -68,6 +68,7 @@ describe("ReviewScreen", () => {
     await answer("Đúng");
     await answer("Đúng");
     await answer("Đúng", true);
+    expect(screen.getByRole("heading", { name: "Xong lượt ôn tập!" })).toBeInTheDocument();
     expect(screen.getByText("Pin +2")).toBeInTheDocument();
     expect(screen.queryByText(/xu$/)).not.toBeInTheDocument();
     expect(screen.queryByRole("link", { name: /^Luyện thêm/ })).not.toBeInTheDocument();

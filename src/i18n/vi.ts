@@ -93,6 +93,7 @@ export const vi = {
   "review.itemOf": "Câu {current}/{total}",
   "review.score": "Con đúng {correct}/{total} câu.",
   "review.doneTitle": "Xong trạm ôn!",
+  "review.freeDoneTitle": "Xong lượt ôn tập!",
   "review.empty": "Chưa có câu nào để ôn. Con học thêm bài nhé!",
   "review.notFound": "Không tìm thấy trạm ôn này.",
   "review.locked": "Trạm ôn này chưa mở. Con học các bài trước đã nhé.",

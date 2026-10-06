@@ -95,6 +95,7 @@ export const en: Record<MessageKey, string> = {
   "review.itemOf": "Question {current}/{total}",
   "review.score": "You got {correct} of {total} right.",
   "review.doneTitle": "Review done!",
+  "review.freeDoneTitle": "Review done!",
   "review.empty": "There is nothing to review yet. Learn a lesson first!",
   "review.notFound": "This review station does not exist.",
   "review.locked": "This review station is not open yet. Finish the lessons before it first.",

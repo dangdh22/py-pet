@@ -34,7 +34,7 @@ export function ReviewScreen({ stationId, onExit, rng = Math.random }: { station
       title={t(stationId === null ? "review.freeTitle" : "review.title")}
       items={items}
       source="review"
-      doneTitle={t("review.doneTitle")}
+      doneTitle={t(stationId === null ? "review.freeDoneTitle" : "review.doneTitle")}
       onFinish={({ correct, total }) => game.dispatch({ type: "ReviewCompleted", stationId, correct, total })}
       onExit={onExit}
     />
