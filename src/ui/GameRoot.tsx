@@ -5,10 +5,12 @@ import { AppRoutes } from "./AppRoutes";
 import { GameProvider } from "./GameProvider";
 import { Header } from "./Header";
 import { OnboardingScreen } from "./OnboardingScreen";
+import { Robot } from "./Robot";
 
 export function GameRoot({ store, clock, onReplaced }: { store: GameStore; clock: () => Date; onReplaced(): void }) {
   const { t } = useLang();
   const [loaded, setLoaded] = useState<LoadedGame | null | undefined>(undefined);
+  const [loadFailed, setLoadFailed] = useState(false);
 
   useEffect(() => {
     let alive = true;
@@ -17,7 +19,7 @@ export function GameRoot({ store, clock, onReplaced }: { store: GameStore; clock
         if (alive) setLoaded(result);
       },
       () => {
-        if (alive) setLoaded(null);
+        if (alive) setLoadFailed(true);
       },
     );
     return () => {
@@ -25,6 +27,18 @@ export function GameRoot({ store, clock, onReplaced }: { store: GameStore; clock
     };
   }, [store]);
 
+  if (loadFailed) {
+    return (
+      <>
+        <Header />
+        <main className="crash" role="alert">
+          <Robot mood="sad" size={80} />
+          <p>{t("app.crash")}</p>
+          <button onClick={() => window.location.reload()}>{t("app.reload")}</button>
+        </main>
+      </>
+    );
+  }
   if (loaded === undefined) {
     return (
       <>

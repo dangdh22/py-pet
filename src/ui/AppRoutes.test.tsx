@@ -84,6 +84,18 @@ describe("App", () => {
     expect(await screen.findByText("Đã xong")).toBeInTheDocument();
   });
 
+  test("a failed profile read shows an error and never the onboarding screen", async () => {
+    class UnreadableStore extends MemoryStore {
+      override async loadActive(): Promise<never> {
+        throw new Error("read failed");
+      }
+    }
+    render(<App bundle={testBundle()} runnerClient={makeClient().client} store={new UnreadableStore()} clock={() => FIXED_NOW} />);
+    expect(await screen.findByRole("alert")).toHaveTextContent("Robo bị trục trặc rồi.");
+    expect(screen.getByRole("button", { name: "Tải lại trang" })).toBeInTheDocument();
+    expect(screen.queryByRole("heading", { name: "Chào mừng đến với Py-Pet!" })).not.toBeInTheDocument();
+  });
+
   test("shows the other-tab message when the tab does not own the lock", async () => {
     render(<App bundle={testBundle()} runnerClient={makeClient().client} store={new MemoryStore()} ownsTab={false} />);
     expect(screen.getByText("Py-Pet đang mở ở tab khác. Con dùng tab đó nhé.")).toBeInTheDocument();
