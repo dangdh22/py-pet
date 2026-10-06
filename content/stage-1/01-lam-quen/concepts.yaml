@@ -19,14 +19,14 @@ concepts:
       Không có dấu nháy, Python nghĩ `Robo` là tên biến. Có dấu nháy, `"Robo"` là chữ để in ra. Mở bằng dấu nháy nào thì đóng bằng dấu nháy đó.
     parent_tip: |
       Dấu nháy giống cặp ngoặc kép khi trích lời nói: những gì nằm trong đó được in ra y nguyên.
-    practice: { level1: [s1.lam-quen.l2.q1, s1.lam-quen.b7, s1.lam-quen.l1.q1], level2: [s1.lam-quen.p3], level3: [s1.lam-quen.l1.ex1, s1.lam-quen.l2.ex1, s1.lam-quen.l4.ex1] }
+    practice: { level1: [s1.lam-quen.l2.q1, s1.lam-quen.b7, s1.lam-quen.l1.q1, s1.lam-quen.b12], level2: [s1.lam-quen.p3], level3: [s1.lam-quen.l1.ex1, s1.lam-quen.l2.ex1, s1.lam-quen.l4.ex1] }
   - id: case-sensitive
     name: { vi: "Python phân biệt chữ hoa và chữ thường", en: "Python is case-sensitive" }
     misconception_card: |
       Với Python, `print`, `Print` và `PRINT` là 3 tên khác nhau. Chỉ có `print` là lệnh in.
     parent_tip: |
       Viết "an" và "An" lên giấy rồi hỏi con: với máy tính, 2 chữ này có giống nhau không? (Không.)
-    practice: { level1: [s1.lam-quen.b6, s1.lam-quen.b7, s1.lam-quen.l1.q1], level2: [s1.lam-quen.p4], level3: [s1.lam-quen.l2.ex1] }
+    practice: { level1: [s1.lam-quen.b6, s1.lam-quen.b7, s1.lam-quen.l1.q1, s1.lam-quen.b13], level2: [s1.lam-quen.p4], level3: [s1.lam-quen.l2.ex1] }
   - id: read-error
     name: { vi: "Đọc thông báo lỗi", en: "Reading error messages" }
     misconception_card: |

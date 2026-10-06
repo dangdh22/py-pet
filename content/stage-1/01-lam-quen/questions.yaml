@@ -171,3 +171,36 @@ questions:
     explanation:
       vi: "Tự chạy chưa phải là AI. Chiếc đèn chỉ làm đúng bảng giờ có sẵn, không học gì từ ví dụ cả."
       en: "Running by itself is not the same as AI. This light just follows its timetable and does not learn anything from examples."
+
+  - id: s1.lam-quen.b12
+    type: predict
+    concepts: [string-quotes]
+    lessons: [s1.lam-quen.l1]
+    code: |
+      print("1 + 2")
+    prompt: { vi: "Đoạn code in ra gì?", en: "What is the output of this code?" }
+    choices:
+      - { text: "1 + 2", correct: true }
+      - { text: "3", misconception: string-quotes }
+      - { text: "\"1 + 2\"", misconception: string-quotes }
+      - { vi: "Báo lỗi ở dòng 1", en: "An error on line 1", error: true }
+    explanation:
+      vi: "Chữ nằm trong dấu nháy được in ra y nguyên, kể cả khi trông giống một phép tính. Dấu nháy thì không được in."
+      en: "Text inside quotes is printed exactly as it is, even if it looks like a calculation. The quotes themselves are not printed."
+
+  - id: s1.lam-quen.b13
+    type: predict
+    concepts: [case-sensitive]
+    lessons: [s1.lam-quen.l2]
+    code: |
+      print("a")
+      print("A")
+    prompt: { vi: "Đoạn code in ra gì?", en: "What is the output of this code?" }
+    choices:
+      - { text: "a\nA", correct: true }
+      - { text: "a\na", misconception: case-sensitive }
+      - { text: "A\nA", misconception: case-sensitive }
+      - { text: "aA" }
+    explanation:
+      vi: "Chữ hoa và chữ thường là 2 ký tự khác nhau, nên a và A được in ra đúng như đã viết."
+      en: "Upper-case and lower-case letters are different characters, so a and A are printed exactly as written."
