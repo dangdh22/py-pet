@@ -4,15 +4,19 @@ import type { MessageKey } from "../i18n/vi";
 import { isValidPin } from "../storage/pin";
 import { formatDateTime } from "./format";
 import { useGame } from "./GameProvider";
+import { ParentHelp } from "./ParentHelp";
 import { ParentOverview } from "./ParentOverview";
 
 /** Spec 9: the parent area locks itself after 5 minutes without use, and when the parent leaves it. */
 export const LOCK_AFTER_MS = 5 * 60_000;
 const LOCK_CHECK_MS = 10_000;
 
-type Tab = "overview";
+type Tab = "overview" | "help";
 
-const TABS: { id: Tab; label: MessageKey }[] = [{ id: "overview", label: "parent.tabOverview" }];
+const TABS: { id: Tab; label: MessageKey }[] = [
+  { id: "overview", label: "parent.tabOverview" },
+  { id: "help", label: "parent.tabHelp" },
+];
 
 export function ParentScreen() {
   const [open, setOpen] = useState(false);
@@ -183,6 +187,7 @@ function ParentArea({ onLock }: { onLock(auto: boolean): void }) {
         ))}
       </div>
       {tab === "overview" && <ParentOverview />}
+      {tab === "help" && <ParentHelp />}
       <a href="#/">{t("nav.room")}</a>
     </main>
   );
