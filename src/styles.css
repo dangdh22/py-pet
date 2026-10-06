@@ -124,3 +124,10 @@ button[aria-pressed="true"] { background: var(--text); border-color: var(--text)
 .room-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 12px; }
 a.button { display: inline-block; padding: 8px 16px; border-radius: 6px; border: 1px solid var(--border); background: var(--surface); color: var(--text); text-decoration: none; }
 a.button.primary { background: var(--primary); border-color: var(--primary); color: #fff; font-size: 1.1rem; }
+
+.map { max-width: 900px; margin: 0 auto; padding: 20px; }
+.map-path { list-style: none; padding: 0; display: grid; gap: 8px; justify-items: center; }
+.map-node { min-width: 260px; display: flex; justify-content: space-between; gap: 12px; padding: 8px 14px; border-radius: 20px; border: 2px solid var(--border); background: var(--surface); }
+.node-done { border-color: var(--success); background: #e6f7ea; }
+.node-next { border-color: var(--primary); font-weight: 700; }
+.node-locked { color: var(--muted); }

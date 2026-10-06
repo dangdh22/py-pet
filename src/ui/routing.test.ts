@@ -18,6 +18,12 @@ describe("routing", () => {
     expect(parseHash(routeToHash(route))).toEqual(route);
     expect(routeToHash({ name: "home" })).toBe("#/");
   });
+  test("parses the map and backup hashes", () => {
+    expect(parseHash("#/map")).toEqual({ name: "map" });
+    expect(parseHash("#/backup")).toEqual({ name: "backup" });
+    expect(routeToHash({ name: "map" })).toBe("#/map");
+    expect(routeToHash({ name: "backup" })).toBe("#/backup");
+  });
 });
 
 describe("isBrowserSupported", () => {

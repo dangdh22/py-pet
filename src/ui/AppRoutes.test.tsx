@@ -50,6 +50,14 @@ describe("AppRoutes", () => {
     await renderWithGame(<AppRoutes />);
     expect(screen.getByText("Không tìm thấy bài học này.")).toBeInTheDocument();
   });
+
+  test("the map opens from the room and a locked lesson cannot be opened by URL", async () => {
+    await renderWithGame(<AppRoutes />);
+    await userEvent.click(screen.getByRole("link", { name: "Bản đồ học" }));
+    expect(await screen.findByRole("heading", { name: "Bản đồ học" })).toBeInTheDocument();
+    window.location.hash = "#/lesson/t.l2";
+    expect(await screen.findByText("Bài này chưa mở. Con học các bài trước đã nhé.")).toBeInTheDocument();
+  });
 });
 
 describe("ErrorBoundary", () => {
