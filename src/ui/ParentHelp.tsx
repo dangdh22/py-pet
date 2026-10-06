@@ -66,9 +66,10 @@ function HelpCard({
   const game = useGame();
   const concept = findConcept(bundle, conceptId);
   const [attempts, setAttempts] = useState<AttemptRecord[] | null>(null);
-  const [assigned, setAssigned] = useState(false);
-  // The set is drawn when the parent clicks; its size does not depend on the draw.
-  const canPractice = buildPracticeSet(bundle, game.state, conceptId, rng).length > 0;
+  // Derived from the saved state, so it holds after a tab switch too.
+  const assigned = game.state.assigned.some((a) => a.conceptId === conceptId);
+  // The set is drawn when the parent clicks (with rng); its size does not depend on the draw.
+  const canPractice = buildPracticeSet(bundle, game.state, conceptId, () => 0).length > 0;
   const accuracy = accuracyPercent(mastery);
 
   useEffect(() => {
@@ -133,7 +134,6 @@ function HelpCard({
           onClick={() => {
             const items = buildPracticeSet(bundle, game.state, conceptId, rng).map((item) => item.id);
             game.dispatch({ type: "PracticeAssigned", id: newId(), conceptId, items });
-            setAssigned(true);
           }}
         >
           {t("help.assign")}

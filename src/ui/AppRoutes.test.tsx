@@ -5,6 +5,7 @@ import { beforeEach, describe, expect, test, vi } from "vitest";
 import { GAME_STATE_VERSION, initialGameState, type GameState } from "../game/state";
 import { RunnerClient } from "../runner/client";
 import { MemoryStore } from "../storage/memoryStore";
+import { hashPin } from "../storage/pin";
 import { answerPaper } from "../test/answerExam";
 import { examBundle } from "../test/examBundle";
 import { FakeWorker } from "../test/fakeWorker";
@@ -185,6 +186,7 @@ describe("App", () => {
     const store = new MemoryStore({ persistent: true });
     const damaged = { ...initialGameState(TODAY), wallet: "lots" } as unknown as GameState;
     await store.createProfile(testProfile(), damaged);
+    await store.writeMeta({ pin: await hashPin("1234"), autoBackups: ["encoded-backup"] });
     render(<App bundle={testBundle()} runnerClient={makeClient().client} store={store} clock={() => FIXED_NOW} />);
     expect(await screen.findByRole("alert")).toHaveTextContent("Robo bị trục trặc rồi.");
     await waitFor(async () => expect((await store.readMeta()).errorLog).toMatchObject([{ kind: "load-failed" }]));
@@ -192,6 +194,10 @@ describe("App", () => {
     const [fileName, text] = vi.mocked(downloadText).mock.calls.at(-1)!;
     expect(fileName).toBe("py-pet-data-2026-10-06.json");
     expect(JSON.parse(text).profiles[0].state.wallet).toBe("lots");
+    // The file is for support: no PIN hash to brute-force and no copies of old data.
+    expect(JSON.parse(text).meta.pin ?? null).toBeNull();
+    expect(JSON.parse(text).meta.autoBackups ?? []).toEqual([]);
+    expect(text).not.toContain("encoded-backup");
   });
 
   test("shows the other-tab message when the tab does not own the lock", async () => {

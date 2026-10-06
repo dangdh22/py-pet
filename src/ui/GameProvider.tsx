@@ -264,9 +264,13 @@ export function GameProvider({ store, loaded, clock, onReplaced, children }: Gam
         const autoBackups = [current, ...existing.autoBackups].slice(0, AUTO_BACKUPS);
         const activeProfileId = payload.meta.activeProfileId ?? payload.profiles[0]?.profile.id ?? null;
         // A file without a PIN keeps this device's PIN, so importing never leaves the parent area open.
-        // Also keep the device's pinResetAt when the file has no PIN.
+        // The trace of a PIN reset is permanent (spec 6.3): keep the later of the device's and the file's.
         const pin = payload.meta.pin ?? existing.pin;
-        const pinResetAt = payload.meta.pin ? payload.meta.pinResetAt : existing.pinResetAt;
+        const filePinResetAt = payload.meta.pin ? (payload.meta.pinResetAt ?? null) : null;
+        const pinResetAt =
+          filePinResetAt !== null && (existing.pinResetAt === null || filePinResetAt > existing.pinResetAt)
+            ? filePinResetAt
+            : existing.pinResetAt;
         await store.replaceAll({ ...emptyMeta(), ...payload.meta, pin, pinResetAt, activeProfileId, autoBackups }, payload.profiles);
       });
     },

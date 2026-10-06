@@ -106,11 +106,16 @@ function NumberSettings() {
   function save(event: FormEvent) {
     event.preventDefault();
     const patch: Partial<GameSettings> = {};
-    for (const { key } of NUMBER_FIELDS) patch[key] = Number(values[key]);
+    for (const { key } of NUMBER_FIELDS) {
+      const text = values[key].trim();
+      const value = Number(text);
+      // A blank or non-numeric field is left out, so the saved value stays.
+      if (text !== "" && Number.isFinite(value)) patch[key] = value;
+    }
     game.dispatch({ type: "SettingsChanged", patch });
     // Refill the field values from the cleaned settings.
     const cleaned = cleanSettings(game.state.settings, patch);
-    setValues((current) =>
+    setValues(
       Object.fromEntries(NUMBER_FIELDS.map(({ key }) => [key, String(cleaned[key])])) as Record<NumberSetting, string>,
     );
     setSaved(true);

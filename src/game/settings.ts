@@ -17,8 +17,9 @@ export function cleanSettings(current: GameSettings, patch: Partial<GameSettings
   const next = { ...current, ...patch };
   for (const key of Object.keys(SETTING_LIMITS) as NumberSetting[]) {
     const { min, max } = SETTING_LIMITS[key];
-    const value = Number(next[key]);
-    next[key] = Number.isFinite(value) ? Math.min(max, Math.max(min, Math.round(value))) : current[key];
+    const value = next[key] as unknown;
+    next[key] =
+      typeof value === "number" && Number.isFinite(value) ? Math.min(max, Math.max(min, Math.round(value))) : current[key];
   }
   if (next.uiLang !== "vi" && next.uiLang !== "en") next.uiLang = current.uiLang;
   if (!["vi", "en", "both"].includes(next.questionLang)) next.questionLang = current.questionLang;

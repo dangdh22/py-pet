@@ -18,6 +18,12 @@ describe("cleanSettings", () => {
     expect(cleanSettings(DEFAULT_SETTINGS, bad)).toEqual(DEFAULT_SETTINGS);
   });
 
+  test("null, an empty string or a boolean keeps the old number", () => {
+    const current = { ...DEFAULT_SETTINGS, passPercent: 80, dailyGoal: 4, runSeconds: 5 };
+    const bad = { passPercent: null, dailyGoal: "", runSeconds: false } as unknown as Parameters<typeof cleanSettings>[1];
+    expect(cleanSettings(current, bad)).toEqual(current);
+  });
+
   test("SettingsChanged uses it", () => {
     const state = apply(initialGameState("2026-10-06"), { type: "SettingsChanged", patch: { passPercent: 120 } }, at("2026-10-06"));
     expect(state.settings.passPercent).toBe(100);

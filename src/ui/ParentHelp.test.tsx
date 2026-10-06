@@ -70,4 +70,13 @@ describe("ParentHelp", () => {
     await waitFor(async () => expect((await store.loadActive())!.state.mastery.c1!.needsHelp).toBe(false));
     expect(screen.getByText("Khái niệm c2: 55 điểm")).toBeInTheDocument();
   });
+
+  test("a concept already assigned stays assigned after the card is shown again", async () => {
+    const state = helpState();
+    state.assigned = [{ id: "p-1", conceptId: "c1", items: ["r.q1"], day: TODAY }];
+    await renderWithGame(<ParentHelp newId={() => "p-2"} rng={seededRng(1)} />, { bundle, state });
+    const card = screen.getByRole("heading", { name: "Khái niệm c1" }).closest("article") as HTMLElement;
+    expect(within(card).getByRole("button", { name: "Giao thêm bài luyện" })).toBeDisabled();
+    expect(within(card).getByRole("status")).toHaveTextContent("Đã giao bài luyện.");
+  });
 });

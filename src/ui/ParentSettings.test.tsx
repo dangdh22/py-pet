@@ -40,6 +40,18 @@ describe("ParentSettings", () => {
     await waitFor(async () => expect((await store.loadActive())!.state.vacation.ranges).toEqual([]));
   });
 
+  test("a blank number field is left out and shows the saved value again", async () => {
+    const state = initialGameState(TODAY);
+    state.settings.weeklyTarget = 7;
+    const { store } = await renderWithGame(<ParentSettings />, { state });
+    const goals = section("Mục tiêu và ngưỡng");
+    const weekly = within(goals).getByLabelText("Kế hoạch tuần (bài học)") as HTMLInputElement;
+    await userEvent.clear(weekly);
+    await userEvent.click(within(goals).getByRole("button", { name: "Lưu cài đặt" }));
+    expect(weekly.value).toBe("7");
+    await waitFor(async () => expect((await store.loadActive())!.state.settings.weeklyTarget).toBe(7));
+  });
+
   test("saves goals and limits inside their ranges, and the question language", async () => {
     const { store } = await renderWithGame(<ParentSettings />);
     const goals = section("Mục tiêu và ngưỡng");

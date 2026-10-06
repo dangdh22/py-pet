@@ -97,7 +97,9 @@ function RawExport({ store, clock }: { store: GameStore; clock: () => Date }) {
   async function exportRaw() {
     setFailed(false);
     try {
-      const data = { exportedAt: clock().toISOString(), meta: await store.readMeta(), profiles: await store.exportProfiles() };
+      // No PIN hash (brute-forceable) and no automatic backups: the file is meant for support.
+      const meta = { ...(await store.readMeta()), pin: null, autoBackups: [] };
+      const data = { exportedAt: clock().toISOString(), meta, profiles: await store.exportProfiles() };
       downloadText(`py-pet-data-${localDay(clock())}.json`, JSON.stringify(data, null, 2));
     } catch {
       setFailed(true);
