@@ -1,16 +1,27 @@
-import { daysBetween, localDay, weekStart } from "./dates";
+import { addDays, daysBetween, localDay, weekStart } from "./dates";
+import { reviewCard } from "./leitner";
+import { emptyMastery, MASTERY, recordMisconception, recordResult, solvedScore, type ResultSource } from "./mastery";
 import {
   CORRECT_RUN_FOR_VUI,
   FREEZE_EVERY,
   MAX_FREEZES,
   PERSISTENCE_FAILS,
+  PIN_REVIEW,
   POINTS,
+  RETRY_AFTER_DAYS,
   STREAK_MILESTONES,
   WEEK_EXCEED_RATIO,
   XP,
   XU,
 } from "./rewards";
-import { STAT_MAX, WARNING_LIMIT, type ExerciseStats, type GameSettings, type GameState } from "./state";
+import {
+  STAT_MAX,
+  WARNING_LIMIT,
+  type ConceptMastery,
+  type ExerciseStats,
+  type GameSettings,
+  type GameState,
+} from "./state";
 
 export type GameEvent =
   | { type: "DayRollover" }
@@ -23,8 +34,23 @@ export type GameEvent =
       failedSubmitsBefore: number;
       hintsUsed: number;
       viewedSolution: boolean;
+      /** The exercise's concepts. Default: none. */
+      concepts?: string[];
+      /** The misconceptions the judge found. Default: none. */
+      misconceptions?: string[];
+      /** Where the exercise was done. Default: "lesson". */
+      source?: ResultSource;
     }
-  | { type: "QuestionAnswered"; questionId: string; correct: boolean }
+  | {
+      type: "QuestionAnswered";
+      questionId: string;
+      correct: boolean;
+      concepts?: string[];
+      /** The misconception of the chosen wrong answer. */
+      misconception?: string | null;
+      source?: ResultSource;
+    }
+  | { type: "ReviewCompleted"; stationId: string | null; correct: number; total: number }
   | { type: "HintShown"; exerciseId: string }
   | { type: "SolutionViewed"; exerciseId: string };
 
@@ -32,6 +58,7 @@ const ACTIVITY_EVENTS: ReadonlySet<GameEvent["type"]> = new Set([
   "LessonCompleted",
   "ExerciseJudged",
   "QuestionAnswered",
+  "ReviewCompleted",
 ]);
 
 export function apply(state: GameState, event: GameEvent, now: Date): GameState {
@@ -56,13 +83,17 @@ export function apply(state: GameState, event: GameEvent, now: Date): GameState 
       judgeExercise(next, event);
       break;
     case "QuestionAnswered":
-      answerQuestion(next, event);
+      answerQuestion(next, event, today);
+      break;
+    case "ReviewCompleted":
+      completeReview(next, event, today, rollback);
       break;
     case "HintShown":
       statsFor(next, event.exerciseId).hints += 1;
       break;
     case "SolutionViewed":
       statsFor(next, event.exerciseId).viewedSolution = true;
+      next.retry[event.exerciseId] = addDays(today, RETRY_AFTER_DAYS);
       break;
   }
 
@@ -153,7 +184,20 @@ function statsFor(s: GameState, exerciseId: string): ExerciseStats {
   return (all[exerciseId] ??= { fails: 0, hints: 0, viewedSolution: false });
 }
 
+function updateMastery(s: GameState, conceptId: string, change: (m: ConceptMastery) => ConceptMastery): void {
+  s.mastery[conceptId] = change(s.mastery[conceptId] ?? emptyMastery());
+}
+
 function judgeExercise(s: GameState, e: Extract<GameEvent, { type: "ExerciseJudged" }>): void {
+  const source = e.source ?? "lesson";
+  for (const id of e.misconceptions ?? []) updateMastery(s, id, recordMisconception);
+  if (e.accepted) {
+    const score = solvedScore(e.failedSubmitsBefore, e.hintsUsed, e.viewedSolution);
+    for (const id of e.concepts ?? []) updateMastery(s, id, (m) => recordResult(m, score, source));
+    if (!e.viewedSolution) delete s.retry[e.exerciseId];
+  }
+  // A review station pays for the whole station (ReviewCompleted), not per exercise.
+  if (source === "review") return;
   const solved = s.progress.solvedExercises.includes(e.exerciseId);
   if (!e.accepted) {
     s.pet.correctRun = 0;
@@ -183,7 +227,13 @@ function judgeExercise(s: GameState, e: Extract<GameEvent, { type: "ExerciseJudg
   s.pet.correctRun = 0;
 }
 
-function answerQuestion(s: GameState, e: Extract<GameEvent, { type: "QuestionAnswered" }>): void {
+function answerQuestion(s: GameState, e: Extract<GameEvent, { type: "QuestionAnswered" }>, today: string): void {
+  const source = e.source ?? "lesson";
+  const score = e.correct ? MASTERY.score.firstTry : MASTERY.score.wrong;
+  for (const id of e.concepts ?? []) updateMastery(s, id, (m) => recordResult(m, score, source));
+  if (!e.correct && e.misconception) updateMastery(s, e.misconception, recordMisconception);
+  s.reviews[e.questionId] = reviewCard(s.reviews[e.questionId], e.correct, today);
+  if (source === "review") return;
   const first = !s.progress.answeredQuestions.includes(e.questionId);
   if (first) s.progress.answeredQuestions.push(e.questionId);
   if (!e.correct) {
@@ -193,4 +243,21 @@ function answerQuestion(s: GameState, e: Extract<GameEvent, { type: "QuestionAns
   if (!first) return;
   s.pet.xp += XP.question;
   bumpCorrectRun(s);
+}
+
+function completeReview(
+  s: GameState,
+  e: Extract<GameEvent, { type: "ReviewCompleted" }>,
+  today: string,
+  rollback: boolean,
+): void {
+  const total = Math.max(0, e.total);
+  const correct = Math.max(0, Math.min(e.correct, total));
+  const first = e.stationId !== null && !s.progress.completedReviews.includes(e.stationId);
+  if (first) s.progress.completedReviews.push(e.stationId as string);
+  s.pet.xp += XP.review + XP.reviewPerCorrect * correct;
+  s.pet.pin = Math.min(STAT_MAX, s.pet.pin + PIN_REVIEW);
+  // Xu only for the first run of a station on the map, so repeated reviews cannot farm xu.
+  if (first) s.wallet.xu += XU.review + (total > 0 && correct === total ? XU.reviewPerfect : 0);
+  if (!rollback) addPoints(s, POINTS.review, today);
 }

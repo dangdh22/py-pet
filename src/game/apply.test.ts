@@ -306,3 +306,130 @@ describe("SettingsChanged", () => {
     expect(next.activity.lastActiveDay).toBeNull();
   });
 });
+
+describe("mastery and Leitner", () => {
+  const question = (questionId: string, correct: boolean, extra: Partial<Extract<GameEvent, { type: "QuestionAnswered" }>> = {}): GameEvent => ({
+    type: "QuestionAnswered",
+    questionId,
+    correct,
+    concepts: ["c1"],
+    ...extra,
+  });
+
+  test("a solved exercise updates the score of each concept", () => {
+    const state = run(initialGameState("2026-10-06"), [
+      ["2026-10-06", solved("x", { concepts: ["c1", "c2"] })],
+      ["2026-10-06", solved("y", { concepts: ["c1"], failedSubmitsBefore: 2 })],
+    ]);
+    expect(state.mastery.c1).toMatchObject({ score: 39, recent: [1, 0.6], level: 2 });
+    expect(state.mastery.c2).toMatchObject({ score: 30, recent: [1] });
+  });
+
+  test("a hint or the solution makes s = 0.3", () => {
+    const hinted = apply(initialGameState("2026-10-06"), solved("x", { concepts: ["c1"], hintsUsed: 1 }), at("2026-10-06"));
+    expect(hinted.mastery.c1!.score).toBe(9);
+  });
+
+  test("a failed submit adds no result but counts the misconceptions it shows", () => {
+    const state = run(initialGameState("2026-10-06"), [
+      ["2026-10-06", solved("x", { accepted: false, concepts: ["c1"], misconceptions: ["m1"] })],
+      ["2026-10-06", solved("x", { accepted: false, concepts: ["c1"], misconceptions: ["m1"] })],
+      ["2026-10-06", solved("x", { accepted: false, concepts: ["c1"], misconceptions: ["m1"] })],
+    ]);
+    expect(state.mastery.c1).toBeUndefined();
+    expect(state.mastery.m1).toMatchObject({ misconceptions: 3, needsHelp: true });
+  });
+
+  test("a question answer updates the score, the misconception and the Leitner box", () => {
+    const state = run(initialGameState("2026-10-06"), [
+      ["2026-10-06", question("q", false, { misconception: "m1" })],
+      ["2026-10-07", question("q", true)],
+    ]);
+    expect(state.mastery.c1).toMatchObject({ score: 30, recent: [0, 1] });
+    expect(state.mastery.m1).toMatchObject({ misconceptions: 1 });
+    expect(state.reviews.q).toEqual({ box: 2, due: "2026-10-09" });
+  });
+
+  test("a review answer pays no XP and does not change the lesson progress", () => {
+    const state = apply(initialGameState("2026-10-06"), question("q", true, { source: "review" }), at("2026-10-06"));
+    expect(state.pet.xp).toBe(0);
+    expect(state.progress.answeredQuestions).toEqual([]);
+    expect(state.reviews.q).toEqual({ box: 2, due: "2026-10-08" });
+    expect(state.mastery.c1!.score).toBe(30);
+  });
+
+  test("2 wrong review answers in a row flag the concept", () => {
+    const state = run(initialGameState("2026-10-06"), [
+      ["2026-10-06", question("q", false, { source: "review" })],
+      ["2026-10-06", question("r", false, { source: "review" })],
+    ]);
+    expect(state.mastery.c1!.needsHelp).toBe(true);
+  });
+
+  test("a solved review exercise pays nothing and is not marked solved", () => {
+    const state = apply(initialGameState("2026-10-06"), solved("x", { concepts: ["c1"], source: "review" }), at("2026-10-06"));
+    expect(state.pet.xp).toBe(0);
+    expect(state.wallet.xu).toBe(0);
+    expect(state.progress.solvedExercises).toEqual([]);
+    expect(state.mastery.c1!.score).toBe(30);
+  });
+
+  test("a shown solution brings the exercise back the next day until it is solved without help", () => {
+    const shown = apply(initialGameState("2026-10-06"), { type: "SolutionViewed", exerciseId: "x" }, at("2026-10-06"));
+    expect(shown.retry).toEqual({ x: "2026-10-07" });
+    const helped = apply(shown, solved("x", { viewedSolution: true }), at("2026-10-06"));
+    expect(helped.retry).toEqual({ x: "2026-10-07" });
+    const later = apply(helped, solved("x", { source: "review" }), at("2026-10-07"));
+    expect(later.retry).toEqual({});
+  });
+});
+
+describe("ReviewCompleted", () => {
+  const review = (stationId: string | null, correct: number, total = 5): GameEvent => ({
+    type: "ReviewCompleted",
+    stationId,
+    correct,
+    total,
+  });
+
+  test("the first run of a station pays XP, xu, Pin and 1 activity point", () => {
+    const start = initialGameState("2026-10-06");
+    start.pet.pin = 2;
+    const state = apply(start, review("s.r1", 4), at("2026-10-06"));
+    expect(state.pet.xp).toBe(13);
+    expect(state.wallet.xu).toBe(10);
+    expect(state.pet.pin).toBe(4);
+    expect(state.progress.completedReviews).toEqual(["s.r1"]);
+    expect(state.streak.points).toBe(1);
+    expect(state.week.lessonsDone).toBe(0);
+    expect(state.activity.lastActiveDay).toBe("2026-10-06");
+  });
+
+  test("all answers right adds 5 xu", () => {
+    expect(apply(initialGameState("2026-10-06"), review("s.r1", 5), at("2026-10-06")).wallet.xu).toBe(15);
+  });
+
+  test("a repeated station or a free review pays XP and Pin but no xu", () => {
+    const once = apply(initialGameState("2026-10-06"), review("s.r1", 5), at("2026-10-06"));
+    const again = apply(once, review("s.r1", 5), at("2026-10-06"));
+    expect(again.wallet.xu).toBe(15);
+    expect(again.pet.xp).toBe(30);
+    const free = apply(initialGameState("2026-10-06"), review(null, 2), at("2026-10-06"));
+    expect(free).toMatchObject({ wallet: { xu: 0 }, pet: { xp: 9, pin: 5 } });
+    expect(free.progress.completedReviews).toEqual([]);
+  });
+
+  test("an empty station pays the base reward without the all-right bonus", () => {
+    const state = apply(initialGameState("2026-10-06"), review("s.r1", 0, 0), at("2026-10-06"));
+    expect(state.pet.xp).toBe(5);
+    expect(state.wallet.xu).toBe(10);
+  });
+
+  test("a review and a lesson on the same day reach the daily goal", () => {
+    const state = run(initialGameState("2026-10-06"), [
+      ["2026-10-06", lesson("a")],
+      ["2026-10-06", review("s.r1", 3)],
+    ]);
+    expect(state.streak).toMatchObject({ points: 2, current: 1 });
+  });
+});
