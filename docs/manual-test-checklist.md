@@ -29,3 +29,15 @@ Chạy trước mỗi lần phát hành. Ghi kết quả (Đạt / Không đạt
 - [ ] Con tự học bài 1 mà không cần hỏi bố mẹ
 - [ ] Ghi lại những chỗ con dừng lại lâu, hỏi lại, hoặc bấm nhầm
 - [ ] Hỏi con: lời giải thích lỗi của Robo có dễ hiểu không?
+
+## Lưu trữ và vòng chơi (M2)
+
+- [ ] Lần đầu mở: màn hình chào hỏi; sau khi tạo hồ sơ, tải lại trang vẫn vào thẳng Phòng robot
+- [ ] Học xong 1 bài: Phòng robot hiện XP, xu, mục tiêu hôm nay tăng; tải lại trang không mất
+- [ ] Đang làm dở bài code, tải lại trang: code đang viết vẫn còn
+- [ ] Mở thêm 1 tab Py-Pet: tab thứ 2 chỉ báo "đang mở ở tab khác"
+- [ ] Chế độ ẩn danh của Chrome: app vẫn học được (assumption: ẩn danh vẫn cho IndexedDB tạm; nếu bị chặn thì phải có banner đỏ)
+- [ ] Xuất file sao lưu, nhập lại trên Edge hoặc máy khác: đúng tên con, xu, bài đã xong
+- [ ] Nhập file bằng PIN sai: không nhập được
+- [ ] Đổi giờ máy lùi 2 ngày rồi học: chuỗi ngày không tăng
+- [ ] Không học 3 ngày (hoặc chỉnh giờ máy tiến 3 ngày): Pin và Vui giảm 2, robot buồn ngủ
