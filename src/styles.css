@@ -277,12 +277,14 @@ a.button.primary { background: var(--primary); border-color: var(--primary); col
 .item-icon-pin { color: var(--stat-pin); }
 .item-icon-vui { color: var(--stat-vui); }
 .shop-price, .shop-detail { color: var(--muted); }
-.shop-actions { margin-left: auto; display: flex; gap: 8px; align-items: center; }
+.shop-actions { margin-left: auto; display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 6px 8px; align-items: center; }
+/* On a phone the actions wrap as whole phrases ("Có 0", "Chưa đủ xu"), never one word per line. */
+.shop-actions > span { white-space: nowrap; }
 .badges { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 8px; }
 .badge { padding: 8px 12px; border-radius: var(--radius); border: 1px solid #dde3ef; display: flex; flex-direction: column; }
 .badge-earned { border-color: var(--success); }
 .badge-locked { color: var(--muted); }
-.achievements { max-width: 900px; margin: 0 auto; padding: 20px; }
+.achievements, .shop { max-width: 900px; margin: 0 auto; padding: 20px; }
 /* Design decision 9: the forms as pictures; all 4 stand on the same floor line, a form not reached is a grey shape. */
 .forms { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; max-width: 640px; }
 @media (max-width: 480px) { .forms { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
