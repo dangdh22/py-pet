@@ -9,7 +9,7 @@ concepts:
       level1: [s2.input.l3.q1, s2.input.l3.q2, s2.input.l5.q1, s2.input.b1, s2.input.b2, s2.input.b3]
       level2: [s2.input.p3]
       level3: [s2.input.l3.ex1, s2.input.l3.ex2, s2.input.c1]
-  - id: input-empty-prompt
+  - id: input-prompt
     name: { vi: "Để trống ngoặc của input() khi làm bài", en: "Keep input() empty in your exercises" }
     misconception_card: |
       Nhiều bạn viết câu hỏi vào trong ngoặc, như `ten = input("Tên: ")`, cho chương trình thêm lịch sự. Thực ra chữ trong ngoặc là **lời nhắc**: Python in nó ra, và Robo tính nó vào kết quả khi chấm, nên bài bị sai. Trong Py-Pet, con luôn viết `ten = input()`, để trống ngoặc.

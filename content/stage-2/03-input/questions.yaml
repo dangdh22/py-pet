@@ -24,18 +24,18 @@ questions:
     lessons: [s2.input.l3]
     code: |
       a = input()
-      print(a * 3)
+      print(a * 2 + "0")
     prompt:
-      vi: "Ô Dữ liệu nhập có 1 dòng: 2. Đoạn code in ra gì?"
-      en: "The Input data box has 1 line: 2. What is the output of this code?"
+      vi: "Ô Dữ liệu nhập có 1 dòng: 3. Đoạn code in ra gì?"
+      en: "The Input data box has 1 line: 3. What is the output of this code?"
     choices:
-      - { text: "222", correct: true }
-      - { text: "6", misconception: input-str }
-      - { text: "2 2 2", misconception: string-repeat }
+      - { text: "330", correct: true }
+      - { text: "60", misconception: input-str }
+      - { text: "3 3 0", misconception: string-repeat }
       - { vi: "Báo lỗi TypeError ở dòng 2", en: "A TypeError on line 2", error: true, misconception: input-str }
     explanation:
-      vi: "a là chuỗi \"2\", không phải số 2. Chuỗi nhân với 1 số nguyên thì được lặp lại, như con đã học ở giai đoạn 1: \"2\" * 3 ra 222, không có dấu cách và không bị lỗi."
-      en: "a is the string \"2\", not the number 2. A string times an integer is repeated, as you learned in stage 1: \"2\" * 3 gives 222, with no spaces and no error."
+      vi: "a là chuỗi \"3\" đọc từ input(), không phải số 3. Python làm phép * trước, như con đã học ở giai đoạn 1: chuỗi \"3\" lặp lại 2 lần thành 33. Sau đó dấu + nối 33 với chuỗi \"0\" thành 330. Cả 2 đều là chuỗi nên không có lỗi, và không có dấu cách nào được thêm vào."
+      en: "a is the string \"3\" read with input(), not the number 3. Python does * first, as you learned in stage 1: the string \"3\" is repeated 2 times into 33. Then + joins 33 with the string \"0\" into 330. Both are strings, so there is no error, and no space is added."
 
   - id: s2.input.b3
     type: mcq
@@ -45,20 +45,20 @@ questions:
       a = input()
       print(a + 1)
     prompt:
-      vi: "Ô Dữ liệu nhập có 1 dòng: 5. Chuyện gì xảy ra khi chạy đoạn code này?"
-      en: "The Input data box has 1 line: 5. What happens when this code runs?"
+      vi: "Ô Dữ liệu nhập có 1 dòng: 5. Đoạn code này báo lỗi TypeError ở dòng 2. Vì sao?"
+      en: "The Input data box has 1 line: 5. This code shows a TypeError on line 2. Why?"
     choices:
-      - { text: "6", misconception: input-str }
-      - { vi: "Báo lỗi TypeError ở dòng 2", en: "A TypeError on line 2", correct: true, error: true }
-      - { text: "51", misconception: input-str }
-      - { text: "5 1", misconception: concat-no-space }
+      - { vi: "Vì ô Dữ liệu nhập phải có 2 dòng, 1 dòng cho số 5 và 1 dòng cho số 1", en: "Because the Input data box must have 2 lines, 1 for the number 5 and 1 for the number 1", misconception: input-one-line }
+      - { vi: "Vì a là chuỗi \"5\" đọc từ input(), mà dấu + không cộng được chuỗi với số", en: "Because a is the string \"5\" read with input(), and + cannot add a string and a number", correct: true }
+      - { vi: "Vì ngoặc của input() để trống, nên a không nhận được dữ liệu nào", en: "Because the brackets of input() are empty, so a gets no data" }
+      - { vi: "Vì Python chưa biết a là gì, do a chưa được gán", en: "Because Python does not know a yet, as a has not been assigned", misconception: var-before-use }
     explanation:
-      vi: "a là chuỗi \"5\" đọc từ input(), còn 1 là số nguyên. Dấu + không cộng được chuỗi với số, cũng không tự đổi 1 thành chuỗi để nối, nên Python báo lỗi TypeError ở dòng 2."
-      en: "a is the string \"5\" read with input(), and 1 is an integer. + cannot add a string and a number, and it does not change 1 into a string to join them, so Python shows a TypeError on line 2."
+      vi: "input() luôn đưa lại chuỗi, nên a là chuỗi \"5\", không phải số 5. Dấu + không cộng được chuỗi với số 1, nên Python báo lỗi TypeError. Ô có 1 dòng là đủ cho 1 lần gọi input(), ngoặc để trống là đúng, và a đã được gán ở dòng 1."
+      en: "input() always gives back a string, so a is the string \"5\", not the number 5. + cannot add a string and the number 1, so Python shows a TypeError. 1 line in the box is enough for 1 input() call, empty brackets are right, and a is assigned on line 1."
 
   - id: s2.input.b4
     type: mcq
-    concepts: [input-empty-prompt]
+    concepts: [input-prompt]
     lessons: [s2.input.l2]
     code: |
       name = input("Name: ")
@@ -67,18 +67,18 @@ questions:
       vi: "Bài tập yêu cầu đọc 1 tên rồi in tên đó ra. Con viết đoạn code này rồi bấm Nộp bài. Chuyện gì xảy ra?"
       en: "An exercise asks you to read a name and print it. You write this code and press Submit. What happens?"
     choices:
-      - { vi: "Python báo lỗi SyntaxError, vì trong ngoặc của input() có chữ", en: "Python shows a SyntaxError, because there is text inside the brackets of input()", error: true, misconception: input-empty-prompt }
-      - { vi: "Bài vẫn đúng, vì Robo bỏ qua lời nhắc khi chấm", en: "The answer is still right, because Robo ignores the prompt when it checks", misconception: input-empty-prompt }
+      - { vi: "Python báo lỗi SyntaxError, vì trong ngoặc của input() có chữ", en: "Python shows a SyntaxError, because there is text inside the brackets of input()", error: true, misconception: input-prompt }
+      - { vi: "Bài vẫn đúng, vì Robo bỏ qua lời nhắc khi chấm", en: "The answer is still right, because Robo ignores the prompt when it checks", misconception: input-prompt }
       - { vi: "Chữ Name: được in ra và bị tính vào kết quả, nên bài bị chấm sai", en: "The text Name: is printed and counted in the output, so the answer is marked wrong", correct: true }
-      - { vi: "Biến name nhận chữ Name: thay cho dữ liệu nhập", en: "The variable name gets the text Name: instead of the input data", misconception: input-empty-prompt }
+      - { vi: "Biến name nhận chữ Name: thay cho dữ liệu nhập", en: "The variable name gets the text Name: instead of the input data", misconception: input-prompt }
     explanation:
       vi: "Chữ trong ngoặc là lời nhắc. Python không báo lỗi mà in lời nhắc ra, và Robo tính nó vào kết quả, nên kết quả thành Name: cộng với tên, khác kết quả mong đợi. Biến name vẫn nhận đúng dòng trong ô Dữ liệu nhập."
       en: "The text inside the brackets is a prompt. Python shows no error but prints the prompt, and Robo counts it in the output, so the output becomes Name: followed by the name, which is not the expected output. The variable name still gets the line from the Input data box."
 
   - id: s2.input.b5
     type: mcq
-    concepts: [input-empty-prompt]
-    lessons: [s2.input.l4]
+    concepts: [input-prompt]
+    lessons: [s2.input.l3]
     code: |
       a = input("A")
       b = input("B")
@@ -87,8 +87,8 @@ questions:
       vi: "Ô Dữ liệu nhập có 2 dòng: 1 và 2. Đoạn code in ra gì?"
       en: "The Input data box has 2 lines: 1 and 2. What is the output of this code?"
     choices:
-      - { text: "12", misconception: input-empty-prompt }
-      - { text: "A1B2", misconception: input-empty-prompt }
+      - { text: "12", misconception: input-prompt }
+      - { text: "A1B2", misconception: input-prompt }
       - { text: "3", misconception: input-str }
       - { text: "AB12", correct: true }
     explanation:

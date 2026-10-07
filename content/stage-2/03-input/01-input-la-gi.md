@@ -48,25 +48,25 @@ exercises:
     choices:
       - { vi: "Python đọc hết mọi dòng trong ô Dữ liệu nhập và cất vào biến name", en: "Python reads all the lines in the Input data box and stores them in the variable name", misconception: input-one-line }
       - { vi: "Python dừng lại chờ người dùng gõ 1 dòng, rồi cất dòng đó vào biến name", en: "Python stops and waits for the user to type 1 line, then stores that line in the variable name", correct: true }
-      - { vi: "Python báo lỗi, vì ngoặc của input() đang để trống", en: "Python shows an error, because the brackets of input() are empty", misconception: input-empty-prompt }
-      - { vi: "Python in chữ input ra màn hình rồi chạy tiếp", en: "Python prints the word input on the screen and goes on", misconception: input-one-line }
+      - { vi: "Python báo lỗi, vì ngoặc của input() đang để trống", en: "Python shows an error, because the brackets of input() are empty", error: true }
+      - { vi: "Python dừng lại chờ người dùng gõ 1 dòng, rồi in dòng đó ra màn hình", en: "Python stops and waits for the user to type 1 line, then prints that line on the screen" }
     explanation:
-      vi: "input() làm Python dừng lại và chờ. Người dùng gõ 1 dòng, input() đưa lại đúng dòng đó, và dấu = cất nó vào biến name. Mỗi lần gọi input() chỉ đọc 1 dòng. Ngoặc để trống là đúng, không bị lỗi."
-      en: "input() makes Python stop and wait. The user types 1 line, input() gives back exactly that line, and = stores it in the variable name. Each input() call reads only 1 line. Empty brackets are right, and there is no error."
+      vi: "input() làm Python dừng lại và chờ. Người dùng gõ 1 dòng, input() đưa lại đúng dòng đó, và dấu = cất nó vào biến name. Mỗi lần gọi input() chỉ đọc 1 dòng. input() không in dòng đó ra màn hình: muốn in, con dùng print. Ngoặc để trống là đúng, không bị lỗi."
+      en: "input() makes Python stop and wait. The user types 1 line, input() gives back exactly that line, and = stores it in the variable name. Each input() call reads only 1 line. input() does not print that line on the screen: to print it, you use print. Empty brackets are right, and there is no error."
   - id: s2.input.l1.q2
     type: mcq
-    concepts: [input-empty-prompt]
+    concepts: [input-prompt]
     prompt:
       vi: "Trong 1 bài tập của Py-Pet, con gõ dữ liệu cho input() ở đâu?"
       en: "In a Py-Pet exercise, where do you type the data for input()?"
     choices:
-      - { vi: "Gõ vào trong ngoặc của input(), ví dụ input(\"An\")", en: "Inside the brackets of input(), for example input(\"An\")", misconception: input-empty-prompt }
-      - { vi: "Không cần gõ ở đâu cả, Python tự nghĩ ra dữ liệu khi bấm Chạy thử", en: "Nowhere, Python makes up the data by itself when you press Run" }
+      - { vi: "Gõ vào trong ngoặc của input(), ví dụ input(\"An\")", en: "Inside the brackets of input(), for example input(\"An\")", misconception: input-prompt }
+      - { vi: "Gõ vào chú thích ở cuối dòng có input(), ví dụ ten = input()  # An", en: "In a comment at the end of the line with input(), for example ten = input()  # An", misconception: comment-hash }
       - { vi: "Gõ vào phần kết quả, sau khi bấm Chạy thử", en: "In the output area, after you press Run" }
       - { vi: "Gõ vào ô Dữ liệu nhập, mỗi giá trị 1 dòng, rồi bấm Chạy thử", en: "In the Input data box, 1 value on each line, then press Run", correct: true }
     explanation:
-      vi: "Ô Dữ liệu nhập nằm dưới chỗ viết code. Khi con bấm Chạy thử, input() đọc dữ liệu từ ô này. Chữ viết trong ngoặc của input() không phải là dữ liệu nhập: Python in chữ đó ra màn hình."
-      en: "The Input data box is under the place where you write code. When you press Run, input() reads the data from this box. Text inside the brackets of input() is not input data: Python prints that text on the screen."
+      vi: "Ô Dữ liệu nhập nằm dưới chỗ viết code. Khi con bấm Chạy thử, input() đọc dữ liệu từ ô này. Chữ viết trong ngoặc của input() không phải là dữ liệu nhập: Python in chữ đó ra màn hình. Python cũng bỏ qua chú thích, nên chữ sau dấu # không phải là dữ liệu nhập. Phần kết quả chỉ để xem những gì chương trình in ra."
+      en: "The Input data box is under the place where you write code. When you press Run, input() reads the data from this box. Text inside the brackets of input() is not input data: Python prints that text on the screen. Python also skips comments, so the text after # is not input data. The output area only shows what the program prints."
 ---
 Từ trước tới giờ, chương trình của con chạy lần nào cũng in ra đúng 1 kết quả. Robo muốn hỏi tên của con để chào cho đúng. Để chương trình hỏi được người dùng, con dùng lệnh **input()**.
 

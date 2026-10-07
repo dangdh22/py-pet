@@ -32,18 +32,6 @@ exercises:
     common_wrong:
       - output: |
           Lúc đầu: 10
-          Sau khi nhặt: 10
-          Còn lại: 10
-        misconception: var-reassign
-        sample: |
-          xu = 10
-          print("Lúc đầu:", xu)
-          xu + 3
-          print("Sau khi nhặt:", xu)
-          xu - 4
-          print("Còn lại:", xu)
-      - output: |
-          Lúc đầu: 10
           Sau khi nhặt: 3
           Còn lại: 4
         misconception: var-reassign
@@ -69,9 +57,9 @@ exercises:
       vi: "Đoạn code in ra gì?"
       en: "What is the output of this code?"
     choices:
-      - { text: "7", correct: true }
       - { text: "1", misconception: var-reassign }
       - { text: "1\n7", misconception: var-reassign }
+      - { text: "7", correct: true }
       - { text: "8", misconception: var-reassign }
     explanation:
       vi: "Một biến chỉ giữ 1 giá trị. Dòng 2 gán 7 cho n, nên giá trị cũ là 1 bị thay mất. Lệnh print chạy sau cùng nên in ra 7."
@@ -88,8 +76,8 @@ exercises:
       vi: "Đoạn code in ra gì?"
       en: "What is the output of this code?"
     choices:
-      - { text: "12", correct: true }
       - { text: "11", misconception: var-reassign }
+      - { text: "12", correct: true }
       - { text: "6", misconception: var-reassign }
       - { text: "5", misconception: var-reassign }
     explanation:
@@ -105,10 +93,10 @@ exercises:
       vi: "Chuyện gì xảy ra khi chạy đoạn code này?"
       en: "What happens when this code runs?"
     choices:
-      - { vi: "Báo lỗi NameError ở dòng 1", en: "A NameError on line 1", correct: true, error: true }
       - { text: "3", misconception: var-before-use }
       - { text: "0", misconception: var-before-use }
       - { text: "n", misconception: var-assign }
+      - { vi: "Báo lỗi NameError ở dòng 1", en: "A NameError on line 1", correct: true, error: true }
     explanation:
       vi: "Python chạy từ trên xuống. Ở dòng 1, biến n chưa được gán giá trị nào, nên Python chưa biết n là gì và báo lỗi NameError. Dòng 2 không được chạy."
       en: "Python runs from top to bottom. On line 1, nothing has been assigned to n yet, so Python does not know n and shows a NameError. Line 2 does not run."
@@ -151,6 +139,15 @@ print("Pin:", pin)
 ```
 
 Biến `pin` lần lượt là 3, rồi 6, rồi 5. Mỗi lệnh print in giá trị của lúc đó.
+
+Lệnh gán cũng dùng giá trị **của lúc nó chạy**. Ở ví dụ dưới, `tong` được tính khi `pin` còn là 3, nên `tong` là 4. Sau đó `pin` đổi thành 10, nhưng `tong` vẫn giữ 4.
+
+```python run
+pin = 3
+tong = pin + 1
+pin = 10
+print(tong)
+```
 ---
 Con phải **gán giá trị cho biến trước**, rồi mới được dùng biến. Nếu dùng biến khi nó chưa có giá trị, Python báo lỗi **NameError**. Bấm Chạy thử để xem:
 

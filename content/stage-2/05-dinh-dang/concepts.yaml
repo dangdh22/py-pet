@@ -22,7 +22,7 @@ concepts:
   - id: round-digits
     name: { vi: "round(x, n) giữ n chữ số sau dấu chấm", en: "round(x, n) keeps n digits after the dot" }
     misconception_card: |
-      Nhiều bạn nghĩ `round()` cắt bỏ phần thập phân như `int()`. Thực ra `round()` **làm tròn**, và số thứ hai cho biết giữ mấy chữ số sau dấu chấm: `round(2.678, 2)` ra 2.68, còn `int(2.678)` ra 2. Không có số thứ hai thì `round()` làm tròn thành số nguyên gần nhất: `round(2.678)` ra 3.
+      Nhiều bạn nghĩ `round()` cắt bỏ phần thập phân như `int()`. Thực ra `round()` **làm tròn**, và số thứ hai cho biết giữ mấy chữ số sau dấu chấm: `round(2.678, 2)` ra 2.68, còn `int(2.678)` ra 2. Không có số thứ hai thì `round()` làm tròn thành số nguyên gần nhất, không có .0: `round(2.678)` ra 3.
     parent_tip: |
       Đo chiều cao của con, ví dụ 1,437 m, rồi cùng con làm tròn còn 2 chữ số sau dấu phẩy (1,44 m) và còn 1 chữ số (1,4 m). Giải thích rằng round(x, 2) và round(x, 1) của Python làm đúng việc đó.
     practice:
@@ -38,7 +38,7 @@ concepts:
     practice:
       level1: [s2.dinh-dang.l3.q1, s2.dinh-dang.b7, s2.dinh-dang.b8, s2.dinh-dang.b12]
       level2: [s2.dinh-dang.p4]
-      level3: [s2.dinh-dang.c2]
+      level3: [s2.dinh-dang.c2, s2.dinh-dang.c4]
   - id: format-two-decimals
     name: { vi: ":.2f luôn in đủ 2 chữ số sau dấu chấm", en: ":.2f always prints 2 digits after the dot" }
     misconception_card: |

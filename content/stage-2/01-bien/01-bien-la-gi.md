@@ -42,8 +42,8 @@ exercises:
       vi: "Đoạn code in ra gì?"
       en: "What is the output of this code?"
     choices:
-      - { text: "Bo\nname", correct: true }
       - { text: "name\nname", misconception: var-assign }
+      - { text: "Bo\nname", correct: true }
       - { text: "Bo\nBo", misconception: var-assign }
       - { text: "name\nBo", misconception: var-assign }
     explanation:
@@ -58,9 +58,9 @@ exercises:
       vi: "Lệnh a = 5 làm gì?"
       en: "What does the statement a = 5 do?"
     choices:
-      - { vi: "Cất số 5 vào biến a", en: "It stores the number 5 in the variable a", correct: true }
       - { vi: "Kiểm tra xem a có bằng 5 hay không", en: "It checks whether a is equal to 5", misconception: var-assign }
       - { vi: "In ra màn hình dòng chữ a = 5", en: "It prints the text a = 5 on the screen", misconception: var-assign }
+      - { vi: "Cất số 5 vào biến a", en: "It stores the number 5 in the variable a", correct: true }
       - { vi: "Cất chữ a vào số 5", en: "It stores the letter a in the number 5", misconception: var-assign }
     explanation:
       vi: "Dấu = là lệnh gán: Python lấy giá trị ở bên phải (số 5) và cất vào biến ở bên trái (a). Lệnh gán không kiểm tra gì và không in gì ra màn hình."

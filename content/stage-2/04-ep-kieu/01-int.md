@@ -1,6 +1,6 @@
 ---
 id: s2.ep-kieu.l1
-title: { vi: "Đổi chuỗi thành số nguyên với int()", en: "Text to whole number with int()" }
+title: { vi: "Đổi chuỗi thành số nguyên với int()", en: "String to integer with int()" }
 exercises:
   - id: s2.ep-kieu.l1.ex1
     type: code

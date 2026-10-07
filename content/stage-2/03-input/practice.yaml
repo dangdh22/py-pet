@@ -1,7 +1,7 @@
 exercises:
   - id: s2.input.p1
     type: fill
-    concepts: [input-empty-prompt]
+    concepts: [input-prompt]
     prompt:
       vi: "Điền vào chỗ trống để chương trình đọc tên từ ô Dữ liệu nhập và in ra lời chào như phần Ví dụ. Nhớ để trống ngoặc."
       en: "Fill the blank so that the program reads a name from the Input data box and prints the greeting in the Example. Remember to keep the brackets empty."
@@ -116,7 +116,7 @@ exercises:
 
   - id: s2.input.c2
     type: code
-    concepts: [input-one-line, input-empty-prompt]
+    concepts: [input-one-line, input-prompt]
     prompt:
       vi: "Làm thẻ thành viên của câu lạc bộ Robo. Ô Dữ liệu nhập có 3 dòng: tên, tuổi, lớp. Hãy đọc 3 dòng đó rồi in ra 3 dòng như phần Ví dụ. Nhớ để trống ngoặc của input()."
       en: "Make a membership card for Robo's club. The Input data box has 3 lines: a name, an age, a class. Read the 3 lines, then print the 3 lines in the Example. Remember to keep the brackets of input() empty."
@@ -146,7 +146,7 @@ exercises:
           Tên: Tuổi: Lớp: Tên: An
           Tuổi: 11
           Lớp: 6A
-        misconception: input-empty-prompt
+        misconception: input-prompt
         sample: |
           ten = input("Tên: ")
           tuoi = input("Tuổi: ")

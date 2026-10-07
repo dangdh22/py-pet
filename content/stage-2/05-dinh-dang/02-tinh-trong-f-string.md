@@ -93,8 +93,8 @@ exercises:
       - { text: "print(f\"{a} - {b} = {a} - {b}\")", misconception: fstring-expression }
       - { text: "print(\"{a} - {b} = {a - b}\")", misconception: fstring-prefix }
     explanation:
-      vi: "Cần 3 cặp ngoặc nhọn: {a} điền 10, {b} điền 4, và {a - b} tính ra 6. Lệnh thứ hai in ra 6 = 6. Lệnh thứ ba in ra 10 - 4 = 10 - 4, vì dấu - nằm ngoài ngoặc nên không được tính. Lệnh cuối thiếu chữ f, nên in ra nguyên cả ngoặc nhọn."
-      en: "You need 3 pairs of curly brackets: {a} fills in 10, {b} fills in 4, and {a - b} works out 6. The second statement prints 6 = 6. The third prints 10 - 4 = 10 - 4, because the - sign is outside the brackets, so it is not worked out. The last one has no f, so it prints the curly brackets as they are."
+      vi: "Cần 3 cặp ngoặc nhọn: {a} điền 10, {b} điền 4, và {a - b} tính ra 6. Lệnh với f\"{a - b} = {a - b}\" in ra 6 = 6. Lệnh với f\"{a} - {b} = {a} - {b}\" in ra 10 - 4 = 10 - 4, vì dấu - ở vế sau nằm ngoài ngoặc nên không được tính. Lệnh có chuỗi không có chữ f trước dấu nháy thì in ra nguyên cả ngoặc nhọn."
+      en: "You need 3 pairs of curly brackets: {a} fills in 10, {b} fills in 4, and {a - b} works out 6. The statement with f\"{a - b} = {a - b}\" prints 6 = 6. The statement with f\"{a} - {b} = {a} - {b}\" prints 10 - 4 = 10 - 4, because the second - sign is outside the brackets, so it is not worked out. The statement whose string has no f before the quote prints the curly brackets as they are."
 ---
 Trong ngoặc nhọn của chuỗi f, con không chỉ đặt được tên biến. Con còn đặt được cả 1 **biểu thức**, tức là 1 phép tính như `a + b`. Python tính biểu thức trước, rồi điền kết quả vào chỗ ngoặc:
 

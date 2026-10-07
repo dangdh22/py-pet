@@ -70,7 +70,7 @@ exercises:
       - { text: "7.00", correct: true }
       - { text: "7", misconception: format-two-decimals }
       - { text: "7.0", misconception: format-two-decimals }
-      - { vi: "Báo lỗi ValueError ở dòng 2, vì 7 là số nguyên", en: "A ValueError on line 2, because 7 is an integer", error: true, misconception: format-two-decimals }
+      - { vi: "Báo lỗi ValueError ở dòng 2, vì 7 là số nguyên", en: "A ValueError on line 2, because 7 is an integer", error: true }
     explanation:
       vi: ":.2f in số theo kiểu số thực, với đúng 2 chữ số sau dấu chấm. Số nguyên 7 cũng in được như vậy, không có lỗi. Python thêm số 0 cho đủ 2 chữ số, nên in ra 7.00."
       en: ":.2f prints the number as a decimal number, with exactly 2 digits after the dot. The integer 7 can be printed this way too, with no error. Python adds zeros to make 2 digits, so it prints 7.00."
@@ -102,7 +102,7 @@ print(f"{gia:.2f}")
 print(f"{5:.2f}")
 ```
 
-Python in ra 3.14, 12.50 và 5.00. Số 2 nghĩa là 2 chữ số sau dấu chấm, còn chữ f ở cuối nghĩa là in theo kiểu số thực. Nếu thiếu chữ số, Python thêm số 0 cho đủ. Nếu thừa chữ số, Python làm tròn.
+Python in ra 3.14, 12.50 và 5.00. Số 2 nghĩa là 2 chữ số sau dấu chấm, còn chữ f ở cuối nghĩa là in theo kiểu số thực. Chữ f này khác chữ f đứng trước dấu nháy: chữ f trước dấu nháy cho biết đây là chuỗi f, còn chữ f trong `:.2f` cho biết in số theo kiểu số thực. Nếu thiếu chữ số, Python thêm số 0 cho đủ. Nếu thừa chữ số, Python làm tròn.
 ---
 `:.2f` khác với `round()`. `round()` làm tròn **con số**, rồi Python in số đó theo cách ngắn nhất, như 5.0 hay 7.1. Còn `:.2f` lo **cách in**, nên luôn in đủ 2 chữ số:
 

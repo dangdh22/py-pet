@@ -4,7 +4,7 @@ title: { vi: "Chương trình biết trò chuyện", en: "A program that talks" 
 exercises:
   - id: s2.input.l5.ex1
     type: code
-    concepts: [input-order, input-empty-prompt]
+    concepts: [input-order, input-prompt]
     prompt:
       vi: "Viết chương trình trò chuyện của Robo. Ô Dữ liệu nhập có 2 dòng: dòng 1 là tên, dòng 2 là món ăn yêu thích. Hãy đọc 2 dòng đó vào 2 biến ten và mon, rồi in ra 2 dòng như phần Ví dụ. Chú ý: dấu chấm than đứng liền ngay sau tên."
       en: "Write Robo's chat program. The Input data box has 2 lines: line 1 is a name, and line 2 is a favourite food. Read the 2 lines into the 2 variables ten and mon, then print the 2 lines in the Example. Note: the exclamation mark comes right after the name, with no space."
@@ -38,7 +38,7 @@ exercises:
       - output: |
           Tên: Món: Chào An!
           Món phở ngon lắm, An ạ.
-        misconception: input-empty-prompt
+        misconception: input-prompt
         sample: |
           ten = input("Tên: ")
           mon = input("Món: ")

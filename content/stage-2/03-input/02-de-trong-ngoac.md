@@ -4,7 +4,7 @@ title: { vi: "Để trống ngoặc của input()", en: "Keep input() empty" }
 exercises:
   - id: s2.input.l2.ex1
     type: code
-    concepts: [input-empty-prompt]
+    concepts: [input-prompt]
     prompt:
       vi: "Robo hỏi món ăn con thích. Code bên phải có lời nhắc trong ngoặc của input(), nên kết quả bị thừa chữ và bị chấm sai. Hãy sửa code để in ra đúng dòng như phần Ví dụ."
       en: "Robo asks which food you like. The code on the right has a prompt inside the brackets of input(), so the output has extra text and is marked wrong. Fix the code to print the line in the Example."
@@ -22,7 +22,7 @@ exercises:
         hidden: true
     common_wrong:
       - output: "Con thích ăn gì? Robo cũng thích phở"
-        misconception: input-empty-prompt
+        misconception: input-prompt
         sample: |
           mon = input("Con thích ăn gì? ")
           print("Robo cũng thích", mon)
@@ -32,7 +32,7 @@ exercises:
     test_eligible: true
   - id: s2.input.l2.q1
     type: mcq
-    concepts: [input-empty-prompt]
+    concepts: [input-prompt]
     code: |
       name = input("Name? ")
       print("Hi", name)
@@ -40,23 +40,23 @@ exercises:
       vi: "Ô Dữ liệu nhập có 1 dòng: Bo. Đoạn code in ra gì?"
       en: "The Input data box has 1 line: Bo. What is the output of this code?"
     choices:
-      - { text: "Hi Bo", misconception: input-empty-prompt }
-      - { text: "Name?\nHi Bo", misconception: input-empty-prompt }
+      - { text: "Hi Bo", misconception: input-prompt }
+      - { text: "Name?\nHi Bo", misconception: input-prompt }
       - { text: "Name? Hi Bo", correct: true }
-      - { text: "Name? Bo\nHi Bo", misconception: input-empty-prompt }
+      - { text: "Name? Bo\nHi Bo", misconception: input-prompt }
     explanation:
       vi: "Python in lời nhắc Name? ra trước và không xuống dòng. Chữ Bo trong ô Dữ liệu nhập không được in ra. Sau đó print in Hi Bo ngay sau lời nhắc, nên kết quả chỉ có 1 dòng: Name? Hi Bo."
       en: "Python prints the prompt Name? first and does not start a new line. The text Bo in the Input data box is not printed. Then print prints Hi Bo right after the prompt, so the output is just 1 line: Name? Hi Bo."
   - id: s2.input.l2.q2
     type: mcq
-    concepts: [input-empty-prompt]
+    concepts: [input-prompt]
     prompt:
       vi: "Trong bài tập của Py-Pet, con nên viết lệnh nào để đọc dữ liệu nhập?"
       en: "In a Py-Pet exercise, which statement should you write to read the input data?"
     choices:
       - { text: "n = input()", correct: true }
-      - { text: "n = input(\"Number: \")", misconception: input-empty-prompt }
-      - { text: "n = input(\"5\")", misconception: input-empty-prompt }
+      - { text: "n = input(\"Number: \")", misconception: input-prompt }
+      - { text: "n = input(\"5\")", misconception: input-prompt }
       - { text: "input() = n", misconception: var-assign }
     explanation:
       vi: "Trong Py-Pet, con luôn để trống ngoặc: n = input(). Chữ trong ngoặc là lời nhắc, được in ra và bị tính vào kết quả, kể cả khi đó là chữ số như \"5\". Dữ liệu nhập nằm ở ô Dữ liệu nhập, không nằm trong ngoặc. Còn input() = n viết ngược lệnh gán."

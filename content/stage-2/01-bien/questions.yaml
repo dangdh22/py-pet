@@ -7,10 +7,10 @@ questions:
       vi: "Trong Python, biến giống với thứ gì nhất?"
       en: "In Python, what is a variable most like?"
     choices:
-      - { vi: "Một chiếc hộp có dán tên, dùng để cất 1 giá trị", en: "A box with a name on it, used to store 1 value", correct: true }
       - { vi: "Một lệnh in chữ ra màn hình", en: "A statement that prints text on the screen", misconception: var-assign }
       - { vi: "Một phép so sánh xem 2 giá trị có bằng nhau không", en: "A check of whether 2 values are equal", misconception: var-assign }
       - { vi: "Một chuỗi luôn nằm trong dấu nháy", en: "A string that is always inside quotes", misconception: var-assign }
+      - { vi: "Một chiếc hộp có dán tên, dùng để cất 1 giá trị", en: "A box with a name on it, used to store 1 value", correct: true }
     explanation:
       vi: "Biến giống chiếc hộp có dán tên. Lệnh gán cất 1 giá trị vào hộp, và sau đó con gọi tên hộp để lấy giá trị ra dùng."
       en: "A variable is like a box with a name on it. An assignment stores 1 value in the box, and then you use the name of the box to get the value back."
@@ -32,21 +32,20 @@ questions:
       en: "An assignment has the variable name on the left, then =, then the value on the right: score = 10. If you write it the other way round, 10 = score, Python shows an error, because 10 is not a variable."
 
   - id: s2.bien.b3
-    type: predict
+    type: mcq
     concepts: [var-assign]
     lessons: [s2.bien.l1]
-    code: |
-      word = "Hi"
-      print(word, "word")
-    prompt: { vi: "Đoạn code in ra gì?", en: "What is the output of this code?" }
+    prompt:
+      vi: "Biến pet đang chứa chuỗi \"cat\". Lệnh nào dùng biến pet để in ra cat?"
+      en: "The variable pet holds the string \"cat\". Which statement uses the variable pet to print cat?"
     choices:
-      - { text: "word word", misconception: var-assign }
-      - { text: "Hi Hi", misconception: var-assign }
-      - { text: "Hi word", correct: true }
-      - { text: "Hiword", misconception: print-comma-space }
+      - { text: "print(\"pet\")", misconception: var-assign }
+      - { text: "print(cat)", misconception: string-quotes }
+      - { text: "print(pet)", correct: true }
+      - { text: "print(pet = \"cat\")", misconception: var-assign }
     explanation:
-      vi: "Giá trị thứ nhất là biến word, không có dấu nháy, nên Python in giá trị của nó: Hi. Giá trị thứ hai là chuỗi \"word\", được in y nguyên. Dấu phẩy thêm 1 dấu cách ở giữa."
-      en: "The first value is the variable word, with no quotes, so Python prints its value: Hi. The second value is the string \"word\", printed exactly as it is. The comma adds 1 space between them."
+      vi: "Tên biến viết không có dấu nháy, nên print(pet) lấy giá trị trong biến pet ra in: cat. Còn print(\"pet\") in y nguyên chữ pet. print(cat) báo lỗi NameError, vì cat không có dấu nháy và không có biến nào tên cat. Lệnh gán phải viết thành 1 dòng riêng, không đặt trong print được."
+      en: "A variable name has no quotes, so print(pet) takes the value in the variable pet and prints it: cat. But print(\"pet\") prints the word pet exactly as it is. print(cat) shows a NameError, because cat has no quotes and there is no variable named cat. An assignment must be a line of its own; it cannot go inside print."
 
   - id: s2.bien.b4
     type: predict
@@ -60,7 +59,7 @@ questions:
       - { text: "5", misconception: var-assign }
       - { text: "n", misconception: var-assign }
       - { vi: "Không in gì, báo lỗi SyntaxError ở dòng 1", en: "It prints nothing and shows a SyntaxError on line 1", correct: true, error: true }
-      - { vi: "Không in gì, báo lỗi NameError ở dòng 2", en: "It prints nothing and shows a NameError on line 2", error: true }
+      - { vi: "Không in gì, báo lỗi NameError ở dòng 2", en: "It prints nothing and shows a NameError on line 2", error: true, misconception: syntax-error-nothing-runs }
     explanation:
       vi: "Dòng 1 viết ngược lệnh gán. Bên trái dấu = phải là tên biến, nhưng ở đây lại là số 5. Đây là lỗi cú pháp, nên Python báo SyntaxError và không chạy dòng nào."
       en: "Line 1 writes the assignment the wrong way round. The left side of = must be a variable name, but here it is the number 5. This is a syntax error, so Python shows a SyntaxError and runs no line."
@@ -147,22 +146,20 @@ questions:
       en: "All 4 names follow the rules, but only players tells what the variable stores. A name with a meaning makes the code easier to read for you and for others."
 
   - id: s2.bien.b10
-    type: predict
+    type: mcq
     concepts: [var-reassign]
     lessons: [s2.bien.l3]
-    code: |
-      a = "cat"
-      a = "dog"
-      print(a)
-    prompt: { vi: "Đoạn code in ra gì?", en: "What is the output of this code?" }
+    prompt:
+      vi: "Biến n đang chứa số 3. Lệnh nào làm cho n chứa số 8?"
+      en: "The variable n holds the number 3. Which statement makes n hold the number 8?"
     choices:
-      - { text: "cat", misconception: var-reassign }
-      - { text: "dog", correct: true }
-      - { text: "cat\ndog", misconception: var-reassign }
-      - { text: "catdog", misconception: var-reassign }
+      - { text: "n + 5", misconception: var-reassign }
+      - { text: "n = n + 5", correct: true }
+      - { text: "print(n + 5)", misconception: var-reassign }
+      - { text: "n = 5", misconception: var-reassign }
     explanation:
-      vi: "Biến chỉ giữ 1 giá trị. Dòng 2 gán \"dog\" cho a, nên giá trị cũ \"cat\" bị thay mất. Lệnh print in ra dog."
-      en: "A variable holds only 1 value. Line 2 assigns \"dog\" to a, so the old value \"cat\" is replaced. print prints dog."
+      vi: "Muốn đổi giá trị của biến, con phải gán lại. n = n + 5 tính 3 + 5 ra 8, rồi cất 8 vào n. Lệnh n + 5 chỉ tính rồi bỏ kết quả đi. print(n + 5) in ra 8, nhưng n vẫn là 3. Còn n = 5 cất số 5 vào n, thay cho số 3."
+      en: "To change the value of a variable, you must assign it again. n = n + 5 works out 3 + 5 = 8, then stores 8 in n. The statement n + 5 only works it out and throws the result away. print(n + 5) prints 8, but n is still 3. And n = 5 stores the number 5 in n, in place of 3."
 
   - id: s2.bien.b11
     type: predict
@@ -175,10 +172,10 @@ questions:
       print(n)
     prompt: { vi: "Đoạn code in ra gì?", en: "What is the output of this code?" }
     choices:
-      - { text: "2\n5", correct: true }
       - { text: "5\n5", misconception: var-reassign }
       - { text: "2\n2", misconception: var-reassign }
       - { text: "2\n3", misconception: var-reassign }
+      - { text: "2\n5", correct: true }
     explanation:
       vi: "Lệnh print ở dòng 2 chạy khi n còn là 2, nên in ra 2. Dòng 3 tính 2 + 3 ra 5 rồi cất vào n. Lệnh print ở dòng 4 in ra 5."
       en: "The print on line 2 runs while n is still 2, so it prints 2. Line 3 works out 2 + 3 = 5 and stores it in n. The print on line 4 prints 5."
@@ -203,22 +200,23 @@ questions:
       en: "Line 2 runs while x is 4, so Python works out 4 + 1 = 5 and stores 5 in y. Line 3 changes x to 10, but it does not change y. y still holds 5."
 
   - id: s2.bien.b13
-    type: predict
+    type: mcq
     concepts: [var-before-use]
     lessons: [s2.bien.l3]
     code: |
-      a = 1
-      print(a + b)
-      b = 2
-    prompt: { vi: "Chuyện gì xảy ra khi chạy đoạn code này?", en: "What happens when this code runs?" }
+      print("Pin:", pin)
+      pin = 5
+    prompt:
+      vi: "Đoạn code này báo lỗi NameError. Sửa thế nào để in ra Pin: 5?"
+      en: "This code shows a NameError. How do you fix it so that it prints Pin: 5?"
     choices:
-      - { text: "3", misconception: var-before-use }
-      - { text: "1", misconception: var-before-use }
-      - { vi: "Báo lỗi NameError ở dòng 2", en: "A NameError on line 2", correct: true, error: true }
-      - { vi: "Không in gì, báo lỗi SyntaxError ở dòng 3", en: "It prints nothing and shows a SyntaxError on line 3", error: true, misconception: var-before-use }
+      - { vi: "Thêm 1 dòng pin = 5 nữa vào cuối chương trình", en: "Add one more line pin = 5 at the end of the program", misconception: var-before-use }
+      - { vi: "Đặt pin trong dấu nháy: print(\"Pin:\", \"pin\")", en: "Put pin in quotes: print(\"Pin:\", \"pin\")", misconception: var-assign }
+      - { vi: "Đổi chỗ 2 dòng, để dòng pin = 5 nằm trên dòng print", en: "Swap the 2 lines, so that pin = 5 is above the print line", correct: true }
+      - { vi: "Đổi tên biến pin thành Pin ở cả 2 dòng", en: "Rename the variable pin to Pin on both lines", misconception: var-before-use }
     explanation:
-      vi: "Python chạy từ trên xuống. Tới dòng 2, biến b chưa được gán, vì lệnh gán b nằm ở dòng 3. Python không biết b là gì nên báo lỗi NameError."
-      en: "Python runs from top to bottom. On line 2, b has no value yet, because the assignment of b is on line 3. Python does not know b, so it shows a NameError."
+      vi: "Python chạy từ trên xuống. Lúc dòng print chạy, biến pin chưa được gán nên Python báo lỗi. Phải đặt dòng gán pin = 5 lên trên dòng print. Thêm dòng gán ở cuối hay đổi tên biến đều không giúp gì, vì dòng print vẫn chạy trước dòng gán. Đặt pin trong dấu nháy thì in ra chữ pin, không phải số 5."
+      en: "Python runs from top to bottom. When the print line runs, pin has no value yet, so Python shows an error. The assignment pin = 5 must be above the print line. Adding an assignment at the end or renaming the variable does not help, because the print line still runs before the assignment. Putting pin in quotes prints the word pin, not the number 5."
 
   - id: s2.bien.b14
     type: mcq
@@ -263,13 +261,13 @@ questions:
       vi: "Sau lệnh gán này, biến n chứa gì?"
       en: "After this assignment, what does the variable n hold?"
     choices:
-      - { vi: "Một chuỗi (str) gồm 2 ký tự 1 và 2", en: "A string (str) with the 2 characters 1 and 2", correct: true }
       - { vi: "Số nguyên 12 (int)", en: "The integer 12 (int)", misconception: str-vs-int }
-      - { vi: "Số 3, vì 1 + 2 = 3", en: "The number 3, because 1 + 2 = 3", misconception: str-vs-int }
+      - { vi: "Không gì cả, vì Python báo lỗi: chuỗi không được chứa chữ số", en: "Nothing, because Python shows an error: a string cannot hold digits", error: true, misconception: str-vs-int }
       - { vi: "Chữ n", en: "The letter n", misconception: var-assign }
+      - { vi: "Một chuỗi (str) gồm 2 ký tự 1 và 2", en: "A string (str) with the 2 characters 1 and 2", correct: true }
     explanation:
-      vi: "\"12\" nằm trong dấu nháy nên là 1 chuỗi, dù bên trong chỉ có chữ số. type(n) sẽ cho biết đó là str."
-      en: "\"12\" is inside quotes, so it is a string, even though it has only digits. type(n) would tell you it is a str."
+      vi: "\"12\" nằm trong dấu nháy nên là 1 chuỗi, dù bên trong chỉ có chữ số. Chuỗi chứa được cả chữ số, nên lệnh gán này không lỗi. type(n) sẽ cho biết đó là str."
+      en: "\"12\" is inside quotes, so it is a string, even though it has only digits. A string can hold digits, so this assignment has no error. type(n) would tell you it is a str."
 
   - id: s2.bien.b17
     type: predict
@@ -282,7 +280,7 @@ questions:
     prompt: { vi: "Đoạn code in ra gì?", en: "What is the output of this code?" }
     choices:
       - { text: "<class 'int'>\n<class 'str'>", correct: true }
-      - { text: "<class 'int'>\n<class 'int'>", misconception: var-assign }
+      - { text: "<class 'int'>\n<class 'int'>", misconception: str-vs-int }
       - { text: "<class 'str'>\n<class 'str'>", misconception: str-vs-int }
       - { text: "<class 'str'>\n<class 'int'>", misconception: str-vs-int }
     explanation:
@@ -331,13 +329,13 @@ questions:
       vi: "Robo chụp ảnh, ghi âm giọng nói và đếm số bước chân mỗi ngày. Những thứ Robo ghi lại được gọi chung là gì?"
       en: "Robo takes photos, records voices and counts its steps every day. What do we call all the things Robo records?"
     choices:
+      - { vi: "Nhãn", en: "Labels", misconception: ai-data }
+      - { vi: "AI", en: "AI", misconception: ai-data }
+      - { vi: "Chương trình", en: "A program" }
       - { vi: "Dữ liệu", en: "Data", correct: true }
-      - { vi: "Lỗi", en: "Errors" }
-      - { vi: "Chú thích", en: "Comments" }
-      - { vi: "Dấu nháy", en: "Quotes" }
     explanation:
-      vi: "Ảnh, âm thanh và các con số mà máy ghi lại đều là dữ liệu. Dữ liệu không chỉ là chữ và số."
-      en: "Photos, sounds and the numbers a machine records are all data. Data is not only text and numbers."
+      vi: "Ảnh, âm thanh và các con số mà máy ghi lại đều là dữ liệu. Nhãn chỉ là lời ghi chú đáp án gắn vào mỗi ví dụ. AI là chương trình học từ dữ liệu, còn chương trình là các lệnh, không phải những thứ được ghi lại."
+      en: "Photos, sounds and the numbers a machine records are all data. A label is only a note with the right answer, added to each example. AI is a program that learns from data, and a program is a list of statements, not the things that are recorded."
 
   - id: s2.bien.b21
     type: mcq
@@ -349,11 +347,11 @@ questions:
     choices:
       - { vi: "Một nhãn ghi ảnh đó có phải quả táo hay không", en: "A label that says whether the photo shows an apple or not", correct: true }
       - { vi: "Không cần gì thêm, AI tự biết ảnh nào là táo", en: "Nothing more, the AI knows by itself which photos show apples", misconception: ai-data }
-      - { vi: "Tên của người đã chụp ảnh", en: "The name of the person who took the photo" }
-      - { vi: "Một bài hát về quả táo", en: "A song about apples" }
+      - { vi: "Một nhãn ghi ngày chụp ảnh đó", en: "A label with the date the photo was taken", misconception: ai-data }
+      - { vi: "Một nhãn, ghi đúng hay ghi sai cũng được", en: "A label, and it does not matter if it is right or wrong", misconception: ai-data }
     explanation:
-      vi: "Nhãn cho AI biết đáp án đúng của mỗi ví dụ. Nhờ có nhãn, AI học được ảnh như thế nào là quả táo."
-      en: "The label tells the AI the right answer for each example. With the labels, the AI learns what an apple photo looks like."
+      vi: "Nhãn cho AI biết đáp án đúng của mỗi ví dụ: ảnh này có phải quả táo hay không. Nhờ có nhãn đúng, AI học được ảnh như thế nào là quả táo. Ngày chụp ảnh không giúp AI nhận ra táo, còn nhãn ghi sai làm AI học sai."
+      en: "The label tells the AI the right answer for each example: does this photo show an apple or not. With right labels, the AI learns what an apple photo looks like. The date of the photo does not help the AI recognize apples, and wrong labels make the AI learn wrong things."
 
   - id: s2.bien.b22
     type: mcq
@@ -363,10 +361,10 @@ questions:
       vi: "Khi dạy AI nhận ra mèo, nhiều ảnh con chó bị ghi nhãn nhầm là \"mèo\". Học xong, AI có thể thế nào?"
       en: "While teaching an AI to recognize cats, many dog photos are labeled \"cat\" by mistake. After learning, what can happen to the AI?"
     choices:
-      - { vi: "AI dễ nhận nhầm chó thành mèo", en: "The AI often mistakes dogs for cats", correct: true }
       - { vi: "AI tự phát hiện và sửa hết các nhãn sai", en: "The AI finds and fixes all the wrong labels by itself", misconception: ai-data }
       - { vi: "AI không bị ảnh hưởng gì, vì nó rất thông minh", en: "The AI is not affected at all, because it is very smart", misconception: ai-data }
       - { vi: "AI chạy nhanh hơn", en: "The AI runs faster", misconception: ai-data }
+      - { vi: "AI dễ nhận nhầm chó thành mèo", en: "The AI often mistakes dogs for cats", correct: true }
     explanation:
       vi: "AI học đúng như dữ liệu dạy nó. Nhãn sai thì AI học sai: nó sẽ nghĩ những con chó kia cũng là mèo."
       en: "AI learns exactly what its data teaches. Wrong labels make the AI learn wrong things: it will think those dogs are cats too."
@@ -382,7 +380,7 @@ questions:
       - { vi: "Đoán sai thành táo hoặc cam, vì nó chưa từng học ảnh xoài", en: "Guess wrong, apple or orange, because it never learned from mango photos", correct: true }
       - { vi: "Chắc chắn nhận đúng là xoài", en: "Surely recognize it as a mango", misconception: ai-data }
       - { vi: "Tự biết thêm tên quả xoài mà không cần học", en: "Know the word mango by itself without learning", misconception: ai-data }
-      - { vi: "Báo là ảnh bị hỏng", en: "Say that the photo is broken" }
+      - { vi: "Trả lời \"mình chưa học quả này\", vì AI luôn biết khi nó chưa học điều gì", en: "Answer \"I have not learned this fruit\", because an AI always knows when it has not learned something", misconception: ai-data }
     explanation:
-      vi: "AI chỉ biết những gì có trong dữ liệu nó đã học. Dữ liệu thiếu ảnh xoài thì AI không nhận ra xoài, và có thể đoán sai thành 1 loại quả nó đã biết."
-      en: "AI only knows what is in the data it learned from. With no mango photos in the data, the AI cannot recognize a mango, and it may guess wrong with a fruit it knows."
+      vi: "AI chỉ biết những gì có trong dữ liệu nó đã học. Dữ liệu thiếu ảnh xoài thì AI không nhận ra xoài, và có thể đoán sai thành 1 loại quả nó đã biết. AI thường không tự biết là mình chưa học, nên nó vẫn đoán như thường."
+      en: "AI only knows what is in the data it learned from. With no mango photos in the data, the AI cannot recognize a mango, and it may guess wrong with a fruit it knows. An AI often does not know that it has not learned something, so it still makes a guess."

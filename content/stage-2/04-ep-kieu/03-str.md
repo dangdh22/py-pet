@@ -1,6 +1,6 @@
 ---
 id: s2.ep-kieu.l3
-title: { vi: "Đổi số thành chuỗi với str()", en: "Number to text with str()" }
+title: { vi: "Đổi số thành chuỗi với str()", en: "Number to string with str()" }
 exercises:
   - id: s2.ep-kieu.l3.ex1
     type: code

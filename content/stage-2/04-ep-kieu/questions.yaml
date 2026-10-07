@@ -52,10 +52,10 @@ questions:
       - { text: "44", correct: true }
       - { text: "8", misconception: int-convert }
       - { text: "4 4", misconception: concat-no-space }
-      - { text: "4\n8", misconception: int-convert }
+      - { vi: "Báo lỗi ở dòng 2, vì int(a) không được cất vào biến nào", en: "An error on line 2, because int(a) is not stored in any variable", error: true, misconception: int-convert }
     explanation:
-      vi: "Dòng 2 có gọi int(a), nhưng số mới không được cất vào đâu và cũng không được in ra. Biến a vẫn là chuỗi \"4\", nên a + a nối thành 44. Muốn cộng ra 8, con viết a = int(a)."
-      en: "Line 2 calls int(a), but the new number is not stored anywhere, and it is not printed either. The variable a is still the string \"4\", so a + a joins into 44. To add up to 8, write a = int(a)."
+      vi: "Dòng 2 có gọi int(a), nhưng số mới không được cất vào đâu và cũng không được in ra. Python không báo lỗi, chỉ bỏ số mới đi. Biến a vẫn là chuỗi \"4\", nên a + a nối thành 44. Muốn cộng ra 8, con viết a = int(a)."
+      en: "Line 2 calls int(a), but the new number is not stored anywhere, and it is not printed either. Python shows no error: it just throws the new number away. The variable a is still the string \"4\", so a + a joins into 44. To add up to 8, write a = int(a)."
 
   - id: s2.ep-kieu.b4
     type: predict

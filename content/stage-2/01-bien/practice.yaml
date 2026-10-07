@@ -19,21 +19,17 @@ exercises:
     type: fill
     concepts: [var-name-rules]
     prompt:
-      vi: "Code đã có 2 biến mau_mat và so_pin. Điền đúng tên biến vào 2 chỗ trống để in ra 2 dòng như phần Ví dụ."
-      en: "The code already has 2 variables, mau_mat and so_pin. Fill the 2 blanks with the right variable names to print the 2 lines in the Example."
+      vi: "Robo cần 1 biến để cất màu mắt của mình. Con hãy tự đặt 1 tên biến gồm 2 từ \"mau\" và \"mat\", viết đúng quy tắc, rồi điền tên đó vào cả 2 chỗ trống để in ra đúng dòng như phần Ví dụ."
+      en: "Robo needs a variable to store the colour of its eyes. Make up a variable name from the 2 words \"mau\" and \"mat\" that follows the rules, then write that name in both blanks to print the line in the Example."
     template: |
-      mau_mat = "xanh"
-      so_pin = 3
-      print("Mắt:", ___)
-      print("Pin:", ___)
-    answers: ["mau_mat", "so_pin"]
+      ___ = "xanh"
+      print("Mắt Robo màu", ___)
+    answers: ["mau_mat", "mau_mat"]
     tests:
-      - output: |
-          Mắt: xanh
-          Pin: 3
+      - output: "Mắt Robo màu xanh"
     hints:
-      - { vi: "Tên biến phải viết giống hệt lúc gán: cùng chữ thường, có dấu gạch dưới _, không có dấu cách.", en: "Write each variable name exactly as in its assignment: the same lower-case letters, with the underscore _, and no space." }
-      - { vi: "Điền mau_mat vào chỗ thứ nhất và so_pin vào chỗ thứ hai.", en: "Fill the first blank with mau_mat and the second blank with so_pin." }
+      - { vi: "Tên biến không có dấu cách và không có dấu gạch ngang. Muốn ghép 2 từ, con nối chúng bằng dấu gạch dưới _. Hai chỗ trống phải là cùng 1 tên.", en: "A variable name has no spaces and no dashes. To join 2 words, use the underscore _. Both blanks must hold the same name." }
+      - { vi: "Điền mau_mat vào cả 2 chỗ trống.", en: "Fill both blanks with mau_mat." }
 
   - id: s2.bien.p3
     type: parsons

@@ -13,7 +13,7 @@ questions:
     choices:
       - { text: "23 23", misconception: fstring-prefix }
       - { text: "5 {a}{b}", misconception: fstring-expression }
-      - { text: "2 3 {a}{b}", misconception: concat-no-space }
+      - { text: "2 3 {a}{b}" }
       - { text: "23 {a}{b}", correct: true }
     explanation:
       vi: "Chuỗi thứ nhất có chữ f, nên {a} thành 2 và {b} thành 3, đứng sát nhau thành 23, không có phép cộng. Chuỗi thứ hai không có chữ f, nên Python in nguyên văn {a}{b}. Dấu phẩy thêm 1 dấu cách ở giữa."
@@ -65,10 +65,10 @@ questions:
       - { vi: "Cả chuỗi, kể cả phần nằm ngoài ngoặc nhọn", en: "The whole string, including the part outside the curly brackets", misconception: fstring-expression }
       - { vi: "Chỉ tên biến trong ngoặc nhọn; phép tính trong ngoặc được in y nguyên", en: "Only variable names in curly brackets; a calculation in the brackets is printed as it is", misconception: fstring-expression }
       - { vi: "Mọi thứ nằm trong ngoặc nhọn, cả tên biến lẫn phép tính", en: "Everything inside the curly brackets, both variable names and calculations", correct: true }
-      - { vi: "Chỉ phần nằm ngoài ngoặc nhọn", en: "Only the part outside the curly brackets", misconception: fstring-expression }
+      - { vi: "Mọi thứ trong ngoặc nhọn, kể cả khi chuỗi không có chữ f trước dấu nháy", en: "Everything inside the curly brackets, even when the string has no f before the quote", misconception: fstring-prefix }
     explanation:
-      vi: "Python tính mọi thứ nằm trong ngoặc nhọn, dù là tên biến như {a} hay phép tính như {a + b}, rồi điền kết quả vào. Phần nằm ngoài ngoặc nhọn là chữ, được in y nguyên."
-      en: "Python works out everything inside the curly brackets, a variable name like {a} or a calculation like {a + b}, and fills in the result. The part outside the curly brackets is text, printed as it is."
+      vi: "Python tính mọi thứ nằm trong ngoặc nhọn, dù là tên biến như {a} hay phép tính như {a + b}, rồi điền kết quả vào. Phần nằm ngoài ngoặc nhọn là chữ, được in y nguyên. Việc này chỉ xảy ra với chuỗi f: chuỗi không có chữ f trước dấu nháy thì được in nguyên văn, cả ngoặc nhọn."
+      en: "Python works out everything inside the curly brackets, a variable name like {a} or a calculation like {a + b}, and fills in the result. The part outside the curly brackets is text, printed as it is. This only happens in an f-string: a string with no f before the quote is printed as it is, curly brackets too."
 
   - id: s2.dinh-dang.b5
     type: predict
@@ -120,7 +120,7 @@ questions:
       - { text: "4 5", misconception: round-half-even }
       - { text: "3 4", misconception: int-truncate }
       - { text: "4 4", correct: true }
-      - { text: "3.5 4.5", misconception: round-digits }
+      - { text: "3.5 4.5" }
     explanation:
       vi: "7 / 2 ra 3.5, nằm đúng giữa 3 và 4, nên Python chọn số chẵn là 4. 9 / 2 ra 4.5, nằm đúng giữa 4 và 5, nên Python cũng chọn số chẵn là 4. Vì vậy 2 kết quả bằng nhau."
       en: "7 / 2 gives 3.5, exactly halfway between 3 and 4, so Python picks the even number, 4. 9 / 2 gives 4.5, exactly halfway between 4 and 5, so Python also picks the even number, 4. So the 2 results are the same."
@@ -199,18 +199,18 @@ questions:
     concepts: [round-half-even]
     lessons: [s2.dinh-dang.l3]
     code: |
-      print(round(2.5), round(2.51))
+      print(round(0.5), round(0.6))
     prompt:
       vi: "Đoạn code in ra gì?"
       en: "What is the output of this code?"
     choices:
-      - { text: "3 3", misconception: round-half-even }
-      - { text: "2 2", misconception: round-half-even }
-      - { text: "2.0 3.0", misconception: round-digits }
-      - { text: "2 3", correct: true }
+      - { text: "1 1", misconception: round-half-even }
+      - { text: "0 0", misconception: int-truncate }
+      - { text: "0.0 1.0", misconception: round-digits }
+      - { text: "0 1", correct: true }
     explanation:
-      vi: "2.5 nằm đúng giữa 2 và 3, nên Python chọn số chẵn là 2. 2.51 không nằm đúng giữa mà gần 3 hơn, nên Python làm tròn thành 3. Quy tắc chọn số chẵn chỉ dùng khi số nằm đúng giữa."
-      en: "2.5 is exactly halfway between 2 and 3, so Python picks the even number, 2. 2.51 is not exactly halfway: it is closer to 3, so Python rounds it to 3. The rule of picking the even number is used only when a number is exactly halfway."
+      vi: "0.5 nằm đúng giữa 0 và 1, nên Python chọn số chẵn là 0. Số 0 cũng là số chẵn. 0.6 không nằm đúng giữa mà gần 1 hơn, nên Python làm tròn thành 1. Quy tắc chọn số chẵn chỉ dùng khi số nằm đúng giữa."
+      en: "0.5 is exactly halfway between 0 and 1, so Python picks the even number, 0. Zero is an even number too. 0.6 is not exactly halfway: it is closer to 1, so Python rounds it to 1. The rule of picking the even number is used only when a number is exactly halfway."
 
   - id: s2.dinh-dang.b13
     type: predict

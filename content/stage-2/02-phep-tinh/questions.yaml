@@ -3,17 +3,19 @@ questions:
     type: mcq
     concepts: [div-float]
     lessons: [s2.phep-tinh.l1]
+    code: |
+      n = 12 / 4
     prompt:
-      vi: "Vì sao print(6 / 2) in ra 3.0 mà không in ra 3?"
-      en: "Why does print(6 / 2) print 3.0 and not 3?"
+      vi: "Sau lệnh gán này, biến n chứa gì?"
+      en: "After this assignment, what does the variable n hold?"
     choices:
-      - { vi: "Vì Python tính sai phép chia này", en: "Because Python gets this division wrong", misconception: div-float }
-      - { vi: "Vì 6 không chia hết cho 2", en: "Because 6 cannot be divided exactly by 2", misconception: div-float }
-      - { vi: "Vì print luôn thêm .0 vào sau mọi số", en: "Because print always adds .0 after every number", misconception: div-float }
-      - { vi: "Vì phép / luôn cho ra số thực", en: "Because / always gives a float", correct: true }
+      - { vi: "Số nguyên 3 (int)", en: "The integer 3 (int)", misconception: div-float }
+      - { vi: "Chuỗi \"3.0\" (str)", en: "The string \"3.0\" (str)", misconception: str-vs-int }
+      - { vi: "Số thực 3.0 (float), lớn hơn 3 một chút", en: "The float 3.0, which is a little more than 3", misconception: div-float }
+      - { vi: "Số thực 3.0 (float), có giá trị bằng 3", en: "The float 3.0, which has the same value as 3", correct: true }
     explanation:
-      vi: "Python tính đúng: 6 chia 2 được 3. Nhưng kết quả của phép / luôn là số thực, nên được viết là 3.0. Lệnh print(3) vẫn in ra 3 như bình thường."
-      en: "Python is right: 6 divided by 2 is 3. But the result of / is always a float, so it is written as 3.0. The statement print(3) still prints 3 as usual."
+      vi: "Phép / luôn cho ra số thực, kể cả khi chia hết, nên n chứa 3.0 và type(n) là float. Số 3.0 có giá trị bằng đúng 3, chỉ là được viết theo kiểu số thực. 12 / 4 không nằm trong dấu nháy nên kết quả không phải chuỗi."
+      en: "/ always gives a float, even when the division has no remainder, so n holds 3.0 and type(n) is float. 3.0 has exactly the same value as 3; it is just written as a float. 12 / 4 is not in quotes, so the result is not a string."
 
   - id: s2.phep-tinh.b2
     type: mcq

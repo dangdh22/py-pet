@@ -58,7 +58,7 @@ exercises:
     choices:
       - { text: "0.6", misconception: floor-div }
       - { text: "1", misconception: floor-div }
-      - { vi: "Báo lỗi ZeroDivisionError", en: "A ZeroDivisionError", error: true, misconception: floor-div }
+      - { vi: "Báo lỗi ZeroDivisionError", en: "A ZeroDivisionError", error: true }
       - { text: "0", correct: true }
     explanation:
       vi: "3 chia 5 được 0.6, phần nguyên là 0. Giống như có 3 viên kẹo mà chia đều cho 5 bạn: không bạn nào được trọn 1 viên. Không có lỗi, vì số chia là 5, không phải 0."

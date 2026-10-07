@@ -4,7 +4,7 @@ concepts:
     misconception_card: |
       Nhiều bạn đọc `diem = 5` là "diem bằng 5" như ở môn Toán. Thực ra dấu `=` là lệnh **gán**: lấy giá trị ở bên phải, rồi cất vào biến ở bên trái. Vì vậy tên biến luôn đứng bên trái: viết `5 = diem` thì Python báo lỗi. Khi in, tên biến không có dấu nháy: `print(diem)` in ra 5, còn `print("diem")` in ra chữ diem.
     parent_tip: |
-      Lấy 1 hộp giấy, dán nhãn ghi "diem", rồi bỏ vào hộp 1 mảnh giấy ghi số 5. Hỏi con: "Trong hộp diem có gì?". Con trả lời 5, chứ không phải chữ diem. Lệnh gán giống việc bỏ mảnh giấy vào hộp.
+      Dán nhãn "diem" lên 1 hộp giấy, bỏ vào hộp 1 mảnh giấy ghi số 5, rồi hỏi con: "Trong hộp diem có gì?". Con trả lời 5, chứ không phải chữ diem: lệnh gán giống việc bỏ mảnh giấy vào hộp.
     practice:
       level1: [s2.bien.l1.q1, s2.bien.l1.q2, s2.bien.b1, s2.bien.b2, s2.bien.b3, s2.bien.b4]
       level2: [s2.bien.p1]
@@ -12,9 +12,9 @@ concepts:
   - id: var-name-rules
     name: { vi: "Quy tắc đặt tên biến", en: "Rules for variable names" }
     misconception_card: |
-      Nhiều bạn nghĩ tên biến viết thế nào cũng được, như `so keo` hay `2ten`. Thực ra tên biến chỉ gồm chữ cái, chữ số và dấu gạch dưới `_`, và không được bắt đầu bằng chữ số. Muốn ghép nhiều từ, con nối bằng dấu gạch dưới: `so_keo`. Python cũng phân biệt chữ hoa và chữ thường, nên `ten` và `Ten` là 2 biến khác nhau.
+      Nhiều bạn nghĩ tên biến viết thế nào cũng được, như `so keo` hay `2ten`. Thực ra tên biến chỉ gồm chữ cái, chữ số và dấu gạch dưới `_`, và không được bắt đầu bằng chữ số. Muốn ghép nhiều từ, con nối bằng dấu gạch dưới: `so_keo`, không viết `so keo` hay `so-keo`.
     parent_tip: |
-      Cùng con làm nhãn tên cho các hộp đồ chơi, với luật: chỉ viết liền, nối các từ bằng dấu gạch dưới, và không bắt đầu bằng số, ví dụ "hop_but" hay "xe_do_choi". Bố mẹ thử viết vài nhãn sai luật để con tìm lỗi.
+      Cùng con làm nhãn tên cho các hộp đồ chơi theo luật đặt tên biến: viết liền, nối các từ bằng dấu gạch dưới, không bắt đầu bằng số, ví dụ "hop_but". Bố mẹ viết thêm vài nhãn sai luật để con tìm lỗi.
     practice:
       level1: [s2.bien.l2.q1, s2.bien.l2.q2, s2.bien.b5, s2.bien.b6, s2.bien.b7, s2.bien.b8, s2.bien.b9]
       level2: [s2.bien.p2]
@@ -22,7 +22,7 @@ concepts:
   - id: var-reassign
     name: { vi: "Biến giữ giá trị gán sau cùng", en: "A variable keeps the last value assigned" }
     misconception_card: |
-      Nhiều bạn nghĩ biến nhớ được cả giá trị cũ, hoặc nghĩ chỉ viết `xu + 3` là biến xu tự tăng. Thực ra mỗi biến chỉ giữ **1 giá trị**: gán lại thì giá trị cũ mất. Muốn đổi giá trị, con phải gán lại: `xu = xu + 3`. Python tính vế phải bằng giá trị cũ trước, rồi mới cất kết quả vào biến. Lệnh print in giá trị của biến ở đúng lúc nó chạy.
+      Nhiều bạn nghĩ biến nhớ được cả giá trị cũ, hoặc nghĩ chỉ viết `xu + 3` là biến xu tự tăng. Thực ra mỗi biến chỉ giữ **1 giá trị**: gán lại thì giá trị cũ mất. Muốn đổi giá trị, con phải gán lại: với `xu = xu + 3`, Python tính vế phải bằng giá trị cũ trước, rồi mới cất kết quả vào biến. Lệnh print in giá trị của biến ở đúng lúc nó chạy.
     parent_tip: |
       Viết số 5 lên 1 tấm bảng nhỏ. Mỗi lần con nhặt thêm 1 viên kẹo, con xóa số cũ và viết số mới vào. Tấm bảng luôn chỉ có 1 số, là số mới nhất, giống như 1 biến.
     practice:
@@ -34,7 +34,7 @@ concepts:
     misconception_card: |
       Nhiều bạn nghĩ biến chưa gán thì tự có giá trị 0, hoặc nghĩ Python đọc trước cả chương trình để tìm giá trị. Thực ra Python chạy từ trên xuống: dùng biến khi nó chưa được gán thì Python báo lỗi **NameError**. Ví dụ `print(tuoi)` đặt trước `tuoi = 11` sẽ bị lỗi. Con sửa bằng cách đặt dòng gán lên trên dòng dùng biến.
     parent_tip: |
-      Nhờ con lấy đồ từ chiếc hộp có nhãn "hop_keo" khi trong nhà chưa có hộp nào như vậy. Con sẽ thấy phải chuẩn bị hộp và bỏ kẹo vào trước, rồi mới lấy ra được. Biến cũng phải được gán trước rồi mới dùng.
+      Nhờ con lấy kẹo từ hộp "hop_keo" khi trong nhà chưa có hộp đó, rồi cùng con chuẩn bị hộp và bỏ kẹo vào. Biến cũng vậy: phải gán trước rồi mới dùng được.
     practice:
       level1: [s2.bien.l3.q3, s2.bien.b13, s2.bien.b14]
       level2: [s2.bien.p4]

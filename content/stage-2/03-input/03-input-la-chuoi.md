@@ -83,11 +83,11 @@ exercises:
     choices:
       - { vi: "Số nguyên 10", en: "The integer 10", misconception: input-str }
       - { vi: "Số nguyên 10 nếu con gõ chữ số, còn chuỗi nếu con gõ chữ cái", en: "The integer 10 if you type digits, and a string if you type letters", misconception: input-str }
-      - { vi: "Không chứa gì, vì input() chỉ đọc được chữ cái", en: "Nothing, because input() can only read letters", misconception: input-str }
+      - { vi: "Chuỗi \"1\", vì mỗi lần gọi input() chỉ đọc 1 ký tự", en: "The string \"1\", because each input() call reads only 1 character", misconception: input-one-line }
       - { vi: "Chuỗi \"10\"", en: "The string \"10\"", correct: true }
     explanation:
-      vi: "Dù con gõ chữ hay gõ số, input() luôn đưa lại 1 chuỗi. Vì vậy n chứa chuỗi \"10\", và print(type(n)) sẽ in ra <class 'str'>."
-      en: "Whether you type letters or digits, input() always gives back a string. So n holds the string \"10\", and print(type(n)) prints <class 'str'>."
+      vi: "Dù con gõ chữ hay gõ số, input() luôn đưa lại 1 chuỗi, và chuỗi đó là cả dòng con gõ. Vì vậy n chứa chuỗi \"10\", và print(type(n)) sẽ in ra <class 'str'>."
+      en: "Whether you type letters or digits, input() always gives back a string, and that string is the whole line you type. So n holds the string \"10\", and print(type(n)) prints <class 'str'>."
 ---
 Dù con gõ chữ hay gõ số, **input()** luôn đưa lại 1 **chuỗi** (str). Gõ 5 thì biến nhận được chuỗi "5", như có dấu nháy, chứ không phải số 5.
 
@@ -96,7 +96,7 @@ so = input()
 print(type(so))
 ```
 
-Nếu ô Dữ liệu nhập có dòng 5, chương trình in ra <class 'str'>. Đoạn code dưới đây thay `input()` bằng chuỗi "5", đúng như thứ `input()` đưa lại. Con bấm Chạy thử để xem:
+Nếu ô Dữ liệu nhập có dòng 5, chương trình in ra `<class 'str'>`. Đoạn code dưới đây thay `input()` bằng chuỗi "5", đúng như thứ `input()` đưa lại. Con bấm Chạy thử để xem:
 
 ```python run
 so = "5"  # giống như con gõ 5

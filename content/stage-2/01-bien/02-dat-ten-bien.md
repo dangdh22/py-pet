@@ -29,10 +29,10 @@ exercises:
       vi: "Tên biến nào viết đúng quy tắc?"
       en: "Which variable name follows the rules?"
     choices:
-      - { text: "my_total", correct: true }
       - { text: "my total", misconception: var-name-rules }
       - { text: "2total", misconception: var-name-rules }
       - { text: "my-total", misconception: var-name-rules }
+      - { text: "my_total", correct: true }
     explanation:
       vi: "Tên biến chỉ gồm chữ cái, chữ số và dấu gạch dưới _, và không bắt đầu bằng chữ số. my total có dấu cách, 2total bắt đầu bằng số, còn my-total có dấu gạch ngang mà Python hiểu là phép trừ."
       en: "A variable name has only letters, digits and the underscore _, and it does not start with a digit. my total has a space, 2total starts with a digit, and my-total has a dash, which Python reads as a minus sign."
@@ -80,7 +80,7 @@ so keo = 3
 
 Python thấy 2 từ `so` và `keo` đứng cạnh nhau nên không hiểu. Dấu gạch ngang cũng không dùng được: Python đọc `so-keo` là "so trừ keo".
 
-Con nên viết tên bằng chữ không dấu, như `so_keo` hay `tuoi`, để dễ gõ và không gõ nhầm.
+Con nên viết tên bằng chữ không dấu, như `so_keo` hay `tuoi`, để dễ gõ và không gõ nhầm. Hãy chọn tên **có nghĩa**, để ai đọc code cũng hiểu biến đó cất gì: tên `so_pin` dễ hiểu hơn nhiều so với `x` hay `abc`.
 ---
 Python **phân biệt chữ hoa và chữ thường** trong tên biến, giống như với tên lệnh `print`. Vì vậy `ten` và `Ten` là 2 biến khác nhau.
 
@@ -91,8 +91,6 @@ print(Ten)
 
 Biến `ten` đã có giá trị, nhưng biến `Ten` thì chưa có, nên Python báo lỗi NameError. Robo đoán giúp con tên đúng là `ten`. Con nên viết tên biến bằng chữ thường để khỏi nhầm.
 ---
-Hãy chọn tên **có nghĩa**, để ai đọc code cũng hiểu biến đó cất gì. Tên `so_pin` dễ hiểu hơn nhiều so với `x` hay `abc`.
-
 Đừng đặt tên biến trùng với tên lệnh của Python, như `print`. Python vẫn cho gán, nhưng sau đó lệnh print không dùng được nữa:
 
 ```python run expect-error
@@ -100,4 +98,4 @@ print = "Robo"
 print(print)
 ```
 
-Ở dòng 2, `print` không còn là lệnh in nữa mà là 1 biến chứa chuỗi, nên Python báo lỗi. Cũng có vài từ đặc biệt như `if` hay `for` mà Python cấm hẳn dùng làm tên biến. Con sẽ gặp các từ này ở giai đoạn sau.
+Ở dòng 2, `print` không còn là lệnh in nữa mà là 1 biến chứa chuỗi, nên Python báo lỗi. Ngoài ra, có một số từ đặc biệt mà Python cấm hẳn dùng làm tên biến. Con sẽ gặp các từ này ở giai đoạn sau.

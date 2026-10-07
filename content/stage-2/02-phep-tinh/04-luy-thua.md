@@ -98,7 +98,7 @@ exercises:
       - { text: "11", correct: true }
       - { text: "25", misconception: precedence }
       - { text: "8", misconception: power-op }
-      - { text: "10", misconception: precedence }
+      - { text: "10" }
     explanation:
       vi: "Python làm phép ** trước: 3 ** 2 ra 9. Sau đó mới cộng: 2 + 9 ra 11. Nếu muốn cộng trước thì phải viết (2 + 3) ** 2, ra 25."
       en: "Python does ** first: 3 ** 2 gives 9. Then it adds: 2 + 9 gives 11. To add first, you must write (2 + 3) ** 2, which gives 25."
@@ -128,15 +128,19 @@ Khi 1 dòng có nhiều phép tính, Python làm theo **thứ tự phép tính**
 2. Rồi đến nhân và chia: `*`, `/`, `//`, `%`.
 3. Cuối cùng là cộng và trừ: `+`, `-`.
 
+Các phép cùng mức thì làm lần lượt **từ trái sang phải**.
+
 ```python run
 print(2 + 3 * 4)
 print(2 * 3 ** 2)
 print(10 - 7 // 2)
+print(8 / 2 * 3)
 ```
 
 - `2 + 3 * 4`: nhân trước, 3 * 4 ra 12, rồi 2 + 12 ra **14**.
 - `2 * 3 ** 2`: lũy thừa trước, 3 ** 2 ra 9, rồi 2 * 9 ra **18**.
 - `10 - 7 // 2`: chia trước, 7 // 2 ra 3, rồi 10 - 3 ra **7**.
+- `8 / 2 * 3`: chia và nhân cùng mức, nên làm từ trái sang phải: 8 / 2 ra 4.0, rồi 4.0 * 3 ra **12.0**.
 ---
 Muốn Python làm phép nào trước, con đặt phép đó trong **ngoặc tròn**. Phép tính trong ngoặc luôn được làm đầu tiên.
 

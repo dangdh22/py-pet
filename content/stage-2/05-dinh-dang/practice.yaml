@@ -185,3 +185,44 @@ exercises:
       - { vi: "Đọc số gam bằng int(input()) rồi chia cho 1000. round() không thêm số 0 vào cuối, nên con dùng :.2f ngay sau phép chia, bên trong ngoặc nhọn.", en: "Read the grams with int(input()), then divide by 1000. round() does not add a 0 at the end, so use :.2f right after the division, inside the curly brackets." }
       - { vi: "Dòng 1 là gam = int(input()). Dòng 2 là print(f\"Cân nặng: {gam / 1000:.2f} kg\").", en: "Line 1 is gam = int(input()). Line 2 is print(f\"Cân nặng: {gam / 1000:.2f} kg\")." }
     test_eligible: true
+
+  - id: s2.dinh-dang.c4
+    type: code
+    concepts: [round-half-even, fstring-expression]
+    prompt:
+      vi: "Robo thử xem round() làm tròn những số nằm đúng giữa như thế nào. Ô Dữ liệu nhập có 1 dòng: 1 số nguyên n. Hãy đọc số đó vào biến n, rồi dùng chuỗi f và round() để in ra 2 dòng như phần Ví dụ: dòng 1 làm tròn số n + 0.5, dòng 2 làm tròn số n + 1.5. Đừng tự tính: hãy để round() làm tròn."
+      en: "Robo tests how round() rounds numbers that are exactly halfway. The Input data box has 1 line: an integer n. Read the number into the variable n, then use f-strings and round() to print the 2 lines in the Example: line 1 rounds the number n + 0.5, and line 2 rounds the number n + 1.5. Do not work it out yourself: let round() do the rounding."
+    starter: |
+      # Viết lệnh của con ở dưới dòng này
+    solution: |
+      n = int(input())
+      print(f"{n + 0.5} làm tròn thành {round(n + 0.5)}")
+      print(f"{n + 1.5} làm tròn thành {round(n + 1.5)}")
+    tests:
+      - input: "2"
+        output: |
+          2.5 làm tròn thành 2
+          3.5 làm tròn thành 4
+      - input: "7"
+        output: |
+          7.5 làm tròn thành 8
+          8.5 làm tròn thành 8
+        hidden: true
+      - input: "0"
+        output: |
+          0.5 làm tròn thành 0
+          1.5 làm tròn thành 2
+        hidden: true
+    common_wrong:
+      - output: |
+          2.5 làm tròn thành 3
+          3.5 làm tròn thành 4
+        misconception: round-half-even
+        sample: |
+          n = int(input())
+          print(f"{n + 0.5} làm tròn thành {n + 1}")
+          print(f"{n + 1.5} làm tròn thành {n + 2}")
+    hints:
+      - { vi: "Đọc n bằng int(input()). Trong mỗi chuỗi f, cặp ngoặc nhọn thứ nhất điền số cần làm tròn, như {n + 0.5}, còn cặp thứ hai điền kết quả của round(). Số nằm đúng giữa 2 số nguyên thì round() chọn số chẵn, nên đừng tự cộng thêm 1.", en: "Read n with int(input()). In each f-string, the first pair of curly brackets fills in the number to round, such as {n + 0.5}, and the second pair fills in the result of round(). For a number exactly halfway between 2 integers, round() picks the even one, so do not just add 1 yourself." }
+      - { vi: "Dòng 1 là n = int(input()). Dòng 2 là print(f\"{n + 0.5} làm tròn thành {round(n + 0.5)}\"). Dòng 3 làm tương tự với n + 1.5.", en: "Line 1 is n = int(input()). Line 2 is print(f\"{n + 0.5} làm tròn thành {round(n + 0.5)}\"). Do line 3 the same way with n + 1.5." }
+    test_eligible: false

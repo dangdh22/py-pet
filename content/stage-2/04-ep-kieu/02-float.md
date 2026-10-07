@@ -62,7 +62,7 @@ exercises:
       en: "What is the output of this code?"
     choices:
       - { text: "3 4", misconception: float-convert }
-      - { text: "3.0 4", misconception: float-convert }
+      - { text: "3.0 4" }
       - { vi: "Báo lỗi TypeError ở dòng 2", en: "A TypeError on line 2", error: true, misconception: str-vs-int }
       - { text: "3.0 4.0", correct: true }
     explanation:

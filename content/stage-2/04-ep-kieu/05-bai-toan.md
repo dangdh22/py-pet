@@ -81,11 +81,11 @@ exercises:
     choices:
       - { vi: "Báo lỗi ValueError ở dòng 2", en: "A ValueError on line 2", correct: true, error: true }
       - { text: "20.0", misconception: int-invalid }
-      - { text: "16", misconception: int-invalid }
+      - { text: "16", misconception: int-truncate }
       - { text: "20", misconception: int-invalid }
     explanation:
-      vi: "Dòng 1 đổi chuỗi \"8\" thành số 8 mà không có lỗi. Dòng 2 đọc chuỗi \"2.5\", có dấu chấm, nên int() không đổi được và Python báo lỗi ValueError ở dòng 2. int() không tự cắt phần thập phân của 1 chuỗi. Muốn tính với 2.5, con đọc bằng float(input())."
-      en: "Line 1 changes the string \"8\" into the number 8 with no error. Line 2 reads the string \"2.5\", which has a dot, so int() cannot change it and Python shows a ValueError on line 2. int() does not drop the decimals of a string by itself. To work with 2.5, read it with float(input())."
+      vi: "Dòng 1 đổi chuỗi \"8\" thành số 8 mà không có lỗi. Dòng 2 đọc chuỗi \"2.5\", có dấu chấm, nên int() không đổi được và Python báo lỗi ValueError ở dòng 2. int() không tự cắt phần thập phân của 1 chuỗi, nên không có kết quả 16. Muốn tính với 2.5, con đọc bằng float(input())."
+      en: "Line 1 changes the string \"8\" into the number 8 with no error. Line 2 reads the string \"2.5\", which has a dot, so int() cannot change it and Python shows a ValueError on line 2. int() does not drop the decimals of a string by itself, so there is no result 16. To work with 2.5, read it with float(input())."
   - id: s2.ep-kieu.l5.q2
     type: mcq
     concepts: [float-convert]

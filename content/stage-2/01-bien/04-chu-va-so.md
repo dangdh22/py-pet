@@ -95,10 +95,10 @@ exercises:
       vi: "Đoạn code in ra gì?"
       en: "What is the output of this code?"
     choices:
-      - { text: "<class 'str'>", correct: true }
       - { text: "<class 'int'>", misconception: str-vs-int }
       - { text: "7", misconception: str-vs-int }
-      - { text: "<class 'n'>", misconception: var-assign }
+      - { text: "<class 'str'>", correct: true }
+      - { text: "<class 'n'>" }
     explanation:
       vi: "\"7\" nằm trong dấu nháy nên biến n chứa 1 chuỗi, dù bên trong chuỗi chỉ có chữ số. type() cho biết loại dữ liệu của giá trị trong biến: str là chuỗi."
       en: "\"7\" is inside quotes, so the variable n holds a string, even though the string has only a digit. type() tells the kind of data of the value in the variable: str means string."
