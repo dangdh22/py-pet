@@ -132,7 +132,7 @@ Người bảo trì chưa duyệt kế hoạch M6b; Claude tự chốt theo yêu
 1. **Lint tối thiểu** bằng ESLint 10 (kế hoạch ghi 9; npm cài bản mới nhất) (`@eslint/js`, `typescript-eslint`, `eslint-plugin-react-hooks`), nằm trong `npm run check`.
 2. **CI chạy `npm run check`** trên Node 22 và Python 3.13; **deploy GitHub Pages** bằng workflow riêng khi push vào `main`. Người bảo trì cần bật Pages (Source: GitHub Actions).
 3. **Trình duyệt không hỗ trợ** gồm cả thiếu `indexedDB`; màn hình song ngữ theo ngôn ngữ trình duyệt.
-4. **Pyodide khởi động quá 60 giây** coi như lỗi, có nút Thử lại.
-5. **Bài lỗi lúc chạy** bỏ qua được, ghi nhật ký `content-error`, không cộng XP hay ghi thành thạo.
+4. **Pyodide khởi động quá 120 giây** coi như lỗi, có nút Thử lại (mạng trường chậm tải ~10 MB nên không đặt 60 giây). Khi không tải được `pyodide.asm.wasm`, worker báo lỗi ngay mà không chờ hết 120 giây.
+5. **Bài lỗi lúc chạy** bỏ qua được, ghi nhật ký `content-error`, không cộng XP hay ghi thành thạo. Bài bị bỏ qua không tính vào điểm: trong bài kiểm tra, trạm ôn và luyện tập, nó không nằm trong điểm, điểm tối đa, khái niệm sai hay tổng số câu, nên con làm đúng hết các bài còn lại vẫn đạt trọn điểm. Bài kiểm tra bỏ qua hết mọi bài giống bài kiểm tra rỗng (0/0) và không tính là đạt.
 6. **Bài luyện mở khi mọi khái niệm của nó đã gặp trong 1 bài học đã xong** (thay luật "chủ đề có 1 bài xong").
 7. **Khu phụ huynh** hiện tên bài và 3 hiểu lầm hay gặp; đầu ra so với mong đợi vẫn để bản sau (cần đổi dữ liệu).
