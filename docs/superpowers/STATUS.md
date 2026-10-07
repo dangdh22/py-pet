@@ -16,13 +16,14 @@ Cập nhật lần cuối: 2026-10-07.
 | M5b | Nội dung giai đoạn 2 "Dữ liệu" (5 chủ đề, 25 bài), nhận ra lỗi dùng biến trước khi gán, không ghi hiểu lầm của giai đoạn chưa tới | Xong, đã merge vào `main` và push (2026-10-07). Phụ huynh chưa duyệt lời văn (`docs/superpowers/content-stage-2.md`) |
 | M5c | Nội dung giai đoạn 3 "Rẽ nhánh" (5 chủ đề, 22 bài), nhận ra dấu `=` trong điều kiện | Xong, đã merge vào `main` và push (2026-10-07). Phụ huynh chưa duyệt lời văn (`docs/superpowers/content-stage-3.md`) |
 | M5d | Nội dung giai đoạn 4 "Vòng lặp" (5 chủ đề, 28 bài), luật 8 và 9 của spec 3.9 thành lỗi khi build nội dung, nhận ra `+=` khi biến chưa được gán | Xong, đã merge vào `main` và push (2026-10-07). Phụ huynh chưa duyệt lời văn (`docs/superpowers/content-stage-4.md`) |
-| M6 | M6a: hình robot 4 dạng, phụ kiện, cảnh phòng, hoạt cảnh tiến hóa. M6b: CI/CD, lint, phần còn thiếu của spec 10 | **Việc tiếp theo** (M6a) |
+| M6a | Hình robot 4 dạng × 3 cỡ × 5 trạng thái, 10 phụ kiện trên người Robo, cảnh phòng (đồ trang trí, buồn ngủ, hết pin cạnh ổ sạc, bãi biển), thanh Pin/Vui/Lớn lên, hoạt cảnh tiến hóa toàn màn hình, Sổ thành tích có hình, trang `#/gallery` ở bản dev | Xong, đã merge vào `main` và push (2026-10-07). Người bảo trì chưa thử bằng mắt (mở `#/gallery` khi chạy `npm run dev`) |
+| M6b | CI/CD (GitHub Actions, GitHub Pages), lint, phần còn thiếu của spec 10, bài luyện mở theo khái niệm đã học, việc chuyển của khu phụ huynh | **Việc tiếp theo** |
 
 Tài liệu:
 
 - Spec (bắt buộc tuân theo): `docs/superpowers/specs/2026-10-06-py-pet-design.md`
-- Kế hoạch đã chạy: `docs/superpowers/plans/2026-10-06-m1-lat-cat-doc.md`, `docs/superpowers/plans/2026-10-06-m2-vong-choi-pet.md`, `docs/superpowers/plans/2026-10-06-m3a-on-tap-thanh-thao.md`, `docs/superpowers/plans/2026-10-06-m3b-kiem-tra-tien-hoa.md`, `docs/superpowers/plans/2026-10-06-m4a-cua-hang-nghi.md`, `docs/superpowers/plans/2026-10-06-m4b-khu-phu-huynh.md`, `docs/superpowers/plans/2026-10-06-m5a-noi-dung-giai-doan-1.md`, `docs/superpowers/plans/2026-10-07-m5b-noi-dung-giai-doan-2.md`, `docs/superpowers/plans/2026-10-07-m5c-noi-dung-giai-doan-3.md`, `docs/superpowers/plans/2026-10-07-m5d-noi-dung-giai-doan-4.md`
-- Sổ ghi (ledger) của từng mốc, gồm mọi phán quyết và finding nhỏ đã hoãn: `docs/superpowers/ledgers/m1-sdd-ledger.md`, `docs/superpowers/ledgers/m2-sdd-ledger.md`, `docs/superpowers/ledgers/m3a-sdd-ledger.md`, `docs/superpowers/ledgers/m3b-sdd-ledger.md`, `docs/superpowers/ledgers/m4a-sdd-ledger.md`, `docs/superpowers/ledgers/m4b-sdd-ledger.md`, `docs/superpowers/ledgers/m5a-sdd-ledger.md`, `docs/superpowers/ledgers/m5b-sdd-ledger.md`, `docs/superpowers/ledgers/m5c-sdd-ledger.md`, `docs/superpowers/ledgers/m5d-sdd-ledger.md`
+- Kế hoạch đã chạy: `docs/superpowers/plans/2026-10-06-m1-lat-cat-doc.md`, `docs/superpowers/plans/2026-10-06-m2-vong-choi-pet.md`, `docs/superpowers/plans/2026-10-06-m3a-on-tap-thanh-thao.md`, `docs/superpowers/plans/2026-10-06-m3b-kiem-tra-tien-hoa.md`, `docs/superpowers/plans/2026-10-06-m4a-cua-hang-nghi.md`, `docs/superpowers/plans/2026-10-06-m4b-khu-phu-huynh.md`, `docs/superpowers/plans/2026-10-06-m5a-noi-dung-giai-doan-1.md`, `docs/superpowers/plans/2026-10-07-m5b-noi-dung-giai-doan-2.md`, `docs/superpowers/plans/2026-10-07-m5c-noi-dung-giai-doan-3.md`, `docs/superpowers/plans/2026-10-07-m5d-noi-dung-giai-doan-4.md`, `docs/superpowers/plans/2026-10-07-m6a-hinh-robot.md`
+- Sổ ghi (ledger) của từng mốc, gồm mọi phán quyết và finding nhỏ đã hoãn: `docs/superpowers/ledgers/m1-sdd-ledger.md`, `docs/superpowers/ledgers/m2-sdd-ledger.md`, `docs/superpowers/ledgers/m3a-sdd-ledger.md`, `docs/superpowers/ledgers/m3b-sdd-ledger.md`, `docs/superpowers/ledgers/m4a-sdd-ledger.md`, `docs/superpowers/ledgers/m4b-sdd-ledger.md`, `docs/superpowers/ledgers/m5a-sdd-ledger.md`, `docs/superpowers/ledgers/m5b-sdd-ledger.md`, `docs/superpowers/ledgers/m5c-sdd-ledger.md`, `docs/superpowers/ledgers/m5d-sdd-ledger.md`, `docs/superpowers/ledgers/m6a-sdd-ledger.md`
 - Quyết định Claude tự chốt khi chạy liên tục các mốc, cần người bảo trì xem lại: `docs/superpowers/DECISIONS.md`
 
 ## Quyết định của người bảo trì ở M3a
@@ -36,9 +37,9 @@ Tài liệu:
 - Kiểm tra chủ đề gồm 8 câu và 2 bài code. Đề tiến hóa rút theo số câu đang có (luật 9 chỉ cảnh báo tới M5; từ M5d là lỗi). Khi tiến hóa chỉ cần màn hình chúc mừng đơn giản.
 - Ngày 2026-10-06 người bảo trì yêu cầu chạy liên tục: implement M3b, push, rồi lần lượt plan và implement M4, M5, M6, merge vào `main` theo từng mốc, ghi các quyết định cần xem lại vào `docs/superpowers/DECISIONS.md`.
 
-## Việc chuyển sang M6 và sau đó
+## Việc chuyển sang M6b và sau đó
 
-1. Robot có thể nhỏ lại 1 cỡ sau khi cập nhật lên M3a và M3b: tổng XP tối đa của giai đoạn 1 tăng (trạm ôn +30, kiểm tra chủ đề +30). Sau khi tiến hóa, thanh "Lớn lên" bắt đầu lại từ 0 và robot về cỡ nhỏ nhất cho tới khi M6 có hình theo dạng tiến hóa.
+1. (Đã xong ở M6a) Robo không còn nhỏ lại sau khi tiến hóa: cỡ theo dạng tiến hóa và tăng đơn điệu.
 2. Khi xuất file mà đọc kho lỗi, file chỉ chứa hồ sơ đang dùng. Xử lý khi có giao diện nhiều hồ sơ.
 3. App chạy Python 3.14 (Pyodide), còn `content:validate` chạy CPython 3.13: thông báo lỗi có thể khác. Test `src/content/parity.pyodide.test.ts` chạy mọi mục nội dung và mẫu từ điển lỗi trong Pyodide; khi soạn nội dung về lỗi, kiểm thông báo trong Pyodide.
 4. E2E luồng "thi tiến hóa chưa đạt → ôn trọng tâm → thi lại đạt" (spec 11 mục 5) đang được kiểm tra bằng test tích hợp jsdom; đi hết 19 bài của giai đoạn 1 trong Playwright quá chậm cho `npm run check` (DECISIONS M5a mục 6).
@@ -56,4 +57,4 @@ Các finding nhỏ khác đã hoãn nằm trong các file ledger (tìm dòng `mi
 - npm 12 chặn script cài đặt của esbuild/fsevents và in cảnh báo; cảnh báo này vô hại.
 - Cài lần đầu: xem `README.md` mục "Cài đặt lần đầu".
 - Phiên cloud (kiểm tra 2026-10-06): Node 22.22.0, npm 10.9.4, Python 3.13. npm in cảnh báo `EBADENGINE` (jsdom 30 cần Node 22.22.2 trở lên) nhưng `npm run check` vẫn xanh. Hook SessionStart tự cài môi trường; e2e dùng Chromium có sẵn qua `PW_CHROMIUM_PATH` (xem `CLAUDE.md`).
-- `npm run check` phải xanh trước mọi merge: typecheck, Vitest (1309 test sau M5d; số test tăng theo số mục nội dung), pytest (21), kiểm tra nội dung, Playwright e2e (14).
+- `npm run check` phải xanh trước mọi merge: typecheck, Vitest (1373 test sau M6a; số test tăng theo số mục nội dung), pytest (21), kiểm tra nội dung, Playwright e2e (15).
