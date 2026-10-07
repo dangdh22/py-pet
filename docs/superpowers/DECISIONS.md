@@ -98,3 +98,12 @@ Người bảo trì chưa duyệt kế hoạch M5c; Claude tự chốt theo yêu
 6. **Từ điển lỗi giai đoạn 3**: mục mới `assign-in-call`, `compare-str-int`, `print-unknown-option`, `elif-after-else`, `assign-in-if` (39 mục); các mục `missing-colon`, `indent-expected`, `assign-in-condition` gắn khái niệm giai đoạn 3; `indent-unexpected` không gắn khái niệm (lỗi dễ gặp do vô ý, kể cả ở giai đoạn 1–2). Lời giải thích `missing-colon` chỉ nói về `if`/`elif`/`else`; M5d bổ sung `for`/`while`.
 7. **Sửa 1 phần code của app trong M5c** (như M5b mục 7): check `assign-in-if` nhận ra dấu `=` đứng riêng trong điều kiện có `and`/`or` (Python chỉ báo "invalid syntax").
 8. **Bỏ ví dụ "thụt lề thừa"** khỏi bài `s3.if-else.l2` (thẻ chỉ còn lỗi thụt lề lệch); từ điển lỗi vẫn giải thích lỗi này.
+
+## M5d
+
+Người bảo trì chưa duyệt kế hoạch M5d; Claude tự chốt theo yêu cầu chạy liên tục. Chi tiết trong mục "Quyết định thiết kế" của `docs/superpowers/plans/2026-10-07-m5d-noi-dung-giai-doan-4.md`.
+
+1. **Dàn ý giai đoạn 4** do Claude đặt: "for và range" (6 bài, bài 6 là AI), "Vòng lặp while" (5), "Tổng, đếm, lớn nhất" (6), "Vòng lặp lồng và vẽ hình" (5), "Chữ số, ước số, break và continue" (6): 28 bài.
+2. **Bài AI "Học có giám sát và không giám sát"** là bài cuối của chủ đề "for và range".
+3. **Chưa dạy list, `len()`, `sum()`, `max()`** ở giai đoạn 4; dùng biến tích lũy.
+4. **Luật 8 và 9 của spec 3.9 thành lỗi** của `content:validate` khi giai đoạn 4 xong.
