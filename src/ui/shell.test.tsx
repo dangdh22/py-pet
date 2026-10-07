@@ -22,7 +22,7 @@ describe("Header", () => {
     renderWithApp(<Header />, { runner });
     const panel = screen.getByRole("alert");
     expect(within(panel).getByRole("img", { name: "Robo" })).toHaveAttribute("data-mood", "sad");
-    expect(within(panel).getByText("Robo chưa khởi động được")).toBeInTheDocument();
+    expect(within(panel).getByText("Robo đang gặp trục trặc khi chạy Python")).toBeInTheDocument();
     expect(within(panel).getByText("Nếu vẫn lỗi, con tải lại trang nhé.")).toBeInTheDocument();
     expect(screen.getAllByRole("button", { name: "Thử lại" })).toHaveLength(1);
     await userEvent.click(within(panel).getByRole("button", { name: "Thử lại" }));
@@ -36,7 +36,7 @@ describe("Header", () => {
 
   test("the panel follows the interface language", () => {
     renderWithApp(<Header />, { runner: fakeRunner(() => okResult(""), "failed"), lang: "en" });
-    expect(screen.getByText("Robo could not start")).toBeInTheDocument();
+    expect(screen.getByText("Robo has trouble running Python")).toBeInTheDocument();
   });
 
   test("switches the interface language", async () => {

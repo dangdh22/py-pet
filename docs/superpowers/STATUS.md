@@ -53,7 +53,7 @@ Các finding nhỏ khác đã hoãn nằm trong các file ledger (tìm dòng `mi
 
 ## Môi trường
 
-- Máy phát triển ban đầu dùng Node 24.18, npm 12.2, Python 3.14.2 với `pytest` (trong `.venv`), Chromium của Playwright. `package.json` không khai báo `engines`; phiên bản Node tối thiểu chưa được kiểm tra.
+- Máy phát triển ban đầu dùng Node 24.18, npm 12.2, Python 3.14.2 với `pytest` (trong `.venv`), Chromium của Playwright. `package.json` khai báo `engines.node` là `^22.22.2 || ^24.15.0 || >=26.0.0`, theo yêu cầu của jsdom 30 (bản Node tối thiểu để chạy Vitest).
 - npm 12 chặn script cài đặt của esbuild/fsevents và in cảnh báo; cảnh báo này vô hại.
 - Cài lần đầu: xem `README.md` mục "Cài đặt lần đầu".
 - Phiên cloud (kiểm tra 2026-10-06): Node 22.22.0, npm 10.9.4, Python 3.13. npm in cảnh báo `EBADENGINE` (jsdom 30 cần Node 22.22.2 trở lên) nhưng `npm run check` vẫn xanh. Hook SessionStart tự cài môi trường; e2e dùng Chromium có sẵn qua `PW_CHROMIUM_PATH` (xem `CLAUDE.md`).

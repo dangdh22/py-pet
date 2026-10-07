@@ -233,6 +233,53 @@ describe("RunnerClient", () => {
       expect(client.status).toBe("ready");
     });
 
+    test("a late ready after init-failed recovers: status ready and runs work", async () => {
+      const { client, workers, current } = setup(5000);
+      current().emit({ type: "init-failed", message: "spurious rejection" });
+      expect(client.status).toBe("failed");
+      current().emit({ type: "ready" });
+      expect(client.status).toBe("ready");
+      client.retry();
+      expect(workers).toHaveLength(1);
+      const pending = client.run("print(1)", "");
+      await vi.advanceTimersByTimeAsync(0);
+      const request = current().lastRun();
+      expect(request).toMatchObject({ type: "run", code: "print(1)" });
+      current().emit({ type: "result", id: request!.id, result: ok("1\n") });
+      await expect(pending).resolves.toEqual(ok("1\n"));
+    });
+
+    test("init-failed is ignored once the runner is ready", () => {
+      const { client, current } = setup(5000);
+      current().emit({ type: "ready" });
+      current().emit({ type: "init-failed", message: "late" });
+      expect(client.status).toBe("ready");
+    });
+
+    test("messages from a worker that is no longer current are ignored after a retry", async () => {
+      const { client, workers, current } = setup(5000);
+      const stale = current();
+      stale.emit({ type: "init-failed", message: "first" });
+      expect(client.status).toBe("failed");
+      client.retry();
+      expect(workers).toHaveLength(2);
+      expect(client.status).toBe("loading");
+      stale.emit({ type: "ready" });
+      expect(client.status).toBe("loading");
+      stale.emit({ type: "init-failed", message: "stale failure" });
+      expect(client.status).toBe("loading");
+      current().emit({ type: "ready" });
+      expect(client.status).toBe("ready");
+      stale.emit({ type: "init-failed", message: "stale again" });
+      expect(client.status).toBe("ready");
+      const pending = client.run("print(2)", "");
+      await vi.advanceTimersByTimeAsync(0);
+      const request = current().lastRun();
+      expect(request).toBeDefined();
+      current().emit({ type: "result", id: request!.id, result: ok("2\n") });
+      await expect(pending).resolves.toEqual(ok("2\n"));
+    });
+
     test("a worker restarted after a crash gets its own wait", () => {
       const { client, workers, current } = setup(5000);
       current().emit({ type: "ready" });

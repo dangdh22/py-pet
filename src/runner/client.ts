@@ -95,10 +95,21 @@ export class RunnerClient {
         const message = event.data;
         switch (message.type) {
           case "ready":
+            // A worker that is no longer current (retry, restart, timeout) must not change the status.
+            if (this.worker !== worker) break;
+            if (this.currentStatus === "failed") {
+              // A late ready after init-failed (a stray rejection while Pyodide went on loading): the worker is
+              // usable, so recover with a fresh resolved promise instead of leaving "ready" with a rejected one.
+              this.ready = Promise.resolve();
+              this.setStatus("ready");
+              break;
+            }
+            if (this.currentStatus !== "loading") break;
             this.setStatus("ready");
             resolve();
             break;
           case "init-failed":
+            if (this.worker !== worker || this.currentStatus !== "loading") break;
             this.setStatus("failed");
             reject(new Error(message.message));
             break;

@@ -15,7 +15,7 @@ test("a Pyodide that cannot download shows the failed panel, and Thử lại sta
   await page.getByLabel("Nhập lại mã PIN").fill("1234");
   await page.getByRole("button", { name: "Bắt đầu" }).click();
 
-  const panel = page.getByRole("alert").filter({ hasText: "Robo chưa khởi động được" });
+  const panel = page.getByRole("alert").filter({ hasText: "Robo đang gặp trục trặc khi chạy Python" });
   await expect(panel).toBeVisible();
   await expect(page.getByText("Robo sẵn sàng")).toHaveCount(0);
 

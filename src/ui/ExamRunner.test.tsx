@@ -73,7 +73,7 @@ describe("ExamRunner", () => {
     });
     afterEach(() => vi.restoreAllMocks());
 
-    test("is skipped as 0 points: no event is sent for it and the next item goes on", async () => {
+    test("is left out of the grade: no event is sent for it and the next item goes on", async () => {
       const onFinish = vi.fn();
       const paper = [brokenQuestion(items[0] as ChoiceQuestion) as ExamItem, items[1]!];
       const { store } = await renderWithGame(<ExamRunner title="Đề thử" items={paper} onFinish={onFinish} />, {

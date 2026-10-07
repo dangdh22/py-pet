@@ -127,7 +127,7 @@ Người bảo trì chưa duyệt kế hoạch M6a; Claude tự chốt theo yêu
 
 ## M6b
 
-Người bảo trì chưa duyệt kế hoạch M6b; Claude tự chốt theo yêu cầu chạy liên tục. Chi tiết trong mục "Quyết định thiết kế" của `docs/superpowers/plans/2026-10-07-m6b-ci-loi.md`.
+Người bảo trì chưa duyệt kế hoạch M6b; Claude tự chốt theo yêu cầu chạy liên tục. Chi tiết trong mục "Quyết định thiết kế" của `docs/superpowers/plans/2026-10-07-m6b-ci-loi.md`. Mục 1, 4 và 5 dưới đây thay cho quyết định 1, 5 và 6 của kế hoạch (ESLint 10, 120 giây, bài bị bỏ qua không tính vào điểm); kế hoạch giữ nguyên.
 
 1. **Lint tối thiểu** bằng ESLint 10 (kế hoạch ghi 9; npm cài bản mới nhất) (`@eslint/js`, `typescript-eslint`, `eslint-plugin-react-hooks`), nằm trong `npm run check`.
 2. **CI chạy `npm run check`** trên Node 22 và Python 3.13; **deploy GitHub Pages** bằng workflow riêng khi push vào `main`. Người bảo trì cần bật Pages (Source: GitHub Actions).

@@ -590,6 +590,19 @@ describe("tests", () => {
     expect(over.progress.evolutionTests[0]).toMatchObject({ score: 24, passed: true });
   });
 
+  test("a paper with every item skipped (max 0) keeps the stored best, max and passed", () => {
+    const start = initialGameState("2026-10-06");
+    const first = apply(start, topicTest(6, 6), at("2026-10-06"));
+    const skipped = apply(first, topicTest(0, 0, []), at("2026-10-07"));
+    expect(skipped.progress.topicTests.t1).toEqual({ attempts: 2, best: 6, max: 6, passed: true, lastItems: [] });
+    const again = apply(skipped, topicTest(0, 0, []), at("2026-10-08"));
+    expect(again.progress.topicTests.t1).toMatchObject({ attempts: 3, best: 6, max: 6, passed: true });
+    const later = apply(again, topicTest(4, 14), at("2026-10-09"));
+    expect(later.progress.topicTests.t1).toMatchObject({ best: 14, max: 14, passed: true });
+    const unpassed = apply(apply(start, topicTest(3, 6), at("2026-10-06")), topicTest(0, 0, []), at("2026-10-07"));
+    expect(unpassed.progress.topicTests.t1).toMatchObject({ attempts: 2, best: 3, max: 6, passed: false });
+  });
+
   test("a best score from a paper of another size is rescaled to the new paper", () => {
     const start = initialGameState("2026-10-06");
     const small = apply(start, topicTest(6, 6), at("2026-10-06"));

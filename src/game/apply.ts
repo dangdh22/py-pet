@@ -412,10 +412,12 @@ function completeTopicTest(s: GameState, e: Extract<GameEvent, { type: "TopicTes
   const previous = s.progress.topicTests[e.topicId];
   const score = testScore(e.score, e.max);
   const passed = isPass(score, e.max, s.settings.passPercent);
+  // A paper whose items were all skipped (max 0) says nothing about the child: keep the stored best, max and passed.
+  const keep = e.max <= 0 && previous !== undefined;
   s.progress.topicTests[e.topicId] = {
     attempts: (previous?.attempts ?? 0) + 1,
-    best: Math.min(e.max, Math.max(rescaledBest(previous, e.max), score)),
-    max: e.max,
+    best: keep ? previous.best : Math.min(e.max, Math.max(rescaledBest(previous, e.max), score)),
+    max: keep ? previous.max : e.max,
     passed: passed || (previous?.passed ?? false),
     lastItems: e.items,
   };
