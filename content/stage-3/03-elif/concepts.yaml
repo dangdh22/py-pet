@@ -1,0 +1,41 @@
+concepts:
+  - id: elif-chain
+    name: { vi: "Chỉ 1 nhánh của chuỗi if, elif, else được chạy", en: "Only 1 branch of an if, elif, else chain runs" }
+    misconception_card: |
+      Nhiều bạn nghĩ mọi nhánh có điều kiện đúng đều chạy, hoặc nghĩ nhánh else cũng chạy sau cùng. Thực ra trong 1 chuỗi `if`, `elif`, `else`, Python chạy đúng 1 nhánh rồi bỏ qua mọi nhánh còn lại. Mỗi `elif` có điều kiện riêng, như `elif pin > 50:`, còn `else:` luôn đứng cuối: viết elif sau else thì Python báo lỗi SyntaxError.
+    parent_tip: |
+      Bố mẹ đọc 1 luật chọn món: "Nếu có phở thì ăn phở, nếu không mà có bún thì ăn bún, nếu không nữa thì ăn cơm", rồi kể hôm nay quán có những món nào. Con nói Robo sẽ ăn món gì, và bố mẹ hỏi con có khi nào Robo ăn 2 món cùng lúc không.
+    practice:
+      level1: [s3.elif.l1.q1, s3.elif.l1.q2, s3.elif.b1, s3.elif.b2, s3.elif.b3, s3.elif.b4, s3.elif.b13]
+      level2: [s3.elif.p1, s3.elif.p4]
+      level3: [s3.elif.l1.ex1, s3.elif.l1.ex2, s3.elif.c1, s3.elif.l3.ex1, s3.elif.l3.ex2]
+  - id: condition-order
+    name: { vi: "Điều kiện đúng đầu tiên thắng", en: "The first True condition wins" }
+    misconception_card: |
+      Nhiều bạn nghĩ Python chọn điều kiện "khớp nhất", nên xếp các điều kiện theo thứ tự nào cũng được. Thực ra Python thử từ trên xuống và dừng ở điều kiện đúng đầu tiên. Nếu viết `if diem >= 5:` trước `elif diem >= 8:`, thì 9 điểm cũng chỉ được xếp Đạt. Với `>=`, con xếp số lớn nhất lên trước; với `<`, con xếp số nhỏ nhất lên trước.
+    parent_tip: |
+      Bố mẹ viết 2 tờ giấy và đặt theo thứ tự: tờ trên ghi "Từ 5 điểm: Đạt", tờ dưới ghi "Từ 8 điểm: Giỏi", rồi đọc từ trên xuống cho 1 bài 9 điểm và dừng ở tờ đúng đầu tiên. Hỏi con vì sao bài 9 điểm chỉ được Đạt, và nên đổi chỗ 2 tờ giấy thế nào.
+    practice:
+      level1: [s3.elif.l2.q1, s3.elif.l2.q2, s3.elif.b5, s3.elif.b7, s3.elif.b6]
+      level2: [s3.elif.p2]
+      level3: [s3.elif.l2.ex1, s3.elif.l2.ex2, s3.elif.c2, s3.elif.l3.ex1]
+  - id: boundary-check
+    name: { vi: "Ranh giới: chọn >= hay >", en: "Boundaries: >= or >" }
+    misconception_card: |
+      Nhiều bạn nghĩ `>=` và `>` gần như nhau, nên chỉ thử những số ở xa ranh giới như 9 hay 3. Thực ra 2 dấu này chỉ khác nhau ở đúng ranh giới: `8 >= 8` là True, còn `8 > 8` là False. "Từ 8 trở lên" là `>= 8`, còn "trên 8" là `> 8`. Vì vậy, con luôn thử đúng số ở ranh giới, như 8 điểm.
+    parent_tip: |
+      Hỏi con: "Cầu trượt dành cho bạn cao từ 120 cm trở lên, bạn cao đúng 120 cm có được chơi không?", rồi hỏi lại với "cao trên 120 cm". Cùng con tìm thêm các biển báo ngoài đời có chữ "từ", "trên", "dưới" hay "không quá".
+    practice:
+      level1: [s3.elif.l3.q1, s3.elif.l3.q2, s3.elif.b8, s3.elif.b9, s3.elif.b10, s3.elif.b6]
+      level2: [s3.elif.p3]
+      level3: [s3.elif.l3.ex1, s3.elif.l3.ex2, s3.elif.c1]
+  - id: elif-vs-if
+    name: { vi: "Nhiều lệnh if riêng có thể cùng chạy", en: "Separate if statements can all run" }
+    misconception_card: |
+      Nhiều bạn nghĩ nhiều lệnh `if` viết liền nhau cũng giống 1 chuỗi `if`, `elif`, và chỉ 1 khối chạy. Thực ra Python kiểm tra từng lệnh if riêng, nên mọi khối có điều kiện đúng đều chạy, và mỗi `else` chỉ đi với lệnh if ngay phía trên nó. Ví dụ, với `diem = 9`, 2 lệnh `if diem >= 8:` và `if diem >= 5:` làm 2 khối cùng chạy. Cần đúng 1 câu trả lời thì con dùng elif; có thể cần nhiều câu trả lời thì con dùng nhiều lệnh if riêng.
+    parent_tip: |
+      Bố mẹ nói 2 luật riêng: "Nếu trời mưa thì mang ô. Nếu trời lạnh thì mặc áo ấm.", rồi hỏi con hôm trời vừa mưa vừa lạnh thì làm mấy việc. So sánh với luật "Nếu trời mưa thì đi xe buýt, nếu không thì đi bộ", khi con chỉ làm đúng 1 việc.
+    practice:
+      level1: [s3.elif.l4.q1, s3.elif.l4.q2, s3.elif.b11, s3.elif.b12, s3.elif.b13, s3.elif.b6]
+      level2: [s3.elif.p4]
+      level3: [s3.elif.l4.ex1, s3.elif.l4.ex2, s3.elif.c3]

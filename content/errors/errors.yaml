@@ -13,6 +13,17 @@
     en: "Add : at the end of line {line}. If it is an else line, delete the condition and keep only else:, because else has no condition."
   sample: "if True\n    print(1)"
 
+- id: elif-after-else
+  match: { type: SyntaxError, message: "^'elif' block follows an 'else' block$" }
+  misconception: elif-chain
+  explain:
+    vi: "Dòng {line}: dòng elif này đứng sau 1 nhánh else. Trong 1 chuỗi, if đứng đầu, các elif ở giữa, và else luôn đứng cuối cùng."
+    en: "Line {line}: this elif line comes after an else branch. In a chain, the if comes first, the elifs are in the middle, and the else always comes last."
+  hint:
+    vi: "Chuyển dòng else: và các dòng thụt lề của nó xuống dưới cùng, sau mọi nhánh elif."
+    en: "Move the line else: and its indented lines to the very bottom, after every elif branch."
+  sample: "if True:\n    print(1)\nelse:\n    print(2)\nelif False:\n    print(3)"
+
 - id: indent-expected
   match: { type: IndentationError, message: "^expected an indented block after .+ on line (?<header>\\d+)$" }
   misconception: indent-block

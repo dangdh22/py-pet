@@ -1,0 +1,314 @@
+exercises:
+  - id: s3.elif.p1
+    type: parsons
+    concepts: [elif-chain]
+    prompt:
+      vi: "Robo chào theo ngôn ngữ con chọn. Ô Dữ liệu nhập có 1 dòng: vi cho tiếng Việt, en cho tiếng Anh, hoặc 1 mã khác. Gõ vi thì Robo in ra Xin chào, gõ en thì in ra Hello, gõ mã khác thì in ra Robo chưa biết tiếng này. Sắp xếp các dòng lệnh để in ra như phần Ví dụ."
+      en: "Robo greets you in the language you choose. The Input data box has 1 line: vi for Vietnamese, en for English, or another code. For vi, Robo prints Xin chào, for en it prints Hello, and for another code it prints Robo chưa biết tiếng này. Put the lines in order to print as in the Example."
+    solution: |
+      ngon_ngu = input()
+      if ngon_ngu == "vi":
+          print("Xin chào")
+      elif ngon_ngu == "en":
+          print("Hello")
+      else:
+          print("Robo chưa biết tiếng này")
+    tests:
+      - input: "vi"
+        output: "Xin chào"
+      - input: "en"
+        output: "Hello"
+        hidden: true
+      - input: "fr"
+        output: "Robo chưa biết tiếng này"
+        hidden: true
+    hints:
+      - { vi: "Dòng if đứng ngay sau dòng đọc dữ liệu, dòng elif ở giữa, dòng else: ở cuối. Mỗi lệnh print thụt lề đứng ngay dưới dòng hỏi đúng ngôn ngữ của nó.", en: "The if line comes right after the line that reads the input, the elif line is in the middle, and the line else: is last. Each indented print statement comes right under the line that asks about its language." }
+
+  - id: s3.elif.p2
+    type: parsons
+    concepts: [condition-order]
+    prompt:
+      vi: "Robo tặng huy hiệu theo số sách con đọc trong tháng: từ 10 cuốn trở lên là Huy hiệu vàng, từ 5 cuốn trở lên là Huy hiệu bạc, từ 1 cuốn trở lên là Huy hiệu đồng. Chưa đọc cuốn nào thì Robo nhắc Con đọc 1 cuốn sách nhé. Ô Dữ liệu nhập có 1 dòng: số sách. Sắp xếp các dòng lệnh để in ra như phần Ví dụ."
+      en: "Robo gives a badge for the books you read in a month: 10 books or more is Huy hiệu vàng, 5 or more is Huy hiệu bạc, and 1 or more is Huy hiệu đồng. With no books yet, Robo reminds you: Con đọc 1 cuốn sách nhé. The Input data box has 1 line: the number of books. Put the lines in order to print as in the Example."
+    solution: |
+      so_sach = int(input())
+      if so_sach >= 10:
+          print("Huy hiệu vàng")
+      elif so_sach >= 5:
+          print("Huy hiệu bạc")
+      elif so_sach >= 1:
+          print("Huy hiệu đồng")
+      else:
+          print("Con đọc 1 cuốn sách nhé")
+    tests:
+      - input: "12"
+        output: "Huy hiệu vàng"
+      - input: "10"
+        output: "Huy hiệu vàng"
+        hidden: true
+      - input: "5"
+        output: "Huy hiệu bạc"
+        hidden: true
+      - input: "3"
+        output: "Huy hiệu đồng"
+        hidden: true
+      - input: "1"
+        output: "Huy hiệu đồng"
+        hidden: true
+      - input: "0"
+        output: "Con đọc 1 cuốn sách nhé"
+        hidden: true
+    hints:
+      - { vi: "Python dừng ở điều kiện đúng đầu tiên, nên với dấu >=, điều kiện có số lớn hơn phải đứng trước. Hai dòng elif xếp từ số lớn xuống số nhỏ.", en: "Python stops at the first True condition, so with >=, the condition with the bigger number must come first. Put the 2 elif lines from the bigger number down to the smaller one." }
+
+  - id: s3.elif.p3
+    type: fill
+    concepts: [boundary-check]
+    prompt:
+      vi: "Robo phát quà theo điểm trò chơi: trên 100 điểm được Quà lớn, từ 50 điểm trở lên được Quà nhỏ, còn lại thì Robo nói Cố lên nhé. Ô Dữ liệu nhập có 1 dòng: số điểm. Điền dấu so sánh vào 2 chỗ trống để in ra như phần Ví dụ."
+      en: "Robo gives prizes by game points: more than 100 points gets Quà lớn, 50 points or more gets Quà nhỏ, and otherwise Robo says Cố lên nhé. The Input data box has 1 line: the points. Fill the 2 blanks with comparison signs to print as in the Example."
+    template: |
+      diem = int(input())
+      if diem ___ 100:
+          print("Quà lớn")
+      elif diem ___ 50:
+          print("Quà nhỏ")
+      else:
+          print("Cố lên nhé")
+    answers: [">", ">="]
+    tests:
+      - input: "120"
+        output: "Quà lớn"
+      - input: "100"
+        output: "Quà nhỏ"
+        hidden: true
+      - input: "101"
+        output: "Quà lớn"
+        hidden: true
+      - input: "50"
+        output: "Quà nhỏ"
+        hidden: true
+      - input: "49"
+        output: "Cố lên nhé"
+        hidden: true
+    hints:
+      - { vi: "Đọc kỹ chữ trong đề: \"trên 100\" không gồm số 100, còn \"từ 50 trở lên\" có gồm số 50. Đúng 100 điểm chỉ được Quà nhỏ.", en: "Read the words carefully: \"more than 100\" does not include 100, but \"50 or more\" does include 50. Exactly 100 points only gets Quà nhỏ." }
+      - { vi: "Điền > vào chỗ trống thứ nhất và >= vào chỗ trống thứ hai.", en: "Fill the first blank with > and the second blank with >=." }
+
+  - id: s3.elif.p4
+    type: fill
+    concepts: [elif-vs-if, elif-chain]
+    prompt:
+      vi: "Robo nói thời tiết bằng đúng 1 trong 3 câu: từ 30 độ trở lên là Trời nóng, từ 20 độ trở lên là Trời mát, còn lại là Trời lạnh. Riêng khi từ 35 độ trở lên, Robo nói thêm Robo nhắc con uống thêm nước. Ô Dữ liệu nhập có 1 dòng: nhiệt độ. Điền vào 2 chỗ trống để in ra như phần Ví dụ."
+      en: "Robo describes the weather with exactly 1 of 3 sentences: 30 degrees or more is Trời nóng, 20 or more is Trời mát, and otherwise Trời lạnh. Only when it is 35 degrees or more, Robo also says Robo nhắc con uống thêm nước. The Input data box has 1 line: the temperature. Fill the 2 blanks to print as in the Example."
+    template: |
+      nhiet_do = int(input())
+      if nhiet_do >= 30:
+          print("Trời nóng")
+      ___ nhiet_do >= 20:
+          print("Trời mát")
+      else:
+          print("Trời lạnh")
+      ___ nhiet_do >= 35:
+          print("Robo nhắc con uống thêm nước")
+    answers: ["elif", "if"]
+    tests:
+      - input: "36"
+        output: |
+          Trời nóng
+          Robo nhắc con uống thêm nước
+      - input: "35"
+        output: |
+          Trời nóng
+          Robo nhắc con uống thêm nước
+        hidden: true
+      - input: "32"
+        output: "Trời nóng"
+        hidden: true
+      - input: "30"
+        output: "Trời nóng"
+        hidden: true
+      - input: "25"
+        output: "Trời mát"
+        hidden: true
+      - input: "20"
+        output: "Trời mát"
+        hidden: true
+      - input: "10"
+        output: "Trời lạnh"
+        hidden: true
+    hints:
+      - { vi: "Chỗ trống thứ nhất nằm trong chuỗi chọn 1 trong 3 câu thời tiết. Chỗ trống thứ hai là 1 câu hỏi riêng, đứng sau nhánh else, nên nó mở đầu 1 lệnh mới.", en: "The first blank is inside the chain that picks 1 of the 3 weather sentences. The second blank is a separate question after the else branch, so it starts a new statement." }
+      - { vi: "Điền elif vào chỗ trống thứ nhất và if vào chỗ trống thứ hai.", en: "Fill the first blank with elif and the second blank with if." }
+
+  - id: s3.elif.c1
+    type: code
+    concepts: [elif-chain, boundary-check]
+    prompt:
+      vi: "Robo chọn số quạt theo nhiệt độ. Dưới 25 độ: Quạt tắt. Từ 25 đến dưới 30 độ: Quạt số 1. Từ 30 đến dưới 35 độ: Quạt số 2. Từ 35 độ trở lên: Quạt số 3. Ô Dữ liệu nhập có 1 dòng: nhiệt độ, là số nguyên. Hãy in ra đúng 1 dòng như phần Ví dụ."
+      en: "Robo picks the fan speed by the temperature. Below 25 degrees: Quạt tắt. From 25 to below 30 degrees: Quạt số 1. From 30 to below 35 degrees: Quạt số 2. 35 degrees or more: Quạt số 3. The Input data box has 1 line: the temperature, an integer. Print exactly 1 line as in the Example."
+    starter: |
+      # Viết lệnh của con ở dưới dòng này
+    solution: |
+      nhiet_do = int(input())
+      if nhiet_do < 25:
+          print("Quạt tắt")
+      elif nhiet_do < 30:
+          print("Quạt số 1")
+      elif nhiet_do < 35:
+          print("Quạt số 2")
+      else:
+          print("Quạt số 3")
+    tests:
+      - input: "28"
+        output: "Quạt số 1"
+      - input: "24"
+        output: "Quạt tắt"
+        hidden: true
+      - input: "25"
+        output: "Quạt số 1"
+        hidden: true
+      - input: "30"
+        output: "Quạt số 2"
+        hidden: true
+      - input: "34"
+        output: "Quạt số 2"
+        hidden: true
+      - input: "35"
+        output: "Quạt số 3"
+        hidden: true
+      - input: "40"
+        output: "Quạt số 3"
+        hidden: true
+    common_wrong:
+      - test: 2
+        output: "Quạt tắt"
+        misconception: boundary-check
+        sample: |
+          nhiet_do = int(input())
+          if nhiet_do <= 25:
+              print("Quạt tắt")
+          elif nhiet_do <= 30:
+              print("Quạt số 1")
+          elif nhiet_do <= 35:
+              print("Quạt số 2")
+          else:
+              print("Quạt số 3")
+    hints:
+      - { vi: "Có 4 trường hợp, nên con dùng if, 2 elif và else. Với dấu <, con hỏi số nhỏ nhất trước: 25, rồi 30, rồi 35. Đúng 25 độ là Quạt số 1, nên điều kiện đầu là nhiet_do < 25.", en: "There are 4 cases, so use if, 2 elifs and else. With <, ask about the smallest number first: 25, then 30, then 35. Exactly 25 degrees is Quạt số 1, so the first condition is nhiet_do < 25." }
+      - { vi: "Dòng 1 là nhiet_do = int(input()). Sau đó là if nhiet_do < 25:, elif nhiet_do < 30:, elif nhiet_do < 35: và else:, dưới mỗi dòng là 1 lệnh print thụt lề.", en: "Line 1 is nhiet_do = int(input()). Then come if nhiet_do < 25:, elif nhiet_do < 30:, elif nhiet_do < 35: and else:, each with 1 indented print statement under it." }
+    test_eligible: true
+
+  - id: s3.elif.c2
+    type: code
+    concepts: [condition-order]
+    prompt:
+      vi: "Robo nhắc giờ khi con chơi trò chơi trên máy tính. Chơi dưới 30 phút: in ra Con chơi tiếp nhé. Từ 30 đến dưới 60 phút: in ra Sắp hết giờ rồi. Từ 60 phút trở lên: in ra Hết giờ, con nghỉ ngơi nhé. Ô Dữ liệu nhập có 1 dòng: số phút con đã chơi. Code bên phải chạy được nhưng in sai khi con mới chơi 20 phút. Hãy sửa code để in ra đúng như phần Ví dụ."
+      en: "Robo keeps track of time when you play a computer game. Less than 30 minutes: print Con chơi tiếp nhé. From 30 to less than 60 minutes: print Sắp hết giờ rồi. 60 minutes or more: print Hết giờ, con nghỉ ngơi nhé. The Input data box has 1 line: the minutes you have played. The code on the right runs but prints the wrong thing when you have played only 20 minutes. Fix the code so that it prints as in the Example."
+    starter: |
+      phut = int(input())
+      if phut < 60:
+          print("Sắp hết giờ rồi")
+      elif phut < 30:
+          print("Con chơi tiếp nhé")
+      else:
+          print("Hết giờ, con nghỉ ngơi nhé")
+    solution: |
+      phut = int(input())
+      if phut < 30:
+          print("Con chơi tiếp nhé")
+      elif phut < 60:
+          print("Sắp hết giờ rồi")
+      else:
+          print("Hết giờ, con nghỉ ngơi nhé")
+    tests:
+      - input: "20"
+        output: "Con chơi tiếp nhé"
+      - input: "30"
+        output: "Sắp hết giờ rồi"
+        hidden: true
+      - input: "59"
+        output: "Sắp hết giờ rồi"
+        hidden: true
+      - input: "60"
+        output: "Hết giờ, con nghỉ ngơi nhé"
+        hidden: true
+      - input: "90"
+        output: "Hết giờ, con nghỉ ngơi nhé"
+        hidden: true
+    common_wrong:
+      - test: 0
+        output: "Sắp hết giờ rồi"
+        misconception: condition-order
+        sample: |
+          phut = int(input())
+          if phut < 60:
+              print("Sắp hết giờ rồi")
+          elif phut < 30:
+              print("Con chơi tiếp nhé")
+          else:
+              print("Hết giờ, con nghỉ ngơi nhé")
+    hints:
+      - { vi: "20 < 60 đã đúng, nên Python dừng ở nhánh đầu và không bao giờ thử tới phut < 30. Với dấu <, con hỏi số nhỏ nhất trước.", en: "20 < 60 is already True, so Python stops at the first branch and never tries phut < 30. With <, ask about the smallest number first." }
+      - { vi: "Đổi chỗ: dòng if hỏi phut < 30 và in Con chơi tiếp nhé, dòng elif hỏi phut < 60 và in Sắp hết giờ rồi. Nhánh else giữ nguyên.", en: "Swap them: the if line asks phut < 30 and prints Con chơi tiếp nhé, and the elif line asks phut < 60 and prints Sắp hết giờ rồi. The else branch stays the same." }
+    test_eligible: true
+
+  - id: s3.elif.c3
+    type: code
+    concepts: [elif-vs-if]
+    prompt:
+      vi: "Robo chuẩn bị cho con đi học. Ô Dữ liệu nhập có 2 dòng: dòng 1 là nhiệt độ, dòng 2 là khả năng có mưa, tính bằng phần trăm. Cả 2 đều là số nguyên. Nếu nhiệt độ dưới 20, in ra Con mặc áo ấm. Nếu khả năng có mưa từ 50 phần trăm trở lên, in ra Con mang ô. Cuối cùng, Robo luôn in ra Chúc con đi học vui, như phần Ví dụ."
+      en: "Robo gets you ready for school. The Input data box has 2 lines: line 1 is the temperature, and line 2 is the chance of rain, in percent. Both are integers. If the temperature is below 20, print Con mặc áo ấm. If the chance of rain is 50 percent or more, print Con mang ô. At the end, Robo always prints Chúc con đi học vui, as in the Example."
+    starter: |
+      # Viết lệnh của con ở dưới dòng này
+    solution: |
+      nhiet_do = int(input())
+      kha_nang_mua = int(input())
+      if nhiet_do < 20:
+          print("Con mặc áo ấm")
+      if kha_nang_mua >= 50:
+          print("Con mang ô")
+      print("Chúc con đi học vui")
+    tests:
+      - input: "15\n80"
+        output: |
+          Con mặc áo ấm
+          Con mang ô
+          Chúc con đi học vui
+      - input: "25\n60"
+        output: |
+          Con mang ô
+          Chúc con đi học vui
+        hidden: true
+      - input: "15\n10"
+        output: |
+          Con mặc áo ấm
+          Chúc con đi học vui
+        hidden: true
+      - input: "20\n49"
+        output: "Chúc con đi học vui"
+        hidden: true
+      - input: "28\n50"
+        output: |
+          Con mang ô
+          Chúc con đi học vui
+        hidden: true
+    common_wrong:
+      - test: 0
+        output: |
+          Con mặc áo ấm
+          Chúc con đi học vui
+        misconception: elif-vs-if
+        sample: |
+          nhiet_do = int(input())
+          kha_nang_mua = int(input())
+          if nhiet_do < 20:
+              print("Con mặc áo ấm")
+          elif kha_nang_mua >= 50:
+              print("Con mang ô")
+          print("Chúc con đi học vui")
+    hints:
+      - { vi: "Trời lạnh và trời mưa là 2 câu hỏi riêng, có thể cùng đúng. Con dùng 2 lệnh if riêng, không dùng elif. \"Từ 50 trở lên\" viết là >= 50.", en: "Cold weather and rain are 2 separate questions that can both be True. Use 2 separate if statements, not elif. \"50 or more\" is written >= 50." }
+      - { vi: "Dòng 1 là nhiet_do = int(input()), dòng 2 là kha_nang_mua = int(input()). Sau đó là if nhiet_do < 20: và if kha_nang_mua >= 50:, dưới mỗi dòng là 1 lệnh print thụt lề. Dòng print(\"Chúc con đi học vui\") sát lề trái, ở cuối.", en: "Line 1 is nhiet_do = int(input()), and line 2 is kha_nang_mua = int(input()). Then come if nhiet_do < 20: and if kha_nang_mua >= 50:, each with 1 indented print statement under it. The line print(\"Chúc con đi học vui\") is at the left edge, at the end." }
+    test_eligible: true

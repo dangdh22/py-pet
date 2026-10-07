@@ -1,0 +1,264 @@
+questions:
+  - id: s3.elif.b1
+    type: predict
+    concepts: [elif-chain]
+    lessons: [s3.elif.l1]
+    code: |
+      c = "red"
+      if c == "green":
+          print("go")
+      elif c == "red":
+          print("stop")
+      elif c == "yellow":
+          print("slow")
+      else:
+          print("broken")
+    prompt:
+      vi: "Đoạn code in ra gì?"
+      en: "What is the output of this code?"
+    choices:
+      - { text: "broken", misconception: elif-chain }
+      - { text: "stop\nslow", misconception: elif-chain }
+      - { text: "stop\nbroken", misconception: elif-chain }
+      - { text: "stop", correct: true }
+    explanation:
+      vi: "Python thử từ trên xuống. c == \"green\" là False, nên Python thử tiếp elif thứ nhất: c == \"red\" là True, và Python in ra stop. Sau đó Python bỏ qua elif còn lại và nhánh else, vì trong 1 chuỗi chỉ 1 nhánh chạy."
+      en: "Python tries from the top down. c == \"green\" is False, so Python tries the first elif next: c == \"red\" is True, and Python prints stop. Then Python skips the other elif and the else branch, because only 1 branch of a chain runs."
+
+  - id: s3.elif.b2
+    type: predict
+    concepts: [elif-chain]
+    lessons: [s3.elif.l1]
+    code: |
+      n = 3
+      if n > 5:
+          print("big")
+      else:
+          print("small")
+      elif n > 2:
+          print("medium")
+    prompt:
+      vi: "Chuyện gì xảy ra khi chạy đoạn code này?"
+      en: "What happens when this code runs?"
+    choices:
+      - { vi: "Báo lỗi SyntaxError ở dòng 6", en: "A SyntaxError on line 6", correct: true, error: true }
+      - { text: "small", misconception: elif-chain }
+      - { text: "small\nmedium", misconception: elif-chain }
+      - { text: "medium", misconception: elif-chain }
+    explanation:
+      vi: "elif không được đứng sau else, vì else luôn là nhánh cuối cùng của chuỗi. Python báo lỗi SyntaxError ở dòng 6 trước khi chạy, nên không dòng nào được chạy, kể cả dòng 1. Muốn có 3 nhánh, con đặt elif n > 2: ngay sau nhánh if và để else ở cuối."
+      en: "elif cannot come after else, because else is always the last branch of a chain. Python gives a SyntaxError on line 6 before running, so no line runs, not even line 1. To get 3 branches, put elif n > 2: right after the if branch and keep the else at the end."
+
+  - id: s3.elif.b3
+    type: mcq
+    concepts: [elif-chain]
+    lessons: [s3.elif.l1]
+    prompt:
+      vi: "Trong 1 chuỗi bắt đầu bằng 1 lệnh if, phần nào con có thể viết nhiều lần?"
+      en: "In a chain that starts with an if statement, which part can you write several times?"
+    choices:
+      - { vi: "Phần else", en: "The else part", misconception: elif-chain }
+      - { vi: "Phần elif", en: "The elif part", correct: true }
+      - { vi: "Không phần nào, vì chuỗi luôn có đúng 3 nhánh if, elif và else", en: "No part, because a chain always has exactly 3 branches: if, elif and else", misconception: elif-chain }
+      - { vi: "Cả phần elif và phần else", en: "Both the elif part and the else part", misconception: elif-chain }
+    explanation:
+      vi: "Mỗi chuỗi có đúng 1 lệnh if ở đầu và nhiều nhất 1 else ở cuối. Ở giữa, con viết bao nhiêu elif cũng được, mỗi elif có điều kiện riêng. Vì vậy, 1 chuỗi có thể có 3, 4 nhánh hay nhiều hơn nữa."
+      en: "Each chain has exactly 1 if statement at the start and at most 1 else at the end. In between, you can write as many elifs as you need, each with its own condition. So a chain can have 3, 4 or even more branches."
+
+  - id: s3.elif.b4
+    type: predict
+    concepts: [elif-chain]
+    lessons: [s3.elif.l1]
+    code: |
+      n = 2
+      if n > 10:
+          print("A")
+      elif n > 5:
+          print("B")
+      print("end")
+    prompt:
+      vi: "Chuyện gì xảy ra khi chạy đoạn code này?"
+      en: "What happens when this code runs?"
+    choices:
+      - { text: "B\nend", misconception: elif-chain }
+      - { vi: "Báo lỗi SyntaxError, vì chuỗi thiếu else", en: "A SyntaxError, because the chain has no else", error: true, misconception: elif-chain }
+      - { text: "end", correct: true }
+      - { text: "B", misconception: after-block }
+    explanation:
+      vi: "2 > 10 là False, 2 > 5 cũng là False, nên không nhánh nào chạy. Chuỗi không có else vẫn đúng cách viết: khi mọi điều kiện đều sai, Python bỏ qua cả chuỗi. Dòng print(\"end\") sát lề trái nên luôn chạy, và chương trình chỉ in ra end."
+      en: "2 > 10 is False, and 2 > 5 is False too, so no branch runs. A chain without an else is written correctly: when every condition is False, Python skips the whole chain. The line print(\"end\") starts at the left edge, so it always runs, and the program prints only end."
+
+  - id: s3.elif.b5
+    type: predict
+    concepts: [condition-order]
+    lessons: [s3.elif.l2]
+    code: |
+      t = 3
+      if t < 10:
+          print("cool")
+      elif t < 5:
+          print("cold")
+      else:
+          print("hot")
+    prompt:
+      vi: "Đoạn code in ra gì?"
+      en: "What is the output of this code?"
+    choices:
+      - { text: "cool", correct: true }
+      - { text: "cold", misconception: condition-order }
+      - { text: "cool\ncold", misconception: elif-chain }
+      - { text: "hot", misconception: compare-ops }
+    explanation:
+      vi: "Python thử t < 10 trước: 3 < 10 là True, nên in ra cool và dừng. Điều kiện t < 5 cũng đúng, nhưng Python không thử tới nữa, nên nhánh cold không bao giờ chạy được. Muốn in cold khi t bằng 3, con phải hỏi t < 5 trước t < 10."
+      en: "Python tries t < 10 first: 3 < 10 is True, so it prints cool and stops. The condition t < 5 is also True, but Python never gets to it, so the cold branch can never run. To print cold when t is 3, you must ask t < 5 before t < 10."
+
+  - id: s3.elif.b6
+    type: mcq
+    concepts: [condition-order, boundary-check, elif-vs-if]
+    lessons: [s3.elif.l4]
+    prompt:
+      vi: "Robo xếp loại số nguyên n: từ 8 trở lên in A, từ 5 trở lên in B, còn lại in C. Đoạn code nào luôn in ra đúng 1 dòng, đúng loại, với mọi số nguyên n?"
+      en: "Robo grades an integer n: 8 or more prints A, 5 or more prints B, and anything else prints C. Which code always prints exactly 1 line with the right grade, for every integer n?"
+    choices:
+      - { text: "if n >= 5:\n    print(\"B\")\nelif n >= 8:\n    print(\"A\")\nelse:\n    print(\"C\")", misconception: condition-order }
+      - { text: "if n > 8:\n    print(\"A\")\nelif n > 5:\n    print(\"B\")\nelse:\n    print(\"C\")", misconception: boundary-check }
+      - { text: "if n >= 8:\n    print(\"A\")\nif n >= 5:\n    print(\"B\")\nelse:\n    print(\"C\")", misconception: elif-vs-if }
+      - { text: "if n >= 8:\n    print(\"A\")\nelif n >= 5:\n    print(\"B\")\nelse:\n    print(\"C\")", correct: true }
+    explanation:
+      vi: "Đoạn đúng hỏi n >= 8 trước n >= 5 và dùng elif. Đoạn hỏi n >= 5 trước sẽ in B cho cả n bằng 9. Đoạn dùng dấu > sai ở đúng ranh giới: n bằng 8 ra B, n bằng 5 ra C. Đoạn có 2 lệnh if riêng in ra 2 dòng A và B khi n bằng 9."
+      en: "The right code asks n >= 8 before n >= 5 and uses elif. The code that asks n >= 5 first prints B even when n is 9. The code with > is wrong exactly at the boundaries: n equal to 8 gives B, and n equal to 5 gives C. The code with 2 separate if statements prints 2 lines, A and B, when n is 9."
+
+  - id: s3.elif.b7
+    type: mcq
+    concepts: [condition-order]
+    lessons: [s3.elif.l2]
+    prompt:
+      vi: "Một chương trình xếp loại hỏi n >= 9, rồi n >= 7, rồi n >= 5, cuối cùng là else. Nếu đảo ngược thứ tự thành n >= 5, rồi n >= 7, rồi n >= 9, chuyện gì xảy ra?"
+      en: "A grading program asks n >= 9, then n >= 7, then n >= 5, and finally has an else. If the order is turned around to n >= 5, then n >= 7, then n >= 9, what happens?"
+    choices:
+      - { vi: "Kết quả vẫn như cũ, vì các điều kiện vẫn giống nhau", en: "The results stay the same, because the conditions are still the same", misconception: condition-order }
+      - { vi: "Mọi số từ 5 trở lên đều rơi vào nhánh đầu tiên", en: "Every number from 5 up falls into the first branch", correct: true }
+      - { vi: "Chỉ những số từ 9 trở lên bị xếp sai", en: "Only the numbers from 9 up are graded wrongly", misconception: condition-order }
+      - { vi: "Những số dưới 5 bị xếp sai", en: "The numbers below 5 are graded wrongly", misconception: condition-order }
+    explanation:
+      vi: "Python dừng ở điều kiện đúng đầu tiên. Với thứ tự mới, mọi số từ 5 trở lên đều làm n >= 5 đúng, nên rơi vào nhánh đầu tiên, kể cả 7, 8 hay 10. Hai nhánh n >= 7 và n >= 9 không bao giờ chạy. Các số dưới 5 vẫn vào nhánh else như cũ."
+      en: "Python stops at the first True condition. With the new order, every number from 5 up makes n >= 5 True, so it falls into the first branch, even 7, 8 or 10. The branches n >= 7 and n >= 9 never run. The numbers below 5 still go to the else branch as before."
+
+  - id: s3.elif.b8
+    type: mcq
+    concepts: [boundary-check]
+    lessons: [s3.elif.l3]
+    prompt:
+      vi: "Một chương trình xếp loại điểm dùng các ranh giới 8, 6.5 và 5. Con nghi chương trình viết nhầm n > 6.5 thay vì n >= 6.5. Con chỉ được thử 1 điểm. Con nên thử điểm nào?"
+      en: "A grading program uses the boundaries 8, 6.5 and 5. You think the program wrongly says n > 6.5 instead of n >= 6.5. You may try only 1 score. Which score should you try?"
+    choices:
+      - { text: "7", misconception: boundary-check }
+      - { text: "6", misconception: boundary-check }
+      - { text: "6.5", correct: true }
+      - { text: "10", misconception: boundary-check }
+    explanation:
+      vi: "n > 6.5 và n >= 6.5 chỉ khác nhau khi n bằng đúng 6.5. Với 7, cả 2 điều kiện đều đúng; với 6, cả 2 đều sai; còn 10 đã vào nhánh n >= 8 từ trước. Chỉ lần thử đúng ranh giới 6.5 mới cho thấy lỗi: chương trình viết nhầm sẽ xếp 6.5 điểm xuống loại thấp hơn."
+      en: "n > 6.5 and n >= 6.5 differ only when n is exactly 6.5. With 7, both conditions are True; with 6, both are False; and 10 already goes into the n >= 8 branch. Only a try exactly at the boundary 6.5 shows the mistake: the wrong program puts a score of 6.5 in a lower grade."
+
+  - id: s3.elif.b9
+    type: predict
+    concepts: [boundary-check]
+    lessons: [s3.elif.l3]
+    code: |
+      kg = 20
+      if kg <= 7:
+          print("cabin")
+      elif kg <= 20:
+          print("check-in")
+      else:
+          print("too heavy")
+    prompt:
+      vi: "Đoạn code in ra gì?"
+      en: "What is the output of this code?"
+    choices:
+      - { text: "too heavy", misconception: boundary-check }
+      - { text: "check-in", correct: true }
+      - { text: "cabin", misconception: compare-ops }
+      - { text: "check-in\ntoo heavy", misconception: elif-chain }
+    explanation:
+      vi: "20 <= 7 là False. Python thử tiếp kg <= 20: 20 bằng 20, nên 20 <= 20 là True, và Python in ra check-in. Dấu <= gồm cả số ở ranh giới. Chỉ khi kg lớn hơn 20, nhánh else mới chạy."
+      en: "20 <= 7 is False. Python tries kg <= 20 next: 20 equals 20, so 20 <= 20 is True, and Python prints check-in. The sign <= includes the number at the boundary. Only when kg is greater than 20 does the else branch run."
+
+  - id: s3.elif.b10
+    type: mcq
+    concepts: [boundary-check]
+    lessons: [s3.elif.l3]
+    prompt:
+      vi: "Trong đề bài, cụm từ nào phải viết bằng dấu >=?"
+      en: "In a task, which phrase must be written with the sign >=?"
+    choices:
+      - { vi: "từ 18 tuổi trở lên", en: "18 years old or older", correct: true }
+      - { vi: "trên 18 tuổi", en: "over 18 years old", misconception: boundary-check }
+      - { vi: "hơn 18 tuổi", en: "more than 18 years old", misconception: boundary-check }
+      - { vi: "không quá 18 tuổi", en: "not more than 18 years old", misconception: boundary-check }
+    explanation:
+      vi: "\"Từ 18 tuổi trở lên\" gồm cả người đúng 18 tuổi, nên viết là >= 18. \"Trên 18\" và \"hơn 18\" không gồm số 18, nên viết là > 18. \"Không quá 18\" nghĩa là 18 hoặc ít hơn, viết là <= 18."
+      en: "\"18 years old or older\" includes someone who is exactly 18, so it is written >= 18. \"Over 18\" and \"more than 18\" do not include 18, so they are written > 18. \"Not more than 18\" means 18 or less, written <= 18."
+
+  - id: s3.elif.b11
+    type: predict
+    concepts: [elif-vs-if]
+    lessons: [s3.elif.l4]
+    code: |
+      n = 20
+      if n > 10:
+          print("A")
+      elif n > 15:
+          print("B")
+      if n > 15:
+          print("C")
+    prompt:
+      vi: "Đoạn code in ra gì?"
+      en: "What is the output of this code?"
+    choices:
+      - { text: "A", misconception: elif-vs-if }
+      - { text: "A\nB\nC", misconception: elif-chain }
+      - { text: "A\nB", misconception: elif-chain }
+      - { text: "A\nC", correct: true }
+    explanation:
+      vi: "Dòng 2 đến dòng 5 là 1 chuỗi if, elif: 20 > 10 là True, nên Python in ra A và bỏ qua elif. Dòng 6 là 1 lệnh if mới, riêng với chuỗi trên, nên Python vẫn kiểm tra nó: 20 > 15 là True, nên in ra C."
+      en: "Lines 2 to 5 are 1 if, elif chain: 20 > 10 is True, so Python prints A and skips the elif. Line 6 is a new if statement, separate from the chain above, so Python still checks it: 20 > 15 is True, so it prints C."
+
+  - id: s3.elif.b12
+    type: mcq
+    concepts: [elif-vs-if]
+    lessons: [s3.elif.l4]
+    code: |
+      if n >= 8:
+          print("A")
+      if n >= 5:
+          print("B")
+      if n < 5:
+          print("C")
+    prompt:
+      vi: "Với n bằng 9, đoạn code in ra 2 dòng A và B. Con muốn với mọi số n, đoạn code chỉ in ra đúng 1 dòng. Con nên sửa thế nào?"
+      en: "With n equal to 9, the code prints 2 lines, A and B. You want the code to print exactly 1 line for every number n. How should you fix it?"
+    choices:
+      - { vi: "Thêm 1 nhánh else vào cuối", en: "Add an else branch at the end", misconception: elif-vs-if }
+      - { vi: "Đổi chỗ 2 lệnh if đầu tiên cho nhau", en: "Swap the first 2 if statements", misconception: condition-order }
+      - { vi: "Đổi chữ if ở dòng 3 và dòng 5 thành elif", en: "Change the word if on lines 3 and 5 to elif", correct: true }
+      - { vi: "Đổi dấu >= thành dấu > ở dòng 1 và dòng 3", en: "Change >= to > on lines 1 and 3", misconception: boundary-check }
+    explanation:
+      vi: "3 lệnh if riêng đều được kiểm tra, nên với n bằng 9, cả n >= 8 và n >= 5 đều đúng. Đổi 2 lệnh if sau thành elif thì cả 3 thành 1 chuỗi, và chỉ 1 nhánh chạy: 9 ra A, 6 ra B, 3 ra C. Thêm else, đổi chỗ hay đổi dấu thì vẫn là các lệnh if riêng, nên n bằng 9 vẫn in ra từ 2 dòng trở lên."
+      en: "The 3 separate if statements are all checked, so with n equal to 9, both n >= 8 and n >= 5 are True. Changing the last 2 ifs to elif makes all 3 into 1 chain, and only 1 branch runs: 9 gives A, 6 gives B, and 3 gives C. Adding an else, swapping or changing the signs still leaves separate if statements, so n equal to 9 still prints 2 lines or more."
+
+  - id: s3.elif.b13
+    type: mcq
+    concepts: [elif-vs-if, elif-chain]
+    lessons: [s3.elif.l4]
+    prompt:
+      vi: "Câu nào nói đúng?"
+      en: "Which sentence is true?"
+    choices:
+      - { vi: "Với nhiều lệnh if riêng, Python kiểm tra từng lệnh, nên nhiều khối có thể cùng chạy", en: "With several separate if statements, Python checks each one, so several blocks can run", correct: true }
+      - { vi: "Với nhiều lệnh if riêng, Python chỉ chạy khối của điều kiện đúng đầu tiên", en: "With several separate if statements, Python runs only the block of the first True condition", misconception: elif-vs-if }
+      - { vi: "Đổi elif thành if thì chương trình luôn cho cùng kết quả", en: "Changing elif to if always gives the same result", misconception: elif-vs-if }
+      - { vi: "Trong 1 chuỗi if, elif, else, mọi nhánh có điều kiện đúng đều chạy", en: "In an if, elif, else chain, every branch with a True condition runs", misconception: elif-chain }
+    explanation:
+      vi: "Mỗi lệnh if riêng là 1 câu hỏi riêng, nên Python kiểm tra hết, và mọi khối có điều kiện đúng đều chạy. Trong 1 chuỗi if, elif, else thì khác: chỉ nhánh của điều kiện đúng đầu tiên chạy. Vì vậy, đổi elif thành if có thể làm chương trình in ra nhiều dòng hơn."
+      en: "Each separate if statement is a separate question, so Python checks them all, and every block with a True condition runs. An if, elif, else chain is different: only the branch of the first True condition runs. So changing elif to if can make the program print more lines."

@@ -1,0 +1,10 @@
+id: s3.elif
+title: { vi: "Nhiều nhánh với elif", en: "Many branches with elif" }
+lessons:
+  - 01-elif.md
+  - 02-thu-tu-dieu-kien.md
+  - 03-xep-loai.md
+  - 04-elif-hay-if.md
+reviews:
+  - { id: s3.elif.r1, after: s3.elif.l2 }
+  - { id: s3.elif.r2, after: s3.elif.l4 }
