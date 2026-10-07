@@ -15,28 +15,28 @@ Cập nhật lần cuối: 2026-10-07.
 | M5a | Nội dung giai đoạn 1 (4 chủ đề, 19 bài, kể cả bài "AI là gì?"), điểm kiểm tra trong `[0, max]`, xáo thứ tự lựa chọn theo câu hỏi | Xong, đã merge vào `main` và push (2026-10-07). Phụ huynh chưa duyệt lời văn (`docs/superpowers/content-stage-1.md`) |
 | M5b | Nội dung giai đoạn 2 "Dữ liệu" (5 chủ đề, 25 bài), nhận ra lỗi dùng biến trước khi gán, không ghi hiểu lầm của giai đoạn chưa tới | Xong, đã merge vào `main` và push (2026-10-07). Phụ huynh chưa duyệt lời văn (`docs/superpowers/content-stage-2.md`) |
 | M5c | Nội dung giai đoạn 3 "Rẽ nhánh" (5 chủ đề, 22 bài), nhận ra dấu `=` trong điều kiện | Xong, đã merge vào `main` và push (2026-10-07). Phụ huynh chưa duyệt lời văn (`docs/superpowers/content-stage-3.md`) |
-| M5d | Nội dung giai đoạn 4 "Vòng lặp", luật 8 và 9 thành lỗi | **Việc tiếp theo** |
-| M6 | Hình robot 4 dạng, hoạt cảnh | Chưa làm |
+| M5d | Nội dung giai đoạn 4 "Vòng lặp" (5 chủ đề, 28 bài), luật 8 và 9 của spec 3.9 thành lỗi khi build nội dung, nhận ra `+=` khi biến chưa được gán | Xong, đã merge vào `main` và push (2026-10-07). Phụ huynh chưa duyệt lời văn (`docs/superpowers/content-stage-4.md`) |
+| M6 | M6a: hình robot 4 dạng, phụ kiện, cảnh phòng, hoạt cảnh tiến hóa. M6b: CI/CD, lint, phần còn thiếu của spec 10 | **Việc tiếp theo** (M6a) |
 
 Tài liệu:
 
 - Spec (bắt buộc tuân theo): `docs/superpowers/specs/2026-10-06-py-pet-design.md`
-- Kế hoạch đã chạy: `docs/superpowers/plans/2026-10-06-m1-lat-cat-doc.md`, `docs/superpowers/plans/2026-10-06-m2-vong-choi-pet.md`, `docs/superpowers/plans/2026-10-06-m3a-on-tap-thanh-thao.md`, `docs/superpowers/plans/2026-10-06-m3b-kiem-tra-tien-hoa.md`, `docs/superpowers/plans/2026-10-06-m4a-cua-hang-nghi.md`, `docs/superpowers/plans/2026-10-06-m4b-khu-phu-huynh.md`, `docs/superpowers/plans/2026-10-06-m5a-noi-dung-giai-doan-1.md`, `docs/superpowers/plans/2026-10-07-m5b-noi-dung-giai-doan-2.md`, `docs/superpowers/plans/2026-10-07-m5c-noi-dung-giai-doan-3.md`
-- Sổ ghi (ledger) của từng mốc, gồm mọi phán quyết và finding nhỏ đã hoãn: `docs/superpowers/ledgers/m1-sdd-ledger.md`, `docs/superpowers/ledgers/m2-sdd-ledger.md`, `docs/superpowers/ledgers/m3a-sdd-ledger.md`, `docs/superpowers/ledgers/m3b-sdd-ledger.md`, `docs/superpowers/ledgers/m4a-sdd-ledger.md`, `docs/superpowers/ledgers/m4b-sdd-ledger.md`, `docs/superpowers/ledgers/m5a-sdd-ledger.md`, `docs/superpowers/ledgers/m5b-sdd-ledger.md`, `docs/superpowers/ledgers/m5c-sdd-ledger.md`
+- Kế hoạch đã chạy: `docs/superpowers/plans/2026-10-06-m1-lat-cat-doc.md`, `docs/superpowers/plans/2026-10-06-m2-vong-choi-pet.md`, `docs/superpowers/plans/2026-10-06-m3a-on-tap-thanh-thao.md`, `docs/superpowers/plans/2026-10-06-m3b-kiem-tra-tien-hoa.md`, `docs/superpowers/plans/2026-10-06-m4a-cua-hang-nghi.md`, `docs/superpowers/plans/2026-10-06-m4b-khu-phu-huynh.md`, `docs/superpowers/plans/2026-10-06-m5a-noi-dung-giai-doan-1.md`, `docs/superpowers/plans/2026-10-07-m5b-noi-dung-giai-doan-2.md`, `docs/superpowers/plans/2026-10-07-m5c-noi-dung-giai-doan-3.md`, `docs/superpowers/plans/2026-10-07-m5d-noi-dung-giai-doan-4.md`
+- Sổ ghi (ledger) của từng mốc, gồm mọi phán quyết và finding nhỏ đã hoãn: `docs/superpowers/ledgers/m1-sdd-ledger.md`, `docs/superpowers/ledgers/m2-sdd-ledger.md`, `docs/superpowers/ledgers/m3a-sdd-ledger.md`, `docs/superpowers/ledgers/m3b-sdd-ledger.md`, `docs/superpowers/ledgers/m4a-sdd-ledger.md`, `docs/superpowers/ledgers/m4b-sdd-ledger.md`, `docs/superpowers/ledgers/m5a-sdd-ledger.md`, `docs/superpowers/ledgers/m5b-sdd-ledger.md`, `docs/superpowers/ledgers/m5c-sdd-ledger.md`, `docs/superpowers/ledgers/m5d-sdd-ledger.md`
 - Quyết định Claude tự chốt khi chạy liên tục các mốc, cần người bảo trì xem lại: `docs/superpowers/DECISIONS.md`
 
 ## Quyết định của người bảo trì ở M3a
 
-- M3 chia làm M3a và M3b. Test và e2e dùng bộ nội dung mẫu; luật 8 của spec 3.9 chỉ cảnh báo tới M5.
+- M3 chia làm M3a và M3b. Test và e2e dùng bộ nội dung mẫu; luật 8 của spec 3.9 chỉ cảnh báo tới M5 (từ M5d là lỗi).
 - Vui chỉ tăng khi con trả lời đúng (3 câu đúng liên tiếp, kể cả trong trạm ôn); lượt sạc không tự cộng Vui.
 - Ôn tập tự do không giới hạn mỗi ngày (mỗi lượt có XP, Pin +2, 1 điểm hoạt động, không có xu).
 
 ## Quyết định của người bảo trì ở M3b
 
-- Kiểm tra chủ đề gồm 8 câu và 2 bài code. Đề tiến hóa rút theo số câu đang có (luật 9 chỉ cảnh báo tới M5). Khi tiến hóa chỉ cần màn hình chúc mừng đơn giản.
+- Kiểm tra chủ đề gồm 8 câu và 2 bài code. Đề tiến hóa rút theo số câu đang có (luật 9 chỉ cảnh báo tới M5; từ M5d là lỗi). Khi tiến hóa chỉ cần màn hình chúc mừng đơn giản.
 - Ngày 2026-10-06 người bảo trì yêu cầu chạy liên tục: implement M3b, push, rồi lần lượt plan và implement M4, M5, M6, merge vào `main` theo từng mốc, ghi các quyết định cần xem lại vào `docs/superpowers/DECISIONS.md`.
 
-## Việc chuyển sang M5d và sau đó
+## Việc chuyển sang M6 và sau đó
 
 1. Robot có thể nhỏ lại 1 cỡ sau khi cập nhật lên M3a và M3b: tổng XP tối đa của giai đoạn 1 tăng (trạm ôn +30, kiểm tra chủ đề +30). Sau khi tiến hóa, thanh "Lớn lên" bắt đầu lại từ 0 và robot về cỡ nhỏ nhất cho tới khi M6 có hình theo dạng tiến hóa.
 2. Khi xuất file mà đọc kho lỗi, file chỉ chứa hồ sơ đang dùng. Xử lý khi có giao diện nhiều hồ sơ.
@@ -44,7 +44,9 @@ Tài liệu:
 4. E2E luồng "thi tiến hóa chưa đạt → ôn trọng tâm → thi lại đạt" (spec 11 mục 5) đang được kiểm tra bằng test tích hợp jsdom; đi hết 19 bài của giai đoạn 1 trong Playwright quá chậm cho `npm run check` (DECISIONS M5a mục 6).
 5. Khu phụ huynh (M4b), để bản sau: thẻ "Con cần hỗ trợ" chưa hiện nội dung hiểu lầm hay gặp và chưa có đầu ra so với đầu ra mong đợi; tab Tiến độ chưa có thời gian học và ngôn ngữ câu hỏi từng bài, và đang hiện ID bài tập thay cho tên. Xem `DECISIONS.md` mục M4b.
 
-6. M5d: lời giải thích của `missing-colon` và các mục thụt lề phải nói cả `for`/`while`; tag `if-colon` sẽ bắt cả dòng `for`/`while`; dòng `else điều kiện:` nên được dẫn tới khái niệm `else-branch` (cần check). Giới hạn đã biết: check `assign-in-if` chỉ xem phần đầu dòng trước dấu `:`.
+6. Bài luyện của 1 chủ đề mở hết khi con xong 1 bài học bất kỳ của chủ đề (`src/game/reviewSet.ts`), nên nội dung phải giữ bài luyện mức 3 trong danh sách của khái niệm đã dạy kiến thức nó cần (DECISIONS M5d mục 7). Sửa ở app: mở bài luyện theo bài học đã xong.
+7. Bài "viết lại bằng while" và các bài yêu cầu `break`, `continue`, `+=` chỉ được chấm theo đầu ra; chưa có kiểu kiểm tra "phải dùng" 1 cú pháp (DECISIONS M5d mục 6).
+8. Số thực trong `range(n / 2)` hay `"*" * (n / 2)` chỉ nhận lời giải thích chung `type-other`; có thể thêm mục gợi ý dùng `//`.
 
 Các finding nhỏ khác đã hoãn nằm trong các file ledger (tìm dòng `minor (deferred)` và `parked`).
 
@@ -54,4 +56,4 @@ Các finding nhỏ khác đã hoãn nằm trong các file ledger (tìm dòng `mi
 - npm 12 chặn script cài đặt của esbuild/fsevents và in cảnh báo; cảnh báo này vô hại.
 - Cài lần đầu: xem `README.md` mục "Cài đặt lần đầu".
 - Phiên cloud (kiểm tra 2026-10-06): Node 22.22.0, npm 10.9.4, Python 3.13. npm in cảnh báo `EBADENGINE` (jsdom 30 cần Node 22.22.2 trở lên) nhưng `npm run check` vẫn xanh. Hook SessionStart tự cài môi trường; e2e dùng Chromium có sẵn qua `PW_CHROMIUM_PATH` (xem `CLAUDE.md`).
-- `npm run check` phải xanh trước mọi merge: typecheck, Vitest (1109 test sau M5c; số test tăng theo số mục nội dung), pytest (21), kiểm tra nội dung, Playwright e2e (14).
+- `npm run check` phải xanh trước mọi merge: typecheck, Vitest (1309 test sau M5d; số test tăng theo số mục nội dung), pytest (21), kiểm tra nội dung, Playwright e2e (14).
