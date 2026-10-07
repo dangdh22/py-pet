@@ -1,0 +1,271 @@
+questions:
+  - id: s3.bai-toan.b1
+    type: mcq
+    concepts: [divisible-check]
+    lessons: [s3.bai-toan.l1]
+    prompt:
+      vi: "Điều kiện nào là True khi n không chia hết cho 3, và False khi n chia hết cho 3?"
+      en: "Which condition is True when n cannot be divided by 3, and False when n can be divided by 3?"
+    choices:
+      - { text: "n % 3 == 1", misconception: divisible-check }
+      - { text: "n % 3 != 0", correct: true }
+      - { text: "n % 3 == 2", misconception: divisible-check }
+      - { text: "n / 3 != 0", misconception: modulo }
+    explanation:
+      vi: "Khi n không chia hết cho 3, số dư có thể là 1 hoặc 2: 7 % 3 là 1, còn 8 % 3 là 2. Vì vậy n % 3 == 1 sai với số 8, còn n % 3 == 2 sai với số 7. n % 3 != 0 đúng với cả 2 trường hợp. n / 3 là kết quả của phép chia, không phải số dư: 9 / 3 là 3.0, khác 0, dù 9 chia hết cho 3."
+      en: "When n cannot be divided by 3, the remainder can be 1 or 2: 7 % 3 is 1, and 8 % 3 is 2. So n % 3 == 1 is wrong for the number 8, and n % 3 == 2 is wrong for the number 7. n % 3 != 0 is right in both cases. n / 3 is the result of the division, not the remainder: 9 / 3 is 3.0, which is not 0, even though 9 can be divided by 3."
+
+  - id: s3.bai-toan.b2
+    type: predict
+    concepts: [divisible-check, elif-chain]
+    lessons: [s3.bai-toan.l1]
+    code: |
+      n = 30
+      if n % 4 == 0:
+          print("A")
+      elif n % 5 == 0:
+          print("B")
+      elif n % 3 == 0:
+          print("C")
+      else:
+          print("D")
+    prompt:
+      vi: "Đoạn code in ra gì?"
+      en: "What is the output of this code?"
+    choices:
+      - { text: "A", misconception: divisible-check }
+      - { text: "B\nC", misconception: elif-chain }
+      - { text: "D", misconception: divisible-check }
+      - { text: "B", correct: true }
+    explanation:
+      vi: "30 chia 4 được 7, còn dư 2, nên n % 4 == 0 là False. 30 % 5 là 0, nên điều kiện thứ hai là True và Python in ra B. 30 cũng chia hết cho 3, nhưng trong 1 chuỗi if, elif, else, Python dừng ở điều kiện đúng đầu tiên, nên không in ra C."
+      en: "30 divided by 4 is 7 with a remainder of 2, so n % 4 == 0 is False. 30 % 5 is 0, so the second condition is True and Python prints B. 30 can also be divided by 3, but in an if, elif, else chain Python stops at the first True condition, so it does not print C."
+
+  - id: s3.bai-toan.b3
+    type: predict
+    concepts: [divisible-check]
+    lessons: [s3.bai-toan.l1]
+    code: |
+      n = 18
+      print(n % 2 == 0 and n % 3 == 0)
+      print(n % 4 == 0)
+    prompt:
+      vi: "Đoạn code in ra gì?"
+      en: "What is the output of this code?"
+    choices:
+      - { text: "True\nFalse", correct: true }
+      - { text: "True\nTrue", misconception: divisible-check }
+      - { text: "False\nFalse", misconception: and-both }
+      - { text: "0\n2", misconception: divisible-check }
+    explanation:
+      vi: "18 % 2 là 0 và 18 % 3 là 0, nên cả 2 bên của and đều True, và dòng 2 in ra True. 18 chia 4 được 4, còn dư 2, nên 18 không chia hết cho 4 và dòng 3 in ra False: số chẵn không phải lúc nào cũng chia hết cho 4. print in ra kết quả của phép so sánh, là True hoặc False, không in ra số dư."
+      en: "18 % 2 is 0 and 18 % 3 is 0, so both sides of and are True, and line 2 prints True. 18 divided by 4 is 4 with a remainder of 2, so 18 cannot be divided by 4 and line 3 prints False: an even number cannot always be divided by 4. print shows the result of the comparison, True or False, not the remainder."
+
+  - id: s3.bai-toan.b4
+    type: predict
+    concepts: [max-by-compare, elif-vs-if]
+    lessons: [s3.bai-toan.l2]
+    code: |
+      a = 3
+      b = 8
+      c = 10
+      big = a
+      if b > big:
+          big = b
+      elif c > big:
+          big = c
+      print(big)
+    prompt:
+      vi: "Đoạn code in ra gì?"
+      en: "What is the output of this code?"
+    choices:
+      - { text: "10", misconception: elif-vs-if }
+      - { text: "3", misconception: var-reassign }
+      - { text: "8", correct: true }
+      - { vi: "Báo lỗi, vì biến big được gán ở 2 nhánh khác nhau", en: "An error, because the variable big is assigned in 2 different branches", error: true, misconception: var-reassign }
+    explanation:
+      vi: "8 > 3 là True, nên big đổi thành 8. Dòng so sánh c nằm trong elif của cùng chuỗi, nên Python bỏ qua nó, và big vẫn là 8 dù c là 10. Muốn so sánh mọi số, con dùng 2 lệnh if riêng. Gán 1 biến ở nhiều nhánh khác nhau là bình thường, không gây lỗi."
+      en: "8 > 3 is True, so big changes to 8. The line that compares c is in the elif of the same chain, so Python skips it, and big stays 8 even though c is 10. To compare every number, use 2 separate if statements. Assigning a variable in several branches is normal and causes no error."
+
+  - id: s3.bai-toan.b5
+    type: mcq
+    concepts: [max-by-compare]
+    lessons: [s3.bai-toan.l2]
+    prompt:
+      vi: "Con tìm số lớn nhất của a, b và c bằng biến big cập nhật dần. Sau dòng đầu tiên, con viết 2 lệnh if so sánh big với b và với c. Dòng đầu tiên nên là gì?"
+      en: "You find the largest of a, b and c with a variable big that you update step by step. After the first line, you write 2 if statements that compare big with b and with c. What should the first line be?"
+    choices:
+      - { text: "big = a", correct: true }
+      - { text: "big = 0", misconception: max-by-compare }
+      - { text: "big == a", misconception: eq-vs-assign }
+      - { text: "if a > big:", misconception: var-before-use }
+    explanation:
+      vi: "Lúc bắt đầu, con coi số đầu tiên là lớn nhất: big = a. Sau đó 2 lệnh if so sánh big với b và với c. Với big = 0, số a không được so sánh lần nào, nên chương trình sai khi a là số lớn nhất. Dấu == là so sánh, không gán giá trị cho big. Còn if a > big: dùng big khi big chưa có giá trị, nên Python báo lỗi NameError."
+      en: "At the start, take the first number as the largest: big = a. Then the 2 if statements compare big with b and with c. With big = 0, the number a is never compared, so the program is wrong when a is the largest. The sign == compares and does not give big a value. And if a > big: uses big before it has a value, so Python gives a NameError."
+
+  - id: s3.bai-toan.b6
+    type: predict
+    concepts: [max-by-compare]
+    lessons: [s3.bai-toan.l2]
+    code: |
+      a = 5
+      b = 5
+      c = 3
+      if a >= b and a >= c:
+          print("a")
+      elif b >= c:
+          print("b")
+      else:
+          print("c")
+    prompt:
+      vi: "Đoạn code in ra gì?"
+      en: "What is the output of this code?"
+    choices:
+      - { text: "c", misconception: max-by-compare }
+      - { text: "a", correct: true }
+      - { text: "a\nb", misconception: elif-chain }
+      - { text: "b", misconception: boundary-check }
+    explanation:
+      vi: "5 >= 5 là True, vì dấu >= gồm cả trường hợp bằng nhau, và 5 >= 3 cũng là True. Cả 2 bên của and đều True, nên Python in ra a và bỏ qua các nhánh còn lại. Dù b >= c cũng đúng, chỉ 1 nhánh của chuỗi được chạy."
+      en: "5 >= 5 is True, because >= includes the case where the numbers are equal, and 5 >= 3 is also True. Both sides of and are True, so Python prints a and skips the other branches. Even though b >= c is also True, only 1 branch of the chain runs."
+
+  - id: s3.bai-toan.b7
+    type: mcq
+    concepts: [leap-year-rule]
+    lessons: [s3.bai-toan.l3]
+    prompt:
+      vi: "Vì sao năm 1900 không phải năm nhuận, dù 1900 chia hết cho 4?"
+      en: "Why is 1900 not a leap year, even though 1900 can be divided by 4?"
+    choices:
+      - { vi: "Vì năm nhuận phải chia hết cho 400, mà 1900 không chia hết cho 400", en: "Because a leap year must be divisible by 400, and 1900 is not divisible by 400", misconception: leap-year-rule }
+      - { vi: "Vì 1900 % 4 không bằng 0", en: "Because 1900 % 4 is not 0", misconception: divisible-check }
+      - { vi: "Vì năm có 2 chữ số 0 ở cuối không bao giờ là năm nhuận", en: "Because a year ending in 2 zeros is never a leap year", misconception: leap-year-rule }
+      - { vi: "Vì 1900 chia hết cho 100 mà không chia hết cho 400", en: "Because 1900 is divisible by 100 but not by 400", correct: true }
+    explanation:
+      vi: "Năm chia hết cho 100 mà không chia hết cho 400 là năm thường, và 1900 là 1 năm như vậy. Không phải năm nhuận nào cũng chia hết cho 400: 2024 là năm nhuận, dù 2024 không chia hết cho 400. 1900 % 4 là 0, vì 1900 = 4 * 475. Năm 2000 có 2 chữ số 0 ở cuối, nhưng vẫn là năm nhuận, vì 2000 chia hết cho 400."
+      en: "A year divisible by 100 but not by 400 is a common year, and 1900 is such a year. Not every leap year is divisible by 400: 2024 is a leap year, even though 2024 cannot be divided by 400. 1900 % 4 is 0, because 1900 = 4 * 475. The year 2000 ends in 2 zeros but is still a leap year, because 2000 can be divided by 400."
+
+  - id: s3.bai-toan.b8
+    type: predict
+    concepts: [leap-year-rule]
+    lessons: [s3.bai-toan.l3]
+    code: |
+      year = 2000
+      print(year % 4 == 0 and year % 100 != 0)
+      print(year % 400 == 0)
+    prompt:
+      vi: "Đoạn code in ra gì?"
+      en: "What is the output of this code?"
+    choices:
+      - { text: "True\nTrue", misconception: leap-year-rule }
+      - { text: "False\nFalse", misconception: divisible-check }
+      - { text: "False\nTrue", correct: true }
+      - { text: "True\nFalse", misconception: leap-year-rule }
+    explanation:
+      vi: "2000 chia hết cho 4, nhưng 2000 cũng chia hết cho 100, nên year % 100 != 0 là False, và cả điều kiện có and là False. Dòng 3 in ra True, vì 2000 = 400 * 5. Vì vậy, nếu chỉ dùng điều kiện ở dòng 2, chương trình gọi 2000 là năm thường: con cần thêm or year % 400 == 0."
+      en: "2000 can be divided by 4, but 2000 can also be divided by 100, so year % 100 != 0 is False, and the whole condition with and is False. Line 3 prints True, because 2000 = 400 * 5. So with only the condition on line 2, a program would call 2000 a common year: you need to add or year % 400 == 0."
+
+  - id: s3.bai-toan.b9
+    type: mcq
+    concepts: [leap-year-rule]
+    lessons: [s3.bai-toan.l3]
+    prompt:
+      vi: "Con vừa viết 1 chương trình cho biết 1 năm có phải năm nhuận không. Nên thử chương trình với những năm nào để chắc rằng nó đúng?"
+      en: "You have just written a program that tells whether a year is a leap year. Which years should you try to be sure that it works?"
+    choices:
+      - { text: "2024, 2028, 2032, 2036", misconception: leap-year-rule }
+      - { text: "2024, 2023, 1900, 2000", correct: true }
+      - { text: "2021, 2022, 2023, 2025", misconception: leap-year-rule }
+      - { text: "2024, 2020, 2016, 2023", misconception: leap-year-rule }
+    explanation:
+      vi: "Mỗi năm trong 2024, 2023, 1900 và 2000 kiểm tra 1 phần của quy tắc: chia hết cho 4, không chia hết cho 4, chia hết cho 100 mà không chia hết cho 400, và chia hết cho 400. Các nhóm năm còn lại không có năm chia hết cho 100, nên 1 chương trình chỉ hỏi chia hết cho 4 vẫn qua hết, dù nó sai với năm 1900."
+      en: "Each of 2024, 2023, 1900 and 2000 checks 1 part of the rule: divisible by 4, not divisible by 4, divisible by 100 but not by 400, and divisible by 400. The other groups have no year divisible by 100, so a program that only asks about dividing by 4 would pass them all, even though it is wrong for the year 1900."
+
+  - id: s3.bai-toan.b10
+    type: predict
+    concepts: [leap-year-rule, condition-order]
+    lessons: [s3.bai-toan.l3]
+    code: |
+      year = 2000
+      if year % 100 == 0:
+          print("common")
+      elif year % 400 == 0:
+          print("leap")
+      elif year % 4 == 0:
+          print("leap")
+      else:
+          print("common")
+    prompt:
+      vi: "Đoạn code in ra gì?"
+      en: "What is the output of this code?"
+    choices:
+      - { text: "common", correct: true }
+      - { text: "leap", misconception: condition-order }
+      - { text: "common\nleap", misconception: elif-chain }
+      - { text: "leap\nleap", misconception: elif-chain }
+    explanation:
+      vi: "2000 % 100 là 0, nên điều kiện đầu tiên đã đúng, và Python in ra common rồi dừng. Nhánh hỏi chia hết cho 400 đứng sau, nên không bao giờ được thử với năm 2000. Đoạn code sai vì đặt sai thứ tự: nhánh hỏi 400 phải đứng trước nhánh hỏi 100."
+      en: "2000 % 100 is 0, so the first condition is already True, and Python prints common and stops. The branch that asks about 400 comes later, so it is never tried for the year 2000. The code is wrong because of the order: the branch that asks about 400 must come before the branch that asks about 100."
+
+  - id: s3.bai-toan.b11
+    type: predict
+    concepts: [nested-if]
+    lessons: [s3.bai-toan.l4]
+    code: |
+      x = 7
+      if x > 5:
+          print("big")
+          if x > 8:
+              print("huge")
+      else:
+          print("small")
+    prompt:
+      vi: "Đoạn code in ra gì?"
+      en: "What is the output of this code?"
+    choices:
+      - { text: "big\nsmall", misconception: nested-if }
+      - { text: "small", misconception: nested-if }
+      - { text: "big\nhuge", misconception: nested-if }
+      - { text: "big", correct: true }
+    explanation:
+      vi: "7 > 5 là True, nên Python in ra big rồi hỏi tiếp 7 > 8. Câu này là False, nên Python không in huge. else sát lề trái đi với if bên ngoài, không đi với if bên trong, nên nó không chạy, vì 7 > 5 là True."
+      en: "7 > 5 is True, so Python prints big and then asks 7 > 8. That is False, so Python does not print huge. The else at the left edge belongs to the outer if, not to the inner if, so it does not run, because 7 > 5 is True."
+
+  - id: s3.bai-toan.b12
+    type: mcq
+    concepts: [nested-if]
+    lessons: [s3.bai-toan.l4]
+    prompt:
+      vi: "Khi nào con nên dùng if lồng nhau thay vì 1 lệnh if có and?"
+      en: "When should you use a nested if instead of 1 if statement with and?"
+    choices:
+      - { vi: "Khi chỉ cần biết cả 2 điều kiện có cùng đúng không", en: "When you only need to know whether both conditions are True", misconception: nested-if }
+      - { vi: "Khi khối lệnh cần chạy nếu ít nhất 1 điều kiện đúng", en: "When the block must run if at least 1 condition is True", misconception: or-either }
+      - { vi: "Khi mỗi trường hợp cần 1 câu trả lời riêng, như: chưa đủ tuổi, đủ tuổi nhưng chưa đủ cao, đủ cả tuổi và chiều cao", en: "When each case needs its own answer, like: too young, old enough but not tall enough, both old and tall enough", correct: true }
+      - { vi: "Không bao giờ, vì if lồng nhau luôn báo lỗi IndentationError", en: "Never, because a nested if always gives an IndentationError", misconception: nested-if }
+    explanation:
+      vi: "if lồng nhau hữu ích khi mỗi trường hợp có câu trả lời riêng: if bên trong có else riêng, và if bên ngoài cũng có else riêng. Khi chỉ cần biết cả 2 điều kiện cùng đúng, 1 lệnh if có and gọn hơn. \"Ít nhất 1 điều kiện đúng\" là việc của or. if lồng nhau chạy tốt khi khối bên trong thụt lề 8 dấu cách."
+      en: "A nested if is useful when each case has its own answer: the inner if has its own else, and the outer if has its own else too. When you only need to know that both conditions are True, 1 if statement with and is shorter. \"At least 1 condition is True\" is the job of or. A nested if works fine when the inner block is indented by 8 spaces."
+
+  - id: s3.bai-toan.b13
+    type: predict
+    concepts: [nested-if, divisible-check]
+    lessons: [s3.bai-toan.l4]
+    code: |
+      a = 4
+      if a > 0:
+          if a % 2 == 0:
+              print("even")
+          print("positive")
+      print("end")
+    prompt:
+      vi: "Đoạn code in ra gì?"
+      en: "What is the output of this code?"
+    choices:
+      - { text: "even\nend", misconception: nested-if }
+      - { text: "even\npositive\nend", correct: true }
+      - { text: "positive\nend", misconception: divisible-check }
+      - { text: "even\npositive", misconception: after-block }
+    explanation:
+      vi: "4 > 0 là True, nên Python vào khối của if bên ngoài. 4 % 2 là 0, nên Python in ra even. Dòng print(\"positive\") thụt lề 4 dấu cách, nên nó thuộc khối của if bên ngoài, không thuộc if bên trong, và cũng được chạy. Dòng print(\"end\") sát lề trái nên luôn chạy."
+      en: "4 > 0 is True, so Python enters the block of the outer if. 4 % 2 is 0, so Python prints even. The line print(\"positive\") is indented by 4 spaces, so it belongs to the block of the outer if, not the inner if, and it runs too. The line print(\"end\") is at the left edge, so it always runs."

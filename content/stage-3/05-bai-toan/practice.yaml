@@ -1,0 +1,308 @@
+exercises:
+  - id: s3.bai-toan.p1
+    type: fill
+    concepts: [divisible-check]
+    prompt:
+      vi: "Robo trồng cây thành từng hàng, mỗi hàng 5 cây. Ô Dữ liệu nhập có 1 dòng: số cây. Nếu số cây chia hết cho 5, Robo in ra Trồng đủ các hàng. Nếu không, Robo in ra số cây còn lẻ. Điền vào 2 chỗ trống để in ra như phần Ví dụ."
+      en: "Robo plants trees in rows of 5. The Input data box has 1 line: the number of trees. If the number of trees can be divided by 5, Robo prints Trồng đủ các hàng. If not, Robo prints how many trees are left over. Fill the 2 blanks to print as in the Example."
+    template: |
+      so_cay = int(input())
+      if so_cay ___ 5 == 0:
+          print("Trồng đủ các hàng")
+      else:
+          print("Còn lẻ", so_cay ___ 5, "cây")
+    answers: ["%", "%"]
+    tests:
+      - input: "23"
+        output: "Còn lẻ 3 cây"
+      - input: "20"
+        output: "Trồng đủ các hàng"
+        hidden: true
+      - input: "5"
+        output: "Trồng đủ các hàng"
+        hidden: true
+      - input: "21"
+        output: "Còn lẻ 1 cây"
+        hidden: true
+      - input: "24"
+        output: "Còn lẻ 4 cây"
+        hidden: true
+    hints:
+      - { vi: "Cả 2 chỗ trống đều cần số dư của phép chia cho 5. Chỗ thứ nhất hỏi số dư có bằng 0 không; chỗ thứ hai in ra chính số dư đó.", en: "Both blanks need the remainder of dividing by 5. The first one asks whether the remainder is 0; the second one prints that remainder." }
+      - { vi: "Điền % vào cả 2 chỗ trống.", en: "Fill both blanks with %." }
+
+  - id: s3.bai-toan.p2
+    type: fill
+    concepts: [max-by-compare]
+    prompt:
+      vi: "Con trồng 3 cây đậu, và Robo tìm cây cao nhất. Ô Dữ liệu nhập có 3 dòng: chiều cao của 3 cây, tính bằng cm. Robo dùng biến lon_nhat cập nhật dần. Điền vào 2 chỗ trống để in ra như phần Ví dụ."
+      en: "You grow 3 bean plants, and Robo finds the tallest one. The Input data box has 3 lines: the heights of the 3 plants, in cm. Robo uses a variable lon_nhat that it updates step by step. Fill the 2 blanks to print as in the Example."
+    template: |
+      a = int(input())
+      b = int(input())
+      c = int(input())
+      lon_nhat = a
+      if b ___ lon_nhat:
+          lon_nhat = b
+      if c > lon_nhat:
+          ___ = c
+      print("Cây cao nhất:", lon_nhat, "cm")
+    answers: [">", "lon_nhat"]
+    tests:
+      - input: "12\n18\n15"
+        output: "Cây cao nhất: 18 cm"
+      - input: "20\n5\n9"
+        output: "Cây cao nhất: 20 cm"
+        hidden: true
+      - input: "7\n8\n30"
+        output: "Cây cao nhất: 30 cm"
+        hidden: true
+      - input: "10\n10\n10"
+        output: "Cây cao nhất: 10 cm"
+        hidden: true
+      - input: "4\n9\n9"
+        output: "Cây cao nhất: 9 cm"
+        hidden: true
+    hints:
+      - { vi: "Gặp cây cao hơn lon_nhat thì Robo đổi lon_nhat thành chiều cao của cây đó. Chỗ trống thứ nhất là dấu so sánh \"cao hơn\". Chỗ trống thứ hai là tên biến được gán lại.", en: "When a plant is taller than lon_nhat, Robo changes lon_nhat to that plant's height. The first blank is the comparison sign for \"taller than\". The second blank is the name of the variable that gets a new value." }
+      - { vi: "Điền > vào chỗ trống thứ nhất và lon_nhat vào chỗ trống thứ hai.", en: "Fill the first blank with > and the second blank with lon_nhat." }
+
+  - id: s3.bai-toan.p3
+    type: parsons
+    concepts: [leap-year-rule, condition-order]
+    prompt:
+      vi: "Robo tính số ngày của tháng 2. Ô Dữ liệu nhập có 1 dòng: 1 năm. Robo cất số ngày vào biến so_ngay theo quy tắc năm nhuận đầy đủ, rồi in ra. Sắp xếp các dòng lệnh để in ra như phần Ví dụ."
+      en: "Robo works out the number of days in February. The Input data box has 1 line: a year. Robo stores the number of days in the variable so_ngay using the full leap year rule, then prints it. Put the lines in order to print as in the Example."
+    solution: |
+      nam = int(input())
+      if nam % 400 == 0:
+          so_ngay = 29
+      elif nam % 100 == 0:
+          so_ngay = 28
+      elif nam % 4 == 0:
+          so_ngay = 29
+      else:
+          so_ngay = 28
+      print("Tháng 2 có", so_ngay, "ngày")
+    tests:
+      - input: "2024"
+        output: "Tháng 2 có 29 ngày"
+      - input: "2023"
+        output: "Tháng 2 có 28 ngày"
+        hidden: true
+      - input: "1900"
+        output: "Tháng 2 có 28 ngày"
+        hidden: true
+      - input: "2000"
+        output: "Tháng 2 có 29 ngày"
+        hidden: true
+    hints:
+      - { vi: "Python dừng ở điều kiện đúng đầu tiên, nên các điều kiện xếp theo thứ tự: chia hết cho 400, rồi cho 100, rồi cho 4. Năm chia hết cho 100 mà không chia hết cho 400 có 28 ngày. Lệnh print sát lề trái đứng cuối cùng.", en: "Python stops at the first True condition, so the conditions go in this order: divisible by 400, then by 100, then by 4. A year divisible by 100 but not by 400 has 28 days. The print statement at the left edge comes last." }
+
+  - id: s3.bai-toan.p4
+    type: parsons
+    concepts: [nested-if]
+    prompt:
+      vi: "Robo pha đồ uống cho con. Ô Dữ liệu nhập có 2 dòng: dòng 1 là nhiệt độ, dòng 2 là có nếu con thích đồ ngọt, hoặc không nếu không thích. Từ 25 độ trở lên, con thích đồ ngọt thì Robo pha nước cam, không thích thì Robo rót nước lọc mát. Dưới 25 độ, Robo hâm sữa ấm. Sắp xếp các dòng lệnh để in ra như phần Ví dụ."
+      en: "Robo makes you a drink. The Input data box has 2 lines: line 1 is the temperature, and line 2 is có if you like sweet drinks, or không if you do not. At 25 degrees or more, Robo makes orange juice if you like sweet drinks, and pours cool water if you do not. Below 25 degrees, Robo warms some milk. Put the lines in order to print as in the Example."
+    solution: |
+      nhiet_do = int(input())
+      thich_ngot = input()
+      if nhiet_do >= 25:
+          if thich_ngot == "có":
+              print("Robo pha nước cam")
+          else:
+              print("Robo rót nước lọc mát")
+      else:
+          print("Robo hâm sữa ấm")
+    tests:
+      - input: "30\ncó"
+        output: "Robo pha nước cam"
+      - input: "25\nkhông"
+        output: "Robo rót nước lọc mát"
+        hidden: true
+      - input: "32\nkhông"
+        output: "Robo rót nước lọc mát"
+        hidden: true
+      - input: "24\ncó"
+        output: "Robo hâm sữa ấm"
+        hidden: true
+      - input: "10\nkhông"
+        output: "Robo hâm sữa ấm"
+        hidden: true
+    hints:
+      - { vi: "if hỏi nhiệt độ là if bên ngoài, sát lề trái. if hỏi đồ ngọt thụt lề 4 dấu cách, nằm trong khối của nó. Mỗi else đi với lệnh if thẳng hàng với nó, và lệnh print thụt lề 8 dấu cách thuộc if bên trong.", en: "The if that asks about the temperature is the outer if, at the left edge. The if that asks about sweet drinks is indented by 4 spaces, inside its block. Each else belongs to the if lined up with it, and the print statements indented by 8 spaces belong to the inner if." }
+
+  - id: s3.bai-toan.c1
+    type: code
+    concepts: [divisible-check, condition-order]
+    prompt:
+      vi: "Robo chia các bạn trong lớp thành những nhóm bằng nhau để làm bài tập. Robo thích nhóm 4 bạn nhất. Ô Dữ liệu nhập có 1 dòng: số bạn. Nếu số bạn chia hết cho 4, in ra Chia thành nhóm 4 bạn. Nếu không chia hết cho 4 mà chia hết cho 3, in ra Chia thành nhóm 3 bạn. Nếu không chia hết cho 4, cũng không chia hết cho 3, in ra Cần chia nhóm cách khác. Hãy in ra đúng 1 dòng như phần Ví dụ."
+      en: "Robo splits the children of a class into equal groups for an exercise. Robo likes groups of 4 best. The Input data box has 1 line: the number of children. If it can be divided by 4, print Chia thành nhóm 4 bạn. If it cannot be divided by 4 but can be divided by 3, print Chia thành nhóm 3 bạn. If it can be divided by neither 4 nor 3, print Cần chia nhóm cách khác. Print exactly 1 line as in the Example."
+    starter: |
+      # Viết lệnh của con ở dưới dòng này
+    solution: |
+      so_ban = int(input())
+      if so_ban % 4 == 0:
+          print("Chia thành nhóm 4 bạn")
+      elif so_ban % 3 == 0:
+          print("Chia thành nhóm 3 bạn")
+      else:
+          print("Cần chia nhóm cách khác")
+    tests:
+      - input: "20"
+        output: "Chia thành nhóm 4 bạn"
+      - input: "12"
+        output: "Chia thành nhóm 4 bạn"
+        hidden: true
+      - input: "9"
+        output: "Chia thành nhóm 3 bạn"
+        hidden: true
+      - input: "15"
+        output: "Chia thành nhóm 3 bạn"
+        hidden: true
+      - input: "22"
+        output: "Cần chia nhóm cách khác"
+        hidden: true
+      - input: "23"
+        output: "Cần chia nhóm cách khác"
+        hidden: true
+    common_wrong:
+      - test: 1
+        output: "Chia thành nhóm 3 bạn"
+        misconception: condition-order
+        sample: |
+          so_ban = int(input())
+          if so_ban % 3 == 0:
+              print("Chia thành nhóm 3 bạn")
+          elif so_ban % 4 == 0:
+              print("Chia thành nhóm 4 bạn")
+          else:
+              print("Cần chia nhóm cách khác")
+    hints:
+      - { vi: "Có 3 trường hợp, nên con dùng if, elif và else. Robo thích nhóm 4 bạn hơn, nên điều kiện so_ban % 4 == 0 đứng trước: với 12 bạn, chia nhóm 4 hay nhóm 3 đều được, nhưng Robo chọn nhóm 4.", en: "There are 3 cases, so use if, elif and else. Robo prefers groups of 4, so the condition so_ban % 4 == 0 comes first: with 12 children, groups of 4 or of 3 both work, but Robo picks groups of 4." }
+      - { vi: "Dòng 2 là if so_ban % 4 == 0:, dòng 4 là elif so_ban % 3 == 0:, dòng 6 là else:. Mỗi dòng đó có 1 lệnh print thụt lề ngay bên dưới.", en: "Line 2 is if so_ban % 4 == 0:, line 4 is elif so_ban % 3 == 0:, and line 6 is else:. Each of those lines has 1 indented print statement right under it." }
+    test_eligible: true
+
+  - id: s3.bai-toan.c2
+    type: code
+    concepts: [max-by-compare, elif-vs-if]
+    prompt:
+      vi: "Robo đi mua 1 hộp bút màu. Ba cửa hàng cùng bán loại hộp bút này. Ô Dữ liệu nhập có 3 dòng: giá ở cửa hàng 1, 2 và 3, tính bằng nghìn đồng. Hãy dùng if để tìm giá rẻ nhất, rồi in ra Giá rẻ nhất: và giá đó, như phần Ví dụ. Có thể có 2 hay 3 cửa hàng bán cùng giá."
+      en: "Robo goes to buy a box of colour pencils. Three shops sell this box. The Input data box has 3 lines: the price at shop 1, 2 and 3, in thousands of dong. Use if to find the lowest price, then print Giá rẻ nhất: and that price, as in the Example. 2 or 3 shops may have the same price."
+    starter: |
+      # Viết lệnh của con ở dưới dòng này
+    solution: |
+      gia_1 = int(input())
+      gia_2 = int(input())
+      gia_3 = int(input())
+      re_nhat = gia_1
+      if gia_2 < re_nhat:
+          re_nhat = gia_2
+      if gia_3 < re_nhat:
+          re_nhat = gia_3
+      print("Giá rẻ nhất:", re_nhat)
+    tests:
+      - input: "35\n28\n40"
+        output: "Giá rẻ nhất: 28"
+      - input: "25\n30\n32"
+        output: "Giá rẻ nhất: 25"
+        hidden: true
+      - input: "40\n36\n30"
+        output: "Giá rẻ nhất: 30"
+        hidden: true
+      - input: "30\n30\n45"
+        output: "Giá rẻ nhất: 30"
+        hidden: true
+      - input: "50\n42\n42"
+        output: "Giá rẻ nhất: 42"
+        hidden: true
+      - input: "33\n33\n33"
+        output: "Giá rẻ nhất: 33"
+        hidden: true
+    common_wrong:
+      - test: 2
+        output: "Giá rẻ nhất: 36"
+        misconception: elif-vs-if
+        sample: |
+          gia_1 = int(input())
+          gia_2 = int(input())
+          gia_3 = int(input())
+          re_nhat = gia_1
+          if gia_2 < re_nhat:
+              re_nhat = gia_2
+          elif gia_3 < re_nhat:
+              re_nhat = gia_3
+          print("Giá rẻ nhất:", re_nhat)
+      - test: 0
+        output: "Giá rẻ nhất: 40"
+        misconception: max-by-compare
+        sample: |
+          gia_1 = int(input())
+          gia_2 = int(input())
+          gia_3 = int(input())
+          re_nhat = gia_1
+          if gia_2 > re_nhat:
+              re_nhat = gia_2
+          if gia_3 > re_nhat:
+              re_nhat = gia_3
+          print("Giá rẻ nhất:", re_nhat)
+    hints:
+      - { vi: "Làm giống cách tìm số lớn nhất, nhưng dùng dấu <: lúc đầu re_nhat = gia_1, rồi so sánh re_nhat với 2 giá còn lại; gặp giá rẻ hơn thì đổi re_nhat. Dùng 2 lệnh if riêng, vì giá nào cũng phải được so sánh.", en: "Do it like finding the largest number, but use <: first re_nhat = gia_1, then compare re_nhat with the other 2 prices; when you meet a lower price, change re_nhat. Use 2 separate if statements, because every price must be compared." }
+      - { vi: "Sau 3 dòng đọc dữ liệu, viết re_nhat = gia_1. Tiếp theo là if gia_2 < re_nhat: với dòng re_nhat = gia_2 thụt lề, rồi if gia_3 < re_nhat: với dòng re_nhat = gia_3 thụt lề. Dòng cuối là print(\"Giá rẻ nhất:\", re_nhat).", en: "After the 3 input lines, write re_nhat = gia_1. Next comes if gia_2 < re_nhat: with the line re_nhat = gia_2 indented, then if gia_3 < re_nhat: with the line re_nhat = gia_3 indented. The last line is print(\"Giá rẻ nhất:\", re_nhat)." }
+    test_eligible: true
+
+  - id: s3.bai-toan.c3
+    type: code
+    concepts: [nested-if]
+    prompt:
+      vi: "Rạp xiếc bán vé theo luật: trẻ dưới 6 tuổi được vào miễn phí. Từ 6 tuổi trở lên, bạn có thẻ học sinh mua vé 30 nghìn đồng, bạn không có thẻ mua vé 50 nghìn đồng. Ô Dữ liệu nhập có 2 dòng: dòng 1 là tuổi, dòng 2 là có nếu bạn có thẻ học sinh, hoặc không nếu không có. In ra Miễn phí, Vé 30 nghìn đồng hoặc Vé 50 nghìn đồng. Hãy dùng if lồng nhau để in ra đúng 1 dòng như phần Ví dụ."
+      en: "The circus sells tickets by these rules: children under 6 get in free. From 6 years old, a child with a student card buys a 30 thousand dong ticket, and a child without a card buys a 50 thousand dong ticket. The Input data box has 2 lines: line 1 is the age, and line 2 is có if the child has a student card, or không if not. Print Miễn phí, Vé 30 nghìn đồng or Vé 50 nghìn đồng. Use a nested if to print exactly 1 line as in the Example."
+    starter: |
+      # Viết lệnh của con ở dưới dòng này
+    solution: |
+      tuoi = int(input())
+      co_the = input()
+      if tuoi >= 6:
+          if co_the == "có":
+              print("Vé 30 nghìn đồng")
+          else:
+              print("Vé 50 nghìn đồng")
+      else:
+          print("Miễn phí")
+    tests:
+      - input: "10\ncó"
+        output: "Vé 30 nghìn đồng"
+      - input: "10\nkhông"
+        output: "Vé 50 nghìn đồng"
+        hidden: true
+      - input: "6\ncó"
+        output: "Vé 30 nghìn đồng"
+        hidden: true
+      - input: "6\nkhông"
+        output: "Vé 50 nghìn đồng"
+        hidden: true
+      - input: "5\ncó"
+        output: "Miễn phí"
+        hidden: true
+      - input: "3\nkhông"
+        output: "Miễn phí"
+        hidden: true
+    common_wrong:
+      - test: 2
+        output: "Miễn phí"
+        misconception: boundary-check
+        sample: |
+          tuoi = int(input())
+          co_the = input()
+          if tuoi > 6:
+              if co_the == "có":
+                  print("Vé 30 nghìn đồng")
+              else:
+                  print("Vé 50 nghìn đồng")
+          else:
+              print("Miễn phí")
+    hints:
+      - { vi: "if bên ngoài hỏi tuổi: tuoi >= 6. Bên trong nó, if thứ hai hỏi thẻ học sinh: co_the == \"có\", và có else riêng. else sát lề trái đi với if bên ngoài và in ra Miễn phí.", en: "The outer if asks about the age: tuoi >= 6. Inside it, a second if asks about the student card: co_the == \"có\", with its own else. The else at the left edge belongs to the outer if and prints Miễn phí." }
+      - { vi: "Dòng 3 là if tuoi >= 6:. Thụt lề 4 dấu cách là dòng if co_the == \"có\": và dòng else: của nó, mỗi dòng có 1 lệnh print thụt lề 8 dấu cách bên dưới. Cuối cùng là else: sát lề trái, với print(\"Miễn phí\") thụt lề 4 dấu cách.", en: "Line 3 is if tuoi >= 6:. Indented by 4 spaces come the line if co_the == \"có\": and its line else:, each with 1 print statement indented by 8 spaces under it. Last comes else: at the left edge, with print(\"Miễn phí\") indented by 4 spaces." }
+    test_eligible: true

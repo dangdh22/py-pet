@@ -1,0 +1,41 @@
+concepts:
+  - id: divisible-check
+    name: { vi: "Chia hết: n % k == 0", en: "Divisible: n % k == 0" }
+    misconception_card: |
+      Nhiều bạn nghĩ số không chia hết cho 3 thì luôn dư 1, nên viết `n % 3 == 1` để hỏi "không chia hết cho 3". Thực ra số dư có thể là 1 hoặc 2: `8 % 3` ra 2. Muốn hỏi "chia hết cho k", con viết `n % k == 0`; muốn hỏi "không chia hết cho k", con viết `n % k != 0`.
+    parent_tip: |
+      Khi cả nhà xếp hàng hay xếp ghế, bố mẹ hỏi con: 12 người xếp hàng 3 có vừa đủ không, xếp hàng 5 thì sao? Con trả lời bằng cách tìm số người còn thừa: không thừa ai nghĩa là chia hết.
+    practice:
+      level1: [s3.bai-toan.l1.q1, s3.bai-toan.l1.q2, s3.bai-toan.b1, s3.bai-toan.b2, s3.bai-toan.b3, s3.bai-toan.b13]
+      level2: [s3.bai-toan.p1]
+      level3: [s3.bai-toan.l1.ex1, s3.bai-toan.l1.ex2, s3.bai-toan.c1, s3.bai-toan.l3.ex1]
+  - id: max-by-compare
+    name: { vi: "Tìm số lớn nhất bằng phép so sánh", en: "Finding the largest number by comparing" }
+    misconception_card: |
+      Nhiều bạn tìm số lớn nhất bằng cách hỏi `a > b and a > c`, rồi `b > a and b > c`, và để c cho nhánh else. Cách này sai khi có 2 số bằng nhau: với a = 9, b = 9, c = 5, cả 2 điều kiện đều False, nên chương trình chọn c là 5. Con dùng dấu `>=`, hoặc dùng biến `lon_nhat` cập nhật dần, và luôn thử cả trường hợp các số bằng nhau.
+    parent_tip: |
+      Bố mẹ úp 3 lá bài có số, rồi lật từng lá: con chỉ được giữ 1 lá, và khi thấy lá lớn hơn lá đang giữ thì đổi. Lật hết 3 lá, lá con đang giữ chính là lá lớn nhất.
+    practice:
+      level1: [s3.bai-toan.l2.q1, s3.bai-toan.l2.q2, s3.bai-toan.b4, s3.bai-toan.b5, s3.bai-toan.b6]
+      level2: [s3.bai-toan.p2]
+      level3: [s3.bai-toan.l2.ex1, s3.bai-toan.l2.ex2, s3.bai-toan.c2]
+  - id: leap-year-rule
+    name: { vi: "Quy tắc năm nhuận", en: "The leap year rule" }
+    misconception_card: |
+      Nhiều bạn nghĩ năm nào chia hết cho 4 cũng là năm nhuận. Thực ra năm chia hết cho 100 là năm thường, như năm 1900, trừ khi năm đó chia hết cho 400, như năm 2000. Viết thành 1 điều kiện: `(nam % 4 == 0 and nam % 100 != 0) or nam % 400 == 0`.
+    parent_tip: |
+      Bố mẹ cùng con xem tờ lịch tháng 2 của năm 2024 và năm 2025, rồi đếm xem tháng 2 mỗi năm có 28 hay 29 ngày. Hỏi con năm sinh của ông bà có phải năm nhuận không, và cùng kiểm tra bằng quy tắc chia hết.
+    practice:
+      level1: [s3.bai-toan.l3.q1, s3.bai-toan.l3.q2, s3.bai-toan.b7, s3.bai-toan.b8, s3.bai-toan.b9, s3.bai-toan.b10]
+      level2: [s3.bai-toan.p3]
+      level3: [s3.bai-toan.l3.ex1, s3.bai-toan.l3.ex2]
+  - id: nested-if
+    name: { vi: "if lồng nhau và thụt lề 8 dấu cách", en: "Nested if and 8-space indentation" }
+    misconception_card: |
+      Nhiều bạn nghĩ khi điều kiện của if bên trong sai, Python sẽ chạy else của if bên ngoài. Thực ra mỗi else đi với lệnh if thẳng hàng với nó: else thụt lề 4 dấu cách đi với `if` bên trong, còn else sát lề trái đi với `if` bên ngoài. Vì vậy, với `if tuoi >= 10:` và bên trong là `if cao >= 130:`, else thụt lề 4 dấu cách chạy khi đủ tuổi mà chưa đủ cao; các dòng trong khối của if bên trong thụt lề 8 dấu cách.
+    parent_tip: |
+      Bố mẹ hỏi con 2 bước: "Con làm xong bài chưa?", và chỉ khi con trả lời "xong rồi" mới hỏi tiếp "Con muốn đọc truyện hay vẽ tranh?". Câu hỏi thứ hai nằm bên trong câu hỏi thứ nhất, giống if bên trong if.
+    practice:
+      level1: [s3.bai-toan.l4.q1, s3.bai-toan.l4.q2, s3.bai-toan.b11, s3.bai-toan.b12, s3.bai-toan.b13]
+      level2: [s3.bai-toan.p4]
+      level3: [s3.bai-toan.l4.ex1, s3.bai-toan.l4.ex2, s3.bai-toan.c3]

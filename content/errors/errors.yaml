@@ -28,8 +28,8 @@
   match: { type: IndentationError, message: "^expected an indented block after .+ on line (?<header>\\d+)$" }
   misconception: indent-block
   explain:
-    vi: "Dòng {line}: dòng này phải thụt lề vào 4 dấu cách, vì nó nằm trong khối lệnh của dòng {header}."
-    en: "Line {line}: indent this line by 4 spaces. It is inside the block of line {header}."
+    vi: "Dòng {line}: dòng này phải thụt lề thêm 4 dấu cách so với dòng {header}, vì nó nằm trong khối lệnh của dòng {header}."
+    en: "Line {line}: indent this line 4 spaces more than line {header}. It is inside the block of line {header}."
   sample: "if True:\nprint(1)"
 
 - id: indent-unexpected

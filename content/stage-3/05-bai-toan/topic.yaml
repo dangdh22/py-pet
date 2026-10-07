@@ -1,0 +1,10 @@
+id: s3.bai-toan
+title: { vi: "Bài toán điều kiện", en: "Problems with conditions" }
+lessons:
+  - 01-chan-le.md
+  - 02-so-lon-nhat.md
+  - 03-nam-nhuan.md
+  - 04-if-long-nhau.md
+reviews:
+  - { id: s3.bai-toan.r1, after: s3.bai-toan.l2 }
+  - { id: s3.bai-toan.r2, after: s3.bai-toan.l4 }
