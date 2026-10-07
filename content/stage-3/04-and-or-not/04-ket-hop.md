@@ -122,7 +122,7 @@ exercises:
       - { text: "n < 10 or n > 20", correct: true }
       - { text: "n < 10 and n > 20", misconception: and-both }
       - { text: "10 <= n <= 20", misconception: chained-compare }
-      - { text: "n < 10 or > 20", misconception: or-misuse }
+      - { text: "n < 10 or > 20", misconception: chained-compare }
     explanation:
       vi: "\"Nhỏ hơn 10 hoặc lớn hơn 20\" là n < 10 or n > 20. Với and, điều kiện không bao giờ đúng, vì không số nào vừa nhỏ hơn 10 vừa lớn hơn 20. 10 <= n <= 20 hỏi điều ngược lại: n nằm trong khoảng. Còn n < 10 or > 20 thiếu tên biến ở bên phải or, nên Python báo lỗi SyntaxError."
       en: "\"Less than 10 or greater than 20\" is n < 10 or n > 20. With and, the condition is never True, because no number is both less than 10 and greater than 20. 10 <= n <= 20 asks the opposite: n is inside the range. And n < 10 or > 20 has no variable name on the right of or, so Python gives a SyntaxError."
@@ -147,7 +147,7 @@ print(20 <= nhiet_do <= 30)
 print(20 < nhiet_do < 30)
 ```
 
-Lệnh print đầu tiên in ra True, vì dấu <= gồm cả số 30. Lệnh print thứ hai in ra False, vì dấu < không gồm 2 số ở đầu khoảng. Con nhớ viết số nhỏ bên trái, số lớn bên phải: `30 <= nhiet_do <= 20` không bao giờ đúng.
+Lệnh print đầu tiên in ra True, vì dấu <= gồm cả số 30. Lệnh print thứ hai in ra False, vì dấu < không gồm số ở 2 đầu khoảng. Con nhớ viết số nhỏ bên trái, số lớn bên phải: `30 <= nhiet_do <= 20` không bao giờ đúng.
 ---
 Muốn hỏi nhiệt độ **nằm ngoài** khoảng từ 20 đến 30, con dùng or: nhỏ hơn 20 hoặc lớn hơn 30. Con cũng có thể đặt not trước khoảng giá trị:
 
