@@ -9,7 +9,7 @@ export const vi = {
   "browser.unsupportedAdvice": "Con nhờ bố mẹ mở Py-Pet bằng Chrome hoặc Edge bản mới nhé.",
   "runner.loading": "Robo đang khởi động...",
   "runner.ready": "Robo sẵn sàng",
-  "runner.failed": "Robo đang gặp trục trặc khi chạy Python",
+  "runner.failed": "Robo chưa khởi động được",
   "runner.retry": "Thử lại",
   "runner.reloadHint": "Nếu vẫn lỗi, con tải lại trang nhé.",
   "lesson.cardOf": "Thẻ {current}/{total}",
