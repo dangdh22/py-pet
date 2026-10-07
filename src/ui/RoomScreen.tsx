@@ -9,10 +9,10 @@ import {
   stageXpMax,
   todayPoints,
   weekLessons,
-  type GrowthSize,
   type PetCondition,
 } from "../game/progress";
 import { weekStart } from "../game/dates";
+import { formOf, robotPixelSize } from "../game/look";
 import { SHOP_ITEMS } from "../game/shop";
 import { STAT_MAX } from "../game/state";
 import { weekTarget } from "../game/vacation";
@@ -22,8 +22,6 @@ import { useGame } from "./GameProvider";
 import { itemKey } from "./names";
 import { Robot, type RobotMood } from "./Robot";
 import { routeToHash, stepRoute } from "./routing";
-
-export const ROBOT_SIZES: Record<GrowthSize, number> = { 1: 96, 2: 128, 3: 160 };
 
 export const CONDITION_MOOD: Record<PetCondition | "vacation", RobotMood> = {
   happy: "happy",
@@ -57,7 +55,7 @@ export function RoomScreen() {
       <h1>{t("room.title", { name: profile.robotName })}</h1>
       <p>{t("room.greeting", { child: profile.childName })}</p>
       <div className={`room-scene condition-${condition}`}>
-        <Robot mood={CONDITION_MOOD[condition]} size={ROBOT_SIZES[growthSize(xp, max)]} />
+        <Robot mood={CONDITION_MOOD[condition]} size={robotPixelSize(formOf(state.pet.stage), growthSize(xp, max))} />
         <p className="pet-says">{t(message, { name: profile.robotName })}</p>
         {state.inventory.equipped.length > 0 && (
           <p className="room-wearing">{t("room.wearing", { items: names(state.inventory.equipped) })}</p>

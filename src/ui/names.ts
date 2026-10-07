@@ -10,8 +10,8 @@ export function badgeKey(id: BadgeId): MessageKey {
   return `badge.${id}` as MessageKey;
 }
 
-/** The robot forms of the achievement book (spec 8.4), 1 per stage. */
-export const FORM_COUNT = 4;
+/** The robot forms of the achievement book (spec 8.4), 1 per stage: the count lives with the look rules. */
+export { FORM_COUNT } from "../game/look";
 
 export function formKey(stage: number): MessageKey {
   return `form.${stage}` as MessageKey;

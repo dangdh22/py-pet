@@ -47,7 +47,7 @@ describe("RoomScreen", () => {
     state.progress.completedLessons = ["t.l1", "t.l2"];
     await renderWithGame(<RoomScreen />, { state });
     expect(screen.getByRole("img", { name: "Robo" })).toHaveAttribute("data-mood", "drained");
-    expect(screen.getByRole("img", { name: "Robo" })).toHaveAttribute("width", "160");
+    expect(screen.getByRole("img", { name: "Robo" })).toHaveAttribute("width", "112");
     expect(screen.getByText("Robo hết pin rồi. Con làm 1 trạm ôn để sạc cho Robo nhé!")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Sạc cho Robo" })).toHaveAttribute("href", "#/review");
     expect(screen.getByText("Lớn lên: 79%")).toBeInTheDocument();
