@@ -110,3 +110,14 @@ Người bảo trì chưa duyệt kế hoạch M5d; Claude tự chốt theo yêu
 5. **`+=` được dạy ở bài 1 chủ đề "Tổng, đếm, lớn nhất"**; 2 chủ đề trước dùng `dem = dem + 1`. Khi con viết `tong += i` mà quên `tong = 0`, app cho lời khuyên "gán trước khi dùng" (sửa nhỏ trong `isAssignedInCode`), không khuyên đặt tên trong dấu ngoặc kép.
 6. **Bài viết lại chương trình for bằng while chỉ chấm theo kết quả in ra**, nên lời giải dùng for vẫn qua. Chưa có kiểu kiểm tra "phải dùng while"; xem lại nếu cần ở bản sau.
 7. **Bài luyện mức 3 chỉ dùng kiến thức đã học trong chủ đề tới lúc đó, ở mức có thể.** App mở mọi bài luyện của 1 chủ đề khi con xong 1 bài học bất kỳ của chủ đề; vì vậy 3 bài cần kiến thức của bài học sau (`s4.chu-so.c5`, `s4.for-range.c2`, `s4.long-nhau.c4`) chỉ nằm trong danh sách của khái niệm dạy kiến thức đó. Sửa ở app (mở bài luyện theo bài học đã xong) để bản sau.
+
+## M6a
+
+Người bảo trì chưa duyệt kế hoạch M6a; Claude tự chốt theo yêu cầu chạy liên tục. Chi tiết trong mục "Quyết định thiết kế" của `docs/superpowers/plans/2026-10-07-m6a-hinh-robot.md`.
+
+1. **M6 chia làm M6a** (hình robot, phụ kiện, cảnh phòng, hoạt cảnh tiến hóa) **và M6b** (CI/CD, lint, phần còn thiếu của spec 10, việc chuyển của khu phụ huynh).
+2. **Dạng = `min(pet.stage, 4)`**: đạt kiểm tra tiến hóa giai đoạn 4 vẫn là Thiếu niên, thêm ngôi sao trên màn hình ngực.
+3. **Linh kiện theo dạng**: Sơ sinh thêm ăng-ten, Bé con thêm tay, Thiếu niên thêm màn hình ngực.
+4. **Cỡ tăng đơn điệu theo dạng và cỡ** (96 đến 184 điểm ảnh), nên Robo không nhỏ đi sau khi tiến hóa.
+5. **Khi đi nghỉ, kính râm của trạng thái thay phụ kiện ở mặt**; ở bãi biển không hiện đồ trang trí.
+6. **Trang `#/gallery` chỉ có ở bản dev** để xem mọi tổ hợp hình.
