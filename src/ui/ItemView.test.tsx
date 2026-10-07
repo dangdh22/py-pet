@@ -2,7 +2,7 @@
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, test, vi } from "vitest";
-import { fixtureCodeExercise } from "../test/fixtures";
+import { fixtureCodeExercise, fixtureQuestion } from "../test/fixtures";
 import { fakeRunner, okResult } from "../test/render";
 import { initialGameState } from "../game/state";
 import { renderWithGame, TODAY } from "../test/renderGame";
@@ -190,6 +190,22 @@ describe("ItemView", () => {
       await userEvent.click(await screen.findByRole("button", { name: "Xem thẻ Hiểu lầm thường gặp" }));
       expect(screen.getByRole("region", { name: "Hiểu lầm thường gặp" })).toHaveTextContent("Khái niệm c2");
       expect(onMisconception.mock.calls).toEqual([["c2"]]);
+    });
+
+    test("a choice tagged with a concept of a later stage is not recorded for a stage 1 child", async () => {
+      const question = {
+        ...fixtureQuestion,
+        choices: [
+          { text: { vi: "A", en: "A" }, correct: true, error: false, misconception: null },
+          { text: { vi: "Sai", en: "Wrong" }, correct: false, error: false, misconception: "later" },
+        ],
+      };
+      const state = initialGameState(TODAY);
+      const { store } = await renderWithGame(<ItemView item={question} source="lesson" onDone={() => {}} />, { bundle: twoStages, state });
+      await userEvent.click(screen.getByRole("radio", { name: "Sai" }));
+      await userEvent.click(screen.getByRole("button", { name: "Kiểm tra" }));
+      await waitFor(async () => expect((await savedState(store)).reviews[question.id]).toBeDefined());
+      expect((await savedState(store)).mastery.later).toBeUndefined();
     });
 
     test("a stage 2 child gets both", async () => {

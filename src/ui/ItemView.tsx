@@ -56,7 +56,7 @@ export function ItemView({
                 questionId: item.id,
                 correct,
                 concepts: item.concepts,
-                misconception: chosen,
+                misconception: chosen && isConcept(chosen) ? chosen : null,
                 source,
               },
               { kind: "choice", itemId: item.id, choiceIndex: detail.choiceIndex, correct, lang: detail.lang },

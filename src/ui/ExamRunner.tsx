@@ -48,13 +48,14 @@ export function ExamRunner({
         question={item}
         exam
         onAnswered={(correct, detail) => {
+          const chosen = item.choices[detail.choiceIndex]?.misconception ?? null;
           game.dispatch(
             {
               type: "QuestionAnswered",
               questionId: item.id,
               correct,
               concepts: item.concepts,
-              misconception: item.choices[detail.choiceIndex]?.misconception ?? null,
+              misconception: chosen && isConceptReached(bundle, chosen, game.state.pet.stage) ? chosen : null,
               source: "test",
             },
             { kind: "choice", itemId: item.id, choiceIndex: detail.choiceIndex, correct, lang: detail.lang },
