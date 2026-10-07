@@ -114,7 +114,7 @@ describe("ReviewScreen", () => {
       for (let n = 2; n <= 5; n += 1) await userEvent.click(screen.getByRole("button", { name: "Bỏ qua" }));
 
       expect(screen.getByRole("heading", { name: "Xong trạm ôn!" })).toBeInTheDocument();
-      expect(screen.getByText("Con đúng 0/5 câu.")).toBeInTheDocument();
+      expect(screen.getByText("Con đúng 0/0 câu.")).toBeInTheDocument();
       await waitFor(async () => expect((await store.readMeta()).errorLog).toHaveLength(5));
       expect((await store.readMeta()).errorLog.every((entry) => entry.kind === "content-error")).toBe(true);
       const saved = (await store.loadActive())!.state;
@@ -122,6 +122,26 @@ describe("ReviewScreen", () => {
       expect(saved.mastery).toEqual({});
       expect(saved.progress.answeredQuestions).toEqual([]);
       expect((await store.exportProfiles())[0]!.attempts).toEqual([]);
+    });
+
+    test("a skipped item is not counted in the total, so answering every other item right is still perfect", async () => {
+      const broken = reviewBundle();
+      const topic = broken.stages[0]!.topics[0]!;
+      const [first, ...rest] = topic.questions;
+      topic.questions = [brokenQuestion(first!), ...rest];
+      const { store } = await renderWithGame(<ReviewScreen stationId="r.r1" onExit={() => {}} rng={seededRng(1)} />, {
+        bundle: broken,
+        state: stateWith(["r.l1", "r.l2"]),
+      });
+      // The set order depends on the rng: skip each broken card when it shows, answer the others.
+      for (let n = 1; n <= 5; n += 1) {
+        const skip = screen.queryByRole("button", { name: "Bỏ qua" });
+        if (skip) await userEvent.click(skip);
+        else await answer("Đúng", n === 5);
+      }
+      expect(screen.getByRole("heading", { name: "Xong trạm ôn!" })).toBeInTheDocument();
+      expect(screen.getByText("Con đúng 4/4 câu.")).toBeInTheDocument();
+      await waitFor(async () => expect(Object.keys((await store.loadActive())!.state.badges)).toContain("perfect-review"));
     });
   });
 });

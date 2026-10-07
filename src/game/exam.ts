@@ -92,20 +92,26 @@ export function itemMax(item: Exercise): number {
   return isChoiceQuestion(item) ? 1 : CODE_POINTS;
 }
 
-function points(item: Exercise, answer: ExamAnswer | undefined): number {
-  if (!answer) return 0;
+function points(item: Exercise, answer: ExamAnswer): number {
   if (answer.kind === "choice") return answer.correct ? 1 : 0;
   return answer.total > 0 ? (itemMax(item) * answer.passed) / answer.total : 0;
 }
 
 const round2 = (n: number) => Math.round(n * 100) / 100;
 
+/**
+ * Grades a paper. An item without an answer was skipped (ExamRunner requires an answer before Next, so the only way
+ * is the Bỏ qua of a broken item): it is left out of the score, the max and the wrong concepts, so broken content does
+ * not cost the child. A paper with every item skipped has max 0, like an empty paper, and never counts as passed.
+ */
 export function gradePaper(items: readonly Exercise[], answers: readonly (ExamAnswer | undefined)[]): ExamGrade {
   let score = 0;
   let max = 0;
   const wrongConcepts: string[] = [];
   items.forEach((item, i) => {
-    const got = points(item, answers[i]);
+    const answer = answers[i];
+    if (answer === undefined) return;
+    const got = points(item, answer);
     score += got;
     max += itemMax(item);
     if (got < itemMax(item)) {

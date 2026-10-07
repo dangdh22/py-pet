@@ -19,7 +19,8 @@ export interface SessionScreenProps {
 
 /**
  * A series of items, 1 per card (spec 8.2.4): a review station or a practice set. With no item it can still finish.
- * A broken item can be skipped: it counts as done and not correct, and sends no grading event.
+ * A broken item can be skipped: it counts as done, sends no grading event and is left out of the total, so the child
+ * who answers every other item right still has a perfect session.
  */
 export function SessionScreen({ title, items, source, onFinish, doneTitle, onExit }: SessionScreenProps) {
   const { t } = useLang();
@@ -31,6 +32,7 @@ export function SessionScreen({ title, items, source, onFinish, doneTitle, onExi
   // The practice for a misconception comes after the session; a practice set offers no more practice.
   const [practiceConcepts, setPracticeConcepts] = useState<string[]>([]);
   const correct = results.filter((r) => r === true).length;
+  const answered = results.filter((r) => r !== undefined).length;
 
   if (finished) {
     return (
@@ -38,7 +40,7 @@ export function SessionScreen({ title, items, source, onFinish, doneTitle, onExi
         before={before}
         after={game.state}
         title={doneTitle}
-        message={t("review.score", { correct, total: items.length })}
+        message={t("review.score", { correct, total: answered })}
         practiceConcepts={source === "practice" ? undefined : practiceConcepts}
         onExit={onExit}
       />
@@ -53,7 +55,7 @@ export function SessionScreen({ title, items, source, onFinish, doneTitle, onExi
       return;
     }
     setFinished(true);
-    onFinish({ correct, total: items.length });
+    onFinish({ correct, total: answered });
   };
 
   return (

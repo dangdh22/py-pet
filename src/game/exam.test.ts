@@ -3,6 +3,7 @@ import { examBundle } from "../test/examBundle";
 import { buildRemedialSet, drawEvolutionTest, drawTopicTest, gradePaper, type ExamAnswer } from "./exam";
 import { emptyMastery } from "./mastery";
 import { seededRng } from "./random";
+import { isPass } from "./rewards";
 import { initialGameState } from "./state";
 
 const bundle = examBundle();
@@ -78,9 +79,37 @@ describe("gradePaper", () => {
     expect(gradePaper(items, answers)).toEqual({ score: 2.5, max: 5, wrongConcepts: ["k1"] });
   });
 
-  test("an unanswered item scores 0", () => {
-    expect(gradePaper(items, [])).toEqual({ score: 0, max: 5, wrongConcepts: ["k1"] });
+  test("a wrong answer scores 0 and counts in the max", () => {
+    const answers: ExamAnswer[] = [
+      { kind: "choice", correct: false },
+      { kind: "choice", correct: false },
+      { kind: "code", passed: 0, total: 2 },
+    ];
+    expect(gradePaper(items, answers)).toEqual({ score: 0, max: 5, wrongConcepts: ["k1"] });
     expect(gradePaper([], [])).toEqual({ score: 0, max: 0, wrongConcepts: [] });
+  });
+
+  test("a skipped item (broken content) is left out of the score, the max and the wrong concepts", () => {
+    const answers: (ExamAnswer | undefined)[] = [
+      { kind: "choice", correct: true },
+      undefined,
+      { kind: "code", passed: 2, total: 2 },
+    ];
+    const grade = gradePaper(items, answers);
+    expect(grade).toEqual({ score: 4, max: 4, wrongConcepts: [] });
+    expect(isPass(grade.score, grade.max)).toBe(true);
+  });
+
+  test("an item left out does not hide the wrong concepts of the others", () => {
+    const answers: (ExamAnswer | undefined)[] = [undefined, { kind: "choice", correct: false }, undefined];
+    expect(gradePaper(items, answers)).toEqual({ score: 0, max: 1, wrongConcepts: topic.questions[1]!.concepts });
+  });
+
+  test("a paper with every item skipped is like an empty paper and does not pass", () => {
+    const grade = gradePaper(items, [undefined, undefined, undefined]);
+    expect(grade).toEqual({ score: 0, max: 0, wrongConcepts: [] });
+    expect(isPass(grade.score, grade.max)).toBe(false);
+    expect(isPass(grade.score, grade.max, 0)).toBe(false);
   });
 });
 

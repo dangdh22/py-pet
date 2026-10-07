@@ -19,7 +19,7 @@ export function formatScore(score: number, lang: Lang): string {
 /**
  * The items of a test, 1 per card (spec 8.2.4). Each answer is recorded at once (mastery, Leitner, attempt history)
  * with the source "test", which pays nothing per item; the results appear only after the last item. A broken item can
- * be skipped: nothing is recorded for it and its answer stays undefined, which the grade counts as 0 points.
+ * be skipped: nothing is recorded for it and its answer stays undefined, which the grade leaves out of the score and the max.
  */
 export function ExamRunner({
   title,
