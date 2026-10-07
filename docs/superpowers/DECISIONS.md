@@ -72,3 +72,13 @@ Người bảo trì chưa duyệt kế hoạch M5a; Claude tự chốt theo yêu
 7. **Thêm bài 5 "AI là gì?" vào cuối chủ đề 1** (phát sinh khi chạy): câu hỏi AI cần 1 bài dạy về AI; bài có 2 thẻ, không có bài code. Giai đoạn 1 có 19 bài.
 8. **Thứ tự lựa chọn được xáo theo ID câu hỏi** khi hiển thị (phát sinh khi chạy, Task 7): đáp án đúng của hầu hết câu hỏi nằm đầu tiên trong file. Thứ tự cố định cho mỗi câu (tải lại không đổi); lịch sử vẫn lưu vị trí trong file.
 9. **App chạy Python 3.14 (Pyodide), validator chạy CPython 3.13**: thông báo lỗi có thể khác nhau; mục từ điển lỗi mới được kiểm trong Pyodide bằng test parity. Mục `quote-inside-string` khớp thông báo của 3.14.
+
+## M5b
+
+Người bảo trì chưa duyệt kế hoạch M5b; Claude tự chốt theo yêu cầu chạy liên tục. Chi tiết trong mục "Quyết định thiết kế" của `docs/superpowers/plans/2026-10-07-m5b-noi-dung-giai-doan-2.md`.
+
+1. **Dàn ý giai đoạn 2** do Claude đặt: 5 chủ đề "Biến", "Phép tính // % **", "Nhập dữ liệu với input()", "Ép kiểu", "Định dạng đầu ra", mỗi chủ đề 5 bài (25 bài).
+2. **Bài AI "Dữ liệu là gì?"** là bài cuối của chủ đề "Biến".
+3. **`round(2.5)` ra `2`** được dạy như 1 hiểu lầm hay gặp.
+4. **Không dạy phép chia số âm** ở giai đoạn 2.
+5. **`input()` luôn để trống ngoặc** trong bài tập, vì chữ trong ngoặc bị tính vào đầu ra khi chấm (đã có mục từ điển `input-prompt`).
