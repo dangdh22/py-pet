@@ -110,18 +110,20 @@ questions:
     concepts: [round-half-even]
     lessons: [s2.dinh-dang.l3]
     code: |
-      print(round(0.5), round(1.5), round(4.5))
+      a = 7 / 2
+      b = 9 / 2
+      print(round(a), round(b))
     prompt:
       vi: "Đoạn code in ra gì?"
       en: "What is the output of this code?"
     choices:
-      - { text: "1 2 5", misconception: round-half-even }
-      - { text: "0 1 4", misconception: int-truncate }
-      - { text: "0 2 4", correct: true }
-      - { text: "1 2 4", misconception: round-half-even }
+      - { text: "4 5", misconception: round-half-even }
+      - { text: "3 4", misconception: int-truncate }
+      - { text: "4 4", correct: true }
+      - { text: "3.5 4.5", misconception: round-digits }
     explanation:
-      vi: "Cả 3 số đều nằm đúng giữa 2 số nguyên, nên Python chọn số chẵn. 0.5 nằm giữa 0 và 1, chọn 0. 1.5 nằm giữa 1 và 2, chọn 2. 4.5 nằm giữa 4 và 5, chọn 4."
-      en: "All 3 numbers are exactly halfway between 2 whole numbers, so Python picks the even one. 0.5 is between 0 and 1: it picks 0. 1.5 is between 1 and 2: it picks 2. 4.5 is between 4 and 5: it picks 4."
+      vi: "7 / 2 ra 3.5, nằm đúng giữa 3 và 4, nên Python chọn số chẵn là 4. 9 / 2 ra 4.5, nằm đúng giữa 4 và 5, nên Python cũng chọn số chẵn là 4. Vì vậy 2 kết quả bằng nhau."
+      en: "7 / 2 gives 3.5, exactly halfway between 3 and 4, so Python picks the even number, 4. 9 / 2 gives 4.5, exactly halfway between 4 and 5, so Python also picks the even number, 4. So the 2 results are the same."
 
   - id: s2.dinh-dang.b8
     type: mcq
