@@ -1,0 +1,51 @@
+concepts:
+  - id: int-convert
+    name: { vi: "int() đổi chuỗi thành số nguyên", en: "int() turns a string into an integer" }
+    misconception_card: |
+      Nhiều bạn nghĩ chỉ cần viết `int(so)` trên 1 dòng riêng là biến `so` thành số. Thực ra `int()` đưa lại 1 **số mới**, còn biến `so` vẫn giữ chuỗi cũ: với `so = "7"`, `so + so` vẫn nối thành 77. Muốn dùng số mới, con cất nó vào biến bằng `so = int(so)`, hoặc đổi ngay khi đọc: `so = int(input())`.
+    parent_tip: |
+      Chơi trò đổi phiếu: con đưa 1 tấm phiếu ghi chữ số 3, bố mẹ đổi lại 3 viên kẹo thật để con đếm và cộng. Giải thích rằng int() làm đúng việc đổi phiếu chữ thành số để tính.
+    practice:
+      level1: [s2.ep-kieu.l1.q1, s2.ep-kieu.l1.q2, s2.ep-kieu.b1, s2.ep-kieu.b2, s2.ep-kieu.b3]
+      level2: [s2.ep-kieu.p1]
+      level3: [s2.ep-kieu.l1.ex1, s2.ep-kieu.l1.ex2, s2.ep-kieu.l5.ex1, s2.ep-kieu.c1]
+  - id: float-convert
+    name: { vi: "Số thực dùng dấu chấm và float()", en: "Decimals use a dot, and float()" }
+    misconception_card: |
+      Nhiều bạn viết ba phẩy năm là `3,5`, như ở môn Toán. Thực ra Python dùng **dấu chấm**: `3.5`. Với dấu phẩy, `print(3,5)` in ra 3 5, vì Python hiểu đó là 2 số, còn `float("3,5")` báo lỗi ValueError. Khi đọc số có phần thập phân, con dùng `float(input())` và gõ số có dấu chấm.
+    parent_tip: |
+      Cùng con đọc cân nặng hay giá tiền in trên bao bì, như 1,5 kg, rồi nhờ con viết lại theo cách của Python là 1.5. Giải thích rằng máy tính đọc dấu phẩy là dấu ngăn cách 2 số.
+    practice:
+      level1: [s2.ep-kieu.l2.q1, s2.ep-kieu.l2.q2, s2.ep-kieu.l5.q2, s2.ep-kieu.b4, s2.ep-kieu.b5, s2.ep-kieu.b6]
+      level2: [s2.ep-kieu.p2]
+      level3: [s2.ep-kieu.l2.ex1, s2.ep-kieu.l2.ex2, s2.ep-kieu.l5.ex2, s2.ep-kieu.c3]
+  - id: str-convert
+    name: { vi: "str() đổi số thành chuỗi để nối", en: "str() turns a number into a string to join" }
+    misconception_card: |
+      Nhiều bạn nghĩ dấu `+` tự nối được chuỗi với số, như `"Tuổi: " + 11`. Thực ra Python báo lỗi TypeError, vì không biết nên cộng hay nên nối. Con đổi số thành chuỗi trước bằng **str()**: `"Tuổi: " + str(11)` in ra Tuổi: 11. Nếu không cần chữ và số đứng sát nhau, dùng dấu phẩy cũng được: `print("Tuổi:", 11)`.
+    parent_tip: |
+      Viết số 80 và dấu % lên 2 tấm thẻ, rồi nhờ con đặt sát nhau thành 80%. Giải thích rằng str() biến con số thành 1 tấm thẻ chữ, để ghép sát được vào chữ khác.
+    practice:
+      level1: [s2.ep-kieu.l3.q1, s2.ep-kieu.l3.q2, s2.ep-kieu.b7, s2.ep-kieu.b8, s2.ep-kieu.b13]
+      level2: [s2.ep-kieu.p3]
+      level3: [s2.ep-kieu.l3.ex1, s2.ep-kieu.l3.ex2, s2.ep-kieu.c2]
+  - id: int-truncate
+    name: { vi: "int() cắt bỏ phần thập phân", en: "int() drops the decimals" }
+    misconception_card: |
+      Nhiều bạn nghĩ `int(5.67)` ra 6, vì 5.67 gần 6 hơn. Thực ra `int()` **cắt bỏ** phần sau dấu chấm, không làm tròn: `int(5.67)` ra 5, `int(9.99)` ra 9. Cách làm tròn, con sẽ học ở chủ đề sau.
+    parent_tip: |
+      Cắt 1 ổ bánh mì thành 5 khúc bằng nhau và 1 mẩu lẻ, rồi hỏi con có mấy khúc nguyên. Dù mẩu lẻ to gần bằng 1 khúc, int() vẫn chỉ đếm 5 khúc nguyên.
+    practice:
+      level1: [s2.ep-kieu.l4.q1, s2.ep-kieu.b9, s2.ep-kieu.b10]
+      level2: [s2.ep-kieu.p4]
+      level3: [s2.ep-kieu.l4.ex1, s2.ep-kieu.l4.ex2, s2.ep-kieu.c3]
+  - id: int-invalid
+    name: { vi: "int() không đổi được chuỗi có dấu chấm hay chữ cái", en: "int() cannot change a string with a dot or letters" }
+    misconception_card: |
+      Nhiều bạn nghĩ `int("5.67")` cũng cắt bỏ phần thập phân và ra 5, như `int(5.67)`. Thực ra với chuỗi, `int()` chỉ nhận các chữ số của 1 số nguyên, nên `int("5.67")` và `int("năm")` đều báo lỗi **ValueError**. Với chuỗi có dấu chấm, con đổi qua `float()` trước: `int(float("5.67"))` ra 5.
+    parent_tip: |
+      Viết 3 tấm phiếu: 12, 4.5 và "mười hai", rồi đóng vai máy bán kẹo chỉ nhận phiếu ghi số nguyên bằng chữ số. Hỏi con phiếu nào bị máy trả lại và vì sao.
+    practice:
+      level1: [s2.ep-kieu.l4.q2, s2.ep-kieu.l5.q1, s2.ep-kieu.b11, s2.ep-kieu.b12]
+      level2: [s2.ep-kieu.p5]
+      level3: [s2.ep-kieu.l4.ex2]

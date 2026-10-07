@@ -157,15 +157,15 @@
 - id: concat-str
   match: { type: TypeError, message: "^can only concatenate str \\(not \"(?<other>\\w+)\"\\) to str$" }
   explain:
-    vi: "Dòng {line}: dấu + chỉ nối được chuỗi với chuỗi, không nối được chuỗi với giá trị kiểu {other}. Muốn in chữ và số cùng nhau, hãy ngăn cách chúng bằng dấu phẩy, ví dụ print(\"Robo có\", 4). Nếu con đã học str(), con cũng có thể đổi số thành chuỗi bằng str() rồi mới nối."
-    en: "Line {line}: + can only join a string with a string, not with a value of type {other}. To print text and a number together, separate them with a comma, for example print(\"Robo có\", 4). If you have learned str(), you can also change the number to a string with str() before you join."
+    vi: "Dòng {line}: dấu + chỉ nối được chuỗi với chuỗi, không nối được chuỗi với giá trị kiểu {other}. Muốn in chữ và số cùng nhau, hãy ngăn cách chúng bằng dấu phẩy, ví dụ print(\"Robo có\", 4). Nếu chuỗi là số đọc từ input() mà con cần tính toán, hãy đổi nó thành số bằng int(), ví dụ so = int(input()). Nếu con đã học str(), con cũng có thể đổi số thành chuỗi bằng str() rồi mới nối."
+    en: "Line {line}: + can only join a string with a string, not with a value of type {other}. To print text and a number together, separate them with a comma, for example print(\"Robo có\", 4). If the string is a number read with input() and you need to calculate with it, change it into a number with int(), for example so = int(input()). If you have learned str(), you can also change the number to a string with str() before you join."
   sample: "print(\"Tuổi: \" + 11)"
 
 - id: unsupported-operand
   match: { type: TypeError, message: "^unsupported operand type\\(s\\) for (?<op>.+): '(?<left>\\w+)' and '(?<right>\\w+)'$" }
   explain:
-    vi: "Dòng {line}: không dùng được phép {op} giữa kiểu {left} và kiểu {right}. Có thể một giá trị là chuỗi (str), ví dụ giá trị đọc từ input()."
-    en: "Line {line}: you cannot use {op} with type {left} and type {right}. Maybe one value is a string (str), for example a value from input()."
+    vi: "Dòng {line}: không dùng được phép {op} giữa kiểu {left} và kiểu {right}. Có thể một giá trị là chuỗi (str), ví dụ giá trị đọc từ input(). Muốn tính toán, hãy đổi chuỗi đó thành số bằng int(), ví dụ so = int(input())."
+    en: "Line {line}: you cannot use {op} with type {left} and type {right}. Maybe one value is a string (str), for example a value from input(). To calculate with it, change the string into a number with int(), for example so = int(input())."
   sample: "print(1 + \"2\")"
 
 - id: not-callable
@@ -184,10 +184,19 @@
 
 - id: int-invalid
   match: { type: ValueError, message: "^invalid literal for int\\(\\) with base 10: '(?<value>.*)'$" }
+  misconception: int-invalid
   explain:
-    vi: "Dòng {line}: không đổi được '{value}' thành số nguyên. int() chỉ nhận chuỗi gồm các chữ số, ví dụ '12'. Với số thập phân như '5.5', hãy dùng float()."
-    en: "Line {line}: '{value}' cannot become an integer. int() accepts only a string of digits, for example '12'. For a decimal number such as '5.5', use float()."
+    vi: "Dòng {line}: int() không đổi được '{value}' thành số nguyên. Với chuỗi, int() chỉ nhận các chữ số của 1 số nguyên, ví dụ '12', không nhận chữ cái hay dấu chấm. Với số thực như '5.5', hãy dùng float(). Nếu chỉ cần phần nguyên, hãy đổi qua float() trước rồi mới dùng int(), ví dụ int(float(input())). Nếu chuỗi đọc từ input(), hãy kiểm tra dòng đó trong ô Dữ liệu nhập."
+    en: "Line {line}: int() cannot change '{value}' into an integer. With a string, int() only takes the digits of a whole number, for example '12', not letters or a dot. For a decimal number such as '5.5', use float(). If you only need the whole part, change it with float() first and then use int(), for example int(float(input())). If the string comes from input(), check that line in the Input data box."
   sample: "x = int(\"5.5\")"
+
+- id: float-invalid
+  match: { type: ValueError, message: "^could not convert string to float: '(?<value>.*)'$" }
+  misconception: float-convert
+  explain:
+    vi: "Dòng {line}: float() không đổi được '{value}' thành số thực. Số thực trong Python dùng dấu chấm, không dùng dấu phẩy: viết 3.5, không viết 3,5. Số cũng phải viết bằng chữ số, không viết bằng chữ cái. Nếu chuỗi đọc từ input(), hãy kiểm tra dòng đó trong ô Dữ liệu nhập."
+    en: "Line {line}: float() cannot change '{value}' into a decimal number. Decimal numbers in Python use a dot, not a comma: write 3.5, not 3,5. Numbers must also be written in digits, not in letters. If the string comes from input(), check that line in the Input data box."
+  sample: "x = float(\"3,5\")"
 
 - id: zero-division
   match: { type: ZeroDivisionError }

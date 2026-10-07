@@ -1,0 +1,243 @@
+questions:
+  - id: s2.ep-kieu.b1
+    type: predict
+    concepts: [int-convert]
+    lessons: [s2.ep-kieu.l1]
+    code: |
+      print(type(int("8")))
+    prompt:
+      vi: "Đoạn code in ra gì?"
+      en: "What is the output of this code?"
+    choices:
+      - { text: "<class 'str'>", misconception: int-convert }
+      - { text: "<class 'int'>", correct: true }
+      - { text: "8" }
+      - { text: "<class 'float'>", misconception: float-convert }
+    explanation:
+      vi: "int(\"8\") đổi chuỗi \"8\" thành số nguyên 8. type() cho biết loại dữ liệu của giá trị đó: int là số nguyên. Lệnh print in ra loại dữ liệu, không in ra giá trị 8."
+      en: "int(\"8\") changes the string \"8\" into the integer 8. type() tells the data type of that value: int means integer. The print statement prints the data type, not the value 8."
+
+  - id: s2.ep-kieu.b2
+    type: mcq
+    concepts: [int-convert]
+    lessons: [s2.ep-kieu.l1]
+    code: |
+      a = int(input())
+      b = input()
+      print(a + b)
+    prompt:
+      vi: "Ô Dữ liệu nhập có 2 dòng: 6 và 4. Chuyện gì xảy ra khi chạy đoạn code này?"
+      en: "The Input data box has 2 lines: 6 and 4. What happens when this code runs?"
+    choices:
+      - { text: "10", misconception: int-convert }
+      - { text: "64", misconception: input-str }
+      - { text: "6 4", misconception: concat-no-space }
+      - { vi: "Báo lỗi TypeError ở dòng 3", en: "A TypeError on line 3", correct: true, error: true }
+    explanation:
+      vi: "Chỉ dòng 1 có int(), nên a là số 6, còn b vẫn là chuỗi \"4\". Dấu + không cộng được số với chuỗi, nên Python báo lỗi TypeError ở dòng 3. Mỗi dòng nhập cần dùng để tính đều phải đổi bằng int()."
+      en: "Only line 1 has int(), so a is the number 6, and b is still the string \"4\". + cannot add a number and a string, so Python shows a TypeError on line 3. Every input line you want to calculate with must be changed with int()."
+
+  - id: s2.ep-kieu.b3
+    type: mcq
+    concepts: [int-convert]
+    lessons: [s2.ep-kieu.l1]
+    code: |
+      a = input()
+      int(a)
+      print(a + a)
+    prompt:
+      vi: "Ô Dữ liệu nhập có 1 dòng: 4. Đoạn code in ra gì?"
+      en: "The Input data box has 1 line: 4. What is the output of this code?"
+    choices:
+      - { text: "44", correct: true }
+      - { text: "8", misconception: int-convert }
+      - { text: "4 4", misconception: concat-no-space }
+      - { text: "4\n8", misconception: int-convert }
+    explanation:
+      vi: "Dòng 2 có gọi int(a), nhưng số mới không được cất vào đâu và cũng không được in ra. Biến a vẫn là chuỗi \"4\", nên a + a nối thành 44. Muốn cộng ra 8, con viết a = int(a)."
+      en: "Line 2 calls int(a), but the new number is not stored anywhere, and it is not printed either. The variable a is still the string \"4\", so a + a joins into 44. To add up to 8, write a = int(a)."
+
+  - id: s2.ep-kieu.b4
+    type: predict
+    concepts: [float-convert]
+    lessons: [s2.ep-kieu.l2]
+    code: |
+      a = 7
+      b = 2.0
+      print(a * b, a + b)
+    prompt:
+      vi: "Đoạn code in ra gì?"
+      en: "What is the output of this code?"
+    choices:
+      - { text: "14 9", misconception: float-convert }
+      - { vi: "Báo lỗi TypeError ở dòng 3, vì không tính được số nguyên với số thực", en: "A TypeError on line 3, because an integer and a decimal number cannot be used together", error: true, misconception: float-convert }
+      - { text: "14.0 9.0", correct: true }
+      - { text: "14.0 9", misconception: float-convert }
+    explanation:
+      vi: "b là số thực 2.0. Số nguyên tính với số thực thì được, và kết quả là số thực, kể cả khi không có phần lẻ. Vì vậy 7 * 2.0 ra 14.0, và 7 + 2.0 ra 9.0."
+      en: "b is the decimal number 2.0. An integer can be used with a decimal number, and the result is a decimal number, even with no fraction part. So 7 * 2.0 gives 14.0, and 7 + 2.0 gives 9.0."
+
+  - id: s2.ep-kieu.b5
+    type: mcq
+    concepts: [float-convert]
+    lessons: [s2.ep-kieu.l2]
+    prompt:
+      vi: "Con muốn cất số ba phẩy năm vào biến x để tính toán. Lệnh nào đúng?"
+      en: "You want to store the number three point five in the variable x to calculate with it. Which statement is right?"
+    choices:
+      - { text: "x = 3,5", misconception: float-convert }
+      - { text: "x = 3.5", correct: true }
+      - { text: "x = \"3.5\"", misconception: str-vs-int }
+      - { text: "x = float(\"3,5\")", misconception: float-convert }
+    explanation:
+      vi: "Python viết số thực bằng dấu chấm: 3.5. Dấu phẩy ngăn cách 2 giá trị, nên 3,5 không phải là ba phẩy năm, và float(\"3,5\") báo lỗi ValueError. Còn \"3.5\" có dấu nháy là chuỗi, chưa tính được."
+      en: "Python writes a decimal number with a dot: 3.5. A comma separates 2 values, so 3,5 is not three point five, and float(\"3,5\") shows a ValueError. And \"3.5\" in quotes is a string, so you cannot calculate with it yet."
+
+  - id: s2.ep-kieu.b6
+    type: mcq
+    concepts: [float-convert]
+    lessons: [s2.ep-kieu.l2]
+    code: |
+      n = float(input())
+      print(n * 2)
+    prompt:
+      vi: "Ô Dữ liệu nhập có 1 dòng: 1.5. Đoạn code in ra gì?"
+      en: "The Input data box has 1 line: 1.5. What is the output of this code?"
+    choices:
+      - { text: "3", misconception: float-convert }
+      - { text: "1.51.5", misconception: input-str }
+      - { vi: "Báo lỗi ValueError ở dòng 1", en: "A ValueError on line 1", error: true, misconception: float-convert }
+      - { text: "3.0", correct: true }
+    explanation:
+      vi: "float() đổi chuỗi \"1.5\" thành số thực 1.5, không có lỗi. Biến n chứa số, nên n * 2 là phép nhân, không phải lặp lại chuỗi. Kết quả là số thực, nên Python in ra 3.0."
+      en: "float() changes the string \"1.5\" into the decimal number 1.5, with no error. The variable n holds a number, so n * 2 is a multiplication, not a repeated string. The result is a decimal number, so Python prints 3.0."
+
+  - id: s2.ep-kieu.b7
+    type: predict
+    concepts: [str-convert]
+    lessons: [s2.ep-kieu.l3]
+    code: |
+      n = 7
+      print("Lv" + str(n + 1))
+    prompt:
+      vi: "Đoạn code in ra gì?"
+      en: "What is the output of this code?"
+    choices:
+      - { text: "Lv8", correct: true }
+      - { text: "Lv71", misconception: str-convert }
+      - { text: "Lv 8", misconception: concat-no-space }
+      - { vi: "Báo lỗi TypeError ở dòng 2", en: "A TypeError on line 2", error: true, misconception: str-convert }
+    explanation:
+      vi: "Python tính phép cộng trong ngoặc trước: n + 1 ra số 8. Sau đó str() đổi 8 thành chuỗi \"8\", nên dấu + nối được với \"Lv\" mà không có lỗi. Dấu + không thêm dấu cách, nên kết quả là Lv8."
+      en: "Python works out the addition in the brackets first: n + 1 gives the number 8. Then str() changes 8 into the string \"8\", so + can join it with \"Lv\" with no error. + adds no space, so the result is Lv8."
+
+  - id: s2.ep-kieu.b8
+    type: mcq
+    concepts: [str-convert]
+    lessons: [s2.ep-kieu.l3]
+    code: |
+      x = 5
+      y = str(x)
+    prompt:
+      vi: "Sau 2 dòng này, điều nào đúng?"
+      en: "After these 2 lines, which sentence is true?"
+    choices:
+      - { vi: "x cũng trở thành chuỗi \"5\", giống y", en: "x also becomes the string \"5\", like y", misconception: str-convert }
+      - { vi: "y chứa số 5, giống hệt x", en: "y holds the number 5, just like x", misconception: str-convert }
+      - { vi: "y chứa chuỗi \"5\", còn x vẫn là số nguyên 5", en: "y holds the string \"5\", and x is still the integer 5", correct: true }
+      - { vi: "Báo lỗi, vì str() chỉ dùng được với chữ cái", en: "An error, because str() only works with letters", error: true, misconception: str-convert }
+    explanation:
+      vi: "str(x) đưa lại 1 chuỗi mới là \"5\", và dấu = cất chuỗi đó vào y. Biến x không bị thay đổi, vẫn là số nguyên 5. str() đổi được cả số, không báo lỗi."
+      en: "str(x) gives back a new string, \"5\", and = stores that string in y. The variable x does not change: it is still the integer 5. str() can change numbers too, with no error."
+
+  - id: s2.ep-kieu.b9
+    type: predict
+    concepts: [int-truncate]
+    lessons: [s2.ep-kieu.l4]
+    code: |
+      print(int(7 / 2), 7 // 2)
+    prompt:
+      vi: "Đoạn code in ra gì?"
+      en: "What is the output of this code?"
+    choices:
+      - { text: "3.5 3", misconception: int-truncate }
+      - { text: "3 3", correct: true }
+      - { text: "4 3", misconception: int-truncate }
+      - { text: "3.0 3", misconception: int-truncate }
+    explanation:
+      vi: "7 / 2 ra 3.5. int() cắt bỏ phần sau dấu chấm và không làm tròn, nên int(3.5) ra số nguyên 3, không có .0. Phép // cũng chỉ giữ phần nguyên, nên 7 // 2 ra 3."
+      en: "7 / 2 gives 3.5. int() drops the part after the dot and does not round, so int(3.5) gives the integer 3, with no .0. // also keeps only the whole part, so 7 // 2 gives 3."
+
+  - id: s2.ep-kieu.b10
+    type: predict
+    concepts: [int-truncate]
+    lessons: [s2.ep-kieu.l4]
+    code: |
+      x = 2.8
+      y = int(x)
+      print(x, y)
+    prompt:
+      vi: "Đoạn code in ra gì?"
+      en: "What is the output of this code?"
+    choices:
+      - { text: "2 2", misconception: int-convert }
+      - { text: "2.8 3", misconception: int-truncate }
+      - { text: "2.8 2.0", misconception: int-truncate }
+      - { text: "2.8 2", correct: true }
+    explanation:
+      vi: "int(x) cắt bỏ phần sau dấu chấm và không làm tròn, nên y là số nguyên 2, không có .0. int() đưa lại 1 số mới và không thay đổi biến x, nên x vẫn là 2.8."
+      en: "int(x) drops the part after the dot and does not round, so y is the integer 2, with no .0. int() gives back a new number and does not change the variable x, so x is still 2.8."
+
+  - id: s2.ep-kieu.b11
+    type: mcq
+    concepts: [int-invalid]
+    lessons: [s2.ep-kieu.l4]
+    prompt:
+      vi: "Lệnh nào báo lỗi ValueError?"
+      en: "Which statement shows a ValueError?"
+    choices:
+      - { text: "int(\"12.5\")", correct: true }
+      - { text: "int(12.5)", misconception: int-invalid }
+      - { text: "float(\"12\")", misconception: float-convert }
+      - { text: "float(12)", misconception: float-convert }
+    explanation:
+      vi: "\"12.5\" là chuỗi có dấu chấm, mà với chuỗi, int() chỉ nhận các chữ số của 1 số nguyên, nên báo lỗi ValueError. int(12.5) đổi 1 số thực nên được, ra 12. float() đổi được cả chuỗi \"12\" lẫn số 12, ra 12.0."
+      en: "\"12.5\" is a string with a dot, and with a string, int() only takes the digits of a whole number, so it shows a ValueError. int(12.5) changes a decimal number, so it works and gives 12. float() can change both the string \"12\" and the number 12, giving 12.0."
+
+  - id: s2.ep-kieu.b12
+    type: mcq
+    concepts: [int-invalid]
+    lessons: [s2.ep-kieu.l4]
+    code: |
+      n = int(input())
+      print(n + 1)
+    prompt:
+      vi: "Ô Dữ liệu nhập có 1 dòng: ten (chữ tiếng Anh nghĩa là mười). Chuyện gì xảy ra khi chạy đoạn code này?"
+      en: "The Input data box has 1 line: ten. What happens when this code runs?"
+    choices:
+      - { text: "11", misconception: int-invalid }
+      - { text: "ten1", misconception: input-str }
+      - { vi: "Báo lỗi ValueError ở dòng 1", en: "A ValueError on line 1", correct: true, error: true }
+      - { vi: "Báo lỗi TypeError ở dòng 2", en: "A TypeError on line 2", error: true, misconception: int-invalid }
+    explanation:
+      vi: "int() chỉ hiểu chữ số, không hiểu số viết bằng chữ cái. Vì vậy int() không đổi được chuỗi \"ten\", và Python báo lỗi ValueError ngay ở dòng 1. Dòng 2 không được chạy."
+      en: "int() understands only digits, not numbers written in letters. So int() cannot change the string \"ten\", and Python shows a ValueError right on line 1. Line 2 does not run."
+
+  - id: s2.ep-kieu.b13
+    type: predict
+    concepts: [str-convert]
+    lessons: [s2.ep-kieu.l3]
+    code: |
+      n = 3
+      print("x" + str(n), "x", n)
+    prompt:
+      vi: "Đoạn code in ra gì?"
+      en: "What is the output of this code?"
+    choices:
+      - { text: "x3 x3", misconception: print-comma-space }
+      - { text: "x3 x 3", correct: true }
+      - { text: "x 3 x 3", misconception: concat-no-space }
+      - { vi: "Báo lỗi TypeError ở dòng 2", en: "A TypeError on line 2", error: true, misconception: str-convert }
+    explanation:
+      vi: "\"x\" + str(n) nối 2 chuỗi thành x3, không có dấu cách. Sau đó dấu phẩy ngăn cách các giá trị và thêm 1 dấu cách trước \"x\" và trước n. Dấu phẩy in được số mà không cần str(), nên không có lỗi."
+      en: "\"x\" + str(n) joins 2 strings into x3, with no space. Then the commas separate the values and add a space before \"x\" and before n. A comma can print a number without str(), so there is no error."

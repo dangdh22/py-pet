@@ -1,0 +1,11 @@
+id: s2.ep-kieu
+title: { vi: "Ép kiểu", en: "Type conversion" }
+lessons:
+  - 01-int.md
+  - 02-float.md
+  - 03-str.md
+  - 04-int-cat-bo.md
+  - 05-bai-toan.md
+reviews:
+  - { id: s2.ep-kieu.r1, after: s2.ep-kieu.l2 }
+  - { id: s2.ep-kieu.r2, after: s2.ep-kieu.l5 }

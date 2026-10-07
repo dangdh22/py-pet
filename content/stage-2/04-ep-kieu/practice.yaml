@@ -1,0 +1,194 @@
+exercises:
+  - id: s2.ep-kieu.p1
+    type: fill
+    concepts: [int-convert]
+    prompt:
+      vi: "Robo nhặt kẹo buổi sáng và buổi chiều. Ô Dữ liệu nhập có 2 dòng: số kẹo nhặt buổi sáng và số kẹo nhặt buổi chiều. Điền vào chỗ trống để in ra tổng số kẹo như phần Ví dụ."
+      en: "Robo picks up sweets in the morning and in the afternoon. The Input data box has 2 lines: the sweets picked up in the morning and the sweets picked up in the afternoon. Fill the blank to print the total number of sweets as in the Example."
+    template: |
+      keo_sang = ___
+      keo_chieu = int(input())
+      print("Cả ngày:", keo_sang + keo_chieu, "viên kẹo")
+    answers: ["int(input())"]
+    tests:
+      - { input: "3\n4", output: "Cả ngày: 7 viên kẹo" }
+      - { input: "10\n25", output: "Cả ngày: 35 viên kẹo", hidden: true }
+    hints:
+      - { vi: "Dòng 2 đã đọc số kẹo buổi chiều và đổi thành số. Dòng 1 cần làm giống hệt cho buổi sáng.", en: "Line 2 already reads the afternoon sweets and changes them into a number. Line 1 needs to do the same for the morning." }
+      - { vi: "Điền int(input()) vào chỗ trống.", en: "Fill the blank with int(input())." }
+
+  - id: s2.ep-kieu.p2
+    type: parsons
+    concepts: [float-convert]
+    prompt:
+      vi: "Robo mua kẹo gói. Ô Dữ liệu nhập có 2 dòng: dòng 1 là cân nặng của 1 gói (kg, số thực), dòng 2 là số gói (số nguyên). Sắp xếp các dòng lệnh để in ra tổng cân nặng như phần Ví dụ."
+      en: "Robo buys bags of sweets. The Input data box has 2 lines: line 1 is the weight of 1 bag (kg, a decimal number), and line 2 is the number of bags (an integer). Put the lines in order to print the total weight as in the Example."
+    solution: |
+      can_goi = float(input())
+      so_goi = int(input())
+      print("Tổng cân nặng:", can_goi * so_goi, "kg")
+    tests:
+      - input: "0.25\n4"
+        output: "Tổng cân nặng: 1.0 kg"
+      - input: "1.5\n3"
+        output: "Tổng cân nặng: 4.5 kg"
+        hidden: true
+    hints:
+      - { vi: "Cân nặng của 1 gói ở dòng 1 và có dấu chấm, nên được đọc trước bằng float(). Lệnh print đứng sau cả 2 lệnh đọc.", en: "The weight of 1 bag is on line 1 and has a dot, so it is read first with float(). The print statement comes after both reading lines." }
+
+  - id: s2.ep-kieu.p3
+    type: fill
+    concepts: [str-convert]
+    prompt:
+      vi: "Robo lên cấp trong trò chơi. Ô Dữ liệu nhập có 1 dòng: cấp hiện tại của Robo. Điền vào chỗ trống để in ra cấp mới như phần Ví dụ. Chú ý: dấu chấm than đứng liền ngay sau số."
+      en: "Robo levels up in a game. The Input data box has 1 line: Robo's level now. Fill the blank to print the new level as in the Example. Note: the exclamation mark comes right after the number, with no space."
+    template: |
+      cap = int(input())
+      cap_moi = cap + 1
+      print("Robo lên cấp " + ___ + "!")
+    answers: ["str(cap_moi)"]
+    tests:
+      - { input: "4", output: "Robo lên cấp 5!" }
+      - { input: "9", output: "Robo lên cấp 10!", hidden: true }
+    hints:
+      - { vi: "cap_moi là số nguyên, còn dấu + chỉ nối được chuỗi với chuỗi. Con cần đổi cap_moi thành chuỗi.", en: "cap_moi is an integer, and + can only join a string with a string. Change cap_moi into a string." }
+      - { vi: "Điền str(cap_moi) vào chỗ trống.", en: "Fill the blank with str(cap_moi)." }
+
+  - id: s2.ep-kieu.p4
+    type: parsons
+    concepts: [int-truncate]
+    prompt:
+      vi: "Robo rót nước vào các chai 1 lít. Ô Dữ liệu nhập có 1 dòng: số lít nước Robo có, là số thực. Sắp xếp các dòng lệnh để in ra số chai được rót đầy như phần Ví dụ."
+      en: "Robo pours water into 1-litre bottles. The Input data box has 1 line: the litres of water Robo has, a decimal number. Put the lines in order to print the number of full bottles as in the Example."
+    solution: |
+      lit = float(input())
+      so_chai = int(lit)
+      print("Số chai đầy:", so_chai)
+    tests:
+      - input: "3.7"
+        output: "Số chai đầy: 3"
+      - input: "10.2"
+        output: "Số chai đầy: 10"
+        hidden: true
+    hints:
+      - { vi: "Đọc số lít trước, rồi dùng int() để cắt bỏ phần lẻ: 3.7 lít chỉ rót đầy được 3 chai. Lệnh print đứng cuối cùng.", en: "Read the litres first, then use int() to drop the fraction: 3.7 litres fill only 3 bottles. The print statement comes last." }
+
+  - id: s2.ep-kieu.p5
+    type: fill
+    concepts: [int-invalid]
+    prompt:
+      vi: "Ô Dữ liệu nhập có 1 dòng là 1 số thực có dấu chấm. int() không đổi thẳng được chuỗi này. Điền vào chỗ trống để in ra phần nguyên của số đó như phần Ví dụ."
+      en: "The Input data box has 1 line with a decimal number that has a dot. int() cannot change this string directly. Fill the blank to print the whole part of the number as in the Example."
+    template: |
+      so = int(___(input()))
+      print("Phần nguyên:", so)
+    answers: ["float"]
+    tests:
+      - { input: "7.25", output: "Phần nguyên: 7" }
+      - { input: "15.9", output: "Phần nguyên: 15", hidden: true }
+    hints:
+      - { vi: "Chuỗi \"7.25\" có dấu chấm, nên phải đổi thành số thực trước, rồi int() mới cắt bỏ phần thập phân.", en: "The string \"7.25\" has a dot, so it must become a decimal number first, and then int() drops the decimal part." }
+      - { vi: "Điền float vào chỗ trống, để dòng 1 thành so = int(float(input())).", en: "Fill the blank with float, so that line 1 becomes so = int(float(input()))." }
+
+  - id: s2.ep-kieu.c1
+    type: code
+    concepts: [int-convert]
+    prompt:
+      vi: "Robo chia kẹo cho các bạn. Ô Dữ liệu nhập có 2 dòng: dòng 1 là số kẹo, dòng 2 là số bạn, đều là số nguyên. Hãy đọc 2 số vào 2 biến keo và ban, rồi in ra 2 dòng như phần Ví dụ: mỗi bạn được mấy viên, và còn dư mấy viên."
+      en: "Robo shares sweets with friends. The Input data box has 2 lines: line 1 is the number of sweets, and line 2 is the number of friends, both integers. Read the 2 numbers into the 2 variables keo and ban, then print the 2 lines in the Example: how many sweets each friend gets, and how many are left over."
+    starter: |
+      # Viết lệnh của con ở dưới dòng này
+    solution: |
+      keo = int(input())
+      ban = int(input())
+      print("Mỗi bạn được", keo // ban, "viên")
+      print("Còn dư", keo % ban, "viên")
+    tests:
+      - input: "17\n5"
+        output: |
+          Mỗi bạn được 3 viên
+          Còn dư 2 viên
+      - input: "25\n4"
+        output: |
+          Mỗi bạn được 6 viên
+          Còn dư 1 viên
+        hidden: true
+    common_wrong:
+      - output: |
+          Mỗi bạn được 2 viên
+          Còn dư 3 viên
+        misconception: modulo
+        sample: |
+          keo = int(input())
+          ban = int(input())
+          print("Mỗi bạn được", keo % ban, "viên")
+          print("Còn dư", keo // ban, "viên")
+    hints:
+      - { vi: "Đổi 2 dòng nhập thành số bằng int(). Số kẹo mỗi bạn là phần nguyên của phép chia, dùng //. Số kẹo dư là số dư, dùng %.", en: "Change the 2 input lines into numbers with int(). The sweets for each friend are the whole part of the division, with //. The sweets left over are the remainder, with %." }
+      - { vi: "Hai dòng đầu là keo = int(input()) và ban = int(input()). Dòng in thứ nhất dùng keo // ban, dòng in thứ hai dùng keo % ban.", en: "The first 2 lines are keo = int(input()) and ban = int(input()). The first print line uses keo // ban, and the second print line uses keo % ban." }
+    test_eligible: true
+
+  - id: s2.ep-kieu.c2
+    type: code
+    concepts: [str-convert, int-convert]
+    prompt:
+      vi: "Trong trò chơi của Robo, mỗi ngôi sao được thưởng 5 điểm. Ô Dữ liệu nhập có 1 dòng: số ngôi sao con nhặt được, là số nguyên. Hãy đọc số đó vào biến sao, rồi in ra số điểm thưởng như phần Ví dụ. Chú ý: dấu + đứng liền ngay trước số điểm."
+      en: "In Robo's game, each star gives 5 bonus points. The Input data box has 1 line: the number of stars you collect, an integer. Read the number into the variable sao, then print the bonus points as in the Example. Note: the + sign comes right before the points, with no space."
+    starter: |
+      # Viết lệnh của con ở dưới dòng này
+    solution: |
+      sao = int(input())
+      print("Thưởng: +" + str(sao * 5) + " điểm")
+    tests:
+      - input: "3"
+        output: "Thưởng: +15 điểm"
+      - input: "12"
+        output: "Thưởng: +60 điểm"
+        hidden: true
+    common_wrong:
+      - output: "Thưởng: + 15 điểm"
+        misconception: print-comma-space
+        sample: |
+          sao = int(input())
+          print("Thưởng: +", sao * 5, "điểm")
+    hints:
+      - { vi: "Đọc số sao bằng int(input()) để nhân được với 5. Dấu phẩy trong print thêm 1 dấu cách sau dấu +, nên con nối bằng dấu + và đổi số điểm thành chuỗi bằng str().", en: "Read the stars with int(input()) so that you can multiply by 5. A comma in print adds a space after the + sign, so join with + and change the points into a string with str()." }
+      - { vi: "Dòng 1 là sao = int(input()). Dòng 2 là print(\"Thưởng: +\" + str(sao * 5) + \" điểm\").", en: "Line 1 is sao = int(input()). Line 2 is print(\"Thưởng: +\" + str(sao * 5) + \" điểm\")." }
+    test_eligible: true
+
+  - id: s2.ep-kieu.c3
+    type: code
+    concepts: [float-convert, int-truncate]
+    prompt:
+      vi: "Mỗi ngày Robo chạy cùng 1 quãng đường. Ô Dữ liệu nhập có 1 dòng: số km Robo chạy mỗi ngày, là số thực có dấu chấm. Hãy đọc số đó vào biến km, rồi in ra 2 dòng như phần Ví dụ: tổng số km Robo chạy trong 3 ngày, và số km tròn của tổng đó (bỏ phần thập phân, không làm tròn)."
+      en: "Every day Robo runs the same distance. The Input data box has 1 line: the km Robo runs each day, a decimal number with a dot. Read the number into the variable km, then print the 2 lines in the Example: the total km Robo runs in 3 days, and the whole km of that total (drop the decimal part, do not round)."
+    starter: |
+      # Viết lệnh của con ở dưới dòng này
+    solution: |
+      km = float(input())
+      tong = km * 3
+      print("Ba ngày:", tong, "km")
+      print("Số km tròn:", int(tong))
+    tests:
+      - input: "2.5"
+        output: |
+          Ba ngày: 7.5 km
+          Số km tròn: 7
+      - input: "1.25"
+        output: |
+          Ba ngày: 3.75 km
+          Số km tròn: 3
+        hidden: true
+    common_wrong:
+      - output: |
+          Ba ngày: 7.5 km
+          Số km tròn: 6
+        misconception: int-truncate
+        sample: |
+          km = float(input())
+          print("Ba ngày:", km * 3, "km")
+          print("Số km tròn:", int(km) * 3)
+    hints:
+      - { vi: "Đọc km bằng float(input()) và tính tổng 3 ngày trước. Chỉ cắt bỏ phần thập phân của tổng, ở bước cuối cùng.", en: "Read km with float(input()) and work out the 3-day total first. Drop the decimal part of the total only, as the last step." }
+      - { vi: "Dòng 1 là km = float(input()), dòng 2 là tong = km * 3. Hai dòng in là print(\"Ba ngày:\", tong, \"km\") và print(\"Số km tròn:\", int(tong)).", en: "Line 1 is km = float(input()), and line 2 is tong = km * 3. The 2 print lines are print(\"Ba ngày:\", tong, \"km\") and print(\"Số km tròn:\", int(tong))." }
+    test_eligible: true
