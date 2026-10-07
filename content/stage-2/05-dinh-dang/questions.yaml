@@ -1,0 +1,231 @@
+questions:
+  - id: s2.dinh-dang.b1
+    type: predict
+    concepts: [fstring-prefix]
+    lessons: [s2.dinh-dang.l1]
+    code: |
+      a = 2
+      b = 3
+      print(f"{a}{b}", "{a}{b}")
+    prompt:
+      vi: "Đoạn code in ra gì?"
+      en: "What is the output of this code?"
+    choices:
+      - { text: "23 23", misconception: fstring-prefix }
+      - { text: "5 {a}{b}", misconception: fstring-expression }
+      - { text: "2 3 {a}{b}", misconception: concat-no-space }
+      - { text: "23 {a}{b}", correct: true }
+    explanation:
+      vi: "Chuỗi thứ nhất có chữ f, nên {a} thành 2 và {b} thành 3, đứng sát nhau thành 23, không có phép cộng. Chuỗi thứ hai không có chữ f, nên Python in nguyên văn {a}{b}. Dấu phẩy thêm 1 dấu cách ở giữa."
+      en: "The first string has an f, so {a} becomes 2 and {b} becomes 3, side by side as 23, with no addition. The second string has no f, so Python prints {a}{b} as it is. The comma adds a space in between."
+
+  - id: s2.dinh-dang.b2
+    type: mcq
+    concepts: [fstring-prefix]
+    lessons: [s2.dinh-dang.l1]
+    prompt:
+      vi: "Biến name chứa chuỗi \"Bo\". Lệnh nào in ra Hi Bo?"
+      en: "The variable name holds the string \"Bo\". Which statement prints Hi Bo?"
+    choices:
+      - { text: "print(f\"Hi {name}\")", correct: true }
+      - { text: "print(\"Hi {name}\")", misconception: fstring-prefix }
+      - { text: "print(\"Hi f{name}\")", misconception: fstring-prefix }
+      - { text: "print(f\"Hi (name)\")", misconception: fstring-prefix }
+    explanation:
+      vi: "Chữ f phải đứng ngay trước dấu nháy mở, và tên biến phải nằm trong ngoặc nhọn. Không có chữ f, Python in nguyên văn Hi {name}. Chữ f đặt bên trong dấu nháy chỉ là 1 chữ cái bình thường. Ngoặc tròn không được thay bằng giá trị, nên Python in ra Hi (name)."
+      en: "The f must come right before the opening quote, and the variable name must be in curly brackets. Without the f, Python prints Hi {name} as it is. An f inside the quotes is just a normal letter. Round brackets are not replaced with a value, so Python prints Hi (name)."
+
+  - id: s2.dinh-dang.b3
+    type: predict
+    concepts: [fstring-expression]
+    lessons: [s2.dinh-dang.l2]
+    code: |
+      w = "ab"
+      print(f"{w * 2}!")
+    prompt:
+      vi: "Đoạn code in ra gì?"
+      en: "What is the output of this code?"
+    choices:
+      - { text: "ab * 2!", misconception: fstring-expression }
+      - { text: "abab!", correct: true }
+      - { text: "ab ab!", misconception: string-repeat }
+      - { vi: "Báo lỗi TypeError ở dòng 2", en: "A TypeError on line 2", error: true, misconception: string-repeat }
+    explanation:
+      vi: "Phép tính trong ngoặc nhọn được tính trước: chuỗi \"ab\" nhân 2 thì được lặp lại và nối sát nhau thành abab. Sau đó Python điền abab vào chỗ ngoặc, rồi in tiếp dấu chấm than nằm ngoài ngoặc."
+      en: "The calculation inside the curly brackets is worked out first: the string \"ab\" times 2 is repeated and joined into abab. Then Python fills abab into the brackets, and prints the exclamation mark that is outside the brackets."
+
+  - id: s2.dinh-dang.b4
+    type: mcq
+    concepts: [fstring-expression]
+    lessons: [s2.dinh-dang.l2]
+    prompt:
+      vi: "Trong 1 chuỗi f, phần nào được Python tính ra giá trị?"
+      en: "In an f-string, which part does Python work out as a value?"
+    choices:
+      - { vi: "Cả chuỗi, kể cả phần nằm ngoài ngoặc nhọn", en: "The whole string, including the part outside the curly brackets", misconception: fstring-expression }
+      - { vi: "Chỉ tên biến trong ngoặc nhọn; phép tính trong ngoặc được in y nguyên", en: "Only variable names in curly brackets; a calculation in the brackets is printed as it is", misconception: fstring-expression }
+      - { vi: "Mọi thứ nằm trong ngoặc nhọn, cả tên biến lẫn phép tính", en: "Everything inside the curly brackets, both variable names and calculations", correct: true }
+      - { vi: "Chỉ phần nằm ngoài ngoặc nhọn", en: "Only the part outside the curly brackets", misconception: fstring-expression }
+    explanation:
+      vi: "Python tính mọi thứ nằm trong ngoặc nhọn, dù là tên biến như {a} hay phép tính như {a + b}, rồi điền kết quả vào. Phần nằm ngoài ngoặc nhọn là chữ, được in y nguyên."
+      en: "Python works out everything inside the curly brackets, a variable name like {a} or a calculation like {a + b}, and fills in the result. The part outside the curly brackets is text, printed as it is."
+
+  - id: s2.dinh-dang.b5
+    type: predict
+    concepts: [round-digits]
+    lessons: [s2.dinh-dang.l3]
+    code: |
+      x = 2.678
+      print(round(x, 1), round(x, 2))
+    prompt:
+      vi: "Đoạn code in ra gì?"
+      en: "What is the output of this code?"
+    choices:
+      - { text: "2.6 2.67", misconception: int-truncate }
+      - { text: "2.7 2.68", correct: true }
+      - { text: "3 3", misconception: round-digits }
+      - { text: "2.70 2.68", misconception: format-two-decimals }
+    explanation:
+      vi: "round(x, 1) giữ 1 chữ số sau dấu chấm và làm tròn: 2.678 gần 2.7 hơn 2.6, nên ra 2.7. round(x, 2) giữ 2 chữ số: 2.678 gần 2.68 hơn 2.67, nên ra 2.68. round() làm tròn chứ không cắt bỏ, và không thêm số 0 vào cuối."
+      en: "round(x, 1) keeps 1 digit after the dot and rounds: 2.678 is closer to 2.7 than to 2.6, so it gives 2.7. round(x, 2) keeps 2 digits: 2.678 is closer to 2.68 than to 2.67, so it gives 2.68. round() rounds and does not just drop digits, and it adds no 0 at the end."
+
+  - id: s2.dinh-dang.b6
+    type: mcq
+    concepts: [round-digits]
+    lessons: [s2.dinh-dang.l3]
+    prompt:
+      vi: "Lệnh nào in ra 9.9?"
+      en: "Which statement prints 9.9?"
+    choices:
+      - { text: "print(round(9.87, 1))", correct: true }
+      - { text: "print(round(9.87))", misconception: round-digits }
+      - { text: "print(int(9.87))", misconception: int-truncate }
+      - { text: "print(round(9.87, 2))", misconception: round-digits }
+    explanation:
+      vi: "round(9.87, 1) giữ 1 chữ số sau dấu chấm, nên ra 9.9. round(9.87) không có số thứ hai, nên ra số nguyên 10. int(9.87) cắt bỏ phần thập phân, ra 9. round(9.87, 2) giữ 2 chữ số, nên vẫn là 9.87."
+      en: "round(9.87, 1) keeps 1 digit after the dot, so it gives 9.9. round(9.87) has no second number, so it gives the integer 10. int(9.87) drops the decimal part and gives 9. round(9.87, 2) keeps 2 digits, so it is still 9.87."
+
+  - id: s2.dinh-dang.b7
+    type: predict
+    concepts: [round-half-even]
+    lessons: [s2.dinh-dang.l3]
+    code: |
+      print(round(0.5), round(1.5), round(4.5))
+    prompt:
+      vi: "Đoạn code in ra gì?"
+      en: "What is the output of this code?"
+    choices:
+      - { text: "1 2 5", misconception: round-half-even }
+      - { text: "0 1 4", misconception: int-truncate }
+      - { text: "0 2 4", correct: true }
+      - { text: "1 2 4", misconception: round-half-even }
+    explanation:
+      vi: "Cả 3 số đều nằm đúng giữa 2 số nguyên, nên Python chọn số chẵn. 0.5 nằm giữa 0 và 1, chọn 0. 1.5 nằm giữa 1 và 2, chọn 2. 4.5 nằm giữa 4 và 5, chọn 4."
+      en: "All 3 numbers are exactly halfway between 2 whole numbers, so Python picks the even one. 0.5 is between 0 and 1: it picks 0. 1.5 is between 1 and 2: it picks 2. 4.5 is between 4 and 5: it picks 4."
+
+  - id: s2.dinh-dang.b8
+    type: mcq
+    concepts: [round-half-even]
+    lessons: [s2.dinh-dang.l3]
+    prompt:
+      vi: "round(6.5) ra bao nhiêu, và vì sao?"
+      en: "What does round(6.5) give, and why?"
+    choices:
+      - { vi: "7, vì số có đuôi .5 luôn được làm tròn lên", en: "7, because a number ending in .5 is always rounded up", misconception: round-half-even }
+      - { vi: "6, vì round() cắt bỏ phần thập phân như int()", en: "6, because round() drops the decimal part like int()", misconception: int-truncate }
+      - { vi: "6.0, vì round() luôn đưa lại số thực", en: "6.0, because round() always gives back a decimal number", misconception: round-digits }
+      - { vi: "6, vì 6.5 nằm đúng giữa 6 và 7, và Python chọn số chẵn", en: "6, because 6.5 is exactly halfway between 6 and 7, and Python picks the even number", correct: true }
+    explanation:
+      vi: "6.5 nằm đúng giữa 6 và 7, nên Python chọn số chẵn là 6. round() không cắt bỏ như int(): round(6.7) vẫn ra 7. Khi chỉ có 1 số trong ngoặc, round() đưa lại số nguyên, nên không có .0."
+      en: "6.5 is exactly halfway between 6 and 7, so Python picks the even number, 6. round() does not just drop digits like int(): round(6.7) still gives 7. With only 1 number in the brackets, round() gives back an integer, so there is no .0."
+
+  - id: s2.dinh-dang.b9
+    type: predict
+    concepts: [format-two-decimals]
+    lessons: [s2.dinh-dang.l4]
+    code: |
+      x = 4.5
+      print(f"{x:.2f}", round(x, 2))
+    prompt:
+      vi: "Đoạn code in ra gì?"
+      en: "What is the output of this code?"
+    choices:
+      - { text: "4.50 4.50", misconception: format-two-decimals }
+      - { text: "4.5 4.5", misconception: format-two-decimals }
+      - { text: "4.50 4.5", correct: true }
+      - { text: "4.5 4.50", misconception: format-two-decimals }
+    explanation:
+      vi: ":.2f luôn in đủ 2 chữ số sau dấu chấm, nên Python thêm số 0 và in ra 4.50. round(x, 2) chỉ làm tròn con số: 4.5 đã có ít hơn 2 chữ số sau dấu chấm nên giữ nguyên, và Python in ra 4.5."
+      en: ":.2f always prints 2 digits after the dot, so Python adds a 0 and prints 4.50. round(x, 2) only rounds the number: 4.5 already has fewer than 2 digits after the dot, so it stays the same, and Python prints 4.5."
+
+  - id: s2.dinh-dang.b10
+    type: predict
+    concepts: [format-two-decimals]
+    lessons: [s2.dinh-dang.l4]
+    code: |
+      print(f"{2 / 3:.2f}")
+    prompt:
+      vi: "Đoạn code in ra gì?"
+      en: "What is the output of this code?"
+    choices:
+      - { text: "0.66", misconception: int-truncate }
+      - { text: "0.67", correct: true }
+      - { text: "0.6666666666666666", misconception: format-two-decimals }
+      - { text: "2 / 3:.2f", misconception: fstring-expression }
+    explanation:
+      vi: "Python tính 2 / 3 trong ngoặc nhọn trước, ra 0.666... Sau đó :.2f in với đúng 2 chữ số sau dấu chấm và làm tròn, không cắt bỏ: 0.666... gần 0.67 hơn 0.66, nên in ra 0.67."
+      en: "Python works out 2 / 3 inside the curly brackets first: 0.666... Then :.2f prints exactly 2 digits after the dot and rounds, without just dropping digits: 0.666... is closer to 0.67 than to 0.66, so it prints 0.67."
+
+  - id: s2.dinh-dang.b11
+    type: mcq
+    concepts: [format-two-decimals]
+    lessons: [s2.dinh-dang.l4]
+    prompt:
+      vi: "Biến tien chứa số 12.5. Con muốn in ra 12.50. Lệnh nào đúng?"
+      en: "The variable tien holds the number 12.5. You want to print 12.50. Which statement is right?"
+    choices:
+      - { text: "print(f\"{tien:.2f}\")", correct: true }
+      - { text: "print(round(tien, 2))", misconception: format-two-decimals }
+      - { text: "print(f\"{tien}:.2f\")", misconception: format-two-decimals }
+      - { text: "print(\"{tien:.2f}\")", misconception: fstring-prefix }
+    explanation:
+      vi: ":.2f phải nằm bên trong ngoặc nhọn, ngay sau tên biến, và chuỗi phải có chữ f. round(tien, 2) vẫn in ra 12.5. Khi :.2f nằm ngoài ngoặc, Python in ra 12.5:.2f. Không có chữ f, Python in nguyên văn {tien:.2f}."
+      en: ":.2f must be inside the curly brackets, right after the variable name, and the string must have an f. round(tien, 2) still prints 12.5. With :.2f outside the brackets, Python prints 12.5:.2f. Without the f, Python prints {tien:.2f} as it is."
+
+  - id: s2.dinh-dang.b12
+    type: predict
+    concepts: [round-half-even]
+    lessons: [s2.dinh-dang.l3]
+    code: |
+      print(round(2.5), round(2.51))
+    prompt:
+      vi: "Đoạn code in ra gì?"
+      en: "What is the output of this code?"
+    choices:
+      - { text: "3 3", misconception: round-half-even }
+      - { text: "2 2", misconception: round-half-even }
+      - { text: "2.0 3.0", misconception: round-digits }
+      - { text: "2 3", correct: true }
+    explanation:
+      vi: "2.5 nằm đúng giữa 2 và 3, nên Python chọn số chẵn là 2. 2.51 không nằm đúng giữa mà gần 3 hơn, nên Python làm tròn thành 3. Quy tắc chọn số chẵn chỉ dùng khi số nằm đúng giữa."
+      en: "2.5 is exactly halfway between 2 and 3, so Python picks the even number, 2. 2.51 is not exactly halfway: it is closer to 3, so Python rounds it to 3. The rule of picking the even number is used only when a number is exactly halfway."
+
+  - id: s2.dinh-dang.b13
+    type: predict
+    concepts: [fstring-expression]
+    lessons: [s2.dinh-dang.l2]
+    code: |
+      a = 7
+      b = 2
+      print(f"{a / b} {a // b}")
+    prompt:
+      vi: "Đoạn code in ra gì?"
+      en: "What is the output of this code?"
+    choices:
+      - { text: "3.5 3.5", misconception: floor-div }
+      - { text: "3 3", misconception: div-float }
+      - { text: "3.5 3", correct: true }
+      - { text: "a / b a // b", misconception: fstring-expression }
+    explanation:
+      vi: "Python tính phép chia trong mỗi cặp ngoặc nhọn rồi điền kết quả vào. Phép / luôn ra số thực, nên 7 / 2 ra 3.5. Phép // chỉ giữ phần nguyên, nên 7 // 2 ra 3. Dấu cách giữa 2 cặp ngoặc là chữ, được in y nguyên."
+      en: "Python works out the division in each pair of curly brackets and fills in the result. / always gives a decimal number, so 7 / 2 gives 3.5. // keeps only the whole part, so 7 // 2 gives 3. The space between the 2 pairs of brackets is text, printed as it is."

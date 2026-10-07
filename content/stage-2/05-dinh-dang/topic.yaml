@@ -1,0 +1,11 @@
+id: s2.dinh-dang
+title: { vi: "Định dạng đầu ra", en: "Formatting output" }
+lessons:
+  - 01-f-string.md
+  - 02-tinh-trong-f-string.md
+  - 03-round.md
+  - 04-hai-chu-so.md
+  - 05-hoa-don.md
+reviews:
+  - { id: s2.dinh-dang.r1, after: s2.dinh-dang.l2 }
+  - { id: s2.dinh-dang.r2, after: s2.dinh-dang.l5 }

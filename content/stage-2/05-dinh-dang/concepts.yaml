@@ -1,0 +1,51 @@
+concepts:
+  - id: fstring-prefix
+    name: { vi: "Chuỗi f cần chữ f trước dấu nháy", en: "An f-string needs an f before the quote" }
+    misconception_card: |
+      Nhiều bạn quên chữ **f** và nghĩ Python vẫn thay `{ten}` bằng giá trị của biến. Thực ra không có chữ f thì đó là chuỗi thường: với `ten = "Robo"`, `print("Chào {ten}")` in ra nguyên văn Chào {ten}, và Python không báo lỗi. Con viết `print(f"Chào {ten}")`, với chữ f đứng sát ngay trước dấu nháy mở và tên biến nằm trong ngoặc nhọn.
+    parent_tip: |
+      Viết lên giấy câu "Chào { }!" rồi cùng con đọc to, mỗi lần điền 1 tên khác vào chỗ ngoặc. Giải thích rằng chữ f giống lời dặn "hãy điền vào chỗ trống", thiếu nó thì máy đọc nguyên cả ngoặc.
+    practice:
+      level1: [s2.dinh-dang.l1.q1, s2.dinh-dang.l1.q2, s2.dinh-dang.b1, s2.dinh-dang.b2]
+      level2: [s2.dinh-dang.p1]
+      level3: [s2.dinh-dang.l1.ex1, s2.dinh-dang.l1.ex2]
+  - id: fstring-expression
+    name: { vi: "Phép tính trong ngoặc nhọn được tính", en: "A calculation inside curly brackets is worked out" }
+    misconception_card: |
+      Nhiều bạn nghĩ `f"{a} + {b}"` sẽ in ra tổng của a và b. Thực ra Python chỉ tính phần **bên trong** ngoặc nhọn, còn phần bên ngoài là chữ, được in y nguyên: với a = 3 và b = 4, dòng này in ra 3 + 4. Muốn in ra 7, con đặt cả phép tính vào 1 cặp ngoặc: `f"{a + b}"`.
+    parent_tip: |
+      Viết lên giấy câu "Có [2 + 3] quả táo" rồi nhờ con đọc to, thay phần trong ngoặc bằng kết quả. Phần ngoài ngoặc con đọc nguyên văn, giống hệt cách Python đọc chuỗi f.
+    practice:
+      level1: [s2.dinh-dang.l2.q1, s2.dinh-dang.l2.q2, s2.dinh-dang.l5.q2, s2.dinh-dang.b3, s2.dinh-dang.b4, s2.dinh-dang.b13]
+      level2: [s2.dinh-dang.p2]
+      level3: [s2.dinh-dang.l2.ex1, s2.dinh-dang.l2.ex2, s2.dinh-dang.l5.ex2]
+  - id: round-digits
+    name: { vi: "round(x, n) giữ n chữ số sau dấu chấm", en: "round(x, n) keeps n digits after the dot" }
+    misconception_card: |
+      Nhiều bạn nghĩ `round()` cắt bỏ phần thập phân như `int()`. Thực ra `round()` **làm tròn**, và số thứ hai cho biết giữ mấy chữ số sau dấu chấm: `round(2.678, 2)` ra 2.68, còn `int(2.678)` ra 2. Không có số thứ hai thì `round()` làm tròn thành số nguyên gần nhất: `round(2.678)` ra 3.
+    parent_tip: |
+      Đo chiều cao của con, ví dụ 1,437 m, rồi cùng con làm tròn còn 2 chữ số sau dấu phẩy (1,44 m) và còn 1 chữ số (1,4 m). Giải thích rằng round(x, 2) và round(x, 1) của Python làm đúng việc đó.
+    practice:
+      level1: [s2.dinh-dang.l3.q2, s2.dinh-dang.b5, s2.dinh-dang.b6]
+      level2: [s2.dinh-dang.p3]
+      level3: [s2.dinh-dang.l3.ex1, s2.dinh-dang.l3.ex2, s2.dinh-dang.c1]
+  - id: round-half-even
+    name: { vi: "round() chọn số chẵn khi đúng ở giữa", en: "round() picks the even number when exactly halfway" }
+    misconception_card: |
+      Nhiều bạn nghĩ số có đuôi .5 luôn được làm tròn lên, nên `round(2.5)` ra 3 như ở môn Toán. Thực ra khi 1 số nằm **đúng giữa** 2 số nguyên, Python chọn số **chẵn**: `round(2.5)` ra 2, còn `round(3.5)` ra 4. Nếu số không nằm đúng giữa, như 2.51, Python làm tròn về số gần hơn: `round(2.51)` ra 3.
+    parent_tip: |
+      Viết các số 0,5; 1,5; 2,5 và 3,5 lên giấy, rồi cùng con tìm số chẵn gần nhất của mỗi số (0, 2, 2 và 4). Đó chính là kết quả round() của Python với những số nằm đúng giữa.
+    practice:
+      level1: [s2.dinh-dang.l3.q1, s2.dinh-dang.b7, s2.dinh-dang.b8, s2.dinh-dang.b12]
+      level2: [s2.dinh-dang.p4]
+      level3: [s2.dinh-dang.c2]
+  - id: format-two-decimals
+    name: { vi: ":.2f luôn in đủ 2 chữ số sau dấu chấm", en: ":.2f always prints 2 digits after the dot" }
+    misconception_card: |
+      Nhiều bạn nghĩ `round(x, 2)` luôn in ra đủ 2 chữ số sau dấu chấm. Thực ra `round()` chỉ làm tròn con số, nên `round(5.0, 2)` vẫn in ra 5.0. Muốn **luôn** in đủ 2 chữ số, con dùng `:.2f` trong chuỗi f: `f"{5.0:.2f}"` in ra 5.00.
+    parent_tip: |
+      Cho con xem 1 chiếc cân điện tử hiện 2 chữ số sau dấu phẩy, như 0,50 kg, rồi hỏi 0,50 và 0,5 có bằng nhau không. Giải thích rằng :.2f chỉ thêm số 0 cho đủ 2 chữ số, còn giá trị không đổi.
+    practice:
+      level1: [s2.dinh-dang.l4.q1, s2.dinh-dang.l4.q2, s2.dinh-dang.l5.q1, s2.dinh-dang.b9, s2.dinh-dang.b10, s2.dinh-dang.b11]
+      level2: [s2.dinh-dang.p5]
+      level3: [s2.dinh-dang.l4.ex1, s2.dinh-dang.l4.ex2, s2.dinh-dang.l5.ex1, s2.dinh-dang.c3]

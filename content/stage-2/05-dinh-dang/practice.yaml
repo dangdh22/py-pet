@@ -1,0 +1,187 @@
+exercises:
+  - id: s2.dinh-dang.p1
+    type: fill
+    concepts: [fstring-prefix]
+    prompt:
+      vi: "Robo chào bạn mới. Ô Dữ liệu nhập có 1 dòng: tên của bạn đó. Điền vào chỗ trống để in ra lời chào như phần Ví dụ."
+      en: "Robo greets a new friend. The Input data box has 1 line: the friend's name. Fill the blank to print the greeting as in the Example."
+    template: |
+      ten = input()
+      print(___"Chào {ten}, Robo đây!")
+    answers: ["f"]
+    tests:
+      - { input: "Lan", output: "Chào Lan, Robo đây!" }
+      - { input: "Minh", output: "Chào Minh, Robo đây!", hidden: true }
+    hints:
+      - { vi: "Nếu để trống, Python in ra nguyên văn Chào {ten}, Robo đây!. Chuỗi cần 1 chữ cái đứng ngay trước dấu nháy mở để điền tên vào ngoặc nhọn.", en: "With the blank empty, Python prints Chào {ten}, Robo đây! as it is. The string needs 1 letter right before the opening quote to fill the name into the curly brackets." }
+      - { vi: "Điền chữ f vào chỗ trống.", en: "Fill the blank with the letter f." }
+
+  - id: s2.dinh-dang.p2
+    type: parsons
+    concepts: [fstring-expression]
+    prompt:
+      vi: "Robo đo mảnh vườn hình chữ nhật. Ô Dữ liệu nhập có 2 dòng: dòng 1 là chiều dài, dòng 2 là chiều rộng (mét, số nguyên). Sắp xếp các dòng lệnh để in ra kích thước và diện tích mảnh vườn như phần Ví dụ."
+      en: "Robo measures a rectangular garden. The Input data box has 2 lines: line 1 is the length, and line 2 is the width (metres, integers). Put the lines in order to print the size and the area of the garden as in the Example."
+    solution: |
+      dai = int(input())
+      rong = int(input())
+      print(f"Vườn {dai} x {rong} mét có diện tích {dai * rong} mét vuông")
+    tests:
+      - input: "5\n3"
+        output: "Vườn 5 x 3 mét có diện tích 15 mét vuông"
+      - input: "8\n6"
+        output: "Vườn 8 x 6 mét có diện tích 48 mét vuông"
+        hidden: true
+    hints:
+      - { vi: "Chiều dài ở dòng 1 của ô Dữ liệu nhập, nên được đọc trước chiều rộng. Lệnh print đứng sau cả 2 lệnh đọc, và tính dai * rong ngay trong ngoặc nhọn.", en: "The length is on line 1 of the Input data box, so it is read before the width. The print statement comes after both reading lines, and works out dai * rong right inside the curly brackets." }
+
+  - id: s2.dinh-dang.p3
+    type: fill
+    concepts: [round-digits]
+    prompt:
+      vi: "Robo đi bộ suốt 7 ngày. Ô Dữ liệu nhập có 1 dòng: tổng số km Robo đi trong 7 ngày, là số nguyên. Điền vào chỗ trống để in ra số km trung bình mỗi ngày, làm tròn đến 1 chữ số sau dấu chấm, như phần Ví dụ."
+      en: "Robo walks for 7 days. The Input data box has 1 line: the total km Robo walks in the 7 days, an integer. Fill the blank to print the average km per day, rounded to 1 digit after the dot, as in the Example."
+    template: |
+      tong_km = int(input())
+      print(f"Mỗi ngày khoảng {round(tong_km / 7, ___)} km")
+    answers: ["1"]
+    tests:
+      - { input: "20", output: "Mỗi ngày khoảng 2.9 km" }
+      - { input: "30", output: "Mỗi ngày khoảng 4.3 km", hidden: true }
+    hints:
+      - { vi: "Số thứ hai trong round() cho biết giữ lại mấy chữ số sau dấu chấm. Nếu để trống, round() làm tròn thành số nguyên.", en: "The second number in round() tells how many digits to keep after the dot. With the blank empty, round() rounds to a whole number." }
+      - { vi: "Điền 1 vào chỗ trống, để có round(tong_km / 7, 1).", en: "Fill the blank with 1, to get round(tong_km / 7, 1)." }
+
+  - id: s2.dinh-dang.p4
+    type: fill
+    concepts: [round-half-even]
+    prompt:
+      vi: "Robo thử xem round() làm tròn các số như thế nào. Ô Dữ liệu nhập có 1 dòng là 1 số thực có dấu chấm. Điền vào chỗ trống để in ra số đó làm tròn thành số nguyên bằng round(), như phần Ví dụ."
+      en: "Robo tests how round() rounds numbers. The Input data box has 1 line with a decimal number with a dot. Fill the blank to print the number rounded to a whole number with round(), as in the Example."
+    template: |
+      so = float(input())
+      print("Làm tròn:", ___)
+    answers: ["round(so)"]
+    tests:
+      - { input: "2.5", output: "Làm tròn: 2" }
+      - { input: "3.5", output: "Làm tròn: 4", hidden: true }
+      - { input: "7.8", output: "Làm tròn: 8", hidden: true }
+    hints:
+      - { vi: "round() với 1 số trong ngoặc làm tròn thành số nguyên gần nhất. Khi số nằm đúng giữa, như 2.5, Python chọn số chẵn, nên ra 2.", en: "round() with 1 number in the brackets rounds to the nearest whole number. When the number is exactly halfway, like 2.5, Python picks the even number, so it gives 2." }
+      - { vi: "Điền round(so) vào chỗ trống.", en: "Fill the blank with round(so)." }
+
+  - id: s2.dinh-dang.p5
+    type: fill
+    concepts: [format-two-decimals]
+    prompt:
+      vi: "Robo in nhãn giá cho 1 món hàng. Ô Dữ liệu nhập có 1 dòng: giá 1 món hàng, là số thực, tính bằng nghìn đồng. Điền vào chỗ trống để in ra giá với đúng 2 chữ số sau dấu chấm, như phần Ví dụ."
+      en: "Robo prints a price tag for an item. The Input data box has 1 line: the price of 1 item, a decimal number, in thousands of dong. Fill the blank to print the price with exactly 2 digits after the dot, as in the Example."
+    template: |
+      gia = float(input())
+      print(f"Giá: {gia___} nghìn đồng")
+    answers: [":.2f"]
+    tests:
+      - { input: "12.5", output: "Giá: 12.50 nghìn đồng" }
+      - { input: "8", output: "Giá: 8.00 nghìn đồng", hidden: true }
+    hints:
+      - { vi: "Trong ngoặc nhọn, ngay sau tên biến, con viết cách in để luôn có đủ 2 chữ số sau dấu chấm.", en: "Inside the curly brackets, right after the variable name, write the format that always prints 2 digits after the dot." }
+      - { vi: "Điền :.2f vào chỗ trống, để có {gia:.2f}.", en: "Fill the blank with :.2f, to get {gia:.2f}." }
+
+  - id: s2.dinh-dang.c1
+    type: code
+    concepts: [round-digits]
+    prompt:
+      vi: "Robo đổi phút ra giờ. Ô Dữ liệu nhập có 1 dòng: số phút, là số nguyên. Hãy đọc số đó vào biến phut, rồi in ra số giờ, làm tròn đến 2 chữ số sau dấu chấm, như phần Ví dụ. Một giờ có 60 phút."
+      en: "Robo changes minutes into hours. The Input data box has 1 line: the number of minutes, an integer. Read the number into the variable phut, then print the number of hours, rounded to 2 digits after the dot, as in the Example. An hour has 60 minutes."
+    starter: |
+      # Viết lệnh của con ở dưới dòng này
+    solution: |
+      phut = int(input())
+      print(f"Khoảng {round(phut / 60, 2)} giờ")
+    tests:
+      - input: "100"
+        output: "Khoảng 1.67 giờ"
+      - input: "45"
+        output: "Khoảng 0.75 giờ"
+        hidden: true
+      - input: "90"
+        output: "Khoảng 1.5 giờ"
+        hidden: true
+    common_wrong:
+      - output: "Khoảng 1.6666666666666667 giờ"
+        misconception: round-digits
+        sample: |
+          phut = int(input())
+          print(f"Khoảng {phut / 60} giờ")
+      - output: "Khoảng 2 giờ"
+        misconception: round-digits
+        sample: |
+          phut = int(input())
+          print(f"Khoảng {round(phut / 60)} giờ")
+    hints:
+      - { vi: "Đọc số phút bằng int(input()) rồi chia cho 60. Dùng round() với số thứ hai là 2 để giữ 2 chữ số sau dấu chấm.", en: "Read the minutes with int(input()), then divide by 60. Use round() with 2 as the second number to keep 2 digits after the dot." }
+      - { vi: "Dòng 1 là phut = int(input()). Dòng 2 là print(f\"Khoảng {round(phut / 60, 2)} giờ\").", en: "Line 1 is phut = int(input()). Line 2 is print(f\"Khoảng {round(phut / 60, 2)} giờ\")." }
+    test_eligible: true
+
+  - id: s2.dinh-dang.c2
+    type: code
+    concepts: [round-half-even]
+    prompt:
+      vi: "Robo chia đều bánh cho các bạn. Ô Dữ liệu nhập có 2 dòng: dòng 1 là số cái bánh, dòng 2 là số bạn, đều là số nguyên. Hãy đọc 2 số vào 2 biến banh và ban, rồi in ra số bánh mỗi bạn nhận, làm tròn thành số nguyên bằng round(), như phần Ví dụ."
+      en: "Robo shares cakes equally with friends. The Input data box has 2 lines: line 1 is the number of cakes, and line 2 is the number of friends, both integers. Read the 2 numbers into the 2 variables banh and ban, then print the cakes each friend gets, rounded to a whole number with round(), as in the Example."
+    starter: |
+      # Viết lệnh của con ở dưới dòng này
+    solution: |
+      banh = int(input())
+      ban = int(input())
+      print(f"Mỗi bạn khoảng {round(banh / ban)} cái bánh")
+    tests:
+      - input: "5\n2"
+        output: "Mỗi bạn khoảng 2 cái bánh"
+      - input: "7\n2"
+        output: "Mỗi bạn khoảng 4 cái bánh"
+        hidden: true
+      - input: "11\n4"
+        output: "Mỗi bạn khoảng 3 cái bánh"
+        hidden: true
+    common_wrong:
+      - test: 1
+        output: "Mỗi bạn khoảng 3 cái bánh"
+        misconception: int-truncate
+        sample: |
+          banh = int(input())
+          ban = int(input())
+          print(f"Mỗi bạn khoảng {int(banh / ban)} cái bánh")
+    hints:
+      - { vi: "Chia banh / ban rồi làm tròn bằng round(). Với 5 cái bánh và 2 bạn, mỗi bạn được 2.5 cái, nằm đúng giữa 2 và 3, nên Python chọn số chẵn là 2.", en: "Divide banh / ban, then round it with round(). With 5 cakes and 2 friends, each friend gets 2.5 cakes, exactly halfway between 2 and 3, so Python picks the even number, 2." }
+      - { vi: "Hai dòng đầu là banh = int(input()) và ban = int(input()). Dòng 3 là print(f\"Mỗi bạn khoảng {round(banh / ban)} cái bánh\").", en: "The first 2 lines are banh = int(input()) and ban = int(input()). Line 3 is print(f\"Mỗi bạn khoảng {round(banh / ban)} cái bánh\")." }
+    test_eligible: true
+
+  - id: s2.dinh-dang.c3
+    type: code
+    concepts: [format-two-decimals]
+    prompt:
+      vi: "Robo đổi gam ra kilôgam. Ô Dữ liệu nhập có 1 dòng: cân nặng tính bằng gam, là số nguyên. Hãy đọc số đó vào biến gam, rồi in ra cân nặng tính bằng kg, với đúng 2 chữ số sau dấu chấm, như phần Ví dụ. Một kg bằng 1000 gam."
+      en: "Robo changes grams into kilograms. The Input data box has 1 line: a weight in grams, an integer. Read the number into the variable gam, then print the weight in kg, with exactly 2 digits after the dot, as in the Example. 1 kg is 1000 grams."
+    starter: |
+      # Viết lệnh của con ở dưới dòng này
+    solution: |
+      gam = int(input())
+      print(f"Cân nặng: {gam / 1000:.2f} kg")
+    tests:
+      - input: "1250"
+        output: "Cân nặng: 1.25 kg"
+      - input: "800"
+        output: "Cân nặng: 0.80 kg"
+        hidden: true
+    common_wrong:
+      - test: 1
+        output: "Cân nặng: 0.8 kg"
+        misconception: format-two-decimals
+        sample: |
+          gam = int(input())
+          print(f"Cân nặng: {round(gam / 1000, 2)} kg")
+    hints:
+      - { vi: "Đọc số gam bằng int(input()) rồi chia cho 1000. round() không thêm số 0 vào cuối, nên con dùng :.2f ngay sau phép chia, bên trong ngoặc nhọn.", en: "Read the grams with int(input()), then divide by 1000. round() does not add a 0 at the end, so use :.2f right after the division, inside the curly brackets." }
+      - { vi: "Dòng 1 là gam = int(input()). Dòng 2 là print(f\"Cân nặng: {gam / 1000:.2f} kg\").", en: "Line 1 is gam = int(input()). Line 2 is print(f\"Cân nặng: {gam / 1000:.2f} kg\")." }
+    test_eligible: true

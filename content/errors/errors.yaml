@@ -198,6 +198,14 @@
     en: "Line {line}: float() cannot change '{value}' into a decimal number. Decimal numbers in Python use a dot, not a comma: write 3.5, not 3,5. Numbers must also be written in digits, not in letters. If the string comes from input(), check that line in the Input data box."
   sample: "x = float(\"3,5\")"
 
+- id: format-code-str
+  match: { type: ValueError, message: "^Unknown format code '(?<code>.)' for object of type 'str'$" }
+  misconception: input-str
+  explain:
+    vi: "Dòng {line}: cách in số như :.2f chỉ dùng được với số, nhưng giá trị ở đây là chuỗi (str). Nếu giá trị đọc từ input(), hãy đổi nó thành số trước khi in, ví dụ gia = float(input())."
+    en: "Line {line}: a number format such as :.2f only works with numbers, but this value is a string (str). If the value comes from input(), change it into a number before you print it, for example gia = float(input())."
+  sample: "gia = \"30\"\nprint(f\"{gia:.2f}\")"
+
 - id: zero-division
   match: { type: ZeroDivisionError }
   explain:
