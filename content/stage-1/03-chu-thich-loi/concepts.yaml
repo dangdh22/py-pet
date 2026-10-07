@@ -26,7 +26,7 @@ concepts:
     parent_tip: |
       Đưa con 1 tờ giấy ghi 3 việc cần làm, trong đó việc thứ 3 bị viết thiếu chữ, không đọc được. Luật chơi là đọc hết tờ giấy trước, có chỗ không đọc được thì trả lại và chưa làm việc nào, giống Python gặp lỗi cú pháp.
     practice:
-      level1: [s1.chu-thich-loi.l3.q1, s1.chu-thich-loi.b8, s1.chu-thich-loi.b11, s1.chu-thich-loi.l4.q2]
+      level1: [s1.chu-thich-loi.l3.q1, s1.chu-thich-loi.b8, s1.chu-thich-loi.l4.q2]
       level2: [s1.chu-thich-loi.p3]
       level3: [s1.chu-thich-loi.l3.ex1, s1.chu-thich-loi.l4.ex1]
   - id: runtime-error-stops
@@ -36,7 +36,7 @@ concepts:
     parent_tip: |
       Chơi trò làm theo danh sách việc: con làm lần lượt từng việc, gặp việc không làm được thì dừng hẳn và báo lại. Các việc phía trên đã làm xong, các việc phía dưới chưa làm.
     practice:
-      level1: [s1.chu-thich-loi.l3.q2, s1.chu-thich-loi.b9, s1.chu-thich-loi.b10, s1.chu-thich-loi.b14]
+      level1: [s1.chu-thich-loi.l3.q2, s1.chu-thich-loi.b9, s1.chu-thich-loi.b10, s1.chu-thich-loi.b11, s1.chu-thich-loi.b14]
       level2: [s1.chu-thich-loi.p4]
       level3: [s1.chu-thich-loi.l3.ex1, s1.chu-thich-loi.c2]
   - id: bracket-pairs

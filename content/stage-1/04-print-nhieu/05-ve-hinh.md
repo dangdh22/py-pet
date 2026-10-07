@@ -84,10 +84,10 @@ exercises:
       vi: "Đoạn code in ra gì?"
       en: "What is the output of this code?"
     choices:
-      - { text: "###\n###", correct: true }
       - { text: "##\n#\n###", misconception: end-param }
       - { text: "## #\n###", misconception: end-param }
       - { text: "##\n####", misconception: end-param }
+      - { text: "###\n###", correct: true }
     explanation:
       vi: "Lệnh 1 in ## và không xuống dòng, vì end=\"\". Lệnh 2 in thêm 1 dấu # ngay sau đó, rồi xuống dòng: dòng 1 có ###. Lệnh 3 in ### ở dòng 2."
       en: "Statement 1 prints ## and does not start a new line, because of end=\"\". Statement 2 prints 1 more # right after it, then starts a new line: line 1 is ###. Statement 3 prints ### on line 2."

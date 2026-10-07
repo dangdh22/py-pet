@@ -17,7 +17,7 @@ concepts:
       Viết lên giấy 1 câu trích lời nói, rồi cùng con tô 2 màu: 1 màu cho cặp dấu nháy bao ngoài, 1 màu cho dấu nháy nằm bên trong.
     practice:
       level1: [s1.chuoi.l2.q1, s1.chuoi.l2.q2, s1.chuoi.b4, s1.chuoi.b5, s1.chuoi.b6]
-      level2: [s1.chuoi.p2]
+      level2: [s1.chuoi.p2, s1.chuoi.p8]
       level3: [s1.chuoi.l2.ex1, s1.chuoi.c4]
   - id: concat-no-space
     name: { vi: "Dấu + không tự thêm dấu cách", en: "+ does not add a space" }
@@ -44,7 +44,7 @@ concepts:
     misconception_card: |
       Nhiều bạn nghĩ `\n` sẽ được in ra thành 2 ký tự. Thực ra Python hiểu `\n` là **1 ký tự xuống dòng**: `print("A\nB")` in A và B trên 2 dòng. Nhớ dùng dấu gạch chéo ngược `\`, vì `"A/nB"` chỉ in ra A/nB trên 1 dòng.
     parent_tip: |
-      Đọc cho con chép 1 đoạn thơ ngắn. Mỗi khi bố mẹ nói "xuống dòng", con viết sang dòng mới. Ký hiệu \n trong chuỗi chính là lời nhắc "xuống dòng" đó.
+      Đọc cho con chép 1 đoạn thơ ngắn, và mỗi khi bố mẹ nói "xuống dòng" thì con viết sang dòng mới. Ký hiệu \n trong chuỗi chính là lời nhắc "xuống dòng" đó.
     practice:
       level1: [s1.chuoi.l5.q1, s1.chuoi.l5.q2, s1.chuoi.b13, s1.chuoi.b14, s1.chuoi.b15]
       level2: [s1.chuoi.p6, s1.chuoi.p7]

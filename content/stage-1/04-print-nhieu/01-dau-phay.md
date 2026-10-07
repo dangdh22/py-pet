@@ -39,9 +39,9 @@ exercises:
       vi: "Đoạn code in ra gì?"
       en: "What is the output of this code?"
     choices:
-      - { text: "A B C", correct: true }
       - { text: "ABC", misconception: print-comma-space }
       - { text: "A, B, C", misconception: print-comma-space }
+      - { text: "A B C", correct: true }
       - { text: "A\nB\nC", misconception: print-comma-space }
     explanation:
       vi: "Lệnh print có 3 giá trị, ngăn cách bằng dấu phẩy. Python in cả 3 giá trị trên cùng 1 dòng, với 1 dấu cách giữa 2 giá trị liền nhau. Dấu phẩy không được in ra."
@@ -55,10 +55,10 @@ exercises:
       vi: "Đoạn code in ra gì?"
       en: "What is the output of this code?"
     choices:
-      - { text: "PyPet Bo", correct: true }
       - { text: "Py Pet Bo", misconception: concat-no-space }
       - { text: "PyPetBo", misconception: print-comma-space }
       - { text: "PyPet, Bo", misconception: print-comma-space }
+      - { text: "PyPet Bo", correct: true }
     explanation:
       vi: "Dấu + nối Py và Pet sát nhau thành 1 giá trị: PyPet. Dấu phẩy ngăn cách PyPet với Bo, nên print thêm 1 dấu cách giữa chúng."
       en: "+ joins Py and Pet with no space into 1 value: PyPet. The comma separates PyPet from Bo, so print adds 1 space between them."

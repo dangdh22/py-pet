@@ -5,10 +5,10 @@ questions:
     lessons: [s1.chuoi.l1]
     prompt: { vi: "Trong Python, chuỗi là gì?", en: "In Python, what is a string?" }
     choices:
-      - { vi: "Một dãy ký tự nằm trong dấu nháy", en: "A sequence of characters inside quotes", correct: true }
       - { vi: "Chỉ gồm chữ cái, không có chữ số hay dấu cách", en: "Only letters, with no digits or spaces", misconception: string-exact }
       - { vi: "Một phép tính mà Python sẽ tính ra kết quả", en: "A calculation that Python works out", misconception: string-exact }
       - { vi: "Tên của một lệnh trong Python", en: "The name of a Python statement" }
+      - { vi: "Một dãy ký tự nằm trong dấu nháy", en: "A sequence of characters inside quotes", correct: true }
     explanation:
       vi: "Chuỗi là một dãy ký tự nằm trong dấu nháy. Chữ cái, chữ số, dấu cách và dấu câu đều là ký tự, và Python in chúng ra y nguyên."
       en: "A string is a sequence of characters inside quotes. Letters, digits, spaces and punctuation marks are all characters, and Python prints them exactly as they are."
@@ -39,9 +39,9 @@ questions:
       print("2 + 2 = 5")
     prompt: { vi: "Đoạn code in ra gì?", en: "What is the output of this code?" }
     choices:
-      - { text: "2 + 2 = 5", correct: true }
       - { text: "2 + 2 = 4", misconception: string-exact }
       - { text: "4 = 5", misconception: string-exact }
+      - { text: "2 + 2 = 5", correct: true }
       - { vi: "Báo lỗi vì phép tính sai", en: "An error, because the sum is wrong", error: true, misconception: string-exact }
     explanation:
       vi: "Mọi thứ trong chuỗi đều được in y nguyên. Python không tính và không sửa phép tính nằm trong dấu nháy."
@@ -55,8 +55,8 @@ questions:
       print("I'm Robo")
     prompt: { vi: "Đoạn code in ra gì?", en: "What is the output of this code?" }
     choices:
-      - { text: "I'm Robo", correct: true }
       - { vi: "Báo lỗi ở dòng 1", en: "An error on line 1", error: true, misconception: quote-inside }
+      - { text: "I'm Robo", correct: true }
       - { text: "Im Robo", misconception: quote-inside }
       - { text: "\"I'm Robo\"", misconception: string-quotes }
     explanation:
@@ -87,8 +87,8 @@ questions:
       vi: 'Lệnh nào in ra đúng dòng chữ: He said "Hi"'
       en: 'Which statement prints exactly this text: He said "Hi"'
     choices:
-      - { text: "print('He said \"Hi\"')", correct: true }
       - { text: 'print("He said "Hi"")', misconception: quote-inside }
+      - { text: "print('He said \"Hi\"')", correct: true }
       - { text: 'print(He said "Hi")', misconception: string-quotes }
       - { text: "print('He said \"Hi\"\")", misconception: string-quotes }
     explanation:
@@ -103,10 +103,10 @@ questions:
       print("Py" + "-" + "Pet")
     prompt: { vi: "Đoạn code in ra gì?", en: "What is the output of this code?" }
     choices:
-      - { text: "Py-Pet", correct: true }
       - { text: "Py - Pet", misconception: concat-no-space }
       - { text: "PyPet" }
       - { text: "Py+-+Pet" }
+      - { text: "Py-Pet", correct: true }
     explanation:
       vi: "Dấu + nối 3 chuỗi sát nhau, không thêm dấu cách: Py, rồi dấu -, rồi Pet."
       en: "+ joins the 3 strings right next to each other with no spaces: Py, then -, then Pet."
@@ -135,10 +135,10 @@ questions:
       vi: "Lệnh nào in ra Robo Pet, với đúng 1 dấu cách ở giữa?"
       en: "Which statement prints Robo Pet, with exactly 1 space in the middle?"
     choices:
-      - { text: 'print("Robo" + " " + "Pet")', correct: true }
       - { text: 'print("Robo" + "Pet")', misconception: concat-no-space }
       - { text: 'print("Robo " + " Pet")', misconception: string-exact }
       - { text: 'print("Robo" + "Pet" + " ")', misconception: concat-no-space }
+      - { text: 'print("Robo" + " " + "Pet")', correct: true }
     explanation:
       vi: "Dấu + không tự thêm dấu cách. Muốn có 1 dấu cách giữa Robo và Pet, con nối thêm chuỗi \" \" vào giữa."
       en: "+ does not add a space by itself. To get 1 space between Robo and Pet, join the string \" \" in the middle."
@@ -151,10 +151,10 @@ questions:
       print("Hi" * 2)
     prompt: { vi: "Đoạn code in ra gì?", en: "What is the output of this code?" }
     choices:
-      - { text: "HiHi", correct: true }
       - { text: "Hi Hi", misconception: string-repeat }
       - { text: "Hi2", misconception: string-repeat }
-      - { text: "Hi\nHi", misconception: string-repeat }
+      - { text: "HiHi", correct: true }
+      - { text: "Hi\nHi" }
     explanation:
       vi: "\"Hi\" * 2 lặp chuỗi Hi 2 lần, nối sát nhau trên cùng 1 dòng: HiHi."
       en: "\"Hi\" * 2 repeats the string Hi 2 times, right next to each other on the same line: HiHi."
@@ -167,8 +167,8 @@ questions:
       print("x" * 2 + "y" * 3)
     prompt: { vi: "Đoạn code in ra gì?", en: "What is the output of this code?" }
     choices:
-      - { text: "xxyyy", correct: true }
       - { text: "xxyxxyxxy", misconception: string-repeat }
+      - { text: "xxyyy", correct: true }
       - { text: "x2y3", misconception: string-repeat }
       - { text: "xx yyy", misconception: concat-no-space }
     explanation:
@@ -185,7 +185,7 @@ questions:
     choices:
       - { text: 'print("-" * 10)', correct: true }
       - { text: 'print("-" * "10")', misconception: string-repeat }
-      - { text: 'print("-" + 10)', misconception: string-repeat }
+      - { text: 'print("-" + 10)' }
       - { text: 'print("-10")', misconception: string-repeat }
     explanation:
       vi: "Viết chuỗi cần lặp, dấu *, rồi số lần lặp. Số lần lặp nằm ngoài dấu nháy. Viết \"-10\" thì Python chỉ in ra -10."
@@ -199,10 +199,10 @@ questions:
       print("1\n2\n3")
     prompt: { vi: "Đoạn code in ra gì?", en: "What is the output of this code?" }
     choices:
-      - { text: "1\n2\n3", correct: true }
       - { text: '1\n2\n3', misconception: newline-escape }
       - { text: "123" }
       - { text: "1 2 3" }
+      - { text: "1\n2\n3", correct: true }
     explanation:
       vi: 'Mỗi \n là 1 lần xuống dòng. Chuỗi có 2 ký tự \n nên in ra 3 dòng: 1, 2 và 3.'
       en: 'Each \n starts a new line. The string has 2 new-line characters, so it prints 3 lines: 1, 2 and 3.'
@@ -215,8 +215,8 @@ questions:
       print("Hi/nBo")
     prompt: { vi: "Đoạn code in ra gì?", en: "What is the output of this code?" }
     choices:
-      - { text: "Hi/nBo", correct: true }
       - { text: "Hi\nBo", misconception: newline-escape }
+      - { text: "Hi/nBo", correct: true }
       - { text: "HiBo" }
       - { vi: "Báo lỗi ở dòng 1", en: "An error on line 1", error: true }
     explanation:
@@ -231,9 +231,9 @@ questions:
       print("Py\nPet\n!")
     prompt: { vi: "Lệnh này in ra mấy dòng?", en: "How many lines does this statement print?" }
     choices:
-      - { text: "3", correct: true }
       - { text: "1", misconception: newline-escape }
       - { text: "2" }
+      - { text: "3", correct: true }
       - { text: "5" }
     explanation:
       vi: 'Chuỗi có 2 ký tự \n, nên được chia thành 3 dòng: Py, Pet và dấu chấm than.'
@@ -247,9 +247,9 @@ questions:
       print("Hi\n" * 2 + "Bo")
     prompt: { vi: "Đoạn code in ra gì?", en: "What is the output of this code?" }
     choices:
-      - { text: "Hi\nHi\nBo", correct: true }
       - { text: "Hi\nBoHi\nBo", misconception: string-repeat }
       - { text: 'Hi\nHi\nBo', misconception: newline-escape }
+      - { text: "Hi\nHi\nBo", correct: true }
       - { text: "HiHiBo", misconception: newline-escape }
     explanation:
       vi: 'Phép * làm trước: chuỗi "Hi\n" được lặp 2 lần, mỗi lần có 1 ký tự xuống dòng ở cuối. Sau đó dấu + nối thêm Bo, nên in ra 3 dòng: Hi, Hi và Bo.'

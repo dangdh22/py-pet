@@ -43,8 +43,8 @@ exercises:
       vi: "Đoạn code in ra gì?"
       en: "What is the output of this code?"
     choices:
-      - { text: "A-B\nC", correct: true }
       - { text: "A-B-C", misconception: end-param }
+      - { text: "A-B\nC", correct: true }
       - { text: "A-\nB\nC", misconception: end-param }
       - { text: "A\nB\nC", misconception: end-param }
     explanation:
@@ -63,7 +63,7 @@ exercises:
       - { text: "1+2=3", correct: true }
       - { text: "1+2=\n3", misconception: end-param }
       - { text: "1+2+=3", misconception: sep-param }
-      - { text: "3=3", misconception: number-vs-text }
+      - { text: "1 + 2 = 3", misconception: sep-param }
     explanation:
       vi: "sep=\"+\" đặt dấu + giữa 1 và 2. end=\"=\" in dấu = ở cuối thay vì xuống dòng. Vì vậy số 3 của lệnh print sau được in tiếp trên cùng dòng: 1+2=3."
       en: "sep=\"+\" puts a + between 1 and 2. end=\"=\" prints an = at the end instead of a new line. So the 3 from the next print statement is printed on the same line: 1+2=3."

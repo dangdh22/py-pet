@@ -65,16 +65,16 @@ questions:
     concepts: [print-call]
     lessons: [s1.lam-quen.l3]
     code: |
-      print("Xin")
+      print("Up")
       print()
       print()
-      print("chào")
+      print("Down")
     prompt: { vi: "Đoạn code in ra gì?", en: "What is the output of this code?" }
     choices:
-      - { text: "Xin\n\n\nchào", correct: true }
-      - { text: "Xin\n\nchào", misconception: print-call }
-      - { text: "Xin chào" }
-      - { text: "Xin\nchào", misconception: print-call }
+      - { text: "Up\n\n\nDown", correct: true }
+      - { text: "Up\n\nDown", misconception: print-call }
+      - { text: "Up Down" }
+      - { text: "Up\nDown", misconception: print-call }
     explanation:
       vi: "Mỗi print() để trống in ra 1 dòng trống. Có 2 lệnh như vậy nên có 2 dòng trống."
       en: "Each empty print() prints 1 empty line. There are 2 of them, so there are 2 empty lines."
@@ -148,10 +148,10 @@ questions:
       vi: "Một trợ lý AI trả lời bài tập của con bằng giọng rất chắc chắn. Con nên làm gì?"
       en: "An AI assistant answers your homework in a very confident voice. What should you do?"
     choices:
-      - { vi: "Tin ngay, vì AI không bao giờ sai", en: "Trust it right away, because AI is never wrong", misconception: ai-basics }
-      - { vi: "Kiểm tra lại bằng sách, thầy cô hoặc tự tính, vì AI cũng có thể sai", en: "Check it with a book, a teacher or your own work, because AI can also be wrong", correct: true }
-      - { vi: "Chép nguyên văn vào bài, vì AI giỏi hơn con", en: "Copy it word for word, because AI is smarter than you", misconception: ai-basics }
-      - { vi: "Không bao giờ dùng AI nữa", en: "Never use AI again" }
+      - { vi: "Tin ngay, vì giọng chắc chắn như vậy thì AI không thể sai", en: "Trust it right away, because AI cannot be wrong when it sounds so sure", misconception: ai-basics }
+      - { vi: "Kiểm tra lại bằng sách hoặc hỏi thầy cô, vì AI có thể sai", en: "Check it with a book or a teacher, because AI can be wrong", correct: true }
+      - { vi: "Chép nguyên văn vào bài, vì AI luôn giỏi hơn con người", en: "Copy it word for word, because AI is always smarter than people", misconception: ai-basics }
+      - { vi: "Không bao giờ dùng AI nữa, vì AI chẳng giúp được gì", en: "Never use AI again, because AI cannot help at all" }
     explanation:
       vi: "AI học từ ví dụ nên có lúc trả lời sai dù nghe rất chắc chắn. Con người cần kiểm tra lại trước khi dùng."
       en: "AI learns from examples, so sometimes it gives a wrong answer even when it sounds very sure. People need to check it before using it."
@@ -198,8 +198,8 @@ questions:
     prompt: { vi: "Đoạn code in ra gì?", en: "What is the output of this code?" }
     choices:
       - { text: "a\nA", correct: true }
-      - { text: "a\na", misconception: case-sensitive }
-      - { text: "A\nA", misconception: case-sensitive }
+      - { text: "a\na" }
+      - { text: "A\nA" }
       - { text: "aA" }
     explanation:
       vi: "Chữ hoa và chữ thường là 2 ký tự khác nhau, nên a và A được in ra đúng như đã viết."

@@ -14,7 +14,7 @@ concepts:
     misconception_card: |
       Nhiều bạn nghĩ `"2" + "3"` cũng ra 5. Thực ra chữ số nằm trong dấu nháy là **chữ**, nên dấu `+` chỉ đặt chúng cạnh nhau thành 23. Số viết **không có dấu nháy** mới là số thật: `print(2 + 3)` in ra 5. Muốn in chữ cùng với số, hãy ngăn cách bằng dấu phẩy: `print("Tổng:", 2 + 3)`.
     parent_tip: |
-      Đưa con 2 tấm thẻ ghi chữ số 2 và 3, rồi hỏi: đặt 2 tấm thẻ cạnh nhau thì đọc được số nào (23)? Còn 2 cái kẹo thêm 3 cái kẹo thì được mấy cái (5)? Chữ số trong dấu nháy giống tấm thẻ, số không có dấu nháy giống những cái kẹo.
+      Đặt 2 tấm thẻ ghi chữ số 2 và 3 cạnh nhau, rồi hỏi con đọc được số nào (23), còn 2 cái kẹo thêm 3 cái kẹo thì được mấy cái (5). Chữ số trong dấu nháy giống tấm thẻ, còn số không có dấu nháy giống những cái kẹo.
     practice:
       level1: [s1.print-nhieu.l2.q1, s1.print-nhieu.l2.q2, s1.print-nhieu.b5, s1.print-nhieu.b6, s1.print-nhieu.b7, s1.print-nhieu.b8]
       level2: [s1.print-nhieu.p2]
@@ -34,7 +34,7 @@ concepts:
     misconception_card: |
       Nhiều bạn nghĩ mỗi lệnh print luôn in trên 1 dòng riêng. Thực ra print in thêm `end` ở cuối, và nếu con không viết end thì end là ký tự xuống dòng `\n`. Với `end=""`, lệnh print sau in tiếp ngay trên cùng dòng: `print("A", end="")` rồi `print("B")` in ra AB. `end` chỉ đổi phần cuối của đúng lệnh print chứa nó.
     parent_tip: |
-      Đọc cho con viết từng từ lên giấy, mỗi từ xong thì xuống dòng. Thỉnh thoảng bố mẹ dặn "đừng xuống dòng", và con viết từ tiếp theo ngay trên dòng đó. Tham số end chính là lời dặn ấy.
+      Đọc cho con viết từng từ lên giấy, mỗi từ 1 dòng, nhưng thỉnh thoảng dặn "đừng xuống dòng" để con viết từ tiếp theo ngay trên dòng đó. Tham số end chính là lời dặn ấy.
     practice:
       level1: [s1.print-nhieu.l4.q1, s1.print-nhieu.l4.q2, s1.print-nhieu.b13, s1.print-nhieu.b14, s1.print-nhieu.b15, s1.print-nhieu.b17, s1.print-nhieu.l5.q1]
       level2: [s1.print-nhieu.p4, s1.print-nhieu.p7]
@@ -42,7 +42,7 @@ concepts:
   - id: named-option-order
     name: { vi: "Viết sep và end sau các giá trị", en: "Write sep and end after the values" }
     misconception_card: |
-      Nhiều bạn viết sep ở đầu, quên dấu nháy, hoặc đặt cả `sep=-` vào trong dấu nháy. Thực ra `sep` và `end` viết **sau tất cả giá trị**, có dấu `=`, và giá trị của chúng là 1 **chuỗi** trong dấu nháy: `print("A", "B", sep="-")`. Nếu viết `"sep=-"` trong dấu nháy thì đó chỉ là 1 chuỗi bình thường, và print in ra A B sep=-.
+      Nhiều bạn viết sep ở đầu, quên dấu nháy, hoặc đặt cả `sep=-` vào trong dấu nháy. Thực ra `sep` và `end` viết **sau tất cả giá trị**, có dấu `=`, và giá trị của chúng là 1 **chuỗi** trong dấu nháy: `print("A", "B", sep="-")`. Còn giữa sep và end thì viết cái nào trước cũng được. Nếu viết `"sep=-"` trong dấu nháy thì đó chỉ là 1 chuỗi bình thường, và print in ra A B sep=-.
     parent_tip: |
       Chơi trò gọi món: con nói tên các món trước, rồi mới dặn thêm như "ít cay" hay "không hành". Trong print, các giá trị là các món, còn sep và end là lời dặn thêm, luôn nói sau cùng.
     practice:

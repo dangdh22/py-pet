@@ -42,9 +42,9 @@ exercises:
       vi: "Đoạn code in ra gì?"
       en: "What is the output of this code?"
     choices:
-      - { text: "ababab", correct: true }
       - { text: "aaabbb", misconception: string-repeat }
       - { text: "ab ab ab", misconception: string-repeat }
+      - { text: "ababab", correct: true }
       - { text: "ab3", misconception: string-repeat }
     explanation:
       vi: "Cả chuỗi ab được lặp lại 3 lần và nối sát nhau: ababab."
@@ -58,8 +58,8 @@ exercises:
       vi: "Đoạn code in ra gì?"
       en: "What is the output of this code?"
     choices:
-      - { text: "ABB", correct: true }
       - { text: "ABAB", misconception: string-repeat }
+      - { text: "ABB", correct: true }
       - { text: "AABB" }
       - { text: "AB2" }
     explanation:

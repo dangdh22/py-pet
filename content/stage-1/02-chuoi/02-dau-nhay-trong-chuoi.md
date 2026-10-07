@@ -34,10 +34,10 @@ exercises:
       vi: "Đoạn code in ra gì?"
       en: "What is the output of this code?"
     choices:
-      - { text: 'Say "hi"', correct: true }
       - { text: "Say hi", misconception: quote-inside }
       - { text: "'Say \"hi\"'", misconception: string-quotes }
       - { vi: "Báo lỗi ở dòng 1", en: "An error on line 1", error: true, misconception: quote-inside }
+      - { text: 'Say "hi"', correct: true }
     explanation:
       vi: "Chuỗi mở và đóng bằng dấu nháy đơn, nên 2 dấu nháy kép ở giữa chỉ là ký tự bình thường và được in ra. Hai dấu nháy đơn bao ngoài thì không được in."
       en: "The string opens and closes with single quotes, so the 2 double quotes inside are ordinary characters and are printed. The single quotes around it are not printed."
@@ -48,9 +48,9 @@ exercises:
       vi: "Lệnh nào in ra đúng dòng chữ: It's OK"
       en: "Which statement prints exactly this text: It's OK"
     choices:
-      - { text: "print(\"It's OK\")", correct: true }
       - { text: "print('It's OK')", misconception: quote-inside }
       - { text: "print(It's OK)", misconception: string-quotes }
+      - { text: "print(\"It's OK\")", correct: true }
       - { text: "print(\"It's OK')", misconception: string-quotes }
     explanation:
       vi: "Chuỗi có dấu nháy đơn bên trong thì bao ngoài bằng dấu nháy kép. Với print('It's OK'), dấu nháy đơn sau chữ It đã đóng chuỗi mất rồi, nên Python báo lỗi."

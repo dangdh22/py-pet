@@ -58,7 +58,7 @@ exercises:
       - { text: "123", correct: true }
       - { text: "1 2 3", misconception: sep-param }
       - { text: "6", misconception: number-vs-text }
-      - { text: "1\"\"2\"\"3", misconception: sep-param }
+      - { text: "1,2,3", misconception: print-comma-space }
     explanation:
       vi: "sep=\"\" là chuỗi rỗng, nên giữa các giá trị không có gì cả. Ba số được in sát nhau thành 123. Dấu phẩy chỉ ngăn cách các giá trị, không cộng chúng lại."
       en: "sep=\"\" is the empty string, so there is nothing between the values. The 3 numbers are printed right next to each other: 123. The commas only separate the values. They do not add them up."
@@ -69,8 +69,8 @@ exercises:
       vi: "Lệnh nào in ra đúng dòng chữ: A+B"
       en: "Which statement prints exactly this text: A+B"
     choices:
-      - { text: 'print("A", "B", sep="+")', correct: true }
       - { text: 'print(sep="+", "A", "B")', misconception: named-option-order }
+      - { text: 'print("A", "B", sep="+")', correct: true }
       - { text: 'print("A", "B", sep=+)', misconception: named-option-order }
       - { text: 'print("A", "B", "sep=+")', misconception: named-option-order }
     explanation:

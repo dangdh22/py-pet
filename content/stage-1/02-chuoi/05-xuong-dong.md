@@ -42,8 +42,8 @@ exercises:
       vi: "Đoạn code in ra gì?"
       en: "What is the output of this code?"
     choices:
-      - { text: "Hi\nBo", correct: true }
       - { text: 'Hi\nBo', misconception: newline-escape }
+      - { text: "Hi\nBo", correct: true }
       - { text: "HiBo" }
       - { text: "Hi nBo" }
     explanation:
@@ -56,9 +56,9 @@ exercises:
       vi: "Lệnh nào in ra 2 dòng: dòng 1 là A, dòng 2 là B?"
       en: "Which statement prints 2 lines: A on line 1 and B on line 2?"
     choices:
-      - { text: 'print("A\nB")', correct: true }
       - { text: 'print("A/nB")', misconception: newline-escape }
       - { text: 'print("A" + "B")' }
+      - { text: 'print("A\nB")', correct: true }
       - { text: 'print("A n B")' }
     explanation:
       vi: 'Ký tự xuống dòng viết là \n, với dấu gạch chéo ngược. /n chỉ là 2 ký tự bình thường. Còn dấu + nối A và B trên cùng 1 dòng.'
@@ -66,7 +66,7 @@ exercises:
 ---
 Ở bài 2, con đã gặp dấu `\` trong `\"`. Dấu `\` báo cho Python biết: ký tự ngay sau nó có nghĩa đặc biệt.
 
-`\n` (dấu gạch chéo ngược và chữ n) là **ký tự xuống dòng**. Gặp `\n`, Python chuyển xuống dòng mới rồi in tiếp. Chữ n là chữ đầu của *new line*, nghĩa là "dòng mới".
+`\n` (dấu gạch chéo ngược và chữ n) là **ký tự xuống dòng**. Gặp `\n`, Python chuyển xuống dòng mới rồi in tiếp. Chữ n là chữ cái đầu của *new line*, nghĩa là "dòng mới".
 
 ```python run
 print("Robo\nPy-Pet")

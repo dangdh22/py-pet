@@ -6,20 +6,20 @@ exercises:
     type: predict
     concepts: [read-error, string-quotes]
     code: |
-      print("Một")
-      print(Hai)
-      print("Ba")
+      print("One")
+      print(Two)
+      print("Three")
     prompt:
       vi: "Chuyện gì xảy ra khi chạy đoạn code này?"
       en: "What happens when this code runs?"
     choices:
-      - { vi: "In ra Một, rồi báo lỗi NameError ở dòng 2", en: "It prints Một, then shows a NameError on line 2", correct: true, error: true }
-      - { text: "Một\nHai\nBa", misconception: string-quotes }
-      - { text: "Một\nBa" }
+      - { vi: "In ra One, rồi báo lỗi NameError ở dòng 2", en: "It prints One, then shows a NameError on line 2", correct: true, error: true }
+      - { text: "One\nTwo\nThree", misconception: string-quotes }
+      - { text: "One\nThree" }
       - { vi: "Không in gì, báo lỗi SyntaxError ở dòng 2", en: "It prints nothing and shows a SyntaxError on line 2", error: true, misconception: read-error }
     explanation:
-      vi: "Dòng 1 chạy bình thường. Ở dòng 2, Hai không có dấu nháy nên Python nghĩ đó là tên biến chưa có, và dừng lại với lỗi NameError. Dòng 3 không được chạy."
-      en: "Line 1 runs. On line 2, Hai has no quotes, so Python thinks it is a variable that does not exist and stops with a NameError. Line 3 does not run."
+      vi: "Dòng 1 chạy bình thường. Ở dòng 2, Two không có dấu nháy nên Python coi đó là 1 cái tên mà nó không biết, và dừng lại với lỗi NameError. Dòng 3 không được chạy."
+      en: "Line 1 runs. On line 2, Two has no quotes, so Python sees it as a name that it does not know and stops with a NameError. Line 3 does not run."
   - id: s1.lam-quen.l4.ex1
     type: code
     concepts: [read-error, string-quotes]

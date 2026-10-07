@@ -9,10 +9,10 @@ exercises:
       vi: "Điểm khác nhau giữa chương trình print con đã viết và một chương trình AI là gì?"
       en: "What is the difference between the print programs you wrote and an AI program?"
     choices:
-      - { vi: "Chương trình print làm đúng từng dòng lệnh, còn AI học từ rất nhiều ví dụ", en: "A print program does exactly what each line says, while AI learns from a huge number of examples", correct: true }
-      - { vi: "Chương trình print chạy chậm hơn AI", en: "A print program runs more slowly than AI", misconception: ai-basics }
-      - { vi: "AI chạy mà không cần ai viết chương trình", en: "AI runs without anyone writing a program", misconception: ai-basics }
-      - { vi: "Chương trình print và AI giống hệt nhau", en: "A print program and AI are exactly the same", misconception: ai-basics }
+      - { vi: "Chương trình print làm theo lệnh, còn AI học từ ví dụ", en: "A print program follows its statements, while AI learns from examples", correct: true }
+      - { vi: "Chương trình print chạy chậm hơn, còn AI chạy nhanh hơn", en: "A print program runs more slowly, while AI runs faster", misconception: ai-basics }
+      - { vi: "AI tự chạy được mà không cần ai viết chương trình cho nó", en: "AI runs by itself, without anyone writing a program for it", misconception: ai-basics }
+      - { vi: "Chương trình print và AI giống hệt nhau, chỉ khác tên gọi", en: "A print program and AI are the same thing with different names", misconception: ai-basics }
     explanation:
       vi: "Chương trình print chỉ làm theo lệnh con viết. AI là chương trình học từ rất nhiều ví dụ, nên làm được việc khó như nhận ra khuôn mặt."
       en: "A print program only follows the statements you write. AI is a program that learns from a huge number of examples, so it can do hard tasks such as recognizing a face."

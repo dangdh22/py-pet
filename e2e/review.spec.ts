@@ -41,9 +41,9 @@ test("after 2 lessons the review station opens, pays and unlocks lesson 3", asyn
 
   await page.getByRole("link", { name: "Học tiếp" }).click();
   await expect(page.getByRole("heading", { name: "Trạm ôn" })).toBeVisible();
-  // The station holds up to 5 questions of the 2 lessons done; the AI questions now belong to lesson 5, so there are 4.
+  // The station holds 5 questions: lessons 1 and 2 have 6 questions (l1.q1, l2.q1, b6, b7, b12, b13), so it is full.
   const total = Number((await page.getByText(/^Câu 1\/\d+$/).textContent())!.split("/")[1]);
-  expect(total).toBeGreaterThanOrEqual(4);
+  expect(total).toBe(5);
   for (let n = 1; n <= total; n += 1) {
     await expect(page.getByText(`Câu ${n}/${total}`)).toBeVisible();
     await answerFirstChoice(page, n === total);

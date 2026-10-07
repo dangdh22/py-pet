@@ -49,8 +49,8 @@ exercises:
       vi: "Đoạn code in ra gì?"
       en: "What is the output of this code?"
     choices:
-      - { text: "A\nC", correct: true }
       - { text: "A  # B\nC", misconception: comment-hash }
+      - { text: "A\nC", correct: true }
       - { text: "A B\nC", misconception: comment-hash }
       - { text: "C", misconception: comment-hash }
     explanation:
@@ -65,10 +65,10 @@ exercises:
       vi: "Đoạn code in ra gì?"
       en: "What is the output of this code?"
     choices:
-      - { text: "Go #1", correct: true }
       - { text: "Go", misconception: hash-in-string }
       - { text: "Go #1  # 2", misconception: comment-hash }
       - { text: "Go #1 2", misconception: comment-hash }
+      - { text: "Go #1", correct: true }
     explanation:
       vi: "Dấu # thứ nhất nằm trong dấu nháy nên là 1 ký tự của chuỗi và được in ra. Dấu # thứ hai nằm ngoài dấu nháy nên bắt đầu chú thích, và Python bỏ qua phần đó."
       en: "The first # is inside the quotes, so it is a character of the string and is printed. The second # is outside the quotes, so it starts a comment, and Python skips it."

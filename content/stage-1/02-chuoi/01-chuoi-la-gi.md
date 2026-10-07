@@ -43,10 +43,10 @@ exercises:
       vi: "Đoạn code in ra gì?"
       en: "What is the output of this code?"
     choices:
-      - { text: "A  B\n  C", correct: true }
       - { text: "A B\nC", misconception: string-exact }
       - { text: "AB\nC" }
       - { text: "A  B  C" }
+      - { text: "A  B\n  C", correct: true }
     explanation:
       vi: "Python in chuỗi y nguyên, kể cả dấu cách. Dòng 1 có 2 dấu cách giữa A và B. Dòng 2 có 2 dấu cách trước C."
       en: "Python prints a string exactly as it is, spaces included. Line 1 has 2 spaces between A and B. Line 2 has 2 spaces before C."
@@ -57,10 +57,10 @@ exercises:
       vi: 'Chuỗi "Hi Bo!" có bao nhiêu ký tự?'
       en: 'How many characters are there in the string "Hi Bo!"?'
     choices:
-      - { text: "6", correct: true }
-      - { text: "5", misconception: string-exact }
-      - { text: "8", misconception: string-quotes }
       - { text: "4", misconception: string-exact }
+      - { text: "5", misconception: string-exact }
+      - { text: "6", correct: true }
+      - { text: "8", misconception: string-quotes }
     explanation:
       vi: "Chuỗi gồm H, i, dấu cách, B, o và dấu chấm than: 6 ký tự. Dấu cách và dấu câu cũng là ký tự. Hai dấu nháy chỉ đánh dấu chỗ bắt đầu và chỗ kết thúc, không thuộc chuỗi."
       en: "The string has H, i, a space, B, o and an exclamation mark: 6 characters. Spaces and punctuation marks are characters too. The 2 quotes only mark where the string starts and ends. They are not part of it."

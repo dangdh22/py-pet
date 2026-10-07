@@ -40,19 +40,19 @@ exercises:
     type: predict
     concepts: [number-vs-text]
     code: |
-      print(4 + 4)
-      print("4" + "4")
+      print(3 + 4)
+      print("3" + "4")
     prompt:
       vi: "Đoạn code in ra gì?"
       en: "What is the output of this code?"
     choices:
-      - { text: "8\n44", correct: true }
-      - { text: "8\n8", misconception: number-vs-text }
-      - { text: "44\n44", misconception: number-vs-text }
-      - { text: "4 + 4\n44", misconception: number-vs-text }
+      - { text: "7\n34", correct: true }
+      - { text: "7\n7", misconception: number-vs-text }
+      - { text: "34\n34", misconception: number-vs-text }
+      - { text: "3 + 4\n34", misconception: number-vs-text }
     explanation:
-      vi: "Ở dòng 1, 4 không có dấu nháy nên là số, và Python cộng ra 8. Ở dòng 2, \"4\" nằm trong dấu nháy nên là chữ, và dấu + chỉ đặt 2 chữ 4 cạnh nhau thành 44."
-      en: "On line 1, 4 has no quotes, so it is a number, and Python adds them to get 8. On line 2, \"4\" is inside quotes, so it is text, and + only puts the 2 characters 4 next to each other: 44."
+      vi: "Ở dòng 1, 3 và 4 không có dấu nháy nên là số, và Python cộng ra 7. Ở dòng 2, \"3\" và \"4\" nằm trong dấu nháy nên là chữ, và dấu + chỉ đặt 2 chữ số cạnh nhau thành 34."
+      en: "On line 1, 3 and 4 have no quotes, so they are numbers, and Python adds them to get 7. On line 2, \"3\" and \"4\" are inside quotes, so they are text, and + only puts the 2 digits next to each other: 34."
   - id: s1.print-nhieu.l2.q2
     type: predict
     concepts: [number-vs-text, print-comma-space]
@@ -62,10 +62,10 @@ exercises:
       vi: "Đoạn code in ra gì?"
       en: "What is the output of this code?"
     choices:
-      - { text: "1 + 2 = 3", correct: true }
       - { text: "1 + 2 = 1 + 2", misconception: number-vs-text }
       - { text: "3 = 3", misconception: number-vs-text }
       - { text: "1 + 2 =3", misconception: print-comma-space }
+      - { text: "1 + 2 = 3", correct: true }
     explanation:
       vi: "Giá trị thứ nhất nằm trong dấu nháy nên được in y nguyên: 1 + 2 =. Giá trị thứ hai không có dấu nháy nên Python tính ra 3. Dấu phẩy thêm 1 dấu cách giữa 2 giá trị."
       en: "The first value is inside quotes, so it is printed exactly as it is: 1 + 2 =. The second value has no quotes, so Python works it out: 3. The comma adds 1 space between the 2 values."

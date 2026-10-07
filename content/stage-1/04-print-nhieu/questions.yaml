@@ -7,9 +7,9 @@ questions:
       vi: "Khi con in nhiều giá trị ngăn cách bằng dấu phẩy, print đặt gì giữa 2 giá trị liền nhau?"
       en: "When you print many values separated by commas, what does print put between 2 values next to each other?"
     choices:
-      - { vi: "1 dấu cách", en: "1 space", correct: true }
       - { vi: "Không có gì, các giá trị dính sát nhau", en: "Nothing, the values are stuck together", misconception: print-comma-space }
       - { vi: "1 dấu phẩy và 1 dấu cách", en: "1 comma and 1 space", misconception: print-comma-space }
+      - { vi: "1 dấu cách", en: "1 space", correct: true }
       - { vi: "1 ký tự xuống dòng", en: "1 new-line character", misconception: print-comma-space }
     explanation:
       vi: "Dấu phẩy chỉ ngăn cách các giá trị và không được in ra. Print tự đặt 1 dấu cách giữa 2 giá trị liền nhau, và in tất cả trên cùng 1 dòng."
@@ -20,16 +20,16 @@ questions:
     concepts: [print-comma-space]
     lessons: [s1.print-nhieu.l1]
     code: |
-      print("Hi ", "Bo")
+      print("Py ", "Pet")
     prompt: { vi: "Đoạn code in ra gì?", en: "What is the output of this code?" }
     choices:
-      - { text: "Hi  Bo", correct: true }
-      - { text: "Hi Bo", misconception: print-comma-space }
-      - { text: "HiBo", misconception: print-comma-space }
-      - { text: "Hi , Bo", misconception: print-comma-space }
+      - { text: "Py Pet", misconception: print-comma-space }
+      - { text: "Py  Pet", correct: true }
+      - { text: "PyPet", misconception: print-comma-space }
+      - { text: "Py , Pet", misconception: print-comma-space }
     explanation:
-      vi: "Chuỗi \"Hi \" có sẵn 1 dấu cách ở cuối. Dấu phẩy làm print thêm 1 dấu cách nữa. Vì vậy giữa Hi và Bo có 2 dấu cách."
-      en: "The string \"Hi \" already ends with 1 space. The comma makes print add 1 more space. So there are 2 spaces between Hi and Bo."
+      vi: "Chuỗi \"Py \" có sẵn 1 dấu cách ở cuối. Dấu phẩy làm print thêm 1 dấu cách nữa. Vì vậy giữa Py và Pet có 2 dấu cách."
+      en: "The string \"Py \" already ends with 1 space. The comma makes print add 1 more space. So there are 2 spaces between Py and Pet."
 
   - id: s1.print-nhieu.b3
     type: predict
@@ -39,10 +39,10 @@ questions:
       print("=" * 2, "Bo", "=" * 2)
     prompt: { vi: "Đoạn code in ra gì?", en: "What is the output of this code?" }
     choices:
-      - { text: "== Bo ==", correct: true }
       - { text: "==Bo==", misconception: print-comma-space }
       - { text: "=2 Bo =2", misconception: string-repeat }
       - { text: "= = Bo = =", misconception: string-repeat }
+      - { text: "== Bo ==", correct: true }
     explanation:
       vi: "Python làm phép * trước: \"=\" * 2 ra ==. Sau đó print in 3 giá trị ==, Bo và ==, với 1 dấu cách giữa 2 giá trị liền nhau."
       en: "Python does * first: \"=\" * 2 gives ==. Then print prints the 3 values ==, Bo and ==, with 1 space between 2 values next to each other."
@@ -55,10 +55,10 @@ questions:
       vi: "Lệnh nào in ra đúng dòng chữ: Py, Pet"
       en: "Which statement prints exactly this text: Py, Pet"
     choices:
-      - { text: 'print("Py,", "Pet")', correct: true }
       - { text: 'print("Py", "Pet")', misconception: print-comma-space }
       - { text: 'print("Py" + "," + "Pet")', misconception: concat-no-space }
       - { text: 'print("Py", ",", "Pet")', misconception: print-comma-space }
+      - { text: 'print("Py,", "Pet")', correct: true }
     explanation:
       vi: "Dấu phẩy ngăn cách các giá trị thì không được in ra. Muốn in dấu phẩy, con đặt nó vào trong chuỗi: \"Py,\". Lệnh print(\"Py\", \",\", \"Pet\") in ra Py , Pet, vì print thêm dấu cách ở cả 2 bên dấu phẩy."
       en: "A comma that separates values is not printed. To print a comma, put it inside a string: \"Py,\". The statement print(\"Py\", \",\", \"Pet\") prints Py , Pet, because print adds a space on both sides of the comma."
@@ -72,9 +72,9 @@ questions:
       print("5" * 3)
     prompt: { vi: "Đoạn code in ra gì?", en: "What is the output of this code?" }
     choices:
-      - { text: "15\n555", correct: true }
       - { text: "15\n15", misconception: number-vs-text }
       - { text: "555\n555", misconception: number-vs-text }
+      - { text: "15\n555", correct: true }
       - { text: "5 * 3\n555", misconception: number-vs-text }
     explanation:
       vi: "Ở dòng 1, 5 là số, nên 5 * 3 là phép nhân và ra 15. Ở dòng 2, \"5\" là chữ, nên \"5\" * 3 lặp chữ 5 ba lần thành 555."
@@ -104,10 +104,10 @@ questions:
       print("A" + 1)
     prompt: { vi: "Chuyện gì xảy ra khi chạy đoạn code này?", en: "What happens when this code runs?" }
     choices:
-      - { vi: "Báo lỗi TypeError ở dòng 1", en: "A TypeError on line 1", correct: true, error: true }
       - { text: "A1", misconception: number-vs-text }
+      - { vi: "Báo lỗi TypeError ở dòng 1", en: "A TypeError on line 1", correct: true, error: true }
       - { text: "A 1", misconception: number-vs-text }
-      - { text: "B" }
+      - { vi: "Báo lỗi SyntaxError ở dòng 1", en: "A SyntaxError on line 1", error: true }
     explanation:
       vi: "\"A\" là chuỗi, còn 1 là số. Dấu + chỉ nối chuỗi với chuỗi, hoặc cộng số với số, nên Python báo lỗi TypeError. Muốn in A và 1 trên cùng dòng, hãy dùng dấu phẩy: print(\"A\", 1)."
       en: "\"A\" is a string and 1 is a number. + only joins a string to a string, or adds a number to a number, so Python shows a TypeError. To print A and 1 on the same line, use a comma: print(\"A\", 1)."
@@ -120,9 +120,9 @@ questions:
       vi: "Lệnh nào in ra đúng dòng chữ: Age: 11"
       en: "Which statement prints exactly this text: Age: 11"
     choices:
-      - { text: 'print("Age:", 11)', correct: true }
       - { text: 'print("Age:" + 11)', misconception: number-vs-text }
       - { text: 'print("Age: ", 11)', misconception: print-comma-space }
+      - { text: 'print("Age:", 11)', correct: true }
       - { text: 'print("Age:", "10 + 1")', misconception: number-vs-text }
     explanation:
       vi: "Dấu phẩy ghép chữ với số và tự thêm 1 dấu cách. Dấu + giữa chuỗi và số làm Python báo lỗi. \"Age: \" đã có dấu cách nên sẽ có 2 dấu cách. Còn \"10 + 1\" nằm trong dấu nháy nên được in y nguyên, không được tính."
@@ -152,9 +152,9 @@ questions:
       print("A", "B", "C", sep="\n")
     prompt: { vi: "Đoạn code in ra gì?", en: "What is the output of this code?" }
     choices:
-      - { text: "A\nB\nC", correct: true }
       - { text: "A B C", misconception: sep-param }
       - { text: 'A\nB\nC', misconception: newline-escape }
+      - { text: "A\nB\nC", correct: true }
       - { text: "A\n B\n C", misconception: sep-param }
     explanation:
       vi: 'sep="\n" đặt 1 ký tự xuống dòng giữa 2 giá trị liền nhau, nên mỗi giá trị nằm trên 1 dòng riêng. Khi có sep, print không thêm dấu cách, nên đầu dòng không có dấu cách nào.'
@@ -168,9 +168,9 @@ questions:
       vi: "Lệnh nào làm Python báo lỗi?"
       en: "Which statement makes Python show an error?"
     choices:
+      - { text: 'print("A", "B", sep="-")' }
       - { text: 'print(sep="-", "A", "B")', correct: true }
-      - { text: 'print("A", "B", sep="-")', misconception: named-option-order }
-      - { text: 'print("A", "B", sep="")', misconception: sep-param }
+      - { text: 'print("A", "B", sep="")' }
       - { text: 'print("A", "B", "sep=-")', misconception: named-option-order }
     explanation:
       vi: "sep phải viết sau tất cả giá trị, nên print(sep=\"-\", \"A\", \"B\") bị lỗi cú pháp. sep=\"\" là chuỗi rỗng, hoàn toàn hợp lệ. Còn \"sep=-\" trong dấu nháy chỉ là 1 chuỗi bình thường, nên lệnh đó không lỗi và in ra A B sep=-."
@@ -178,19 +178,19 @@ questions:
 
   - id: s1.print-nhieu.b12
     type: predict
-    concepts: [named-option-order]
-    lessons: [s1.print-nhieu.l3]
+    concepts: [named-option-order, end-param]
+    lessons: [s1.print-nhieu.l4]
     code: |
-      print("A", "B", "sep=-")
+      print("Py", "Pet", end="!", sep="-")
     prompt: { vi: "Đoạn code in ra gì?", en: "What is the output of this code?" }
     choices:
-      - { text: "A B sep=-", correct: true }
-      - { text: "A-B", misconception: named-option-order }
-      - { text: "A B -", misconception: named-option-order }
       - { vi: "Báo lỗi SyntaxError ở dòng 1", en: "A SyntaxError on line 1", error: true, misconception: named-option-order }
+      - { text: "Py Pet!", misconception: named-option-order }
+      - { text: "Py-Pet!", correct: true }
+      - { text: "Py-Pet-!", misconception: sep-param }
     explanation:
-      vi: "\"sep=-\" nằm trong dấu nháy, nên nó chỉ là giá trị thứ ba, 1 chuỗi bình thường. Print in 3 giá trị cách nhau 1 dấu cách. Muốn dùng tham số sep, phải viết sep=\"-\": tên sep và dấu = nằm ngoài dấu nháy."
-      en: "\"sep=-\" is inside quotes, so it is just the third value, an ordinary string. print prints the 3 values with 1 space between them. To use the sep option, write sep=\"-\": the name sep and the = sign go outside the quotes."
+      vi: "sep và end đều viết sau các giá trị, và viết cái nào trước cũng được. sep=\"-\" đặt dấu - giữa Py và Pet. end=\"!\" in dấu ! ở cuối, sau giá trị cuối cùng."
+      en: "sep and end both come after the values, in either order. sep=\"-\" puts a - between Py and Pet. end=\"!\" prints a ! at the end, after the last value."
 
   - id: s1.print-nhieu.b13
     type: predict
@@ -201,9 +201,9 @@ questions:
       print("Bo", end="!")
     prompt: { vi: "Đoạn code in ra gì?", en: "What is the output of this code?" }
     choices:
-      - { text: "Hi Bo!", correct: true }
       - { text: "Hi\nBo!", misconception: end-param }
       - { text: "HiBo!", misconception: end-param }
+      - { text: "Hi Bo!", correct: true }
       - { text: "Hi Bo\n!", misconception: end-param }
     explanation:
       vi: "Lệnh 1 in Hi rồi in 1 dấu cách thay vì xuống dòng. Lệnh 2 in tiếp Bo trên cùng dòng, rồi in dấu ! ở cuối. Kết quả là Hi Bo!."
@@ -217,8 +217,8 @@ questions:
       vi: "Nếu không viết tham số end, lệnh print(\"Robo\") in xong chữ Robo thì in thêm gì ở cuối?"
       en: "If you do not write the end option, what does print(\"Robo\") print at the end, after the word Robo?"
     choices:
-      - { vi: "1 ký tự xuống dòng", en: "1 new-line character", correct: true }
       - { vi: "1 dấu cách", en: "1 space", misconception: end-param }
+      - { vi: "1 ký tự xuống dòng", en: "1 new-line character", correct: true }
       - { vi: "Không in thêm gì", en: "Nothing more", misconception: end-param }
       - { vi: "1 dấu chấm", en: "1 full stop" }
     explanation:
@@ -233,8 +233,8 @@ questions:
       vi: "Con muốn 2 lệnh print(\"A\") và print(\"B\") in ra AB trên cùng 1 dòng. Con sửa lệnh print(\"A\") thành gì?"
       en: "You want the 2 statements print(\"A\") and print(\"B\") to print AB on the same line. What do you change print(\"A\") to?"
     choices:
-      - { text: 'print("A", end="")', correct: true }
       - { text: 'print("A", sep="")', misconception: end-param }
+      - { text: 'print("A", end="")', correct: true }
       - { text: 'print("A", end=" ")', misconception: end-param }
       - { text: 'print(end="", "A")', misconception: named-option-order }
     explanation:
@@ -244,17 +244,17 @@ questions:
   - id: s1.print-nhieu.b16
     type: predict
     concepts: [sep-param, print-comma-space]
-    lessons: [s1.print-nhieu.l5]
+    lessons: [s1.print-nhieu.l3]
     code: |
       print("+", "+", sep="--")
       print("|", "|", sep="  ")
       print("+", "+", sep="--")
     prompt: { vi: "Đoạn code in ra gì?", en: "What is the output of this code?" }
     choices:
-      - { text: "+--+\n|  |\n+--+", correct: true }
       - { text: "+ -- +\n|    |\n+ -- +", misconception: sep-param }
       - { text: "+--+--\n|  |\n+--+--", misconception: sep-param }
       - { text: "++\n||\n++", misconception: sep-param }
+      - { text: "+--+\n|  |\n+--+", correct: true }
     explanation:
       vi: "Mỗi lệnh có 2 giá trị, nên sep chỉ xuất hiện 1 lần, ở giữa. Dòng 1 và dòng 3 có -- ở giữa 2 dấu +. Dòng 2 có 2 dấu cách ở giữa 2 dấu |. Khi có sep, print không thêm dấu cách nào khác."
       en: "Each statement has 2 values, so sep appears only once, in the middle. Lines 1 and 3 have -- between the 2 + signs. Line 2 has 2 spaces between the 2 | signs. With sep, print adds no other space."
@@ -262,7 +262,7 @@ questions:
   - id: s1.print-nhieu.b17
     type: predict
     concepts: [end-param]
-    lessons: [s1.print-nhieu.l5]
+    lessons: [s1.print-nhieu.l4]
     code: |
       print("|", end="")
       print("*" * 3)

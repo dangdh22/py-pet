@@ -16,7 +16,7 @@ concepts:
   - id: string-quotes
     name: { vi: "Chữ cần in phải nằm trong dấu nháy", en: "Text must be inside quotes" }
     misconception_card: |
-      Không có dấu nháy, Python nghĩ `Robo` là tên biến. Có dấu nháy, `"Robo"` là chữ để in ra. Mở bằng dấu nháy nào thì đóng bằng dấu nháy đó.
+      Không có dấu nháy, Python coi `Robo` là 1 cái tên mà nó không biết, nên báo lỗi NameError. Có dấu nháy, `"Robo"` là chữ để in ra. Mở bằng dấu nháy nào thì đóng bằng dấu nháy đó.
     parent_tip: |
       Dấu nháy giống cặp ngoặc kép khi trích lời nói: những gì nằm trong đó được in ra y nguyên.
     practice: { level1: [s1.lam-quen.l2.q1, s1.lam-quen.b7, s1.lam-quen.l1.q1, s1.lam-quen.b12], level2: [s1.lam-quen.p3], level3: [s1.lam-quen.l1.ex1, s1.lam-quen.l2.ex1, s1.lam-quen.l4.ex1] }

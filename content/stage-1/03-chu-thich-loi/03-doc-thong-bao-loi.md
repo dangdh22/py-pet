@@ -32,8 +32,8 @@ exercises:
       vi: "Chuyện gì xảy ra khi chạy đoạn code này?"
       en: "What happens when this code runs?"
     choices:
-      - { vi: "In ra Go và GoGo, rồi báo lỗi NameError ở dòng 3", en: "It prints Go and GoGo, then shows a NameError on line 3", correct: true, error: true }
       - { vi: "Không in gì, báo lỗi NameError ở dòng 3", en: "It prints nothing and shows a NameError on line 3", error: true, misconception: runtime-error-stops }
+      - { vi: "In ra Go và GoGo, rồi báo lỗi NameError ở dòng 3", en: "It prints Go and GoGo, then shows a NameError on line 3", correct: true, error: true }
       - { text: "Go\nGoGo\nEnd", misconception: runtime-error-stops }
       - { text: "Go\nGoGo\nStop\nEnd", misconception: case-sensitive }
     explanation:

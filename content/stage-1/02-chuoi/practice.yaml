@@ -111,6 +111,21 @@ exercises:
     hints:
       - { vi: 'Lệnh có \n in ra 2 dòng. Hãy tìm lệnh in ra 2 dòng đầu tiên.', en: 'The statement with \n prints 2 lines. Find the statement that prints the first 2 lines.' }
 
+  - id: s1.chuoi.p8
+    type: fill
+    concepts: [quote-inside]
+    prompt:
+      vi: 'Câu hỏi của An có cả dấu nháy kép và dấu nháy đơn. Điền vào 2 chỗ trống để in ra đúng dòng chữ: An hỏi: "Where''s Robo?"'
+      en: 'The question of An has both double quotes and a single quote. Fill the 2 blanks to print exactly this text: An hỏi: "Where''s Robo?"'
+    template: |
+      print("An hỏi: ___Where's Robo?___")
+    answers: ['\"', '\"']
+    tests:
+      - { output: 'An hỏi: "Where''s Robo?"' }
+    hints:
+      - { vi: 'Chuỗi đã mở bằng dấu nháy kép. Dấu nháy kép ở bên trong cần 1 dấu \ đứng ngay trước, để Python không đóng chuỗi ở đó.', en: 'The string opens with a double quote. A double quote inside it needs a \ right before it, so that Python does not end the string there.' }
+      - { vi: 'Điền \" vào cả 2 chỗ trống.', en: 'Fill both blanks with \".' }
+
   - id: s1.chuoi.c1
     type: code
     concepts: [string-repeat, concat-no-space]

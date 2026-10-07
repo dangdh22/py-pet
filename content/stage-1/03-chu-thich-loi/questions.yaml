@@ -5,9 +5,9 @@ questions:
     lessons: [s1.chu-thich-loi.l1]
     prompt: { vi: "Python làm gì với chú thích bắt đầu bằng dấu #?", en: "What does Python do with a comment that starts with #?" }
     choices:
-      - { vi: "Bỏ qua: không chạy và không in ra", en: "It skips it: it does not run it and does not print it", correct: true }
       - { vi: "In chú thích ra màn hình", en: "It prints the comment on the screen", misconception: comment-hash }
       - { vi: "Chạy chú thích như 1 lệnh", en: "It runs the comment as a statement", misconception: comment-hash }
+      - { vi: "Bỏ qua: không chạy và không in ra", en: "It skips it: it does not run it and does not print it", correct: true }
       - { vi: "Báo lỗi, vì chú thích không phải code", en: "It shows an error, because a comment is not code", misconception: comment-hash }
     explanation:
       vi: "Chú thích là ghi chú cho người đọc code. Python bỏ qua mọi thứ từ dấu # tới hết dòng."
@@ -54,10 +54,10 @@ questions:
       print("#" * 3)  # 3
     prompt: { vi: "Đoạn code in ra gì?", en: "What is the output of this code?" }
     choices:
-      - { text: "###", correct: true }
       - { vi: "Không in gì", en: "Nothing is printed", misconception: hash-in-string }
       - { text: "###  # 3", misconception: comment-hash }
       - { text: "#3", misconception: string-repeat }
+      - { text: "###", correct: true }
     explanation:
       vi: "\"#\" nằm trong dấu nháy nên là 1 ký tự, và \"#\" * 3 ra ###. Dấu # sau lệnh nằm ngoài dấu nháy nên bắt đầu chú thích, và Python bỏ qua nó."
       en: "\"#\" is inside quotes, so it is a character, and \"#\" * 3 gives ###. The # sign after the statement is outside the quotes, so it starts a comment, and Python skips it."
@@ -70,8 +70,8 @@ questions:
       print(#1)
     prompt: { vi: "Chuyện gì xảy ra khi chạy đoạn code này?", en: "What happens when this code runs?" }
     choices:
-      - { vi: "Báo lỗi SyntaxError: dấu ( chưa được đóng", en: "It shows a SyntaxError: the ( is never closed", correct: true, error: true }
       - { text: "#1", misconception: hash-in-string }
+      - { vi: "Báo lỗi SyntaxError: dấu ( chưa được đóng", en: "It shows a SyntaxError: the ( is never closed", correct: true, error: true }
       - { text: "1", misconception: comment-hash }
       - { vi: "Không in gì và không báo lỗi", en: "Nothing is printed and there is no error", misconception: comment-hash }
     explanation:
@@ -88,10 +88,10 @@ questions:
       #print("C")
     prompt: { vi: "Đoạn code in ra gì?", en: "What is the output of this code?" }
     choices:
-      - { text: "B", correct: true }
       - { text: "B\nC", misconception: comment-hash }
       - { text: "A\nB\nC", misconception: comment-hash }
       - { text: "A\nC", misconception: comment-hash }
+      - { text: "B", correct: true }
     explanation:
       vi: "Dòng 1 và dòng 3 đều bắt đầu bằng dấu #, nên đều bị tắt. Có hay không có dấu cách sau dấu # cũng vậy. Chỉ dòng 2 được chạy."
       en: "Lines 1 and 3 both start with a # sign, so both are turned off. A space after the # sign makes no difference. Only line 2 runs."
@@ -104,10 +104,10 @@ questions:
       vi: "Con muốn tạm tắt dòng print(\"Py\") để chương trình không in Py nữa, nhưng vẫn giữ dòng đó để dùng sau. Con sửa dòng đó thành gì?"
       en: "You want to turn off the line print(\"Py\") for now, so the program no longer prints Py, but you want to keep the line for later. What do you change the line to?"
     choices:
-      - { text: "# print(\"Py\")", correct: true }
       - { text: "print(\"Py\")  #", misconception: comment-hash }
       - { text: "print(\"# Py\")", misconception: hash-in-string }
       - { text: "print(# \"Py\")", misconception: bracket-pairs }
+      - { text: "# print(\"Py\")", correct: true }
     explanation:
       vi: "Dấu # phải đặt ở đầu dòng thì cả dòng mới bị tắt. Dấu # ở cuối dòng không tắt được lệnh phía trước. Dấu # trong dấu nháy thì được in ra. Còn print(# \"Py\") làm dấu ) rơi vào chú thích nên bị lỗi."
       en: "The # sign must go at the start of the line to turn off the whole line. A # at the end does not turn off the statement before it. A # inside quotes is printed. And print(# \"Py\") puts the ) inside the comment, so it causes an error."
@@ -121,9 +121,9 @@ questions:
       en: "A program has 5 print statements. Line 5 has a syntax error (SyntaxError). When you click Run, how many lines are printed?"
     choices:
       - { text: "0", correct: true }
+      - { text: "1", misconception: syntax-error-nothing-runs }
       - { text: "4", misconception: syntax-error-nothing-runs }
       - { text: "5" }
-      - { text: "1", misconception: syntax-error-nothing-runs }
     explanation:
       vi: "Python kiểm tra cách viết của cả chương trình trước khi chạy. Có lỗi cú pháp ở bất kỳ dòng nào thì không dòng nào được chạy, nên không có gì được in ra."
       en: "Python checks how the whole program is written before it runs. With a syntax error on any line, no line runs, so nothing is printed."
@@ -136,8 +136,8 @@ questions:
       vi: "Một chương trình có 5 dòng lệnh print. Dòng 3 viết Print thay vì print, các dòng khác đều đúng. Khi chạy, những dòng nào in ra được?"
       en: "A program has 5 print statements. Line 3 says Print instead of print, and all the other lines are correct. When it runs, which lines print something?"
     choices:
-      - { vi: "Dòng 1 và dòng 2", en: "Lines 1 and 2", correct: true }
       - { vi: "Không dòng nào", en: "No line", misconception: runtime-error-stops }
+      - { vi: "Dòng 1 và dòng 2", en: "Lines 1 and 2", correct: true }
       - { vi: "Dòng 1, 2, 4 và 5", en: "Lines 1, 2, 4 and 5", misconception: runtime-error-stops }
       - { vi: "Cả 5 dòng", en: "All 5 lines", misconception: case-sensitive }
     explanation:
@@ -165,21 +165,22 @@ questions:
 
   - id: s1.chu-thich-loi.b11
     type: predict
-    concepts: [syntax-error-nothing-runs]
+    concepts: [runtime-error-stops, comment-hash]
     lessons: [s1.chu-thich-loi.l3]
     code: |
       print("A")
-      print("B")
-      print "C"
+      # print("B"
+      print("C")
+      print(D)
     prompt: { vi: "Chuyện gì xảy ra khi chạy đoạn code này?", en: "What happens when this code runs?" }
     choices:
-      - { vi: "Không in gì, báo lỗi SyntaxError ở dòng 3", en: "It prints nothing and shows a SyntaxError on line 3", correct: true, error: true }
-      - { vi: "In ra A và B, rồi báo lỗi SyntaxError ở dòng 3", en: "It prints A and B, then shows a SyntaxError on line 3", error: true, misconception: syntax-error-nothing-runs }
-      - { text: "A\nB\nC", misconception: print-call }
-      - { text: "A\nB", misconception: syntax-error-nothing-runs }
+      - { vi: "Không in gì, báo lỗi SyntaxError ở dòng 2", en: "It prints nothing and shows a SyntaxError on line 2", error: true, misconception: comment-hash }
+      - { vi: "Không in gì, báo lỗi NameError ở dòng 4", en: "It prints nothing and shows a NameError on line 4", error: true, misconception: runtime-error-stops }
+      - { text: "A\nC", misconception: runtime-error-stops }
+      - { vi: "In ra A và C, rồi báo lỗi NameError ở dòng 4", en: "It prints A and C, then shows a NameError on line 4", correct: true, error: true }
     explanation:
-      vi: "Dòng 3 thiếu cặp ngoặc tròn của print, nên có lỗi cú pháp. Với lỗi cú pháp, Python không chạy dòng nào, kể cả dòng 1 và dòng 2."
-      en: "Line 3 is missing the round brackets of print, so there is a syntax error. With a syntax error, Python runs no line, not even lines 1 and 2."
+      vi: "Dòng 2 bắt đầu bằng dấu # nên là chú thích. Python bỏ qua nó, dù bên trong thiếu dấu ). Cách viết của các dòng còn lại đều đúng, nên Python chạy dòng 1 và dòng 3, in ra A và C. Tới dòng 4, D không có dấu nháy nên Python dừng lại với lỗi NameError."
+      en: "Line 2 starts with a # sign, so it is a comment. Python skips it, even though a ) is missing inside it. The other lines are written correctly, so Python runs lines 1 and 3 and prints A and C. On line 4, D has no quotes, so Python stops with a NameError."
 
   - id: s1.chu-thich-loi.b12
     type: mcq
@@ -189,9 +190,9 @@ questions:
       vi: "Python báo lỗi ở dòng 2: SyntaxError: '(' was never closed. Con cần sửa gì ở dòng 2?"
       en: "Python shows an error on line 2: SyntaxError: '(' was never closed. What do you need to fix on line 2?"
     choices:
-      - { vi: "Thêm dấu ) để đóng dấu ( đang mở", en: "Add a ) to close the ( that is open", correct: true }
       - { vi: "Thêm dấu nháy để đóng chuỗi", en: "Add a quote to close the string", misconception: bracket-pairs }
       - { vi: "Đổi print thành Print", en: "Change print to Print", misconception: case-sensitive }
+      - { vi: "Thêm dấu ) để đóng dấu ( đang mở", en: "Add a ) to close the ( that is open", correct: true }
       - { vi: "Sửa dòng 1, vì lỗi luôn nằm ở dòng đầu tiên", en: "Fix line 1, because the error is always on the first line" }
     explanation:
       vi: "'(' was never closed nghĩa là dấu ( chưa được đóng. Dòng 2 cần thêm 1 dấu ) để dấu ( có đủ cặp."
@@ -205,9 +206,9 @@ questions:
       vi: "Python báo lỗi ở dòng 1: SyntaxError: unterminated string literal. Dòng 1 có thể là dòng nào dưới đây?"
       en: "Python shows an error on line 1: SyntaxError: unterminated string literal. Which of these could line 1 be?"
     choices:
-      - { text: "print(\"Robo)", correct: true }
       - { text: "print(\"Robo\"", misconception: bracket-pairs }
       - { text: "print(\"Robo\"))", misconception: bracket-pairs }
+      - { text: "print(\"Robo)", correct: true }
       - { text: "pirnt(\"Robo\")" }
     explanation:
       vi: "unterminated string literal nghĩa là chuỗi chưa được đóng. Ở print(\"Robo), chuỗi mở bằng dấu nháy kép nhưng không có dấu nháy đóng. Hai dòng có lỗi về ngoặc sẽ có thông báo khác, còn pirnt là lỗi NameError."
@@ -221,10 +222,10 @@ questions:
       vi: "Code của con có 3 lỗi ở 3 dòng khác nhau. Mỗi lần bấm Chạy thử, Python báo mấy lỗi?"
       en: "Your code has 3 errors on 3 different lines. Each time you click Run, how many errors does Python show?"
     choices:
-      - { vi: "1 lỗi. Sửa xong lỗi đó và chạy lại thì mới thấy lỗi tiếp theo", en: "1 error. You see the next error only after you fix it and run again", correct: true }
-      - { vi: "Cả 3 lỗi cùng lúc", en: "All 3 errors at once", misconception: runtime-error-stops }
+      - { vi: "Cả 3 lỗi cùng lúc, mỗi lỗi ở 1 dòng", en: "All 3 errors at once, 1 for each line", misconception: runtime-error-stops }
       - { vi: "Không báo lỗi nào, vì có quá nhiều lỗi", en: "No error, because there are too many errors" }
-      - { vi: "Chỉ báo lỗi ở dòng cuối cùng", en: "Only the error on the last line", misconception: syntax-error-nothing-runs }
+      - { vi: "1 lỗi, rồi sửa xong và chạy lại mới thấy lỗi sau", en: "1 error, and you see the next one after you fix it and run again", correct: true }
+      - { vi: "Chỉ báo lỗi ở dòng cuối cùng của code", en: "Only the error on the last line of the code", misconception: syntax-error-nothing-runs }
     explanation:
       vi: "Gặp 1 lỗi là Python dừng lại và chỉ báo lỗi đó. Vì vậy con sửa từng lỗi một, chạy lại sau mỗi lần sửa."
       en: "When Python meets an error, it stops and shows only that error. So fix the errors one by one and run again after each fix."

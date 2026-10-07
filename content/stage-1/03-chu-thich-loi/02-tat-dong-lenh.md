@@ -74,9 +74,9 @@ exercises:
       vi: "Đoạn code in ra gì?"
       en: "What is the output of this code?"
     choices:
-      - { text: "1\n4", correct: true }
       - { text: "1\n2\n4", misconception: comment-hash }
       - { text: "1\n3\n4", misconception: comment-hash }
+      - { text: "1\n4", correct: true }
       - { text: "4", misconception: comment-hash }
     explanation:
       vi: "Ở dòng 1, lệnh print(\"1\") đứng trước dấu # nên vẫn chạy, còn print(\"2\") nằm trong chú thích. Dòng 2 là chú thích. Dòng 3 in ra 4."

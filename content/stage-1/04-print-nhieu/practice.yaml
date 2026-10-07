@@ -272,6 +272,6 @@ exercises:
           print(5, 9, 2026, "sep=/")
           print(7, 30, sep=":")
     hints:
-      - { vi: "Tên sep và dấu = nằm ngoài dấu nháy. Chỉ giá trị của sep nằm trong dấu nháy.", en: "The name sep and the = sign go outside the quotes. Only the value of sep goes inside the quotes." }
-      - { vi: "Dòng 1 là print(5, 9, 2026, sep=\"/\"). Ở dòng 2, viết sep=\":\".", en: "Line 1 is print(5, 9, 2026, sep=\"/\"). On line 2, write sep=\":\"." }
+      - { vi: "Lần chạy đầu, Python báo lỗi ở dòng 2: giá trị của sep là 1 chuỗi, nên dấu : phải nằm trong dấu nháy. Ở dòng 1 thì ngược lại: tên sep và dấu = phải nằm ngoài dấu nháy.", en: "On the first run, Python shows an error on line 2: the value of sep is a string, so the : must be inside quotes. Line 1 is the other way round: the name sep and the = sign must be outside the quotes." }
+      - { vi: "Dòng 2 là print(7, 30, sep=\":\"). Dòng 1 là print(5, 9, 2026, sep=\"/\").", en: "Line 2 is print(7, 30, sep=\":\"). Line 1 is print(5, 9, 2026, sep=\"/\")." }
     test_eligible: true

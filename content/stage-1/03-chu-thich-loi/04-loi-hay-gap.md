@@ -32,13 +32,13 @@ exercises:
       vi: "Dòng code nào có đủ các cặp ngoặc và dấu nháy?"
       en: "Which line of code has all of its brackets and quotes in pairs?"
     choices:
-      - { text: "print(\"Robo\" + \"!\")", correct: true }
       - { text: "print(\"Robo\" + \"!\"", misconception: bracket-pairs }
+      - { text: "print(\"Robo\" + \"!\")", correct: true }
       - { text: "print(\"Robo\" + \"!)", misconception: bracket-pairs }
       - { text: "print(\"Robo\" + \"!\"))", misconception: bracket-pairs }
     explanation:
-      vi: "Mỗi dấu ( cần đúng 1 dấu ) để đóng, và mỗi chuỗi cần 1 dấu nháy mở và 1 dấu nháy đóng. Chỉ dòng đầu tiên có đủ các cặp: không thiếu, không thừa."
-      en: "Each ( needs exactly 1 ) to close it, and each string needs 1 opening quote and 1 closing quote. Only the first line has all its pairs, with nothing missing and nothing extra."
+      vi: "Mỗi dấu ( cần đúng 1 dấu ) để đóng, và mỗi chuỗi cần 1 dấu nháy mở và 1 dấu nháy đóng. Chỉ dòng print(\"Robo\" + \"!\") có đủ các cặp: không thiếu, không thừa."
+      en: "Each ( needs exactly 1 ) to close it, and each string needs 1 opening quote and 1 closing quote. Only the line print(\"Robo\" + \"!\") has all its pairs, with nothing missing and nothing extra."
   - id: s1.chu-thich-loi.l4.q2
     type: predict
     concepts: [bracket-pairs, syntax-error-nothing-runs]
