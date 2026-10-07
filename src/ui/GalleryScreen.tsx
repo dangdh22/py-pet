@@ -1,7 +1,8 @@
-import type { CSSProperties, ReactNode } from "react";
+import { useState, type CSSProperties, type ReactNode } from "react";
 import { FORM_COUNT, robotPixelSize, type RobotForm, type RobotLook } from "../game/look";
 import type { GrowthSize } from "../game/progress";
 import { SHOP_ITEMS } from "../game/shop";
+import { EvolutionShow } from "./EvolutionShow";
 import { Robot, type RobotMood } from "./Robot";
 import { ItemIcon } from "./robot/accessories";
 import { DECOR_IDS } from "./robot/decor";
@@ -35,6 +36,14 @@ const SCENES: readonly RobotLook[] = [
   { state: "drained", form: 4, graduated: true, size: 2, equipped: ["khan-quang"] },
   { state: "vacation", form: 3, graduated: false, size: 3, equipped: ["mu-luoi-trai", "kinh-tron"] },
 ];
+/** The evolution shows the child can see: each evolution, and the check of the last stage. */
+const SHOWS: readonly { label: string; from: RobotForm; to: RobotForm; graduated: boolean; equipped: string[] }[] = [
+  { label: "1 → 2", from: 1, to: 2, graduated: false, equipped: [] },
+  { label: "2 → 3", from: 2, to: 3, graduated: false, equipped: ["mu-luoi-trai", "no-buom"] },
+  { label: "3 → 4", from: 3, to: 4, graduated: false, equipped: ["kinh-tron", "khan-quang"] },
+  { label: "4 → 4 graduated", from: 4, to: 4, graduated: true, equipped: ["vuong-mien", "ao-choang"] },
+];
+
 /** A phone (360 px screen) and a laptop (the 860 px the room gets inside its 900 px column). */
 const SCENE_WIDTHS = [328, 860] as const;
 
@@ -68,10 +77,43 @@ export function DevGalleryGate({ children }: { children: ReactNode }) {
   return route.name === "gallery" ? <GalleryScreen /> : children;
 }
 
+function EvolutionShows() {
+  const [playing, setPlaying] = useState<number | null>(null);
+  const [ended, setEnded] = useState<string | null>(null);
+  const show = playing === null ? null : SHOWS[playing]!;
+  return (
+    <section>
+      <h2>Evolution show</h2>
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+        {SHOWS.map((item, index) => (
+          <button key={item.label} type="button" data-show={index} onClick={() => setPlaying(index)}>
+            Play {item.label}
+          </button>
+        ))}
+      </div>
+      {ended && <p style={caption}>Last show ended: {ended}</p>}
+      {show && (
+        <EvolutionShow
+          key={playing}
+          from={{ form: show.from, graduated: false }}
+          to={{ form: show.to, graduated: show.graduated }}
+          equipped={show.equipped}
+          robotName="Robo"
+          onDone={() => {
+            setEnded(show.label);
+            setPlaying(null);
+          }}
+        />
+      )}
+    </section>
+  );
+}
+
 export function GalleryScreen() {
   return (
     <main style={{ padding: 20 }}>
       <h1>Robo gallery (dev only)</h1>
+      <EvolutionShows />
       <section>
         <h2>Forms × faces, 112 px</h2>
         <table style={{ borderCollapse: "collapse" }}>

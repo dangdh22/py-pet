@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
-import { screen, waitFor } from "@testing-library/react";
+import { screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { describe, expect, test } from "vitest";
+import { describe, expect, test, vi } from "vitest";
 import { seededRng } from "../game/random";
 import { initialGameState } from "../game/state";
 import { answerPaper } from "../test/answerExam";
@@ -12,6 +12,29 @@ import { EvolutionTestScreen } from "./EvolutionTestScreen";
 
 const bundle = examBundle();
 const stage = bundle.stages[0]!;
+/** The exam bundle and a second stage, so a pass leads somewhere: "Học tiếp" opens its first lesson. */
+const twoStages = {
+  ...bundle,
+  stages: [
+    ...bundle.stages,
+    {
+      ...stage,
+      id: "y",
+      topics: [{ ...stage.topics[0]!, id: "y.t", lessons: [{ ...stage.topics[0]!.lessons[0]!, id: "y.l1" }] }],
+    },
+  ],
+};
+
+/** A matchMedia that prefers reduced motion; CodeMirror also listens to its "print" query. */
+function reduceMotion() {
+  vi.stubGlobal("matchMedia", (query: string) => ({
+    matches: query === "(prefers-reduced-motion: reduce)",
+    addListener() {},
+    removeListener() {},
+    addEventListener() {},
+    removeEventListener() {},
+  }));
+}
 
 function ready() {
   const state = initialGameState(TODAY);
@@ -24,17 +47,48 @@ describe("EvolutionTestScreen", () => {
   test("a pass evolves the robot", async () => {
     const { store } = await renderWithGame(
       <EvolutionTestScreen stage={stage} stageNumber={1} onExit={() => {}} rng={seededRng(3)} />,
-      { bundle, runner: fakeRunner(() => okResult("Hi\n")), state: ready() },
+      { bundle: twoStages, runner: fakeRunner(() => okResult("Hi\n")), state: ready() },
     );
     expect(screen.getByRole("heading", { name: "Kiểm tra tiến hóa" })).toBeInTheDocument();
     expect(screen.getByText("Câu 1/5")).toBeInTheDocument();
     await answerPaper("Đúng");
 
-    expect(screen.getByRole("heading", { name: "Robo đã tiến hóa!" })).toBeInTheDocument();
+    // The evolution show comes first: the old form turns into the new one, with the skip button in focus.
+    const show = screen.getByRole("dialog", { name: "Robo đã tiến hóa!" });
+    expect(within(show).getAllByRole("img", { name: "Robo" }).map((robot) => robot.dataset.form)).toEqual(["1", "2"]);
+    expect(within(show).getByText("Robo có thêm ăng-ten!")).toBeInTheDocument();
+    expect(screen.queryByText("Con được 7/7 điểm.")).not.toBeInTheDocument();
+    await userEvent.click(screen.getByRole("button", { name: "Bỏ qua" }));
+
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+    const heading = screen.getByRole("heading", { name: "Robo đã tiến hóa!" });
+    expect(heading).toHaveFocus();
+    expect(screen.getByRole("img", { name: "Robo" })).toHaveAttribute("data-form", "2");
+    expect(screen.getByRole("img", { name: "Robo" })).toHaveAttribute("data-size", "200");
     expect(screen.getByText("Con được 7/7 điểm.")).toBeInTheDocument();
     expect(screen.getByText("+100 xu")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Học tiếp" })).toHaveAttribute("href", "#/lesson/y.l1");
     await waitFor(async () => expect((await store.loadActive())!.state.pet.stage).toBe(2));
     expect((await store.loadActive())!.state.remedial).toBeNull();
+  });
+
+  test("with reduced motion a pass goes straight to the congratulation", async () => {
+    reduceMotion();
+    try {
+      await renderWithGame(
+        <EvolutionTestScreen stage={stage} stageNumber={1} onExit={() => {}} rng={seededRng(3)} />,
+        { bundle: twoStages, runner: fakeRunner(() => okResult("Hi\n")), state: ready() },
+      );
+      await answerPaper("Đúng");
+
+      expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+      expect(screen.getByRole("heading", { name: "Robo đã tiến hóa!" })).toHaveFocus();
+      expect(screen.getByRole("img", { name: "Robo" })).toHaveAttribute("data-form", "2");
+      expect(screen.getByText("Con được 7/7 điểm.")).toBeInTheDocument();
+      expect(screen.getByRole("link", { name: "Học tiếp" })).toHaveAttribute("href", "#/lesson/y.l1");
+    } finally {
+      vi.unstubAllGlobals();
+    }
   });
 
   test("a fail lists the weak concepts and opens the focused review set", async () => {

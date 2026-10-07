@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { findConcept } from "../content/lookup";
 import type { Concept, Stage } from "../content/types";
 import { buildRemedialSet, drawEvolutionTest, gradePaper, type ExamGrade } from "../game/exam";
+import { FORM_COUNT, formOf } from "../game/look";
 import { nextStep } from "../game/path";
 import type { Rng } from "../game/random";
 import { isPass } from "../game/rewards";
@@ -9,6 +10,7 @@ import type { GameState } from "../game/state";
 import { pick } from "../i18n/lang";
 import { useLang } from "../i18n/LangProvider";
 import { useContent } from "./contexts";
+import { EvolutionShow } from "./EvolutionShow";
 import { ExamRunner, formatScore } from "./ExamRunner";
 import { useGame } from "./GameProvider";
 import { PetRobot } from "./PetRobot";
@@ -127,12 +129,31 @@ function EvolutionPassed({
   const next = nextStep(bundle, after);
   const xu = after.wallet.xu - before.wallet.xu;
   const vui = after.pet.vui - before.pet.vui;
+  const [showing, setShowing] = useState(true);
+  const headingRef = useRef<HTMLHeadingElement>(null);
+  useEffect(() => {
+    // The show had the focus on its skip button: it goes on to the congratulation.
+    if (!showing) headingRef.current?.focus();
+  }, [showing]);
+  if (showing) {
+    return (
+      <EvolutionShow
+        from={{ form: formOf(before.pet.stage), graduated: before.pet.stage > FORM_COUNT }}
+        to={{ form: formOf(after.pet.stage), graduated: after.pet.stage > FORM_COUNT }}
+        equipped={after.inventory.equipped}
+        robotName={profile.robotName}
+        onDone={() => setShowing(false)}
+      />
+    );
+  }
   return (
     <main className="evolution-done">
       <div className="evolve">
         <PetRobot mood="happy" size={200} />
       </div>
-      <h1>{t("evolution.title", { name: profile.robotName })}</h1>
+      <h1 ref={headingRef} tabIndex={-1}>
+        {t("evolution.title", { name: profile.robotName })}
+      </h1>
       <p>{t("evolution.body", { name: profile.robotName })}</p>
       <p>{t("exam.score", { score: formatScore(grade.score, uiLang), max: grade.max })}</p>
       <ul className="result-rewards">

@@ -338,6 +338,9 @@ describe("tests and evolution", () => {
     output = "Hi\n";
     expect(await screen.findByRole("heading", { name: "Kiểm tra tiến hóa" })).toBeInTheDocument();
     await answerPaper("Đúng");
+    // The evolution show comes first; the skip button leads to the congratulation.
+    expect(screen.getByRole("dialog", { name: "Robo đã tiến hóa!" })).toBeInTheDocument();
+    await userEvent.click(screen.getByRole("button", { name: "Bỏ qua" }));
     expect(screen.getByRole("heading", { name: "Robo đã tiến hóa!" })).toBeInTheDocument();
     await waitFor(async () => expect((await saved()).pet.stage).toBe(2));
     const attempts = (await saved()).progress.evolutionTests;
