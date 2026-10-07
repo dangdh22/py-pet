@@ -1,0 +1,11 @@
+id: s2.input
+title: { vi: "Nhập dữ liệu với input()", en: "Reading input with input()" }
+lessons:
+  - 01-input-la-gi.md
+  - 02-de-trong-ngoac.md
+  - 03-input-la-chuoi.md
+  - 04-nhieu-dong.md
+  - 05-chuong-trinh-tro-chuyen.md
+reviews:
+  - { id: s2.input.r1, after: s2.input.l2 }
+  - { id: s2.input.r2, after: s2.input.l5 }

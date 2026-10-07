@@ -1,0 +1,160 @@
+exercises:
+  - id: s2.input.p1
+    type: fill
+    concepts: [input-empty-prompt]
+    prompt:
+      vi: "Điền vào chỗ trống để chương trình đọc tên từ ô Dữ liệu nhập và in ra lời chào như phần Ví dụ. Nhớ để trống ngoặc."
+      en: "Fill the blank so that the program reads a name from the Input data box and prints the greeting in the Example. Remember to keep the brackets empty."
+    template: |
+      ten = ___
+      print("Robo chào", ten)
+    answers: ["input()"]
+    tests:
+      - { input: "Mai", output: "Robo chào Mai" }
+      - { input: "Khoa", output: "Robo chào Khoa", hidden: true }
+    hints:
+      - { vi: "Chỗ trống cần lệnh đọc 1 dòng con gõ. Nếu có chữ trong ngoặc, chữ đó sẽ bị in ra và tính vào kết quả.", en: "The blank needs the statement that reads 1 typed line. If there is text in the brackets, that text is printed and counted in the output." }
+      - { vi: "Điền input() vào chỗ trống, không có chữ nào trong ngoặc.", en: "Fill the blank with input(), with nothing inside the brackets." }
+
+  - id: s2.input.p2
+    type: parsons
+    concepts: [input-order]
+    prompt:
+      vi: "Ô Dữ liệu nhập có 2 dòng: dòng 1 là tên, dòng 2 là môn học yêu thích. Sắp xếp các dòng lệnh để in ra đúng dòng như phần Ví dụ."
+      en: "The Input data box has 2 lines: line 1 is a name, and line 2 is a favourite school subject. Put the lines in order to print the line in the Example."
+    solution: |
+      ten = input()
+      mon_hoc = input()
+      print(ten, "thích môn", mon_hoc)
+    tests:
+      - input: "Lan\nToán"
+        output: "Lan thích môn Toán"
+      - input: "Nam\nTin học"
+        output: "Nam thích môn Tin học"
+        hidden: true
+    hints:
+      - { vi: "Lần gọi input() đầu tiên đọc dòng 1, là tên. Lệnh print phải đứng sau cả 2 lệnh đọc.", en: "The first input() call reads line 1, the name. The print statement must come after both reading lines." }
+
+  - id: s2.input.p3
+    type: parsons
+    concepts: [input-str, input-order]
+    prompt:
+      vi: "Robo ghép 2 chữ số con gõ thành mã khóa. Ô Dữ liệu nhập có 2 dòng: dòng 1 là chữ số hàng chục, dòng 2 là chữ số hàng đơn vị. Sắp xếp các dòng lệnh để in ra mã khóa như phần Ví dụ."
+      en: "Robo joins 2 digits you type into a lock code. The Input data box has 2 lines: line 1 is the tens digit, and line 2 is the ones digit. Put the lines in order to print the lock code in the Example."
+    solution: |
+      chuc = input()
+      don_vi = input()
+      print("Mã khóa:", chuc + don_vi)
+    tests:
+      - input: "4\n2"
+        output: "Mã khóa: 42"
+      - input: "7\n0"
+        output: "Mã khóa: 70"
+        hidden: true
+    hints:
+      - { vi: "input() đưa lại chuỗi, nên chuc + don_vi ghép 2 chữ số lại. Chữ số hàng chục ở dòng 1, nên phải được đọc trước.", en: "input() gives back strings, so chuc + don_vi joins the 2 digits. The tens digit is on line 1, so it must be read first." }
+
+  - id: s2.input.p4
+    type: fill
+    concepts: [input-one-line]
+    prompt:
+      vi: "Robo đọc ngày, tháng, năm sinh của con trên 3 dòng, rồi in ra cách nhau bằng dấu gạch chéo /. Điền vào chỗ trống để in ra đúng dòng như phần Ví dụ."
+      en: "Robo reads your birthday as the day, the month and the year on 3 lines, then prints them separated by a slash /. Fill the blank to print the line in the Example."
+    template: |
+      ngay = input()
+      thang = input()
+      nam = ___
+      print(ngay, thang, nam, sep="/")
+    answers: ["input()"]
+    tests:
+      - input: "15\n8\n2015"
+        output: "15/8/2015"
+      - input: "1\n6\n2014"
+        output: "1/6/2014"
+        hidden: true
+    hints:
+      - { vi: "Mỗi lần gọi input() đọc 1 dòng. Đã có 2 lần đọc cho ngày và tháng, còn thiếu 1 lần đọc cho năm ở dòng 3.", en: "Each input() call reads 1 line. There are already 2 reads for the day and the month, and 1 more read is needed for the year on line 3." }
+      - { vi: "Điền input() vào chỗ trống.", en: "Fill the blank with input()." }
+
+  - id: s2.input.c1
+    type: code
+    concepts: [input-str, input-order]
+    prompt:
+      vi: "Ô Dữ liệu nhập có 2 dòng, mỗi dòng 1 số. Hãy đọc 2 số vào 2 biến a và b, rồi dùng dấu + để in ra 2 dòng như phần Ví dụ: dòng 1 ghép a trước b, dòng 2 ghép b trước a."
+      en: "The Input data box has 2 lines with 1 number on each line. Read the 2 numbers into the 2 variables a and b, then use + to print the 2 lines in the Example: line 1 joins a before b, and line 2 joins b before a."
+    starter: |
+      # Viết lệnh của con ở dưới dòng này
+    solution: |
+      a = input()
+      b = input()
+      print("Ghép:", a + b)
+      print("Ghép ngược:", b + a)
+    tests:
+      - input: "5\n3"
+        output: |
+          Ghép: 53
+          Ghép ngược: 35
+      - input: "12\n7"
+        output: |
+          Ghép: 127
+          Ghép ngược: 712
+        hidden: true
+    common_wrong:
+      - output: |
+          Ghép: 5 3
+          Ghép ngược: 3 5
+        misconception: print-comma-space
+        sample: |
+          a = input()
+          b = input()
+          print("Ghép:", a, b)
+          print("Ghép ngược:", b, a)
+    hints:
+      - { vi: "input() đưa lại chuỗi, nên dấu + ghép 2 chuỗi lại, không có dấu cách ở giữa. Dấu phẩy thì lại thêm 1 dấu cách.", en: "input() gives back strings, so + joins the 2 strings with no space between them. A comma adds a space instead." }
+      - { vi: "Dòng in thứ nhất là print(\"Ghép:\", a + b). Dòng in thứ hai đổi chỗ a và b.", en: "The first print line is print(\"Ghép:\", a + b). The second print line swaps a and b." }
+    test_eligible: true
+
+  - id: s2.input.c2
+    type: code
+    concepts: [input-one-line, input-empty-prompt]
+    prompt:
+      vi: "Làm thẻ thành viên của câu lạc bộ Robo. Ô Dữ liệu nhập có 3 dòng: tên, tuổi, lớp. Hãy đọc 3 dòng đó rồi in ra 3 dòng như phần Ví dụ. Nhớ để trống ngoặc của input()."
+      en: "Make a membership card for Robo's club. The Input data box has 3 lines: a name, an age, a class. Read the 3 lines, then print the 3 lines in the Example. Remember to keep the brackets of input() empty."
+    starter: |
+      # Viết lệnh của con ở dưới dòng này
+    solution: |
+      ten = input()
+      tuoi = input()
+      lop = input()
+      print("Tên:", ten)
+      print("Tuổi:", tuoi)
+      print("Lớp:", lop)
+    tests:
+      - input: "An\n11\n6A"
+        output: |
+          Tên: An
+          Tuổi: 11
+          Lớp: 6A
+      - input: "Minh\n12\n6B"
+        output: |
+          Tên: Minh
+          Tuổi: 12
+          Lớp: 6B
+        hidden: true
+    common_wrong:
+      - output: |
+          Tên: Tuổi: Lớp: Tên: An
+          Tuổi: 11
+          Lớp: 6A
+        misconception: input-empty-prompt
+        sample: |
+          ten = input("Tên: ")
+          tuoi = input("Tuổi: ")
+          lop = input("Lớp: ")
+          print("Tên:", ten)
+          print("Tuổi:", tuoi)
+          print("Lớp:", lop)
+    hints:
+      - { vi: "Gọi input() 3 lần, mỗi lần đọc 1 dòng, theo đúng thứ tự tên, tuổi, lớp. Chữ Tên:, Tuổi:, Lớp: nằm trong lệnh print, không nằm trong input().", en: "Call input() 3 times, each call reading 1 line, in the order name, age, class. The text Tên:, Tuổi:, Lớp: goes in the print statements, not in input()." }
+      - { vi: "Ba dòng đầu là ten = input(), tuoi = input(), lop = input(). Sau đó viết print(\"Tên:\", ten) và 2 lệnh print tương tự.", en: "The first 3 lines are ten = input(), tuoi = input(), lop = input(). Then write print(\"Tên:\", ten) and 2 similar print statements." }
+    test_eligible: true

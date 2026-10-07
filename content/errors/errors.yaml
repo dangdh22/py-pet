@@ -206,8 +206,9 @@
 - id: eof
   match: { type: EOFError }
   explain:
-    vi: "Dòng {line}: chương trình cần thêm dữ liệu nhập, nhưng ô Input đã hết. Con điền dữ liệu vào ô Input nhé, mỗi giá trị một dòng."
-    en: "Line {line}: the program needs more input data, but the Input box has no more lines. Write the data in the Input box, 1 value on each line."
+    vi: "Dòng {line}: chương trình cần thêm dữ liệu nhập, nhưng ô Dữ liệu nhập đã hết dòng. Mỗi lần gọi input() đọc 1 dòng mới: con điền đủ dữ liệu vào ô Dữ liệu nhập nhé, mỗi giá trị 1 dòng."
+    en: "Line {line}: the program needs more input data, but the Input data box has no more lines. Each input() call reads 1 new line: write enough data in the Input data box, 1 value on each line."
+  misconception: input-one-line
   sample: "x = input()"
   sample_input: ""
 

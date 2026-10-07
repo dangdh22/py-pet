@@ -1,0 +1,41 @@
+concepts:
+  - id: input-str
+    name: { vi: "input() luôn trả về chuỗi", en: "input() always gives a string" }
+    misconception_card: |
+      Nhiều bạn nghĩ gõ 5 vào ô Dữ liệu nhập thì `input()` đưa lại số 5. Thực ra `input()` luôn đưa lại 1 **chuỗi**, nên biến nhận được "5", như có dấu nháy. Vì vậy, nếu a và b đều đọc từ `input()`, `a + b` nối 2 chuỗi: gõ 5 và 3 thì in ra 53, còn `a + 1` thì báo lỗi TypeError. Muốn tính toán, con dùng công thức `int(input())`, sẽ học kỹ ở chủ đề "Ép kiểu".
+    parent_tip: |
+      Đọc cho con nghe số điện thoại của nhà: các chữ số ấy chỉ để đọc và ghép lại, không ai đem cộng chúng với nhau. Giải thích rằng input() cũng nhận mọi thứ con gõ như 1 dòng chữ, kể cả khi đó là chữ số.
+    practice:
+      level1: [s2.input.l3.q1, s2.input.l3.q2, s2.input.l5.q1, s2.input.b1, s2.input.b2, s2.input.b3]
+      level2: [s2.input.p3]
+      level3: [s2.input.l3.ex1, s2.input.l3.ex2, s2.input.c1]
+  - id: input-empty-prompt
+    name: { vi: "Để trống ngoặc của input() khi làm bài", en: "Keep input() empty in your exercises" }
+    misconception_card: |
+      Nhiều bạn viết câu hỏi vào trong ngoặc, như `ten = input("Tên: ")`, cho chương trình thêm lịch sự. Thực ra chữ trong ngoặc là **lời nhắc**: Python in nó ra, và Robo tính nó vào kết quả khi chấm, nên bài bị sai. Trong Py-Pet, con luôn viết `ten = input()`, để trống ngoặc.
+    parent_tip: |
+      Đưa con 1 phiếu có in sẵn chữ "Tên:" và 1 chỗ trống, rồi nhờ con chỉ viết câu trả lời vào chỗ trống. Nếu con chép lại cả chữ "Tên:" vào chỗ trống thì phiếu bị thừa chữ, giống như lời nhắc trong input() bị tính vào kết quả.
+    practice:
+      level1: [s2.input.l1.q2, s2.input.l2.q1, s2.input.l2.q2, s2.input.b4, s2.input.b5]
+      level2: [s2.input.p1]
+      level3: [s2.input.l2.ex1, s2.input.l5.ex1, s2.input.c2]
+  - id: input-one-line
+    name: { vi: "Mỗi lần gọi input() đọc 1 dòng", en: "Each input() call reads 1 line" }
+    misconception_card: |
+      Nhiều bạn nghĩ 1 lần gọi `input()` đọc được hết ô Dữ liệu nhập, hoặc gọi lại `input()` thì lấy lại được dòng cũ. Thực ra mỗi lần gọi `input()` đọc đúng **1 dòng mới**, cả dòng, kể cả dấu cách. Muốn đọc 3 giá trị, con gọi `input()` 3 lần và viết mỗi giá trị trên 1 dòng. Gọi `input()` nhiều lần hơn số dòng thì Python báo lỗi **EOFError**.
+    parent_tip: |
+      Viết 3 câu trả lời lên 3 dòng của 1 tờ giấy. Mỗi lần con nói "đọc", bố mẹ chỉ đọc đúng 1 dòng tiếp theo, và khi hết dòng thì nói "hết rồi": đó chính là lỗi EOFError.
+    practice:
+      level1: [s2.input.l1.q1, s2.input.l4.q2, s2.input.b6, s2.input.b7, s2.input.b8]
+      level2: [s2.input.p4]
+      level3: [s2.input.l1.ex1, s2.input.l4.ex2, s2.input.c2]
+  - id: input-order
+    name: { vi: "Dữ liệu được đọc theo thứ tự gõ", en: "Input is read in the order it was typed" }
+    misconception_card: |
+      Nhiều bạn nghĩ Python chọn dòng theo tên biến, ví dụ biến tuoi tự nhận dòng có số. Thực ra Python đọc các dòng **từ trên xuống**: lần gọi `input()` đầu tiên nhận dòng 1, lần sau nhận dòng 2. Với `ten = input()` rồi `tuoi = input()`, nếu con gõ 11 trước An thì ten nhận 11 và tuoi nhận An. Con phải viết các dòng trong ô Dữ liệu nhập đúng thứ tự các lần gọi `input()`.
+    parent_tip: |
+      Xếp 3 tấm thẻ ghi tên, tuổi, lớp thành 1 chồng, rồi để con rút từ trên xuống và ghi lần lượt vào 3 ô "tên", "tuổi", "lớp". Sau đó đảo thứ tự chồng thẻ để con thấy các ô bị ghi nhầm.
+    practice:
+      level1: [s2.input.l4.q1, s2.input.l5.q2, s2.input.b9, s2.input.b10, s2.input.b11]
+      level2: [s2.input.p2, s2.input.p3]
+      level3: [s2.input.l4.ex1, s2.input.l5.ex1, s2.input.l5.ex2, s2.input.c1]

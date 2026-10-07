@@ -1,0 +1,210 @@
+questions:
+  - id: s2.input.b1
+    type: mcq
+    concepts: [input-str]
+    lessons: [s2.input.l3]
+    code: |
+      n = input()
+      print(type(n))
+    prompt:
+      vi: "Ô Dữ liệu nhập có 1 dòng: 42. Đoạn code in ra gì?"
+      en: "The Input data box has 1 line: 42. What is the output of this code?"
+    choices:
+      - { text: "<class 'int'>", misconception: input-str }
+      - { text: "<class 'input'>", misconception: input-str }
+      - { text: "<class 'str'>", correct: true }
+      - { text: "42" }
+    explanation:
+      vi: "Dù con gõ chữ số, input() vẫn đưa lại chuỗi \"42\". type() cho biết loại dữ liệu của giá trị trong biến, và str là chuỗi. type() không in ra giá trị, nên không có 42."
+      en: "Even when you type digits, input() still gives back the string \"42\". type() tells the data type of the value in the variable, and str means string. type() does not print the value, so there is no 42."
+
+  - id: s2.input.b2
+    type: mcq
+    concepts: [input-str]
+    lessons: [s2.input.l3]
+    code: |
+      a = input()
+      print(a * 3)
+    prompt:
+      vi: "Ô Dữ liệu nhập có 1 dòng: 2. Đoạn code in ra gì?"
+      en: "The Input data box has 1 line: 2. What is the output of this code?"
+    choices:
+      - { text: "222", correct: true }
+      - { text: "6", misconception: input-str }
+      - { text: "2 2 2", misconception: string-repeat }
+      - { vi: "Báo lỗi TypeError ở dòng 2", en: "A TypeError on line 2", error: true, misconception: input-str }
+    explanation:
+      vi: "a là chuỗi \"2\", không phải số 2. Chuỗi nhân với 1 số nguyên thì được lặp lại, như con đã học ở giai đoạn 1: \"2\" * 3 ra 222, không có dấu cách và không bị lỗi."
+      en: "a is the string \"2\", not the number 2. A string times an integer is repeated, as you learned in stage 1: \"2\" * 3 gives 222, with no spaces and no error."
+
+  - id: s2.input.b3
+    type: mcq
+    concepts: [input-str]
+    lessons: [s2.input.l3]
+    code: |
+      a = input()
+      print(a + 1)
+    prompt:
+      vi: "Ô Dữ liệu nhập có 1 dòng: 5. Chuyện gì xảy ra khi chạy đoạn code này?"
+      en: "The Input data box has 1 line: 5. What happens when this code runs?"
+    choices:
+      - { text: "6", misconception: input-str }
+      - { vi: "Báo lỗi TypeError ở dòng 2", en: "A TypeError on line 2", correct: true, error: true }
+      - { text: "51", misconception: input-str }
+      - { text: "5 1", misconception: concat-no-space }
+    explanation:
+      vi: "a là chuỗi \"5\" đọc từ input(), còn 1 là số nguyên. Dấu + không cộng được chuỗi với số, cũng không tự đổi 1 thành chuỗi để nối, nên Python báo lỗi TypeError ở dòng 2."
+      en: "a is the string \"5\" read with input(), and 1 is an integer. + cannot add a string and a number, and it does not change 1 into a string to join them, so Python shows a TypeError on line 2."
+
+  - id: s2.input.b4
+    type: mcq
+    concepts: [input-empty-prompt]
+    lessons: [s2.input.l2]
+    code: |
+      name = input("Name: ")
+      print(name)
+    prompt:
+      vi: "Bài tập yêu cầu đọc 1 tên rồi in tên đó ra. Con viết đoạn code này rồi bấm Nộp bài. Chuyện gì xảy ra?"
+      en: "An exercise asks you to read a name and print it. You write this code and press Submit. What happens?"
+    choices:
+      - { vi: "Python báo lỗi SyntaxError, vì trong ngoặc của input() có chữ", en: "Python shows a SyntaxError, because there is text inside the brackets of input()", error: true, misconception: input-empty-prompt }
+      - { vi: "Bài vẫn đúng, vì Robo bỏ qua lời nhắc khi chấm", en: "The answer is still right, because Robo ignores the prompt when it checks", misconception: input-empty-prompt }
+      - { vi: "Chữ Name: được in ra và bị tính vào kết quả, nên bài bị chấm sai", en: "The text Name: is printed and counted in the output, so the answer is marked wrong", correct: true }
+      - { vi: "Biến name nhận chữ Name: thay cho dữ liệu nhập", en: "The variable name gets the text Name: instead of the input data", misconception: input-empty-prompt }
+    explanation:
+      vi: "Chữ trong ngoặc là lời nhắc. Python không báo lỗi mà in lời nhắc ra, và Robo tính nó vào kết quả, nên kết quả thành Name: cộng với tên, khác kết quả mong đợi. Biến name vẫn nhận đúng dòng trong ô Dữ liệu nhập."
+      en: "The text inside the brackets is a prompt. Python shows no error but prints the prompt, and Robo counts it in the output, so the output becomes Name: followed by the name, which is not the expected output. The variable name still gets the line from the Input data box."
+
+  - id: s2.input.b5
+    type: mcq
+    concepts: [input-empty-prompt]
+    lessons: [s2.input.l4]
+    code: |
+      a = input("A")
+      b = input("B")
+      print(a + b)
+    prompt:
+      vi: "Ô Dữ liệu nhập có 2 dòng: 1 và 2. Đoạn code in ra gì?"
+      en: "The Input data box has 2 lines: 1 and 2. What is the output of this code?"
+    choices:
+      - { text: "12", misconception: input-empty-prompt }
+      - { text: "A1B2", misconception: input-empty-prompt }
+      - { text: "3", misconception: input-str }
+      - { text: "AB12", correct: true }
+    explanation:
+      vi: "Lời nhắc A được in ra, rồi tới lời nhắc B, đều không xuống dòng. Chữ 1 và 2 trong ô Dữ liệu nhập không được in ra. Cuối cùng print in a + b, là chuỗi \"1\" nối với chuỗi \"2\": 12. Cả dòng là AB12."
+      en: "The prompt A is printed, then the prompt B, with no new line. The text 1 and 2 in the Input data box is not printed. Finally print prints a + b, the string \"1\" joined to the string \"2\": 12. The whole line is AB12."
+
+  - id: s2.input.b6
+    type: predict
+    concepts: [input-one-line]
+    lessons: [s2.input.l4]
+    code: |
+      name = input()
+      print("Hi", name)
+    prompt:
+      vi: "Ô Dữ liệu nhập để trống. Chuyện gì xảy ra khi bấm Chạy thử?"
+      en: "The Input data box is empty. What happens when you press Run?"
+    choices:
+      - { text: "Hi", misconception: input-one-line }
+      - { vi: "Báo lỗi EOFError ở dòng 1", en: "An EOFError on line 1", correct: true, error: true }
+      - { text: "Hi name", misconception: var-assign }
+      - { vi: "Báo lỗi NameError ở dòng 2", en: "A NameError on line 2", error: true, misconception: var-before-use }
+    explanation:
+      vi: "Ở dòng 1, input() cần đọc 1 dòng, nhưng ô Dữ liệu nhập không có dòng nào. Python báo lỗi EOFError, nghĩa là đã hết dữ liệu để đọc, và dừng ngay ở dòng 1. Dòng 2 không được chạy."
+      en: "On line 1, input() needs to read 1 line, but the Input data box has no lines. Python shows an EOFError, which means there is no more data to read, and stops right on line 1. Line 2 does not run."
+
+  - id: s2.input.b7
+    type: mcq
+    concepts: [input-one-line]
+    lessons: [s2.input.l4]
+    code: |
+      a = input()
+      b = input()
+      print(a, b)
+    prompt:
+      vi: "Ô Dữ liệu nhập có 3 dòng: 1, 2 và 3. Đoạn code in ra gì?"
+      en: "The Input data box has 3 lines: 1, 2 and 3. What is the output of this code?"
+    choices:
+      - { text: "1 2", correct: true }
+      - { text: "1 2 3", misconception: input-one-line }
+      - { vi: "Báo lỗi EOFError, vì ô Dữ liệu nhập thừa 1 dòng", en: "An EOFError, because the Input data box has 1 extra line", error: true, misconception: input-one-line }
+      - { text: "2 3", misconception: input-order }
+    explanation:
+      vi: "Chương trình gọi input() 2 lần, nên chỉ đọc dòng 1 và dòng 2. Dòng 3 thừa chỉ bị bỏ qua, Python không báo lỗi. Lệnh print in a và b: 1 2."
+      en: "The program calls input() 2 times, so it reads only line 1 and line 2. The extra line 3 is just skipped, and Python shows no error. The print statement prints a and b: 1 2."
+
+  - id: s2.input.b8
+    type: mcq
+    concepts: [input-one-line]
+    lessons: [s2.input.l4]
+    code: |
+      a = input()
+      print(a + "!")
+    prompt:
+      vi: "Ô Dữ liệu nhập có 1 dòng: 7 8 (có 1 dấu cách ở giữa). Đoạn code in ra gì?"
+      en: "The Input data box has 1 line: 7 8 (with 1 space in the middle). What is the output of this code?"
+    choices:
+      - { text: "7!", misconception: input-one-line }
+      - { text: "15!", misconception: input-str }
+      - { text: "78!", misconception: input-one-line }
+      - { text: "7 8!", correct: true }
+    explanation:
+      vi: "input() đọc cả dòng, kể cả dấu cách, nên a là chuỗi \"7 8\". Dấu + nối thêm dấu chấm than vào cuối: 7 8!. Python không cộng 7 với 8, vì a là chuỗi."
+      en: "input() reads the whole line, spaces included, so a is the string \"7 8\". + joins the exclamation mark to the end: 7 8!. Python does not add 7 and 8, because a is a string."
+
+  - id: s2.input.b9
+    type: mcq
+    concepts: [input-order]
+    lessons: [s2.input.l4]
+    code: |
+      name = input()
+      age = input()
+      print(name, age)
+    prompt:
+      vi: "Con muốn đoạn code in ra Bo 11. Con cần viết gì vào ô Dữ liệu nhập?"
+      en: "You want this code to print Bo 11. What do you write in the Input data box?"
+    choices:
+      - { text: "11\nBo", misconception: input-order }
+      - { text: "Bo 11", misconception: input-one-line }
+      - { text: "Bo\n11", correct: true }
+      - { text: "name = Bo\nage = 11" }
+    explanation:
+      vi: "Lần gọi input() đầu tiên cất dòng 1 vào name, lần thứ hai cất dòng 2 vào age. Vì vậy dòng 1 là Bo, dòng 2 là 11. Nếu viết Bo 11 trên 1 dòng, name nhận cả dòng đó và ô thiếu 1 dòng cho age. Ô Dữ liệu nhập chỉ chứa giá trị, không chứa tên biến."
+      en: "The first input() call stores line 1 in name, and the second call stores line 2 in age. So line 1 is Bo and line 2 is 11. If you write Bo 11 on 1 line, name gets that whole line and the box has no line left for age. The Input data box holds only the values, not the variable names."
+
+  - id: s2.input.b10
+    type: mcq
+    concepts: [input-order]
+    lessons: [s2.input.l4]
+    code: |
+      age = input()
+      name = input()
+      print(name, "is", age)
+    prompt:
+      vi: "Ô Dữ liệu nhập có 2 dòng: Tom rồi 12. Đoạn code in ra gì?"
+      en: "The Input data box has 2 lines: Tom, then 12. What is the output of this code?"
+    choices:
+      - { text: "Tom is 12", misconception: input-order }
+      - { text: "12 is Tom", correct: true }
+      - { vi: "Báo lỗi TypeError ở dòng 1, vì Tom không phải là số", en: "A TypeError on line 1, because Tom is not a number", error: true, misconception: input-str }
+      - { text: "name is age", misconception: var-assign }
+    explanation:
+      vi: "Python không nhìn tên biến để chọn dòng. Lần gọi input() đầu tiên đọc dòng 1, nên age là Tom. Lần thứ hai đọc dòng 2, nên name là 12. Cả 2 đều là chuỗi nên không có lỗi, và print in ra 12 is Tom."
+      en: "Python does not look at the variable names to choose a line. The first input() call reads line 1, so age is Tom. The second call reads line 2, so name is 12. Both are strings, so there is no error, and print prints 12 is Tom."
+
+  - id: s2.input.b11
+    type: mcq
+    concepts: [input-order]
+    lessons: [s2.input.l4]
+    prompt:
+      vi: "Python đọc các dòng trong ô Dữ liệu nhập theo thứ tự nào?"
+      en: "In what order does Python read the lines in the Input data box?"
+    choices:
+      - { vi: "Theo tên biến: biến tên người nhận dòng có chữ, biến tuổi nhận dòng có số", en: "By variable name: a name variable gets the line with letters, and an age variable gets the line with digits", misconception: input-order }
+      - { vi: "Theo thứ tự các lệnh print trong chương trình", en: "In the order of the print statements in the program", misconception: input-order }
+      - { vi: "Từ dưới lên: dòng cuối cùng được đọc trước", en: "From the bottom up: the last line is read first", misconception: input-order }
+      - { vi: "Từ trên xuống: lần gọi input() đầu tiên đọc dòng 1, lần tiếp theo đọc dòng 2, cứ thế tiếp tục", en: "From the top down: the first input() call reads line 1, the next call reads line 2, and so on", correct: true }
+    explanation:
+      vi: "Python chạy từ trên xuống, và mỗi lần gọi input() đọc dòng tiếp theo trong ô Dữ liệu nhập. Tên biến và thứ tự in không làm thay đổi thứ tự đọc. Vì vậy con phải viết các dòng đúng thứ tự các lần gọi input()."
+      en: "Python runs from top to bottom, and each input() call reads the next line in the Input data box. The variable names and the order of printing do not change the order of reading. So you must write the lines in the same order as the input() calls."
