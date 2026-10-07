@@ -8,7 +8,7 @@ concepts:
     practice:
       level1: [s4.chu-so.l1.q1, s4.chu-so.l1.q2, s4.chu-so.l2.q1, s4.chu-so.l2.q2, s4.chu-so.b1, s4.chu-so.b2, s4.chu-so.b3, s4.chu-so.l6.q1, s4.chu-so.b15]
       level2: [s4.chu-so.p1, s4.chu-so.p6]
-      level3: [s4.chu-so.l1.ex1, s4.chu-so.l1.ex2, s4.chu-so.l2.ex1, s4.chu-so.l2.ex2, s4.chu-so.l6.ex1, s4.chu-so.l6.ex2, s4.chu-so.c1]
+      level3: [s4.chu-so.l1.ex1, s4.chu-so.l1.ex2, s4.chu-so.l2.ex1, s4.chu-so.l2.ex2, s4.chu-so.l6.ex1, s4.chu-so.l6.ex2, s4.chu-so.c1, s4.chu-so.c5]
   - id: divisor-loop
     name: { vi: "Tìm ước: thử i từ 1 đến n", en: "Finding divisors: try i from 1 to n" }
     misconception_card: |

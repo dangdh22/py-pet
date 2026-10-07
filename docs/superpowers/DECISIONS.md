@@ -109,7 +109,7 @@ Người bảo trì chưa duyệt kế hoạch M5d; Claude tự chốt theo yêu
 4. **Luật 8 và 9 của spec 3.9 thành lỗi** của `content:validate` khi giai đoạn 4 xong.
 5. **`+=` được dạy ở bài 1 chủ đề "Tổng, đếm, lớn nhất"**; 2 chủ đề trước dùng `dem = dem + 1`. Khi con viết `tong += i` mà quên `tong = 0`, app cho lời khuyên "gán trước khi dùng" (sửa nhỏ trong `isAssignedInCode`), không khuyên đặt tên trong dấu ngoặc kép.
 6. **Bài viết lại chương trình for bằng while chỉ chấm theo kết quả in ra**, nên lời giải dùng for vẫn qua. Chưa có kiểu kiểm tra "phải dùng while"; xem lại nếu cần ở bản sau.
-7. **Bài luyện mức 3 chỉ dùng kiến thức đã học trong chủ đề tới lúc đó, ở mức có thể.** App mở mọi bài luyện của 1 chủ đề khi con xong 1 bài học bất kỳ của chủ đề; vì vậy 3 bài cần kiến thức của bài học sau (`s4.chu-so.c5`, `s4.for-range.c2`, `s4.long-nhau.c4`) chỉ nằm trong danh sách của khái niệm dạy kiến thức đó. Sửa ở app (mở bài luyện theo bài học đã xong) để bản sau.
+7. **Bài luyện mức 3 chỉ dùng kiến thức đã học trong chủ đề tới lúc đó, ở mức có thể.** App mở mọi bài luyện của 1 chủ đề khi con xong 1 bài học bất kỳ của chủ đề; vì vậy 3 bài cần kiến thức của bài học sau (`s4.chu-so.c5`, `s4.for-range.c2`, `s4.long-nhau.c4`) chỉ nằm trong danh sách của khái niệm dạy kiến thức đó. Đã sửa ở M6b (mục 7 của M6b): app mở bài luyện khi mọi khái niệm của nó đã xuất hiện trong 1 bài học đã xong, nên 3 bài này đã được trả lại vào danh sách mức 3 của `range-stop-excluded`, `row-col-pattern` và `digit-split`; app giữ chúng đến khi con học xong bài dạy khái niệm còn lại.
 
 ## M6a
 

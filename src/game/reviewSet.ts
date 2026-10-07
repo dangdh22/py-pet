@@ -1,4 +1,4 @@
-import { allConcepts } from "../content/lookup";
+import { allConcepts, allLessons } from "../content/lookup";
 import { isChoiceQuestion, type ChoiceQuestion, type ContentBundle, type Exercise } from "../content/types";
 import { isDue } from "./leitner";
 import { shuffled, type Rng } from "./random";
@@ -12,11 +12,27 @@ export const PRACTICE_SIZE = 2;
 const LEVELS = ["level1", "level2", "level3"] as const;
 
 /**
- * The items a child may meet in a review: exercises and questions of finished lessons, and the practice exercises
- * of topics with at least 1 finished lesson. Items of lessons not learned yet stay hidden.
+ * The concepts a child has met: those of the exercises and questions in the finished lessons. A lesson declares its
+ * concepts through the items it holds, so a concept taught by a later lesson is not met yet.
+ */
+export function conceptsMet(bundle: ContentBundle, state: GameState): Set<string> {
+  const done = new Set(state.progress.completedLessons);
+  const met = new Set<string>();
+  for (const lesson of allLessons(bundle)) {
+    if (!done.has(lesson.id)) continue;
+    for (const item of lesson.exercises) for (const id of item.concepts) met.add(id);
+  }
+  return met;
+}
+
+/**
+ * The items a child may meet in a review: exercises and questions of finished lessons, bank questions of finished
+ * lessons, and the practice exercises of a topic whose concepts were all met in finished lessons (an item that uses
+ * `continue` waits for the lesson on `continue`). Items of lessons not learned yet stay hidden.
  */
 export function availableItems(bundle: ContentBundle, state: GameState): Map<string, Exercise> {
   const done = new Set(state.progress.completedLessons);
+  const met = conceptsMet(bundle, state);
   const items = new Map<string, Exercise>();
   for (const topic of bundle.stages.flatMap((stage) => stage.topics)) {
     for (const lesson of topic.lessons) {
@@ -25,8 +41,11 @@ export function availableItems(bundle: ContentBundle, state: GameState): Map<str
     for (const question of topic.questions) {
       if (question.lessons.some((id) => done.has(id))) items.set(question.id, question);
     }
-    if (topic.lessons.some((lesson) => done.has(lesson.id))) {
-      for (const exercise of topic.practice) items.set(exercise.id, exercise);
+    const started = topic.lessons.some((lesson) => done.has(lesson.id));
+    for (const exercise of topic.practice) {
+      // An item without concepts has nothing to wait for: it follows the topic's first finished lesson.
+      const open = exercise.concepts.length === 0 ? started : exercise.concepts.every((id) => met.has(id));
+      if (open) items.set(exercise.id, exercise);
     }
   }
   return items;

@@ -28,7 +28,7 @@ concepts:
     practice:
       level1: [s4.long-nhau.l3.q1, s4.long-nhau.l3.q2, s4.long-nhau.b6, s4.long-nhau.b7, s4.long-nhau.b8, s4.long-nhau.l5.q2]
       level2: [s4.long-nhau.p3]
-      level3: [s4.long-nhau.l3.ex1, s4.long-nhau.l3.ex2, s4.long-nhau.l5.ex2, s4.long-nhau.c3]
+      level3: [s4.long-nhau.l3.ex1, s4.long-nhau.l3.ex2, s4.long-nhau.l5.ex2, s4.long-nhau.c3, s4.long-nhau.c4]
   - id: leading-spaces
     name: { vi: "Dấu cách ở đầu hàng", en: "Spaces at the start of a row" }
     misconception_card: |

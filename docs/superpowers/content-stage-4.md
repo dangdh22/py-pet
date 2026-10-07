@@ -70,7 +70,7 @@ Ngân hàng câu hỏi: 16 câu. Tổng câu đoán kết quả và trắc nghi�
 | ID khái niệm | Tên khái niệm | Bài luyện mức 1 / 2 / 3 |
 |---|---|---|
 | `for-repeat` | Vòng lặp for lặp lại cả khối lệnh thụt lề | 6 / 1 / 4 |
-| `range-stop-excluded` | range không có số dừng | 6 / 1 / 4 |
+| `range-stop-excluded` | range không có số dừng | 6 / 1 / 5 |
 | `range-start-step` | Số bắt đầu và bước nhảy của range | 6 / 2 / 3 |
 | `loop-variable` | Biến của vòng lặp đổi giá trị mỗi lần lặp | 4 / 1 / 4 |
 | `for-over-string` | for đi qua từng ký tự của chuỗi | 4 / 2 / 3 |
@@ -165,7 +165,7 @@ Ngân hàng câu hỏi: 12 câu. Tổng câu đoán kết quả và trắc nghi�
 |---|---|---|
 | `nested-inner-full` | Vòng trong chạy hết mỗi lần vòng ngoài chạy | 8 / 1 / 5 |
 | `print-end-newline` | end="" và print() để xuống dòng trong vòng lặp | 6 / 1 / 3 |
-| `row-col-pattern` | Hàng thứ i có i ký tự | 6 / 1 / 4 |
+| `row-col-pattern` | Hàng thứ i có i ký tự | 6 / 1 / 5 |
 | `leading-spaces` | Dấu cách ở đầu hàng | 5 / 2 / 3 |
 
 ## Chủ đề 5: Chữ số, ước số, break và continue (`s4.chu-so`)
@@ -193,7 +193,7 @@ Ngân hàng câu hỏi: 16 câu. Tổng câu đoán kết quả và trắc nghi�
 
 | ID khái niệm | Tên khái niệm | Bài luyện mức 1 / 2 / 3 |
 |---|---|---|
-| `digit-split` | Tách chữ số bằng % 10 và // 10 | 9 / 2 / 7 |
+| `digit-split` | Tách chữ số bằng % 10 và // 10 | 9 / 2 / 8 |
 | `divisor-loop` | Tìm ước: thử i từ 1 đến n | 5 / 1 / 5 |
 | `break-nearest` | break thoát khỏi vòng lặp gần nhất | 6 / 1 / 4 |
 | `continue-skip` | continue bỏ qua phần còn lại của 1 lần lặp | 4 / 1 / 3 |

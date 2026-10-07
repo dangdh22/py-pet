@@ -18,7 +18,7 @@ concepts:
     practice:
       level1: [s4.for-range.l2.q1, s4.for-range.l2.q2, s4.for-range.b4, s4.for-range.b5, s4.for-range.l4.q2, s4.for-range.l3.q2]
       level2: [s4.for-range.p3]
-      level3: [s4.for-range.l2.ex1, s4.for-range.l3.ex1, s4.for-range.l4.ex2, s4.for-range.l4.ex1]
+      level3: [s4.for-range.l2.ex1, s4.for-range.l3.ex1, s4.for-range.l4.ex2, s4.for-range.l4.ex1, s4.for-range.c2]
   - id: range-start-step
     name: { vi: "Số bắt đầu và bước nhảy của range", en: "The start and the step of range" }
     misconception_card: |
