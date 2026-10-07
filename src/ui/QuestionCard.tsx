@@ -6,6 +6,11 @@ import { useLang } from "../i18n/LangProvider";
 import { LangSwitch, Prompt, showText } from "./LangSwitch";
 import { RobotBubble } from "./RobotBubble";
 
+/** A predict choice is always program output; an mcq choice is code when it reads the same in both languages. */
+function isCodeChoice(question: ChoiceQuestion, choice: ChoiceQuestion["choices"][number]): boolean {
+  return question.type === "predict" || choice.text.vi === choice.text.en;
+}
+
 /**
  * 1 predict/mcq question. In a test (`exam`), the answer is only recorded: no right/wrong marks and no explanation
  * until the end (spec 8.2.4). The choices are shown in an order shuffled by the question ID, the same every time,
@@ -58,7 +63,7 @@ export function QuestionCard({
         {order.map((i) => (
           <label key={i} className={choiceClass(i)}>
             <input type="radio" name={question.id} checked={selected === i} onChange={() => setSelected(i)} />
-            <span className={question.type === "predict" ? "choice-text code" : "choice-text"}>
+            <span className={isCodeChoice(question, question.choices[i]!) ? "choice-text code" : "choice-text"}>
               {showText(question.choices[i]!.text, lang)}
             </span>
           </label>

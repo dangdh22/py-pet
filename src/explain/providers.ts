@@ -1,6 +1,6 @@
 import type { ErrorEntry } from "../content/types";
 import type { ErrorMisconceptionFn } from "../runner/judge";
-import { matchError, renderTemplate } from "./match";
+import { matchError, misconceptionOf, renderTemplate } from "./match";
 import type { ExplainContext, Explanation, ExplainProvider } from "./types";
 
 export class DictionaryProvider implements ExplainProvider {
@@ -14,7 +14,7 @@ export class DictionaryProvider implements ExplainProvider {
       text: renderTemplate(entry.explain[context.lang], vars),
       hint: entry.hint ? renderTemplate(entry.hint[context.lang], vars) : null,
       entryId: entry.id,
-      misconception: entry.misconception,
+      misconception: misconceptionOf(match),
     };
   }
 }
@@ -28,5 +28,8 @@ export async function explainWithChain(providers: ExplainProvider[], context: Ex
 }
 
 export function errorMisconceptionFrom(entries: ErrorEntry[]): ErrorMisconceptionFn {
-  return (error, code) => matchError(entries, error, code)?.entry.misconception ?? undefined;
+  return (error, code) => {
+    const match = matchError(entries, error, code);
+    return (match && misconceptionOf(match)) ?? undefined;
+  };
 }

@@ -36,3 +36,16 @@ export function matchError(entries: ErrorEntry[], error: PyErrorInfo, code: stri
 export function renderTemplate(template: string, vars: Record<string, string>): string {
   return template.replace(/\{(\w+)\}/g, (whole, name: string) => vars[name] ?? whole);
 }
+
+/**
+ * The misconception an error points to. A name-similar match is the case-sensitive misconception only when the
+ * name and the suggestion differ just in letter case (Print -> print); a typo (pirnt -> print) is not.
+ */
+export function misconceptionOf(match: ErrorMatch): string | null {
+  const { entry, vars } = match;
+  if (entry.match.check === "similar-name" && entry.misconception === "case-sensitive") {
+    const { name, suggestion } = vars;
+    if (name === undefined || suggestion === undefined || name.toLowerCase() !== suggestion.toLowerCase()) return null;
+  }
+  return entry.misconception;
+}

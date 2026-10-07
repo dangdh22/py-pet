@@ -392,7 +392,6 @@ function raiseVui(s: GameState): void {
   s.pet.vui = Math.min(STAT_MAX, s.pet.vui + 1);
 }
 
-/** Spec 5.4-5.6: the first completion pays 30 XP; the first pass pays 20 xu and Vui +1. Any score moves the path on. */
 /** A test score inside [0, max]; a score that is not a number counts as 0. */
 function testScore(score: number, max: number): number {
   return Number.isFinite(score) ? Math.min(max, Math.max(0, score)) : 0;
@@ -408,6 +407,7 @@ function rescaledBest(previous: TopicTestRecord | undefined, max: number): numbe
   return Math.round(((previous.best * max) / previous.max) * 100) / 100;
 }
 
+/** Spec 5.4-5.6: the first completion pays 30 XP; the first pass pays 20 xu and Vui +1. Any score moves the path on. */
 function completeTopicTest(s: GameState, e: Extract<GameEvent, { type: "TopicTestCompleted" }>, today: string): void {
   const previous = s.progress.topicTests[e.topicId];
   const score = testScore(e.score, e.max);

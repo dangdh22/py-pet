@@ -57,6 +57,29 @@ describe("QuestionCard", () => {
   });
 });
 
+describe("QuestionCard choice style", () => {
+  const mcq = {
+    ...fixtureQuestion,
+    id: "q.style",
+    type: "mcq" as const,
+    choices: [
+      { text: { vi: "2 + 3", en: "2 + 3" }, correct: true, error: false, misconception: null },
+      { text: { vi: "Báo lỗi", en: "An error" }, correct: false, error: true, misconception: null },
+    ],
+  };
+
+  test("an mcq choice that is the same in vi and en is code; a translated choice is not", () => {
+    renderWithApp(<QuestionCard question={mcq} onAnswered={() => {}} />);
+    expect(screen.getByText("2 + 3")).toHaveClass("code");
+    expect(screen.getByText("Báo lỗi")).not.toHaveClass("code");
+  });
+
+  test("every predict choice is code", () => {
+    renderWithApp(<QuestionCard question={{ ...mcq, type: "predict" }} onAnswered={() => {}} />);
+    expect(screen.getByText("Báo lỗi")).toHaveClass("code");
+  });
+});
+
 describe("QuestionCard choice order", () => {
   const question = (id: string) => ({
     ...fixtureQuestion,

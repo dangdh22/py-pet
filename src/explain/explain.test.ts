@@ -167,6 +167,17 @@ describe("providers", () => {
     expect(await explainWithChain([silent], context)).toBeNull();
   });
 
+  test("name-similar is the case-sensitive misconception only for a change of letter case, not for a typo", async () => {
+    const find = errorMisconceptionFrom(entries);
+    expect(find(error("NameError", "name 'Print' is not defined"), "Print(1)")).toBe("case-sensitive");
+    expect(find(error("NameError", "name 'pirnt' is not defined"), "pirnt(1)")).toBeUndefined();
+    const provider = new DictionaryProvider(entries);
+    const explain = (name: string) =>
+      provider.explain({ error: error("NameError", `name '${name}' is not defined`, 1), code: `${name}(1)`, lang: "vi" });
+    expect(await explain("Print")).toMatchObject({ entryId: "name-similar", misconception: "case-sensitive" });
+    expect(await explain("pirnt")).toMatchObject({ entryId: "name-similar", misconception: null });
+  });
+
   test("errorMisconceptionFrom", () => {
     const find = errorMisconceptionFrom(entries);
     expect(find(error("NameError", "name 'Print' is not defined"), "Print(1)")).toBe("case-sensitive");
