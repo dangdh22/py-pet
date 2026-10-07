@@ -52,4 +52,4 @@ Các finding nhỏ khác đã hoãn nằm trong các file ledger (tìm dòng `mi
 - npm 12 chặn script cài đặt của esbuild/fsevents và in cảnh báo; cảnh báo này vô hại.
 - Cài lần đầu: xem `README.md` mục "Cài đặt lần đầu".
 - Phiên cloud (kiểm tra 2026-10-06): Node 22.22.0, npm 10.9.4, Python 3.13. npm in cảnh báo `EBADENGINE` (jsdom 30 cần Node 22.22.2 trở lên) nhưng `npm run check` vẫn xanh. Hook SessionStart tự cài môi trường; e2e dùng Chromium có sẵn qua `PW_CHROMIUM_PATH` (xem `CLAUDE.md`).
-- `npm run check` phải xanh trước mọi merge: typecheck, Vitest (931 test sau M5b; số test tăng theo số mục nội dung), pytest (21), kiểm tra nội dung, Playwright e2e (14).
+- `npm run check` phải xanh trước mọi merge: typecheck, Vitest (932 test sau M5b; số test tăng theo số mục nội dung), pytest (21), kiểm tra nội dung, Playwright e2e (14).
