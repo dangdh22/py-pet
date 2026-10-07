@@ -65,7 +65,7 @@ questions:
   - id: s1.chu-thich-loi.b5
     type: predict
     concepts: [hash-in-string, bracket-pairs]
-    lessons: [s1.chu-thich-loi.l4]
+    lessons: [s1.chu-thich-loi.l3]
     code: |
       print(#1)
     prompt: { vi: "Chuyện gì xảy ra khi chạy đoạn code này?", en: "What happens when this code runs?" }
@@ -184,7 +184,7 @@ questions:
   - id: s1.chu-thich-loi.b12
     type: mcq
     concepts: [bracket-pairs]
-    lessons: [s1.chu-thich-loi.l4]
+    lessons: [s1.chu-thich-loi.l3]
     prompt:
       vi: "Python báo lỗi ở dòng 2: SyntaxError: '(' was never closed. Con cần sửa gì ở dòng 2?"
       en: "Python shows an error on line 2: SyntaxError: '(' was never closed. What do you need to fix on line 2?"

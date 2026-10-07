@@ -90,20 +90,16 @@
 
 - id: quote-inside-string
   match: { type: SyntaxError, message: "Is this intended to be part of the string\\?" }
-  misconception: quote-inside
   explain:
-    vi: "Dòng {line}: chuỗi bị đóng quá sớm. Bên trong chuỗi có dấu nháy cùng loại với dấu nháy bao ngoài, nên Python tưởng chuỗi đã kết thúc ở đó. Hãy bao ngoài chuỗi bằng loại dấu nháy còn lại, hoặc đặt dấu \\ ngay trước dấu nháy bên trong. Nếu chữ nằm giữa 2 chuỗi là tên biến, có thể con quên dấu phẩy."
-    en: "Line {line}: the string ends too early. There is a quote inside the string of the same type as the quotes around it, so Python thinks the string ends there. Put the other type of quote around the string, or put a \\ right before the quote inside. If the word between 2 strings is a variable name, maybe a comma is missing."
-  hint:
-    vi: "Ví dụ đúng: print('Robo nói: \"Chào\"')"
-    en: "Correct example: print('Robo says: \"Hi\"')"
+    vi: "Dòng {line}: Python thấy 1 chuỗi đã đóng, rồi gặp chữ nằm ngoài dấu nháy. Có 2 lý do hay gặp. Nếu bên trong chuỗi có dấu nháy cùng loại với dấu nháy bao ngoài, hãy bao ngoài bằng loại dấu nháy còn lại, hoặc đặt dấu \\ ngay trước dấu nháy bên trong. Nếu chữ đó không thuộc chuỗi, có thể con quên dấu phẩy hoặc dấu + ở trước hoặc sau nó."
+    en: "Line {line}: Python sees a string that has ended, and then a word outside the quotes. There are 2 common reasons. If the string has a quote inside of the same type as the quotes around it, put the other type of quote around the string, or put a \\ right before the quote inside. If the word is not part of the string, maybe a comma or a + is missing before or after it."
   sample: "print(\"Robo nói: \"Chào\"\")"
 
 - id: missing-comma
   match: { type: SyntaxError, message: "Perhaps you forgot a comma\\?" }
   explain:
-    vi: "Dòng {line}: có 2 giá trị đứng sát nhau mà không có gì ngăn cách. Có thể chuỗi có dấu nháy cùng loại ở bên trong, nên chuỗi bị đóng quá sớm. Khi đó, hãy bao ngoài chuỗi bằng loại dấu nháy còn lại, ví dụ print('Robo nói: \"Chào\"'). Cũng có thể con quên dấu phẩy giữa các giá trị, hoặc quên dấu ) ở cuối dòng."
-    en: "Line {line}: 2 values stand next to each other with nothing between them. Maybe a string has a quote of the same type inside it, so the string ends too early. Then put the other type of quote around the string, for example print('Robo says: \"Hi\"'). Or maybe a comma is missing between the values, or a ) is missing at the end of the line."
+    vi: "Dòng {line}: có thể con quên dấu phẩy giữa 2 giá trị đứng cạnh nhau. Nếu chuỗi có dấu nháy cùng loại ở bên trong, hãy bao ngoài chuỗi bằng loại dấu nháy còn lại, ví dụ print('Robo nói: \"Chào!\"')."
+    en: "Line {line}: maybe a comma is missing between 2 values that stand next to each other. If a string has a quote of the same type inside it, put the other type of quote around the string, for example print('Robo says: \"Hi!\"')."
   sample: "print(\"a\" \"b\" 1)"
 
 - id: invalid-decimal
@@ -112,6 +108,14 @@
     vi: "Dòng {line}: số và chữ bị viết liền nhau. Tên biến không được bắt đầu bằng số, còn phép nhân phải có dấu *, ví dụ 2*y."
     en: "Line {line}: a number and letters are written together. A variable name cannot start with a number, and multiplication needs *, for example 2*y."
   sample: "x = 2y"
+
+- id: keyword-before-value
+  match: { type: SyntaxError, message: "^positional argument follows keyword argument" }
+  misconception: named-option-order
+  explain:
+    vi: "Dòng {line}: phần có dấu =, như sep=... hay end=..., phải viết sau tất cả các giá trị cần in. Hãy chuyển nó xuống cuối, ngay trước dấu ) đóng, ví dụ print(\"A\", \"B\", sep=\"-\")."
+    en: "Line {line}: a part with =, such as sep=... or end=..., must come after all the values to print. Move it to the end, just before the closing ), for example print(\"A\", \"B\", sep=\"-\")."
+  sample: "print(sep=\"-\", \"A\", \"B\")"
 
 - id: syntax-other
   match: { type: SyntaxError }
@@ -142,8 +146,8 @@
 - id: concat-str
   match: { type: TypeError, message: "^can only concatenate str \\(not \"(?<other>\\w+)\"\\) to str$" }
   explain:
-    vi: "Dòng {line}: không thể nối chuỗi với giá trị kiểu {other}. Hãy đổi số thành chuỗi bằng str(), hoặc đổi chuỗi thành số bằng int() trước khi cộng."
-    en: "Line {line}: you cannot join a string and a value of type {other}. Change the number to a string with str(), or change the string to a number with int() before you add."
+    vi: "Dòng {line}: dấu + chỉ nối được chuỗi với chuỗi, không nối được chuỗi với giá trị kiểu {other}. Muốn in chữ và số cùng nhau, hãy ngăn cách chúng bằng dấu phẩy, ví dụ print(\"Robo có\", 4). Nếu con đã học str(), con cũng có thể đổi số thành chuỗi bằng str() rồi mới nối."
+    en: "Line {line}: + can only join a string with a string, not with a value of type {other}. To print text and a number together, separate them with a comma, for example print(\"Robo có\", 4). If you have learned str(), you can also change the number to a string with str() before you join."
   sample: "print(\"Tuổi: \" + 11)"
 
 - id: unsupported-operand

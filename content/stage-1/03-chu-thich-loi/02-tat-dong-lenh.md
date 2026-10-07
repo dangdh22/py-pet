@@ -82,7 +82,7 @@ exercises:
       vi: "Ở dòng 1, lệnh print(\"1\") đứng trước dấu # nên vẫn chạy, còn print(\"2\") nằm trong chú thích. Dòng 2 là chú thích. Dòng 3 in ra 4."
       en: "On line 1, print(\"1\") comes before the # sign, so it runs, and print(\"2\") is inside the comment. Line 2 is a comment. Line 3 prints 4."
 ---
-Đặt dấu `#` ở **đầu 1 dòng lệnh** thì cả dòng đó trở thành chú thích. Python sẽ bỏ qua dòng đó, giống như con tạm tắt công tắc của 1 bóng đèn.
+Đặt dấu `#` ở **đầu 1 dòng lệnh** thì cả dòng đó trở thành chú thích. Python sẽ bỏ qua dòng đó, giống như tạm tắt công tắc của 1 bóng đèn.
 
 ```python run
 print("Robo thức dậy")
