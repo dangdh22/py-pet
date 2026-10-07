@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import type { ChoiceQuestion } from "../content/types";
+import { seedFromText, seededRng, shuffled } from "../game/random";
 import type { QuestionLang } from "../i18n/lang";
 import { useLang } from "../i18n/LangProvider";
 import { LangSwitch, Prompt, showText } from "./LangSwitch";
@@ -7,7 +8,8 @@ import { RobotBubble } from "./RobotBubble";
 
 /**
  * 1 predict/mcq question. In a test (`exam`), the answer is only recorded: no right/wrong marks and no explanation
- * until the end (spec 8.2.4).
+ * until the end (spec 8.2.4). The choices are shown in an order shuffled by the question ID, the same every time,
+ * so the place of the right answer gives nothing away; answers are still reported by their index in the content.
  */
 export function QuestionCard({
   question,
@@ -22,6 +24,10 @@ export function QuestionCard({
   const [lang, setLang] = useState<QuestionLang>(questionLang);
   const [selected, setSelected] = useState<number | null>(null);
   const [checked, setChecked] = useState(false);
+  const order = useMemo(
+    () => shuffled(question.choices.map((_, i) => i), seededRng(seedFromText(question.id))),
+    [question],
+  );
   const correctIndex = question.choices.findIndex((choice) => choice.correct);
   const isCorrect = selected === correctIndex;
 
@@ -49,10 +55,12 @@ export function QuestionCard({
       )}
       <fieldset disabled={checked}>
         <legend className="sr-only">{t("question.choices")}</legend>
-        {question.choices.map((choice, i) => (
+        {order.map((i) => (
           <label key={i} className={choiceClass(i)}>
             <input type="radio" name={question.id} checked={selected === i} onChange={() => setSelected(i)} />
-            <span className={question.type === "predict" ? "choice-text code" : "choice-text"}>{showText(choice.text, lang)}</span>
+            <span className={question.type === "predict" ? "choice-text code" : "choice-text"}>
+              {showText(question.choices[i]!.text, lang)}
+            </span>
           </label>
         ))}
       </fieldset>

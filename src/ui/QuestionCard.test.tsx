@@ -57,6 +57,38 @@ describe("QuestionCard", () => {
   });
 });
 
+describe("QuestionCard choice order", () => {
+  const question = (id: string) => ({
+    ...fixtureQuestion,
+    id,
+    choices: ["A", "B", "C", "D"].map((text, i) => ({ text: { vi: text, en: text }, correct: i === 0, error: false, misconception: null })),
+  });
+  const shown = () => screen.getAllByRole("radio").map((radio) => radio.closest("label")!.textContent);
+
+  test("is shuffled by the question ID, the same on every render, and answers keep their content index", async () => {
+    const onAnswered = vi.fn();
+    const first = renderWithApp(<QuestionCard question={question("q.order")} onAnswered={onAnswered} />);
+    const order = shown();
+    expect([...order].sort()).toEqual(["A", "B", "C", "D"]);
+    first.unmount();
+    renderWithApp(<QuestionCard question={question("q.order")} onAnswered={onAnswered} />);
+    expect(shown()).toEqual(order);
+    await userEvent.click(screen.getByRole("radio", { name: "C" }));
+    await userEvent.click(screen.getByRole("button", { name: "Kiểm tra" }));
+    expect(onAnswered).toHaveBeenCalledWith(false, { choiceIndex: 2, lang: "vi" });
+  });
+
+  test("the right answer is not always shown first", () => {
+    const firsts = new Set<string | null>();
+    for (const id of ["q1", "q2", "q3", "q4", "q5", "q6", "q7", "q8"]) {
+      const view = renderWithApp(<QuestionCard question={question(id)} onAnswered={() => {}} />);
+      firsts.add(shown()[0] ?? null);
+      view.unmount();
+    }
+    expect(firsts.size).toBeGreaterThan(1);
+  });
+});
+
 describe("QuestionCard in a test", () => {
   test("records the answer without marks or explanation", async () => {
     const onAnswered = vi.fn();
