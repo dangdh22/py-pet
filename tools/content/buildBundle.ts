@@ -13,6 +13,7 @@ import {
   type TestedExercise,
   type Topic,
 } from "../../src/content/types";
+import { coverageProblems } from "./coverage";
 import { LessonFormatError, parseLessonFile } from "./parseLesson";
 import { checkReferences } from "./references";
 import {
@@ -74,7 +75,12 @@ class Collector {
   }
 }
 
-export function buildBundle(contentDir: string): ContentBundle {
+export interface BuildOptions {
+  /** Skips spec 3.9 rules 8 and 9 (coverage). For unit tests that build a tiny tree; never set for real content. */
+  skipCoverage?: boolean;
+}
+
+export function buildBundle(contentDir: string, options: BuildOptions = {}): ContentBundle {
   const collector = new Collector(contentDir);
   const stageDirs = readdirSync(contentDir)
     .filter((name) => /^stage-\d+$/.test(name))
@@ -87,6 +93,8 @@ export function buildBundle(contentDir: string): ContentBundle {
 
   const bundle: ContentBundle = { stages, errors };
   const problems = [...collector.problems, ...checkReferences(bundle)];
+  // Coverage gaps are judged only on a bundle that parsed cleanly; a broken file would show up as false gaps.
+  if (problems.length === 0 && !options.skipCoverage) problems.push(...coverageProblems(bundle));
   if (problems.length > 0) throw new ContentError(problems);
   return bundle;
 }

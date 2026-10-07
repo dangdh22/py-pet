@@ -3,8 +3,11 @@ import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { describe, expect, test } from "vitest";
 import { fillTemplate, parsonsLines } from "../../src/content/exercise";
-import { buildBundle, ContentError } from "./buildBundle";
-import { contentWarnings } from "./coverage";
+import { buildBundle as buildBundleChecked, ContentError } from "./buildBundle";
+
+// Most tests build a tiny tree to check one feature, so they skip the coverage rules (spec 3.9 rules 8 and 9). The
+// coverage tests and the complete-tree test call `buildBundleChecked`, which applies them as `content:build` does.
+const buildBundle = (dir: string) => buildBundleChecked(dir, { skipCoverage: true });
 
 function writeTree(files: Record<string, string>): string {
   const root = mkdtempSync(join(tmpdir(), "py-pet-content-"));
@@ -62,6 +65,16 @@ function minimalTree(overrides: Record<string, string> = {}): Record<string, str
 function problemsOf(files: Record<string, string>): string[] {
   try {
     buildBundle(writeTree(files));
+  } catch (error) {
+    if (error instanceof ContentError) return error.problems;
+    throw error;
+  }
+  return [];
+}
+
+function problemsOfChecked(files: Record<string, string>): string[] {
+  try {
+    buildBundleChecked(writeTree(files));
   } catch (error) {
     if (error instanceof ContentError) return error.problems;
     throw error;
@@ -260,7 +273,7 @@ describe("buildBundle", () => {
       "",
     ].join("\n");
     const questions = minimalTree()["stage-1/01-a/questions.yaml"]!.replace("    type: mcq\n", "    type: mcq\n    concepts: [print-call]\n");
-    const bundle = buildBundle(
+    const bundle = buildBundleChecked(
       writeTree(
         minimalTree({
           "stage-1/stage.yaml":
@@ -279,7 +292,6 @@ describe("buildBundle", () => {
     expect(topic.practice[1]).toMatchObject({ type: "fill", template: "print(___)\n", answers: ['"Hi"'], solution: 'print("Hi")\n' });
     expect(topic.concepts[0]!.misconceptionHtml).toBe("<p>Viết <strong>print</strong> thường.</p>\n");
     expect(topic.concepts[0]!.practice).toEqual({ level1: ["s1.a.b1"], level2: ["s1.a.p1", "s1.a.f1"], level3: ["s1.a.l1.ex1"] });
-    expect(contentWarnings(bundle)).toEqual([]);
   });
 
   test("reports bad parsons and fill exercises", () => {
@@ -309,9 +321,8 @@ describe("buildBundle", () => {
     ]);
   });
 
-  test("warns about concepts without a card, a tip or practice at every level", () => {
-    const bundle = buildBundle(writeTree(minimalTree()));
-    expect(contentWarnings(bundle)).toContain(
+  test("reports concepts without a card, a tip or practice at every level", () => {
+    expect(problemsOfChecked(minimalTree())).toContain(
       "print-call: thiếu thẻ hiểu lầm, gợi ý cho phụ huynh, bài luyện level1, bài luyện level2, bài luyện level3",
     );
   });
@@ -330,20 +341,32 @@ describe("buildBundle", () => {
       "    type: mcq\n",
       "    type: mcq\n    concepts: [ai-x]\n",
     );
-    const warnings = contentWarnings(buildBundle(writeTree(tree)));
-    expect(warnings.filter((w) => w.startsWith("ai-x"))).toEqual([]);
-    expect(warnings).toContain("ai-y: thiếu bài luyện level1");
+    const problems = problemsOfChecked(tree);
+    expect(problems.filter((w) => w.startsWith("ai-x"))).toEqual([]);
+    expect(problems).toContain("ai-y: thiếu bài luyện level1");
   });
 
-  test("warns when a bank is too small for its tests (spec 3.9 rule 9)", () => {
-    const bundle = buildBundle(writeTree(minimalTree()));
-    expect(contentWarnings(bundle).slice(1)).toEqual([
+  test("reports when a bank is too small for its tests (spec 3.9 rule 9)", () => {
+    expect(problemsOfChecked(minimalTree()).slice(1)).toEqual([
       "s1: ngân hàng có 1 câu, cần ít nhất 30 câu cho đề tiến hóa",
       "s1: có 0 câu AI, đề tiến hóa cần 3",
       "s1: có 0 bài code test_eligible, đề tiến hóa cần 3",
       "s1.a: có 1 câu, kiểm tra chủ đề cần 8",
       "s1.a: có 0 bài code test_eligible, kiểm tra chủ đề cần 2",
     ]);
+  });
+
+  test("a coverage gap stops the build with one error that lists every gap", () => {
+    const dir = writeTree(minimalTree());
+    expect(() => buildBundleChecked(dir)).toThrow(ContentError);
+    expect(() => buildBundleChecked(dir)).toThrow(/^Nội dung có 6 lỗi:/);
+    expect(() => buildBundleChecked(dir)).toThrow(/print-call: thiếu thẻ hiểu lầm[^\n]*\ns1: ngân hàng có 1 câu/);
+  });
+
+  test("coverage gaps are not reported on top of other problems", () => {
+    const problems = problemsOfChecked(minimalTree({ "stage-1/01-a/concepts.yaml": "concepts: nope\n" }));
+    expect(problems.length).toBeGreaterThan(0);
+    expect(problems.some((p) => p.includes("thiếu") || p.includes("ngân hàng có"))).toBe(false);
   });
 
   test("reads test configs and the AI flag, and reports a test larger than its AI share allows", () => {
