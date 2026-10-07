@@ -31,8 +31,6 @@ exercises:
           Tích: 18
           Thương: 4.5
         hidden: true
-    compare: float
-    tolerance: 0.001
     hints:
       - { vi: "Đọc mỗi số bằng int(input()). Sau đó viết 4 lệnh print, mỗi lệnh có 1 chuỗi và 1 phép tính với a và b. Phép chia dùng dấu /.", en: "Read each number with int(input()). Then write 4 print statements, each with 1 string and 1 calculation with a and b. Division uses the / sign." }
       - { vi: "Hai dòng đầu là a = int(input()) và b = int(input()). Dòng in đầu tiên là print(\"Tổng:\", a + b). Ba dòng in sau làm tương tự với dấu -, dấu * và dấu /.", en: "The first 2 lines are a = int(input()) and b = int(input()). The first print line is print(\"Tổng:\", a + b). Do the other 3 print lines the same way with -, * and /." }
@@ -55,8 +53,6 @@ exercises:
       - input: "20.25\n26.75"
         output: "Nhiệt độ trung bình: 23.5"
         hidden: true
-    compare: float
-    tolerance: 0.001
     common_wrong:
       - output: "Nhiệt độ trung bình: 40.25"
         misconception: precedence

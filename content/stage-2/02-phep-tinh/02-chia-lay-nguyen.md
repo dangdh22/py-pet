@@ -77,7 +77,7 @@ print(keo // ban)
 
 Dấu `/` chia ra 3.5. Dấu `//` bỏ phần lẻ .5 đi, chỉ giữ **phần nguyên** là 3.
 ---
-Phép `//` **không làm tròn**. Nó luôn bỏ phần lẻ đi, dù phần lẻ lớn hay nhỏ.
+Phép `//` **không làm tròn lên số gần nhất**: nó luôn lấy số nguyên ở phía dưới (bỏ phần lẻ đi), dù phần lẻ lớn hay nhỏ.
 
 ```python run
 print(9 // 2)
