@@ -121,3 +121,6 @@ Người bảo trì chưa duyệt kế hoạch M6a; Claude tự chốt theo yêu
 4. **Cỡ tăng đơn điệu theo dạng và cỡ** (96 đến 184 điểm ảnh), nên Robo không nhỏ đi sau khi tiến hóa.
 5. **Khi đi nghỉ, kính râm của trạng thái thay phụ kiện ở mặt**; ở bãi biển không hiện đồ trang trí.
 6. **Trang `#/gallery` chỉ có ở bản dev** để xem mọi tổ hợp hình.
+7. **Màu chính `--primary` đậm hơn** (#4f7cff thành #3a66e6) để chữ trắng trên nút đạt tương phản WCAG AA (từ 3,71:1 lên 4,97:1). Thay đổi này áp dụng cho toàn app.
+8. **Dạng chưa đạt trong Sổ thành tích** là bóng xám đúng hình dạng sau, có dấu "?"; con thấy trước dáng của dạng sau.
+9. **Phụ kiện xoay theo Robo** khi Robo nằm cạnh ổ sạc (vương miện nằm nghiêng).
