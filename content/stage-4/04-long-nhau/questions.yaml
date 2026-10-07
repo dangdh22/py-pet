@@ -25,16 +25,16 @@ questions:
     concepts: [nested-inner-full]
     lessons: [s4.long-nhau.l1]
     prompt:
-      vi: "Trong 2 vòng lặp lồng nhau, vòng ngoài chạy 5 lần. Mỗi lần vòng ngoài chạy, vòng trong chạy 2 lần. Lệnh print nằm trong vòng trong chạy tất cả bao nhiêu lần?"
-      en: "In 2 nested loops, the outer loop runs 5 times. Each time the outer loop runs, the inner loop runs 2 times. How many times in total does the print statement inside the inner loop run?"
+      vi: "Robo muốn in đúng 12 dòng bằng 2 vòng lặp lồng nhau, với lệnh print nằm trong vòng trong. Vòng ngoài chạy 3 lần. Mỗi lần vòng ngoài chạy, vòng trong phải chạy mấy lần?"
+      en: "Robo wants to print exactly 12 lines with 2 nested loops, with the print statement inside the inner loop. The outer loop runs 3 times. Each time the outer loop runs, how many times must the inner loop run?"
     choices:
-      - { text: "7", misconception: nested-inner-full }
-      - { text: "2", misconception: nested-inner-full }
-      - { text: "10", correct: true }
-      - { text: "5", misconception: nested-inner-full }
+      - { text: "9", misconception: nested-inner-full }
+      - { text: "12", misconception: nested-inner-full }
+      - { text: "4", correct: true }
+      - { text: "36", misconception: nested-inner-full }
     explanation:
-      vi: "Mỗi lần vòng ngoài chạy, vòng trong chạy hết 2 lần. Vòng ngoài chạy 5 lần, nên lệnh print chạy 5 × 2 = 10 lần. Cộng 5 + 2 = 7 là sai, vì vòng trong không chỉ chạy 1 lượt, mà chạy lại từ đầu ở mỗi lần của vòng ngoài."
-      en: "Each time the outer loop runs, the inner loop runs all 2 times. The outer loop runs 5 times, so the print statement runs 5 × 2 = 10 times. Adding 5 + 2 = 7 is wrong, because the inner loop does not run just one round: it starts again from the beginning on every pass of the outer loop."
+      vi: "Mỗi lần vòng ngoài chạy, vòng trong chạy lại từ đầu đến hết. Vì vậy số dòng in ra là 3 nhân với số lần của vòng trong. 3 × 4 = 12, nên vòng trong chạy 4 lần. Nghĩ 3 + 9 = 12 là sai, vì với vòng lặp lồng nhau, số lần được nhân chứ không cộng."
+      en: "Each time the outer loop runs, the inner loop runs again from start to end. So the number of printed lines is 3 times the number of passes of the inner loop. 3 × 4 = 12, so the inner loop runs 4 times. Thinking 3 + 9 = 12 is wrong, because with nested loops the numbers of passes are multiplied, not added."
 
   - id: s4.long-nhau.b3
     type: predict
@@ -113,7 +113,7 @@ questions:
       en: "What is the output of this code?"
     choices:
       - { text: "1\n12\n123", misconception: row-col-pattern }
-      - { text: "3\n6\n9", misconception: string-repeat }
+      - { text: "1\n4\n9", misconception: string-repeat }
       - { text: "1\n22\n333", correct: true }
       - { text: "111\n222\n333", misconception: row-col-pattern }
     explanation:
@@ -194,7 +194,7 @@ questions:
       - { text: "*\n-*\n--*", correct: true }
       - { text: "-*\n--*\n---*", misconception: range-stop-excluded }
     explanation:
-      vi: "range(3) cho i là 0, 1, 2, nên số dấu - ở đầu hàng tăng dần: 0, 1, 2. Chuỗi dấu - đứng trước dấu + nên nằm ở đầu hàng, còn dấu * nằm sau cùng. Hình là 1 đường chéo đi xuống bên phải."
+      vi: "range(3) cho i là 0, 1, 2, nên số dấu - ở đầu hàng tăng dần: 0, 1, 2. Chuỗi dấu - đứng trước phép nối + nên nằm ở đầu hàng, còn dấu * nằm sau cùng. Hình là 1 đường chéo đi xuống bên phải."
       en: "range(3) gives i the values 0, 1, 2, so the number of - signs at the start of a row goes up: 0, 1, 2. The string of - signs comes before the + sign, so it is at the start of the row, and the * comes last. The shape is a line going down to the right."
 
   - id: s4.long-nhau.b11

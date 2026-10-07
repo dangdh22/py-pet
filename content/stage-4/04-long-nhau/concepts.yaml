@@ -4,7 +4,7 @@ concepts:
     misconception_card: |
       Nhiều bạn nghĩ 2 vòng lặp lồng nhau cùng tăng 1 lúc, hoặc nghĩ khối lệnh bên trong chạy 3 + 4 = 7 lần. Thực ra mỗi lần vòng ngoài chạy 1 lần, vòng trong chạy hết từ đầu đến cuối, rồi vòng ngoài mới chạy tiếp. Với `for i in range(3):` và `for j in range(4):` nằm bên trong, khối lệnh của vòng trong chạy 3 × 4 = 12 lần.
     parent_tip: |
-      Cùng con chơi: mỗi lần giậm chân 1 cái thì vỗ tay 3 cái, làm như vậy 4 lần, rồi hỏi con đã vỗ tay tất cả mấy cái. Giải thích rằng việc vỗ tay giống vòng trong, chạy hết mỗi lần vòng ngoài là giậm chân chạy 1 lần, nên có 4 × 3 = 12 cái vỗ tay.
+      Cùng con chơi: mỗi lần giậm chân 1 cái thì vỗ tay 3 cái, làm như vậy 4 lần, rồi hỏi con đã vỗ tay tất cả mấy cái. Mỗi lần giậm chân là 1 lượt của vòng ngoài, 3 cái vỗ tay là vòng trong chạy hết, nên có 4 × 3 = 12 cái vỗ tay.
     practice:
       level1: [s4.long-nhau.l1.q1, s4.long-nhau.l1.q2, s4.long-nhau.b1, s4.long-nhau.b2, s4.long-nhau.b3, s4.long-nhau.l4.q1, s4.long-nhau.b8, s4.long-nhau.b12]
       level2: [s4.long-nhau.p1]
@@ -18,7 +18,7 @@ concepts:
     practice:
       level1: [s4.long-nhau.l2.q1, s4.long-nhau.l2.q2, s4.long-nhau.b1, s4.long-nhau.b4, s4.long-nhau.b5, s4.long-nhau.b12]
       level2: [s4.long-nhau.p2]
-      level3: [s4.long-nhau.l2.ex1, s4.long-nhau.l2.ex2, s4.long-nhau.l4.ex2, s4.long-nhau.c2]
+      level3: [s4.long-nhau.l2.ex2, s4.long-nhau.l4.ex2, s4.long-nhau.c2]
   - id: row-col-pattern
     name: { vi: "Hàng thứ i có i ký tự", en: "Row i has i characters" }
     misconception_card: |

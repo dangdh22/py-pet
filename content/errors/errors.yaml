@@ -7,7 +7,7 @@
   misconception: if-colon
   explain:
     vi: "Dòng {line}: Python cần 1 dấu hai chấm (:) ở cuối dòng này. Dòng mở đầu 1 khối lệnh, như dòng if hay dòng else, luôn kết thúc bằng dấu hai chấm. Khi con học vòng lặp, dòng for và dòng while cũng vậy."
-    en: "Line {line}: Python needs a colon (:) at the end of this line. A line that starts a block, like an if line or an else line, always ends with a colon. When you learn loops, for lines and while lines do too."
+    en: "Line {line}: Python needs a colon (:) at the end of this line. A line that starts a block, like an if line or an else line, always ends with a colon. When you learn loops, for lines and while lines also end with a colon."
   hint:
     vi: "Thêm dấu : vào cuối dòng {line}. Nếu đó là dòng else, hãy xóa phần điều kiện và chỉ để lại else:, vì else không có điều kiện. Nếu con cần thêm 1 điều kiện, hãy viết elif thay cho else if."
     en: "Add : at the end of line {line}. If it is an else line, delete the condition and keep only else:, because else has no condition. If you need to add another condition, write elif instead of else if."
@@ -262,6 +262,9 @@
   explain:
     vi: "Dòng {line}: ở đây Python cần 1 số nguyên, như số trong range(), nhưng lại nhận được 1 chuỗi (str). Có thể giá trị đó là chuỗi đọc từ input(), như \"5\": hãy đổi nó thành số nguyên bằng int(), ví dụ n = int(input())."
     en: "Line {line}: Python needs an integer here, such as the number in range(), but it got a string (str). Maybe that value is a string from input(), such as \"5\": change it into an integer with int(), for example n = int(input())."
+  hint:
+    vi: "Nếu ở dòng {line} có 1 số nằm trong dấu nháy, như \"5\", hãy xóa dấu nháy. Nếu đó là 1 biến, hãy xem dòng gán giá trị cho biến: nếu dòng đó là n = input(), hãy sửa thành n = int(input())."
+    en: "If line {line} has a number in quotes, such as \"5\", delete the quotes. If it is a variable, look at the line that gives it a value: if that line is n = input(), change it to n = int(input())."
   sample: "n = \"3\"\nfor i in range(n):\n    print(i)"
 
 - id: type-other
@@ -322,8 +325,8 @@
   match: { type: Timeout, check: while-loop }
   misconception: while-update
   explain:
-    vi: "Code chạy lâu quá nên Robo đã dừng lại. Có thể vòng lặp while không bao giờ dừng: hãy kiểm tra xem trong mỗi lần lặp, biến trong điều kiện có được thay đổi, và có tiến dần tới chỗ làm điều kiện sai không."
-    en: "The code ran too long, so Robo stopped it. Maybe the while loop never stops: check that on each pass, the variable in the condition is changed and moves closer to making the condition False."
+    vi: "Code chạy lâu quá nên Robo đã dừng lại. Có thể vòng lặp while không bao giờ dừng. Hãy kiểm tra xem trong mỗi lần lặp, biến trong điều kiện có được thay đổi và có tiến dần tới chỗ làm điều kiện sai không."
+    en: "The code ran too long, so Robo stopped it. Maybe the while loop never stops. Check that on each pass, the variable in the condition is changed and moves closer to making the condition False."
   sample: "i = 0\nwhile i < 5:\n    i = i * 1"
 
 - id: timeout

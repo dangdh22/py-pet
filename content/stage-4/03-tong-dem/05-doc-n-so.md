@@ -139,13 +139,13 @@ exercises:
       vi: "Ô Dữ liệu nhập có 4 dòng: 2, 10, 20, 5. Đoạn code in ra gì?"
       en: "The Input data box has 4 lines: 2, 10, 20, 5. What is the output of this code?"
     choices:
-      - { text: "35", misconception: input-one-line }
+      - { text: "35" }
       - { text: "30", correct: true }
-      - { text: "32", misconception: input-order }
-      - { vi: "Báo lỗi, vì dòng 5 không được đọc", en: "An error, because the line 5 is never read", error: true, misconception: input-one-line }
+      - { text: "32" }
+      - { vi: "Báo lỗi, vì số 5 ở dòng cuối không được đọc", en: "An error, because the number 5 on the last line is never read", error: true, misconception: input-one-line }
     explanation:
-      vi: "Dòng đầu cho n là 2, nên vòng lặp chạy 2 lần và đọc 2 dòng tiếp theo là 10 và 20. total là 10 + 20 = 30. Số n chỉ cho biết có mấy số, nên không được cộng vào total. Dòng 5 ở cuối không được đọc, và các dòng thừa chỉ bị bỏ qua, Python không báo lỗi."
-      en: "The first line makes n equal to 2, so the loop runs 2 times and reads the next 2 lines, 10 and 20. total is 10 + 20 = 30. The number n only tells how many numbers there are, so it is not added to total. The line 5 at the end is never read, and extra lines are just skipped, so Python gives no error."
+      vi: "Dòng đầu cho n là 2, nên vòng lặp chạy 2 lần và đọc 2 dòng tiếp theo là 10 và 20. total là 10 + 20 = 30. Số n chỉ cho biết có mấy số, nên không được cộng vào total. Số 5 ở dòng cuối không được đọc, và các dòng thừa chỉ bị bỏ qua, Python không báo lỗi."
+      en: "The first line makes n equal to 2, so the loop runs 2 times and reads the next 2 lines, 10 and 20. total is 10 + 20 = 30. The number n only tells how many numbers there are, so it is not added to total. The number 5 on the last line is never read, and extra lines are just skipped, so Python gives no error."
   - id: s4.tong-dem.l5.q2
     type: predict
     concepts: [running-max]

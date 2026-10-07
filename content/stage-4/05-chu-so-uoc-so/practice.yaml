@@ -455,6 +455,35 @@ exercises:
           29
           Có 10 số nguyên tố
         hidden: true
+      - input: "100"
+        output: |
+          2
+          3
+          5
+          7
+          11
+          13
+          17
+          19
+          23
+          29
+          31
+          37
+          41
+          43
+          47
+          53
+          59
+          61
+          67
+          71
+          73
+          79
+          83
+          89
+          97
+          Có 25 số nguyên tố
+        hidden: true
     common_wrong:
       - test: 0
         output: |
@@ -544,4 +573,59 @@ exercises:
     hints:
       - { vi: "Mỗi lần lặp, cất chữ số cuối vào 1 biến, rồi bỏ nó khỏi n bằng n = n // 10 ngay sau đó, trước dòng continue. Nếu dòng n = n // 10 nằm sau continue, nó bị bỏ qua khi gặp chữ số 0, và vòng lặp chạy mãi.", en: "On each pass, store the last digit in a variable, then drop it from n with n = n // 10 right after that, before the continue line. If the line n = n // 10 comes after continue, it is skipped when a 0 digit comes, and the loop runs forever." }
       - { vi: "Trong while n > 0:, có 4 phần thụt lề 4 dấu cách: chu_so = n % 10, n = n // 10, if chu_so == 0: với continue thụt lề 8 dấu cách, rồi print(chu_so). Cuối cùng, sát lề trái: print(\"Hết\").", en: "Inside while n > 0:, there are 4 parts indented by 4 spaces: chu_so = n % 10, n = n // 10, if chu_so == 0: with continue indented by 8 spaces, then print(chu_so). Last, at the left edge: print(\"Hết\")." }
+    test_eligible: true
+
+  - id: s4.chu-so.c6
+    type: code
+    concepts: [divisor-loop, accumulator-init]
+    prompt:
+      vi: "Số hoàn hảo là số bằng tổng các ước của nó, không tính chính nó. Ví dụ, 6 = 1 + 2 + 3. Ô Dữ liệu nhập có 1 dòng: số n, là số nguyên từ 1 đến 1000. Hãy dùng vòng lặp for để tính tổng các ước nhỏ hơn n, rồi in ra đúng 1 dòng như phần Ví dụ: n là số hoàn hảo, hoặc n không phải là số hoàn hảo."
+      en: "A perfect number is a number that equals the sum of its divisors, not counting itself. For example, 6 = 1 + 2 + 3. The Input data box has 1 line: a number n, an integer from 1 to 1000. Use a for loop to work out the sum of the divisors smaller than n, then print exactly 1 line as in the Example: n là số hoàn hảo (n is a perfect number), or n không phải là số hoàn hảo (n is not a perfect number)."
+    starter: |
+      # Viết lệnh của con ở dưới dòng này
+    solution: |
+      n = int(input())
+      tong = 0
+      for i in range(1, n):
+          if n % i == 0:
+              tong += i
+      if tong == n:
+          print(n, "là số hoàn hảo")
+      else:
+          print(n, "không phải là số hoàn hảo")
+    tests:
+      - input: "6"
+        output: "6 là số hoàn hảo"
+      - input: "1"
+        output: "1 không phải là số hoàn hảo"
+        hidden: true
+      - input: "28"
+        output: "28 là số hoàn hảo"
+        hidden: true
+      - input: "12"
+        output: "12 không phải là số hoàn hảo"
+        hidden: true
+      - input: "496"
+        output: "496 là số hoàn hảo"
+        hidden: true
+      - input: "500"
+        output: "500 không phải là số hoàn hảo"
+        hidden: true
+    common_wrong:
+      - test: 0
+        output: "6 không phải là số hoàn hảo"
+        misconception: divisor-loop
+        sample: |
+          n = int(input())
+          tong = 0
+          for i in range(1, n + 1):
+              if n % i == 0:
+                  tong += i
+          if tong == n:
+              print(n, "là số hoàn hảo")
+          else:
+              print(n, "không phải là số hoàn hảo")
+    hints:
+      - { vi: "Không tính chính n, nên i chỉ chạy từ 1 đến n - 1: con dùng range(1, n). Đặt tong = 0 trước vòng lặp, và cộng i vào tong khi n % i == 0. Sau vòng lặp, so sánh tong với n.", en: "n itself does not count, so i only goes from 1 to n - 1: use range(1, n). Set tong = 0 before the loop, and add i to tong when n % i == 0. After the loop, compare tong with n." }
+      - { vi: "Chương trình: n = int(input()), tong = 0, for i in range(1, n):, if n % i == 0: thụt lề 4 dấu cách, tong += i thụt lề 8 dấu cách. Sau vòng lặp: if tong == n: in ra là số hoàn hảo, else: in ra không phải là số hoàn hảo.", en: "The program: n = int(input()), tong = 0, for i in range(1, n):, if n % i == 0: indented by 4 spaces, tong += i indented by 8 spaces. After the loop: if tong == n: print là số hoàn hảo, else: print không phải là số hoàn hảo." }
     test_eligible: true

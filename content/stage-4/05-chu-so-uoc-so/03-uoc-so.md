@@ -131,7 +131,7 @@ exercises:
     choices:
       - { text: "1\n2\n5\n10", misconception: range-stop-excluded }
       - { text: "2\n5", misconception: divisor-loop }
-      - { text: "1\n3\n7\n9", misconception: divisible-check }
+      - { text: "3\n4\n6\n7\n8\n9", misconception: divisible-check }
       - { text: "1\n2\n5", correct: true }
     explanation:
       vi: "range(1, n) là range(1, 10), cho i từ 1 đến 9, không có 10. Trong các số đó, 10 chia hết cho 1, 2 và 5, nên đoạn code in ra 1, 2, 5. Số 10 cũng là ước của 10, nhưng i không bao giờ bằng 10. Muốn có cả n, con dùng range(1, n + 1)."

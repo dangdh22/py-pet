@@ -16,8 +16,8 @@ questions:
     choices:
       - { text: "4 2 8", correct: true }
       - { text: "8 2 4", misconception: digit-split }
-      - { text: "5", misconception: count-if }
-      - { text: "4 2 8 5", misconception: count-if }
+      - { text: "3" }
+      - { text: "4 2 8 5" }
     explanation:
       vi: "Robo tách các chữ số từ phải sang trái: 4, 2, 8, rồi 5. Mỗi lần lặp, d là chữ số vừa tách, và Robo chỉ in d khi d chẵn. Vì vậy Robo in 4, 2, 8 theo đúng thứ tự tách, và bỏ qua chữ số lẻ 5."
       en: "Robo splits the digits from right to left: 4, 2, 8, then 5. On each pass, d is the digit just split off, and Robo prints d only when d is even. So Robo prints 4, 2, 8 in the order they were split off, and leaves out the odd digit 5."
@@ -322,3 +322,19 @@ questions:
     explanation:
       vi: "r đúng là 121, nhưng vòng lặp đã làm n thành 0. Vì vậy dòng if so sánh 121 với 0, và đoạn code in ra no. So sánh với 0 không phải là lỗi. Muốn đúng, con giữ số lúc đầu trong 1 biến khác trước vòng lặp, rồi so sánh r với biến đó."
       en: "r is indeed 121, but the loop has turned n into 0. So the if line compares 121 with 0, and the code prints no. Comparing with 0 is not an error. To fix it, keep the starting number in another variable before the loop, then compare r with that variable."
+
+  - id: s4.chu-so.b16
+    type: mcq
+    concepts: [prime-check]
+    lessons: [s4.chu-so.l4]
+    prompt:
+      vi: "Để biết 23 có phải là số nguyên tố không, Robo cần thử chia 23 cho những số nào?"
+      en: "To find out whether 23 is a prime number, which numbers must Robo try dividing 23 by?"
+    choices:
+      - { vi: "Chỉ số 2, vì số lẻ nào cũng là số nguyên tố", en: "Only 2, because every odd number is a prime number", misconception: prime-check }
+      - { vi: "Mọi số từ 1 đến 23, kể cả 1 và chính 23", en: "Every number from 1 to 23, 1 and 23 included", misconception: prime-check }
+      - { vi: "Chỉ số 1 và số 23, vì đó là 2 ước của 23", en: "Only 1 and 23, because those are the 2 divisors of 23", misconception: prime-check }
+      - { vi: "Mọi số từ 2 đến 22, tức là các số nằm giữa 1 và 23", en: "Every number from 2 to 22, the numbers between 1 and 23", correct: true }
+    explanation:
+      vi: "Số nguyên tố chỉ có 2 ước là 1 và chính nó, nên Robo thử các số nằm giữa: từ 2 đến 22. Không số nào chia hết 23, nên 23 là số nguyên tố. 23 luôn chia hết cho 1 và cho 23, nên thử 2 số này không cho biết gì. Số lẻ chưa chắc là số nguyên tố: 9 là số lẻ, nhưng 9 = 3 x 3."
+      en: "A prime number has only 2 divisors, 1 and itself, so Robo tries the numbers in between: from 2 to 22. None of them divides 23, so 23 is a prime number. 23 can always be divided by 1 and by 23, so trying those 2 numbers tells nothing. An odd number is not always prime: 9 is odd, but 9 = 3 x 3."

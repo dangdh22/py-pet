@@ -99,7 +99,7 @@ exercises:
       en: "What is the output of this code?"
     choices:
       - { text: "..*\n.**\n***", misconception: leading-spaces }
-      - { text: ".. *\n. **\n***", misconception: leading-spaces }
+      - { text: "... *\n.. **\n. ***" }
       - { text: ".. *\n. **\n ***", correct: true }
       - { text: ". *\n.. **\n... ***", misconception: row-col-pattern }
     explanation:
@@ -153,7 +153,7 @@ print("." * 2, "*")
 print("." * 2 + "*")
 ```
 
-Dòng 1 in ra .. * với 1 dấu cách thừa. Khi chấm bài, Robo so sánh cả dấu cách ở đầu dòng, nên dấu cách thừa ở đầu làm bài bị sai. Còn dấu cách ở cuối dòng thì Robo bỏ qua, nên con không cần in dấu cách sau dấu `*` cuối cùng.
+Dòng 1 in ra .. * với 1 dấu cách thừa ở giữa. Khi dấu chấm là dấu cách, dấu cách thừa này nằm ở đầu dòng, cùng với các dấu cách khác. Khi chấm bài, Robo so sánh cả dấu cách ở đầu dòng, nên dấu cách thừa làm bài bị sai. Còn dấu cách ở cuối dòng thì Robo bỏ qua, nên con không cần in dấu cách sau dấu `*` cuối cùng.
 ---
 Robo cũng vẽ được kim tự tháp bằng vòng lặp lồng. Trong vòng ngoài có 2 vòng trong, chạy lần lượt: vòng thứ nhất in các dấu cách, vòng thứ hai in các dấu `*`, rồi `print()` xuống dòng.
 

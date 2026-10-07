@@ -6,8 +6,8 @@ exercises:
     type: code
     concepts: [while-vs-for, off-by-one]
     prompt:
-      vi: "Robo đếm cừu để dễ ngủ. Code bên phải là 1 chương trình dùng for, viết trong các dòng chú thích. Hãy viết lại chương trình đó bằng vòng lặp while, để in ra giống hệt như phần Ví dụ. Ô Dữ liệu nhập có 1 dòng: số con cừu n, là số nguyên không âm."
-      en: "Robo counts sheep to fall asleep. The code on the right is a program that uses for, written in comment lines. Rewrite that program with a while loop, so that it prints exactly the same as in the Example. The Input data box has 1 line: the number of sheep n, an integer that is not negative."
+      vi: "Robo đếm cừu để dễ ngủ. Code bên phải là 1 chương trình dùng for, viết trong các dòng chú thích. Hãy viết lại chương trình đó bằng vòng lặp while, không dùng for, để in ra giống hệt như phần Ví dụ. Ô Dữ liệu nhập có 1 dòng: số con cừu n, là số nguyên không âm."
+      en: "Robo counts sheep to fall asleep. The code on the right is a program that uses for, written in comment lines. Rewrite that program with a while loop, without for, so that it prints exactly the same as in the Example. The Input data box has 1 line: the number of sheep n, an integer that is not negative."
     starter: |
       # Chương trình dùng for:
       # n = int(input())

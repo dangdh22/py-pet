@@ -148,6 +148,7 @@ describe("error dictionary on Pyodide", () => {
       ['print("*" + 3)', "concat-str"],
       ['print(1 + "2")', "unsupported-operand"],
       ['print("*" * 2.5)', "type-other"],
+      ["for i in range(2.5):\n    print(i)", "type-other"],
       ["print(len(5))", "type-other"],
     ];
     for (const [code, id] of cases) {

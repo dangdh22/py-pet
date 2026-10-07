@@ -23,15 +23,15 @@ exercises:
       vi: "Một ứng dụng nghe nhạc dùng học không giám sát cho hàng nghìn bài hát chưa có nhãn. Câu nào nói đúng về việc ứng dụng làm?"
       en: "A music app uses unsupervised learning on thousands of songs that have no labels. Which sentence about what the app does is right?"
     choices:
-      - { vi: "AI tự biết tên đúng của từng nhóm, như nhạc thiếu nhi", en: "The AI knows the right name of each group by itself, such as children's songs", misconception: ai-supervised }
+      - { vi: "AI tự biết tên đúng của từng nhóm, như nhóm nhạc thiếu nhi hay nhạc vui", en: "The AI knows the right name of each group by itself, such as children's songs or happy songs", misconception: ai-supervised }
       - { vi: "Phải có người ghi nhãn cho từng bài hát trước, thì AI mới chia nhóm được", en: "Someone must label every song first, or the AI cannot make groups", misconception: ai-supervised }
-      - { vi: "AI xếp các bài hát theo thứ tự tên, từ chữ A đến chữ Z", en: "The AI sorts the songs by their titles, from A to Z", misconception: ai-supervised }
-      - { vi: "AI xếp những bài hát giống nhau vào cùng 1 nhóm, rồi người đặt tên cho các nhóm", en: "The AI puts songs that are alike into the same group, and then people name the groups", correct: true }
+      - { vi: "AI chỉ xếp các bài hát theo thứ tự tên bài, từ chữ A đến chữ Z", en: "The AI only sorts the songs by their titles, from A to Z", misconception: ai-supervised }
+      - { vi: "AI xếp những bài hát giống nhau vào cùng 1 nhóm, rồi người đặt tên nhóm", en: "The AI puts songs that are alike into one group, then people name the groups", correct: true }
     explanation:
       vi: "Học không giám sát dùng dữ liệu không có nhãn: AI tự tìm những bài hát giống nhau, như cùng nhịp nhanh, rồi xếp chung 1 nhóm. AI không biết tên của nhóm, nên người xem các nhóm rồi đặt tên. Xếp theo tên bài hát thì không cần học gì, và cũng không phải là tìm bài giống nhau."
       en: "Unsupervised learning uses data without labels: the AI finds songs that are alike, such as songs with the same fast beat, and puts them in one group. The AI does not know the name of a group, so people look at the groups and name them. Sorting by title needs no learning, and it does not find songs that are alike."
 ---
-Ở các giai đoạn trước, con đã biết AI học từ những ví dụ có **nhãn**, như ảnh có ghi "mèo" hoặc "không phải mèo". Cách học này có tên là **học có giám sát**: mỗi ví dụ đều đi kèm đáp án đúng.
+Ở các giai đoạn trước, con đã biết AI học từ những ví dụ có **nhãn**, như ảnh có ghi "mèo" hoặc "không phải mèo". Cách học này có tên là **học có giám sát**: mỗi ví dụ đều đi kèm đáp án đúng. Chữ "giám sát" ở đây nghĩa là AI học từ những ví dụ có nhãn, chứ không phải có người ngồi trông máy tính.
 
 Giống như con luyện đề có đáp án ở cuối sách: con làm bài, so với đáp án, rồi sửa. Học xong, AI đoán được nhãn của 1 ví dụ mới chưa có nhãn, như 1 bức ảnh con vừa chụp.
 ---

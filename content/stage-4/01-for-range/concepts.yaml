@@ -32,7 +32,7 @@ concepts:
   - id: loop-variable
     name: { vi: "Biến của vòng lặp đổi giá trị mỗi lần lặp", en: "The loop variable changes on each pass" }
     misconception_card: |
-      Nhiều bạn nghĩ i giữ nguyên 1 giá trị trong suốt vòng lặp, hoặc phải tự viết `i = i + 1` thì i mới tăng. Thực ra mỗi lần lặp, for tự cho i số tiếp theo trong range: lần đầu i là 0, lần sau là 1, và cứ thế. Vì vậy `print(i * 10)` trong vòng lặp in ra 0, 10, 20, mỗi lần 1 số khác.
+      Nhiều bạn nghĩ i giữ nguyên 1 giá trị trong suốt vòng lặp, hoặc phải tự viết `i = i + 1` thì i mới tăng. Thực ra mỗi lần lặp, for tự cho i số tiếp theo trong range: lần đầu i là 0, lần sau là 1, và cứ thế. Vì vậy trong vòng lặp `for i in range(3):`, lệnh `print(i * 10)` in ra 0, 10, 20, mỗi lần 1 số khác.
     parent_tip: |
       Chơi trò điểm danh: mỗi người trong nhà lần lượt nói số thứ tự của mình rồi nhân số đó với 2. Giải thích rằng i trong vòng lặp cũng giống số thứ tự, mỗi lượt là 1 số mới.
     practice:

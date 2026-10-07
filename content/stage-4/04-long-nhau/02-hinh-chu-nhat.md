@@ -195,7 +195,7 @@ for hang in range(2):
 print("Hết")
 ```
 
-Nếu `print()` thụt lề 8 dấu cách, nó nằm trong vòng trong và xuống dòng sau mỗi dấu *, nên mỗi dấu * nằm trên 1 dòng riêng. Con thử thêm dòng print() vào đoạn code trên ở 2 chỗ đó để xem.
+Nếu `print()` thụt lề 8 dấu cách, nó nằm trong vòng trong và xuống dòng sau mỗi dấu *, nên mỗi dấu * nằm trên 1 dòng riêng. Con thử thêm dòng print() vào đoạn code trên, thụt lề 4 dấu cách, rồi thụt lề 8 dấu cách, để xem.
 ---
 Trong bài tập, con đọc số hàng và số cột bằng `input()`. Nếu quên `int()`, biến chỉ là 1 chuỗi, và Python không nhân được 1 chuỗi với 1 chuỗi khác:
 

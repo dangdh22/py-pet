@@ -94,7 +94,7 @@ exercises:
       en: "money starts at 10. In turn, 10 < 35, 20 < 35 and 30 < 35 are all True, so the loop runs 3 times: money becomes 20, 30, then 40, and weeks becomes 3. Now 40 < 35 is False, so the loop stops. The last check does not make weeks bigger."
   - id: s4.while.l5.q2
     type: mcq
-    concepts: [while-check-first]
+    concepts: [while-check-first, off-by-one]
     code: |
       price = int(input())
       money = int(input())
@@ -104,16 +104,16 @@ exercises:
           weeks = weeks + 1
       print(weeks)
     prompt:
-      vi: "Ô Dữ liệu nhập có 2 dòng: 20 và 25. Đoạn code in ra gì?"
-      en: "The Input data box has 2 lines: 20 and 25. What is the output of this code?"
+      vi: "Ô Dữ liệu nhập có 2 dòng: 20 và 15. Đoạn code in ra gì?"
+      en: "The Input data box has 2 lines: 20 and 15. What is the output of this code?"
     choices:
-      - { text: "1", misconception: while-check-first }
-      - { vi: "Không in ra gì", en: "Nothing is printed", misconception: after-block }
-      - { text: "0", correct: true }
-      - { vi: "Báo lỗi, vì vòng lặp không chạy lần nào", en: "An error, because the loop runs 0 times", error: true, misconception: while-check-first }
+      - { text: "2", misconception: off-by-one }
+      - { text: "0", misconception: while-check-first }
+      - { text: "1", correct: true }
+      - { text: "4" }
     explanation:
-      vi: "price là 20 và money là 25, nên money < price sai ngay lần kiểm tra đầu tiên. Vòng lặp chạy 0 lần, và điều đó không phải là lỗi. weeks vẫn là 0. Dòng print(weeks) sát lề trái, nằm ngoài vòng lặp, nên vẫn chạy và in ra 0."
-      en: "price is 20 and money is 25, so money < price is False at the very first check. The loop runs 0 times, and that is not an error. weeks is still 0. The line print(weeks) starts at the left edge, outside the loop, so it still runs and prints 0."
+      vi: "price là 20 và money là 15. Lần kiểm tra đầu, 15 < 20 đúng, nên khối lệnh chạy: money thành 20, weeks thành 1. Lần kiểm tra sau, 20 < 20 sai, nên vòng lặp dừng. Vì vậy code in ra 1. money bắt đầu từ 15 chứ không từ 0, nên không cần tới 4 tuần."
+      en: "price is 20 and money is 15. At the first check, 15 < 20 is True, so the block runs: money becomes 20 and weeks becomes 1. At the next check, 20 < 20 is False, so the loop stops. So the code prints 1. money starts at 15, not at 0, so 4 weeks are not needed."
 ---
 Robo muốn mua 1 chiếc diều giá 50 nghìn đồng. Heo đất của Robo đang trống, và mỗi tuần Robo bỏ vào 15 nghìn đồng. Robo cần bao nhiêu tuần? Robo chưa biết trước số tuần, chỉ biết lúc nào dừng: khi đủ tiền. Vì vậy Robo dùng while:
 

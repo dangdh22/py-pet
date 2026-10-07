@@ -205,7 +205,7 @@ questions:
       - { text: "11", correct: true }
       - { text: "10", misconception: off-by-one }
       - { text: "9", misconception: off-by-one }
-      - { text: "1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11", misconception: after-block }
+      - { text: "1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11", misconception: for-repeat }
     explanation:
       vi: "i đi từ 0 đến 10, có cả 0 và cả 10, vì điều kiện là i <= 10. Từ 0 đến 10 có 11 số, nên vòng lặp chạy 11 lần và count là 11. Dòng print(count) sát lề trái, nên chỉ in ra 1 lần, sau vòng lặp."
       en: "i goes from 0 to 10, with both 0 and 10 included, because the condition is i <= 10. From 0 to 10 there are 11 numbers, so the loop runs 11 times and count is 11. The line print(count) starts at the left edge, so it prints only once, after the loop."
@@ -215,16 +215,16 @@ questions:
     concepts: [off-by-one, while-check-first]
     lessons: [s4.while.l5]
     prompt:
-      vi: "Heo đất của Robo đang có 0 đồng. Mỗi tuần Robo bỏ vào 10 nghìn đồng, để mua 1 món đồ giá 30 nghìn đồng. Vòng lặp đếm số tuần phải dừng ngay khi Robo vừa đủ tiền. Dòng while nào đúng?"
-      en: "Robo's piggy bank has 0 dong. Each week Robo puts in 10 thousand dong, to buy a toy that costs 30 thousand dong. The loop that counts the weeks must stop as soon as Robo has just enough money. Which while line is right?"
+      vi: "Heo đất của Robo đang có 0 đồng. Mỗi tuần Robo bỏ vào 20 nghìn đồng, để mua 1 món đồ giá 80 nghìn đồng. Vòng lặp đếm số tuần phải dừng ngay khi Robo vừa đủ tiền. Dòng while nào đúng?"
+      en: "Robo's piggy bank has 0 dong. Each week Robo puts in 20 thousand dong, to buy a toy that costs 80 thousand dong. The loop that counts the weeks must stop as soon as Robo has just enough money. Which while line is right?"
     choices:
-      - { text: "while tien <= 30:", misconception: off-by-one }
-      - { text: "while tien < 30:", correct: true }
-      - { text: "while tien > 30:", misconception: while-check-first }
-      - { text: "while tien == 30:", misconception: while-check-first }
+      - { text: "while tien <= 80:", misconception: off-by-one }
+      - { text: "while tien < 80:", correct: true }
+      - { text: "while tien > 80:", misconception: while-check-first }
+      - { text: "while tien == 80:", misconception: while-check-first }
     explanation:
-      vi: "Vòng lặp chạy trong khi Robo chưa đủ tiền, tức là tien < 30. Khi tien vừa bằng 30, điều kiện sai và vòng lặp dừng sau 3 tuần. Với tien <= 30, vòng lặp chạy thừa 1 tuần. Với tien > 30 hay tien == 30, điều kiện sai ngay từ đầu vì tien là 0, nên vòng lặp không chạy lần nào."
-      en: "The loop runs while Robo does not have enough money yet, that is tien < 30. When tien is exactly 30, the condition is False and the loop stops after 3 weeks. With tien <= 30, the loop runs 1 week too many. With tien > 30 or tien == 30, the condition is False from the start because tien is 0, so the loop runs 0 times."
+      vi: "Vòng lặp chạy trong khi Robo chưa đủ tiền, tức là tien < 80. Khi tien vừa bằng 80, điều kiện sai và vòng lặp dừng sau 4 tuần. Với tien <= 80, vòng lặp chạy thừa 1 tuần. Với tien > 80 hay tien == 80, điều kiện sai ngay từ đầu vì tien là 0, nên vòng lặp không chạy lần nào."
+      en: "The loop runs while Robo does not have enough money yet, that is tien < 80. When tien is exactly 80, the condition is False and the loop stops after 4 weeks. With tien <= 80, the loop runs 1 week too many. With tien > 80 or tien == 80, the condition is False from the start because tien is 0, so the loop runs 0 times."
 
   - id: s4.while.b13
     type: mcq

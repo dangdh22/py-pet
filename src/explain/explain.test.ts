@@ -133,6 +133,8 @@ describe("assigned-in-code check", () => {
     expect(checks["assigned-in-code"](input("tong", "for i in range(3):\n    tong += i"))).toMatchObject({ ok: true });
     expect(checks["assigned-in-code"](input("x", "x //= 2"))).toMatchObject({ ok: true });
     expect(checks["assigned-in-code"](input("x", "x <= 2\nx != 2\nx == 2"))).toEqual({ ok: false });
+    expect(checks["assigned-in-code"](input("x", "x >= 2"))).toEqual({ ok: false });
+    expect(checks["assigned-in-code"](input("x", "x := 2"))).toEqual({ ok: false });
   });
 
   test("escapes the name for a RegExp", () => {
@@ -271,6 +273,13 @@ describe("providers", () => {
     expect(
       await provider.explain({ error: error("NameError", message, 1), code: "print(diem)\ndiem = 5", lang: "vi" }),
     ).toMatchObject({ entryId: "name-before-assign", misconception: "var-before-use" });
+  });
+
+  test("tong += i without tong = 0 before the loop is name-before-assign", () => {
+    const code = "for i in range(3):\n    tong += i\nprint(tong)";
+    const match = matchError(entries, error("NameError", "name 'tong' is not defined", 2), code);
+    expect(match?.entry.id).toBe("name-before-assign");
+    expect(match?.vars.name).toBe("tong");
   });
 
   test("errorMisconceptionFrom", () => {

@@ -369,8 +369,8 @@ exercises:
     type: code
     concepts: [average-zero-count, count-if]
     prompt:
-      vi: "Robo tính trung bình các số chia hết cho 3, từ a đến b (có cả a và b). Ô Dữ liệu nhập có 2 dòng: số a và số b, là số nguyên dương. Hãy in ra trung bình với đúng 2 chữ số sau dấu chấm, như phần Ví dụ. Nếu không có số nào chia hết cho 3, in ra Không có số nào chia hết cho 3."
-      en: "Robo works out the average of the numbers that can be divided by 3, from a to b (a and b included). The Input data box has 2 lines: the number a and the number b, positive integers. Print the average with exactly 2 digits after the decimal point, as in the Example. If no number can be divided by 3, print Không có số nào chia hết cho 3."
+      vi: "Robo tính trung bình các số chia hết cho 3, từ a đến b (có cả a và b). Ô Dữ liệu nhập có 2 dòng: số a và số b, là số nguyên dương. Hãy in ra trung bình với đúng 2 chữ số sau dấu chấm, như phần Ví dụ. Nếu a lớn hơn b thì không có số nào từ a đến b. Nếu không có số nào chia hết cho 3, in ra Không có số nào chia hết cho 3."
+      en: "Robo works out the average of the numbers that can be divided by 3, from a to b (a and b included). The Input data box has 2 lines: the number a and the number b, positive integers. Print the average with exactly 2 digits after the decimal point, as in the Example. If a is greater than b, there are no numbers from a to b. If no number can be divided by 3, print Không có số nào chia hết cho 3."
     starter: |
       # Viết lệnh của con ở dưới dòng này
     solution: |

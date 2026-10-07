@@ -24,7 +24,7 @@ questions:
       en: "The line print(\"Xong\") starts at the left edge, right after the block of the loop for i in range(4):. How many times does this line run, and when?"
     choices:
       - { vi: "4 lần, mỗi lần lặp 1 lần", en: "4 times, once on each pass", misconception: for-repeat }
-      - { vi: "Không lần nào, vì nó nằm ngoài vòng lặp", en: "Never, because it is outside the loop", misconception: for-repeat }
+      - { vi: "1 lần, ngay sau lần lặp đầu tiên", en: "Once, right after the first pass", misconception: for-repeat }
       - { vi: "1 lần, trước khi vòng lặp bắt đầu", en: "Once, before the loop starts", misconception: run-order }
       - { vi: "1 lần, sau khi vòng lặp chạy xong", en: "Once, after the loop is done", correct: true }
     explanation:
@@ -172,7 +172,7 @@ questions:
     choices:
       - { vi: "Có, nếu không thì i luôn là 0", en: "Yes, or else i is always 0", misconception: loop-variable }
       - { vi: "Có, nếu không thì vòng lặp chạy mãi không dừng", en: "Yes, or else the loop never stops", misconception: loop-variable }
-      - { vi: "Không, vì i giữ nguyên giá trị 5 từ đầu đến cuối", en: "No, because i keeps the value 5 from start to end", misconception: loop-variable }
+      - { vi: "Không, vì for tự cho i lần lượt các số từ 1 đến 5", en: "No, because for gives i the numbers from 1 to 5, one after another", misconception: range-stop-excluded }
       - { vi: "Không, vì mỗi lần lặp, for tự cho i số tiếp theo trong range", en: "No, because on each pass, for gives i the next number of the range by itself", correct: true }
     explanation:
       vi: "Vòng lặp for tự lo việc đổi giá trị của i: lần lặp đầu i là 0, lần sau là 1, và cứ thế đến 4. Vòng lặp chạy đúng 5 lần rồi dừng, con không cần viết i = i + 1."
@@ -225,9 +225,9 @@ questions:
       vi: "Điểm khác nhau chính giữa học có giám sát và học không giám sát là gì?"
       en: "What is the main difference between supervised and unsupervised learning?"
     choices:
-      - { vi: "Học có giám sát thì có người ngồi cạnh máy tính suốt lúc AI học", en: "In supervised learning, someone sits next to the computer the whole time the AI learns", misconception: ai-supervised }
-      - { vi: "Học có giám sát dùng dữ liệu có nhãn, học không giám sát dùng dữ liệu không có nhãn", en: "Supervised learning uses labeled data, and unsupervised learning uses data without labels", correct: true }
-      - { vi: "Học không giám sát không cần dữ liệu, còn học có giám sát thì cần", en: "Unsupervised learning needs no data, while supervised learning does", misconception: ai-data }
+      - { vi: "Học có giám sát thì có người ngồi cạnh máy tính suốt lúc AI đang học", en: "In supervised learning, someone sits next to the computer the whole time the AI is learning", misconception: ai-supervised }
+      - { vi: "Học có giám sát dùng dữ liệu có nhãn, còn học không giám sát thì không", en: "Supervised learning uses labeled data, and unsupervised learning does not", correct: true }
+      - { vi: "Học không giám sát không cần dữ liệu nào, còn học có giám sát thì cần", en: "Unsupervised learning needs no data at all, while supervised learning does", misconception: ai-data }
       - { vi: "Học có giám sát chỉ dùng cho ảnh, học không giám sát chỉ dùng cho âm thanh", en: "Supervised learning is only for pictures, and unsupervised learning is only for sounds", misconception: ai-supervised }
     explanation:
       vi: "Cả 2 cách đều học từ dữ liệu, và đều dùng được cho ảnh, âm thanh hay chữ. Khác nhau ở nhãn: học có giám sát có đáp án sẵn cho mỗi ví dụ, còn học không giám sát thì không có, nên AI tự xếp những thứ giống nhau vào cùng nhóm."
@@ -243,8 +243,8 @@ questions:
     choices:
       - { vi: "Dạy AI nhận ra thư rác từ hàng nghìn thư đã được đánh dấu là rác hoặc không rác", en: "Teaching an AI to spot spam from thousands of emails already marked as spam or not spam", misconception: ai-supervised }
       - { vi: "Dạy AI đọc chữ số viết tay từ hàng nghìn ảnh có ghi sẵn chữ số trong ảnh", en: "Teaching an AI to read handwritten digits from thousands of photos with the digit written next to each", misconception: ai-supervised }
-      - { vi: "Kiểm tra 1 bạn đã đủ 6 tuổi để vào lớp 1 hay chưa", en: "Checking whether a child is old enough, 6 years, to start grade 1", misconception: ai-rules-vs-data }
-      - { vi: "Chia khách hàng của 1 cửa hàng thành các nhóm mua sắm giống nhau, khi chưa ai biết có những nhóm nào", en: "Splitting the customers of a shop into groups that shop alike, when nobody knows yet which groups there are", correct: true }
+      - { vi: "Kiểm tra 1 bạn đã đủ 6 tuổi để vào lớp 1 hay chưa, theo năm sinh của bạn ấy", en: "Checking whether a child is old enough, 6 years, to start grade 1, from the year the child was born", misconception: ai-rules-vs-data }
+      - { vi: "Chia khách của 1 cửa hàng thành các nhóm mua sắm giống nhau, khi chưa biết có nhóm nào", en: "Splitting a shop's customers into groups that shop alike, when nobody knows the groups yet", correct: true }
     explanation:
       vi: "Khi chưa có nhãn và chưa ai biết có những nhóm nào, AI học không giám sát tự tìm ra các nhóm giống nhau. Thư rác và chữ số viết tay đều có nhãn sẵn, nên hợp với học có giám sát. Kiểm tra đủ 6 tuổi chỉ cần 1 quy tắc cố định, không cần AI."
       en: "When there are no labels and nobody knows which groups exist, unsupervised learning finds groups that are alike by itself. Spam emails and handwritten digits come with labels, so they fit supervised learning. Checking an age of 6 only needs a fixed rule, not AI."
@@ -257,26 +257,26 @@ questions:
       vi: "Vì sao học không giám sát có ích?"
       en: "Why is unsupervised learning useful?"
     choices:
-      - { vi: "Vì ghi nhãn cho thật nhiều dữ liệu rất tốn công, và có khi chưa ai biết nên chia thành những nhóm nào", en: "Because labeling a lot of data takes a lot of work, and sometimes nobody knows yet which groups to make", correct: true }
-      - { vi: "Vì học không giám sát luôn cho kết quả đúng hơn học có giám sát", en: "Because unsupervised learning always gives better answers than supervised learning", misconception: ai-supervised }
-      - { vi: "Vì dữ liệu không có nhãn thì không phải là dữ liệu, nên không cần xem kỹ", en: "Because data without labels is not really data, so it does not need a close look", misconception: ai-data }
+      - { vi: "Vì ghi nhãn cho rất nhiều dữ liệu tốn công, và có khi chưa ai biết có nhóm nào", en: "Because labeling a lot of data takes much work, and sometimes nobody knows the groups yet", correct: true }
+      - { vi: "Vì học không giám sát luôn cho kết quả đúng hơn hẳn học có giám sát", en: "Because unsupervised learning always gives much better answers than supervised learning", misconception: ai-supervised }
+      - { vi: "Vì học không giám sát đoán đúng nhãn cho mỗi ảnh mới, như mèo hay chó", en: "Because unsupervised learning guesses the right label of each new photo, such as cat or dog", misconception: ai-supervised }
       - { vi: "Vì học không giám sát tự đặt tên đúng cho mọi nhóm, con người không cần xem lại", en: "Because unsupervised learning names every group correctly by itself, so people do not need to look", misconception: ai-supervised }
     explanation:
-      vi: "Ghi nhãn cho hàng triệu bài hát hay ảnh cần rất nhiều người và thời gian. Học không giám sát dùng được ngay dữ liệu chưa có nhãn để tìm các nhóm. Nhưng nó không đúng hơn học có giám sát, và người vẫn phải xem các nhóm rồi đặt tên."
-      en: "Labeling millions of songs or photos takes many people and a lot of time. Unsupervised learning can use data without labels right away to find groups. But it is not better than supervised learning, and people still need to look at the groups and name them."
+      vi: "Ghi nhãn cho hàng triệu bài hát hay ảnh cần rất nhiều người và thời gian. Học không giám sát dùng được ngay dữ liệu chưa có nhãn để tìm các nhóm. Nhưng nó không đúng hơn học có giám sát, và nó không đoán nhãn như mèo hay chó: nó chỉ chia nhóm, rồi người phải xem các nhóm và đặt tên."
+      en: "Labeling millions of songs or photos takes many people and a lot of time. Unsupervised learning can use data without labels right away to find groups. But it is not better than supervised learning, and it does not guess labels such as cat or dog: it only makes groups, and people have to look at the groups and name them."
 
   - id: s4.for-range.b16
     type: mcq
     concepts: [ai-supervised]
     lessons: [s4.for-range.l6]
     prompt:
-      vi: "Một AI học có giám sát từ hàng nghìn đoạn ghi âm tiếng kêu, mỗi đoạn có nhãn chó, mèo hoặc gà. Học xong, con đưa cho AI 1 đoạn ghi âm mới chưa có nhãn. AI làm gì với đoạn này?"
-      en: "An AI learns with supervision from thousands of recordings of animal sounds, each labeled dog, cat or chicken. After learning, you give the AI a new recording with no label. What does the AI do with it?"
+      vi: "Một AI học có giám sát từ hàng nghìn đoạn ghi âm tiếng kêu, mỗi đoạn có nhãn chó, mèo hoặc gà. Học xong, con cho AI nghe tiếng kêu của 1 con vịt. Vì sao AI không trả lời là vịt?"
+      en: "An AI learns with supervision from thousands of recordings of animal sounds, each labeled dog, cat or chicken. After learning, you let the AI hear a duck. Why does the AI not answer duck?"
     choices:
-      - { vi: "Không làm được gì, vì đoạn ghi âm mới chưa có nhãn", en: "Nothing, because the new recording has no label", misconception: ai-supervised }
-      - { vi: "Xếp đoạn ghi âm vào 1 nhóm chưa có tên, rồi chờ người đặt tên cho nhóm", en: "It puts the recording into a group with no name and waits for people to name the group", misconception: ai-supervised }
-      - { vi: "Đoán nhãn cho đoạn ghi âm mới: chó, mèo hoặc gà", en: "It guesses a label for the new recording: dog, cat or chicken", correct: true }
-      - { vi: "Tự nghĩ ra 1 nhãn mới chưa từng học, như vịt", en: "It makes up a new label it never learned, such as duck", misconception: ai-supervised }
+      - { vi: "Vì đoạn ghi âm tiếng vịt chưa có nhãn, nên AI không nghe được gì", en: "Because the duck recording has no label, so the AI cannot hear anything", misconception: ai-supervised }
+      - { vi: "Vì AI cần nghe đoạn đó thêm vài lần nữa thì mới tự nghĩ ra chữ vịt", en: "Because the AI needs to hear it a few more times before it comes up with the word duck", misconception: ai-supervised }
+      - { vi: "Vì AI chỉ chọn được trong những nhãn nó đã học: chó, mèo hoặc gà", en: "Because the AI can only choose among the labels it learned: dog, cat or chicken", correct: true }
+      - { vi: "Vì AI xếp tiếng vịt vào 1 nhóm mới, rồi chờ người đặt tên cho nhóm", en: "Because the AI puts the duck into a new group and waits for people to name it", misconception: ai-supervised }
     explanation:
-      vi: "Học có giám sát là để đoán nhãn cho ví dụ mới chưa có nhãn. AI chỉ chọn trong những nhãn nó đã học: chó, mèo hoặc gà. Xếp vào nhóm chưa có tên là việc của học không giám sát."
-      en: "Supervised learning is for guessing the label of a new example that has none. The AI can only choose among the labels it learned: dog, cat or chicken. Putting things into groups with no name is what unsupervised learning does."
+      vi: "AI học có giám sát chỉ chọn trong những nhãn có trong dữ liệu học. Chưa từng có ví dụ nào mang nhãn vịt, nên AI không thể nghĩ ra nhãn này, dù nghe bao nhiêu lần. Có lẽ AI sẽ đoán là gà. Muốn AI nhận ra vịt, người phải thêm nhiều đoạn ghi âm có nhãn vịt rồi cho AI học lại."
+      en: "An AI that learns with supervision can only choose among the labels in its training data. No example ever had the label duck, so the AI cannot come up with it, however many times it listens. It may guess chicken. For the AI to know ducks, people must add many recordings labeled duck and let the AI learn again."

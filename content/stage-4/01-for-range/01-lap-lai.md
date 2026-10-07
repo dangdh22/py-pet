@@ -148,7 +148,7 @@ for i in range(3):
     print("Robo vẫy tay")
 ```
 
-Dòng 1 bảo Python: "làm khối lệnh bên dưới 3 lần". Python in ra Robo vẫy tay 3 lần. Mỗi lần chạy khối lệnh được gọi là 1 **lần lặp**.
+Dòng 1 bảo Python: "làm khối lệnh bên dưới 3 lần". Chữ `i` là tên 1 biến, bài sau sẽ cho con biết nó dùng để làm gì. Python in ra Robo vẫy tay 3 lần. Mỗi lần chạy khối lệnh được gọi là 1 **lần lặp**.
 ---
 Dòng for viết theo đúng thứ tự: chữ `for` viết thường, tên biến `i`, chữ `in`, `range(3)`, rồi **dấu hai chấm** ở cuối, giống dòng if. Khối lệnh bên dưới thụt lề 4 dấu cách. Khối có thể có nhiều dòng, và cả khối được lặp lại:
 

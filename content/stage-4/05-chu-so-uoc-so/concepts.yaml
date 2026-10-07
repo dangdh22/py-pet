@@ -18,11 +18,11 @@ concepts:
     practice:
       level1: [s4.chu-so.l3.q1, s4.chu-so.l3.q2, s4.chu-so.b4, s4.chu-so.b5, s4.chu-so.b14]
       level2: [s4.chu-so.p2]
-      level3: [s4.chu-so.l3.ex1, s4.chu-so.l3.ex2, s4.chu-so.l6.ex3, s4.chu-so.c2, s4.chu-so.l4.ex1]
+      level3: [s4.chu-so.l3.ex1, s4.chu-so.l3.ex2, s4.chu-so.c6, s4.chu-so.c2, s4.chu-so.l4.ex1]
   - id: break-nearest
     name: { vi: "break thoát khỏi vòng lặp gần nhất", en: "break leaves the nearest loop" }
     misconception_card: |
-      Nhiều bạn nghĩ break dừng cả chương trình, thoát khỏi mọi vòng lặp, hoặc chỉ thoát khỏi lệnh if chứa nó. Thực ra break thoát khỏi vòng lặp gần nhất chứa nó, và Python chạy tiếp dòng đầu tiên sau vòng lặp đó. Nếu break nằm trong vòng lặp bên trong, như `for i in range(2, so + 1):`, thì vòng lặp bên ngoài vẫn chạy tiếp lần lặp sau.
+      Nhiều bạn nghĩ break dừng cả chương trình, thoát khỏi mọi vòng lặp, hoặc chỉ thoát khỏi lệnh if chứa nó. Thực ra break thoát khỏi vòng lặp gần nhất chứa nó, và Python chạy tiếp dòng đầu tiên sau vòng lặp đó. Nếu break nằm trong vòng lặp bên trong, như `for i in range(2, so + 1):`, thì vòng lặp bên ngoài vẫn chạy tiếp lần lặp sau. Cả break và continue chỉ được viết bên trong 1 vòng lặp; viết ở ngoài, Python báo lỗi SyntaxError.
     parent_tip: |
       Khi cả nhà tìm chìa khóa trong các ngăn kéo, hỏi con: tìm thấy rồi thì có cần mở tiếp các ngăn còn lại không? Giải thích rằng break cũng dừng việc tìm ngay khi đã thấy, rồi làm tiếp việc sau đó.
     practice:
@@ -46,6 +46,6 @@ concepts:
     parent_tip: |
       Cùng con thử xếp 7 viên kẹo, rồi 12 viên kẹo, thành hình chữ nhật có từ 2 hàng trở lên và các hàng dài bằng nhau. 12 viên xếp được nhiều cách, còn 7 viên thì không cách nào: 7 là số nguyên tố.
     practice:
-      level1: [s4.chu-so.b12, s4.chu-so.b13]
+      level1: [s4.chu-so.b12, s4.chu-so.b13, s4.chu-so.b16]
       level2: [s4.chu-so.p5]
       level3: [s4.chu-so.l4.ex2, s4.chu-so.c4]
