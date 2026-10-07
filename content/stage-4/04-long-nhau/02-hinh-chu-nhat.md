@@ -158,10 +158,10 @@ exercises:
       vi: "Trong đoạn code vẽ hình chữ nhật này, dòng 4 làm việc gì?"
       en: "In this code that draws a rectangle, what does line 4 do?"
     choices:
-      - { vi: "Kết thúc hàng đang vẽ, để hàng sau bắt đầu ở dòng mới", en: "It ends the row being drawn, so that the next row starts on a new line", correct: true }
-      - { vi: "In ra 1 dòng trống giữa 2 hàng dấu *", en: "It prints an empty line between 2 rows of *", misconception: print-end-newline }
+      - { vi: "Kết thúc hàng vừa vẽ, để hàng sau ở dòng mới", en: "It ends the row just drawn, so the next row is on a new line", correct: true }
+      - { vi: "In ra 1 dòng trống ở giữa 2 hàng dấu *", en: "It prints an empty line between 2 rows of * signs", misconception: print-end-newline }
       - { vi: "In thêm 1 dấu * ở cuối mỗi hàng", en: "It prints 1 more * at the end of each row", misconception: print-end-newline }
-      - { vi: "Không làm gì, vì trong ngoặc không có gì", en: "Nothing, because there is nothing inside the brackets", misconception: print-end-newline }
+      - { vi: "Không làm gì, vì trong ngoặc tròn không có gì", en: "Nothing, because there is nothing inside the round brackets", misconception: print-end-newline }
     explanation:
       vi: "Vòng trong in 5 dấu * với end=\"\", nên Python vẫn đang in tiếp ở cuối hàng đó. print() để trống chỉ in 1 ký tự xuống dòng: nó kết thúc hàng này, chứ không tạo thêm 1 dòng trống. Thiếu dòng 4, cả 15 dấu * nằm trên cùng 1 dòng."
       en: "The inner loop prints 5 * signs with end=\"\", so Python is still printing at the end of that row. An empty print() prints just 1 new-line character: it ends this row and does not add an empty line. Without line 4, all 15 * signs would be on the same line."

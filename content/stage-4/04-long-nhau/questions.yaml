@@ -131,9 +131,9 @@ questions:
       vi: "Robo muốn vẽ 1 tam giác. Hàng đầu tiên mà đoạn code in ra là gì?"
       en: "Robo wants to draw a triangle. What is the first row that this code prints?"
     choices:
-      - { vi: "1 dấu *", en: "1 *", misconception: range-stop-excluded }
-      - { vi: "4 dấu *", en: "4 * signs", misconception: row-col-pattern }
-      - { vi: "Không in được, Python báo lỗi vì không nhân chuỗi với 0 được", en: "Nothing, Python gives an error because a string cannot be multiplied by 0", error: true, misconception: string-repeat }
+      - { vi: "1 dấu *, vì hàng đầu tiên là hàng 1", en: "1 *, because the first row is row 1", misconception: range-stop-excluded }
+      - { vi: "4 dấu *, vì vòng lặp có range(4)", en: "4 * signs, because the loop has range(4)", misconception: row-col-pattern }
+      - { vi: "Python báo lỗi, vì không nhân chuỗi với 0 được", en: "An error, because a string cannot be multiplied by 0", error: true, misconception: string-repeat }
       - { vi: "1 dòng trống, vì ở lần lặp đầu tiên i là 0", en: "An empty line, because i is 0 on the first pass", correct: true }
     explanation:
       vi: "range(4) bắt đầu từ 0, nên lần lặp đầu tiên in \"*\" * 0, là 1 chuỗi rỗng: Python in ra 1 dòng trống, không báo lỗi. Muốn hàng đầu có 1 dấu *, con dùng range(1, 5)."
@@ -144,21 +144,22 @@ questions:
     concepts: [row-col-pattern, nested-inner-full]
     lessons: [s4.long-nhau.l3]
     code: |
-      for i in range(3, 0, -1):
+      count = 0
+      for i in range(1, 5):
           for j in range(i):
-              print(j, end="")
-          print()
+              count += 1
+      print(count)
     prompt:
-      vi: "Đoạn code in ra gì?"
-      en: "What is the output of this code?"
+      vi: "Đoạn code đếm số dấu * của 1 tam giác. Đoạn code in ra gì?"
+      en: "This code counts the * signs of a triangle. What is the output of this code?"
     choices:
-      - { text: "012\n01\n0", correct: true }
-      - { text: "123\n12\n1", misconception: range-stop-excluded }
-      - { text: "0\n01\n012", misconception: row-col-pattern }
-      - { text: "321\n21\n1", misconception: loop-variable }
+      - { text: "10", correct: true }
+      - { text: "16", misconception: row-col-pattern }
+      - { text: "6", misconception: range-stop-excluded }
+      - { text: "4", misconception: nested-inner-full }
     explanation:
-      vi: "i lần lượt là 3, 2, 1, nên các hàng ngắn dần: 3 số, 2 số, 1 số. Vòng trong là range(i), nên j luôn bắt đầu từ 0 và dừng trước i. Mỗi hàng in giá trị của j, không in i."
-      en: "i is 3, then 2, then 1, so the rows get shorter: 3 numbers, 2 numbers, 1 number. The inner loop is range(i), so j always starts at 0 and stops before i. Each row prints the value of j, not i."
+      vi: "Vòng trong chạy i lần, nên số lần chạy tăng dần theo hàng: 1, 2, 3, rồi 4 lần. count là 1 + 2 + 3 + 4 = 10, giống số dấu * của tam giác 4 hàng. Vòng trong không chạy 4 lần ở mọi hàng, vì range(i) thay đổi theo i."
+      en: "The inner loop runs i times, so the number of passes goes up row by row: 1, 2, 3, then 4 times. count is 1 + 2 + 3 + 4 = 10, the same as the number of * signs in a triangle with 4 rows. The inner loop does not run 4 times on every row, because range(i) changes with i."
 
   - id: s4.long-nhau.b9
     type: mcq
@@ -226,8 +227,8 @@ questions:
     choices:
       - { vi: "Sau dòng 3, thụt lề 4 dấu cách, thẳng hàng với dòng for bên trong", en: "After line 3, indented by 4 spaces, lined up with the inner for line", correct: true }
       - { vi: "Sau dòng 3, thụt lề 8 dấu cách, thẳng hàng với dòng print ở trên", en: "After line 3, indented by 8 spaces, lined up with the print line above", misconception: print-end-newline }
-      - { vi: "Sau dòng 3, sát lề trái", en: "After line 3, at the left edge", misconception: nested-inner-full }
-      - { vi: "Trước dòng 1, sát lề trái", en: "Before line 1, at the left edge", misconception: nested-inner-full }
+      - { vi: "Sau dòng 3, sát lề trái, nằm ngoài cả 2 vòng lặp", en: "After line 3, at the left edge, outside both loops", misconception: nested-inner-full }
+      - { vi: "Trước dòng 1, sát lề trái, trước cả 2 vòng lặp", en: "Before line 1, at the left edge, before both loops", misconception: nested-inner-full }
     explanation:
       vi: "Dòng trống cần có 1 lần sau mỗi bảng, tức là sau khi vòng trong chạy xong, nên print() nằm trong vòng ngoài và thụt lề 4 dấu cách. Thụt lề 8 dấu cách thì có 1 dòng trống sau mỗi phép nhân. Sát lề trái thì print() chỉ chạy 1 lần, khi cả 2 vòng lặp đã xong."
       en: "The empty line is needed once after each table, that is, after the inner loop is done, so print() goes inside the outer loop, indented by 4 spaces. Indented by 8 spaces, there is an empty line after every multiplication. At the left edge, print() runs only once, when both loops are done."
