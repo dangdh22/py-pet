@@ -1,0 +1,51 @@
+concepts:
+  - id: digit-split
+    name: { vi: "Tách chữ số bằng % 10 và // 10", en: "Splitting digits with % 10 and // 10" }
+    misconception_card: |
+      Nhiều bạn nghĩ `n % 10` cho chữ số đầu tiên bên trái, hoặc nghĩ sau vòng lặp n vẫn giữ số lúc đầu. Thực ra `n % 10` cho chữ số hàng đơn vị, nên các chữ số được tách từ phải sang trái, và `n = n // 10` làm n nhỏ dần cho tới 0. Muốn dùng lại số lúc đầu, con chép nó sang 1 biến khác trước vòng lặp; còn số 0 thì vòng lặp `while n > 0:` không chạy lần nào, nên con xử lý riêng.
+    parent_tip: |
+      Viết 1 số như 4271 lên giấy, rồi cùng con "bóc" từng chữ số từ bên phải: mỗi lần chép chữ số cuối ra 1 bên rồi gạch nó đi, cho đến khi hết số. Hỏi con: số có 4 chữ số thì phải bóc mấy lần?
+    practice:
+      level1: [s4.chu-so.l1.q1, s4.chu-so.l1.q2, s4.chu-so.l2.q1, s4.chu-so.l2.q2, s4.chu-so.b1, s4.chu-so.b2, s4.chu-so.b3, s4.chu-so.l6.q1, s4.chu-so.b15]
+      level2: [s4.chu-so.p1, s4.chu-so.p6]
+      level3: [s4.chu-so.l1.ex1, s4.chu-so.l1.ex2, s4.chu-so.l2.ex1, s4.chu-so.l2.ex2, s4.chu-so.l6.ex1, s4.chu-so.l6.ex2, s4.chu-so.c1, s4.chu-so.c5]
+  - id: divisor-loop
+    name: { vi: "Tìm ước: thử i từ 1 đến n", en: "Finding divisors: try i from 1 to n" }
+    misconception_card: |
+      Nhiều bạn viết ngược điều kiện thành `i % n == 0`, hoặc cho i chạy theo `range(n)`. Thực ra i là ước của n khi n chia cho i không dư, tức là `n % i == 0`; còn `range(n)` bắt đầu từ 0, nên Python phải tính `n % 0` và báo ZeroDivisionError. Con dùng `range(1, n + 1)`, vì 1 và chính n luôn là ước của n.
+    parent_tip: |
+      Đưa con 12 hạt đậu và nhờ con xếp thành các hàng đều nhau: mỗi hàng 1 hạt, 2 hạt, 3 hạt, và cứ thế. Cách xếp nào không thừa hạt nào thì số hạt mỗi hàng là 1 ước của 12.
+    practice:
+      level1: [s4.chu-so.l3.q1, s4.chu-so.l3.q2, s4.chu-so.b4, s4.chu-so.b5, s4.chu-so.b14]
+      level2: [s4.chu-so.p2]
+      level3: [s4.chu-so.l3.ex1, s4.chu-so.l3.ex2, s4.chu-so.l6.ex3, s4.chu-so.c2, s4.chu-so.l4.ex1]
+  - id: break-nearest
+    name: { vi: "break thoát khỏi vòng lặp gần nhất", en: "break leaves the nearest loop" }
+    misconception_card: |
+      Nhiều bạn nghĩ break dừng cả chương trình, thoát khỏi mọi vòng lặp, hoặc chỉ thoát khỏi lệnh if chứa nó. Thực ra break thoát khỏi vòng lặp gần nhất chứa nó, và Python chạy tiếp dòng đầu tiên sau vòng lặp đó. Nếu break nằm trong vòng lặp bên trong, như `for i in range(2, so + 1):`, thì vòng lặp bên ngoài vẫn chạy tiếp lần lặp sau.
+    parent_tip: |
+      Khi cả nhà tìm chìa khóa trong các ngăn kéo, hỏi con: tìm thấy rồi thì có cần mở tiếp các ngăn còn lại không? Giải thích rằng break cũng dừng việc tìm ngay khi đã thấy, rồi làm tiếp việc sau đó.
+    practice:
+      level1: [s4.chu-so.l4.q1, s4.chu-so.l4.q2, s4.chu-so.b6, s4.chu-so.b7, s4.chu-so.b8, s4.chu-so.b9]
+      level2: [s4.chu-so.p3]
+      level3: [s4.chu-so.l4.ex1, s4.chu-so.c3, s4.chu-so.c4, s4.chu-so.l4.ex2]
+  - id: continue-skip
+    name: { vi: "continue bỏ qua phần còn lại của 1 lần lặp", en: "continue skips the rest of one pass" }
+    misconception_card: |
+      Nhiều bạn nghĩ continue làm vòng lặp dừng hẳn như break, hoặc nghĩ nó chỉ bỏ qua 1 dòng ngay sau nó. Thực ra continue bỏ qua mọi dòng còn lại của lần lặp đang chạy, rồi vòng lặp sang lần lặp tiếp theo. Với while, con đổi biến trước dòng continue, như `i = i + 1`, nếu không vòng lặp sẽ chạy mãi.
+    parent_tip: |
+      Khi con phát kẹo cho cả nhà, dặn con bỏ qua người đang vắng mặt nhưng vẫn phát tiếp cho người sau. Giải thích rằng continue chỉ bỏ qua 1 lượt, không dừng cả việc phát.
+    practice:
+      level1: [s4.chu-so.l5.q1, s4.chu-so.l5.q2, s4.chu-so.b10, s4.chu-so.b11]
+      level2: [s4.chu-so.p4]
+      level3: [s4.chu-so.l5.ex1, s4.chu-so.l5.ex2, s4.chu-so.c5]
+  - id: prime-check
+    name: { vi: "Kiểm tra số nguyên tố", en: "Checking for a prime number" }
+    misconception_card: |
+      Nhiều bạn nghĩ 1 là số nguyên tố, hoặc kết luận "là số nguyên tố" ngay khi gặp 1 số không chia hết. Thực ra số nguyên tố là số lớn hơn 1 chỉ có 2 ước, 1 và chính nó; 49 không chia hết cho 2 nhưng `49 % 7 == 0`, nên 49 không phải là số nguyên tố. Con thử hết các số từ 2 đến n - 1, và chỉ kết luận sau vòng lặp.
+    parent_tip: |
+      Cùng con thử xếp 7 viên kẹo, rồi 12 viên kẹo, thành hình chữ nhật có từ 2 hàng trở lên và các hàng dài bằng nhau. 12 viên xếp được nhiều cách, còn 7 viên thì không cách nào: 7 là số nguyên tố.
+    practice:
+      level1: [s4.chu-so.b12, s4.chu-so.b13]
+      level2: [s4.chu-so.p5]
+      level3: [s4.chu-so.l4.ex2, s4.chu-so.c4]

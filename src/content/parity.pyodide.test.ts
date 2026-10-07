@@ -23,7 +23,7 @@ beforeAll(async () => {
 
 describe("error dictionary on Pyodide", () => {
   test("has the expected number of entries", () => {
-    expect(bundle.errors.length).toBe(41);
+    expect(bundle.errors.length).toBe(42);
   });
 
   for (const entry of bundle.errors) {
@@ -154,6 +154,28 @@ describe("error dictionary on Pyodide", () => {
       const problem = problemFromOutcome(run(code, "5\n"), false);
       expect(problem?.type).toBe("TypeError");
       expect(matchError(bundle.errors, problem!, code)?.entry.id).toBe(id);
+    }
+  });
+
+  test("stage-4 break and continue (lesson s4.chu-so.l5): outside a loop they are explained, inside a loop they run", () => {
+    const cases: [string, string][] = [
+      ["diem = 3\nif diem < 5:\n    break\nprint(diem)", "loop-keyword-outside"],
+      ["x = 5\nif x > 3:\n    continue", "loop-keyword-outside"],
+      ["for i in range(3):\n    print(i)\nbreak", "loop-keyword-outside"],
+      ["n = 5\nwhile n > 0:\n    n = n - 1\nif n == 0:\n    break", "loop-keyword-outside"],
+      ["break = 1", "syntax-other"],
+      ["x = 5\nif x > 3\n    break", "missing-colon"],
+    ];
+    for (const [code, id] of cases) {
+      const problem = problemFromOutcome(run(code, ""), false);
+      expect(problem?.type).toBe("SyntaxError");
+      expect(matchError(bundle.errors, problem!, code)?.entry.id).toBe(id);
+    }
+    const match = matchError(bundle.errors, problemFromOutcome(run(cases[1][0], ""), false)!, cases[1][0]);
+    expect(match?.vars.word).toBe("continue");
+    expect(match?.vars.line).toBe("3");
+    for (const code of ["for i in range(5):\n    if i == 2:\n        break\n    print(i)", "i = 0\nwhile i < 3:\n    i = i + 1\n    if i == 2:\n        continue\n    print(i)"]) {
+      expect(problemFromOutcome(run(code, ""), false)).toBeNull();
     }
   });
 

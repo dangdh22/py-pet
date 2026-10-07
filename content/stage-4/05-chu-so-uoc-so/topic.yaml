@@ -1,0 +1,12 @@
+id: s4.chu-so
+title: { vi: "Chữ số, ước số, break và continue", en: "Digits, divisors, break and continue" }
+lessons:
+  - 01-tach-chu-so.md
+  - 02-tong-chu-so.md
+  - 03-uoc-so.md
+  - 04-break.md
+  - 05-continue.md
+  - 06-bai-toan.md
+reviews:
+  - { id: s4.chu-so.r1, after: s4.chu-so.l2 }
+  - { id: s4.chu-so.r2, after: s4.chu-so.l5 }

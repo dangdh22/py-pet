@@ -163,6 +163,17 @@
     en: "In an assignment, the variable name goes on the left of =, and the value goes on the right."
   sample: "5 = diem"
 
+- id: loop-keyword-outside
+  match: { type: SyntaxError, message: "^'(?<word>break|continue)' (outside loop|not properly in loop)$" }
+  misconception: break-nearest
+  explain:
+    vi: "Dòng {line}: lệnh {word} chỉ dùng được bên trong 1 vòng lặp for hay while. Nó không thoát khỏi lệnh if."
+    en: "Line {line}: the {word} statement can only be used inside a for loop or a while loop. It does not leave an if statement."
+  hint:
+    vi: "Nếu con muốn dừng hay bỏ qua 1 lần lặp, hãy đặt dòng {word} trong khối của vòng lặp, thụt lề sâu hơn dòng for hay while. Nếu chương trình không có vòng lặp, hãy dùng if và else để chọn dòng nào được chạy."
+    en: "If you want to stop a loop or skip a pass, put the {word} line inside the block of the loop, indented deeper than the for or while line. If the program has no loop, use if and else to choose which lines run."
+  sample: "diem = 3\nif diem < 5:\n    break\nprint(diem)"
+
 - id: syntax-other
   match: { type: SyntaxError }
   explain:

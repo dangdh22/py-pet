@@ -1,0 +1,547 @@
+exercises:
+  - id: s4.chu-so.p1
+    type: parsons
+    concepts: [digit-split]
+    prompt:
+      vi: "Robo in ra chữ số cuối và chữ số đầu của 1 số. Ô Dữ liệu nhập có 1 dòng: số n, là số nguyên không âm. Sắp xếp các dòng lệnh để in ra như phần Ví dụ."
+      en: "Robo prints the last digit and the first digit of a number. The Input data box has 1 line: a number n, an integer that is not negative. Put the lines in order to print as in the Example."
+    solution: |
+      n = int(input())
+      print("Chữ số cuối:", n % 10)
+      while n >= 10:
+          n = n // 10
+      print("Chữ số đầu:", n)
+    tests:
+      - input: "4721"
+        output: |
+          Chữ số cuối: 1
+          Chữ số đầu: 4
+      - input: "0"
+        output: |
+          Chữ số cuối: 0
+          Chữ số đầu: 0
+        hidden: true
+      - input: "7"
+        output: |
+          Chữ số cuối: 7
+          Chữ số đầu: 7
+        hidden: true
+      - input: "10"
+        output: |
+          Chữ số cuối: 0
+          Chữ số đầu: 1
+        hidden: true
+      - input: "908"
+        output: |
+          Chữ số cuối: 8
+          Chữ số đầu: 9
+        hidden: true
+    hints:
+      - { vi: "Vòng lặp làm n nhỏ dần, nên chữ số cuối phải được in trước vòng lặp, khi n còn là số lúc đầu. Vòng lặp bỏ dần chữ số hàng đơn vị cho tới khi n chỉ còn 1 chữ số.", en: "The loop makes n smaller, so the last digit must be printed before the loop, while n is still the starting number. The loop keeps dropping the ones digit until n has only 1 digit left." }
+
+  - id: s4.chu-so.p2
+    type: fill
+    concepts: [divisor-loop]
+    prompt:
+      vi: "Robo chia n viên kẹo vào các túi, túi nào cũng có số kẹo bằng nhau và không thừa viên nào. Ô Dữ liệu nhập có 1 dòng: số kẹo n, là số nguyên lớn hơn 0. Điền vào 2 chỗ trống để in ra mọi cách chia, như phần Ví dụ."
+      en: "Robo shares n candies among some bags, with the same number of candies in every bag and none left over. The Input data box has 1 line: the number of candies n, an integer greater than 0. Fill the 2 blanks to print every way to share them, as in the Example."
+    template: |
+      n = int(input())
+      for i in range(1, ___):
+          if n ___ i == 0:
+              print(i, "túi, mỗi túi", n // i, "viên")
+    answers: ["n + 1", "%"]
+    tests:
+      - input: "6"
+        output: |
+          1 túi, mỗi túi 6 viên
+          2 túi, mỗi túi 3 viên
+          3 túi, mỗi túi 2 viên
+          6 túi, mỗi túi 1 viên
+      - input: "1"
+        output: "1 túi, mỗi túi 1 viên"
+        hidden: true
+      - input: "7"
+        output: |
+          1 túi, mỗi túi 7 viên
+          7 túi, mỗi túi 1 viên
+        hidden: true
+      - input: "16"
+        output: |
+          1 túi, mỗi túi 16 viên
+          2 túi, mỗi túi 8 viên
+          4 túi, mỗi túi 4 viên
+          8 túi, mỗi túi 2 viên
+          16 túi, mỗi túi 1 viên
+        hidden: true
+    hints:
+      - { vi: "Số túi i phải là ước của n, và có thể là chính n: mỗi túi 1 viên. range dừng trước số cuối, nên số cuối phải lớn hơn n 1 đơn vị. Kẹo chia hết cho i khi phép chia lấy dư ra 0.", en: "The number of bags i must be a divisor of n, and it can be n itself: 1 candy in each bag. range stops before its last number, so the last number must be 1 more than n. The candies can be shared among i bags when the remainder is 0." }
+      - { vi: "Điền n + 1 vào chỗ trống thứ nhất và dấu % vào chỗ trống thứ hai.", en: "Fill the first blank with n + 1 and the second blank with the sign %." }
+
+  - id: s4.chu-so.p3
+    type: fill
+    concepts: [break-nearest]
+    prompt:
+      vi: "Robo đi bộ nhiều ngày: ngày 1 đi 1 km, ngày 2 đi 2 km, và cứ thế. Robo đi tối đa n ngày, và dừng ngay khi tổng quãng đường đạt từ k km trở lên. Ô Dữ liệu nhập: dòng 1 là n, dòng 2 là k, đều là số nguyên không âm. Điền vào 2 chỗ trống để in ra như phần Ví dụ."
+      en: "Robo walks for several days: 1 km on day 1, 2 km on day 2, and so on. Robo walks for at most n days, and stops as soon as the total distance reaches k km or more. The Input data box: line 1 is n, line 2 is k, both integers that are not negative. Fill the 2 blanks to print as in the Example."
+    template: |
+      n = int(input())
+      k = int(input())
+      tong = 0
+      for ngay in range(1, n + 1):
+          tong += ngay
+          if tong ___ k:
+              print("Ngày", ngay, "Robo đi đủ", tong, "km")
+              ___
+      print("Tổng:", tong, "km")
+    answers: [">=", "break"]
+    tests:
+      - input: "20\n50"
+        output: |
+          Ngày 10 Robo đi đủ 55 km
+          Tổng: 55 km
+      - input: "0\n10"
+        output: "Tổng: 0 km"
+        hidden: true
+      - input: "5\n100"
+        output: "Tổng: 15 km"
+        hidden: true
+      - input: "4\n10"
+        output: |
+          Ngày 4 Robo đi đủ 10 km
+          Tổng: 10 km
+        hidden: true
+      - input: "10\n1"
+        output: |
+          Ngày 1 Robo đi đủ 1 km
+          Tổng: 1 km
+        hidden: true
+    hints:
+      - { vi: "Đi đúng k km cũng là đủ, nên dấu so sánh phải đúng cả khi tong bằng k. Khi đã đủ, Robo in ra rồi thoát ngay khỏi vòng lặp, để không đi thêm ngày nào.", en: "Walking exactly k km is enough too, so the comparison sign must be True when tong equals k as well. Once it is enough, Robo prints the line and leaves the loop at once, so that it walks no more days." }
+      - { vi: "Điền dấu >= vào chỗ trống thứ nhất và break vào chỗ trống thứ hai.", en: "Fill the first blank with the sign >= and the second blank with break." }
+
+  - id: s4.chu-so.p4
+    type: parsons
+    concepts: [continue-skip]
+    prompt:
+      vi: "Hội trường có n ghế, đánh số từ 1 đến n. Cứ ghế có số chia hết cho 4 là ghế hỏng, và Robo bỏ qua ghế đó. Ô Dữ liệu nhập có 1 dòng: số ghế n, là số nguyên không âm. Sắp xếp các dòng lệnh để in ra như phần Ví dụ."
+      en: "A hall has n chairs, numbered from 1 to n. Every chair whose number can be divided by 4 is broken, and Robo skips it. The Input data box has 1 line: the number of chairs n, an integer that is not negative. Put the lines in order to print as in the Example."
+    solution: |
+      n = int(input())
+      for ghe in range(1, n + 1):
+          if ghe % 4 == 0:
+              continue
+          print("Ghế", ghe, "còn tốt")
+      print("Kiểm tra xong")
+    tests:
+      - input: "9"
+        output: |
+          Ghế 1 còn tốt
+          Ghế 2 còn tốt
+          Ghế 3 còn tốt
+          Ghế 5 còn tốt
+          Ghế 6 còn tốt
+          Ghế 7 còn tốt
+          Ghế 9 còn tốt
+          Kiểm tra xong
+      - input: "0"
+        output: "Kiểm tra xong"
+        hidden: true
+      - input: "1"
+        output: |
+          Ghế 1 còn tốt
+          Kiểm tra xong
+        hidden: true
+      - input: "4"
+        output: |
+          Ghế 1 còn tốt
+          Ghế 2 còn tốt
+          Ghế 3 còn tốt
+          Kiểm tra xong
+        hidden: true
+    hints:
+      - { vi: "Mỗi lần lặp, Robo kiểm tra ghế trước. Nếu ghế hỏng, continue bỏ qua dòng in của lần lặp đó. Dòng Kiểm tra xong sát lề trái, nên chỉ chạy 1 lần, sau vòng lặp.", en: "On each pass, Robo checks the chair first. If the chair is broken, continue skips the print line of that pass. The line Kiểm tra xong starts at the left edge, so it runs only once, after the loop." }
+
+  - id: s4.chu-so.p5
+    type: fill
+    concepts: [prime-check]
+    prompt:
+      vi: "Robo kiểm tra số nguyên tố. Ô Dữ liệu nhập có 1 dòng: số n, là số nguyên từ 1 đến 1000. Chương trình tìm ước nhỏ nhất lớn hơn 1 của n, và uoc vẫn là n nếu không có ước nào từ 2 đến n - 1. Điền vào 2 chỗ trống để in ra như phần Ví dụ."
+      en: "Robo checks for prime numbers. The Input data box has 1 line: a number n, an integer from 1 to 1000. The program looks for the smallest divisor of n that is greater than 1, and uoc stays n if there is no divisor from 2 to n - 1. Fill the 2 blanks to print as in the Example."
+    template: |
+      n = int(input())
+      uoc = n
+      for i in range(2, n):
+          if n % i == 0:
+              uoc = i
+              break
+      if n ___ 1 and uoc ___ n:
+          print(n, "là số nguyên tố")
+      else:
+          print(n, "không phải là số nguyên tố")
+    answers: [">", "=="]
+    tests:
+      - input: "11"
+        output: "11 là số nguyên tố"
+      - input: "1"
+        output: "1 không phải là số nguyên tố"
+        hidden: true
+      - input: "2"
+        output: "2 là số nguyên tố"
+        hidden: true
+      - input: "25"
+        output: "25 không phải là số nguyên tố"
+        hidden: true
+      - input: "97"
+        output: "97 là số nguyên tố"
+        hidden: true
+      - input: "91"
+        output: "91 không phải là số nguyên tố"
+        hidden: true
+    hints:
+      - { vi: "Số nguyên tố phải lớn hơn 1, nên 1 không phải là số nguyên tố. n là số nguyên tố khi không có ước nào từ 2 đến n - 1, tức là uoc vẫn bằng n.", en: "A prime number must be greater than 1, so 1 is not a prime number. n is a prime number when it has no divisor from 2 to n - 1, that is, when uoc is still equal to n." }
+      - { vi: "Điền dấu > vào chỗ trống thứ nhất và == vào chỗ trống thứ hai.", en: "Fill the first blank with the sign > and the second blank with ==." }
+
+  - id: s4.chu-so.p6
+    type: fill
+    concepts: [digit-split]
+    prompt:
+      vi: "Robo đọc ngược số trên vé. Ô Dữ liệu nhập có 1 dòng: số n, là số nguyên không âm. Điền vào 2 chỗ trống để in ra số đảo ngược của n, như phần Ví dụ. Số 0 ở đầu số đảo ngược bị bỏ đi."
+      en: "Robo reads the number on a ticket backwards. The Input data box has 1 line: a number n, an integer that is not negative. Fill the 2 blanks to print the reversed number of n, as in the Example. Zeros at the start of the reversed number are dropped."
+    template: |
+      n = int(input())
+      dao = 0
+      while n > 0:
+          dao = dao * ___ + n % 10
+          n = n ___ 10
+      print("Số đảo ngược:", dao)
+    answers: ["10", "//"]
+    tests:
+      - input: "2045"
+        output: "Số đảo ngược: 5402"
+      - input: "0"
+        output: "Số đảo ngược: 0"
+        hidden: true
+      - input: "9"
+        output: "Số đảo ngược: 9"
+        hidden: true
+      - input: "500"
+        output: "Số đảo ngược: 5"
+        hidden: true
+      - input: "11111"
+        output: "Số đảo ngược: 11111"
+        hidden: true
+    hints:
+      - { vi: "Mỗi lần lặp, dao được nhân với 10 để chừa chỗ cho chữ số mới ở bên phải. Rồi n bỏ chữ số hàng đơn vị bằng phép chia lấy phần nguyên.", en: "On each pass, dao is multiplied by 10 to make room for the new digit on the right. Then n drops its ones digit with whole-number division." }
+      - { vi: "Điền 10 vào chỗ trống thứ nhất và // vào chỗ trống thứ hai.", en: "Fill the first blank with 10 and the second blank with //." }
+
+  - id: s4.chu-so.c1
+    type: code
+    concepts: [digit-split, count-if]
+    prompt:
+      vi: "Robo đếm các chữ số chẵn của 1 số. Ô Dữ liệu nhập có 1 dòng: số n, là số nguyên không âm. Hãy dùng vòng lặp while để đếm số chữ số chẵn của n, rồi in ra đúng 1 dòng như phần Ví dụ. Chữ số 0 cũng là chữ số chẵn, nên số 0 có 1 chữ số chẵn."
+      en: "Robo counts the even digits of a number. The Input data box has 1 line: a number n, an integer that is not negative. Use a while loop to count the even digits of n, then print exactly 1 line as in the Example. The digit 0 is an even digit too, so the number 0 has 1 even digit."
+    starter: |
+      # Viết lệnh của con ở dưới dòng này
+    solution: |
+      so = int(input())
+      n = so
+      dem = 0
+      while n > 0:
+          if n % 10 % 2 == 0:
+              dem += 1
+          n = n // 10
+      if so == 0:
+          dem = 1
+      print("Số", so, "có", dem, "chữ số chẵn")
+    tests:
+      - input: "2468"
+        output: "Số 2468 có 4 chữ số chẵn"
+      - input: "0"
+        output: "Số 0 có 1 chữ số chẵn"
+        hidden: true
+      - input: "7"
+        output: "Số 7 có 0 chữ số chẵn"
+        hidden: true
+      - input: "135"
+        output: "Số 135 có 0 chữ số chẵn"
+        hidden: true
+      - input: "1020"
+        output: "Số 1020 có 3 chữ số chẵn"
+        hidden: true
+      - input: "90"
+        output: "Số 90 có 1 chữ số chẵn"
+        hidden: true
+    common_wrong:
+      - test: 1
+        output: "Số 0 có 0 chữ số chẵn"
+        misconception: digit-split
+        sample: |
+          so = int(input())
+          n = so
+          dem = 0
+          while n > 0:
+              if n % 10 % 2 == 0:
+                  dem += 1
+              n = n // 10
+          print("Số", so, "có", dem, "chữ số chẵn")
+    hints:
+      - { vi: "Chép số lúc đầu sang n. Mỗi lần lặp, lấy chữ số cuối bằng n % 10; chữ số đó chẵn khi chia 2 dư 0. Nhớ bỏ chữ số đó bằng n = n // 10, ở ngoài khối if. Số 0 cần xử lý riêng sau vòng lặp.", en: "Copy the starting number into n. On each pass, take the last digit with n % 10; that digit is even when dividing it by 2 leaves 0. Remember to drop the digit with n = n // 10, outside the if block. The number 0 needs its own handling after the loop." }
+      - { vi: "Trong while n > 0:, viết if n % 10 % 2 == 0: với dem += 1 thụt lề 8 dấu cách, rồi n = n // 10 thụt lề 4 dấu cách. Sau vòng lặp: if so == 0: với dem = 1, rồi print(\"Số\", so, \"có\", dem, \"chữ số chẵn\").", en: "Inside while n > 0:, write if n % 10 % 2 == 0: with dem += 1 indented by 8 spaces, then n = n // 10 indented by 4 spaces. After the loop: if so == 0: with dem = 1, then print(\"Số\", so, \"có\", dem, \"chữ số chẵn\")." }
+    test_eligible: true
+
+  - id: s4.chu-so.c2
+    type: code
+    concepts: [divisor-loop]
+    prompt:
+      vi: "Ước chung của 2 số là số vừa là ước của số này, vừa là ước của số kia. Ô Dữ liệu nhập có 2 dòng: số a và số b, đều là số nguyên lớn hơn 0. Hãy in ra mọi ước chung của a và b, từ nhỏ đến lớn, mỗi số 1 dòng, đúng như phần Ví dụ."
+      en: "A common divisor of 2 numbers is a number that is a divisor of both of them. The Input data box has 2 lines: the numbers a and b, both integers greater than 0. Print every common divisor of a and b, from the smallest to the largest, one number on each line, exactly as in the Example."
+    starter: |
+      # Viết lệnh của con ở dưới dòng này
+    solution: |
+      a = int(input())
+      b = int(input())
+      for i in range(1, a + 1):
+          if a % i == 0 and b % i == 0:
+              print(i)
+    tests:
+      - input: "12\n18"
+        output: |
+          1
+          2
+          3
+          6
+      - input: "1\n5"
+        output: "1"
+        hidden: true
+      - input: "7\n7"
+        output: |
+          1
+          7
+        hidden: true
+      - input: "8\n15"
+        output: "1"
+        hidden: true
+      - input: "30\n20"
+        output: |
+          1
+          2
+          5
+          10
+        hidden: true
+    common_wrong:
+      - test: 0
+        output: |
+          1
+          2
+          3
+          4
+          6
+          9
+          12
+        misconception: or-misuse
+        sample: |
+          a = int(input())
+          b = int(input())
+          for i in range(1, a + 1):
+              if a % i == 0 or b % i == 0:
+                  print(i)
+    hints:
+      - { vi: "Ước chung không lớn hơn a, nên cho i chạy từ 1 đến a. i là ước chung khi cả 2 điều kiện đều đúng: a % i == 0 và b % i == 0. Con nối 2 điều kiện bằng and.", en: "A common divisor is not bigger than a, so let i go from 1 to a. i is a common divisor when both conditions are True: a % i == 0 and b % i == 0. Join the 2 conditions with and." }
+      - { vi: "Sau 2 dòng đọc a và b, con viết for i in range(1, a + 1):, rồi if a % i == 0 and b % i == 0: thụt lề 4 dấu cách, và print(i) thụt lề 8 dấu cách.", en: "After the 2 lines that read a and b, write for i in range(1, a + 1):, then if a % i == 0 and b % i == 0: indented by 4 spaces, and print(i) indented by 8 spaces." }
+    test_eligible: true
+
+  - id: s4.chu-so.c3
+    type: code
+    concepts: [break-nearest, count-if]
+    prompt:
+      vi: "Robo chơi tối đa n ván. Nếu 1 ván có điểm âm, Robo thua và dừng chơi ngay: ván đó và các ván sau không được tính. Ô Dữ liệu nhập: dòng đầu là n (số nguyên không âm), n dòng sau là điểm của từng ván. Hãy dùng vòng lặp for và break, rồi in ra đúng 1 dòng như phần Ví dụ: tổng điểm và số ván được tính."
+      en: "Robo plays at most n rounds. If a round has a negative score, Robo loses and stops playing at once: that round and the rounds after it do not count. The Input data box: the first line is n (an integer that is not negative), and the n lines after it are the points of each round. Use a for loop and break, then print exactly 1 line as in the Example: the total points and the number of rounds that count."
+    starter: |
+      # Viết lệnh của con ở dưới dòng này
+    solution: |
+      n = int(input())
+      tong = 0
+      dem = 0
+      for i in range(n):
+          diem = int(input())
+          if diem < 0:
+              break
+          tong += diem
+          dem += 1
+      print("Robo được", tong, "điểm sau", dem, "ván")
+    tests:
+      - input: "5\n3\n4\n-1\n9\n2"
+        output: "Robo được 7 điểm sau 2 ván"
+      - input: "0"
+        output: "Robo được 0 điểm sau 0 ván"
+        hidden: true
+      - input: "1\n-5"
+        output: "Robo được 0 điểm sau 0 ván"
+        hidden: true
+      - input: "1\n8"
+        output: "Robo được 8 điểm sau 1 ván"
+        hidden: true
+      - input: "3\n1\n2\n3"
+        output: "Robo được 6 điểm sau 3 ván"
+        hidden: true
+    common_wrong:
+      - test: 0
+        output: "Robo được 18 điểm sau 4 ván"
+        misconception: break-nearest
+        sample: |
+          n = int(input())
+          tong = 0
+          dem = 0
+          for i in range(n):
+              diem = int(input())
+              if diem >= 0:
+                  tong += diem
+                  dem += 1
+          print("Robo được", tong, "điểm sau", dem, "ván")
+    hints:
+      - { vi: "Đặt tong = 0 và dem = 0 trước vòng lặp. Mỗi lần lặp, đọc điểm 1 ván. Nếu điểm nhỏ hơn 0, break thoát ngay, trước khi cộng. Nếu không, cộng điểm vào tong và tăng dem thêm 1.", en: "Set tong = 0 and dem = 0 before the loop. On each pass, read the points of 1 round. If the points are less than 0, break leaves at once, before adding. If not, add the points to tong and add 1 to dem." }
+      - { vi: "Trong for i in range(n):, có: diem = int(input()), rồi if diem < 0: với break thụt lề 8 dấu cách, rồi tong += diem và dem += 1. Sau vòng lặp: print(\"Robo được\", tong, \"điểm sau\", dem, \"ván\").", en: "Inside for i in range(n): there is diem = int(input()), then if diem < 0: with break indented by 8 spaces, then tong += diem and dem += 1. After the loop: print(\"Robo được\", tong, \"điểm sau\", dem, \"ván\")." }
+    test_eligible: true
+
+  - id: s4.chu-so.c4
+    type: code
+    concepts: [prime-check, break-nearest]
+    prompt:
+      vi: "Robo tìm mọi số nguyên tố từ 2 đến n. Ô Dữ liệu nhập có 1 dòng: số n, là số nguyên từ 1 đến 100. Hãy in ra mỗi số nguyên tố 1 dòng, từ nhỏ đến lớn, rồi in ra 1 dòng cho biết có bao nhiêu số nguyên tố, đúng như phần Ví dụ."
+      en: "Robo finds every prime number from 2 to n. The Input data box has 1 line: a number n, an integer from 1 to 100. Print each prime number on its own line, from the smallest to the largest, then print 1 line that tells how many prime numbers there are, exactly as in the Example."
+    starter: |
+      # Viết lệnh của con ở dưới dòng này
+    solution: |
+      n = int(input())
+      dem = 0
+      for so in range(2, n + 1):
+          uoc = so
+          for i in range(2, so):
+              if so % i == 0:
+                  uoc = i
+                  break
+          if uoc == so:
+              print(so)
+              dem += 1
+      print("Có", dem, "số nguyên tố")
+    tests:
+      - input: "10"
+        output: |
+          2
+          3
+          5
+          7
+          Có 4 số nguyên tố
+      - input: "1"
+        output: "Có 0 số nguyên tố"
+        hidden: true
+      - input: "2"
+        output: |
+          2
+          Có 1 số nguyên tố
+        hidden: true
+      - input: "30"
+        output: |
+          2
+          3
+          5
+          7
+          11
+          13
+          17
+          19
+          23
+          29
+          Có 10 số nguyên tố
+        hidden: true
+    common_wrong:
+      - test: 0
+        output: |
+          2
+          3
+          5
+          7
+          9
+          Có 5 số nguyên tố
+        misconception: prime-check
+        sample: |
+          n = int(input())
+          dem = 0
+          for so in range(2, n + 1):
+              uoc = so
+              for i in range(2, so):
+                  if so % i == 0:
+                      uoc = i
+                  break
+              if uoc == so:
+                  print(so)
+                  dem += 1
+          print("Có", dem, "số nguyên tố")
+    hints:
+      - { vi: "Vòng lặp ngoài cho so chạy từ 2 đến n. Với mỗi so, vòng lặp trong tìm ước nhỏ nhất lớn hơn 1 như ở bài break: uoc bắt đầu là so, gặp ước thì ghi lại rồi break. break chỉ thoát vòng lặp trong, nên vòng lặp ngoài vẫn xét số tiếp theo.", en: "The outer loop lets so go from 2 to n. For each so, the inner loop looks for the smallest divisor greater than 1 as in the break lesson: uoc starts as so, and when a divisor is met it is stored and break runs. break leaves only the inner loop, so the outer loop still checks the next number." }
+      - { vi: "Sau vòng lặp trong, vẫn trong vòng lặp ngoài (thụt lề 4 dấu cách): if uoc == so: với 2 dòng print(so) và dem += 1. Dòng print(\"Có\", dem, \"số nguyên tố\") sát lề trái, sau cả 2 vòng lặp.", en: "After the inner loop, still inside the outer loop (indented by 4 spaces): if uoc == so: with the 2 lines print(so) and dem += 1. The line print(\"Có\", dem, \"số nguyên tố\") is at the left edge, after both loops." }
+    test_eligible: true
+
+  - id: s4.chu-so.c5
+    type: code
+    concepts: [continue-skip, digit-split]
+    prompt:
+      vi: "Robo in ra các chữ số khác 0 của 1 số, từ phải sang trái. Ô Dữ liệu nhập có 1 dòng: số n, là số nguyên không âm. Hãy dùng vòng lặp while, và dùng continue để bỏ qua chữ số 0. Mỗi chữ số in 1 dòng, cuối cùng in ra Hết, đúng như phần Ví dụ. Với n là 0, Robo chỉ in ra Hết."
+      en: "Robo prints the digits of a number that are not 0, from right to left. The Input data box has 1 line: a number n, an integer that is not negative. Use a while loop, and use continue to skip the digit 0. Print each digit on its own line, and at the end print Hết, exactly as in the Example. When n is 0, Robo prints only Hết."
+    starter: |
+      # Viết lệnh của con ở dưới dòng này
+    solution: |
+      n = int(input())
+      while n > 0:
+          chu_so = n % 10
+          n = n // 10
+          if chu_so == 0:
+              continue
+          print(chu_so)
+      print("Hết")
+    tests:
+      - input: "10203"
+        output: |
+          3
+          2
+          1
+          Hết
+      - input: "0"
+        output: "Hết"
+        hidden: true
+      - input: "7"
+        output: |
+          7
+          Hết
+        hidden: true
+      - input: "100"
+        output: |
+          1
+          Hết
+        hidden: true
+      - input: "5050"
+        output: |
+          5
+          5
+          Hết
+        hidden: true
+    common_wrong:
+      - test: 0
+        output: |
+          3
+          Hết
+        misconception: continue-skip
+        sample: |
+          n = int(input())
+          while n > 0:
+              chu_so = n % 10
+              n = n // 10
+              if chu_so == 0:
+                  break
+              print(chu_so)
+          print("Hết")
+    hints:
+      - { vi: "Mỗi lần lặp, cất chữ số cuối vào 1 biến, rồi bỏ nó khỏi n bằng n = n // 10 ngay sau đó, trước dòng continue. Nếu dòng n = n // 10 nằm sau continue, nó bị bỏ qua khi gặp chữ số 0, và vòng lặp chạy mãi.", en: "On each pass, store the last digit in a variable, then drop it from n with n = n // 10 right after that, before the continue line. If the line n = n // 10 comes after continue, it is skipped when a 0 digit comes, and the loop runs forever." }
+      - { vi: "Trong while n > 0:, có 4 phần thụt lề 4 dấu cách: chu_so = n % 10, n = n // 10, if chu_so == 0: với continue thụt lề 8 dấu cách, rồi print(chu_so). Cuối cùng, sát lề trái: print(\"Hết\").", en: "Inside while n > 0:, there are 4 parts indented by 4 spaces: chu_so = n % 10, n = n // 10, if chu_so == 0: with continue indented by 8 spaces, then print(chu_so). Last, at the left edge: print(\"Hết\")." }
+    test_eligible: true

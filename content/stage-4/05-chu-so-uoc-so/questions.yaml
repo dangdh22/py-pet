@@ -1,0 +1,324 @@
+questions:
+  - id: s4.chu-so.b1
+    type: predict
+    concepts: [digit-split, count-if]
+    lessons: [s4.chu-so.l1]
+    code: |
+      n = 5824
+      while n > 0:
+          d = n % 10
+          if d % 2 == 0:
+              print(d, end=" ")
+          n = n // 10
+    prompt:
+      vi: "Đoạn code in ra gì?"
+      en: "What is the output of this code?"
+    choices:
+      - { text: "4 2 8", correct: true }
+      - { text: "8 2 4", misconception: digit-split }
+      - { text: "5", misconception: count-if }
+      - { text: "4 2 8 5", misconception: count-if }
+    explanation:
+      vi: "Robo tách các chữ số từ phải sang trái: 4, 2, 8, rồi 5. Mỗi lần lặp, d là chữ số vừa tách, và Robo chỉ in d khi d chẵn. Vì vậy Robo in 4, 2, 8 theo đúng thứ tự tách, và bỏ qua chữ số lẻ 5."
+      en: "Robo splits the digits from right to left: 4, 2, 8, then 5. On each pass, d is the digit just split off, and Robo prints d only when d is even. So Robo prints 4, 2, 8 in the order they were split off, and leaves out the odd digit 5."
+
+  - id: s4.chu-so.b2
+    type: mcq
+    concepts: [digit-split]
+    lessons: [s4.chu-so.l1]
+    prompt:
+      vi: "n là 1 số nguyên có từ 2 chữ số trở lên. Dòng nào in ra chữ số hàng chục của n?"
+      en: "n is an integer with 2 or more digits. Which line prints the tens digit of n?"
+    choices:
+      - { text: "print(n % 10)", misconception: digit-split }
+      - { text: "print(n // 10)", misconception: floor-div }
+      - { text: "print(n // 10 % 10)", correct: true }
+      - { text: "print(n % 100)", misconception: modulo }
+    explanation:
+      vi: "n // 10 bỏ chữ số hàng đơn vị, nên chữ số hàng chục trở thành chữ số cuối cùng. Sau đó, % 10 lấy chữ số cuối đó ra. Python tính // và % từ trái sang phải: với n = 3047, 3047 // 10 là 304, rồi 304 % 10 là 4. n % 10 cho chữ số hàng đơn vị, n // 10 cho 304, còn n % 100 cho 2 chữ số cuối là 47."
+      en: "n // 10 drops the ones digit, so the tens digit becomes the last digit. Then % 10 takes that last digit. Python works out // and % from left to right: with n = 3047, 3047 // 10 is 304, then 304 % 10 is 4. n % 10 gives the ones digit, n // 10 gives 304, and n % 100 gives the last 2 digits, 47."
+
+  - id: s4.chu-so.b3
+    type: mcq
+    concepts: [digit-split]
+    lessons: [s4.chu-so.l1]
+    code: |
+      n = 345
+      while n > 0:
+          print(n % 10)
+          n = n / 10
+    prompt:
+      vi: "Đoạn code dùng n / 10 thay cho n // 10. Đoạn code chạy thế nào?"
+      en: "This code uses n / 10 instead of n // 10. How does the code run?"
+    choices:
+      - { vi: "Giống hệt khi dùng //, vì / và // đều là phép chia", en: "Just the same as with //, because / and // are both division", misconception: floor-div }
+      - { vi: "n thành số thập phân như 34.5, nên Robo in ra những số như 4.5 và 3.45, và lặp hơn 300 lần", en: "n becomes a decimal number such as 34.5, so Robo prints numbers such as 4.5 and 3.45, and loops more than 300 times", correct: true }
+      - { vi: "Báo lỗi, vì / không dùng được với số nguyên", en: "An error, because / cannot be used with integers", error: true, misconception: div-float }
+      - { vi: "In ra 5.0, 4.0, 3.0 rồi dừng", en: "It prints 5.0, 4.0, 3.0 and then stops", misconception: div-float }
+    explanation:
+      vi: "Phép / luôn cho số thập phân: 345 / 10 là 34.5, không phải 34. Vì vậy n % 10 lần sau là 4.5, rồi 3.45, và n chỉ nhỏ dần mà rất lâu mới bằng 0. Phép // bỏ phần lẻ, nên n lần lượt là 34, 3, rồi 0, và vòng lặp chỉ chạy 3 lần."
+      en: "The / operation always gives a decimal number: 345 / 10 is 34.5, not 34. So n % 10 is 4.5 the next time, then 3.45, and n only gets smaller and takes a very long time to reach 0. The // operation drops the part after the dot, so n is 34, then 3, then 0, and the loop runs only 3 times."
+
+  - id: s4.chu-so.b4
+    type: predict
+    concepts: [divisor-loop]
+    lessons: [s4.chu-so.l3]
+    code: |
+      n = 18
+      for i in range(1, n + 1):
+          if n % i == 0 and i % 2 == 1:
+              print(i)
+    prompt:
+      vi: "Đoạn code in ra gì?"
+      en: "What is the output of this code?"
+    choices:
+      - { text: "1\n3\n5\n7\n9\n11\n13\n15\n17", misconception: divisor-loop }
+      - { text: "2\n6\n18", misconception: modulo }
+      - { text: "3\n9", misconception: divisor-loop }
+      - { text: "1\n3\n9", correct: true }
+    explanation:
+      vi: "Robo chỉ in i khi cả 2 điều kiện đều đúng: i là ước của 18, và i lẻ. Các ước của 18 là 1, 2, 3, 6, 9, 18; trong đó các số lẻ là 1, 3 và 9. Số 1 cũng là ước, vì 18 % 1 == 0. Các số lẻ như 5 hay 7 không được in, vì 18 không chia hết cho chúng."
+      en: "Robo prints i only when both conditions are True: i is a divisor of 18, and i is odd. The divisors of 18 are 1, 2, 3, 6, 9, 18; the odd ones are 1, 3 and 9. 1 is a divisor too, because 18 % 1 == 0. Odd numbers such as 5 or 7 are not printed, because 18 cannot be divided by them."
+
+  - id: s4.chu-so.b5
+    type: predict
+    concepts: [divisor-loop]
+    lessons: [s4.chu-so.l3]
+    code: |
+      n = 6
+      for i in range(n):
+          if n % i == 0:
+              print(i)
+    prompt:
+      vi: "Đoạn code chạy thế nào?"
+      en: "How does this code run?"
+    choices:
+      - { vi: "Báo lỗi ZeroDivisionError ngay ở lần lặp đầu tiên", en: "A ZeroDivisionError on the very first pass", error: true, correct: true }
+      - { text: "1\n2\n3", misconception: range-start-step }
+      - { text: "0\n1\n2\n3", misconception: divisor-loop }
+      - { text: "1\n2\n3\n6", misconception: range-stop-excluded }
+    explanation:
+      vi: "range(n) bắt đầu từ 0, nên ở lần lặp đầu tiên, Python phải tính 6 % 0. Phép chia lấy dư cho 0 cũng là chia cho 0, nên Python báo ZeroDivisionError và không in gì. Khi tìm ước, con dùng range(1, n + 1)."
+      en: "range(n) starts at 0, so on the first pass Python has to work out 6 % 0. Taking the remainder of a division by 0 is still dividing by 0, so Python gives a ZeroDivisionError and prints nothing. When looking for divisors, use range(1, n + 1)."
+
+  - id: s4.chu-so.b6
+    type: predict
+    concepts: [break-nearest]
+    lessons: [s4.chu-so.l4]
+    code: |
+      n = 0
+      while n < 100:
+          n += 7
+          if n % 5 == 0:
+              break
+      print(n)
+    prompt:
+      vi: "Đoạn code in ra gì?"
+      en: "What is the output of this code?"
+    choices:
+      - { text: "105", misconception: break-nearest }
+      - { text: "28", misconception: break-nearest }
+      - { text: "35", correct: true }
+      - { text: "7\n14\n21\n28\n35", misconception: after-block }
+    explanation:
+      vi: "Mỗi lần lặp, n tăng thêm 7 trước, rồi mới được kiểm tra: 7, 14, 21, 28, 35. 35 chia hết cho 5, nên break chạy và vòng lặp dừng, dù n vẫn nhỏ hơn 100. n giữ giá trị 35. Dòng print(n) sát lề trái, nên chỉ in 1 lần, sau vòng lặp."
+      en: "On each pass, n first goes up by 7 and only then is checked: 7, 14, 21, 28, 35. 35 can be divided by 5, so break runs and the loop stops, even though n is still less than 100. n keeps the value 35. The line print(n) starts at the left edge, so it prints only once, after the loop."
+
+  - id: s4.chu-so.b7
+    type: mcq
+    concepts: [break-nearest]
+    lessons: [s4.chu-so.l4]
+    prompt:
+      vi: "Có 2 vòng lặp lồng nhau, và break nằm trong vòng lặp bên trong. Khi Python chạy break, chuyện gì xảy ra?"
+      en: "There are 2 nested loops, and break is in the inner loop. What happens when Python runs break?"
+    choices:
+      - { vi: "Python thoát khỏi cả 2 vòng lặp", en: "Python leaves both loops", misconception: break-nearest }
+      - { vi: "Python thoát khỏi vòng lặp bên trong, còn vòng lặp bên ngoài chạy tiếp lần lặp sau", en: "Python leaves the inner loop, and the outer loop goes on with its next pass", correct: true }
+      - { vi: "Chương trình dừng hẳn, không chạy dòng nào nữa", en: "The program stops for good and runs no more lines", misconception: break-nearest }
+      - { vi: "Python chỉ thoát khỏi khối if chứa break, rồi chạy tiếp dòng sau if", en: "Python leaves only the if block that holds break, then goes on with the line after the if", misconception: break-nearest }
+    explanation:
+      vi: "break thoát khỏi vòng lặp gần nhất chứa nó, ở đây là vòng lặp bên trong. Python chạy tiếp dòng sau vòng lặp bên trong, rồi vòng lặp bên ngoài sang lần lặp sau. break không thoát khỏi if, cũng không dừng cả chương trình."
+      en: "break leaves the nearest loop that holds it, here the inner loop. Python goes on with the line after the inner loop, and then the outer loop moves on to its next pass. break does not leave an if, and it does not stop the whole program."
+
+  - id: s4.chu-so.b8
+    type: predict
+    concepts: [break-nearest]
+    lessons: [s4.chu-so.l4]
+    code: |
+      for a in range(1, 4):
+          for b in range(1, 4):
+              if a == b:
+                  break
+              print(a, b)
+      print("end")
+    prompt:
+      vi: "Đoạn code in ra gì?"
+      en: "What is the output of this code?"
+    choices:
+      - { text: "end", misconception: break-nearest }
+      - { text: "1 2\n1 3\n2 1\n2 3\n3 1\n3 2\nend", misconception: break-nearest }
+      - { text: "2 1\n3 1\n3 2", misconception: break-nearest }
+      - { text: "2 1\n3 1\n3 2\nend", correct: true }
+    explanation:
+      vi: "Với a là 1, b là 1 ngay lần đầu, nên break chạy trước khi in gì. Với a là 2, Robo in 2 1, rồi b là 2 thì break. Với a là 3, Robo in 3 1 và 3 2, rồi b là 3 thì break. break chỉ thoát khỏi vòng lặp của b, nên vòng lặp của a vẫn chạy đủ 3 lần, và cuối cùng Python in end."
+      en: "When a is 1, b is 1 right away, so break runs before anything is printed. When a is 2, Robo prints 2 1, then b is 2 and break runs. When a is 3, Robo prints 3 1 and 3 2, then b is 3 and break runs. break leaves only the loop of b, so the loop of a still runs all 3 times, and at the end Python prints end."
+
+  - id: s4.chu-so.b9
+    type: mcq
+    concepts: [break-nearest]
+    lessons: [s4.chu-so.l4]
+    code: |
+      total = 0
+      for i in range(5):
+          x = int(input())
+          if x < 0:
+              break
+          total += x
+      print(total)
+    prompt:
+      vi: "Ô Dữ liệu nhập có 5 dòng: 4, 6, -1, 3, 2. Đoạn code in ra gì?"
+      en: "The Input data box has 5 lines: 4, 6, -1, 3, 2. What is the output of this code?"
+    choices:
+      - { text: "10", correct: true }
+      - { text: "15", misconception: break-nearest }
+      - { text: "9", misconception: break-nearest }
+      - { text: "14", misconception: break-nearest }
+    explanation:
+      vi: "Robo cộng 4 và 6, nên total là 10. Ở lần lặp thứ 3, x là -1, nên break chạy ngay, trước dòng total += x: -1 không được cộng. break thoát hẳn vòng lặp, nên 3 và 2 không được đọc và không được cộng. Python in ra 10."
+      en: "Robo adds 4 and 6, so total is 10. On the 3rd pass, x is -1, so break runs at once, before the line total += x: -1 is not added. break leaves the loop for good, so 3 and 2 are never read or added. Python prints 10."
+
+  - id: s4.chu-so.b10
+    type: predict
+    concepts: [continue-skip]
+    lessons: [s4.chu-so.l5]
+    code: |
+      i = 0
+      while i < 5:
+          i += 1
+          if i == 2 or i == 4:
+              continue
+          print(i)
+    prompt:
+      vi: "Đoạn code in ra gì?"
+      en: "What is the output of this code?"
+    choices:
+      - { text: "1", misconception: continue-skip }
+      - { text: "2\n4", misconception: continue-skip }
+      - { text: "1\n3\n5", correct: true }
+      - { text: "1\n3", misconception: off-by-one }
+    explanation:
+      vi: "i tăng thêm 1 ở đầu mỗi lần lặp, nên i lần lượt là 1, 2, 3, 4, 5. Khi i là 2 hay 4, continue bỏ qua dòng print(i) và sang lần lặp sau. Lần lặp cuối bắt đầu khi i là 4 (4 < 5 đúng), i thành 5 và được in. continue không dừng vòng lặp, nên Robo in 1, 3 và 5."
+      en: "i goes up by 1 at the start of each pass, so i is 1, 2, 3, 4, then 5. When i is 2 or 4, continue skips the line print(i) and moves on to the next pass. The last pass starts when i is 4 (4 < 5 is True), i becomes 5 and is printed. continue does not stop the loop, so Robo prints 1, 3 and 5."
+
+  - id: s4.chu-so.b11
+    type: mcq
+    concepts: [continue-skip, while-update]
+    lessons: [s4.chu-so.l5]
+    code: |
+      i = 0
+      while i < 5:
+          if i == 2:
+              continue
+          print(i)
+          i += 1
+    prompt:
+      vi: "Đoạn code chạy thế nào?"
+      en: "How does this code run?"
+    choices:
+      - { vi: "In ra 0, 1, 3, 4 rồi dừng", en: "It prints 0, 1, 3, 4 and then stops", misconception: continue-skip }
+      - { vi: "In ra 0 và 1, rồi chạy mãi không dừng, đến khi Robo dừng chương trình", en: "It prints 0 and 1, then runs on and on until Robo stops the program", correct: true }
+      - { vi: "In ra 0 và 1, rồi vòng lặp dừng", en: "It prints 0 and 1, then the loop stops", misconception: continue-skip }
+      - { vi: "Báo lỗi SyntaxError, vì continue không dùng được trong while", en: "A SyntaxError, because continue cannot be used in while", error: true, misconception: continue-skip }
+    explanation:
+      vi: "Khi i là 2, continue bỏ qua cả dòng print(i) lẫn dòng i += 1, rồi quay lên kiểm tra i < 5. i vẫn là 2, nên continue lại chạy, mãi mãi. continue dùng được trong while, nhưng con phải đổi biến trước dòng continue."
+      en: "When i is 2, continue skips both the line print(i) and the line i += 1, then goes back up to check i < 5. i is still 2, so continue runs again, forever. continue can be used in while, but you must change the variable before the continue line."
+
+  - id: s4.chu-so.b12
+    type: mcq
+    concepts: [prime-check]
+    lessons: [s4.chu-so.l4]
+    code: |
+      n = int(input())
+      for i in range(2, n):
+          if n % i == 0:
+              print("no")
+              break
+          else:
+              print("yes")
+              break
+    prompt:
+      vi: "Đoạn code muốn in ra yes nếu n là số nguyên tố, và no nếu không phải. Với số nào trong ô Dữ liệu nhập thì đoạn code in ra kết quả sai?"
+      en: "This code is meant to print yes if n is a prime number, and no if it is not. With which number in the Input data box does the code print a wrong result?"
+    choices:
+      - { text: "8", misconception: prime-check }
+      - { text: "7", misconception: prime-check }
+      - { text: "10", misconception: prime-check }
+      - { text: "9", correct: true }
+    explanation:
+      vi: "Cả 2 nhánh đều có break, nên vòng lặp chỉ thử đúng 1 số là 2 rồi dừng. 9 không chia hết cho 2, nên đoạn code in ra yes, nhưng 9 = 3 x 3 không phải là số nguyên tố. Với 8 và 10, đoạn code in đúng no; với 7, in đúng yes. Con chỉ kết luận là số nguyên tố sau khi đã thử hết các số."
+      en: "Both branches have break, so the loop tries only 1 number, 2, and stops. 9 cannot be divided by 2, so the code prints yes, but 9 = 3 x 3 is not a prime number. With 8 and 10, the code rightly prints no; with 7, it rightly prints yes. Decide that a number is prime only after trying every number."
+
+  - id: s4.chu-so.b13
+    type: mcq
+    concepts: [prime-check]
+    lessons: [s4.chu-so.l4]
+    prompt:
+      vi: "Vì sao 1 không phải là số nguyên tố?"
+      en: "Why is 1 not a prime number?"
+    choices:
+      - { vi: "Vì số nguyên tố phải có đúng 2 ước, còn 1 chỉ có 1 ước", en: "Because a prime number must have exactly 2 divisors, and 1 has only 1 divisor", correct: true }
+      - { vi: "Vì 1 là số lẻ", en: "Because 1 is an odd number", misconception: prime-check }
+      - { vi: "Vì 1 chia hết cho mọi số", en: "Because 1 can be divided by every number", misconception: divisor-loop }
+      - { vi: "Vì 1 không có ước nào", en: "Because 1 has no divisors at all", misconception: divisor-loop }
+    explanation:
+      vi: "Số nguyên tố là số lớn hơn 1 chỉ có 2 ước: 1 và chính nó. Số 1 chỉ có 1 ước là chính nó, nên không phải là số nguyên tố. Nhiều số lẻ là số nguyên tố, như 3, 5, 7. 1 là ước của mọi số, nhưng 1 không chia hết cho 2, cho 3 hay cho số nào lớn hơn 1."
+      en: "A prime number is a number greater than 1 with only 2 divisors: 1 and itself. 1 has only 1 divisor, itself, so it is not a prime number. Many odd numbers are prime, such as 3, 5, 7. 1 is a divisor of every number, but 1 cannot be divided by 2, by 3 or by any number greater than 1."
+
+  - id: s4.chu-so.b14
+    type: predict
+    concepts: [divisor-loop]
+    lessons: [s4.chu-so.l3]
+    code: |
+      n = 12
+      total = 0
+      for i in range(1, n):
+          if n % i == 0:
+              total += i
+      print(total)
+    prompt:
+      vi: "Đoạn code in ra gì?"
+      en: "What is the output of this code?"
+    choices:
+      - { text: "28", misconception: range-stop-excluded }
+      - { text: "15", misconception: divisor-loop }
+      - { text: "16", correct: true }
+      - { text: "66", misconception: count-if }
+    explanation:
+      vi: "range(1, n) cho i từ 1 đến 11, không có 12. Trong đó, các ước của 12 là 1, 2, 3, 4 và 6, nên total là 1 + 2 + 3 + 4 + 6 = 16. Số 1 cũng là ước, nên được cộng. Chỉ các ước được cộng, vì dòng total += i nằm trong khối của if."
+      en: "range(1, n) gives i from 1 to 11, without 12. Of these, the divisors of 12 are 1, 2, 3, 4 and 6, so total is 1 + 2 + 3 + 4 + 6 = 16. 1 is a divisor too, so it is added. Only divisors are added, because the line total += i is inside the if block."
+
+  - id: s4.chu-so.b15
+    type: mcq
+    concepts: [digit-split]
+    lessons: [s4.chu-so.l6]
+    code: |
+      n = int(input())
+      r = 0
+      while n > 0:
+          r = r * 10 + n % 10
+          n = n // 10
+      if r == n:
+          print("yes")
+      else:
+          print("no")
+    prompt:
+      vi: "Đoạn code muốn in ra yes khi n là số đối xứng. Ô Dữ liệu nhập có 1 dòng: 121. Đoạn code in ra gì?"
+      en: "This code is meant to print yes when n is a palindrome number. The Input data box has 1 line: 121. What is the output of this code?"
+    choices:
+      - { vi: "yes, vì 121 đọc ngược vẫn là 121", en: "yes, because 121 read backwards is still 121", misconception: digit-split }
+      - { vi: "no, vì sau vòng lặp n là 0, nên Robo so sánh 121 với 0", en: "no, because after the loop n is 0, so Robo compares 121 with 0", correct: true }
+      - { vi: "no, vì số đảo ngược luôn khác số lúc đầu", en: "no, because a reversed number is always different from the starting number", misconception: digit-split }
+      - { vi: "Báo lỗi, vì n đã thành 0 nên không so sánh được", en: "An error, because n has become 0 and cannot be compared", error: true, misconception: digit-split }
+    explanation:
+      vi: "r đúng là 121, nhưng vòng lặp đã làm n thành 0. Vì vậy dòng if so sánh 121 với 0, và đoạn code in ra no. So sánh với 0 không phải là lỗi. Muốn đúng, con giữ số lúc đầu trong 1 biến khác trước vòng lặp, rồi so sánh r với biến đó."
+      en: "r is indeed 121, but the loop has turned n into 0. So the if line compares 121 with 0, and the code prints no. Comparing with 0 is not an error. To fix it, keep the starting number in another variable before the loop, then compare r with that variable."
