@@ -1,0 +1,185 @@
+exercises:
+  - id: s2.bien.p1
+    type: fill
+    concepts: [var-assign]
+    prompt:
+      vi: "Điền vào 2 chỗ trống: chỗ thứ nhất cất chuỗi \"Robo\" vào biến ten, chỗ thứ hai dùng biến ten để in ra: Xin chào Robo"
+      en: "Fill the 2 blanks: the first one stores the string \"Robo\" in the variable ten, the second one uses the variable ten to print: Xin chào Robo"
+    template: |
+      ten ___ "Robo"
+      print("Xin chào", ___)
+    answers: ["=", "ten"]
+    tests:
+      - { output: "Xin chào Robo" }
+    hints:
+      - { vi: "Dấu nào dùng để gán giá trị cho biến? Ở lệnh print, tên biến viết không có dấu nháy.", en: "Which sign gives a value to a variable? In the print statement, the variable name has no quotes." }
+      - { vi: "Điền dấu = vào chỗ thứ nhất, và ten (không có dấu nháy) vào chỗ thứ hai.", en: "Fill the first blank with = and the second blank with ten (with no quotes)." }
+
+  - id: s2.bien.p2
+    type: fill
+    concepts: [var-name-rules]
+    prompt:
+      vi: "Code đã có 2 biến mau_mat và so_pin. Điền đúng tên biến vào 2 chỗ trống để in ra 2 dòng như phần Ví dụ."
+      en: "The code already has 2 variables, mau_mat and so_pin. Fill the 2 blanks with the right variable names to print the 2 lines in the Example."
+    template: |
+      mau_mat = "xanh"
+      so_pin = 3
+      print("Mắt:", ___)
+      print("Pin:", ___)
+    answers: ["mau_mat", "so_pin"]
+    tests:
+      - output: |
+          Mắt: xanh
+          Pin: 3
+    hints:
+      - { vi: "Tên biến phải viết giống hệt lúc gán: cùng chữ thường, có dấu gạch dưới _, không có dấu cách.", en: "Write each variable name exactly as in its assignment: the same lower-case letters, with the underscore _, and no space." }
+      - { vi: "Điền mau_mat vào chỗ thứ nhất và so_pin vào chỗ thứ hai.", en: "Fill the first blank with mau_mat and the second blank with so_pin." }
+
+  - id: s2.bien.p3
+    type: parsons
+    concepts: [var-reassign]
+    prompt:
+      vi: "Robo có 5 xu, nhặt thêm 2 xu, rồi được thưởng gấp đôi số xu đang có. Sắp xếp các dòng lệnh để in ra 3 dòng như phần Ví dụ."
+      en: "Robo has 5 xu, picks up 2 more xu, then gets a prize that doubles its xu. Put the lines in order to print the 3 lines in the Example."
+    solution: |
+      xu = 5
+      print("Lúc đầu:", xu)
+      xu = xu + 2
+      print("Nhặt thêm:", xu)
+      xu = xu * 2
+      print("Gấp đôi:", xu)
+    tests:
+      - output: |
+          Lúc đầu: 5
+          Nhặt thêm: 7
+          Gấp đôi: 14
+    hints:
+      - { vi: "Mỗi lệnh print in giá trị của xu ở đúng lúc nó chạy. Lệnh gán xu = 5 phải đứng đầu tiên.", en: "Each print statement prints the value of xu at the moment it runs. The assignment xu = 5 must come first." }
+
+  - id: s2.bien.p4
+    type: parsons
+    concepts: [var-before-use, var-reassign]
+    prompt:
+      vi: "Sắp xếp các dòng lệnh để in ra 2 dòng như phần Ví dụ. Nhớ: biến phải được gán trước khi dùng."
+      en: "Put the lines in order to print the 2 lines in the Example. Remember: a variable must get a value before it is used."
+    solution: |
+      tuoi = 2
+      print("Robo", tuoi, "tuổi")
+      tuoi = tuoi + 1
+      print("Năm sau:", tuoi)
+    tests:
+      - output: |
+          Robo 2 tuổi
+          Năm sau: 3
+    hints:
+      - { vi: "Dòng nào cũng dùng biến tuoi, nên dòng gán tuoi = 2 phải đứng đầu tiên.", en: "Every line uses the variable tuoi, so the assignment tuoi = 2 must come first." }
+
+  - id: s2.bien.p5
+    type: fill
+    concepts: [str-vs-int]
+    prompt:
+      vi: "Điền 1 giá trị vào mỗi chỗ trống: biến so chứa 1 số, biến chu chứa 1 chuỗi, để in ra 2 dòng như phần Ví dụ."
+      en: "Fill each blank with 1 value: the variable so holds a number and the variable chu holds a string, to print the 2 lines in the Example."
+    template: |
+      so = ___
+      chu = ___
+      print(so + so)
+      print(chu + chu)
+    answers: ["5", "\"5\""]
+    tests:
+      - output: |
+          10
+          55
+    hints:
+      - { vi: "Số cộng với chính nó ra 10. Chuỗi nối với chính nó ra 55.", en: "A number added to itself gives 10. A string joined to itself gives 55." }
+      - { vi: "Điền 5 (không có dấu nháy) vào chỗ thứ nhất, và \"5\" (có dấu nháy) vào chỗ thứ hai.", en: "Fill the first blank with 5 (no quotes) and the second blank with \"5\" (with quotes)." }
+
+  - id: s2.bien.c1
+    type: code
+    concepts: [var-before-use]
+    prompt:
+      vi: "Code bên phải báo lỗi NameError, vì các lệnh print dùng biến trước khi biến được gán. Hãy đổi thứ tự các dòng để in ra 2 dòng như phần Ví dụ."
+      en: "The code on the right shows a NameError, because the print statements use the variables before they get a value. Change the order of the lines to print the 2 lines in the Example."
+    starter: |
+      print("Tên:", ten)
+      print("Pin:", pin)
+      ten = "Robo"
+      pin = 5
+    solution: |
+      ten = "Robo"
+      pin = 5
+      print("Tên:", ten)
+      print("Pin:", pin)
+    tests:
+      - output: |
+          Tên: Robo
+          Pin: 5
+    hints:
+      - { vi: "Python chạy từ trên xuống. Lệnh print nào dùng biến thì phải nằm dưới dòng gán biến đó.", en: "Python runs from top to bottom. A print statement that uses a variable must be below the line that assigns it." }
+      - { vi: "Chuyển 2 dòng gán ten = \"Robo\" và pin = 5 lên đầu chương trình.", en: "Move the 2 assignments ten = \"Robo\" and pin = 5 to the top of the program." }
+    test_eligible: true
+
+  - id: s2.bien.c2
+    type: code
+    concepts: [var-assign]
+    prompt:
+      vi: "Code bên phải viết ngược 2 lệnh gán nên Python báo lỗi. Hãy sửa 2 lệnh gán để in ra đúng dòng như phần Ví dụ."
+      en: "The code on the right writes 2 assignments the wrong way round, so Python shows an error. Fix the 2 assignments to print the line in the Example."
+    starter: |
+      "Robo" = ten
+      4 = so_banh
+      print(ten, "có", so_banh, "bánh xe")
+    solution: |
+      ten = "Robo"
+      so_banh = 4
+      print(ten, "có", so_banh, "bánh xe")
+    tests:
+      - output: "Robo có 4 bánh xe"
+    hints:
+      - { vi: "Trong lệnh gán, tên biến luôn đứng bên trái dấu =, giá trị đứng bên phải.", en: "In an assignment, the variable name is always on the left of =, and the value is on the right." }
+      - { vi: "Dòng 1 sửa thành ten = \"Robo\". Dòng 2 làm tương tự với so_banh và số 4.", en: "Change line 1 to ten = \"Robo\". Do line 2 the same way with so_banh and the number 4." }
+    test_eligible: true
+
+  - id: s2.bien.c3
+    type: code
+    concepts: [var-reassign]
+    prompt:
+      vi: "Robo đứng ở tầng 1. Robo leo lên 2 tầng, rồi leo thêm 3 tầng, rồi đi xuống 1 tầng. Dùng 1 biến tang và gán lại biến này sau mỗi lần Robo di chuyển, để in ra 4 dòng như phần Ví dụ."
+      en: "Robo is on floor 1. Robo climbs up 2 floors, then 3 more floors, then goes down 1 floor. Use 1 variable named tang and assign it again after each move, to print the 4 lines in the Example."
+    starter: |
+      # Viết lệnh của con ở dưới dòng này
+    solution: |
+      tang = 1
+      print("Tầng", tang)
+      tang = tang + 2
+      print("Tầng", tang)
+      tang = tang + 3
+      print("Tầng", tang)
+      tang = tang - 1
+      print("Tầng", tang)
+    tests:
+      - output: |
+          Tầng 1
+          Tầng 3
+          Tầng 6
+          Tầng 5
+    common_wrong:
+      - output: |
+          Tầng 1
+          Tầng 1
+          Tầng 1
+          Tầng 1
+        misconception: var-reassign
+        sample: |
+          tang = 1
+          print("Tầng", tang)
+          tang + 2
+          print("Tầng", tang)
+          tang + 3
+          print("Tầng", tang)
+          tang - 1
+          print("Tầng", tang)
+    hints:
+      - { vi: "Bắt đầu bằng tang = 1 và 1 lệnh print. Sau mỗi lần di chuyển, gán lại tang rồi in ra.", en: "Start with tang = 1 and 1 print statement. After each move, assign tang again and print it." }
+      - { vi: "Lần leo lên đầu tiên là tang = tang + 2. Đi xuống 1 tầng là tang = tang - 1.", en: "The first climb is tang = tang + 2. Going down 1 floor is tang = tang - 1." }
+    test_eligible: true

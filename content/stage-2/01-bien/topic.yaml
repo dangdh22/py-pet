@@ -1,0 +1,11 @@
+id: s2.bien
+title: { vi: "Biến", en: "Variables" }
+lessons:
+  - 01-bien-la-gi.md
+  - 02-dat-ten-bien.md
+  - 03-gan-lai.md
+  - 04-chu-va-so.md
+  - 05-du-lieu-la-gi.md
+reviews:
+  - { id: s2.bien.r1, after: s2.bien.l2 }
+  - { id: s2.bien.r2, after: s2.bien.l4 }

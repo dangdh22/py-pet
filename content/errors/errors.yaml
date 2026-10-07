@@ -117,11 +117,22 @@
     en: "Line {line}: a part with =, such as sep=... or end=..., must come after all the values to print. Move it to the end, just before the closing ), for example print(\"A\", \"B\", sep=\"-\")."
   sample: "print(sep=\"-\", \"A\", \"B\")"
 
+- id: assign-to-literal
+  match: { type: SyntaxError, message: "^cannot assign to literal" }
+  misconception: var-assign
+  explain:
+    vi: "Dòng {line}: bên trái dấu = phải là 1 tên biến, không phải 1 số hay 1 chuỗi. Dấu = cất giá trị ở bên phải vào biến ở bên trái, nên con viết diem = 5, không viết ngược thành 5 = diem. Nếu đây là điều kiện của if, muốn so sánh bằng thì viết == (2 dấu bằng)."
+    en: "Line {line}: the left side of = must be a variable name, not a number or a string. = stores the value on the right in the variable on the left, so write score = 5, not the other way round as 5 = score. If this is the condition of an if, write == (2 equal signs) to compare."
+  hint:
+    vi: "Trong lệnh gán, tên biến đứng bên trái dấu =, giá trị đứng bên phải."
+    en: "In an assignment, the variable name goes on the left of =, and the value goes on the right."
+  sample: "5 = diem"
+
 - id: syntax-other
   match: { type: SyntaxError }
   explain:
-    vi: "Dòng {line}: Python không hiểu cách viết ở dòng này. Hãy kiểm tra dấu ngoặc, dấu nháy và dấu hai chấm."
-    en: "Line {line}: Python does not understand this line. Check the brackets, the quotes and the colons."
+    vi: "Dòng {line}: Python không hiểu cách viết ở dòng này. Hãy kiểm tra dấu ngoặc, dấu nháy và dấu hai chấm. Nếu dòng này có tên biến, hãy kiểm tra cả tên biến: tên chỉ gồm chữ cái, chữ số và dấu gạch dưới _, không có dấu cách."
+    en: "Line {line}: Python does not understand this line. Check the brackets, the quotes and the colons. If this line has a variable name, check the name too: it has only letters, digits and the underscore _, with no spaces."
   sample: "class = 1"
 
 - id: name-similar

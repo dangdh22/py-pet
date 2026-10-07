@@ -1,0 +1,388 @@
+questions:
+  - id: s2.bien.b1
+    type: mcq
+    concepts: [var-assign]
+    lessons: [s2.bien.l1]
+    prompt:
+      vi: "Trong Python, biến giống với thứ gì nhất?"
+      en: "In Python, what is a variable most like?"
+    choices:
+      - { vi: "Một chiếc hộp có dán tên, dùng để cất 1 giá trị", en: "A box with a name on it, used to store 1 value", correct: true }
+      - { vi: "Một lệnh in chữ ra màn hình", en: "A statement that prints text on the screen", misconception: var-assign }
+      - { vi: "Một phép so sánh xem 2 giá trị có bằng nhau không", en: "A check of whether 2 values are equal", misconception: var-assign }
+      - { vi: "Một chuỗi luôn nằm trong dấu nháy", en: "A string that is always inside quotes", misconception: var-assign }
+    explanation:
+      vi: "Biến giống chiếc hộp có dán tên. Lệnh gán cất 1 giá trị vào hộp, và sau đó con gọi tên hộp để lấy giá trị ra dùng."
+      en: "A variable is like a box with a name on it. An assignment stores 1 value in the box, and then you use the name of the box to get the value back."
+
+  - id: s2.bien.b2
+    type: mcq
+    concepts: [var-assign]
+    lessons: [s2.bien.l1]
+    prompt:
+      vi: "Lệnh nào cất số 10 vào biến score?"
+      en: "Which statement stores the number 10 in the variable score?"
+    choices:
+      - { text: "10 = score", misconception: var-assign }
+      - { text: "score = 10", correct: true }
+      - { text: "print(score, 10)", misconception: var-assign }
+      - { text: "score + 10", misconception: var-assign }
+    explanation:
+      vi: "Lệnh gán viết tên biến ở bên trái, dấu =, rồi giá trị ở bên phải: score = 10. Viết ngược thành 10 = score thì Python báo lỗi, vì 10 không phải là biến."
+      en: "An assignment has the variable name on the left, then =, then the value on the right: score = 10. If you write it the other way round, 10 = score, Python shows an error, because 10 is not a variable."
+
+  - id: s2.bien.b3
+    type: predict
+    concepts: [var-assign]
+    lessons: [s2.bien.l1]
+    code: |
+      word = "Hi"
+      print(word, "word")
+    prompt: { vi: "Đoạn code in ra gì?", en: "What is the output of this code?" }
+    choices:
+      - { text: "word word", misconception: var-assign }
+      - { text: "Hi Hi", misconception: var-assign }
+      - { text: "Hi word", correct: true }
+      - { text: "Hiword", misconception: print-comma-space }
+    explanation:
+      vi: "Giá trị thứ nhất là biến word, không có dấu nháy, nên Python in giá trị của nó: Hi. Giá trị thứ hai là chuỗi \"word\", được in y nguyên. Dấu phẩy thêm 1 dấu cách ở giữa."
+      en: "The first value is the variable word, with no quotes, so Python prints its value: Hi. The second value is the string \"word\", printed exactly as it is. The comma adds 1 space between them."
+
+  - id: s2.bien.b4
+    type: predict
+    concepts: [var-assign]
+    lessons: [s2.bien.l1]
+    code: |
+      5 = n
+      print(n)
+    prompt: { vi: "Chuyện gì xảy ra khi chạy đoạn code này?", en: "What happens when this code runs?" }
+    choices:
+      - { text: "5", misconception: var-assign }
+      - { text: "n", misconception: var-assign }
+      - { vi: "Không in gì, báo lỗi SyntaxError ở dòng 1", en: "It prints nothing and shows a SyntaxError on line 1", correct: true, error: true }
+      - { vi: "Không in gì, báo lỗi NameError ở dòng 2", en: "It prints nothing and shows a NameError on line 2", error: true }
+    explanation:
+      vi: "Dòng 1 viết ngược lệnh gán. Bên trái dấu = phải là tên biến, nhưng ở đây lại là số 5. Đây là lỗi cú pháp, nên Python báo SyntaxError và không chạy dòng nào."
+      en: "Line 1 writes the assignment the wrong way round. The left side of = must be a variable name, but here it is the number 5. This is a syntax error, so Python shows a SyntaxError and runs no line."
+
+  - id: s2.bien.b5
+    type: mcq
+    concepts: [var-name-rules]
+    lessons: [s2.bien.l2]
+    prompt:
+      vi: "Dùng tên biến nào thì Python báo lỗi?"
+      en: "Which variable name makes Python show an error?"
+    choices:
+      - { text: "score2" }
+      - { text: "high_score" }
+      - { text: "2score", correct: true }
+      - { text: "Score" }
+    explanation:
+      vi: "Tên biến không được bắt đầu bằng chữ số, nên 2score bị lỗi. Chữ số đứng sau chữ cái thì được, như score2. Dấu gạch dưới và chữ hoa cũng được dùng trong tên."
+      en: "A variable name cannot start with a digit, so 2score is an error. A digit after a letter is fine, as in score2. The underscore and upper-case letters can also be used in a name."
+
+  - id: s2.bien.b6
+    type: mcq
+    concepts: [var-name-rules, case-sensitive]
+    lessons: [s2.bien.l2]
+    prompt:
+      vi: "Với Python, score và Score có phải là cùng 1 biến không?"
+      en: "To Python, are score and Score the same variable?"
+    choices:
+      - { vi: "Có, vì Python không để ý chữ hoa hay chữ thường", en: "Yes, because Python does not care about upper-case or lower-case letters", misconception: case-sensitive }
+      - { vi: "Không, đó là 2 biến khác nhau", en: "No, they are 2 different variables", correct: true }
+      - { vi: "Có, nhưng chỉ khi biến chứa số", en: "Yes, but only when the variable holds a number", misconception: case-sensitive }
+      - { vi: "Không, vì Score là tên sai quy tắc nên không dùng được", en: "No, because Score breaks the rules and cannot be used", misconception: var-name-rules }
+    explanation:
+      vi: "Python phân biệt chữ hoa và chữ thường, nên score và Score là 2 biến khác nhau. Tên Score vẫn đúng quy tắc, nhưng nên viết tên biến bằng chữ thường để khỏi nhầm."
+      en: "Python sees upper-case and lower-case letters as different, so score and Score are 2 different variables. The name Score follows the rules, but it is better to write variable names in lower case so you do not mix them up."
+
+  - id: s2.bien.b7
+    type: predict
+    concepts: [var-name-rules, case-sensitive]
+    lessons: [s2.bien.l2]
+    code: |
+      total = 5
+      print(Total)
+    prompt: { vi: "Chuyện gì xảy ra khi chạy đoạn code này?", en: "What happens when this code runs?" }
+    choices:
+      - { text: "5", misconception: case-sensitive }
+      - { text: "Total", misconception: var-assign }
+      - { vi: "Báo lỗi NameError ở dòng 2", en: "A NameError on line 2", correct: true, error: true }
+      - { vi: "Báo lỗi SyntaxError ở dòng 1", en: "A SyntaxError on line 1", error: true, misconception: var-name-rules }
+    explanation:
+      vi: "Dòng 1 gán 5 cho biến total, viết thường. Dòng 2 dùng Total, có chữ T viết hoa, là 1 biến khác chưa được gán. Python không biết Total là gì nên báo lỗi NameError."
+      en: "Line 1 assigns 5 to the variable total, in lower case. Line 2 uses Total, with an upper-case T, which is a different variable that has no value yet. Python does not know Total, so it shows a NameError."
+
+  - id: s2.bien.b8
+    type: mcq
+    concepts: [var-name-rules]
+    lessons: [s2.bien.l2]
+    prompt:
+      vi: "Lệnh gán nào làm cho lệnh print ở các dòng sau không dùng được nữa?"
+      en: "Which assignment stops print from working on the lines after it?"
+    choices:
+      - { text: "score = 5" }
+      - { text: "print_score = 5", misconception: var-name-rules }
+      - { text: "Print2 = 5", misconception: var-name-rules }
+      - { text: "print = 5", correct: true }
+    explanation:
+      vi: "print = 5 dùng chính tên của lệnh print làm tên biến. Từ đó trở đi, print là 1 biến chứa số 5, không còn là lệnh in nữa. Các tên như print_score hay Print2 khác tên print nên không sao."
+      en: "print = 5 uses the name of the print statement as a variable name. After that, print is a variable that holds 5, not the print statement any more. Names such as print_score or Print2 are different from print, so they are fine."
+
+  - id: s2.bien.b9
+    type: mcq
+    concepts: [var-name-rules]
+    lessons: [s2.bien.l2]
+    prompt:
+      vi: "Con cần 1 biến để cất số người chơi (players) của 1 trò chơi. Tên nào dễ hiểu nhất?"
+      en: "You need a variable to store the number of players in a game. Which name is the easiest to understand?"
+    choices:
+      - { text: "x" }
+      - { text: "players", correct: true }
+      - { text: "abc" }
+      - { text: "p1p2p3" }
+    explanation:
+      vi: "Cả 4 tên đều đúng quy tắc, nhưng chỉ players cho biết biến cất gì. Tên có nghĩa giúp con và người khác đọc code dễ hơn."
+      en: "All 4 names follow the rules, but only players tells what the variable stores. A name with a meaning makes the code easier to read for you and for others."
+
+  - id: s2.bien.b10
+    type: predict
+    concepts: [var-reassign]
+    lessons: [s2.bien.l3]
+    code: |
+      a = "cat"
+      a = "dog"
+      print(a)
+    prompt: { vi: "Đoạn code in ra gì?", en: "What is the output of this code?" }
+    choices:
+      - { text: "cat", misconception: var-reassign }
+      - { text: "dog", correct: true }
+      - { text: "cat\ndog", misconception: var-reassign }
+      - { text: "catdog", misconception: var-reassign }
+    explanation:
+      vi: "Biến chỉ giữ 1 giá trị. Dòng 2 gán \"dog\" cho a, nên giá trị cũ \"cat\" bị thay mất. Lệnh print in ra dog."
+      en: "A variable holds only 1 value. Line 2 assigns \"dog\" to a, so the old value \"cat\" is replaced. print prints dog."
+
+  - id: s2.bien.b11
+    type: predict
+    concepts: [var-reassign]
+    lessons: [s2.bien.l3]
+    code: |
+      n = 2
+      print(n)
+      n = n + 3
+      print(n)
+    prompt: { vi: "Đoạn code in ra gì?", en: "What is the output of this code?" }
+    choices:
+      - { text: "2\n5", correct: true }
+      - { text: "5\n5", misconception: var-reassign }
+      - { text: "2\n2", misconception: var-reassign }
+      - { text: "2\n3", misconception: var-reassign }
+    explanation:
+      vi: "Lệnh print ở dòng 2 chạy khi n còn là 2, nên in ra 2. Dòng 3 tính 2 + 3 ra 5 rồi cất vào n. Lệnh print ở dòng 4 in ra 5."
+      en: "The print on line 2 runs while n is still 2, so it prints 2. Line 3 works out 2 + 3 = 5 and stores it in n. The print on line 4 prints 5."
+
+  - id: s2.bien.b12
+    type: predict
+    concepts: [var-reassign]
+    lessons: [s2.bien.l3]
+    code: |
+      x = 4
+      y = x + 1
+      x = 10
+      print(y)
+    prompt: { vi: "Đoạn code in ra gì?", en: "What is the output of this code?" }
+    choices:
+      - { text: "5", correct: true }
+      - { text: "11", misconception: var-reassign }
+      - { text: "4", misconception: var-reassign }
+      - { text: "10", misconception: var-reassign }
+    explanation:
+      vi: "Dòng 2 chạy khi x là 4, nên Python tính 4 + 1 ra 5 và cất 5 vào y. Dòng 3 đổi x thành 10, nhưng không làm y thay đổi. y vẫn giữ 5."
+      en: "Line 2 runs while x is 4, so Python works out 4 + 1 = 5 and stores 5 in y. Line 3 changes x to 10, but it does not change y. y still holds 5."
+
+  - id: s2.bien.b13
+    type: predict
+    concepts: [var-before-use]
+    lessons: [s2.bien.l3]
+    code: |
+      a = 1
+      print(a + b)
+      b = 2
+    prompt: { vi: "Chuyện gì xảy ra khi chạy đoạn code này?", en: "What happens when this code runs?" }
+    choices:
+      - { text: "3", misconception: var-before-use }
+      - { text: "1", misconception: var-before-use }
+      - { vi: "Báo lỗi NameError ở dòng 2", en: "A NameError on line 2", correct: true, error: true }
+      - { vi: "Không in gì, báo lỗi SyntaxError ở dòng 3", en: "It prints nothing and shows a SyntaxError on line 3", error: true, misconception: var-before-use }
+    explanation:
+      vi: "Python chạy từ trên xuống. Tới dòng 2, biến b chưa được gán, vì lệnh gán b nằm ở dòng 3. Python không biết b là gì nên báo lỗi NameError."
+      en: "Python runs from top to bottom. On line 2, b has no value yet, because the assignment of b is on line 3. Python does not know b, so it shows a NameError."
+
+  - id: s2.bien.b14
+    type: mcq
+    concepts: [var-before-use]
+    lessons: [s2.bien.l3]
+    prompt:
+      vi: "Chương trình báo lỗi NameError: name 'score' is not defined. Lý do nào có thể gây ra lỗi này?"
+      en: "A program shows NameError: name 'score' is not defined. Which reason can cause this error?"
+    choices:
+      - { vi: "Biến score được dùng trước khi được gán giá trị", en: "The variable score is used before it gets a value", correct: true }
+      - { vi: "Biến score đang chứa số 0", en: "The variable score holds the number 0", misconception: var-before-use }
+      - { vi: "Biến score đã được gán lại 2 lần", en: "The variable score has been assigned twice", misconception: var-reassign }
+      - { vi: "Python không cho đặt tên biến là score", en: "Python does not allow the name score for a variable", misconception: var-name-rules }
+    explanation:
+      vi: "NameError nghĩa là Python gặp 1 tên mà nó chưa biết. Với biến, lý do hay gặp là dùng biến trước dòng gán, hoặc gõ sai tên biến. Biến chứa số 0 hay được gán lại nhiều lần đều không gây lỗi."
+      en: "NameError means Python meets a name it does not know. For a variable, the usual reasons are using it before the line that assigns it, or typing its name wrong. A variable that holds 0, or that is assigned many times, does not cause an error."
+
+  - id: s2.bien.b15
+    type: predict
+    concepts: [str-vs-int, string-repeat]
+    lessons: [s2.bien.l4]
+    code: |
+      a = "2"
+      print(a * 3)
+    prompt: { vi: "Đoạn code in ra gì?", en: "What is the output of this code?" }
+    choices:
+      - { text: "6", misconception: str-vs-int }
+      - { text: "222", correct: true }
+      - { text: "2 2 2", misconception: string-repeat }
+      - { vi: "Báo lỗi TypeError", en: "A TypeError", error: true, misconception: str-vs-int }
+    explanation:
+      vi: "Biến a chứa chuỗi \"2\", không phải số 2. Chuỗi nhân với số thì được lặp lại, nên \"2\" * 3 ra 222."
+      en: "The variable a holds the string \"2\", not the number 2. A string times a number is repeated, so \"2\" * 3 gives 222."
+
+  - id: s2.bien.b16
+    type: mcq
+    concepts: [str-vs-int]
+    lessons: [s2.bien.l4]
+    code: |
+      n = "12"
+    prompt:
+      vi: "Sau lệnh gán này, biến n chứa gì?"
+      en: "After this assignment, what does the variable n hold?"
+    choices:
+      - { vi: "Một chuỗi (str) gồm 2 ký tự 1 và 2", en: "A string (str) with the 2 characters 1 and 2", correct: true }
+      - { vi: "Số nguyên 12 (int)", en: "The integer 12 (int)", misconception: str-vs-int }
+      - { vi: "Số 3, vì 1 + 2 = 3", en: "The number 3, because 1 + 2 = 3", misconception: str-vs-int }
+      - { vi: "Chữ n", en: "The letter n", misconception: var-assign }
+    explanation:
+      vi: "\"12\" nằm trong dấu nháy nên là 1 chuỗi, dù bên trong chỉ có chữ số. type(n) sẽ cho biết đó là str."
+      en: "\"12\" is inside quotes, so it is a string, even though it has only digits. type(n) would tell you it is a str."
+
+  - id: s2.bien.b17
+    type: predict
+    concepts: [str-vs-int]
+    lessons: [s2.bien.l4]
+    code: |
+      n = 3
+      print(type(n))
+      print(type("n"))
+    prompt: { vi: "Đoạn code in ra gì?", en: "What is the output of this code?" }
+    choices:
+      - { text: "<class 'int'>\n<class 'str'>", correct: true }
+      - { text: "<class 'int'>\n<class 'int'>", misconception: var-assign }
+      - { text: "<class 'str'>\n<class 'str'>", misconception: str-vs-int }
+      - { text: "<class 'str'>\n<class 'int'>", misconception: str-vs-int }
+    explanation:
+      vi: "Biến n chứa số 3 không có dấu nháy, nên type(n) là int. Còn \"n\" có dấu nháy, là 1 chuỗi chứ không phải biến n, nên type(\"n\") là str."
+      en: "The variable n holds the number 3, with no quotes, so type(n) is int. But \"n\" has quotes: it is a string, not the variable n, so type(\"n\") is str."
+
+  - id: s2.bien.b18
+    type: predict
+    concepts: [str-vs-int]
+    lessons: [s2.bien.l4]
+    code: |
+      age = 11
+      print("age:", age + 1)
+    prompt: { vi: "Đoạn code in ra gì?", en: "What is the output of this code?" }
+    choices:
+      - { text: "age: 12", correct: true }
+      - { text: "age: 111", misconception: str-vs-int }
+      - { text: "age: age + 1", misconception: var-assign }
+      - { text: "age:12", misconception: print-comma-space }
+    explanation:
+      vi: "Biến age chứa số 11, nên age + 1 là phép cộng và ra 12. Dấu phẩy thêm 1 dấu cách giữa chuỗi \"age:\" và số 12."
+      en: "The variable age holds the number 11, so age + 1 is an addition: 12. The comma adds 1 space between the string \"age:\" and the number 12."
+
+  - id: s2.bien.b19
+    type: predict
+    concepts: [str-vs-int]
+    lessons: [s2.bien.l4]
+    code: |
+      a = "5"
+      print(a + 1)
+    prompt: { vi: "Chuyện gì xảy ra khi chạy đoạn code này?", en: "What happens when this code runs?" }
+    choices:
+      - { text: "6", misconception: str-vs-int }
+      - { text: "51", misconception: str-vs-int }
+      - { vi: "Báo lỗi TypeError ở dòng 2", en: "A TypeError on line 2", correct: true, error: true }
+      - { text: "a1", misconception: var-assign }
+    explanation:
+      vi: "Biến a chứa chuỗi \"5\", còn 1 là số. Dấu + không nối được chuỗi với số, cũng không cộng được, nên Python báo lỗi TypeError."
+      en: "The variable a holds the string \"5\", and 1 is a number. + cannot join a string with a number, and it cannot add them either, so Python shows a TypeError."
+
+  - id: s2.bien.b20
+    type: mcq
+    concepts: [ai-data]
+    lessons: [s2.bien.l5]
+    prompt:
+      vi: "Robo chụp ảnh, ghi âm giọng nói và đếm số bước chân mỗi ngày. Những thứ Robo ghi lại được gọi chung là gì?"
+      en: "Robo takes photos, records voices and counts its steps every day. What do we call all the things Robo records?"
+    choices:
+      - { vi: "Dữ liệu", en: "Data", correct: true }
+      - { vi: "Lỗi", en: "Errors" }
+      - { vi: "Chú thích", en: "Comments" }
+      - { vi: "Dấu nháy", en: "Quotes" }
+    explanation:
+      vi: "Ảnh, âm thanh và các con số mà máy ghi lại đều là dữ liệu. Dữ liệu không chỉ là chữ và số."
+      en: "Photos, sounds and the numbers a machine records are all data. Data is not only text and numbers."
+
+  - id: s2.bien.b21
+    type: mcq
+    concepts: [ai-data]
+    lessons: [s2.bien.l5]
+    prompt:
+      vi: "Để dạy AI nhận ra quả táo, người ta cho AI xem thật nhiều ảnh. Mỗi ảnh cần có thêm gì?"
+      en: "To teach an AI to recognize apples, people show it a lot of photos. What does each photo need?"
+    choices:
+      - { vi: "Một nhãn ghi ảnh đó có phải quả táo hay không", en: "A label that says whether the photo shows an apple or not", correct: true }
+      - { vi: "Không cần gì thêm, AI tự biết ảnh nào là táo", en: "Nothing more, the AI knows by itself which photos show apples", misconception: ai-data }
+      - { vi: "Tên của người đã chụp ảnh", en: "The name of the person who took the photo" }
+      - { vi: "Một bài hát về quả táo", en: "A song about apples" }
+    explanation:
+      vi: "Nhãn cho AI biết đáp án đúng của mỗi ví dụ. Nhờ có nhãn, AI học được ảnh như thế nào là quả táo."
+      en: "The label tells the AI the right answer for each example. With the labels, the AI learns what an apple photo looks like."
+
+  - id: s2.bien.b22
+    type: mcq
+    concepts: [ai-data]
+    lessons: [s2.bien.l5]
+    prompt:
+      vi: "Khi dạy AI nhận ra mèo, nhiều ảnh con chó bị ghi nhãn nhầm là \"mèo\". Học xong, AI có thể thế nào?"
+      en: "While teaching an AI to recognize cats, many dog photos are labeled \"cat\" by mistake. After learning, what can happen to the AI?"
+    choices:
+      - { vi: "AI dễ nhận nhầm chó thành mèo", en: "The AI often mistakes dogs for cats", correct: true }
+      - { vi: "AI tự phát hiện và sửa hết các nhãn sai", en: "The AI finds and fixes all the wrong labels by itself", misconception: ai-data }
+      - { vi: "AI không bị ảnh hưởng gì, vì nó rất thông minh", en: "The AI is not affected at all, because it is very smart", misconception: ai-data }
+      - { vi: "AI chạy nhanh hơn", en: "The AI runs faster", misconception: ai-data }
+    explanation:
+      vi: "AI học đúng như dữ liệu dạy nó. Nhãn sai thì AI học sai: nó sẽ nghĩ những con chó kia cũng là mèo."
+      en: "AI learns exactly what its data teaches. Wrong labels make the AI learn wrong things: it will think those dogs are cats too."
+
+  - id: s2.bien.b23
+    type: mcq
+    concepts: [ai-data]
+    lessons: [s2.bien.l5]
+    prompt:
+      vi: "Một AI nhận diện trái cây chỉ được học ảnh táo và ảnh cam. Khi xem ảnh quả xoài, AI có thể làm gì?"
+      en: "A fruit-recognizing AI only learned from photos of apples and oranges. When it sees a photo of a mango, what can it do?"
+    choices:
+      - { vi: "Đoán sai thành táo hoặc cam, vì nó chưa từng học ảnh xoài", en: "Guess wrong, apple or orange, because it never learned from mango photos", correct: true }
+      - { vi: "Chắc chắn nhận đúng là xoài", en: "Surely recognize it as a mango", misconception: ai-data }
+      - { vi: "Tự biết thêm tên quả xoài mà không cần học", en: "Know the word mango by itself without learning", misconception: ai-data }
+      - { vi: "Báo là ảnh bị hỏng", en: "Say that the photo is broken" }
+    explanation:
+      vi: "AI chỉ biết những gì có trong dữ liệu nó đã học. Dữ liệu thiếu ảnh xoài thì AI không nhận ra xoài, và có thể đoán sai thành 1 loại quả nó đã biết."
+      en: "AI only knows what is in the data it learned from. With no mango photos in the data, the AI cannot recognize a mango, and it may guess wrong with a fruit it knows."
