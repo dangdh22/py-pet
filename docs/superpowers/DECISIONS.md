@@ -94,3 +94,7 @@ Người bảo trì chưa duyệt kế hoạch M5c; Claude tự chốt theo yêu
 2. **Bài AI "Quy tắc cố định và học từ dữ liệu"** là bài cuối của chủ đề "So sánh và bool".
 3. **Chưa dạy `max()`/`min()`** ở giai đoạn 3; bài số lớn nhất dùng `if`.
 4. **Test cho mọi nhánh và ranh giới** là quy tắc bắt buộc của bài rẽ nhánh.
+5. **So sánh nối (`1 < x < 5`)** được dạy ở chủ đề "and, or, not", cạnh cách viết bằng `and`.
+6. **Từ điển lỗi giai đoạn 3**: mục mới `assign-in-call`, `compare-str-int`, `print-unknown-option`, `elif-after-else`, `assign-in-if` (39 mục); các mục `missing-colon`, `indent-expected`, `assign-in-condition` gắn khái niệm giai đoạn 3; `indent-unexpected` không gắn khái niệm (lỗi dễ gặp do vô ý, kể cả ở giai đoạn 1–2). Lời giải thích `missing-colon` chỉ nói về `if`/`elif`/`else`; M5d bổ sung `for`/`while`.
+7. **Sửa 1 phần code của app trong M5c** (như M5b mục 7): check `assign-in-if` nhận ra dấu `=` đứng riêng trong điều kiện có `and`/`or` (Python chỉ báo "invalid syntax").
+8. **Bỏ ví dụ "thụt lề thừa"** khỏi bài `s3.if-else.l2` (thẻ chỉ còn lỗi thụt lề lệch); từ điển lỗi vẫn giải thích lỗi này.
