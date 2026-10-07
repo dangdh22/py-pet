@@ -124,3 +124,15 @@ Người bảo trì chưa duyệt kế hoạch M6a; Claude tự chốt theo yêu
 7. **Màu chính `--primary` đậm hơn** (#4f7cff thành #3a66e6) để chữ trắng trên nút đạt tương phản WCAG AA (từ 3,71:1 lên 4,97:1). Thay đổi này áp dụng cho toàn app.
 8. **Dạng chưa đạt trong Sổ thành tích** là bóng xám đúng hình dạng sau, có dấu "?"; con thấy trước dáng của dạng sau.
 9. **Phụ kiện xoay theo Robo** khi Robo nằm cạnh ổ sạc (vương miện nằm nghiêng).
+
+## M6b
+
+Người bảo trì chưa duyệt kế hoạch M6b; Claude tự chốt theo yêu cầu chạy liên tục. Chi tiết trong mục "Quyết định thiết kế" của `docs/superpowers/plans/2026-10-07-m6b-ci-loi.md`.
+
+1. **Lint tối thiểu** bằng ESLint 9 (`@eslint/js`, `typescript-eslint`, `eslint-plugin-react-hooks`), nằm trong `npm run check`.
+2. **CI chạy `npm run check`** trên Node 22 và Python 3.13; **deploy GitHub Pages** bằng workflow riêng khi push vào `main`. Người bảo trì cần bật Pages (Source: GitHub Actions).
+3. **Trình duyệt không hỗ trợ** gồm cả thiếu `indexedDB`; màn hình song ngữ theo ngôn ngữ trình duyệt.
+4. **Pyodide khởi động quá 60 giây** coi như lỗi, có nút Thử lại.
+5. **Bài lỗi lúc chạy** bỏ qua được, ghi nhật ký `content-error`, không cộng XP hay ghi thành thạo.
+6. **Bài luyện mở khi mọi khái niệm của nó đã gặp trong 1 bài học đã xong** (thay luật "chủ đề có 1 bài xong").
+7. **Khu phụ huynh** hiện tên bài và 3 hiểu lầm hay gặp; đầu ra so với mong đợi vẫn để bản sau (cần đổi dữ liệu).
