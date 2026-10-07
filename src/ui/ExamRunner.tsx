@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { findConcept } from "../content/lookup";
+import { isConceptReached } from "../content/lookup";
 import { isChoiceQuestion } from "../content/types";
 import type { ExamAnswer, ExamItem } from "../game/exam";
 import type { Lang } from "../i18n/lang";
@@ -69,7 +69,7 @@ export function ExamRunner({
         key={item.id}
         exercise={item}
         onSubmitted={({ result, code }) => {
-          const misconceptions = result.misconceptions.filter((id) => findConcept(bundle, id) !== undefined);
+          const misconceptions = result.misconceptions.filter((id) => isConceptReached(bundle, id, game.state.pet.stage));
           game.dispatch(
             {
               type: "ExerciseJudged",

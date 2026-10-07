@@ -1,5 +1,5 @@
 import { expect, test } from "vitest";
-import { allExercises, allLessons, findConcept, findItem, findLesson } from "./lookup";
+import { allExercises, allLessons, conceptStage, findConcept, findItem, findLesson, isConceptReached } from "./lookup";
 import type { ChoiceQuestion, CodeExercise, ContentBundle, FillExercise, Lesson } from "./types";
 
 const code: CodeExercise = {
@@ -99,4 +99,32 @@ test("findItem and findConcept look in lessons, banks and practice files", () =>
   expect(findItem(withPractice, "nope")).toBeUndefined();
   expect(findConcept(withPractice, "c1")).toBe(concept);
   expect(findConcept(withPractice, "nope")).toBeUndefined();
+});
+
+test("conceptStage is the 1-based stage number of the concept; isConceptReached compares it with the pet stage", () => {
+  const concept = (id: string) => ({
+    id,
+    name: { vi: id },
+    ai: false,
+    misconceptionCard: null,
+    misconceptionHtml: null,
+    parentTip: null,
+    practice: { level1: [], level2: [], level3: [] },
+  });
+  const stage = bundle.stages[0]!;
+  const topic = stage.topics[0]!;
+  const twoStages: ContentBundle = {
+    ...bundle,
+    stages: [
+      { ...stage, topics: [{ ...topic, concepts: [concept("one")] }] },
+      { ...stage, id: "b", topics: [{ ...topic, id: "b.t", concepts: [concept("two")] }] },
+    ],
+  };
+  expect(conceptStage(twoStages, "one")).toBe(1);
+  expect(conceptStage(twoStages, "two")).toBe(2);
+  expect(conceptStage(twoStages, "nope")).toBeUndefined();
+  expect(isConceptReached(twoStages, "two", 1)).toBe(false);
+  expect(isConceptReached(twoStages, "two", 2)).toBe(true);
+  expect(isConceptReached(twoStages, "one", 2)).toBe(true);
+  expect(isConceptReached(twoStages, "nope", 3)).toBe(false);
 });

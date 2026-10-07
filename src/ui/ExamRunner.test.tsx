@@ -64,4 +64,60 @@ describe("ExamRunner", () => {
     await userEvent.click(screen.getByRole("button", { name: "Nộp bài kiểm tra" }));
     expect(onFinish).toHaveBeenCalledWith([]);
   });
+
+  describe("a misconception of a later stage", () => {
+    const base = examBundle();
+    const stage1 = base.stages[0]!;
+    const topic = stage1.topics[0]!;
+    const wrong = [
+      { test: 0, output: "hi", misconception: "later", sample: 'print("hi")' },
+      { test: 0, output: "hi", misconception: "k2", sample: 'print("hi")' },
+    ];
+    const laterConcept = { ...topic.concepts[1]!, id: "later" };
+    const twoStages = {
+      ...base,
+      stages: [
+        {
+          ...stage1,
+          topics: [
+            {
+              ...topic,
+              lessons: topic.lessons.map((l) => ({
+                ...l,
+                exercises: l.exercises.map((e) => (e.type === "code" ? { ...e, commonWrong: wrong } : e)),
+              })),
+            },
+          ],
+        },
+        { ...stage1, id: "y", topics: [{ ...topic, id: "y.t", lessons: [], questions: [], concepts: [laterConcept] }] },
+      ],
+    };
+    const codeItem = findItem(twoStages, "x.l1.ex1") as ExamItem;
+
+    const submit = async (petStage: number) => {
+      const state = initialGameState(TODAY);
+      state.pet.stage = petStage;
+      const { store } = await renderWithGame(<ExamRunner title="Đề" items={[codeItem]} onFinish={() => {}} />, {
+        bundle: twoStages,
+        state,
+        runner: fakeRunner(() => okResult("hi\n")),
+      });
+      await userEvent.click(screen.getByRole("button", { name: "Nộp bài" }));
+      await screen.findByText("Đã nộp bài. Kết quả hiện ở cuối bài.");
+      await waitFor(async () => expect((await store.loadActive())!.state.mastery.k2).toBeDefined());
+      return (await store.loadActive())!.state.mastery;
+    };
+
+    test("a stage 1 child gets no mastery entry for it", async () => {
+      const mastery = await submit(1);
+      expect(mastery.later).toBeUndefined();
+      expect(mastery.k2).toMatchObject({ misconceptions: 1 });
+    });
+
+    test("a stage 2 child gets both", async () => {
+      const mastery = await submit(2);
+      expect(mastery.later).toMatchObject({ misconceptions: 1 });
+      expect(mastery.k2).toMatchObject({ misconceptions: 1 });
+    });
+  });
 });

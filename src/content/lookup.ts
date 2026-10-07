@@ -40,6 +40,20 @@ export function findConcept(bundle: ContentBundle, id: string): Concept | undefi
   return allConcepts(bundle).find((concept) => concept.id === id);
 }
 
+/** The stage number (1 for the first stage) whose topics define the concept, or undefined when it is not a concept. */
+export function conceptStage(bundle: ContentBundle, id: string): number | undefined {
+  const index = bundle.stages.findIndex((stage) =>
+    stage.topics.some((topic) => topic.concepts.some((concept) => concept.id === id)),
+  );
+  return index === -1 ? undefined : index + 1;
+}
+
+/** A concept the pet has reached: it exists and belongs to the pet's stage or an earlier one. */
+export function isConceptReached(bundle: ContentBundle, id: string, petStage: number): boolean {
+  const stage = conceptStage(bundle, id);
+  return stage !== undefined && stage <= petStage;
+}
+
 export function findTopic(bundle: ContentBundle, id: string): Topic | undefined {
   return bundle.stages.flatMap((stage) => stage.topics).find((topic) => topic.id === id);
 }

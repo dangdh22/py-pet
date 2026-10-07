@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { findConcept } from "../content/lookup";
+import { isConceptReached } from "../content/lookup";
 import { isChoiceQuestion, type Exercise } from "../content/types";
 import type { ResultSource } from "../game/mastery";
 import { CodeExerciseView, type ExerciseOutcome, type JudgedInfo } from "./CodeExerciseView";
@@ -35,7 +35,8 @@ export function ItemView({
   const firstTry = useRef<boolean | null>(null);
   const [misconception, setMisconception] = useState<string | null>(null);
   const inLesson = source === "lesson";
-  const isConcept = (id: string) => findConcept(bundle, id) !== undefined;
+  // A misconception counts only when it is a concept of the pet's stage or an earlier one.
+  const isConcept = (id: string) => isConceptReached(bundle, id, game.state.pet.stage);
   const showHelp = (id: string | null) => {
     setMisconception(id);
     if (id !== null) onMisconception?.(id);
@@ -72,7 +73,7 @@ export function ItemView({
   const onJudged = (info: JudgedInfo) => {
     const accepted = info.result.status === "accepted";
     firstTry.current ??= accepted && info.hintsUsed === 0 && !info.viewedSolution;
-    // A built-in misconception with no concept yet (like input-prompt) gets no mastery entry and no card.
+    // A misconception that is not a concept, or belongs to a stage the pet has not reached, gets no mastery entry and no card.
     const misconceptions = info.result.misconceptions.filter(isConcept);
     showHelp(accepted ? null : (misconceptions[0] ?? null));
     game.dispatch(

@@ -4,7 +4,8 @@ import userEvent from "@testing-library/user-event";
 import { describe, expect, test, vi } from "vitest";
 import { fixtureCodeExercise } from "../test/fixtures";
 import { fakeRunner, okResult } from "../test/render";
-import { renderWithGame } from "../test/renderGame";
+import { initialGameState } from "../game/state";
+import { renderWithGame, TODAY } from "../test/renderGame";
 import { reviewBundle, reviewCode, reviewFill } from "../test/reviewBundle";
 import { ItemView } from "./ItemView";
 
@@ -135,19 +136,69 @@ describe("ItemView", () => {
     await waitFor(async () => expect((await savedState(store)).mastery.c2).toMatchObject({ misconceptions: 1 }));
     const mastery = (await savedState(store)).mastery;
     expect(mastery.nope).toBeUndefined();
-    expect(mastery["input-prompt"]).toBeUndefined();
   });
 
   test("a misconception that is not a concept shows no card", async () => {
+    const code = { ...reviewCode, commonWrong: [{ test: 0, output: "hi", misconception: "nope", sample: 'print("hi")' }] };
     const onMisconception = vi.fn();
     const { store } = await renderWithGame(
-      <ItemView item={reviewCode} source="lesson" onDone={() => {}} onMisconception={onMisconception} />,
-      { bundle, runner: fakeRunner(() => okResult("Nhập: Hi\n", { usedInputPrompt: true })) },
+      <ItemView item={code} source="lesson" onDone={() => {}} onMisconception={onMisconception} />,
+      { bundle, runner: fakeRunner(() => okResult("hi\n")) },
     );
     await userEvent.click(screen.getByRole("button", { name: "Nộp bài" }));
     await waitFor(async () => expect((await savedState(store)).progress.exerciseStats?.[reviewCode.id]?.fails).toBe(1));
     expect(screen.queryByRole("button", { name: "Xem thẻ Hiểu lầm thường gặp" })).not.toBeInTheDocument();
     expect(onMisconception).not.toHaveBeenCalled();
-    expect((await savedState(store)).mastery["input-prompt"]).toBeUndefined();
+    expect((await savedState(store)).mastery.nope).toBeUndefined();
+  });
+
+  describe("a misconception of a later stage", () => {
+    const code = {
+      ...reviewCode,
+      commonWrong: [
+        { test: 0, output: "hi", misconception: "later", sample: 'print("hi")' },
+        { test: 0, output: "hi", misconception: "c2", sample: 'print("hi")' },
+      ],
+    };
+    const base = reviewBundle();
+    const stage1 = base.stages[0]!;
+    const laterConcept = { ...stage1.topics[0]!.concepts[1]!, id: "later", name: { vi: "Khái niệm later", en: "Concept later" } };
+    const twoStages = {
+      ...base,
+      stages: [
+        stage1,
+        { ...stage1, id: "r2", topics: [{ ...stage1.topics[0]!, id: "r2.topic", lessons: [], questions: [], practice: [], concepts: [laterConcept] }] },
+      ],
+    };
+    const submit = async (petStage: number) => {
+      const state = initialGameState(TODAY);
+      state.pet.stage = petStage;
+      const onMisconception = vi.fn();
+      const { store } = await renderWithGame(
+        <ItemView item={code} source="lesson" onDone={() => {}} onMisconception={onMisconception} />,
+        { bundle: twoStages, state, runner: fakeRunner(() => okResult("hi\n")) },
+      );
+      await userEvent.click(screen.getByRole("button", { name: "Nộp bài" }));
+      await waitFor(async () => expect((await savedState(store)).progress.exerciseStats?.[code.id]?.fails).toBe(1));
+      return { store, onMisconception };
+    };
+
+    test("a stage 1 child gets no mastery entry and no card for it", async () => {
+      const { store, onMisconception } = await submit(1);
+      expect((await savedState(store)).mastery.later).toBeUndefined();
+      expect((await savedState(store)).mastery.c2).toMatchObject({ misconceptions: 1 });
+      await userEvent.click(await screen.findByRole("button", { name: "Xem thẻ Hiểu lầm thường gặp" }));
+      expect(screen.getByRole("region", { name: "Hiểu lầm thường gặp" })).toHaveTextContent("Khái niệm c2");
+      expect(onMisconception.mock.calls).toEqual([["c2"]]);
+    });
+
+    test("a stage 2 child gets both", async () => {
+      const { store, onMisconception } = await submit(2);
+      expect((await savedState(store)).mastery.later).toMatchObject({ misconceptions: 1 });
+      expect((await savedState(store)).mastery.c2).toMatchObject({ misconceptions: 1 });
+      await userEvent.click(await screen.findByRole("button", { name: "Xem thẻ Hiểu lầm thường gặp" }));
+      expect(screen.getByRole("region", { name: "Hiểu lầm thường gặp" })).toHaveTextContent("Khái niệm later");
+      expect(onMisconception.mock.calls).toEqual([["later"]]);
+    });
   });
 });

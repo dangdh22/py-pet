@@ -28,7 +28,7 @@ export interface JudgeResult {
 
 export type ErrorMisconceptionFn = (error: PyErrorInfo, code: string) => string | undefined;
 
-// Built-in misconception id with no concepts.yaml entry yet; the input() topic arrives in stage 2.
+// Built-in misconception id; content/stage-2/03-input/concepts.yaml defines the concept of that id.
 export const INPUT_PROMPT_MISCONCEPTION = "input-prompt";
 
 /** What judging needs from a code, parsons or fill exercise. */
