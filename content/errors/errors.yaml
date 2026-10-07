@@ -185,8 +185,8 @@
   match: { type: NameError, message: "^name '(?<name>[^']+)' is not defined$", check: assigned-in-code }
   misconception: var-before-use
   explain:
-    vi: "Dòng {line}: biến {name} được dùng trước khi được gán. Python chạy từ trên xuống: hãy đặt dòng gán {name} = ... lên trên dòng này."
-    en: "Line {line}: the variable {name} is used before it is given a value. Python runs from top to bottom: put the line {name} = ... above this line."
+    vi: "Dòng {line}: biến {name} được dùng trước khi được gán. Python chạy từ trên xuống: hãy đặt dòng gán {name} = ... lên trên dòng này, ở gần đầu chương trình."
+    en: "Line {line}: the variable {name} is used before it is given a value. Python runs from top to bottom: put the line {name} = ... above this line, near the start of the program."
   sample: "print(diem)\ndiem = 5"
 
 - id: name-similar
@@ -260,8 +260,8 @@
   match: { type: TypeError, message: "^'str' object cannot be interpreted as an integer$" }
   misconception: input-str
   explain:
-    vi: "Dòng {line}: ở đây Python cần 1 số nguyên, như số trong range(), nhưng lại nhận được 1 chuỗi (str). Có thể giá trị đó là chuỗi đọc từ input(), như \"5\": hãy đổi nó thành số nguyên bằng int(), ví dụ n = int(input())."
-    en: "Line {line}: Python needs an integer here, such as the number in range(), but it got a string (str). Maybe that value is a string from input(), such as \"5\": change it into an integer with int(), for example n = int(input())."
+    vi: "Dòng {line}: ở đây Python cần 1 số nguyên nhưng lại nhận được 1 chuỗi (str). Có thể giá trị đó là chuỗi đọc từ input(), như \"5\": hãy đổi nó thành số nguyên bằng int(), ví dụ n = int(input())."
+    en: "Line {line}: Python needs an integer here, but it got a string (str). Maybe that value is a string from input(), such as \"5\": change it into an integer with int(), for example n = int(input())."
   hint:
     vi: "Nếu ở dòng {line} có 1 số nằm trong dấu nháy, như \"5\", hãy xóa dấu nháy. Nếu đó là 1 biến, hãy xem dòng gán giá trị cho biến: nếu dòng đó là n = input(), hãy sửa thành n = int(input())."
     en: "If line {line} has a number in quotes, such as \"5\", delete the quotes. If it is a variable, look at the line that gives it a value: if that line is n = input(), change it to n = int(input())."

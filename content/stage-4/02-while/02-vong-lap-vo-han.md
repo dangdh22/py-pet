@@ -71,13 +71,13 @@ exercises:
       vi: "Chuyện gì xảy ra khi chạy đoạn code này?"
       en: "What happens when this code runs?"
     choices:
-      - { vi: "In ra số 5 mãi, đến khi Py-Pet dừng chương trình", en: "It prints 5 again and again, until Py-Pet stops the program", correct: true }
+      - { vi: "In ra số 5 mãi, đến khi Robo dừng chương trình", en: "It prints 5 again and again, until Robo stops the program", correct: true }
       - { vi: "In ra 5, 4, 3, 2, 1, mỗi số 1 dòng, rồi dừng lại", en: "It prints 5, 4, 3, 2, 1, one number on each line, and stops", misconception: while-update }
       - { vi: "In ra số 5 đúng 1 lần, rồi vòng lặp dừng lại", en: "It prints 5 exactly once, and then the loop stops", misconception: while-check-first }
       - { vi: "Báo lỗi IndentationError, vì dòng 4 sát lề trái", en: "An IndentationError, because line 4 is at the left edge", error: true, misconception: indent-block }
     explanation:
-      vi: "Dòng n = n - 1 sát lề trái, nên nó nằm ngoài vòng lặp và chỉ chạy khi vòng lặp đã xong. Trong vòng lặp, n luôn là 5, nên n > 0 luôn đúng và số 5 được in ra mãi. Dòng sát lề trái sau khối lệnh là hợp lệ, nên Python không báo lỗi thụt lề. Py-Pet dừng chương trình vì nó in ra quá nhiều."
-      en: "The line n = n - 1 starts at the left edge, so it is outside the loop and only runs when the loop is done. Inside the loop, n is always 5, so n > 0 is always True and 5 is printed forever. A line at the left edge after a block is allowed, so Python gives no indentation error. Py-Pet stops the program because it prints too much."
+      vi: "Dòng n = n - 1 sát lề trái, nên nó nằm ngoài vòng lặp và chỉ chạy khi vòng lặp đã xong. Trong vòng lặp, n luôn là 5, nên n > 0 luôn đúng và số 5 được in ra mãi. Dòng sát lề trái sau khối lệnh là hợp lệ, nên Python không báo lỗi thụt lề. Robo dừng chương trình vì nó in ra quá nhiều."
+      en: "The line n = n - 1 starts at the left edge, so it is outside the loop and only runs when the loop is done. Inside the loop, n is always 5, so n > 0 is always True and 5 is printed forever. A line at the left edge after a block is allowed, so Python gives no indentation error. Robo stops the program because it prints too much."
   - id: s4.while.l2.q2
     type: mcq
     concepts: [while-update]

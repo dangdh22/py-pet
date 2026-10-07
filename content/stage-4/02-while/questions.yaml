@@ -76,8 +76,8 @@ questions:
       - { vi: "Có, dừng sau khi in ra 10, 7, 4, 1, -2", en: "Yes, it stops after printing 10, 7, 4, 1, -2", misconception: while-update }
       - { vi: "Không chạy lần nào, vì x khác 0 ngay từ đầu", en: "It runs 0 times, because x is not 0 from the start", misconception: compare-ops }
     explanation:
-      vi: "x lần lượt là 10, 7, 4, 1, rồi -2, -5, và cứ nhỏ dần mãi. x nhảy qua 0 mà không bao giờ bằng đúng 0, nên x != 0 luôn đúng và vòng lặp chạy mãi, cho đến khi Py-Pet dừng chương trình. Điều kiện x != 0 đúng ngay từ đầu, nên vòng lặp có chạy."
-      en: "x is 10, 7, 4, 1, then -2, -5, and keeps getting smaller forever. x jumps over 0 and is never exactly 0, so x != 0 is always True and the loop runs forever, until Py-Pet stops the program. The condition x != 0 is True from the start, so the loop does run."
+      vi: "x lần lượt là 10, 7, 4, 1, rồi -2, -5, và cứ nhỏ dần mãi. x nhảy qua 0 mà không bao giờ bằng đúng 0, nên x != 0 luôn đúng và vòng lặp chạy mãi, cho đến khi Robo dừng chương trình. Điều kiện x != 0 đúng ngay từ đầu, nên vòng lặp có chạy."
+      en: "x is 10, 7, 4, 1, then -2, -5, and keeps getting smaller forever. x jumps over 0 and is never exactly 0, so x != 0 is always True and the loop runs forever, until Robo stops the program. The condition x != 0 is True from the start, so the loop does run."
 
   - id: s4.while.b5
     type: mcq

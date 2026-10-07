@@ -120,7 +120,7 @@ exercises:
       en: "What is the output of this code?"
     choices:
       - { text: "A\nB\nA\nB", misconception: for-repeat }
-      - { text: "A\nA\nA\nB", misconception: range-stop-excluded }
+      - { text: "A\nA\nA\nB", misconception: for-repeat }
       - { text: "A\nA\nB", correct: true }
       - { text: "A\nA\nB\nB", misconception: for-repeat }
     explanation:
@@ -136,7 +136,7 @@ exercises:
       - { text: "for i in range(5):", correct: true }
       - { text: "for i in range(5)", misconception: for-repeat }
       - { text: "For i in range(5):", misconception: case-sensitive }
-      - { text: "for i in range(4):", misconception: range-stop-excluded }
+      - { text: "for i in range(4):", misconception: for-repeat }
     explanation:
       vi: "Dòng for viết bằng chữ for thường, rồi i in range(5), và kết thúc bằng dấu hai chấm. range(5) làm vòng lặp chạy đúng 5 lần, còn range(4) chỉ chạy 4 lần. Thiếu dấu hai chấm hay viết For với chữ F hoa đều báo lỗi SyntaxError."
       en: "A for line uses the word for in small letters, then i in range(5), and ends with a colon. range(5) makes the loop run exactly 5 times, while range(4) runs only 4 times. A missing colon, or For with a capital F, gives a SyntaxError."

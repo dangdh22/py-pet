@@ -103,9 +103,10 @@ Người bảo trì chưa duyệt kế hoạch M5c; Claude tự chốt theo yêu
 
 Người bảo trì chưa duyệt kế hoạch M5d; Claude tự chốt theo yêu cầu chạy liên tục. Chi tiết trong mục "Quyết định thiết kế" của `docs/superpowers/plans/2026-10-07-m5d-noi-dung-giai-doan-4.md`.
 
-1. **Dàn ý giai đoạn 4** do Claude đặt: "for và range" (6 bài, bài 6 là AI), "Vòng lặp while" (5), "Tổng, đếm, lớn nhất" (6), "Vòng lặp lồng và vẽ hình" (5), "Chữ số, ước số, break và continue" (6): 28 bài.
+1. **Dàn ý giai đoạn 4** do Claude đặt: "for và range" (6 bài, bài 6 là AI), "Vòng lặp while" (5), "Tổng, đếm, lớn nhất" (6), "Vòng lặp lồng và vẽ hình" (5), "Chữ số, ước số, break và continue" (6): 28 bài. 3 chủ đề có 6 bài, nhiều hơn mức 3 đến 5 bài của spec 3.2 (giai đoạn 1 đến 3 đều đúng mức này); cần người bảo trì duyệt.
 2. **Bài AI "Học có giám sát và không giám sát"** là bài cuối của chủ đề "for và range".
 3. **Chưa dạy list, `len()`, `sum()`, `max()`** ở giai đoạn 4; dùng biến tích lũy.
 4. **Luật 8 và 9 của spec 3.9 thành lỗi** của `content:validate` khi giai đoạn 4 xong.
 5. **`+=` được dạy ở bài 1 chủ đề "Tổng, đếm, lớn nhất"**; 2 chủ đề trước dùng `dem = dem + 1`. Khi con viết `tong += i` mà quên `tong = 0`, app cho lời khuyên "gán trước khi dùng" (sửa nhỏ trong `isAssignedInCode`), không khuyên đặt tên trong dấu ngoặc kép.
 6. **Bài viết lại chương trình for bằng while chỉ chấm theo kết quả in ra**, nên lời giải dùng for vẫn qua. Chưa có kiểu kiểm tra "phải dùng while"; xem lại nếu cần ở bản sau.
+7. **Bài luyện mức 3 chỉ dùng kiến thức đã học trong chủ đề tới lúc đó, ở mức có thể.** App mở mọi bài luyện của 1 chủ đề khi con xong 1 bài học bất kỳ của chủ đề; vì vậy 3 bài cần kiến thức của bài học sau (`s4.chu-so.c5`, `s4.for-range.c2`, `s4.long-nhau.c4`) chỉ nằm trong danh sách của khái niệm dạy kiến thức đó. Sửa ở app (mở bài luyện theo bài học đã xong) để bản sau.
