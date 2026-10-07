@@ -1,0 +1,10 @@
+id: s3.logic
+title: { vi: "and, or, not", en: "and, or, not" }
+lessons:
+  - 01-and.md
+  - 02-or.md
+  - 03-not.md
+  - 04-ket-hop.md
+reviews:
+  - { id: s3.logic.r1, after: s3.logic.l2 }
+  - { id: s3.logic.r2, after: s3.logic.l4 }

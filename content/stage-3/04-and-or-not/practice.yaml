@@ -1,0 +1,263 @@
+exercises:
+  - id: s3.logic.p1
+    type: parsons
+    concepts: [and-both]
+    prompt:
+      vi: "Robo đi xe đạp khi pin từ 30 phần trăm trở lên và gió nhỏ hơn 40 km/h. Ô Dữ liệu nhập có 2 dòng: dòng 1 là số phần trăm pin, dòng 2 là tốc độ gió. Đủ cả 2 điều kiện thì in ra Robo đi xe đạp, nếu không thì in ra Robo ở nhà. Sắp xếp các dòng lệnh để in ra như phần Ví dụ."
+      en: "Robo rides its bike when its battery is 30 percent or more and the wind is slower than 40 km/h. The Input data box has 2 lines: line 1 is the battery percent, and line 2 is the wind speed. If both conditions are met, print Robo đi xe đạp, and if not, print Robo ở nhà. Put the lines in order to print as in the Example."
+    solution: |
+      pin = int(input())
+      gio = int(input())
+      if pin >= 30 and gio < 40:
+          print("Robo đi xe đạp")
+      else:
+          print("Robo ở nhà")
+    tests:
+      - input: "80\n10"
+        output: "Robo đi xe đạp"
+      - input: "30\n39"
+        output: "Robo đi xe đạp"
+        hidden: true
+      - input: "29\n10"
+        output: "Robo ở nhà"
+        hidden: true
+      - input: "80\n40"
+        output: "Robo ở nhà"
+        hidden: true
+      - input: "20\n50"
+        output: "Robo ở nhà"
+        hidden: true
+    hints:
+      - { vi: "Dòng đọc pin đứng trước dòng đọc gió, vì dữ liệu nhập theo thứ tự đó. Dòng if có and đứng sau 2 dòng đọc dữ liệu, và mỗi lệnh print thụt lề đứng ngay dưới dòng if hoặc dòng else: của nó.", en: "The line that reads the battery comes before the line that reads the wind, because the input comes in that order. The if line with and comes after the 2 input lines, and each indented print statement comes right under its if line or else: line." }
+
+  - id: s3.logic.p2
+    type: fill
+    concepts: [or-either, or-misuse]
+    prompt:
+      vi: "Trong trò chơi vòng quay, kim dừng ở ô số 0 hoặc ô số 7 thì Robo được thưởng, dừng ở ô khác thì Robo quay lại. Ô Dữ liệu nhập có 1 dòng: số của ô kim dừng lại. Điền vào 2 chỗ trống để in ra như phần Ví dụ."
+      en: "In a spinning wheel game, if the arrow stops on square 0 or square 7, Robo wins a prize, and on any other square Robo spins again. The Input data box has 1 line: the number of the square where the arrow stops. Fill the 2 blanks to print as in the Example."
+    template: |
+      so_o = int(input())
+      if so_o == 0 ___ ___:
+          print("Robo được thưởng")
+      else:
+          print("Robo quay lại nhé")
+    answers: ["or", "so_o == 7"]
+    tests:
+      - input: "7"
+        output: "Robo được thưởng"
+      - input: "0"
+        output: "Robo được thưởng"
+        hidden: true
+      - input: "3"
+        output: "Robo quay lại nhé"
+        hidden: true
+      - input: "8"
+        output: "Robo quay lại nhé"
+        hidden: true
+    hints:
+      - { vi: "Chỉ cần 1 trong 2 ô đúng là Robo được thưởng, nên chỗ trống thứ nhất là or. Chỗ trống thứ hai phải là 1 phép so sánh đầy đủ, có tên biến so_o.", en: "Robo wins if just 1 of the 2 squares matches, so the first blank is or. The second blank must be a full comparison with the variable name so_o." }
+      - { vi: "Điền or vào chỗ trống thứ nhất và so_o == 7 vào chỗ trống thứ hai.", en: "Fill the first blank with or and the second blank with so_o == 7." }
+
+  - id: s3.logic.p3
+    type: fill
+    concepts: [not-flip]
+    prompt:
+      vi: "Robo hỏi: 5 cộng 7 bằng mấy? Ô Dữ liệu nhập có 1 dòng: câu trả lời của con. Biến dung là True khi con trả lời đúng. Nếu con trả lời chưa đúng, Robo in ra Chưa đúng, con tính lại nhé. Nếu đúng, Robo in ra Đúng rồi!. Điền vào chỗ trống để in ra như phần Ví dụ."
+      en: "Robo asks: what is 5 plus 7? The Input data box has 1 line: your answer. The variable dung is True when your answer is right. If your answer is not right, Robo prints Chưa đúng, con tính lại nhé. If it is right, Robo prints Đúng rồi!. Fill the blank to print as in the Example."
+    template: |
+      tra_loi = int(input())
+      dung = tra_loi == 12
+      if ___ dung:
+          print("Chưa đúng, con tính lại nhé")
+      else:
+          print("Đúng rồi!")
+    answers: ["not"]
+    tests:
+      - input: "12"
+        output: "Đúng rồi!"
+      - input: "11"
+        output: "Chưa đúng, con tính lại nhé"
+        hidden: true
+      - input: "13"
+        output: "Chưa đúng, con tính lại nhé"
+        hidden: true
+    hints:
+      - { vi: "Khối if in lời nhắc tính lại, nên nó phải chạy khi dung là False. Con cần 1 từ đảo False thành True.", en: "The if block prints the reminder to try again, so it must run when dung is False. You need a word that flips False to True." }
+      - { vi: "Điền not vào chỗ trống.", en: "Fill the blank with not." }
+
+  - id: s3.logic.p4
+    type: fill
+    concepts: [chained-compare]
+    prompt:
+      vi: "Thư viện của Robo mở cửa từ 8 giờ đến trước 17 giờ. Ô Dữ liệu nhập có 1 dòng: giờ hiện tại, là số nguyên từ 0 đến 23. Điền vào 2 chỗ trống để in ra như phần Ví dụ."
+      en: "Robo's library is open from 8 o'clock until before 17 o'clock. The Input data box has 1 line: the current hour, an integer from 0 to 23. Fill the 2 blanks to print as in the Example."
+    template: |
+      gio = int(input())
+      if ___ <= gio ___ 17:
+          print("Thư viện đang mở cửa")
+      else:
+          print("Thư viện đã đóng cửa")
+    answers: ["8", "<"]
+    tests:
+      - input: "10"
+        output: "Thư viện đang mở cửa"
+      - input: "8"
+        output: "Thư viện đang mở cửa"
+        hidden: true
+      - input: "7"
+        output: "Thư viện đã đóng cửa"
+        hidden: true
+      - input: "16"
+        output: "Thư viện đang mở cửa"
+        hidden: true
+      - input: "17"
+        output: "Thư viện đã đóng cửa"
+        hidden: true
+    hints:
+      - { vi: "Số nhỏ đứng bên trái khoảng giá trị. \"Từ 8 giờ\" gồm cả 8 giờ, còn \"trước 17 giờ\" không gồm 17 giờ: đúng 17 giờ là thư viện đã đóng cửa.", en: "The small number goes on the left of the range. \"From 8 o'clock\" includes 8, but \"before 17 o'clock\" does not include 17: at exactly 17 o'clock the library is closed." }
+      - { vi: "Điền 8 vào chỗ trống thứ nhất và < vào chỗ trống thứ hai.", en: "Fill the first blank with 8 and the second blank with <." }
+
+  - id: s3.logic.c1
+    type: code
+    concepts: [or-either, or-misuse]
+    prompt:
+      vi: "Robo hỏi: Con có muốn chơi tiếp không? Ô Dữ liệu nhập có 1 dòng: câu trả lời của con. Nếu con gõ đúng chữ có hoặc chữ ok, viết thường, in ra Chơi tiếp thôi!. Nếu con gõ chữ khác, in ra Tạm biệt con. Hãy in ra đúng 1 dòng như phần Ví dụ."
+      en: "Robo asks: Con có muốn chơi tiếp không? (Do you want to keep playing?) The Input data box has 1 line: your answer. If you type exactly the word có or the word ok, in small letters, print Chơi tiếp thôi!. If you type anything else, print Tạm biệt con. Print exactly 1 line as in the Example."
+    starter: |
+      # Viết lệnh của con ở dưới dòng này
+    solution: |
+      tra_loi = input()
+      if tra_loi == "có" or tra_loi == "ok":
+          print("Chơi tiếp thôi!")
+      else:
+          print("Tạm biệt con")
+    tests:
+      - input: "có"
+        output: "Chơi tiếp thôi!"
+      - input: "ok"
+        output: "Chơi tiếp thôi!"
+        hidden: true
+      - input: "không"
+        output: "Tạm biệt con"
+        hidden: true
+      - input: "Có"
+        output: "Tạm biệt con"
+        hidden: true
+    common_wrong:
+      - test: 2
+        output: "Chơi tiếp thôi!"
+        misconception: or-misuse
+        sample: |
+          tra_loi = input()
+          if tra_loi == "có" or "ok":
+              print("Chơi tiếp thôi!")
+          else:
+              print("Tạm biệt con")
+    hints:
+      - { vi: "Chỉ cần 1 trong 2 câu trả lời đúng, nên con dùng or. Mỗi bên của or là 1 phép so sánh đầy đủ: tra_loi == \"có\" và tra_loi == \"ok\".", en: "Just 1 of the 2 answers needs to match, so use or. Each side of or is a full comparison: tra_loi == \"có\" and tra_loi == \"ok\"." }
+      - { vi: "Dòng 1 là tra_loi = input(). Dòng 2 là if tra_loi == \"có\" or tra_loi == \"ok\":. Sau đó là nhánh in Chơi tiếp thôi!, dòng else:, và nhánh in Tạm biệt con.", en: "Line 1 is tra_loi = input(). Line 2 is if tra_loi == \"có\" or tra_loi == \"ok\":. Then come the branch that prints Chơi tiếp thôi!, the line else:, and the branch that prints Tạm biệt con." }
+    test_eligible: true
+
+  - id: s3.logic.c2
+    type: code
+    concepts: [chained-compare, or-either]
+    prompt:
+      vi: "Cửa hàng của Robo mở cửa buổi sáng từ 8 giờ đến trước 12 giờ, và buổi chiều từ 14 giờ đến trước 18 giờ. Ô Dữ liệu nhập có 1 dòng: giờ hiện tại, là số nguyên từ 0 đến 23. In ra Cửa hàng đang mở cửa hoặc Cửa hàng đang đóng cửa, như phần Ví dụ."
+      en: "Robo's shop is open in the morning from 8 o'clock until before 12 o'clock, and in the afternoon from 14 o'clock until before 18 o'clock. The Input data box has 1 line: the current hour, an integer from 0 to 23. Print Cửa hàng đang mở cửa or Cửa hàng đang đóng cửa, as in the Example."
+    starter: |
+      # Viết lệnh của con ở dưới dòng này
+    solution: |
+      gio = int(input())
+      if 8 <= gio < 12 or 14 <= gio < 18:
+          print("Cửa hàng đang mở cửa")
+      else:
+          print("Cửa hàng đang đóng cửa")
+    tests:
+      - input: "9"
+        output: "Cửa hàng đang mở cửa"
+      - input: "8"
+        output: "Cửa hàng đang mở cửa"
+        hidden: true
+      - input: "7"
+        output: "Cửa hàng đang đóng cửa"
+        hidden: true
+      - input: "12"
+        output: "Cửa hàng đang đóng cửa"
+        hidden: true
+      - input: "13"
+        output: "Cửa hàng đang đóng cửa"
+        hidden: true
+      - input: "14"
+        output: "Cửa hàng đang mở cửa"
+        hidden: true
+      - input: "17"
+        output: "Cửa hàng đang mở cửa"
+        hidden: true
+      - input: "18"
+        output: "Cửa hàng đang đóng cửa"
+        hidden: true
+    common_wrong:
+      - test: 3
+        output: "Cửa hàng đang mở cửa"
+        misconception: boundary-check
+        sample: |
+          gio = int(input())
+          if 8 <= gio <= 12 or 14 <= gio <= 18:
+              print("Cửa hàng đang mở cửa")
+          else:
+              print("Cửa hàng đang đóng cửa")
+    hints:
+      - { vi: "Mỗi buổi là 1 khoảng giá trị: 8 <= gio < 12 và 14 <= gio < 18. Cửa hàng mở khi giờ nằm trong ít nhất 1 khoảng, nên con nối 2 khoảng bằng or. \"Trước 12 giờ\" không gồm 12, nên con dùng dấu <.", en: "Each part of the day is a range: 8 <= gio < 12 and 14 <= gio < 18. The shop is open when the hour is in at least 1 of the ranges, so join the 2 ranges with or. \"Before 12 o'clock\" does not include 12, so use <." }
+      - { vi: "Dòng 1 là gio = int(input()). Dòng 2 là if 8 <= gio < 12 or 14 <= gio < 18:. Sau đó là nhánh in Cửa hàng đang mở cửa, dòng else:, và nhánh in Cửa hàng đang đóng cửa.", en: "Line 1 is gio = int(input()). Line 2 is if 8 <= gio < 12 or 14 <= gio < 18:. Then come the branch that prints Cửa hàng đang mở cửa, the line else:, and the branch that prints Cửa hàng đang đóng cửa." }
+    test_eligible: true
+
+  - id: s3.logic.c3
+    type: code
+    concepts: [not-flip, and-both]
+    prompt:
+      vi: "Robo cho con xem phim khi con đã làm xong hết bài tập và ngày mai không có bài kiểm tra. Ô Dữ liệu nhập có 2 dòng: dòng 1 là số bài tập con còn phải làm, dòng 2 là có nếu ngày mai có bài kiểm tra, hoặc không nếu ngày mai không có. Hãy dùng and và not để in ra Con được xem phim hoặc Con ôn bài thêm nhé, như phần Ví dụ."
+      en: "Robo lets you watch a film when you have finished all your homework and there is no test tomorrow. The Input data box has 2 lines: line 1 is the number of exercises you still have to do, and line 2 is có if there is a test tomorrow, or không if there is not. Use and and not to print Con được xem phim or Con ôn bài thêm nhé, as in the Example."
+    starter: |
+      # Viết lệnh của con ở dưới dòng này
+    solution: |
+      so_bai = int(input())
+      tra_loi = input()
+      xong_bai = so_bai == 0
+      mai_kiem_tra = tra_loi == "có"
+      if xong_bai and not mai_kiem_tra:
+          print("Con được xem phim")
+      else:
+          print("Con ôn bài thêm nhé")
+    tests:
+      - input: "0\nkhông"
+        output: "Con được xem phim"
+      - input: "0\ncó"
+        output: "Con ôn bài thêm nhé"
+        hidden: true
+      - input: "2\nkhông"
+        output: "Con ôn bài thêm nhé"
+        hidden: true
+      - input: "1\ncó"
+        output: "Con ôn bài thêm nhé"
+        hidden: true
+      - input: "1\nkhông"
+        output: "Con ôn bài thêm nhé"
+        hidden: true
+    common_wrong:
+      - test: 0
+        output: "Con ôn bài thêm nhé"
+        misconception: not-flip
+        sample: |
+          so_bai = int(input())
+          tra_loi = input()
+          xong_bai = so_bai == 0
+          mai_kiem_tra = tra_loi == "có"
+          if xong_bai and mai_kiem_tra:
+              print("Con được xem phim")
+          else:
+              print("Con ôn bài thêm nhé")
+    hints:
+      - { vi: "Cất 2 kết quả so sánh vào 2 biến bool: xong_bai = so_bai == 0 và mai_kiem_tra = tra_loi == \"có\". Con được xem phim khi xong_bai là True và mai_kiem_tra là False, tức là not mai_kiem_tra là True.", en: "Store 2 comparison results in 2 bool variables: xong_bai = so_bai == 0 and mai_kiem_tra = tra_loi == \"có\". You may watch a film when xong_bai is True and mai_kiem_tra is False, that is, when not mai_kiem_tra is True." }
+      - { vi: "Sau 2 dòng đọc dữ liệu và 2 dòng tạo biến bool, viết if xong_bai and not mai_kiem_tra:. Sau đó là nhánh in Con được xem phim, dòng else:, và nhánh in Con ôn bài thêm nhé.", en: "After the 2 input lines and the 2 lines that make the bool variables, write if xong_bai and not mai_kiem_tra:. Then come the branch that prints Con được xem phim, the line else:, and the branch that prints Con ôn bài thêm nhé." }
+    test_eligible: true

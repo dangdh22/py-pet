@@ -1,0 +1,258 @@
+questions:
+  - id: s3.logic.b1
+    type: predict
+    concepts: [and-both]
+    lessons: [s3.logic.l1]
+    code: |
+      a = 4
+      print(a > 0 and a < 3)
+    prompt:
+      vi: "Đoạn code in ra gì?"
+      en: "What is the output of this code?"
+    choices:
+      - { text: "True", misconception: and-both }
+      - { text: "True\nFalse", misconception: and-both }
+      - { text: "False", correct: true }
+      - { vi: "Báo lỗi SyntaxError ở dòng 2", en: "A SyntaxError on line 2", error: true, misconception: and-both }
+    explanation:
+      vi: "a > 0 là True, nhưng a < 3 là False, vì 4 không nhỏ hơn 3. and chỉ ra True khi cả 2 bên đều True, nên cả điều kiện là False. print in ra 1 giá trị cho cả điều kiện, không in riêng từng bên. Dùng and bên trong print cũng đúng cách viết."
+      en: "a > 0 is True, but a < 3 is False, because 4 is not less than 3. and is True only when both sides are True, so the whole condition is False. print shows 1 value for the whole condition, not one for each side. Using and inside print is also correct."
+
+  - id: s3.logic.b2
+    type: mcq
+    concepts: [and-both]
+    lessons: [s3.logic.l1]
+    prompt:
+      vi: "Robo được ra sân chơi khi pin từ 50 phần trăm trở lên và trời không mưa. Trường hợp nào Robo được ra sân chơi?"
+      en: "Robo may go out to the playground when its battery is 50 percent or more and it is not raining. In which case may Robo go out?"
+    choices:
+      - { vi: "Pin 80 phần trăm, trời đang mưa", en: "Battery 80 percent, it is raining", misconception: and-both }
+      - { vi: "Pin 80 phần trăm, trời không mưa", en: "Battery 80 percent, it is not raining", correct: true }
+      - { vi: "Pin 30 phần trăm, trời không mưa", en: "Battery 30 percent, it is not raining", misconception: and-both }
+      - { vi: "Pin 50 phần trăm, trời đang mưa", en: "Battery 50 percent, it is raining", misconception: and-both }
+    explanation:
+      vi: "Luật có and, nên cả 2 điều kiện phải cùng đúng: pin từ 50 trở lên, và trời không mưa. Chỉ trường hợp pin 80 phần trăm, trời không mưa là đủ cả 2. Pin 30 phần trăm thì thiếu pin; trời đang mưa thì dù pin đủ, Robo vẫn ở trong nhà."
+      en: "The rule has and, so both conditions must be True: a battery of 50 or more, and no rain. Only battery 80 percent with no rain meets both. With 30 percent the battery is too low; when it is raining, Robo stays inside even with enough battery."
+
+  - id: s3.logic.b3
+    type: predict
+    concepts: [and-both, boundary-check]
+    lessons: [s3.logic.l1]
+    code: |
+      t = 30
+      if t >= 20 and t < 30:
+          print("nice")
+      else:
+          print("not nice")
+    prompt:
+      vi: "Đoạn code in ra gì?"
+      en: "What is the output of this code?"
+    choices:
+      - { text: "nice", misconception: boundary-check }
+      - { text: "nice\nnot nice", misconception: else-branch }
+      - { vi: "Không in ra gì", en: "Nothing is printed", misconception: else-branch }
+      - { text: "not nice", correct: true }
+    explanation:
+      vi: "t >= 20 là True, nhưng t < 30 là False, vì 30 không nhỏ hơn chính nó. Với and, 1 bên False là đủ làm cả điều kiện False, nên Python chạy nhánh else và in ra not nice. Mỗi lần chỉ 1 nhánh chạy, và nhánh else chạy khi điều kiện sai."
+      en: "t >= 20 is True, but t < 30 is False, because 30 is not less than itself. With and, one False side is enough to make the whole condition False, so Python runs the else branch and prints not nice. Only 1 branch runs each time, and the else branch runs when the condition is False."
+
+  - id: s3.logic.b4
+    type: predict
+    concepts: [or-either]
+    lessons: [s3.logic.l2]
+    code: |
+      a = 15
+      b = 20
+      print(a > 10 or b > 10)
+    prompt:
+      vi: "Đoạn code in ra gì?"
+      en: "What is the output of this code?"
+    choices:
+      - { text: "True", correct: true }
+      - { text: "False", misconception: or-either }
+      - { text: "True\nTrue", misconception: or-either }
+      - { vi: "Báo lỗi, vì or chỉ dùng được trong dòng if", en: "An error, because or can only be used in an if line", error: true, misconception: or-either }
+    explanation:
+      vi: "Cả a > 10 và b > 10 đều là True. or ra True khi ít nhất 1 bên True, kể cả khi cả 2 bên cùng True, nên Python in ra True. print in ra 1 giá trị cho cả điều kiện. or dùng được ở bất cứ đâu cần 1 giá trị bool, kể cả trong print."
+      en: "Both a > 10 and b > 10 are True. or is True when at least 1 side is True, even when both sides are True, so Python prints True. print shows 1 value for the whole condition. or can be used wherever a bool value is needed, print included."
+
+  - id: s3.logic.b5
+    type: mcq
+    concepts: [or-either]
+    lessons: [s3.logic.l2]
+    prompt:
+      vi: "A và B là 2 điều kiện. Khi nào A or B là False?"
+      en: "A and B are 2 conditions. When is A or B False?"
+    choices:
+      - { vi: "Khi cả A và B đều True", en: "When both A and B are True", misconception: or-either }
+      - { vi: "Khi chỉ 1 trong 2 điều kiện là False", en: "When only 1 of the 2 conditions is False", misconception: or-either }
+      - { vi: "Chỉ khi cả A và B đều False", en: "Only when both A and B are False", correct: true }
+      - { vi: "Khi A là False, dù B là True hay False", en: "When A is False, whether B is True or False", misconception: or-either }
+    explanation:
+      vi: "or chỉ cần 1 bên True là ra True. Vì vậy, A or B chỉ là False khi không bên nào True, tức là cả A và B đều False. Khi cả 2 cùng True, A or B vẫn là True."
+      en: "or needs only 1 True side to be True. So A or B is False only when no side is True, that is, when both A and B are False. When both are True, A or B is still True."
+
+  - id: s3.logic.b6
+    type: mcq
+    concepts: [or-misuse]
+    lessons: [s3.logic.l2]
+    prompt:
+      vi: "Con muốn kiểm tra n có bằng 3 hoặc bằng 4 không. Điều kiện nào đúng?"
+      en: "You want to check whether n is equal to 3 or to 4. Which condition is right?"
+    choices:
+      - { text: "n == 3 or 4", misconception: or-misuse }
+      - { text: "n == 3 and n == 4", misconception: and-both }
+      - { text: "n = 3 or n = 4", misconception: eq-vs-assign }
+      - { text: "n == 3 or n == 4", correct: true }
+    explanation:
+      vi: "Mỗi bên của or phải là 1 phép so sánh đầy đủ: n == 3 or n == 4. Với n == 3 or 4, bên phải chỉ là số 4, nên điều kiện luôn đúng. Với and, điều kiện không bao giờ đúng, vì n không thể vừa bằng 3 vừa bằng 4. Dấu = là gán, không phải so sánh, nên Python báo lỗi."
+      en: "Each side of or must be a full comparison: n == 3 or n == 4. With n == 3 or 4, the right side is just the number 4, so the condition is always True. With and, the condition is never True, because n cannot be 3 and 4 at the same time. The sign = assigns and does not compare, so Python gives an error."
+
+  - id: s3.logic.b7
+    type: mcq
+    concepts: [or-misuse]
+    lessons: [s3.logic.l2]
+    prompt:
+      vi: "Vì sao dòng if n == 1 or 2: luôn chạy khối lệnh bên dưới, dù n là số nào?"
+      en: "Why does the line if n == 1 or 2: always run the block under it, whatever number n is?"
+    choices:
+      - { vi: "Vì Python tự hiểu điều kiện thành n == 1 or n == 2", en: "Because Python reads the condition as n == 1 or n == 2", misconception: or-misuse }
+      - { vi: "Vì bên phải or chỉ là số 2, không phải phép so sánh, và Python hiểu số 2 là đúng", en: "Because on the right of or there is only the number 2, not a comparison, and Python takes the number 2 as True", correct: true }
+      - { vi: "Vì or luôn cho ra True", en: "Because or always gives True", misconception: or-either }
+      - { vi: "Vì dấu == so sánh n với cả 2 số cùng lúc", en: "Because the sign == compares n with both numbers at once", misconception: or-misuse }
+    explanation:
+      vi: "Python đọc điều kiện thành 2 phần: n == 1, và số 2 đứng 1 mình. Python hiểu số 2 là đúng, nên cả điều kiện luôn đúng. Nếu Python hiểu thành n == 1 or n == 2, hay so sánh n với cả 2 số, thì khối lệnh chỉ chạy khi n là 1 hoặc 2. or cũng không luôn ra True: False or False là False."
+      en: "Python reads the condition as 2 parts: n == 1, and the number 2 on its own. Python takes the number 2 as True, so the whole condition is always True. If Python read it as n == 1 or n == 2, or compared n with both numbers, the block would run only when n is 1 or 2. And or is not always True: False or False is False."
+
+  - id: s3.logic.b8
+    type: predict
+    concepts: [not-flip]
+    lessons: [s3.logic.l3]
+    code: |
+      done = False
+      if not done:
+          print("work")
+      else:
+          print("play")
+    prompt:
+      vi: "Đoạn code in ra gì?"
+      en: "What is the output of this code?"
+    choices:
+      - { text: "work", correct: true }
+      - { text: "play", misconception: not-flip }
+      - { text: "work\nplay", misconception: else-branch }
+      - { vi: "Báo lỗi SyntaxError ở dòng 2, vì sau if phải có 1 phép so sánh", en: "A SyntaxError on line 2, because if must be followed by a comparison", error: true }
+    explanation:
+      vi: "done là False, nên not done là True. Điều kiện đúng, nên Python chạy nhánh if, in ra work, và bỏ qua nhánh else. Sau if có thể là 1 biến bool hay not với 1 biến bool, không cần phép so sánh."
+      en: "done is False, so not done is True. The condition is True, so Python runs the if branch, prints work, and skips the else branch. After if you can write a bool variable, or not with a bool variable; no comparison is needed."
+
+  - id: s3.logic.b9
+    type: predict
+    concepts: [not-flip]
+    lessons: [s3.logic.l3]
+    code: |
+      a = 3
+      b = 3
+      print(not a != b)
+    prompt:
+      vi: "Đoạn code in ra gì?"
+      en: "What is the output of this code?"
+    choices:
+      - { text: "False", misconception: not-flip }
+      - { text: "True", correct: true }
+      - { text: "not False", misconception: not-flip }
+      - { vi: "Báo lỗi SyntaxError, vì không được viết not trước dấu !=", en: "A SyntaxError, because not cannot go before the sign !=", error: true, misconception: not-flip }
+    explanation:
+      vi: "Python làm phép so sánh trước: a bằng b, nên a != b là False. Sau đó not đảo False thành True, và Python in ra True. Vì vậy not a != b giống hệt a == b. print in ra giá trị, không in ra chữ not."
+      en: "Python does the comparison first: a equals b, so a != b is False. Then not flips False to True, and Python prints True. So not a != b is the same as a == b. print shows the value, not the word not."
+
+  - id: s3.logic.b10
+    type: mcq
+    concepts: [not-flip]
+    lessons: [s3.logic.l3]
+    prompt:
+      vi: "Biến rain chứa True hoặc False. Điều kiện nào luôn cho cùng kết quả với not rain?"
+      en: "The variable rain holds True or False. Which condition always gives the same result as not rain?"
+    choices:
+      - { text: "rain == True", misconception: not-flip }
+      - { text: "rain = False", misconception: eq-vs-assign }
+      - { text: "rain == False", correct: true }
+      - { text: "rain != False", misconception: not-flip }
+    explanation:
+      vi: "not rain là True khi rain là False. rain == False cũng là True khi rain là False, nên 2 điều kiện luôn giống nhau. rain == True và rain != False giống chính rain, chưa bị đảo. Dấu = là gán, không phải so sánh."
+      en: "not rain is True when rain is False. rain == False is also True exactly when rain is False, so the 2 conditions always match. rain == True and rain != False are the same as rain itself, not flipped. The sign = assigns and does not compare."
+
+  - id: s3.logic.b11
+    type: predict
+    concepts: [chained-compare]
+    lessons: [s3.logic.l4]
+    code: |
+      n = 5
+      if 10 <= n <= 1:
+          print("in")
+      else:
+          print("out")
+    prompt:
+      vi: "Đoạn code in ra gì?"
+      en: "What is the output of this code?"
+    choices:
+      - { text: "out", correct: true }
+      - { text: "in", misconception: chained-compare }
+      - { text: "in\nout", misconception: else-branch }
+      - { vi: "Báo lỗi SyntaxError ở dòng 2", en: "A SyntaxError on line 2", error: true, misconception: chained-compare }
+    explanation:
+      vi: "10 <= n <= 1 giống 10 <= n and n <= 1. 10 <= 5 là False, nên cả điều kiện là False, và Python in ra out. Thực ra không số nào vừa từ 10 trở lên vừa không quá 1, nên điều kiện này không bao giờ đúng. Khi viết gọn khoảng giá trị, con viết số nhỏ bên trái: 1 <= n <= 10."
+      en: "10 <= n <= 1 is the same as 10 <= n and n <= 1. 10 <= 5 is False, so the whole condition is False, and Python prints out. In fact no number is both 10 or more and 1 or less, so this condition is never True. When you write a range in the short form, put the small number on the left: 1 <= n <= 10."
+
+  - id: s3.logic.b12
+    type: mcq
+    concepts: [chained-compare]
+    lessons: [s3.logic.l4]
+    prompt:
+      vi: "Điều kiện nào luôn cho cùng kết quả với 5 < n < 9?"
+      en: "Which condition always gives the same result as 5 < n < 9?"
+    choices:
+      - { text: "n > 5 or n < 9", misconception: and-both }
+      - { text: "n >= 5 and n <= 9", misconception: boundary-check }
+      - { text: "n > 5 and < 9", misconception: chained-compare }
+      - { text: "n > 5 and n < 9", correct: true }
+    explanation:
+      vi: "5 < n < 9 nghĩa là n lớn hơn 5 và n nhỏ hơn 9, viết đủ là n > 5 and n < 9. Với or, điều kiện đúng với mọi số, vì số nào cũng lớn hơn 5 hoặc nhỏ hơn 9. Dấu >= và <= gồm cả 5 và 9, nên sai ở 2 đầu. n > 5 and < 9 thiếu tên biến ở bên phải and, nên Python báo lỗi SyntaxError."
+      en: "5 < n < 9 means n is greater than 5 and n is less than 9, written in full as n > 5 and n < 9. With or, the condition is True for every number, because each number is greater than 5 or less than 9. The signs >= and <= include 5 and 9, so they are wrong at both ends. n > 5 and < 9 has no variable name on the right of and, so Python gives a SyntaxError."
+
+  - id: s3.logic.b13
+    type: predict
+    concepts: [and-both, or-either]
+    lessons: [s3.logic.l4]
+    code: |
+      a = 7
+      b = 1
+      print((a > 5 or b > 5) and b > 3)
+      print(a > 5 or b > 5 and b > 3)
+    prompt:
+      vi: "Đoạn code in ra gì?"
+      en: "What is the output of this code?"
+    choices:
+      - { text: "False\nTrue", correct: true }
+      - { text: "False\nFalse" }
+      - { text: "True\nTrue", misconception: and-both }
+      - { vi: "Báo lỗi SyntaxError ở dòng 3, vì không được đặt ngoặc trong điều kiện", en: "A SyntaxError on line 3, because brackets are not allowed in a condition", error: true }
+    explanation:
+      vi: "Dòng 3 có ngoặc, nên Python làm phần trong ngoặc trước: a > 5 or b > 5 là True. Sau đó True and b > 3 là True and False, ra False. Dòng 4 không có ngoặc, nên Python làm and trước: b > 5 and b > 3 là False. Còn lại a > 5 or False là True or False, ra True."
+      en: "Line 3 has brackets, so Python does the part in brackets first: a > 5 or b > 5 is True. Then True and b > 3 is True and False, which is False. Line 4 has no brackets, so Python does the and first: b > 5 and b > 3 is False. What is left, a > 5 or False, is True or False, which is True."
+
+  - id: s3.logic.b14
+    type: mcq
+    concepts: [and-both]
+    lessons: [s3.logic.l1]
+    prompt:
+      vi: "Con viết 1 chương trình có điều kiện a > 0 and b > 0. Để chắc chắn chương trình chạy đúng, con nên thử những trường hợp nào?"
+      en: "You write a program with the condition a > 0 and b > 0. To be sure the program works, which cases should you try?"
+    choices:
+      - { vi: "Chỉ cần thử 1 lần, khi cả a và b đều lớn hơn 0", en: "Just 1 try, when both a and b are greater than 0", misconception: and-both }
+      - { vi: "Cả a và b lớn hơn 0, chỉ a lớn hơn 0, chỉ b lớn hơn 0, và cả 2 không lớn hơn 0", en: "Both a and b greater than 0, only a greater than 0, only b greater than 0, and neither greater than 0", correct: true }
+      - { vi: "Chỉ cần thử khi cả a và b đều không lớn hơn 0", en: "Just the case when neither a nor b is greater than 0", misconception: and-both }
+      - { vi: "Chỉ cần thử các giá trị của a, vì Python chỉ xem điều kiện bên trái and", en: "Just values of a, because Python only looks at the condition on the left of and", misconception: and-both }
+    explanation:
+      vi: "Điều kiện có and phụ thuộc vào cả 2 bên. Con thử đủ 4 trường hợp: cả 2 bên đúng, chỉ bên trái đúng, chỉ bên phải đúng, và cả 2 bên sai. Nếu con viết nhầm b > 0 thành a > 0, lỗi chỉ lộ ra khi con thử trường hợp chỉ a lớn hơn 0."
+      en: "A condition with and depends on both sides. Try all 4 cases: both sides True, only the left side True, only the right side True, and both sides False. If you wrongly write a > 0 instead of b > 0, the mistake shows only when you try the case where only a is greater than 0."

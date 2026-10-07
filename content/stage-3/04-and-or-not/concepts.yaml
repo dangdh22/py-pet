@@ -1,0 +1,51 @@
+concepts:
+  - id: and-both
+    name: { vi: "and đúng khi cả 2 điều kiện đều đúng", en: "and is True only when both conditions are True" }
+    misconception_card: |
+      Nhiều bạn nghĩ với and, chỉ cần 1 trong 2 điều kiện đúng là đủ. Thực ra and chỉ ra True khi cả 2 bên đều True, nên `5 > 3 and 5 > 8` là False. Vì vậy `n < 10 and n > 35` không bao giờ đúng: không có số nào vừa nhỏ hơn 10 vừa lớn hơn 35.
+    parent_tip: |
+      Bố mẹ đặt 1 luật: "Con được ra ngoài chơi khi đã làm xong bài và đã dọn phòng", rồi kể vài tình huống, như xong bài nhưng chưa dọn phòng. Con nói mỗi lần có được ra ngoài chơi không, và vì sao.
+    practice:
+      level1: [s3.logic.l1.q1, s3.logic.l1.q2, s3.logic.b1, s3.logic.b2, s3.logic.b3, s3.logic.b14, s3.logic.b13]
+      level2: [s3.logic.p1]
+      level3: [s3.logic.l1.ex1, s3.logic.l1.ex2, s3.logic.l4.ex2, s3.logic.c3]
+  - id: or-either
+    name: { vi: "or đúng khi ít nhất 1 điều kiện đúng", en: "or is True when at least 1 condition is True" }
+    misconception_card: |
+      Nhiều bạn nghĩ or giống "hoặc cái này, hoặc cái kia" ngoài đời, nên khi cả 2 bên cùng đúng thì or là False. Thực ra or ra True khi ít nhất 1 bên True, kể cả khi cả 2 bên đều True: `5 > 1 or 5 > 2` là True. or chỉ ra False khi cả 2 bên đều False.
+    parent_tip: |
+      Bố mẹ nói: "Cả nhà đi ăn kem nếu con được điểm 10 hoặc trời nắng", rồi hỏi con: hôm con được điểm 10 mà trời cũng nắng thì có đi ăn kem không? Cùng con tìm thêm các luật có chữ "hoặc" ở nhà và ở trường.
+    practice:
+      level1: [s3.logic.l2.q1, s3.logic.b4, s3.logic.b5, s3.logic.l4.q2, s3.logic.b13]
+      level2: [s3.logic.p2]
+      level3: [s3.logic.l2.ex1, s3.logic.l4.ex2, s3.logic.c1, s3.logic.c2]
+  - id: or-misuse
+    name: { vi: "Viết đủ phép so sánh ở 2 bên or", en: "Write a full comparison on each side of or" }
+    misconception_card: |
+      Nhiều bạn viết `n == 1 or 2`, giống như khi nói "n bằng 1 hoặc 2". Thực ra Python đọc điều kiện thành 2 phần: `n == 1`, và bên phải or chỉ là số 2. Python hiểu số 2 là đúng, nên điều kiện luôn đúng, dù n là số nào. Con phải viết đủ 2 phép so sánh: `n == 1 or n == 2`.
+    parent_tip: |
+      Bố mẹ nói "Ai mặc áo xanh hoặc đỏ thì giơ tay", rồi nhờ con tách thành 2 câu hỏi đầy đủ: "Áo có màu xanh không? Áo có màu đỏ không?". Giải thích với con rằng máy tính cũng cần mỗi câu hỏi được nói đủ như vậy.
+    practice:
+      level1: [s3.logic.l2.q2, s3.logic.b6, s3.logic.b7]
+      level2: [s3.logic.p2]
+      level3: [s3.logic.l2.ex2, s3.logic.c1]
+  - id: not-flip
+    name: { vi: "not đảo True thành False và ngược lại", en: "not flips True to False and back" }
+    misconception_card: |
+      Nhiều bạn nghĩ not làm cho điều kiện thay đổi theo cách khó đoán. Thực ra not chỉ làm 1 việc: đổi True thành False, và False thành True. Python làm phép so sánh trước rồi mới đảo, nên `not 5 > 3` là not True, tức là False. Vì vậy `not a == b` giống `a != b`, còn `not a != b` giống `a == b`.
+    parent_tip: |
+      Bố mẹ nói 1 câu như "Đèn đang bật", con thêm chữ "không" để đảo ý thành "Đèn đang không bật", rồi nói câu mới đúng hay sai. Thử cả với câu đã có chữ "không": thêm 1 chữ "không" nữa thì ý quay về như cũ.
+    practice:
+      level1: [s3.logic.l3.q1, s3.logic.l3.q2, s3.logic.b8, s3.logic.b9, s3.logic.b10]
+      level2: [s3.logic.p3]
+      level3: [s3.logic.l3.ex1, s3.logic.l3.ex2, s3.logic.c3]
+  - id: chained-compare
+    name: { vi: "Khoảng giá trị: a <= x <= b", en: "Ranges: a <= x <= b" }
+    misconception_card: |
+      Nhiều bạn viết `x >= 1 and <= 10`, giống như khi nói. Thực ra mỗi bên của and phải là 1 phép so sánh đầy đủ: `x >= 1 and x <= 10`, nếu không Python báo lỗi SyntaxError. Con cũng có thể viết gọn là `1 <= x <= 10`, với số nhỏ bên trái và số lớn bên phải, vì `10 <= x <= 1` không bao giờ đúng.
+    parent_tip: |
+      Bố mẹ vẽ 1 trục số từ 0 đến 15, tô đoạn từ 5 đến 10, rồi đọc từng số để con nói số đó có nằm trong đoạn không. Hỏi con kỹ ở 2 đầu: số 5 và số 10 có nằm trong đoạn không?
+    practice:
+      level1: [s3.logic.l4.q1, s3.logic.l4.q2, s3.logic.b11, s3.logic.b12]
+      level2: [s3.logic.p4]
+      level3: [s3.logic.l4.ex1, s3.logic.c2]
