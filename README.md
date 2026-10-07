@@ -26,9 +26,17 @@ npx playwright install chromium
 | `npm test` | Build nội dung rồi chạy test Vitest (gồm test trên Pyodide thật) |
 | `npm run test:py` | Test cho script kiểm tra nội dung |
 | `npm run content:validate` | Build nội dung và chạy mọi đoạn code trong nội dung bằng Python |
-| `npm run test:e2e` | Test đầu cuối bằng Playwright trên bản build |
-| `npm run check` | Chạy tất cả kiểm tra ở trên |
+| `npm run test:e2e` | Test đầu cuối bằng Playwright trên bản build (cả khi bản build chạy dưới đường dẫn con `/py-pet/`) |
+| `npm run lint` | ESLint |
+| `npm run check` | Chạy tất cả kiểm tra ở trên, gồm lint |
 | `npm run build` | Build bản tĩnh vào `dist/` |
+
+## CI và deploy
+
+- `.github/workflows/ci.yml` chạy trên mọi lần push và pull request: Node 22, Python 3.13 (tạo `.venv` từ `requirements-dev.txt`), `npm ci`, cài Chromium của Playwright rồi `npm run check`. Khi lỗi, báo cáo Playwright được lưu thành artifact `playwright-report` của lần chạy.
+- `.github/workflows/deploy.yml` chạy khi push vào `main` (hoặc bấm tay ở tab Actions): `npm run build` rồi đưa `dist/` lên GitHub Pages. Không chạy lại test vì CI đã chạy trên cùng commit. Push nhánh khác không deploy.
+- Bật Pages 1 lần: trên GitHub vào Settings → Pages → Source: chọn **GitHub Actions**.
+- Trang sau khi deploy: `https://<owner>.github.io/py-pet/` (`<owner>` là tên tài khoản hoặc tổ chức chứa repo). Bản build dùng đường dẫn tương đối và hash routing nên chạy được dưới `/py-pet/`; e2e `e2e/subpath.spec.ts` kiểm tra điều này bằng `tools/serve_subpath.mjs` (phục vụ `dist/` tại `http://localhost:4174/py-pet/`).
 
 ## Soạn nội dung
 
