@@ -44,8 +44,10 @@ describe("EvolutionShow", () => {
     const dialog = screen.getByRole("dialog", { name: "Robo đã tiến hóa!" });
     expect(dialog).toHaveAttribute("aria-modal", "true");
     expect(dialog).toHaveClass("evolution-show");
-    const robots = screen.getAllByRole("img", { name: "Robo" });
-    expect(robots.map((robot) => robot.getAttribute("data-form"))).toEqual(["2", "3"]);
+    // Only the new form is announced; the old one is hidden from screen readers.
+    expect(screen.getByRole("img", { name: "Robo" })).toHaveAttribute("data-form", "3");
+    expect(dialog.querySelector(".evo-old")).toHaveAttribute("aria-hidden", "true");
+    expect(dialog.querySelector(".evo-old svg")).toHaveAttribute("data-form", "2");
     expect(screen.getByText("Robo đang lớn lên…")).toBeInTheDocument();
   });
 
@@ -55,6 +57,16 @@ describe("EvolutionShow", () => {
     expect(skip).toHaveFocus();
     await userEvent.click(skip);
     expect(onDone).toHaveBeenCalledTimes(1);
+  });
+
+  test("Tab keeps the focus on the skip button while the show is open", async () => {
+    show(1, 2);
+    const skip = screen.getByRole("button", { name: "Bỏ qua" });
+    expect(skip).toHaveFocus();
+    await userEvent.tab();
+    expect(skip).toHaveFocus();
+    await userEvent.tab({ shift: true });
+    expect(skip).toHaveFocus();
   });
 
   test("Esc skips the show, and the show ends only once", async () => {

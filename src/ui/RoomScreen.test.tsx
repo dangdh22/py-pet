@@ -111,6 +111,16 @@ describe("RoomScreen", () => {
     expect(screen.getByText("Lớn lên: 0%")).toBeInTheDocument();
   });
 
+  test("a graduated robot shows its growth bar full", async () => {
+    const state = initialGameState(TODAY);
+    state.pet.stage = 5;
+    state.pet.xp = 900;
+    state.pet.stageStartXp = 900;
+    await renderWithGame(<RoomScreen />, { state });
+    expect(screen.getByText("Lớn lên: 100%")).toBeInTheDocument();
+    expect(screen.getByRole("meter", { name: "Lớn lên" })).toHaveAttribute("aria-valuenow", "100");
+  });
+
   test("on vacation: the robot wears sunglasses and the week plan leaves out the vacation days", async () => {
     const state = initialGameState(TODAY);
     state.pet.pin = 0;

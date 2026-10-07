@@ -8,7 +8,7 @@ import { answerPaper } from "../test/answerExam";
 import { examBundle } from "../test/examBundle";
 import { fakeRunner, okResult } from "../test/render";
 import { renderWithGame, TODAY } from "../test/renderGame";
-import { EvolutionTestScreen } from "./EvolutionTestScreen";
+import { EvolutionPassed, EvolutionTestScreen } from "./EvolutionTestScreen";
 
 const bundle = examBundle();
 const stage = bundle.stages[0]!;
@@ -55,7 +55,8 @@ describe("EvolutionTestScreen", () => {
 
     // The evolution show comes first: the old form turns into the new one, with the skip button in focus.
     const show = screen.getByRole("dialog", { name: "Robo đã tiến hóa!" });
-    expect(within(show).getAllByRole("img", { name: "Robo" }).map((robot) => robot.dataset.form)).toEqual(["1", "2"]);
+    expect(within(show).getByRole("img", { name: "Robo" }).dataset.form).toBe("2");
+    expect(show.querySelector(".evo-old svg")).toHaveAttribute("data-form", "1");
     expect(within(show).getByText("Robo có thêm ăng-ten!")).toBeInTheDocument();
     expect(screen.queryByText("Con được 7/7 điểm.")).not.toBeInTheDocument();
     await userEvent.click(screen.getByRole("button", { name: "Bỏ qua" }));
@@ -89,6 +90,17 @@ describe("EvolutionTestScreen", () => {
     } finally {
       vi.unstubAllGlobals();
     }
+  });
+
+  test("the show plays only when the stage went up", async () => {
+    const before = ready();
+    const after = structuredClone(before);
+    await renderWithGame(
+      <EvolutionPassed before={before} after={after} grade={{ score: 7, max: 7, wrongConcepts: [] }} onExit={() => {}} />,
+      { bundle: twoStages },
+    );
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Robo đã tiến hóa!" })).toBeInTheDocument();
   });
 
   test("a fail lists the weak concepts and opens the focused review set", async () => {

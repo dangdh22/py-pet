@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { findConcept } from "../content/lookup";
 import type { Concept, Stage } from "../content/types";
 import { buildRemedialSet, drawEvolutionTest, gradePaper, type ExamGrade } from "../game/exam";
-import { FORM_COUNT, formOf } from "../game/look";
+import { FORM_COUNT, formOf, robotLook } from "../game/look";
 import { nextStep } from "../game/path";
 import type { Rng } from "../game/random";
 import { isPass } from "../game/rewards";
@@ -10,7 +10,7 @@ import type { GameState } from "../game/state";
 import { pick } from "../i18n/lang";
 import { useLang } from "../i18n/LangProvider";
 import { useContent } from "./contexts";
-import { EvolutionShow } from "./EvolutionShow";
+import { EvolutionShow, prefersReducedMotion } from "./EvolutionShow";
 import { ExamRunner, formatScore } from "./ExamRunner";
 import { useGame } from "./GameProvider";
 import { PetRobot } from "./PetRobot";
@@ -112,7 +112,8 @@ function EvolutionAttempt({
   );
 }
 
-function EvolutionPassed({
+/** Exported for its test: the show plays only for a real stage change. */
+export function EvolutionPassed({
   before,
   after,
   grade,
@@ -125,11 +126,12 @@ function EvolutionPassed({
 }) {
   const { t, uiLang } = useLang();
   const bundle = useContent();
-  const { profile } = useGame();
+  const { profile, today } = useGame();
   const next = nextStep(bundle, after);
   const xu = after.wallet.xu - before.wallet.xu;
   const vui = after.pet.vui - before.pet.vui;
-  const [showing, setShowing] = useState(true);
+  // No show for a fake evolution (same stage) or with reduced motion: the congratulation renders at once.
+  const [showing, setShowing] = useState(() => after.pet.stage > before.pet.stage && !prefersReducedMotion());
   const headingRef = useRef<HTMLHeadingElement>(null);
   useEffect(() => {
     // The show had the focus on its skip button: it goes on to the congratulation.
@@ -140,7 +142,7 @@ function EvolutionPassed({
       <EvolutionShow
         from={{ form: formOf(before.pet.stage), graduated: before.pet.stage > FORM_COUNT }}
         to={{ form: formOf(after.pet.stage), graduated: after.pet.stage > FORM_COUNT }}
-        equipped={after.inventory.equipped}
+        equipped={robotLook(bundle, after, today).equipped}
         robotName={profile.robotName}
         onDone={() => setShowing(false)}
       />

@@ -52,6 +52,22 @@ describe("robotLook", () => {
     expect(robotLook(bundle, state, TODAY)).toMatchObject({ form: 4, graduated: false });
   });
 
+  test("a graduated robot is fully grown: it is not smaller than before the last check", () => {
+    const state = initialGameState(TODAY);
+    state.pet.stage = 4;
+    state.pet.xp = 1000;
+    state.pet.stageStartXp = 0;
+    const before = robotLook(bundle, state, TODAY);
+    expect(before.size).toBe(3);
+    // Passing the check sets stage 5 and starts a new count of the stage XP (apply.ts).
+    state.pet.stage = 5;
+    state.pet.stageStartXp = state.pet.xp;
+    const after = robotLook(bundle, state, TODAY);
+    expect(after).toMatchObject({ form: 4, graduated: true, size: 3 });
+    expect(robotPixelSize(after.form, after.size)).toBeGreaterThanOrEqual(184);
+    expect(robotPixelSize(after.form, after.size)).toBeGreaterThanOrEqual(robotPixelSize(before.form, before.size));
+  });
+
   test("maps the room condition to the 5 states, vacation first, then an empty battery", () => {
     const state = initialGameState(TODAY);
     state.pet.pin = 3;

@@ -54,7 +54,7 @@ export function RoomScreen() {
       <div className="room-stats">
         <StatBar label={t("room.pin")} value={state.pet.pin} max={STAT_MAX} tone="pin" />
         <StatBar label={t("room.vui")} value={state.pet.vui} max={STAT_MAX} tone="vui" />
-        <StatBar label={t("room.growth")} value={growthPercent(xp, max)} max={100} tone="growth" />
+        <StatBar label={t("room.growth")} value={look.graduated ? 100 : growthPercent(xp, max)} max={100} tone="growth" />
       </div>
       <ul className="room-goals">
         <li>{t("room.today", { done: todayPoints(state, today), goal: state.settings.dailyGoal })}</li>

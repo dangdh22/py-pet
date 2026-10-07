@@ -42,13 +42,15 @@ export function robotPixelSize(form: RobotForm, size: GrowthSize): number {
 export function robotLook(bundle: ContentBundle, state: GameState, today: string): RobotLook {
   const stage = currentStage(bundle, state);
   const condition = roomCondition(state, today);
+  const graduated = state.pet.stage > FORM_COUNT;
   const equipped = SLOT_ORDER.flatMap((slot) =>
     state.inventory.equipped.filter((id) => SHOP_ITEMS.some((item) => item.id === id && item.slot === slot)),
   );
   return {
     form: formOf(state.pet.stage),
-    graduated: state.pet.stage > FORM_COUNT,
-    size: growthSize(stageXp(state), stage ? stageXpMax(stage) : 0),
+    graduated,
+    // A graduate is fully grown: stageXp starts again at 0 after the last check, which must not shrink Robo.
+    size: graduated ? 3 : growthSize(stageXp(state), stage ? stageXpMax(stage) : 0),
     state: condition === "normal" ? "neutral" : condition,
     equipped,
   };

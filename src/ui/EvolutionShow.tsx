@@ -111,7 +111,7 @@ export function EvolutionShow({ from, to, equipped, robotName, onDone, reducedMo
     >
       <div className="evo-stage">
         <div className="evo-halo" aria-hidden="true" />
-        <div className="evo-old" style={sizeStyle(from.form)}>
+        <div className="evo-old" style={sizeStyle(from.form)} aria-hidden="true">
           <Robot form={from.form} graduated={from.graduated} equipped={equipped} size={showSize(from.form)} />
         </div>
         <div className="evo-new" style={sizeStyle(to.form)}>

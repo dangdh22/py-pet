@@ -48,6 +48,9 @@ test("explains an error in Vietnamese and marks the line", async ({ page }) => {
   await expect(page.getByText('Dòng 1: Python không biết "Robo" là gì.', { exact: false })).toBeVisible();
   await expect(page.locator(".cm-error-line")).toHaveCount(1);
   await expect(page.getByText("Xem lỗi gốc")).toBeVisible();
+  // The long explanation must not squash Robo in the flex row (jsdom cannot see this).
+  const robo = page.locator(".robot-bubble").getByRole("img", { name: "Robo" });
+  expect((await robo.boundingBox())?.width).toBe(56);
 });
 
 test("stops an endless loop and stays usable", async ({ page }) => {

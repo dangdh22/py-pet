@@ -11,7 +11,7 @@
   /* Stat bars (spec 8.2.1) and the shop items that raise them. */
   --stat-pin: #2a9d4a;
   --stat-vui: #f0508c;
-  --stat-growth: #4f7cff;
+  --stat-growth: var(--primary);
   --stat-low: #d33a3a;
   --stat-track: #e4e9f3;
   --code-bg: #1e1e2e;
@@ -92,6 +92,7 @@ button[aria-pressed="true"] { background: var(--text); border-color: var(--text)
 .cm-error-line { background: rgba(211, 58, 58, 0.18); }
 
 .robot-bubble { display: flex; gap: 10px; align-items: flex-start; margin-top: 12px; }
+.robot-bubble > svg { flex: none; }
 .bubble { background: #fff8ea; border: 1px solid #f0d9a8; border-radius: var(--radius); padding: 8px 12px; }
 .bubble-hint { color: var(--muted); }
 
@@ -488,7 +489,8 @@ button.danger:disabled { opacity: 0.5; }
 .stat-bar { display: grid; gap: 4px; --stat: var(--stat-pin); }
 .stat-vui { --stat: var(--stat-vui); }
 .stat-growth { --stat: var(--stat-growth); }
-.stat-pin.stat-low { --stat: var(--stat-low); }
+.stat-pin.stat-low,
+.stat-vui.stat-low { --stat: var(--stat-low); }
 .stat-head { display: flex; align-items: center; gap: 6px; font-weight: 600; }
 .stat-icon { flex: none; color: var(--stat); }
 .stat-track {
