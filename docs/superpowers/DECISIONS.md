@@ -107,3 +107,5 @@ Người bảo trì chưa duyệt kế hoạch M5d; Claude tự chốt theo yêu
 2. **Bài AI "Học có giám sát và không giám sát"** là bài cuối của chủ đề "for và range".
 3. **Chưa dạy list, `len()`, `sum()`, `max()`** ở giai đoạn 4; dùng biến tích lũy.
 4. **Luật 8 và 9 của spec 3.9 thành lỗi** của `content:validate` khi giai đoạn 4 xong.
+5. **`+=` được dạy ở bài 1 chủ đề "Tổng, đếm, lớn nhất"**; 2 chủ đề trước dùng `dem = dem + 1`. Khi con viết `tong += i` mà quên `tong = 0`, app cho lời khuyên "gán trước khi dùng" (sửa nhỏ trong `isAssignedInCode`), không khuyên đặt tên trong dấu ngoặc kép.
+6. **Bài viết lại chương trình for bằng while chỉ chấm theo kết quả in ra**, nên lời giải dùng for vẫn qua. Chưa có kiểu kiểm tra "phải dùng while"; xem lại nếu cần ở bản sau.
