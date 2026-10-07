@@ -85,3 +85,12 @@ Người bảo trì chưa duyệt kế hoạch M5b; Claude tự chốt theo yêu
 6. **Khái niệm `input-prompt`** (đổi từ `input-empty-prompt` của kế hoạch): trùng mã hiểu lầm mà bộ chấm tự thêm khi con viết chữ trong `input(...)`, nên thẻ hiểu lầm và bài luyện tự xuất hiện.
 7. **Sửa 1 phần code của app trong M5b** (kế hoạch ghi chỉ có nội dung): (a) lỗi `NameError` khi dùng biến trước khi gán được nhận ra riêng (mục từ điển `name-before-assign`, check `assigned-in-code`) và ghi hiểu lầm `var-before-use`, không ghi nhầm thành "quên dấu nháy"; (b) hiểu lầm thuộc khái niệm của giai đoạn con chưa tới thì không được ghi vào điểm thành thạo và không hiện thẻ (`isConceptReached` trong `src/content/lookup.ts`). Lý do: nội dung giai đoạn 2 làm 2 lỗi này hay gặp.
 8. **Mục từ điển lỗi mới của giai đoạn 2**: `assign-to-literal`, `float-invalid`, `format-code-str`, `name-before-assign` (34 mục).
+
+## M5c
+
+Người bảo trì chưa duyệt kế hoạch M5c; Claude tự chốt theo yêu cầu chạy liên tục. Chi tiết trong mục "Quyết định thiết kế" của `docs/superpowers/plans/2026-10-07-m5c-noi-dung-giai-doan-3.md`.
+
+1. **Dàn ý giai đoạn 3** do Claude đặt: "So sánh và bool" (5 bài, bài 5 là AI), "if và else" (5), "Nhiều nhánh với elif" (4), "and, or, not" (4), "Bài toán điều kiện" (4): 22 bài.
+2. **Bài AI "Quy tắc cố định và học từ dữ liệu"** là bài cuối của chủ đề "So sánh và bool".
+3. **Chưa dạy `max()`/`min()`** ở giai đoạn 3; bài số lớn nhất dùng `if`.
+4. **Test cho mọi nhánh và ranh giới** là quy tắc bắt buộc của bài rẽ nhánh.
