@@ -1,0 +1,11 @@
+id: s4.while
+title: { vi: "Vòng lặp while", en: "The while loop" }
+lessons:
+  - 01-while.md
+  - 02-vong-lap-vo-han.md
+  - 03-dung-khi-nhap-0.md
+  - 04-while-hay-for.md
+  - 05-tiet-kiem.md
+reviews:
+  - { id: s4.while.r1, after: s4.while.l2 }
+  - { id: s4.while.r2, after: s4.while.l5 }

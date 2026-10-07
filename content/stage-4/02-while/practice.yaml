@@ -1,0 +1,470 @@
+exercises:
+  - id: s4.while.p1
+    type: fill
+    concepts: [while-check-first]
+    prompt:
+      vi: "Robo chạy từng vòng cho đến khi hết pin, mỗi vòng tốn 1 vạch pin. Ô Dữ liệu nhập có 1 dòng: số vạch pin, là số nguyên không âm. Điền vào chỗ trống để chương trình in ra như phần Ví dụ."
+      en: "Robo runs lap after lap until its battery is empty, and each lap uses 1 bar of battery. The Input data box has 1 line: the number of battery bars, an integer that is not negative. Fill the blank so that the program prints as in the Example."
+    template: |
+      pin = int(input())
+      ___ pin > 0:
+          print("Pin", pin, "- Robo chạy 1 vòng")
+          pin = pin - 1
+      print("Robo cần sạc pin")
+    answers: ["while"]
+    tests:
+      - input: "3"
+        output: |
+          Pin 3 - Robo chạy 1 vòng
+          Pin 2 - Robo chạy 1 vòng
+          Pin 1 - Robo chạy 1 vòng
+          Robo cần sạc pin
+      - input: "1"
+        output: |
+          Pin 1 - Robo chạy 1 vòng
+          Robo cần sạc pin
+        hidden: true
+      - input: "0"
+        output: "Robo cần sạc pin"
+        hidden: true
+      - input: "5"
+        output: |
+          Pin 5 - Robo chạy 1 vòng
+          Pin 4 - Robo chạy 1 vòng
+          Pin 3 - Robo chạy 1 vòng
+          Pin 2 - Robo chạy 1 vòng
+          Pin 1 - Robo chạy 1 vòng
+          Robo cần sạc pin
+        hidden: true
+    hints:
+      - { vi: "Robo cần 1 lệnh kiểm tra pin > 0 trước mỗi vòng chạy, chứ không chỉ 1 lần. Lệnh if chỉ kiểm tra 1 lần.", en: "Robo needs a statement that checks pin > 0 before each lap, not just once. An if statement checks only once." }
+      - { vi: "Điền while vào chỗ trống.", en: "Fill the blank with while." }
+
+  - id: s4.while.p2
+    type: fill
+    concepts: [while-update]
+    prompt:
+      vi: "Robo đếm cách 10, bắt đầu từ 1 số đọc vào, và không đếm quá 50. Ô Dữ liệu nhập có 1 dòng: số bắt đầu. Điền vào chỗ trống để vòng lặp dừng được và chương trình in ra như phần Ví dụ."
+      en: "Robo counts in steps of 10, starting from a number that is read in, and does not count past 50. The Input data box has 1 line: the start number. Fill the blank so that the loop can stop and the program prints as in the Example."
+    template: |
+      so = int(input())
+      while so <= 50:
+          print(so)
+          so = ___
+      print("Xong")
+    answers: ["so + 10"]
+    tests:
+      - input: "20"
+        output: |
+          20
+          30
+          40
+          50
+          Xong
+      - input: "50"
+        output: |
+          50
+          Xong
+        hidden: true
+      - input: "60"
+        output: "Xong"
+        hidden: true
+      - input: "5"
+        output: |
+          5
+          15
+          25
+          35
+          45
+          Xong
+        hidden: true
+    hints:
+      - { vi: "Mỗi lần lặp, so phải lớn thêm 10, để đến 1 lúc so lớn hơn 50 và vòng lặp dừng. Nếu so không đổi, vòng lặp chạy mãi.", en: "On each pass, so must grow by 10, so that at some point so is greater than 50 and the loop stops. If so does not change, the loop runs forever." }
+      - { vi: "Điền so + 10 vào chỗ trống.", en: "Fill the blank with so + 10." }
+
+  - id: s4.while.p3
+    type: parsons
+    concepts: [sentinel-input]
+    prompt:
+      vi: "Robo nhận các số cho đến khi gặp 0. Ô Dữ liệu nhập có nhiều dòng, mỗi dòng 1 số nguyên, và dòng cuối cùng là 0. Sắp xếp các dòng lệnh để in ra như phần Ví dụ."
+      en: "Robo receives numbers until it meets 0. The Input data box has several lines, each with an integer, and the last line is 0. Put the lines in order to print as in the Example."
+    solution: |
+      so = int(input())
+      while so != 0:
+          print("Robo nhận", so)
+          so = int(input())
+      print("Hết số")
+    tests:
+      - input: "4\n9\n2\n0"
+        output: |
+          Robo nhận 4
+          Robo nhận 9
+          Robo nhận 2
+          Hết số
+      - input: "15\n0"
+        output: |
+          Robo nhận 15
+          Hết số
+        hidden: true
+      - input: "0"
+        output: "Hết số"
+        hidden: true
+    hints:
+      - { vi: "Số đầu tiên được đọc trước dòng while. Trong khối lệnh, Robo in số đang có trước, rồi mới đọc số tiếp theo ở dòng cuối của khối.", en: "The first number is read before the while line. Inside the block, Robo prints the number it has first, and reads the next number only on the last line of the block." }
+
+  - id: s4.while.p4
+    type: fill
+    concepts: [sentinel-input]
+    prompt:
+      vi: "Robo đếm xem con đã gõ bao nhiêu số trước số 0. Ô Dữ liệu nhập có nhiều dòng, mỗi dòng 1 số nguyên (có thể là số âm), và dòng cuối cùng là 0. Điền vào chỗ trống để chương trình in ra như phần Ví dụ."
+      en: "Robo counts how many numbers you typed before the 0. The Input data box has several lines, each with an integer (it may be negative), and the last line is 0. Fill the blank so that the program prints as in the Example."
+    template: |
+      dem = 0
+      so = int(input())
+      while so ___ 0:
+          dem = dem + 1
+          so = int(input())
+      print("Robo nhận", dem, "số")
+    answers: ["!="]
+    tests:
+      - input: "7\n3\n9\n0"
+        output: "Robo nhận 3 số"
+      - input: "5\n0"
+        output: "Robo nhận 1 số"
+        hidden: true
+      - input: "0"
+        output: "Robo nhận 0 số"
+        hidden: true
+      - input: "-2\n4\n0"
+        output: "Robo nhận 2 số"
+        hidden: true
+    hints:
+      - { vi: "Vòng lặp chạy trong khi so khác 0. Số có thể âm, nên điều kiện không thể là so > 0.", en: "The loop runs while so is not 0. A number may be negative, so the condition cannot be so > 0." }
+      - { vi: "Điền dấu != vào chỗ trống.", en: "Fill the blank with the sign !=." }
+
+  - id: s4.while.p5
+    type: fill
+    concepts: [while-vs-for]
+    prompt:
+      vi: "Robo in bảng nhân 3 từ 3 x 1 đến 3 x n. Chương trình dùng for nằm trong các dòng chú thích. Điền vào 2 chỗ trống để chương trình dùng while in ra giống hệt như phần Ví dụ. Ô Dữ liệu nhập có 1 dòng: số n, là số nguyên không âm."
+      en: "Robo prints the times table of 3 from 3 x 1 to 3 x n. The program that uses for is in the comment lines. Fill the 2 blanks so that the program that uses while prints exactly as in the Example. The Input data box has 1 line: a number n, an integer that is not negative."
+    template: |
+      # Cách dùng for:
+      # for i in range(1, n + 1):
+      #     print(i * 3)
+      n = int(input())
+      i = ___
+      while i ___ n:
+          print(i * 3)
+          i = i + 1
+      print("Hết")
+    answers: ["1", "<="]
+    tests:
+      - input: "4"
+        output: |
+          3
+          6
+          9
+          12
+          Hết
+      - input: "1"
+        output: |
+          3
+          Hết
+        hidden: true
+      - input: "0"
+        output: "Hết"
+        hidden: true
+    hints:
+      - { vi: "range(1, n + 1) cho i đi từ 1 đến n, có cả n. Vậy i bắt đầu từ mấy, và điều kiện nào vẫn đúng khi i bằng đúng n?", en: "range(1, n + 1) makes i go from 1 to n, n included. So what does i start at, and which condition is still True when i is exactly n?" }
+      - { vi: "Điền 1 vào chỗ trống thứ nhất và dấu <= vào chỗ trống thứ hai.", en: "Fill the first blank with 1 and the second blank with the sign <=." }
+
+  - id: s4.while.p6
+    type: fill
+    concepts: [off-by-one]
+    prompt:
+      vi: "Heo đất của Robo đang trống, và mỗi tuần Robo bỏ vào 10 nghìn đồng. Ô Dữ liệu nhập có 1 dòng: giá món đồ Robo muốn mua, tính bằng nghìn đồng. Điền vào chỗ trống để vòng lặp dừng ngay khi Robo vừa đủ tiền, và chương trình in ra như phần Ví dụ."
+      en: "Robo's piggy bank is empty, and each week Robo puts in 10 thousand dong. The Input data box has 1 line: the price of the toy Robo wants, in thousands of dong. Fill the blank so that the loop stops as soon as Robo has just enough money, and the program prints as in the Example."
+    template: |
+      gia = int(input())
+      tien = 0
+      tuan = 0
+      while tien ___ gia:
+          tien = tien + 10
+          tuan = tuan + 1
+      print("Robo cần", tuan, "tuần")
+    answers: ["<"]
+    tests:
+      - input: "30"
+        output: "Robo cần 3 tuần"
+      - input: "25"
+        output: "Robo cần 3 tuần"
+        hidden: true
+      - input: "0"
+        output: "Robo cần 0 tuần"
+        hidden: true
+      - input: "10"
+        output: "Robo cần 1 tuần"
+        hidden: true
+      - input: "75"
+        output: "Robo cần 8 tuần"
+        hidden: true
+    hints:
+      - { vi: "Khi tiền vừa bằng đúng giá, Robo đã đủ tiền, nên điều kiện phải sai lúc đó. Con thử với giá 30: sau 3 tuần, tien là 30.", en: "When the money is exactly the price, Robo has enough, so the condition must be False then. Try a price of 30: after 3 weeks, tien is 30." }
+      - { vi: "Điền dấu < vào chỗ trống.", en: "Fill the blank with the sign <." }
+
+  - id: s4.while.p7
+    type: parsons
+    concepts: [while-update]
+    prompt:
+      vi: "Mỗi vòng chạy, Robo tốn 20 phần trăm pin, và Robo chỉ chạy khi còn từ 20 phần trăm pin trở lên. Ô Dữ liệu nhập có 1 dòng: số phần trăm pin. Sắp xếp các dòng lệnh để in ra như phần Ví dụ."
+      en: "Each lap costs Robo 20 percent of its battery, and Robo only runs while it has 20 percent or more. The Input data box has 1 line: the battery percent. Put the lines in order to print as in the Example."
+    solution: |
+      pin = int(input())
+      while pin >= 20:
+          pin = pin - 20
+          print("Robo chạy 1 vòng, pin còn", pin)
+      print("Robo đi sạc")
+    tests:
+      - input: "70"
+        output: |
+          Robo chạy 1 vòng, pin còn 50
+          Robo chạy 1 vòng, pin còn 30
+          Robo chạy 1 vòng, pin còn 10
+          Robo đi sạc
+      - input: "20"
+        output: |
+          Robo chạy 1 vòng, pin còn 0
+          Robo đi sạc
+        hidden: true
+      - input: "15"
+        output: "Robo đi sạc"
+        hidden: true
+      - input: "100"
+        output: |
+          Robo chạy 1 vòng, pin còn 80
+          Robo chạy 1 vòng, pin còn 60
+          Robo chạy 1 vòng, pin còn 40
+          Robo chạy 1 vòng, pin còn 20
+          Robo chạy 1 vòng, pin còn 0
+          Robo đi sạc
+        hidden: true
+    hints:
+      - { vi: "Pin phải được trừ đi trong khối lệnh, trước khi Robo báo số pin còn lại. Dòng Robo đi sạc chạy 1 lần, sau vòng lặp.", en: "The battery must be reduced inside the block, before Robo says how much is left. The line Robo đi sạc runs once, after the loop." }
+
+  - id: s4.while.c1
+    type: code
+    concepts: [while-check-first, while-update]
+    prompt:
+      vi: "Robo chơi trò 3n + 1. Ô Dữ liệu nhập có 1 dòng: số n, là số nguyên lớn hơn 0. Trong khi n còn khác 1: nếu n chẵn thì chia n cho 2 bằng phép //, còn nếu n lẻ thì nhân n với 3 rồi cộng 1. Sau mỗi bước, in ra n mới. Cuối cùng, in ra số bước Robo đã làm, đúng như phần Ví dụ."
+      en: "Robo plays the 3n + 1 game. The Input data box has 1 line: a number n, an integer greater than 0. While n is not 1: if n is even, divide n by 2 with //, and if n is odd, multiply n by 3 and add 1. After each step, print the new n. At the end, print the number of steps Robo made, exactly as in the Example."
+    starter: |
+      # Viết lệnh của con ở dưới dòng này
+    solution: |
+      n = int(input())
+      buoc = 0
+      while n != 1:
+          if n % 2 == 0:
+              n = n // 2
+          else:
+              n = n * 3 + 1
+          print(n)
+          buoc = buoc + 1
+      print("Số bước:", buoc)
+    tests:
+      - input: "6"
+        output: |
+          3
+          10
+          5
+          16
+          8
+          4
+          2
+          1
+          Số bước: 8
+      - input: "1"
+        output: "Số bước: 0"
+        hidden: true
+      - input: "2"
+        output: |
+          1
+          Số bước: 1
+        hidden: true
+      - input: "7"
+        output: |
+          22
+          11
+          34
+          17
+          52
+          26
+          13
+          40
+          20
+          10
+          5
+          16
+          8
+          4
+          2
+          1
+          Số bước: 16
+        hidden: true
+    common_wrong:
+      - test: 0
+        output: |
+          3.0
+          10.0
+          5.0
+          16.0
+          8.0
+          4.0
+          2.0
+          1.0
+          Số bước: 8
+        misconception: div-float
+        sample: |
+          n = int(input())
+          buoc = 0
+          while n != 1:
+              if n % 2 == 0:
+                  n = n / 2
+              else:
+                  n = n * 3 + 1
+              print(n)
+              buoc = buoc + 1
+          print("Số bước:", buoc)
+    hints:
+      - { vi: "Đặt buoc = 0, rồi dùng while n != 1:. Trong khối lệnh, dùng if và else với n % 2 == 0 để đổi n, rồi in n và cộng 1 vào buoc. Dùng // chứ không dùng /, để n vẫn là số nguyên.", en: "Set buoc = 0, then use while n != 1:. Inside the block, use if and else with n % 2 == 0 to change n, then print n and add 1 to buoc. Use //, not /, so that n stays an integer." }
+      - { vi: "Trong khối của while: if n % 2 == 0: với n = n // 2, else: với n = n * 3 + 1, rồi print(n) và buoc = buoc + 1. Sau vòng lặp, sát lề trái: print(\"Số bước:\", buoc).", en: "In the while block: if n % 2 == 0: with n = n // 2, else: with n = n * 3 + 1, then print(n) and buoc = buoc + 1. After the loop, at the left edge: print(\"Số bước:\", buoc)." }
+    test_eligible: true
+
+  - id: s4.while.c2
+    type: code
+    concepts: [sentinel-input]
+    prompt:
+      vi: "Hai bạn chơi đoán số, và Robo làm trọng tài. Ô Dữ liệu nhập: dòng 1 là số bí mật, các dòng sau là các lần đoán, và lần đoán cuối cùng luôn đúng. Với mỗi lần đoán sai, in ra Lớn quá hoặc Nhỏ quá. Khi đoán đúng, in ra số lần đã đoán, đúng như phần Ví dụ."
+      en: "Two friends play a guessing game, and Robo is the referee. The Input data box: line 1 is the secret number, the next lines are the guesses, and the last guess is always right. For each wrong guess, print Lớn quá (too big) or Nhỏ quá (too small). When the guess is right, print how many guesses were made, exactly as in the Example."
+    starter: |
+      # Viết lệnh của con ở dưới dòng này
+    solution: |
+      bi_mat = int(input())
+      doan = int(input())
+      lan = 1
+      while doan != bi_mat:
+          if doan > bi_mat:
+              print("Lớn quá")
+          else:
+              print("Nhỏ quá")
+          doan = int(input())
+          lan = lan + 1
+      print("Đúng rồi sau", lan, "lần đoán")
+    tests:
+      - input: "50\n20\n80\n50"
+        output: |
+          Nhỏ quá
+          Lớn quá
+          Đúng rồi sau 3 lần đoán
+      - input: "7\n7"
+        output: "Đúng rồi sau 1 lần đoán"
+        hidden: true
+      - input: "15\n30\n15"
+        output: |
+          Lớn quá
+          Đúng rồi sau 2 lần đoán
+        hidden: true
+      - input: "64\n10\n90\n70\n60\n64"
+        output: |
+          Nhỏ quá
+          Lớn quá
+          Lớn quá
+          Nhỏ quá
+          Đúng rồi sau 5 lần đoán
+        hidden: true
+    common_wrong:
+      - test: 0
+        output: |
+          Nhỏ quá
+          Lớn quá
+          Đúng rồi sau 2 lần đoán
+        misconception: off-by-one
+        sample: |
+          bi_mat = int(input())
+          doan = int(input())
+          lan = 0
+          while doan != bi_mat:
+              if doan > bi_mat:
+                  print("Lớn quá")
+              else:
+                  print("Nhỏ quá")
+              doan = int(input())
+              lan = lan + 1
+          print("Đúng rồi sau", lan, "lần đoán")
+    hints:
+      - { vi: "Đọc số bí mật và lần đoán đầu tiên trước vòng lặp, và đặt lan = 1 vì đã có 1 lần đoán. Vòng lặp chạy trong khi doan != bi_mat. Ở cuối khối lệnh, đọc lần đoán tiếp theo và cộng 1 vào lan.", en: "Read the secret number and the first guess before the loop, and set lan = 1 because 1 guess has been made. The loop runs while doan != bi_mat. At the end of the block, read the next guess and add 1 to lan." }
+      - { vi: "Trong khối của while: if doan > bi_mat: với print(\"Lớn quá\"), else: với print(\"Nhỏ quá\"), rồi doan = int(input()) và lan = lan + 1. Sau vòng lặp: print(\"Đúng rồi sau\", lan, \"lần đoán\").", en: "In the while block: if doan > bi_mat: with print(\"Lớn quá\"), else: with print(\"Nhỏ quá\"), then doan = int(input()) and lan = lan + 1. After the loop: print(\"Đúng rồi sau\", lan, \"lần đoán\")." }
+    test_eligible: true
+
+  - id: s4.while.c3
+    type: code
+    concepts: [off-by-one, while-update]
+    prompt:
+      vi: "Robo nhảy trên 1 cây thước. Robo đứng ở vạch a, mỗi bước nhảy thêm 3 vạch, và không được nhảy qua vạch b. Ô Dữ liệu nhập có 2 dòng: số a và số b. Hãy in ra từng vạch Robo đứng, kể cả vạch a, mỗi vạch 1 dòng, rồi in ra Robo dừng lại, đúng như phần Ví dụ. Nếu a đã lớn hơn b, Robo không đứng được vạch nào."
+      en: "Robo jumps along a ruler. Robo starts at mark a, each jump moves it 3 marks further, and it must not jump past mark b. The Input data box has 2 lines: the number a and the number b. Print each mark Robo stands on, mark a included, one mark on each line, then print Robo dừng lại, exactly as in the Example. If a is already greater than b, Robo stands on no mark."
+    starter: |
+      # Viết lệnh của con ở dưới dòng này
+    solution: |
+      a = int(input())
+      b = int(input())
+      vach = a
+      while vach <= b:
+          print(vach)
+          vach = vach + 3
+      print("Robo dừng lại")
+    tests:
+      - input: "1\n10"
+        output: |
+          1
+          4
+          7
+          10
+          Robo dừng lại
+      - input: "2\n2"
+        output: |
+          2
+          Robo dừng lại
+        hidden: true
+      - input: "5\n4"
+        output: "Robo dừng lại"
+        hidden: true
+      - input: "3\n20"
+        output: |
+          3
+          6
+          9
+          12
+          15
+          18
+          Robo dừng lại
+        hidden: true
+    common_wrong:
+      - test: 0
+        output: |
+          1
+          4
+          7
+          Robo dừng lại
+        misconception: off-by-one
+        sample: |
+          a = int(input())
+          b = int(input())
+          vach = a
+          while vach < b:
+              print(vach)
+              vach = vach + 3
+          print("Robo dừng lại")
+    hints:
+      - { vi: "Đặt vach = a. Robo được đứng ở đúng vạch b, nên điều kiện là vach <= b. Mỗi lần lặp, in vach rồi cộng thêm 3.", en: "Set vach = a. Robo may stand exactly on mark b, so the condition is vach <= b. On each pass, print vach, then add 3." }
+      - { vi: "Sau 3 dòng a = int(input()), b = int(input()) và vach = a, con viết while vach <= b:, rồi print(vach) và vach = vach + 3 thụt lề 4 dấu cách. Cuối cùng là print(\"Robo dừng lại\") sát lề trái.", en: "After the 3 lines a = int(input()), b = int(input()) and vach = a, write while vach <= b:, then print(vach) and vach = vach + 3 indented by 4 spaces. Last comes print(\"Robo dừng lại\") at the left edge." }
+    test_eligible: true

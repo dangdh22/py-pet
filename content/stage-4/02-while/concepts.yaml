@@ -1,0 +1,51 @@
+concepts:
+  - id: while-check-first
+    name: { vi: "while kiểm tra điều kiện trước mỗi lần lặp", en: "while checks its condition before each pass" }
+    misconception_card: |
+      Nhiều bạn nghĩ while chỉ kiểm tra điều kiện 1 lần như if, hoặc nghĩ khối lệnh luôn chạy ít nhất 1 lần. Thực ra trước mỗi lần lặp, Python kiểm tra lại điều kiện: đúng thì chạy hết cả khối rồi quay lên kiểm tra tiếp, sai thì bỏ qua khối. Vì vậy, khi `pin = 0`, vòng lặp `while pin > 0:` không chạy lần nào.
+    parent_tip: |
+      Chơi trò "còn nhạc thì nhảy": trước mỗi điệu nhảy, con nghe xem nhạc còn không, và nếu nhạc tắt ngay từ đầu thì con không nhảy lần nào. Giải thích rằng while cũng kiểm tra điều kiện trước mỗi lần lặp như vậy.
+    practice:
+      level1: [s4.while.l1.q1, s4.while.l1.q2, s4.while.b1, s4.while.b2, s4.while.b3, s4.while.l5.q2, s4.while.b12]
+      level2: [s4.while.p1]
+      level3: [s4.while.l1.ex2, s4.while.l1.ex1, s4.while.c1, s4.while.l5.ex1]
+  - id: while-update
+    name: { vi: "Vòng lặp while phải thay đổi biến để dừng", en: "A while loop must change its variable to stop" }
+    misconception_card: |
+      Nhiều bạn nghĩ while tự tăng biến như for, hoặc nghĩ Python tự biết lúc nào nên dừng. Thực ra nếu khối lệnh không có dòng như `i = i + 1`, hay dòng đó bị viết sát lề trái, thì điều kiện đúng mãi và vòng lặp không bao giờ dừng. Biến cũng phải đổi đúng chiều: với `while pin > 0:`, dòng `pin = pin + 1` vẫn làm vòng lặp chạy mãi.
+    parent_tip: |
+      Cùng con đi về phía 1 cái cây và đếm bước: mỗi bước phải tiến lại gần cây, còn đứng yên hay đi lùi thì không bao giờ tới. Giải thích rằng biến trong vòng lặp while cũng phải tiến dần tới chỗ dừng.
+    practice:
+      level1: [s4.while.l2.q1, s4.while.l2.q2, s4.while.b4, s4.while.b5, s4.while.b8]
+      level2: [s4.while.p2, s4.while.p7]
+      level3: [s4.while.l2.ex1, s4.while.c1, s4.while.c3, s4.while.l5.ex1]
+  - id: sentinel-input
+    name: { vi: "Dừng khi gặp giá trị đặc biệt", en: "Stopping at a special value" }
+    misconception_card: |
+      Nhiều bạn nghĩ số 0 ở dòng cuối cũng là 1 số phải in hay phải đếm, hoặc đọc số mới ở đầu khối lệnh. Thực ra 0 chỉ là tín hiệu dừng: con đọc số đầu tiên trước vòng lặp, xử lý số đó trong khối, rồi đọc số tiếp theo ở dòng cuối của khối. Nếu đọc số mới ở đầu khối, con sẽ bỏ mất số đầu tiên và xử lý cả số 0.
+    parent_tip: |
+      Đọc cho con nghe 1 dãy số và hẹn trước: nghe thấy số 0 thì dừng và nói đã nghe mấy số. Hỏi con xem số 0 có được đếm không.
+    practice:
+      level1: [s4.while.l3.q1, s4.while.b6, s4.while.b7, s4.while.b13]
+      level2: [s4.while.p3, s4.while.p4]
+      level3: [s4.while.l3.ex1, s4.while.l3.ex2, s4.while.c2]
+  - id: while-vs-for
+    name: { vi: "Chọn while hay for", en: "Choosing while or for" }
+    misconception_card: |
+      Nhiều bạn nghĩ while và for làm những việc khác hẳn nhau, hoặc nghĩ chỉ cần đổi chữ for thành while. Thực ra cả 2 đều lặp lại 1 khối lệnh: biết trước số lần lặp thì for gọn hơn, chỉ biết lúc nào dừng thì dùng while. Khi đổi `for i in range(5):` sang while, con phải tự viết `i = 0` trước vòng lặp, dòng `while i < 5:`, và `i = i + 1` trong khối lệnh.
+    parent_tip: |
+      Hỏi con 2 câu: "Mỗi ngày con đánh răng mấy lần?" và "Rót nước vào cốc đến khi nào thì dừng?". Giải thích rằng việc đầu biết trước số lần, giống for, còn việc sau dừng theo điều kiện, giống while.
+    practice:
+      level1: [s4.while.l4.q1, s4.while.l4.q2, s4.while.b8, s4.while.b9]
+      level2: [s4.while.p5]
+      level3: [s4.while.l4.ex1, s4.while.l4.ex2]
+  - id: off-by-one
+    name: { vi: "Lặp thừa hoặc thiếu 1 lần", en: "One pass too many or too few" }
+    misconception_card: |
+      Nhiều bạn nghĩ viết `<` hay `<=` trong điều kiện thì cũng như nhau. Thực ra chỉ 1 dấu = cũng làm vòng lặp chạy thừa hoặc thiếu 1 lần: với i bắt đầu từ 1, `while i < 5:` dừng trước số 5, còn `while i <= 5:` có cả số 5. Con kiểm tra bằng cách thử trong đầu lần lặp đầu tiên và lần lặp cuối cùng, nhất là khi giá trị vừa bằng đúng giới hạn.
+    parent_tip: |
+      Đố con: hàng rào dài 10 mét, cứ mỗi mét cắm 1 cái cọc, kể cả 2 đầu, thì cần mấy cọc? Cùng vẽ ra giấy để thấy cần 11 cọc, không phải 10.
+    practice:
+      level1: [s4.while.l5.q1, s4.while.b10, s4.while.b11, s4.while.b12, s4.while.l4.q2]
+      level2: [s4.while.p6]
+      level3: [s4.while.l5.ex1, s4.while.l4.ex1, s4.while.c3, s4.while.l1.ex1, s4.while.l2.ex1]

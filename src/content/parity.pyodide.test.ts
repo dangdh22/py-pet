@@ -105,6 +105,36 @@ describe("error dictionary on Pyodide", () => {
     }
   });
 
+  test("stage-4 while lines: colon, indentation and = in the condition are explained like on an if line", () => {
+    const cases: [string, string][] = [
+      ["i = 0\nwhile i < 3\n    print(i)\n    i = i + 1", "missing-colon"],
+      ["pin = 2\nwhile pin > 0\n    pin = pin - 1", "missing-colon"],
+      ["n = int(input())\nwhile n != 0\n    n = int(input())", "missing-colon"],
+      ["keo = int(input())\nif keo > 0\n    keo = keo - 1", "missing-colon"],
+      ["n = 0\nwhile n < 3:\n    n = n + 1\nelse\n    print(n)", "missing-colon"],
+      ["i = 0\nwhile i < 3:\nprint(i)", "indent-expected"],
+      ["i = 0\nwhile i < 3:\n    print(i)\n  i = i + 1", "indent-unmatched"],
+      ["i = 0\nwhile i = 3:\n    i = i + 1", "assign-in-condition"],
+      ["x = 5\nwhile x > 0 and x = 2:\n    x = x - 1", "assign-in-if"],
+    ];
+    for (const [code, id] of cases) {
+      const problem = problemFromOutcome(run(code, "0\n"), false);
+      expect(matchError(bundle.errors, problem!, code)?.entry.id).toBe(id);
+    }
+  });
+
+  test("stage-4 endless while loops (lesson s4.while.l2): a printing loop hits the output limit, a silent one is a while timeout", () => {
+    for (const code of ['pin = 3\nwhile pin > 0:\n    print("Robo đi 1 vòng")', "i = 1\nwhile i <= 3:\n    print(i)\ni = i + 1"]) {
+      const problem = problemFromOutcome(run(code, ""), false);
+      expect(problem?.type).toBe("OutputLimit");
+      expect(matchError(bundle.errors, problem!, code)?.entry.id).toBe("output-limit");
+    }
+    const timeout = { type: "Timeout", message: "", line: null, column: null, lineText: "" };
+    const silent = "pin = 3\nwhile pin > 0:\n    pin = pin + 1";
+    expect(matchError(bundle.errors, timeout, silent)?.entry.id).toBe("timeout-while");
+    expect(matchError(bundle.errors, timeout, "x = 0\nfor i in range(10 ** 12):\n    x = x + i")?.entry.id).toBe("timeout");
+  });
+
   test("smart-quote: real curly quotes pasted from Word are recognized (added test)", () => {
     const code = "print(“Xin chào”)";
     const result = run(code, "");

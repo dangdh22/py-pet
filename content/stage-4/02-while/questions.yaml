@@ -1,0 +1,243 @@
+questions:
+  - id: s4.while.b1
+    type: predict
+    concepts: [while-check-first]
+    lessons: [s4.while.l1]
+    code: |
+      n = 5
+      while n > 5:
+          print(n)
+          n = n - 1
+      print("done")
+    prompt:
+      vi: "Đoạn code in ra gì?"
+      en: "What is the output of this code?"
+    choices:
+      - { text: "done", correct: true }
+      - { text: "5\ndone", misconception: while-check-first }
+      - { text: "5\n4\n3\n2\n1\ndone", misconception: off-by-one }
+      - { vi: "Không in ra gì", en: "Nothing is printed", misconception: after-block }
+    explanation:
+      vi: "n là 5, nên n > 5 sai ngay lần kiểm tra đầu tiên: 5 không lớn hơn 5. Khối lệnh không chạy lần nào, nên không số nào được in. Dòng print(\"done\") sát lề trái, nằm ngoài vòng lặp, nên vẫn chạy và in ra done."
+      en: "n is 5, so n > 5 is False at the very first check: 5 is not greater than 5. The block runs 0 times, so no number is printed. The line print(\"done\") starts at the left edge, outside the loop, so it still runs and prints done."
+
+  - id: s4.while.b2
+    type: mcq
+    concepts: [while-check-first]
+    lessons: [s4.while.l1]
+    prompt:
+      vi: "Trong 1 lần lặp, dòng đầu tiên của khối lệnh làm cho điều kiện của while trở thành sai. Các dòng còn lại của khối lệnh trong lần lặp đó thì sao?"
+      en: "During a pass, the first line of the block makes the while condition False. What happens to the other lines of the block in that pass?"
+    choices:
+      - { vi: "Bị bỏ qua, vì vòng lặp dừng ngay ở dòng đó", en: "They are skipped, because the loop stops right at that line", misconception: while-check-first }
+      - { vi: "Vẫn chạy hết, rồi Python mới kiểm tra lại điều kiện", en: "They still all run, and then Python checks the condition again", correct: true }
+      - { vi: "Python báo lỗi, vì điều kiện bị sai giữa chừng", en: "Python gives an error, because the condition became False halfway", error: true, misconception: while-check-first }
+      - { vi: "Bị bỏ qua, rồi Python chạy lại khối từ dòng đầu", en: "They are skipped, and Python runs the block again from its first line", misconception: while-check-first }
+    explanation:
+      vi: "Python chỉ kiểm tra điều kiện ở dòng while, trước mỗi lần lặp. Khi đã bắt đầu 1 lần lặp, Python chạy hết cả khối lệnh, dù điều kiện đã trở thành sai. Sau đó Python quay lên dòng while, thấy điều kiện sai, và dừng vòng lặp."
+      en: "Python checks the condition only on the while line, before each pass. Once a pass has started, Python runs the whole block, even if the condition has become False. Then Python goes back up to the while line, sees that the condition is False, and stops the loop."
+
+  - id: s4.while.b3
+    type: predict
+    concepts: [while-check-first]
+    lessons: [s4.while.l1]
+    code: |
+      n = 10
+      while n > 4:
+          n = n - 3
+          print(n)
+    prompt:
+      vi: "Đoạn code in ra gì?"
+      en: "What is the output of this code?"
+    choices:
+      - { text: "7\n4", correct: true }
+      - { text: "7", misconception: while-check-first }
+      - { text: "10\n7", misconception: run-order }
+      - { text: "7\n4\n1", misconception: off-by-one }
+    explanation:
+      vi: "Lần lặp 1: 10 > 4 đúng, n thành 7 và in ra 7. Lần lặp 2: 7 > 4 đúng, n thành 4 và in ra 4, vì Python chạy hết khối dù 4 > 4 đã sai. Sau đó Python kiểm tra 4 > 4, thấy sai, nên vòng lặp dừng và không có lần lặp thứ 3."
+      en: "Pass 1: 10 > 4 is True, n becomes 7 and 7 is printed. Pass 2: 7 > 4 is True, n becomes 4 and 4 is printed, because Python runs the whole block even though 4 > 4 is already False. Then Python checks 4 > 4, finds it False, so the loop stops and there is no third pass."
+
+  - id: s4.while.b4
+    type: mcq
+    concepts: [while-update]
+    lessons: [s4.while.l2]
+    code: |
+      x = 10
+      while x != 0:
+          print(x)
+          x = x - 3
+    prompt:
+      vi: "Đoạn code này có dừng không?"
+      en: "Does this code stop?"
+    choices:
+      - { vi: "Có, dừng sau khi in ra 10, 7, 4, 1", en: "Yes, it stops after printing 10, 7, 4, 1", misconception: while-update }
+      - { vi: "Không, vì x không bao giờ bằng đúng 0", en: "No, because x is never exactly 0", correct: true }
+      - { vi: "Có, dừng sau khi in ra 10, 7, 4, 1, -2", en: "Yes, it stops after printing 10, 7, 4, 1, -2", misconception: while-update }
+      - { vi: "Không chạy lần nào, vì x khác 0 ngay từ đầu", en: "It runs 0 times, because x is not 0 from the start", misconception: compare-ops }
+    explanation:
+      vi: "x lần lượt là 10, 7, 4, 1, rồi -2, -5, và cứ nhỏ dần mãi. x nhảy qua 0 mà không bao giờ bằng đúng 0, nên x != 0 luôn đúng và vòng lặp chạy mãi, cho đến khi Py-Pet dừng chương trình. Điều kiện x != 0 đúng ngay từ đầu, nên vòng lặp có chạy."
+      en: "x is 10, 7, 4, 1, then -2, -5, and keeps getting smaller forever. x jumps over 0 and is never exactly 0, so x != 0 is always True and the loop runs forever, until Py-Pet stops the program. The condition x != 0 is True from the start, so the loop does run."
+
+  - id: s4.while.b5
+    type: mcq
+    concepts: [while-update]
+    lessons: [s4.while.l2]
+    prompt:
+      vi: "Muốn vòng lặp while dừng được, trong khối lệnh phải có gì?"
+      en: "For a while loop to be able to stop, what must its block have?"
+    choices:
+      - { vi: "1 dòng thay đổi biến trong điều kiện, để có lúc điều kiện sai", en: "A line that changes the variable in the condition, so that it becomes False", correct: true }
+      - { vi: "1 lệnh print, để Python biết vòng lặp vẫn đang chạy", en: "A print statement, so that Python knows the loop is still running", misconception: while-update }
+      - { vi: "Không cần gì thêm, vì while tự tăng biến sau mỗi lần lặp", en: "Nothing more, because while makes the variable bigger after each pass", misconception: while-update }
+      - { vi: "1 dòng gán lại giá trị ban đầu cho biến trong điều kiện", en: "A line that gives the variable in the condition its start value again", misconception: while-update }
+    explanation:
+      vi: "while không tự thay đổi biến nào. Trong khối lệnh phải có 1 dòng thay đổi biến trong điều kiện, theo đúng chiều, để đến 1 lúc điều kiện trở thành sai. Gán lại giá trị ban đầu thì biến quay về chỗ cũ, còn print không làm biến thay đổi, nên vòng lặp vẫn chạy mãi."
+      en: "while does not change any variable by itself. The block must have a line that changes the variable in the condition, in the right direction, so that the condition becomes False at some point. Giving back the start value puts the variable back where it was, and print does not change the variable, so the loop still runs forever."
+
+  - id: s4.while.b6
+    type: mcq
+    concepts: [sentinel-input]
+    lessons: [s4.while.l3]
+    code: |
+      count = 0
+      n = int(input())
+      while n != 0:
+          count = count + 1
+          n = int(input())
+      print(count)
+    prompt:
+      vi: "Ô Dữ liệu nhập có 3 dòng: 0, 5, 8. Đoạn code in ra gì?"
+      en: "The Input data box has 3 lines: 0, 5, 8. What is the output of this code?"
+    choices:
+      - { text: "2", misconception: sentinel-input }
+      - { text: "1", misconception: while-check-first }
+      - { text: "0", correct: true }
+      - { text: "3", misconception: sentinel-input }
+    explanation:
+      vi: "Dòng đầu tiên đã là 0, nên n != 0 sai ngay lần kiểm tra đầu tiên. Vòng lặp chạy 0 lần, count vẫn là 0, và 2 dòng 5, 8 không được đọc. Số 0 là tín hiệu dừng, dù nó đứng ở dòng nào."
+      en: "The first line is already 0, so n != 0 is False at the very first check. The loop runs 0 times, count stays 0, and the 2 lines 5 and 8 are never read. The 0 is the stop signal, whichever line it is on."
+
+  - id: s4.while.b7
+    type: mcq
+    concepts: [sentinel-input]
+    lessons: [s4.while.l3]
+    prompt:
+      vi: "Robo đọc các số cho đến khi gặp 0, và in ra từng số khác 0. Đoạn code nào làm đúng như vậy?"
+      en: "Robo reads numbers until it meets 0, and prints each number that is not 0. Which code does exactly that?"
+    choices:
+      - { text: "n = int(input())\nwhile n != 0:\n    n = int(input())\n    print(n)", misconception: sentinel-input }
+      - { text: "n = int(input())\nwhile n != 0:\n    print(n)\n    n = int(input())", correct: true }
+      - { text: "n = int(input())\nwhile n != 0:\n    print(n)", misconception: while-update }
+      - { text: "while n != 0:\n    n = int(input())\n    print(n)", misconception: var-before-use }
+    explanation:
+      vi: "Đoạn đúng đọc số đầu tiên trước vòng lặp, rồi trong khối lệnh in số đó trước và đọc số tiếp theo sau cùng. Đọc số mới ở đầu khối thì bỏ mất số đầu tiên và in ra cả số 0. Không đọc lại trong khối thì n không đổi và vòng lặp chạy mãi. Không đọc trước vòng lặp thì dòng while dùng n khi n chưa được gán, nên Python báo lỗi NameError."
+      en: "The right code reads the first number before the loop, then inside the block prints that number first and reads the next number last. Reading the new number at the start of the block loses the first number and prints the 0 too. Not reading again inside the block means n never changes and the loop runs forever. Not reading before the loop means the while line uses n before it has a value, so Python gives a NameError."
+
+  - id: s4.while.b8
+    type: mcq
+    concepts: [while-vs-for, while-update]
+    lessons: [s4.while.l4]
+    prompt:
+      vi: "Robo viết lại vòng lặp for i in range(5): bằng vòng lặp while i < 5:. Ngoài dòng while, Robo phải tự viết thêm những gì?"
+      en: "Robo rewrites the loop for i in range(5): as the loop while i < 5:. Besides the while line, what else must Robo write?"
+    choices:
+      - { vi: "Dòng i = 0 trước vòng lặp, và dòng i = i + 1 trong khối lệnh", en: "The line i = 0 before the loop, and the line i = i + 1 in the block", correct: true }
+      - { vi: "Không gì cả, vì while làm mọi việc giống hệt for", en: "Nothing, because while does everything exactly like for", misconception: while-vs-for }
+      - { vi: "Chỉ dòng i = i + 1, vì while tự cho i bắt đầu từ 0", en: "Only the line i = i + 1, because while starts i at 0 by itself", misconception: while-vs-for }
+      - { vi: "Chỉ dòng i = 0, vì while tự tăng i sau mỗi lần lặp", en: "Only the line i = 0, because while makes i bigger after each pass", misconception: while-update }
+    explanation:
+      vi: "for i in range(5): tự cho i bắt đầu từ 0 và tự tăng i. while không làm 2 việc đó. Nếu thiếu i = 0, dòng while dùng i khi i chưa được gán và Python báo lỗi. Nếu thiếu i = i + 1, i luôn là 0 và vòng lặp chạy mãi."
+      en: "for i in range(5): starts i at 0 and makes i bigger by itself. while does neither of these. Without i = 0, the while line uses i before it has a value and Python gives an error. Without i = i + 1, i is always 0 and the loop runs forever."
+
+  - id: s4.while.b9
+    type: mcq
+    concepts: [while-vs-for]
+    lessons: [s4.while.l4]
+    prompt:
+      vi: "Robo muốn in bảng nhân 7, từ 7 x 1 đến 7 x 10. Robo nên dùng vòng lặp nào, và vì sao?"
+      en: "Robo wants to print the times table of 7, from 7 x 1 to 7 x 10. Which loop should Robo use, and why?"
+    choices:
+      - { vi: "while, vì bảng nhân cần phép tính trong vòng lặp", en: "while, because a times table needs a calculation in the loop", misconception: while-vs-for }
+      - { vi: "for, vì biết trước phải lặp đúng 10 lần", en: "for, because it is known in advance that it repeats exactly 10 times", correct: true }
+      - { vi: "for, vì while không thể dừng sau đúng 10 lần", en: "for, because while cannot stop after exactly 10 passes", misconception: while-vs-for }
+      - { vi: "while, vì vòng lặp phải dừng ở 7 x 10", en: "while, because the loop has to stop at 7 x 10", misconception: while-vs-for }
+    explanation:
+      vi: "Bảng nhân 7 có đúng 10 dòng, biết trước ngay từ đầu, nên for i in range(1, 11): gọn hơn. while vẫn làm được việc này, với i = 1, while i <= 10: và i = i + 1, chỉ là dài hơn. Vòng lặp nào cũng làm được phép tính, và vòng lặp nào cũng dừng được ở 7 x 10."
+      en: "The times table of 7 has exactly 10 lines, known from the start, so for i in range(1, 11): is shorter. while can do it too, with i = 1, while i <= 10: and i = i + 1, it is just longer. Both loops can do calculations, and both loops can stop at 7 x 10."
+
+  - id: s4.while.b10
+    type: predict
+    concepts: [off-by-one]
+    lessons: [s4.while.l1]
+    code: |
+      i = 2
+      while i <= 8:
+          print(i, end=" ")
+          i = i + 2
+    prompt:
+      vi: "Đoạn code in ra gì?"
+      en: "What is the output of this code?"
+    choices:
+      - { text: "2 4 6", misconception: off-by-one }
+      - { text: "4 6 8", misconception: off-by-one }
+      - { text: "2 4 6 8", correct: true }
+      - { text: "2 4 6 8 10", misconception: off-by-one }
+    explanation:
+      vi: "i bắt đầu là 2 và được in ra trước khi tăng. i lần lượt là 2, 4, 6, 8: cả 4 lần, i <= 8 đều đúng, kể cả khi i bằng đúng 8. Sau đó i thành 10, và 10 <= 8 sai, nên số 10 không được in."
+      en: "i starts at 2 and is printed before it grows. i is 2, then 4, 6, 8: all 4 times, i <= 8 is True, even when i is exactly 8. Then i becomes 10, and 10 <= 8 is False, so 10 is not printed."
+
+  - id: s4.while.b11
+    type: predict
+    concepts: [off-by-one]
+    lessons: [s4.while.l4]
+    code: |
+      count = 0
+      i = 0
+      while i <= 10:
+          count = count + 1
+          i = i + 1
+      print(count)
+    prompt:
+      vi: "Đoạn code in ra gì?"
+      en: "What is the output of this code?"
+    choices:
+      - { text: "11", correct: true }
+      - { text: "10", misconception: off-by-one }
+      - { text: "9", misconception: off-by-one }
+      - { text: "1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11", misconception: after-block }
+    explanation:
+      vi: "i đi từ 0 đến 10, có cả 0 và cả 10, vì điều kiện là i <= 10. Từ 0 đến 10 có 11 số, nên vòng lặp chạy 11 lần và count là 11. Dòng print(count) sát lề trái, nên chỉ in ra 1 lần, sau vòng lặp."
+      en: "i goes from 0 to 10, with both 0 and 10 included, because the condition is i <= 10. From 0 to 10 there are 11 numbers, so the loop runs 11 times and count is 11. The line print(count) starts at the left edge, so it prints only once, after the loop."
+
+  - id: s4.while.b12
+    type: mcq
+    concepts: [off-by-one, while-check-first]
+    lessons: [s4.while.l5]
+    prompt:
+      vi: "Heo đất của Robo đang có 0 đồng. Mỗi tuần Robo bỏ vào 10 nghìn đồng, để mua 1 món đồ giá 30 nghìn đồng. Vòng lặp đếm số tuần phải dừng ngay khi Robo vừa đủ tiền. Dòng while nào đúng?"
+      en: "Robo's piggy bank has 0 dong. Each week Robo puts in 10 thousand dong, to buy a toy that costs 30 thousand dong. The loop that counts the weeks must stop as soon as Robo has just enough money. Which while line is right?"
+    choices:
+      - { text: "while tien <= 30:", misconception: off-by-one }
+      - { text: "while tien < 30:", correct: true }
+      - { text: "while tien > 30:", misconception: while-check-first }
+      - { text: "while tien == 30:", misconception: while-check-first }
+    explanation:
+      vi: "Vòng lặp chạy trong khi Robo chưa đủ tiền, tức là tien < 30. Khi tien vừa bằng 30, điều kiện sai và vòng lặp dừng sau 3 tuần. Với tien <= 30, vòng lặp chạy thừa 1 tuần. Với tien > 30 hay tien == 30, điều kiện sai ngay từ đầu vì tien là 0, nên vòng lặp không chạy lần nào."
+      en: "The loop runs while Robo does not have enough money yet, that is tien < 30. When tien is exactly 30, the condition is False and the loop stops after 3 weeks. With tien <= 30, the loop runs 1 week too many. With tien > 30 or tien == 30, the condition is False from the start because tien is 0, so the loop runs 0 times."
+
+  - id: s4.while.b13
+    type: mcq
+    concepts: [sentinel-input]
+    lessons: [s4.while.l3]
+    prompt:
+      vi: "Trong 1 chương trình đọc các số cho đến khi gặp 0, số 0 có vai trò gì?"
+      en: "In a program that reads numbers until it meets 0, what is the job of the 0?"
+    choices:
+      - { vi: "Là số đầu tiên con phải gõ vào ô Dữ liệu nhập", en: "It is the first number you must type in the Input data box", misconception: sentinel-input }
+      - { vi: "Được xử lý như mọi số khác, rồi chương trình dừng", en: "It is handled like every other number, then the program stops", misconception: sentinel-input }
+      - { vi: "Làm Python báo lỗi, và lỗi đó làm chương trình dừng", en: "It makes Python give an error, and that error stops the program", error: true, misconception: sentinel-input }
+      - { vi: "Chỉ báo là đã hết số, nên 0 không được xử lý", en: "It only says that the numbers are over, so 0 is not handled", correct: true }
+    explanation:
+      vi: "Số 0 là giá trị dừng: nó đứng ở dòng cuối và chỉ báo cho chương trình biết là đã hết số. Khi đọc được 0, điều kiện của while trở thành sai, vòng lặp dừng và 0 không được in hay tính. Không có lỗi nào xảy ra."
+      en: "The 0 is the stop value: it is on the last line and only tells the program that the numbers are over. When 0 is read, the while condition becomes False, the loop stops, and 0 is not printed or counted. No error happens."
