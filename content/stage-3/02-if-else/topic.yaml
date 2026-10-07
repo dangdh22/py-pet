@@ -1,0 +1,11 @@
+id: s3.if-else
+title: { vi: "if và else", en: "if and else" }
+lessons:
+  - 01-lenh-if.md
+  - 02-khoi-lenh.md
+  - 03-else.md
+  - 04-dieu-kien-tu-input.md
+  - 05-bai-toan.md
+reviews:
+  - { id: s3.if-else.r1, after: s3.if-else.l2 }
+  - { id: s3.if-else.r2, after: s3.if-else.l5 }

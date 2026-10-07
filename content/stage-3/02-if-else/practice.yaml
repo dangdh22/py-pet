@@ -1,0 +1,257 @@
+exercises:
+  - id: s3.if-else.p1
+    type: fill
+    concepts: [if-colon]
+    prompt:
+      vi: "Robo bật quạt khi trời nóng trên 30 độ. Ô Dữ liệu nhập có 1 dòng: nhiệt độ. Điền vào 2 chỗ trống để chương trình luôn in nhiệt độ, rồi in thêm Robo bật quạt khi nhiệt độ trên 30, như phần Ví dụ."
+      en: "Robo turns on the fan when it is hotter than 30 degrees. The Input data box has 1 line: the temperature. Fill the 2 blanks so that the program always prints the temperature, then also prints Robo bật quạt when the temperature is above 30, as in the Example."
+    template: |
+      nhiet_do = int(input())
+      print("Nhiệt độ:", nhiet_do)
+      ___ nhiet_do > 30___
+          print("Robo bật quạt")
+    answers: ["if", ":"]
+    tests:
+      - input: "35"
+        output: |
+          Nhiệt độ: 35
+          Robo bật quạt
+      - input: "30"
+        output: "Nhiệt độ: 30"
+        hidden: true
+      - input: "31"
+        output: |
+          Nhiệt độ: 31
+          Robo bật quạt
+        hidden: true
+    hints:
+      - { vi: "Dòng 3 là 1 lệnh if. Lệnh if mở đầu bằng chữ if viết thường và kết thúc bằng 1 dấu đặc biệt ở cuối dòng.", en: "Line 3 is an if statement. An if statement starts with the word if in small letters and ends with a special sign at the end of the line." }
+      - { vi: "Điền if vào chỗ trống thứ nhất và dấu : vào chỗ trống thứ hai.", en: "Fill the first blank with if and the second blank with :." }
+
+  - id: s3.if-else.p2
+    type: parsons
+    concepts: [indent-block, after-block]
+    prompt:
+      vi: "Khi có hơn 5 bạn đến chơi, Robo kêu lên Đông quá! rồi đi lấy thêm ghế. Dù có bao nhiêu bạn, cuối cùng Robo luôn chào các bạn. Ô Dữ liệu nhập có 1 dòng: số bạn đến chơi. Sắp xếp các dòng lệnh để in ra như phần Ví dụ."
+      en: "When more than 5 friends come over, Robo shouts Đông quá! and then fetches more chairs. However many friends come, at the end Robo always greets them. The Input data box has 1 line: the number of friends. Put the lines in order to print as in the Example."
+    solution: |
+      so_ban = int(input())
+      if so_ban > 5:
+          print("Đông quá!")
+          print("Robo lấy thêm ghế")
+      print("Chào", so_ban, "bạn")
+    tests:
+      - input: "8"
+        output: |
+          Đông quá!
+          Robo lấy thêm ghế
+          Chào 8 bạn
+      - input: "5"
+        output: "Chào 5 bạn"
+        hidden: true
+    hints:
+      - { vi: "Các dòng thụt lề phải đứng ngay dưới dòng if, theo đúng thứ tự Robo làm. Dòng sát lề trái chào các bạn luôn chạy, nên đứng sau cùng.", en: "The indented lines must come right under the if line, in the order Robo does them. The line at the left edge that greets the friends always runs, so it comes last." }
+
+  - id: s3.if-else.p3
+    type: parsons
+    concepts: [else-branch]
+    prompt:
+      vi: "Robo bật đèn từ 18 giờ trở đi, và tắt đèn khi chưa đến 18 giờ. Sau đó, Robo luôn nói giờ. Ô Dữ liệu nhập có 1 dòng: giờ hiện tại, từ 0 đến 23. Sắp xếp các dòng lệnh để in ra như phần Ví dụ."
+      en: "Robo turns the light on from 18 o'clock, and turns it off before 18 o'clock. After that, Robo always says the time. The Input data box has 1 line: the current hour, from 0 to 23. Put the lines in order to print as in the Example."
+    solution: |
+      gio = int(input())
+      if gio >= 18:
+          print("Robo bật đèn")
+      else:
+          print("Robo tắt đèn")
+      print("Bây giờ là", gio, "giờ")
+    tests:
+      - input: "20"
+        output: |
+          Robo bật đèn
+          Bây giờ là 20 giờ
+      - input: "18"
+        output: |
+          Robo bật đèn
+          Bây giờ là 18 giờ
+        hidden: true
+      - input: "9"
+        output: |
+          Robo tắt đèn
+          Bây giờ là 9 giờ
+        hidden: true
+    hints:
+      - { vi: "Dòng bật đèn đứng ngay dưới dòng if, dòng tắt đèn đứng ngay dưới dòng else:. Dòng nói giờ sát lề trái, nên đứng sau cả 2 nhánh.", en: "The line that turns the light on comes right under the if line, and the line that turns it off comes right under the line else:. The line that says the time is at the left edge, so it comes after both branches." }
+
+  - id: s3.if-else.p4
+    type: fill
+    concepts: [convert-before-compare]
+    prompt:
+      vi: "Robo khen con khi con đi đủ 5000 bước trong 1 ngày. Ô Dữ liệu nhập có 1 dòng: số bước con đã đi. Điền vào chỗ trống để chương trình so sánh được số bước với 5000 và in ra như phần Ví dụ."
+      en: "Robo praises you when you walk 5000 steps in a day. The Input data box has 1 line: the number of steps you walked. Fill the blank so that the program can compare the steps with 5000 and print as in the Example."
+    template: |
+      so_buoc = ___(input())
+      if so_buoc >= 5000:
+          print("Giỏi lắm! Con đã đi đủ bước")
+      else:
+          print("Con đi thêm", 5000 - so_buoc, "bước nữa nhé")
+    answers: ["int"]
+    tests:
+      - input: "3500"
+        output: "Con đi thêm 1500 bước nữa nhé"
+      - input: "5000"
+        output: "Giỏi lắm! Con đã đi đủ bước"
+        hidden: true
+      - input: "6200"
+        output: "Giỏi lắm! Con đã đi đủ bước"
+        hidden: true
+    hints:
+      - { vi: "input() đưa lại chuỗi. Muốn so sánh với 5000 và làm phép trừ, con phải đổi chuỗi đó thành số nguyên.", en: "input() gives back a string. To compare it with 5000 and subtract, you must change that string into an integer." }
+      - { vi: "Điền int vào chỗ trống.", en: "Fill the blank with int." }
+
+  - id: s3.if-else.p5
+    type: fill
+    concepts: [else-branch, after-block]
+    prompt:
+      vi: "Robo tặng 1 ngôi sao khi con được từ 8 điểm trở lên, nếu không thì động viên con. Sau đó, Robo luôn nhắc lại điểm. Ô Dữ liệu nhập có 1 dòng: điểm của con. Điền vào chỗ trống để in ra như phần Ví dụ."
+      en: "Robo gives you a star when you score 8 or more, and if not, it cheers you on. After that, Robo always repeats the score. The Input data box has 1 line: your score. Fill the blank to print as in the Example."
+    template: |
+      diem = int(input())
+      if diem >= 8:
+          print("Robo tặng con 1 ngôi sao")
+      ___
+          print("Cố lên, lần sau con sẽ làm được")
+      print("Điểm của con:", diem)
+    answers: ["else:"]
+    tests:
+      - input: "5"
+        output: |
+          Cố lên, lần sau con sẽ làm được
+          Điểm của con: 5
+      - input: "8"
+        output: |
+          Robo tặng con 1 ngôi sao
+          Điểm của con: 8
+        hidden: true
+      - input: "10"
+        output: |
+          Robo tặng con 1 ngôi sao
+          Điểm của con: 10
+        hidden: true
+    hints:
+      - { vi: "Chỗ trống là dòng mở đầu nhánh chạy khi điều kiện sai. Dòng này không có điều kiện, nhưng có dấu hai chấm ở cuối.", en: "The blank is the line that starts the branch that runs when the condition is False. This line has no condition, but it has a colon at the end." }
+      - { vi: "Điền else: vào chỗ trống.", en: "Fill the blank with else:." }
+
+  - id: s3.if-else.c1
+    type: code
+    concepts: [indent-block, after-block]
+    prompt:
+      vi: "Robo chăm cây. Ô Dữ liệu nhập có 1 dòng: độ ẩm của đất, là số nguyên. Nếu độ ẩm dưới 30, Robo in ra 2 dòng Đất khô và Robo tưới cây. Dù độ ẩm là bao nhiêu, cuối cùng Robo luôn in ra dòng Độ ẩm của đất: cùng với độ ẩm, đúng như phần Ví dụ."
+      en: "Robo looks after a plant. The Input data box has 1 line: the moisture of the soil, an integer. If the moisture is below 30, Robo prints 2 lines: Đất khô and Robo tưới cây. Whatever the moisture is, at the end Robo always prints the line Độ ẩm của đất: with the moisture, exactly as in the Example."
+    starter: |
+      # Viết lệnh của con ở dưới dòng này
+    solution: |
+      do_am = int(input())
+      if do_am < 30:
+          print("Đất khô")
+          print("Robo tưới cây")
+      print("Độ ẩm của đất:", do_am)
+    tests:
+      - input: "25"
+        output: |
+          Đất khô
+          Robo tưới cây
+          Độ ẩm của đất: 25
+      - input: "30"
+        output: "Độ ẩm của đất: 30"
+        hidden: true
+      - input: "60"
+        output: "Độ ẩm của đất: 60"
+        hidden: true
+    common_wrong:
+      - test: 1
+        output: |
+          Robo tưới cây
+          Độ ẩm của đất: 30
+        misconception: indent-block
+        sample: |
+          do_am = int(input())
+          if do_am < 30:
+              print("Đất khô")
+          print("Robo tưới cây")
+          print("Độ ẩm của đất:", do_am)
+    hints:
+      - { vi: "Cả 2 dòng Đất khô và Robo tưới cây đều thụt lề 4 dấu cách dưới lệnh if. Dòng in độ ẩm viết sát lề trái, để nó luôn chạy.", en: "Both lines Đất khô and Robo tưới cây are indented by 4 spaces under the if statement. The line that prints the moisture starts at the left edge, so that it always runs." }
+      - { vi: "Dòng 1 là do_am = int(input()), dòng 2 là if do_am < 30:. Dòng 3 và 4 là 2 lệnh print thụt lề. Dòng 5 là print(\"Độ ẩm của đất:\", do_am) sát lề trái.", en: "Line 1 is do_am = int(input()), and line 2 is if do_am < 30:. Lines 3 and 4 are the 2 indented print statements. Line 5 is print(\"Độ ẩm của đất:\", do_am) at the left edge." }
+    test_eligible: true
+
+  - id: s3.if-else.c2
+    type: code
+    concepts: [convert-before-compare, else-branch]
+    prompt:
+      vi: "Con và Robo thi nhảy dây. Ô Dữ liệu nhập có 2 dòng: dòng 1 là số lần con nhảy, dòng 2 là số lần Robo nhảy. Nếu con nhảy nhiều hơn Robo, in ra Con thắng!, nếu không thì in ra Con chưa thắng, cố lên!, như phần Ví dụ."
+      en: "You and Robo have a jump rope contest. The Input data box has 2 lines: line 1 is how many times you jumped, and line 2 is how many times Robo jumped. If you jumped more than Robo, print Con thắng!, and if not, print Con chưa thắng, cố lên!, as in the Example."
+    starter: |
+      # Viết lệnh của con ở dưới dòng này
+    solution: |
+      so_lan_con = int(input())
+      so_lan_robo = int(input())
+      if so_lan_con > so_lan_robo:
+          print("Con thắng!")
+      else:
+          print("Con chưa thắng, cố lên!")
+    tests:
+      - input: "12\n9"
+        output: "Con thắng!"
+      - input: "9\n12"
+        output: "Con chưa thắng, cố lên!"
+        hidden: true
+      - input: "10\n10"
+        output: "Con chưa thắng, cố lên!"
+        hidden: true
+    common_wrong:
+      - output: "Con chưa thắng, cố lên!"
+        misconception: convert-before-compare
+        sample: |
+          so_lan_con = input()
+          so_lan_robo = input()
+          if so_lan_con > so_lan_robo:
+              print("Con thắng!")
+          else:
+              print("Con chưa thắng, cố lên!")
+    hints:
+      - { vi: "Đổi cả 2 dòng nhập sang số bằng int(). Nếu so sánh 2 chuỗi, \"12\" lại nhỏ hơn \"9\". Khi 2 bên bằng nhau, con chưa thắng.", en: "Change both input lines into numbers with int(). If you compare 2 strings, \"12\" is smaller than \"9\". When both are the same, you have not won." }
+      - { vi: "Hai dòng đầu là so_lan_con = int(input()) và so_lan_robo = int(input()). Dòng 3 là if so_lan_con > so_lan_robo:, rồi đến nhánh in Con thắng!, dòng else: và nhánh in Con chưa thắng, cố lên!.", en: "The first 2 lines are so_lan_con = int(input()) and so_lan_robo = int(input()). Line 3 is if so_lan_con > so_lan_robo:, then the branch that prints Con thắng!, the line else:, and the branch that prints Con chưa thắng, cố lên!." }
+    test_eligible: true
+
+  - id: s3.if-else.c3
+    type: code
+    concepts: [if-colon, else-branch]
+    prompt:
+      vi: "Cửa hang của Robo chỉ mở khi con nói đúng câu thần chú vung oi mo ra, viết thường. Ô Dữ liệu nhập có 1 dòng: câu con nói. Code bên phải báo lỗi SyntaxError. Hãy sửa code để in ra Cửa mở khi nói đúng, Cửa vẫn đóng khi nói sai, như phần Ví dụ."
+      en: "Robo's cave door opens only when you say the magic words vung oi mo ra, in small letters. The Input data box has 1 line: what you say. The code on the right gives a SyntaxError. Fix the code to print Cửa mở when the words are right, and Cửa vẫn đóng when they are wrong, as in the Example."
+    starter: |
+      cau_noi = input()
+      if cau_noi == "vung oi mo ra"
+          print("Cửa mở")
+      else
+          print("Cửa vẫn đóng")
+    solution: |
+      cau_noi = input()
+      if cau_noi == "vung oi mo ra":
+          print("Cửa mở")
+      else:
+          print("Cửa vẫn đóng")
+    tests:
+      - input: "vung oi mo ra"
+        output: "Cửa mở"
+      - input: "Vung oi mo ra"
+        output: "Cửa vẫn đóng"
+        hidden: true
+      - input: "vung oi"
+        output: "Cửa vẫn đóng"
+        hidden: true
+    hints:
+      - { vi: "Lời báo lỗi expected ':' cho biết dòng nào thiếu dấu hai chấm. Cả dòng if và dòng else đều phải kết thúc bằng dấu hai chấm.", en: "The error message expected ':' tells you which line has no colon. Both the if line and the else line must end with a colon." }
+      - { vi: "Thêm dấu : vào cuối dòng 2 và cuối dòng 4.", en: "Add : at the end of line 2 and at the end of line 4." }
+    test_eligible: true

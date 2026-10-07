@@ -1,0 +1,51 @@
+concepts:
+  - id: if-colon
+    name: { vi: "Dòng if kết thúc bằng dấu hai chấm", en: "An if line ends with a colon" }
+    misconception_card: |
+      Nhiều bạn quên dấu hai chấm ở cuối dòng `if`, hoặc đặt nó ở đầu dòng bên dưới. Thực ra dấu `:` luôn đứng ở cuối dòng if, ngay sau điều kiện: `if pin < 20:`. Thiếu dấu này, Python báo lỗi SyntaxError: expected ':' và chưa chạy dòng nào.
+    parent_tip: |
+      Chơi trò "Nếu... thì...": bố mẹ nói "Nếu con vỗ tay" rồi dừng lại, con nói tiếp việc sẽ làm, như "thì bố mẹ nhảy lên". Giải thích rằng dấu hai chấm trong Python giống chỗ dừng đó: sau dấu hai chấm là việc cần làm.
+    practice:
+      level1: [s3.if-else.l1.q2, s3.if-else.b1, s3.if-else.b2, s3.if-else.b3, s3.if-else.b5]
+      level2: [s3.if-else.p1]
+      level3: [s3.if-else.l1.ex2, s3.if-else.c3, s3.if-else.l1.ex1]
+  - id: indent-block
+    name: { vi: "Khối lệnh thụt lề 4 dấu cách", en: "A block is indented by 4 spaces" }
+    misconception_card: |
+      Nhiều bạn nghĩ chỉ dòng đầu tiên dưới `if` mới thuộc khối, hoặc nghĩ thụt lề chỉ để code trông đẹp. Thực ra mọi dòng thụt lề cùng 4 dấu cách ngay dưới `if pin < 20:` đều thuộc khối, và cả khối chỉ chạy khi điều kiện đúng. Thiếu thụt lề, thụt thừa hay thụt lệch nhau đều làm Python báo lỗi IndentationError.
+    parent_tip: |
+      Viết lên giấy dòng "Nếu trời mưa:", rồi viết lùi vào 2 việc bên dưới là "mang ô" và "đi ủng". Hỏi con: khi trời nắng, những việc viết lùi vào có cần làm không?
+    practice:
+      level1: [s3.if-else.l1.q1, s3.if-else.l2.q2, s3.if-else.b4, s3.if-else.b5]
+      level2: [s3.if-else.p2]
+      level3: [s3.if-else.l2.ex1, s3.if-else.c1, s3.if-else.l1.ex1]
+  - id: after-block
+    name: { vi: "Dòng sát lề trái sau khối lệnh luôn chạy", en: "A line at the left edge after a block always runs" }
+    misconception_card: |
+      Nhiều bạn nghĩ dòng viết sau khối lệnh cũng chỉ chạy khi điều kiện đúng, hoặc chỉ chạy khi điều kiện sai. Thực ra dòng sát lề trái sau khối không thuộc lệnh `if`, nên nó luôn chạy. Ví dụ, với `pin = 90`, khối của `if pin < 20:` bị bỏ qua, nhưng dòng `print("Xong")` sát lề trái bên dưới vẫn in ra Xong.
+    parent_tip: |
+      Kể cho con nghe việc buổi sáng: "Nếu trời mưa thì mang ô. Sau đó đi học." Hỏi con: hôm trời nắng, con có đi học không, để con thấy việc đứng sau luôn được làm.
+    practice:
+      level1: [s3.if-else.l2.q1, s3.if-else.b6, s3.if-else.b7, s3.if-else.b10, s3.if-else.b14, s3.if-else.l3.q1]
+      level2: [s3.if-else.p2, s3.if-else.p5]
+      level3: [s3.if-else.l2.ex2, s3.if-else.c1]
+  - id: else-branch
+    name: { vi: "else không có điều kiện, chạy khi điều kiện sai", en: "else has no condition and runs when the condition is False" }
+    misconception_card: |
+      Nhiều bạn viết điều kiện sau else, như `else pin >= 20:`, hoặc nghĩ khối else cũng chạy sau khối if. Thực ra `else:` không có điều kiện: nó tự chạy khi điều kiện của `if` sai. Mỗi lần chạy, Python chỉ chọn đúng 1 trong 2 nhánh.
+    parent_tip: |
+      Tung 1 đồng xu và nói: "Nếu ra mặt ngửa thì con rửa bát, nếu không thì bố mẹ rửa bát." Hỏi con có khi nào cả 2 cùng rửa, hay không ai rửa không, để con thấy luôn có đúng 1 việc được làm.
+    practice:
+      level1: [s3.if-else.l3.q1, s3.if-else.l3.q2, s3.if-else.l5.q1, s3.if-else.b4, s3.if-else.b8, s3.if-else.b9, s3.if-else.b10, s3.if-else.b14]
+      level2: [s3.if-else.p3, s3.if-else.p5]
+      level3: [s3.if-else.l3.ex1, s3.if-else.l3.ex2, s3.if-else.l4.ex2, s3.if-else.l5.ex1, s3.if-else.l5.ex2, s3.if-else.l5.ex3, s3.if-else.c2, s3.if-else.c3]
+  - id: convert-before-compare
+    name: { vi: "Đổi số nhập bằng int() trước khi so sánh", en: "Convert input with int() before comparing" }
+    misconception_card: |
+      Nhiều bạn viết `tuoi = input()` rồi so sánh luôn `tuoi >= 10`. Thực ra input() đưa lại chuỗi: so lớn nhỏ chuỗi với số thì báo lỗi TypeError, còn so 2 chuỗi chữ số với nhau thì ra kết quả sai, vì `"9" > "10"` là True. Con đổi sang số ngay khi đọc, bằng `tuoi = int(input())`, rồi mới so sánh.
+    parent_tip: |
+      Đưa con 1 tờ phiếu ghi "15 tuổi" và hỏi người này có lớn hơn 12 tuổi không: con phải đọc phiếu, hiểu thành số 15, rồi mới so sánh được. Giải thích rằng Python cũng phải đổi chữ đọc từ input() thành số bằng int() trước khi so sánh.
+    practice:
+      level1: [s3.if-else.l4.q1, s3.if-else.l4.q2, s3.if-else.b11, s3.if-else.b12, s3.if-else.b13]
+      level2: [s3.if-else.p4]
+      level3: [s3.if-else.l4.ex1, s3.if-else.c2, s3.if-else.l5.ex1, s3.if-else.l5.ex2]

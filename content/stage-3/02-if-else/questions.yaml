@@ -1,0 +1,287 @@
+questions:
+  - id: s3.if-else.b1
+    type: predict
+    concepts: [if-colon]
+    lessons: [s3.if-else.l1]
+    code: |
+      x = 7
+      if x > 5
+          print("big")
+    prompt:
+      vi: "Chuyện gì xảy ra khi chạy đoạn code này?"
+      en: "What happens when this code runs?"
+    choices:
+      - { vi: "Báo lỗi SyntaxError ở dòng 2", en: "A SyntaxError on line 2", correct: true, error: true }
+      - { text: "big", misconception: if-colon }
+      - { vi: "Báo lỗi IndentationError ở dòng 3", en: "An IndentationError on line 3", error: true, misconception: indent-block }
+      - { vi: "Báo lỗi SyntaxError ở dòng 3", en: "A SyntaxError on line 3", error: true, misconception: if-colon }
+    explanation:
+      vi: "Dòng 2 thiếu dấu hai chấm ở cuối, nên Python báo lỗi SyntaxError ở dòng 2 và không chạy dòng nào, kể cả dòng 1. Dòng 3 thụt lề đúng 4 dấu cách. Sửa thành if x > 5: thì chương trình in ra big."
+      en: "Line 2 has no colon at the end, so Python gives a SyntaxError on line 2 and runs no line, not even line 1. Line 3 is indented correctly by 4 spaces. With if x > 5: the program prints big."
+
+  - id: s3.if-else.b2
+    type: mcq
+    concepts: [if-colon]
+    lessons: [s3.if-else.l1]
+    prompt:
+      vi: "Trong lệnh if, dấu hai chấm đặt ở đâu?"
+      en: "In an if statement, where does the colon go?"
+    choices:
+      - { vi: "Ngay sau chữ if, trước điều kiện", en: "Right after the word if, before the condition", misconception: if-colon }
+      - { vi: "Ở cuối dòng if, ngay sau điều kiện", en: "At the end of the if line, right after the condition", correct: true }
+      - { vi: "Ở đầu dòng thụt lề bên dưới", en: "At the start of the indented line below", misconception: if-colon }
+      - { vi: "Chỉ cần khi khối lệnh có từ 2 dòng trở lên", en: "Only when the block has 2 lines or more", misconception: if-colon }
+    explanation:
+      vi: "Dấu hai chấm luôn đứng ở cuối dòng if, ngay sau điều kiện, ví dụ if pin < 20:. Khối lệnh chỉ có 1 dòng cũng vẫn cần dấu hai chấm. Đặt dấu này ở chỗ khác thì Python báo lỗi SyntaxError."
+      en: "The colon always goes at the end of the if line, right after the condition, for example if pin < 20:. A block with only 1 line still needs the colon. Putting it anywhere else gives a SyntaxError."
+
+  - id: s3.if-else.b3
+    type: mcq
+    concepts: [if-colon]
+    lessons: [s3.if-else.l1]
+    code: |
+      x = 5
+      if x == 5
+          print("five")
+    prompt:
+      vi: "Chạy đoạn code này, Python báo lỗi SyntaxError: expected ':' ở dòng 2. Con sửa thế nào?"
+      en: "When this code runs, Python gives SyntaxError: expected ':' on line 2. How do you fix it?"
+    choices:
+      - { vi: "Thêm dấu : vào cuối dòng 2", en: "Add : at the end of line 2", correct: true }
+      - { vi: "Đổi == thành = ở dòng 2", en: "Change == to = on line 2", misconception: eq-vs-assign }
+      - { vi: "Thụt lề dòng 2 vào 4 dấu cách", en: "Indent line 2 by 4 spaces", misconception: indent-block }
+      - { vi: "Thêm dấu : vào đầu dòng 3", en: "Add : at the start of line 3", misconception: if-colon }
+    explanation:
+      vi: "expected ':' nghĩa là Python cần 1 dấu hai chấm. Dấu này đứng ở cuối dòng if: if x == 5:. Dấu == là đúng, vì đây là câu hỏi bằng nhau. Dòng if không thụt lề, chỉ dòng bên dưới mới thụt lề."
+      en: "expected ':' means that Python needs a colon. It goes at the end of the if line: if x == 5:. The == is right, because this is a question about being equal. The if line is not indented: only the line under it is."
+
+  - id: s3.if-else.b4
+    type: predict
+    concepts: [indent-block, else-branch]
+    lessons: [s3.if-else.l3]
+    code: |
+      x = 2
+      if x > 5:
+          print("A")
+      else:
+      print("B")
+    prompt:
+      vi: "Chuyện gì xảy ra khi chạy đoạn code này?"
+      en: "What happens when this code runs?"
+    choices:
+      - { text: "B", misconception: indent-block }
+      - { vi: "Báo lỗi SyntaxError ở dòng 4, vì else không có điều kiện", en: "A SyntaxError on line 4, because else has no condition", error: true, misconception: else-branch }
+      - { vi: "Báo lỗi IndentationError ở dòng 5", en: "An IndentationError on line 5", correct: true, error: true }
+      - { text: "A", misconception: compare-ops }
+    explanation:
+      vi: "Dòng ngay sau else: phải thụt lề 4 dấu cách, giống như dòng sau if. Dòng 5 lại viết sát lề trái, nên Python báo lỗi IndentationError ở dòng 5. Dòng else: viết đúng: else không cần điều kiện."
+      en: "The line right after else: must be indented by 4 spaces, just like the line after if. Line 5 starts at the left edge instead, so Python gives an IndentationError on line 5. The line else: is written correctly: else needs no condition."
+
+  - id: s3.if-else.b5
+    type: mcq
+    concepts: [indent-block, if-colon]
+    lessons: [s3.if-else.l2]
+    prompt:
+      vi: "Biến x đang chứa số 7. Đoạn code nào chạy được, không báo lỗi?"
+      en: "The variable x holds the number 7. Which code runs without an error?"
+    choices:
+      - { text: "if x > 5:\n    print(\"A\")\n    print(\"B\")", correct: true }
+      - { text: "if x > 5:\nprint(\"A\")", misconception: indent-block }
+      - { text: "if x > 5:\n    print(\"A\")\n  print(\"B\")", misconception: indent-block }
+      - { text: "if x > 5\n    print(\"A\")", misconception: if-colon }
+    explanation:
+      vi: "Đoạn chạy được có dấu hai chấm ở cuối dòng if, và 2 dòng print cùng thụt lề 4 dấu cách. Thiếu thụt lề, hay 1 dòng chỉ thụt lề 2 dấu cách, đều báo lỗi IndentationError. Thiếu dấu hai chấm thì báo lỗi SyntaxError."
+      en: "The code that runs has a colon at the end of the if line, and both print lines are indented by 4 spaces. No indentation, or a line indented by only 2 spaces, gives an IndentationError. A missing colon gives a SyntaxError."
+
+  - id: s3.if-else.b6
+    type: predict
+    concepts: [after-block]
+    lessons: [s3.if-else.l2]
+    code: |
+      n = 2
+      if n == 2:
+          print("two")
+      print("end")
+    prompt:
+      vi: "Đoạn code in ra gì?"
+      en: "What is the output of this code?"
+    choices:
+      - { text: "two", misconception: after-block }
+      - { text: "two\nend", correct: true }
+      - { text: "end", misconception: compare-ops }
+      - { text: "end\ntwo", misconception: run-order }
+    explanation:
+      vi: "n bằng 2, nên điều kiện n == 2 là True và dòng 3 in ra two. Dòng 4 viết sát lề trái, không thuộc khối của if, nên luôn chạy và in ra end. Python chạy từ trên xuống, nên two được in trước."
+      en: "n is 2, so the condition n == 2 is True and line 3 prints two. Line 4 starts at the left edge and is not in the block of the if, so it always runs and prints end. Python runs from top to bottom, so two is printed first."
+
+  - id: s3.if-else.b7
+    type: mcq
+    concepts: [after-block]
+    lessons: [s3.if-else.l2]
+    prompt:
+      vi: "Dòng print(\"Xong\") viết sát lề trái, ngay sau khối lệnh của 1 lệnh if không có else. Khi nào dòng này chạy?"
+      en: "The line print(\"Xong\") starts at the left edge, right after the block of an if statement with no else. When does this line run?"
+    choices:
+      - { vi: "Chỉ khi điều kiện của if đúng", en: "Only when the condition of the if is True", misconception: after-block }
+      - { vi: "Chỉ khi điều kiện của if sai", en: "Only when the condition of the if is False", misconception: after-block }
+      - { vi: "Không bao giờ, vì nó nằm ngoài khối lệnh", en: "Never, because it is outside the block", misconception: after-block }
+      - { vi: "Luôn chạy, dù điều kiện đúng hay sai", en: "Always, whether the condition is True or False", correct: true }
+    explanation:
+      vi: "Chỉ những dòng thụt lề ngay dưới if mới phụ thuộc vào điều kiện. Dòng sát lề trái sau khối không thuộc lệnh if, nên Python luôn chạy nó, sau khi xong lệnh if."
+      en: "Only the indented lines right under the if depend on the condition. A line at the left edge after the block is not part of the if statement, so Python always runs it, after the if statement is done."
+
+  - id: s3.if-else.b8
+    type: predict
+    concepts: [else-branch, str-equality]
+    lessons: [s3.if-else.l3]
+    code: |
+      a = "cat"
+      if a == "Cat":
+          print("yes")
+      else:
+          print("no")
+    prompt:
+      vi: "Đoạn code in ra gì?"
+      en: "What is the output of this code?"
+    choices:
+      - { text: "no", correct: true }
+      - { text: "yes", misconception: str-equality }
+      - { text: "yes\nno", misconception: else-branch }
+      - { vi: "Báo lỗi SyntaxError ở dòng 4, vì else thiếu điều kiện", en: "A SyntaxError on line 4, because else has no condition", error: true, misconception: else-branch }
+    explanation:
+      vi: "\"cat\" viết thường, còn \"Cat\" có chữ C hoa, nên điều kiện là False. Python chạy nhánh else và in ra no. else không cần điều kiện, nên dòng 4 không có lỗi, và chỉ 1 nhánh được chạy."
+      en: "\"cat\" is in small letters, but \"Cat\" has a capital C, so the condition is False. Python runs the else branch and prints no. else needs no condition, so line 4 has no error, and only 1 branch runs."
+
+  - id: s3.if-else.b9
+    type: predict
+    concepts: [else-branch]
+    lessons: [s3.if-else.l3]
+    code: |
+      n = 7
+      if n <= 5:
+          print("small")
+      else n > 5:
+          print("big")
+    prompt:
+      vi: "Chuyện gì xảy ra khi chạy đoạn code này?"
+      en: "What happens when this code runs?"
+    choices:
+      - { text: "big", misconception: else-branch }
+      - { text: "small\nbig", misconception: else-branch }
+      - { vi: "Báo lỗi SyntaxError ở dòng 4", en: "A SyntaxError on line 4", correct: true, error: true }
+      - { vi: "Báo lỗi IndentationError ở dòng 5", en: "An IndentationError on line 5", error: true, misconception: indent-block }
+    explanation:
+      vi: "else không có điều kiện. Sau chữ else, Python chờ ngay 1 dấu hai chấm, nên dòng else n > 5: báo lỗi SyntaxError ở dòng 4 và chương trình không in gì. Sửa dòng 4 thành else: thì chương trình in ra big."
+      en: "else has no condition. After the word else, Python expects a colon right away, so the line else n > 5: gives a SyntaxError on line 4 and the program prints nothing. With else: on line 4, the program prints big."
+
+  - id: s3.if-else.b10
+    type: mcq
+    concepts: [else-branch, after-block]
+    lessons: [s3.if-else.l3]
+    code: |
+      if n > 0:
+          print("A")
+      else:
+          print("B")
+      print("C")
+    prompt:
+      vi: "Biến n đang chứa 1 số nguyên nào đó. Đoạn code này luôn in ra bao nhiêu dòng?"
+      en: "The variable n holds some integer. How many lines does this code always print?"
+    choices:
+      - { vi: "1 dòng", en: "1 line", misconception: after-block }
+      - { vi: "2 dòng", en: "2 lines", correct: true }
+      - { vi: "3 dòng", en: "3 lines", misconception: else-branch }
+      - { vi: "2 dòng hoặc 3 dòng, tùy giá trị của n", en: "2 or 3 lines, depending on n", misconception: else-branch }
+    explanation:
+      vi: "Mỗi lần chạy, đúng 1 trong 2 nhánh chạy: nhánh if in A, hoặc nhánh else in B, không bao giờ cả 2. Dòng print(\"C\") sát lề trái nên luôn chạy. Vì vậy, dù n là số nào, chương trình luôn in 2 dòng."
+      en: "Each time, exactly 1 of the 2 branches runs: the if branch prints A, or the else branch prints B, never both. The line print(\"C\") starts at the left edge, so it always runs. So whatever number n is, the program always prints 2 lines."
+
+  - id: s3.if-else.b11
+    type: mcq
+    concepts: [convert-before-compare]
+    lessons: [s3.if-else.l4]
+    code: |
+      a = input()
+      b = input()
+      if a > b:
+          print("first")
+      else:
+          print("second")
+    prompt:
+      vi: "Ô Dữ liệu nhập có 2 dòng: 5 và 30. Đoạn code in ra gì?"
+      en: "The Input data box has 2 lines: 5 and 30. What is the output of this code?"
+    choices:
+      - { text: "first", correct: true }
+      - { text: "second", misconception: convert-before-compare }
+      - { vi: "Báo lỗi TypeError ở dòng 3, vì không so sánh được 2 chuỗi", en: "A TypeError on line 3, because 2 strings cannot be compared", error: true, misconception: compare-str-num }
+      - { text: "first\nsecond", misconception: else-branch }
+    explanation:
+      vi: "Hai dòng nhập không được đổi bằng int(), nên a là chuỗi \"5\" và b là chuỗi \"30\". Python so sánh 2 chuỗi theo từng ký tự: ký tự 5 đứng sau ký tự 3, nên a > b là True và chương trình in ra first. Không có lỗi, nhưng kết quả sai với điều con muốn hỏi, vì số 5 nhỏ hơn số 30."
+      en: "The 2 input lines are not changed with int(), so a is the string \"5\" and b is the string \"30\". Python compares 2 strings character by character: the character 5 comes after the character 3, so a > b is True and the program prints first. There is no error, but the result is not what you want to ask, because the number 5 is smaller than the number 30."
+
+  - id: s3.if-else.b12
+    type: mcq
+    concepts: [convert-before-compare]
+    lessons: [s3.if-else.l4]
+    code: |
+      key = input()
+      if key == 1234:
+          print("open")
+      else:
+          print("closed")
+    prompt:
+      vi: "Ô Dữ liệu nhập có 1 dòng: 1234. Đoạn code in ra gì?"
+      en: "The Input data box has 1 line: 1234. What is the output of this code?"
+    choices:
+      - { text: "open", misconception: convert-before-compare }
+      - { vi: "Báo lỗi TypeError ở dòng 2", en: "A TypeError on line 2", error: true, misconception: compare-str-num }
+      - { text: "closed", correct: true }
+      - { text: "open\nclosed", misconception: else-branch }
+    explanation:
+      vi: "key là chuỗi \"1234\", còn 1234 trong code là số. Chuỗi và số không bao giờ bằng nhau, nên điều kiện là False và chương trình in ra closed. Hỏi bằng nhau giữa chuỗi và số thì không báo lỗi. Muốn so sánh như số, con viết key = int(input())."
+      en: "key is the string \"1234\", but 1234 in the code is a number. A string and a number are never equal, so the condition is False and the program prints closed. Asking whether a string and a number are equal gives no error. To compare as numbers, write key = int(input())."
+
+  - id: s3.if-else.b13
+    type: predict
+    concepts: [convert-before-compare]
+    lessons: [s3.if-else.l4]
+    code: |
+      a = "15"
+      if int(a) > 9:
+          print("yes")
+      else:
+          print("no")
+    prompt:
+      vi: "Đoạn code in ra gì?"
+      en: "What is the output of this code?"
+    choices:
+      - { text: "no", misconception: compare-str-num }
+      - { vi: "Báo lỗi TypeError ở dòng 2", en: "A TypeError on line 2", error: true, misconception: convert-before-compare }
+      - { text: "yes\nno", misconception: else-branch }
+      - { text: "yes", correct: true }
+    explanation:
+      vi: "a là chuỗi \"15\", nhưng int(a) đổi nó thành số 15 ngay trong điều kiện. Python so sánh 2 số: 15 lớn hơn 9, nên in ra yes. Không có lỗi, vì cả 2 bên đều là số."
+      en: "a is the string \"15\", but int(a) changes it into the number 15 right inside the condition. Python compares 2 numbers: 15 is greater than 9, so it prints yes. There is no error, because both sides are numbers."
+
+  - id: s3.if-else.b14
+    type: predict
+    concepts: [else-branch, after-block]
+    lessons: [s3.if-else.l3]
+    code: |
+      total = 4 + 5
+      if total >= 10:
+          print("pass")
+      else:
+          print("try again")
+      print(total)
+    prompt:
+      vi: "Đoạn code in ra gì?"
+      en: "What is the output of this code?"
+    choices:
+      - { text: "try again\n9", correct: true }
+      - { text: "pass\n9", misconception: compare-ops }
+      - { text: "try again", misconception: after-block }
+      - { text: "9\ntry again", misconception: run-order }
+    explanation:
+      vi: "Python tính 4 + 5 được 9. 9 không lớn hơn hoặc bằng 10, nên nhánh else chạy và in ra try again. Dòng cuối sát lề trái, nên luôn chạy và in ra 9 ở dòng sau."
+      en: "Python works out 4 + 5, which is 9. 9 is not greater than or equal to 10, so the else branch runs and prints try again. The last line starts at the left edge, so it always runs and prints 9 on the next line."

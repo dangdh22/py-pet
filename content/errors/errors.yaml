@@ -4,16 +4,18 @@
 
 - id: missing-colon
   match: { type: SyntaxError, message: "^expected ':'$" }
+  misconception: if-colon
   explain:
-    vi: "Dòng {line}: thiếu dấu hai chấm (:) ở cuối dòng. Sau if, elif, else, for và while luôn phải có dấu hai chấm."
-    en: "Line {line}: a colon (:) is missing at the end of the line. Put a colon after if, elif, else, for and while."
+    vi: "Dòng {line}: Python cần 1 dấu hai chấm (:) ở cuối dòng này. Dòng mở đầu 1 khối lệnh, như dòng if hay dòng else, luôn kết thúc bằng dấu hai chấm."
+    en: "Line {line}: Python needs a colon (:) at the end of this line. A line that starts a block, like an if line or an else line, always ends with a colon."
   hint:
-    vi: "Thêm dấu : vào cuối dòng {line}."
-    en: "Add : at the end of line {line}."
+    vi: "Thêm dấu : vào cuối dòng {line}. Nếu đó là dòng else, hãy xóa phần điều kiện và chỉ để lại else:, vì else không có điều kiện."
+    en: "Add : at the end of line {line}. If it is an else line, delete the condition and keep only else:, because else has no condition."
   sample: "if True\n    print(1)"
 
 - id: indent-expected
   match: { type: IndentationError, message: "^expected an indented block after .+ on line (?<header>\\d+)$" }
+  misconception: indent-block
   explain:
     vi: "Dòng {line}: dòng này phải thụt lề vào 4 dấu cách, vì nó nằm trong khối lệnh của dòng {header}."
     en: "Line {line}: indent this line by 4 spaces. It is inside the block of line {header}."
@@ -21,13 +23,15 @@
 
 - id: indent-unexpected
   match: { type: IndentationError, message: "^unexpected indent$" }
+  misconception: indent-block
   explain:
-    vi: "Dòng {line} bị thụt lề thừa. Dòng này không nằm trong khối lệnh nào, nên phải viết sát lề trái."
-    en: "Line {line} has extra indentation. This line is not inside a block, so start it at the left edge."
+    vi: "Dòng {line} bị thụt lề thừa. Nếu dòng này không nằm trong khối lệnh nào, hãy xóa hết dấu cách ở đầu dòng. Nếu nó nằm trong khối của 1 lệnh như if, hãy cho nó thẳng hàng với các dòng khác trong khối."
+    en: "Line {line} has extra indentation. If this line is not inside a block, delete all the spaces at the start of the line. If it is inside the block of a statement like if, line it up with the other lines of the block."
   sample: "print(1)\n    print(2)"
 
 - id: indent-unmatched
   match: { type: IndentationError, message: "^unindent does not match any outer indentation level$" }
+  misconception: indent-block
   explain:
     vi: "Dòng {line}: thụt lề không khớp với các dòng phía trên. Mỗi mức thụt lề nên dùng đúng 4 dấu cách."
     en: "Line {line}: the indentation does not match the lines above. Use exactly 4 spaces for each level."
@@ -35,6 +39,7 @@
 
 - id: tab-error
   match: { type: TabError }
+  misconception: indent-block
   explain:
     vi: "Dòng {line}: code trộn lẫn phím Tab và dấu cách khi thụt lề. Hãy xóa phần thụt lề và gõ lại bằng 4 dấu cách."
     en: "Line {line}: the code mixes Tab and spaces for indentation. Delete the indentation and type 4 spaces again."
@@ -83,6 +88,7 @@
 
 - id: assign-in-condition
   match: { type: SyntaxError, message: "Maybe you meant '==' or ':=' instead of '='", check: assign-in-condition }
+  misconception: eq-vs-assign
   explain:
     vi: "Dòng {line}: trong điều kiện, so sánh bằng phải viết == (2 dấu bằng). Một dấu = dùng để gán giá trị."
     en: "Line {line}: in a condition, write == (2 equal signs) to compare. One = gives a value to a variable."
@@ -193,7 +199,7 @@
 
 - id: compare-str-int
   match: { type: TypeError, message: "^'(?<op>[<>=!]+)' not supported between instances of '(?<left>\\w+)' and '(?<right>\\w+)'$" }
-  misconception: compare-str-num
+  misconception: convert-before-compare
   explain:
     vi: "Dòng {line}: không so sánh được bằng phép {op} giữa kiểu {left} và kiểu {right}. Python chỉ so sánh lớn nhỏ giữa số với số, hoặc giữa chuỗi với chuỗi. Có thể một giá trị là chuỗi (str) đọc từ input(): hãy đổi nó thành số bằng int() trước khi so sánh, ví dụ tuoi = int(input())."
     en: "Line {line}: you cannot compare with {op} between type {left} and type {right}. Python compares bigger or smaller only between numbers, or between strings. Maybe one value is a string (str) from input(): change it into a number with int() before comparing, for example tuoi = int(input())."
