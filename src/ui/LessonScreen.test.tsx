@@ -2,7 +2,7 @@
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
-import type { ChoiceQuestion } from "../content/types";
+import type { ChoiceQuestion, Lesson } from "../content/types";
 import { brokenQuestion } from "../test/brokenItem";
 import { fixtureLesson } from "../test/fixtures";
 import { fakeRunner, okResult } from "../test/render";
@@ -189,6 +189,20 @@ describe("a broken exercise", () => {
     expect(saved.progress.answeredQuestions).toEqual([]);
     expect(saved.mastery).toEqual({});
     expect((await store.exportProfiles())[0]!.attempts).toEqual([]);
+  });
+
+  test("a broken card shows the message and Bỏ qua goes on to the next step", async () => {
+    const brokenCard = { segments: undefined } as unknown as Lesson["cards"][number];
+    const withCard = { ...lesson, cards: [brokenCard], exercises: [question] };
+    const { store } = await renderWithGame(<LessonScreen lesson={withCard} onExit={() => {}} />);
+    expect(screen.getByText("Thẻ 1/1")).toBeInTheDocument();
+    expect(screen.getByRole("alert")).toHaveTextContent("Bài này đang bị lỗi, con bỏ qua nhé");
+    await userEvent.click(screen.getByRole("button", { name: "Bỏ qua" }));
+    expect(screen.getByText("Bài tập 1/1")).toBeInTheDocument();
+    await waitFor(async () => expect((await store.readMeta()).errorLog).toHaveLength(1));
+    const [entry] = (await store.readMeta()).errorLog;
+    expect(entry).toMatchObject({ kind: "content-error" });
+    expect(entry!.detail).toContain("t.l1#card1");
   });
 
   test("skipping the last exercise still completes the lesson as usual", async () => {

@@ -95,7 +95,6 @@ function HelpCard({
     return () => {
       alive = false;
     };
-    // The evidence is read once per card.
     // eslint-disable-next-line react-hooks/exhaustive-deps -- game changes with every event; the evidence is read once per card
   }, [bundle, conceptId]);
 

@@ -32,8 +32,12 @@ export default tseslint.config(
     languageOptions: { globals: globals.browser },
     plugins: { 'react-hooks': reactHooks },
     // Mọi luật react-hooks (cả luật "warn" mặc định, như exhaustive-deps) đều là lỗi, để CI không bỏ sót.
+    // Chỉ đổi mức độ, giữ nguyên tùy chọn của luật (nếu có).
     rules: Object.fromEntries(
-      Object.entries(reactHooks.configs.flat.recommended.rules).map(([name]) => [name, 'error']),
+      Object.entries(reactHooks.configs.flat.recommended.rules).map(([name, entry]) => [
+        name,
+        Array.isArray(entry) ? ['error', ...entry.slice(1)] : 'error',
+      ]),
     ),
   },
   {

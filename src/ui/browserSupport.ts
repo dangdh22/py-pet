@@ -12,9 +12,17 @@ export function isBrowserSupported(env: BrowserEnv = globalThis as BrowserEnv): 
     typeof env.WebAssembly === "object" &&
     env.WebAssembly !== null &&
     typeof env.Worker === "function" &&
-    typeof env.indexedDB === "object" &&
-    env.indexedDB !== null
+    hasIndexedDb(env)
   );
+}
+
+/** Some browsers throw when `indexedDB` is read (blocked storage). The app still loads: the store falls back to memory. */
+function hasIndexedDb(env: BrowserEnv): boolean {
+  try {
+    return typeof env.indexedDB === "object" && env.indexedDB !== null;
+  } catch {
+    return true;
+  }
 }
 
 /** Before the LangProvider exists: Vietnamese unless the browser says another language. */

@@ -20,8 +20,8 @@ export class RunnerCrashError extends Error {
 }
 
 export const MAX_CONSECUTIVE_CRASHES = 3;
-/** Design decision 5: Pyodide that is not ready after this long counts as failed to start. */
-export const START_TIMEOUT_MS = 60_000;
+/** Design decision 5: Pyodide that is not ready after this long counts as failed to start (a slow school network needs ~10 MB). */
+export const START_TIMEOUT_MS = 120_000;
 
 interface PendingRun {
   id: number;

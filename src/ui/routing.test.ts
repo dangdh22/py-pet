@@ -115,6 +115,17 @@ describe("isBrowserSupported", () => {
     expect(isBrowserSupported({ ...full, indexedDB: undefined })).toBe(false);
     expect(isBrowserSupported({ ...full, indexedDB: null })).toBe(false);
   });
+
+  test("an indexedDB getter that throws counts as present (the store falls back to memory)", () => {
+    const throwing = { WebAssembly: {}, Worker: function Worker() {} };
+    Object.defineProperty(throwing, "indexedDB", {
+      get() {
+        throw new DOMException("denied", "SecurityError");
+      },
+    });
+    expect(isBrowserSupported(throwing)).toBe(true);
+    expect(isBrowserSupported({ ...throwing, WebAssembly: undefined })).toBe(false);
+  });
 });
 
 describe("browserLang", () => {

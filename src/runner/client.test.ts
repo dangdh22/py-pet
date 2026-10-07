@@ -201,9 +201,9 @@ describe("RunnerClient", () => {
       await rejected;
     });
 
-    test("the default wait is 60 seconds", () => {
+    test("the default wait is 120 seconds (a slow school network needs time for ~10 MB)", () => {
       const { client } = setup();
-      vi.advanceTimersByTime(59_999);
+      vi.advanceTimersByTime(119_999);
       expect(client.status).toBe("loading");
       vi.advanceTimersByTime(1);
       expect(client.status).toBe("failed");

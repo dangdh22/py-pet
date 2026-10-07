@@ -24,7 +24,12 @@ const TYPES = {
 function resolveFile(rawUrl) {
   const { pathname } = new URL(rawUrl, "http://localhost");
   if (!pathname.startsWith(PREFIX)) return null;
-  const relative = decodeURIComponent(pathname.slice(PREFIX.length)) || "index.html";
+  let relative;
+  try {
+    relative = decodeURIComponent(pathname.slice(PREFIX.length)) || "index.html";
+  } catch {
+    return null; // a malformed %-escape is a 404, not a crash of the server
+  }
   const file = normalize(join(ROOT, relative));
   if (file !== ROOT && !file.startsWith(ROOT + sep)) return null;
   if (!existsSync(file) || !statSync(file).isFile()) return null;
@@ -39,5 +44,7 @@ createServer((request, response) => {
     return;
   }
   response.writeHead(200, { "content-type": TYPES[extname(file)] ?? "application/octet-stream" });
-  createReadStream(file).pipe(response);
+  const stream = createReadStream(file);
+  stream.on("error", () => response.destroy());
+  stream.pipe(response);
 }).listen(PORT, () => console.log(`Phục vụ ${ROOT} tại http://localhost:${PORT}${PREFIX}`));

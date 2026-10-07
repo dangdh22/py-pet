@@ -5,6 +5,8 @@ const launchOptions = { executablePath: process.env.PW_CHROMIUM_PATH || undefine
 
 export default defineConfig({
   testDir: "e2e",
+  // In CI the html report is the artifact the workflow uploads when a test fails.
+  reporter: process.env.CI ? [["list"], ["html", { open: "never" }]] : "list",
   timeout: 90_000,
   expect: { timeout: 30_000 },
   use: { baseURL: "http://localhost:4173/", trace: "retain-on-failure" },
