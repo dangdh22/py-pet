@@ -116,9 +116,9 @@ exercises:
       vi: "Câu nào nói đúng về elif?"
       en: "Which sentence about elif is true?"
     choices:
-      - { vi: "elif không có điều kiện, giống như else", en: "elif has no condition, just like else", misconception: elif-chain }
-      - { vi: "elif được viết sau else, ở cuối chuỗi", en: "elif is written after else, at the end of the chain", misconception: elif-chain }
-      - { vi: "Mỗi elif có điều kiện riêng và dấu hai chấm ở cuối dòng", en: "Each elif has its own condition and a colon at the end of the line", correct: true }
+      - { vi: "elif không cần điều kiện, vì nó giống hệt như else", en: "elif needs no condition, because it is just like else", misconception: elif-chain }
+      - { vi: "elif được viết sau else, ở cuối cùng của chuỗi", en: "elif is written after else, at the very end of the chain", misconception: elif-chain }
+      - { vi: "Mỗi elif có điều kiện riêng và dấu hai chấm ở cuối", en: "Each elif has its own condition and a colon at the end", correct: true }
       - { vi: "Mỗi lệnh if chỉ được đi kèm nhiều nhất 1 elif", en: "Each if statement can have at most 1 elif", misconception: elif-chain }
     explanation:
       vi: "elif giống dòng if: có điều kiện riêng và dấu hai chấm ở cuối. Con viết bao nhiêu elif cũng được. Các elif luôn đứng sau if và trước else: viết elif sau else thì Python báo lỗi SyntaxError."

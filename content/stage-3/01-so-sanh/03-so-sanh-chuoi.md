@@ -49,6 +49,9 @@ exercises:
       - input: "100\n99"
         output: "Số đầu lớn hơn: True"
         hidden: true
+      - input: "7\n7"
+        output: "Số đầu lớn hơn: False"
+        hidden: true
     common_wrong:
       - output: "Số đầu lớn hơn: False"
         misconception: compare-str-num

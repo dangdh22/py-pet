@@ -322,10 +322,10 @@ questions:
       vi: "Vì sao rất khó viết quy tắc cố định để nhận ra con mèo trong ảnh?"
       en: "Why is it very hard to write a fixed rule for recognizing a cat in a photo?"
     choices:
-      - { vi: "Vì mèo có rất nhiều màu lông, kích thước và tư thế, nên không viết hết được các trường hợp", en: "Because cats have many fur colours, sizes and poses, so you cannot write every case", correct: true }
-      - { vi: "Vì máy tính chạy quá chậm, không kịp so sánh", en: "Because a computer is too slow to do the comparisons", misconception: ai-rules-vs-data }
-      - { vi: "Vì ảnh không phải là dữ liệu", en: "Because a photo is not data", misconception: ai-data }
-      - { vi: "Vì máy tính không cất được ảnh", en: "Because a computer cannot store photos", misconception: ai-data }
+      - { vi: "Vì mèo có đủ màu lông, to nhỏ và tư thế, nên không viết hết được các trường hợp", en: "Because cats have all kinds of fur, sizes and poses, so you cannot write every case", correct: true }
+      - { vi: "Vì máy tính chạy quá chậm, không kịp làm hết các phép so sánh trong ảnh", en: "Because a computer is too slow to do all the comparisons in a photo", misconception: ai-rules-vs-data }
+      - { vi: "Vì ảnh chỉ là hình để người xem, không phải là dữ liệu cho máy tính", en: "Because a photo is only a picture for people to look at, not data for a computer", misconception: ai-data }
+      - { vi: "Vì máy tính không cất được ảnh, nên không có gì để so sánh", en: "Because a computer cannot store photos, so there is nothing to compare", misconception: ai-data }
     explanation:
       vi: "Con mèo trong ảnh có thể trắng, đen hay vằn, nằm hay chạy, to hay nhỏ. Không ai viết đủ phép so sánh cho mọi trường hợp. Vì vậy, người ta cho AI học từ rất nhiều ảnh có nhãn. Máy tính so sánh rất nhanh, ảnh cũng là dữ liệu, và máy tính cất được ảnh."
       en: "A cat in a photo can be white, black or striped, lying down or running, big or small. Nobody can write enough comparisons for every case. So people let an AI learn from a huge number of labeled photos. A computer compares very fast, a photo is data too, and a computer can store photos."
@@ -351,17 +351,17 @@ questions:
     concepts: [compare-str-num]
     lessons: [s3.so-sanh.l3]
     code: |
-      a = input()
+      a = int(input())
       b = input()
       print(a < b)
     prompt:
-      vi: "Ô Dữ liệu nhập có 2 dòng: 7 và 12, nhưng đoạn code in ra False. Cách sửa nào làm cho đoạn code so sánh 2 số?"
-      en: "The Input data box has 2 lines: 7 and 12, but the code prints False. Which fix makes the code compare 2 numbers?"
+      vi: "Ô Dữ liệu nhập có 2 dòng: 7 và 12. Đoạn code báo lỗi TypeError ở dòng 3. Cách sửa nào làm cho đoạn code so sánh đúng 2 số?"
+      en: "The Input data box has 2 lines: 7 and 12. The code shows a TypeError on line 3. Which fix makes the code compare the 2 numbers correctly?"
     choices:
-      - { vi: "Đổi dòng 3 thành print(\"a\" < \"b\")", en: "Change line 3 to print(\"a\" < \"b\")", misconception: string-quotes }
+      - { vi: "Đổi dòng 1 thành a = input()", en: "Change line 1 to a = input()", misconception: compare-str-num }
       - { vi: "Đổi dấu < thành dấu <=", en: "Change < to <=", misconception: compare-ops }
-      - { vi: "Đổi dòng 3 thành print(str(a) < str(b))", en: "Change line 3 to print(str(a) < str(b))", misconception: str-convert }
-      - { vi: "Đổi dòng 3 thành print(int(a) < int(b))", en: "Change line 3 to print(int(a) < int(b))", correct: true }
+      - { vi: "Đổi dòng 2 thành b = str(input())", en: "Change line 2 to b = str(input())", misconception: str-convert }
+      - { vi: "Đổi dòng 2 thành b = int(input())", en: "Change line 2 to b = int(input())", correct: true }
     explanation:
-      vi: "input() đưa lại chuỗi, và chuỗi được so sánh theo từng ký tự: ký tự 7 đứng sau ký tự 1, nên \"7\" < \"12\" ra False. int(a) và int(b) đổi 2 chuỗi thành 2 số ngay trong phép so sánh, nên 7 < 12 ra True. str() vẫn để nguyên chuỗi. Có dấu nháy thì Python so sánh 2 chữ cái a và b, không phải 2 biến. Dấu <= vẫn so sánh 2 chuỗi."
-      en: "input() gives back strings, and strings are compared character by character: the character 7 comes after the character 1, so \"7\" < \"12\" gives False. int(a) and int(b) change the 2 strings into 2 numbers right inside the comparison, so 7 < 12 gives True. str() keeps them as strings. With quotes, Python compares the letters a and b, not the 2 variables. <= still compares 2 strings."
+      vi: "Dòng 1 đã đổi dòng nhập đầu thành số 7, nhưng dòng 2 để nguyên chuỗi \"12\". Hỏi lớn nhỏ giữa số và chuỗi thì Python báo lỗi TypeError. Đổi dòng 2 bằng int() thì Python so sánh 2 số, và 7 < 12 ra True. Đổi dòng 1 thành a = input() thì hết lỗi, nhưng Python so sánh 2 chuỗi theo từng ký tự, nên \"7\" < \"12\" ra False. str() vẫn để nguyên chuỗi, còn dấu <= vẫn so sánh số với chuỗi, nên vẫn báo lỗi."
+      en: "Line 1 already changes the first input line into the number 7, but line 2 keeps the string \"12\". Comparing a number and a string for bigger or smaller gives a TypeError. With int() on line 2, Python compares 2 numbers, and 7 < 12 gives True. With a = input() on line 1 the error is gone, but Python compares 2 strings character by character, so \"7\" < \"12\" gives False. str() keeps a string, and <= still compares a number with a string, so the error stays."

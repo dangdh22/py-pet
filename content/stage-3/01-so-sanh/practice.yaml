@@ -78,6 +78,9 @@ exercises:
       - input: "8\n11"
         output: "An lớn tuổi hơn: False"
         hidden: true
+      - input: "10\n10"
+        output: "An lớn tuổi hơn: False"
+        hidden: true
     hints:
       - { vi: "Tuổi của An nằm ở dòng 1, nên được đọc trước. Cả 2 tuổi đều đổi sang số bằng int() trước khi so sánh, để 12 lớn hơn 9.", en: "An's age is on line 1, so it is read first. Both ages are changed into numbers with int() before comparing, so that 12 is greater than 9." }
 
