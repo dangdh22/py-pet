@@ -58,20 +58,22 @@ export function PuzzleExerciseView({
   // A solution seen before a reload still counts as this step's outcome. Runs once, on mount.
   useEffect(() => {
     if (initialStats?.viewedSolution) onComplete("viewed-solution");
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- mount only: onComplete may change identity on every parent render and must not fire again
   }, []);
 
   const linesRef = useRef<HTMLOListElement>(null);
   /** The line whose button keeps the focus after a move, so the keyboard follows the moved line. */
-  const [focusLine, setFocusLine] = useState<{ index: number; dir: "up" | "down" } | null>(null);
+  const focusLineRef = useRef<{ index: number; dir: "up" | "down" } | null>(null);
 
   useEffect(() => {
+    const focusLine = focusLineRef.current;
     if (!focusLine) return;
     const row = linesRef.current?.querySelectorAll("li")[focusLine.index];
     const wanted = row?.querySelector<HTMLButtonElement>(`button[data-dir="${focusLine.dir}"]`);
     const other = row?.querySelector<HTMLButtonElement>(`button[data-dir="${focusLine.dir === "up" ? "down" : "up"}"]`);
     (wanted && !wanted.disabled ? wanted : other)?.focus();
-    setFocusLine(null);
-  }, [focusLine]);
+    focusLineRef.current = null;
+  }, [lines]);
 
   function move(index: number, step: -1 | 1) {
     setLines((current) => {
@@ -79,7 +81,7 @@ export function PuzzleExerciseView({
       [next[index], next[index + step]] = [next[index + step] as string, next[index] as string];
       return next;
     });
-    setFocusLine({ index: index + step, dir: step === -1 ? "up" : "down" });
+    focusLineRef.current = { index: index + step, dir: step === -1 ? "up" : "down" };
   }
 
   async function handleSubmit() {

@@ -67,6 +67,7 @@ export function CodeExerciseView({
   // A solution seen before a reload still counts as this step's outcome. Runs once, on mount.
   useEffect(() => {
     if (initialStats?.viewedSolution) onComplete("viewed-solution");
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- mount only: onComplete may change identity on every parent render and must not fire again
   }, []);
 
   function reset() {

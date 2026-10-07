@@ -150,7 +150,7 @@ export function apply(state: GameState, event: GameEvent, now: Date): GameState 
       buyItem(next, event.itemId, today);
       break;
     case "ItemUsed":
-      useItem(next, event.itemId);
+      consumeItem(next, event.itemId);
       break;
     case "RewardsEdited":
       next.rewards.catalog = cleanCatalog(event.catalog);
@@ -477,7 +477,7 @@ function buyItem(s: GameState, itemId: string, today: string): void {
 }
 
 /** A Pin or Vui item is used only when it can raise its stat; an accessory is worn alone in its slot. */
-function useItem(s: GameState, itemId: string): void {
+function consumeItem(s: GameState, itemId: string): void {
   const item = findShopItem(itemId);
   if (!item) return;
   if (isConsumable(item)) {

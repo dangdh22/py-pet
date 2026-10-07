@@ -42,6 +42,7 @@ export function GameRoot({ store, clock, onReplaced }: { store: GameStore; clock
     return () => {
       alive = false;
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- load once per store; a new clock identity must not reload the game
   }, [store]);
 
   if (loadProblem !== null) {

@@ -156,7 +156,9 @@ function ParentArea({ onLock }: { onLock(auto: boolean): void }) {
   const game = useGame();
   const [tab, setTab] = useState<Tab>("overview");
   const lockRef = useRef(onLock);
-  lockRef.current = onLock;
+  useEffect(() => {
+    lockRef.current = onLock;
+  });
 
   useEffect(() => {
     let last = Date.now();
