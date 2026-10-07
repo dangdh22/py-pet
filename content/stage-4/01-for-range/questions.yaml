@@ -1,23 +1,19 @@
 questions:
   - id: s4.for-range.b1
-    type: predict
+    type: mcq
     concepts: [for-repeat]
     lessons: [s4.for-range.l1]
-    code: |
-      for i in range(3):
-          print("A")
-          print("B")
     prompt:
-      vi: "Đoạn code in ra gì?"
-      en: "What is the output of this code?"
+      vi: "Robo muốn in Hi 3 lần, rồi in Bye đúng 1 lần ở cuối. Đoạn code nào làm đúng như vậy?"
+      en: "Robo wants to print Hi 3 times, then print Bye exactly once at the end. Which code does exactly that?"
     choices:
-      - { text: "A\nA\nA\nB", misconception: for-repeat }
-      - { text: "A\nB\nA\nB\nA\nB", correct: true }
-      - { text: "A\nA\nA\nB\nB\nB", misconception: for-repeat }
-      - { text: "A\nB", misconception: for-repeat }
+      - { text: "for i in range(3):\n    print(\"Hi\")\n    print(\"Bye\")", misconception: for-repeat }
+      - { text: "for i in range(3):\n    print(\"Hi\")\nprint(\"Bye\")", correct: true }
+      - { text: "for i in range(3):\nprint(\"Hi\")\nprint(\"Bye\")", misconception: indent-block }
+      - { text: "print(\"Hi\")\nfor i in range(3):\n    print(\"Bye\")", misconception: for-repeat }
     explanation:
-      vi: "Cả 2 dòng print đều thụt lề, nên cùng nằm trong khối lệnh của vòng lặp. Mỗi lần lặp, Python chạy hết cả khối từ trên xuống: in A rồi in B. Vòng lặp chạy 3 lần, nên A và B xen kẽ nhau 3 lần."
-      en: "Both print lines are indented, so both are in the block of the loop. On each pass, Python runs the whole block from top to bottom: it prints A, then B. The loop runs 3 times, so A and B take turns 3 times."
+      vi: "Dòng print(\"Hi\") thụt lề nên nằm trong vòng lặp và chạy 3 lần. Dòng print(\"Bye\") sát lề trái nên chạy 1 lần, sau vòng lặp. Nếu Bye cũng thụt lề, Bye bị in 3 lần. Nếu không dòng nào thụt lề sau dòng for, Python báo lỗi IndentationError."
+      en: "The line print(\"Hi\") is indented, so it is in the loop and runs 3 times. The line print(\"Bye\") starts at the left edge, so it runs once, after the loop. If Bye is indented too, Bye is printed 3 times. If no line is indented after the for line, Python gives an IndentationError."
 
   - id: s4.for-range.b2
     type: mcq
@@ -77,17 +73,20 @@ questions:
     type: mcq
     concepts: [range-stop-excluded, range-start-step]
     lessons: [s4.for-range.l3]
+    code: |
+      for i in range(1, 10):
+          print(i)
     prompt:
-      vi: "Robo muốn biến i lần lượt là 0, 1, 2 và cứ thế đến 10, có cả số 10. Dòng for nào viết đúng?"
-      en: "Robo wants the variable i to be 0, 1, 2 and so on up to 10, including 10. Which for line is written correctly?"
+      vi: "Robo viết đoạn code này để in các số từ 1 đến 10, nhưng số 10 không được in ra. Sửa thế nào để in đúng từ 1 đến 10?"
+      en: "Robo wrote this code to print the numbers from 1 to 10, but 10 is not printed. How do you fix it so that it prints exactly 1 to 10?"
     choices:
-      - { text: "for i in range(10):", misconception: range-stop-excluded }
-      - { text: "for i in range(11):", correct: true }
-      - { text: "for i in range(1, 11):", misconception: range-start-step }
-      - { text: "for i in range(0, 10):", misconception: range-stop-excluded }
+      - { vi: "Đổi range(1, 10) thành range(0, 10)", en: "Change range(1, 10) to range(0, 10)", misconception: range-start-step }
+      - { vi: "Đổi range(1, 10) thành range(1, 11)", en: "Change range(1, 10) to range(1, 11)", correct: true }
+      - { vi: "Đổi print(i) thành print(i + 1)", en: "Change print(i) to print(i + 1)", misconception: loop-variable }
+      - { vi: "Đổi range(1, 10) thành range(10)", en: "Change range(1, 10) to range(10)", misconception: range-stop-excluded }
     explanation:
-      vi: "range dừng trước số dừng, nên muốn có số 10 thì số dừng phải là 11. range(11) bắt đầu từ 0 và cho 0, 1, ..., 10. range(10) và range(0, 10) đều thiếu số 10, còn range(1, 11) thiếu số 0."
-      en: "range stops before its stop number, so to include 10 the stop number must be 11. range(11) starts at 0 and gives 0, 1, ..., 10. range(10) and range(0, 10) both miss 10, and range(1, 11) misses 0."
+      vi: "range dừng trước số dừng, nên muốn có số 10 thì số dừng phải là 11: range(1, 11) cho 1 đến 10. range(0, 10) và range(10) đều cho 0 đến 9. Còn print(i + 1) in ra 2 đến 10, nên lại thiếu số 1."
+      en: "range stops before its stop number, so to include 10 the stop number must be 11: range(1, 11) gives 1 to 10. range(0, 10) and range(10) both give 0 to 9. And print(i + 1) prints 2 to 10, so 1 is missing instead."
 
   - id: s4.for-range.b6
     type: predict
@@ -271,13 +270,13 @@ questions:
     concepts: [ai-supervised]
     lessons: [s4.for-range.l6]
     prompt:
-      vi: "Con có 1 hộp hình dán, không cái nào ghi chữ gì. Con tự xếp những hình dán giống nhau, như cùng màu hay cùng hình con vật, vào từng nhóm. Cách làm của con giống cách học nào của AI?"
-      en: "You have a box of stickers, and none of them has any words on it. You sort the stickers that are alike, such as the same colour or the same animal, into groups by yourself. Which way of AI learning is your way like?"
+      vi: "Một AI học có giám sát từ hàng nghìn đoạn ghi âm tiếng kêu, mỗi đoạn có nhãn chó, mèo hoặc gà. Học xong, con đưa cho AI 1 đoạn ghi âm mới chưa có nhãn. AI làm gì với đoạn này?"
+      en: "An AI learns with supervision from thousands of recordings of animal sounds, each labeled dog, cat or chicken. After learning, you give the AI a new recording with no label. What does the AI do with it?"
     choices:
-      - { vi: "Học có giám sát, vì chính con là người giám sát", en: "Supervised learning, because you are the one supervising", misconception: ai-supervised }
-      - { vi: "Học có giám sát, vì hình dán có màu và có hình con vật", en: "Supervised learning, because the stickers have colours and animals", misconception: ai-supervised }
-      - { vi: "Học không giám sát", en: "Unsupervised learning", correct: true }
-      - { vi: "Không giống cách nào, vì AI không biết xếp nhóm", en: "Neither, because AI cannot sort things into groups", misconception: ai-supervised }
+      - { vi: "Không làm được gì, vì đoạn ghi âm mới chưa có nhãn", en: "Nothing, because the new recording has no label", misconception: ai-supervised }
+      - { vi: "Xếp đoạn ghi âm vào 1 nhóm chưa có tên, rồi chờ người đặt tên cho nhóm", en: "It puts the recording into a group with no name and waits for people to name the group", misconception: ai-supervised }
+      - { vi: "Đoán nhãn cho đoạn ghi âm mới: chó, mèo hoặc gà", en: "It guesses a label for the new recording: dog, cat or chicken", correct: true }
+      - { vi: "Tự nghĩ ra 1 nhãn mới chưa từng học, như vịt", en: "It makes up a new label it never learned, such as duck", misconception: ai-supervised }
     explanation:
-      vi: "Các hình dán không có nhãn, và con tự tìm những cái giống nhau để xếp chung nhóm. Đó chính là cách học không giám sát. Màu và hình con vật là đặc điểm của hình dán, không phải nhãn ghi sẵn đáp án."
-      en: "The stickers have no labels, and you find the ones that are alike to put them in groups yourself. That is exactly how unsupervised learning works. The colour and the animal are features of a sticker, not a label with the answer written on it."
+      vi: "Học có giám sát là để đoán nhãn cho ví dụ mới chưa có nhãn. AI chỉ chọn trong những nhãn nó đã học: chó, mèo hoặc gà. Xếp vào nhóm chưa có tên là việc của học không giám sát."
+      en: "Supervised learning is for guessing the label of a new example that has none. The AI can only choose among the labels it learned: dog, cat or chicken. Putting things into groups with no name is what unsupervised learning does."
