@@ -1,0 +1,41 @@
+concepts:
+  - id: nested-inner-full
+    name: { vi: "Vòng trong chạy hết mỗi lần vòng ngoài chạy", en: "The inner loop runs all the way on each outer pass" }
+    misconception_card: |
+      Nhiều bạn nghĩ 2 vòng lặp lồng nhau cùng tăng 1 lúc, hoặc nghĩ khối lệnh bên trong chạy 3 + 4 = 7 lần. Thực ra mỗi lần vòng ngoài chạy 1 lần, vòng trong chạy hết từ đầu đến cuối, rồi vòng ngoài mới chạy tiếp. Với `for i in range(3):` và `for j in range(4):` nằm bên trong, khối lệnh của vòng trong chạy 3 × 4 = 12 lần.
+    parent_tip: |
+      Cùng con chơi: mỗi lần giậm chân 1 cái thì vỗ tay 3 cái, làm như vậy 4 lần, rồi hỏi con đã vỗ tay tất cả mấy cái. Giải thích rằng việc vỗ tay giống vòng trong, chạy hết mỗi lần vòng ngoài là giậm chân chạy 1 lần, nên có 4 × 3 = 12 cái vỗ tay.
+    practice:
+      level1: [s4.long-nhau.l1.q1, s4.long-nhau.l1.q2, s4.long-nhau.b1, s4.long-nhau.b2, s4.long-nhau.b3, s4.long-nhau.l4.q1, s4.long-nhau.b8, s4.long-nhau.b12]
+      level2: [s4.long-nhau.p1]
+      level3: [s4.long-nhau.l1.ex1, s4.long-nhau.l1.ex2, s4.long-nhau.l4.ex1, s4.long-nhau.c1, s4.long-nhau.c2]
+  - id: print-end-newline
+    name: { vi: "end=\"\" và print() để xuống dòng trong vòng lặp", en: "end=\"\" and print() to end a line in a loop" }
+    misconception_card: |
+      Nhiều bạn nghĩ `print()` để trống lúc nào cũng in ra 1 dòng trống, nên bỏ nó đi, hoặc đặt nó trong vòng trong. Thực ra sau các lệnh `print("*", end="")`, `print()` chỉ kết thúc hàng đang in dở: thiếu nó thì mọi dấu * nằm trên 1 dòng, còn đặt nó trong vòng trong thì mỗi dấu * nằm trên 1 dòng riêng. Con đặt `print()` ngay sau vòng trong, thụt lề 4 dấu cách, để mỗi hàng xuống dòng đúng 1 lần.
+    parent_tip: |
+      Cho con xếp cúc áo hay đồng xu thành 3 hàng trên bàn, xếp đủ 1 hàng rồi mới chuyển xuống hàng dưới. Hỏi con: nếu quên chuyển hàng thì sao, và nếu xếp mỗi cái xong lại chuyển hàng thì sao?
+    practice:
+      level1: [s4.long-nhau.l2.q1, s4.long-nhau.l2.q2, s4.long-nhau.b1, s4.long-nhau.b4, s4.long-nhau.b5, s4.long-nhau.b12]
+      level2: [s4.long-nhau.p2]
+      level3: [s4.long-nhau.l2.ex1, s4.long-nhau.l2.ex2, s4.long-nhau.l4.ex2, s4.long-nhau.c2]
+  - id: row-col-pattern
+    name: { vi: "Hàng thứ i có i ký tự", en: "Row i has i characters" }
+    misconception_card: |
+      Nhiều bạn vẽ tam giác bằng `for i in range(n):` và `print("*" * i)`, rồi ngạc nhiên vì hình có 1 dòng trống ở trên cùng. Thực ra range(n) bắt đầu từ 0, nên hàng đầu có 0 dấu *, còn hàng cuối chỉ có n - 1 dấu *. Muốn hàng thứ i có i dấu *, con cho i đi từ 1 đến n bằng `range(1, n + 1)`; với tam giác ngược, con dùng `range(n, 0, -1)`.
+    parent_tip: |
+      Cùng con xếp đồng xu thành bậc thang: hàng 1 có 1 đồng, hàng 2 có 2 đồng, rồi hỏi con hàng thứ 7 cần mấy đồng. Khuyến khích con nói ra quy luật bằng lời: hàng thứ mấy thì có bấy nhiêu đồng.
+    practice:
+      level1: [s4.long-nhau.l3.q1, s4.long-nhau.l3.q2, s4.long-nhau.b6, s4.long-nhau.b7, s4.long-nhau.b8, s4.long-nhau.l5.q2]
+      level2: [s4.long-nhau.p3]
+      level3: [s4.long-nhau.l3.ex1, s4.long-nhau.l3.ex2, s4.long-nhau.l5.ex2, s4.long-nhau.c3, s4.long-nhau.c4]
+  - id: leading-spaces
+    name: { vi: "Dấu cách ở đầu hàng", en: "Spaces at the start of a row" }
+    misconception_card: |
+      Nhiều bạn nối dấu cách với dấu * bằng dấu phẩy, như `print(" " * 2, "*")`, và nghĩ dấu cách ở đầu hàng không quan trọng vì không nhìn thấy. Thực ra dấu phẩy thêm 1 dấu cách nữa, nên hình bị lệch, và khi chấm bài, Robo so sánh dấu cách ở đầu hàng như mọi ký tự khác. Con nối bằng dấu +, như `print(" " * 2 + "*")`, và vẽ thử bằng dấu chấm thay cho dấu cách để đếm cho dễ.
+    parent_tip: |
+      Cùng con vẽ 1 kim tự tháp trên giấy kẻ ô vuông, mỗi ô 1 ký tự, và đếm số ô để trống ở đầu mỗi hàng. Hỏi con: nếu hàng nào cũng thừa 1 ô trống ở đầu thì hình trông thế nào?
+    practice:
+      level1: [s4.long-nhau.l5.q1, s4.long-nhau.l5.q2, s4.long-nhau.b9, s4.long-nhau.b10, s4.long-nhau.b11]
+      level2: [s4.long-nhau.p4, s4.long-nhau.p5]
+      level3: [s4.long-nhau.l5.ex1, s4.long-nhau.l5.ex2, s4.long-nhau.c4]

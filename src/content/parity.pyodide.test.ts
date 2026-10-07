@@ -23,7 +23,7 @@ beforeAll(async () => {
 
 describe("error dictionary on Pyodide", () => {
   test("has the expected number of entries", () => {
-    expect(bundle.errors.length).toBe(39);
+    expect(bundle.errors.length).toBe(41);
   });
 
   for (const entry of bundle.errors) {
@@ -133,6 +133,28 @@ describe("error dictionary on Pyodide", () => {
     const silent = "pin = 3\nwhile pin > 0:\n    pin = pin + 1";
     expect(matchError(bundle.errors, timeout, silent)?.entry.id).toBe("timeout-while");
     expect(matchError(bundle.errors, timeout, "x = 0\nfor i in range(10 ** 12):\n    x = x + i")?.entry.id).toBe("timeout");
+  });
+
+  test("stage-4 drawing (lesson s4.long-nhau.l2): a string from input() with * or range() is explained, other TypeErrors keep their entries", () => {
+    const cases: [string, string][] = [
+      ['m = "4"\nprint("*" * m)', "repeat-str-by-str"],
+      ['m = input()\nprint("*" * m)', "repeat-str-by-str"],
+      ['n = input()\nprint(n * 2)\nprint("-" * n)', "repeat-str-by-str"],
+      ['print("ab" * "3")', "repeat-str-by-str"],
+      ['n = input()\nfor i in range(n):\n    print("*")', "str-not-integer"],
+      ['n = "3"\nfor i in range(n):\n    print(i)', "str-not-integer"],
+      ['x = round(3.14159, "2")\nprint(x)', "str-not-integer"],
+      ["n = input()\nfor i in range(1, n + 1):\n    print(i)", "concat-str"],
+      ['print("*" + 3)', "concat-str"],
+      ['print(1 + "2")', "unsupported-operand"],
+      ['print("*" * 2.5)', "type-other"],
+      ["print(len(5))", "type-other"],
+    ];
+    for (const [code, id] of cases) {
+      const problem = problemFromOutcome(run(code, "5\n"), false);
+      expect(problem?.type).toBe("TypeError");
+      expect(matchError(bundle.errors, problem!, code)?.entry.id).toBe(id);
+    }
   });
 
   test("smart-quote: real curly quotes pasted from Word are recognized (added test)", () => {

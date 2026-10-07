@@ -234,6 +234,25 @@
     en: "Line {line}: inside print, Python reads {name}=... as an option like sep= or end=, but print has no option called {name}. If you want to ask whether {name} is equal to a value, write == (2 equal signs), for example print({name} == 5). If you want to use sep or end, check the spelling."
   sample: "tuoi = 11\nprint(tuoi = 11)"
 
+- id: repeat-str-by-str
+  match: { type: TypeError, message: "^can't multiply sequence by non-int of type 'str'$" }
+  misconception: input-str
+  explain:
+    vi: "Dòng {line}: ở 2 bên dấu * đều là chuỗi (str). Python chỉ lặp lại được 1 chuỗi với 1 số nguyên, ví dụ \"*\" * 3 cho ra ***. Có thể 1 giá trị là chuỗi đọc từ input(), như \"3\": hãy đổi nó thành số nguyên bằng int(), ví dụ m = int(input())."
+    en: "Line {line}: both sides of * are strings (str). Python can repeat a string only with an integer, for example \"*\" * 3 gives ***. Maybe one value is a string from input(), such as \"3\": change it into an integer with int(), for example m = int(input())."
+  hint:
+    vi: "Nếu cạnh dấu * ở dòng {line} là 1 số trong dấu nháy, như \"3\", hãy xóa dấu nháy. Nếu đó là 1 biến, hãy xem dòng gán giá trị cho biến: nếu dòng đó là m = input(), hãy sửa thành m = int(input())."
+    en: "If the value next to * on line {line} is a number in quotes, such as \"3\", delete the quotes. If it is a variable, look at the line that gives it a value: if that line is m = input(), change it to m = int(input())."
+  sample: "m = \"4\"\nprint(\"*\" * m)"
+
+- id: str-not-integer
+  match: { type: TypeError, message: "^'str' object cannot be interpreted as an integer$" }
+  misconception: input-str
+  explain:
+    vi: "Dòng {line}: ở đây Python cần 1 số nguyên, như số trong range(), nhưng lại nhận được 1 chuỗi (str). Có thể giá trị đó là chuỗi đọc từ input(), như \"5\": hãy đổi nó thành số nguyên bằng int(), ví dụ n = int(input())."
+    en: "Line {line}: Python needs an integer here, such as the number in range(), but it got a string (str). Maybe that value is a string from input(), such as \"5\": change it into an integer with int(), for example n = int(input())."
+  sample: "n = \"3\"\nfor i in range(n):\n    print(i)"
+
 - id: type-other
   match: { type: TypeError }
   explain:

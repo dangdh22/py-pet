@@ -1,0 +1,11 @@
+id: s4.long-nhau
+title: { vi: "Vòng lặp lồng và vẽ hình", en: "Nested loops and drawing" }
+lessons:
+  - 01-vong-lap-long.md
+  - 02-hinh-chu-nhat.md
+  - 03-tam-giac.md
+  - 04-bang-cuu-chuong.md
+  - 05-kim-tu-thap.md
+reviews:
+  - { id: s4.long-nhau.r1, after: s4.long-nhau.l2 }
+  - { id: s4.long-nhau.r2, after: s4.long-nhau.l5 }

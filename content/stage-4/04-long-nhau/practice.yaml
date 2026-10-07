@@ -1,0 +1,435 @@
+exercises:
+  - id: s4.long-nhau.p1
+    type: parsons
+    concepts: [nested-inner-full]
+    prompt:
+      vi: "Robo lập lịch tập bơi cho n tuần, mỗi tuần 2 buổi. Ô Dữ liệu nhập có 1 dòng: số tuần n, là số nguyên không âm. Sắp xếp các dòng lệnh để in ra như phần Ví dụ."
+      en: "Robo makes a swimming plan for n weeks, with 2 lessons each week. The Input data box has 1 line: the number of weeks n, an integer that is not negative. Put the lines in order to print as in the Example."
+    solution: |
+      n = int(input())
+      for tuan in range(1, n + 1):
+          print("Tuần", tuan)
+          for buoi in range(1, 3):
+              print("Buổi", buoi)
+      print("Hết lịch")
+    tests:
+      - input: "2"
+        output: |
+          Tuần 1
+          Buổi 1
+          Buổi 2
+          Tuần 2
+          Buổi 1
+          Buổi 2
+          Hết lịch
+      - input: "1"
+        output: |
+          Tuần 1
+          Buổi 1
+          Buổi 2
+          Hết lịch
+        hidden: true
+      - input: "0"
+        output: "Hết lịch"
+        hidden: true
+      - input: "3"
+        output: |
+          Tuần 1
+          Buổi 1
+          Buổi 2
+          Tuần 2
+          Buổi 1
+          Buổi 2
+          Tuần 3
+          Buổi 1
+          Buổi 2
+          Hết lịch
+        hidden: true
+    hints:
+      - { vi: "Vòng ngoài đi qua các tuần. Mỗi tuần, Robo in tên tuần trước, rồi vòng trong mới in 2 buổi của tuần đó. Dòng Hết lịch chỉ in 1 lần, sau cả 2 vòng lặp.", en: "The outer loop goes through the weeks. Each week, Robo first prints the week, and then the inner loop prints the 2 lessons of that week. The line Hết lịch is printed only once, after both loops." }
+
+  - id: s4.long-nhau.p2
+    type: fill
+    concepts: [print-end-newline]
+    prompt:
+      vi: "Robo vẽ 1 bức tường bằng dấu #. Ô Dữ liệu nhập có 2 dòng: dòng 1 là số hàng n, dòng 2 là số dấu # trên mỗi hàng m, đều là số nguyên không âm. Điền vào 2 chỗ trống để chương trình in ra như phần Ví dụ, không có dấu cách ở đầu hàng."
+      en: "Robo draws a wall with the sign #. The Input data box has 2 lines: line 1 is the number of rows n, and line 2 is the number of # signs on each row m, both integers that are not negative. Fill the 2 blanks so that the program prints as in the Example, with no spaces at the start of a row."
+    template: |
+      n = int(input())
+      m = int(input())
+      for i in range(n):
+          for j in range(m):
+              print("#", ___)
+          ___
+    answers: ["end=\"\"", "print()"]
+    tests:
+      - input: "2\n5"
+        output: |
+          #####
+          #####
+      - input: "1\n1"
+        output: "#"
+        hidden: true
+      - input: "0\n3"
+        output: ""
+        hidden: true
+      - input: "3\n2"
+        output: |
+          ##
+          ##
+          ##
+        hidden: true
+    hints:
+      - { vi: "Các dấu # của 1 hàng phải nằm liền nhau trên cùng 1 dòng, nên print trong vòng trong không được xuống dòng. Sau khi vòng trong vẽ xong 1 hàng, 1 lệnh để trống kết thúc hàng đó.", en: "The # signs of a row must be next to each other on the same line, so the print inside the inner loop must not start a new line. After the inner loop has drawn a row, an empty statement ends that row." }
+      - { vi: "Điền end=\"\" vào chỗ trống thứ nhất và print() vào chỗ trống thứ hai.", en: "Fill the first blank with end=\"\" and the second blank with print()." }
+
+  - id: s4.long-nhau.p3
+    type: fill
+    concepts: [row-col-pattern]
+    prompt:
+      vi: "Robo xếp các số thành cầu thang. Ô Dữ liệu nhập có 1 dòng: số hàng n, là số nguyên không âm. Hàng thứ i có các số từ 1 đến i, cách nhau 1 dấu cách. Điền vào 2 chỗ trống để chương trình in ra như phần Ví dụ, không có dấu cách ở đầu hàng."
+      en: "Robo arranges numbers as a staircase. The Input data box has 1 line: the number of rows n, an integer that is not negative. Row i has the numbers from 1 to i, separated by 1 space. Fill the 2 blanks so that the program prints as in the Example, with no spaces at the start of a row."
+    template: |
+      n = int(input())
+      for i in range(___, n + 1):
+          for j in range(1, ___):
+              print(j, end=" ")
+          print()
+    answers: ["1", "i + 1"]
+    tests:
+      - input: "4"
+        output: |
+          1
+          1 2
+          1 2 3
+          1 2 3 4
+      - input: "1"
+        output: "1"
+        hidden: true
+      - input: "0"
+        output: ""
+        hidden: true
+      - input: "5"
+        output: |
+          1
+          1 2
+          1 2 3
+          1 2 3 4
+          1 2 3 4 5
+        hidden: true
+    hints:
+      - { vi: "Các hàng đánh số từ 1, nên vòng ngoài bắt đầu từ 1. Hàng thứ i có các số từ 1 đến i, có cả i, mà range dừng trước số thứ hai.", en: "The rows are numbered from 1, so the outer loop starts at 1. Row i has the numbers from 1 to i, including i, and range stops before its second number." }
+      - { vi: "Điền 1 vào chỗ trống thứ nhất và i + 1 vào chỗ trống thứ hai.", en: "Fill the first blank with 1 and the second blank with i + 1." }
+
+  - id: s4.long-nhau.p4
+    type: parsons
+    concepts: [leading-spaces]
+    prompt:
+      vi: "Robo vẽ 1 kim tự tháp ngược. Ô Dữ liệu nhập có 1 dòng: số hàng n, là số nguyên không âm. Hàng đầu dài nhất và không có dấu cách ở đầu, các hàng sau có dấu cách ở đầu hàng. Sắp xếp các dòng lệnh để in ra như phần Ví dụ."
+      en: "Robo draws an upside-down pyramid. The Input data box has 1 line: the number of rows n, an integer that is not negative. The first row is the longest and has no spaces at the start, and the rows after it have spaces at the start. Put the lines in order to print as in the Example."
+    solution: |
+      n = int(input())
+      for i in range(n, 0, -1):
+          print(" " * (n - i), end="")
+          print("*" * (2 * i - 1))
+    tests:
+      - input: "3"
+        output: |
+          *****
+           ***
+            *
+      - input: "1"
+        output: "*"
+        hidden: true
+      - input: "0"
+        output: ""
+        hidden: true
+      - input: "5"
+        output: |
+          *********
+           *******
+            *****
+             ***
+              *
+        hidden: true
+    hints:
+      - { vi: "i đếm ngược từ n về 1. Trong mỗi hàng, Robo in các dấu cách trước, với end=\"\" để không xuống dòng, rồi mới in các dấu * và xuống dòng.", en: "i counts down from n to 1. On each row, Robo first prints the spaces, with end=\"\" so as not to start a new line, and then prints the * signs and starts a new line." }
+
+  - id: s4.long-nhau.p5
+    type: fill
+    concepts: [leading-spaces]
+    prompt:
+      vi: "Robo vẽ 1 đường chéo bằng dấu *. Ô Dữ liệu nhập có 1 dòng: số hàng n, là số nguyên không âm. Hàng đầu tiên không có dấu cách, mỗi hàng sau có thêm 1 dấu cách ở đầu hàng. Điền vào chỗ trống để chương trình in ra như phần Ví dụ."
+      en: "Robo draws a diagonal line with the sign *. The Input data box has 1 line: the number of rows n, an integer that is not negative. The first row has no spaces, and each row after it has 1 more space at the start of the row. Fill the blank so that the program prints as in the Example."
+    template: |
+      n = int(input())
+      for i in range(n):
+          print(___ * i + "*")
+    answers: ["\" \""]
+    tests:
+      - input: "4"
+        output: |
+          *
+           *
+            *
+             *
+      - input: "1"
+        output: "*"
+        hidden: true
+      - input: "0"
+        output: ""
+        hidden: true
+      - input: "6"
+        output: |
+          *
+           *
+            *
+             *
+              *
+               *
+        hidden: true
+    hints:
+      - { vi: "range(n) cho i bắt đầu từ 0, nên hàng đầu có 0 dấu cách, hàng sau có 1 dấu cách. Chỗ trống là chuỗi được lặp lại i lần ở đầu hàng.", en: "range(n) makes i start at 0, so the first row has 0 spaces and the next row has 1 space. The blank is the string that is repeated i times at the start of the row." }
+      - { vi: "Điền 1 chuỗi chỉ có 1 dấu cách: \" \", gồm dấu nháy, 1 dấu cách, rồi dấu nháy.", en: "Fill in a string with just 1 space: \" \", that is, a quote, 1 space, then a quote." }
+
+  - id: s4.long-nhau.c1
+    type: code
+    concepts: [nested-inner-full]
+    prompt:
+      vi: "Có n bạn trong nhóm, đánh số từ 1 đến n. Mỗi 2 bạn bắt tay nhau đúng 1 lần. Ô Dữ liệu nhập có 1 dòng: số bạn n, là số nguyên không âm. Với mỗi cặp bạn, hãy in ra 1 dòng, bạn có số nhỏ hơn đứng trước. Cuối cùng, in ra số lần bắt tay, đúng như phần Ví dụ."
+      en: "There are n children in a group, numbered from 1 to n. Every 2 children shake hands exactly once. The Input data box has 1 line: the number of children n, an integer that is not negative. For each pair of children, print 1 line, with the smaller number first. At the end, print the number of handshakes, exactly as in the Example."
+    starter: |
+      # Viết lệnh của con ở dưới dòng này
+    solution: |
+      n = int(input())
+      dem = 0
+      for i in range(1, n + 1):
+          for j in range(i + 1, n + 1):
+              print(i, "bắt tay", j)
+              dem += 1
+      print("Có", dem, "lần bắt tay")
+    tests:
+      - input: "3"
+        output: |
+          1 bắt tay 2
+          1 bắt tay 3
+          2 bắt tay 3
+          Có 3 lần bắt tay
+      - input: "1"
+        output: "Có 0 lần bắt tay"
+        hidden: true
+      - input: "0"
+        output: "Có 0 lần bắt tay"
+        hidden: true
+      - input: "2"
+        output: |
+          1 bắt tay 2
+          Có 1 lần bắt tay
+        hidden: true
+      - input: "4"
+        output: |
+          1 bắt tay 2
+          1 bắt tay 3
+          1 bắt tay 4
+          2 bắt tay 3
+          2 bắt tay 4
+          3 bắt tay 4
+          Có 6 lần bắt tay
+        hidden: true
+    common_wrong:
+      - test: 0
+        output: |
+          1 bắt tay 1
+          1 bắt tay 2
+          1 bắt tay 3
+          2 bắt tay 1
+          2 bắt tay 2
+          2 bắt tay 3
+          3 bắt tay 1
+          3 bắt tay 2
+          3 bắt tay 3
+          Có 9 lần bắt tay
+        misconception: nested-inner-full
+        sample: |
+          n = int(input())
+          dem = 0
+          for i in range(1, n + 1):
+              for j in range(1, n + 1):
+                  print(i, "bắt tay", j)
+                  dem += 1
+          print("Có", dem, "lần bắt tay")
+    hints:
+      - { vi: "Vòng ngoài chọn bạn i. Vòng trong chỉ chọn các bạn j có số lớn hơn i, để không bạn nào tự bắt tay mình và không cặp nào bị đếm 2 lần. Vì vậy vòng trong bắt đầu từ i + 1.", en: "The outer loop picks child i. The inner loop picks only the children j with a bigger number than i, so that nobody shakes their own hand and no pair is counted twice. So the inner loop starts at i + 1." }
+      - { vi: "Sau n = int(input()) và dem = 0 là for i in range(1, n + 1):, rồi for j in range(i + 1, n + 1): thụt lề 4 dấu cách. Thụt lề 8 dấu cách: print(i, \"bắt tay\", j) và dem += 1. Cuối cùng, sát lề trái: print(\"Có\", dem, \"lần bắt tay\").", en: "After n = int(input()) and dem = 0 comes for i in range(1, n + 1):, then for j in range(i + 1, n + 1): indented by 4 spaces. Indented by 8 spaces: print(i, \"bắt tay\", j) and dem += 1. Last, at the left edge: print(\"Có\", dem, \"lần bắt tay\")." }
+    test_eligible: true
+
+  - id: s4.long-nhau.c2
+    type: code
+    concepts: [print-end-newline, nested-inner-full]
+    prompt:
+      vi: "Robo vẽ 1 bàn cờ vuông, mỗi cạnh có n ô. Ô Dữ liệu nhập có 1 dòng: số n, là số nguyên không âm. Ô ở hàng i, cột j là dấu # khi i + j là số chẵn, và là dấu chấm khi i + j là số lẻ, với i và j đếm từ 0. Vì vậy ô ở góc trên bên trái là dấu #. Các ô trên 1 hàng viết liền nhau, không có dấu cách, đúng như phần Ví dụ. Nếu n là 0, Robo không in ra gì."
+      en: "Robo draws a square board with n squares on each side. The Input data box has 1 line: a number n, an integer that is not negative. The square on row i and column j is # when i + j is even, and a dot when i + j is odd, with i and j counted from 0. So the top-left square is #. The squares on a row are written next to each other, with no spaces, exactly as in the Example. If n is 0, Robo prints nothing."
+    starter: |
+      # Viết lệnh của con ở dưới dòng này
+    solution: |
+      n = int(input())
+      for i in range(n):
+          for j in range(n):
+              if (i + j) % 2 == 0:
+                  print("#", end="")
+              else:
+                  print(".", end="")
+          print()
+    tests:
+      - input: "3"
+        output: |
+          #.#
+          .#.
+          #.#
+      - input: "1"
+        output: "#"
+        hidden: true
+      - input: "0"
+        output: ""
+        hidden: true
+      - input: "4"
+        output: |
+          #.#.
+          .#.#
+          #.#.
+          .#.#
+        hidden: true
+    common_wrong:
+      - test: 0
+        output: |
+          #
+          .
+          #
+          .
+          #
+          .
+          #
+          .
+          #
+        misconception: print-end-newline
+        sample: |
+          n = int(input())
+          for i in range(n):
+              for j in range(n):
+                  if (i + j) % 2 == 0:
+                      print("#", end="")
+                  else:
+                      print(".", end="")
+                  print()
+    hints:
+      - { vi: "Dùng 2 vòng lặp range(n) lồng nhau. Trong vòng trong, con dùng if với (i + j) % 2 == 0 để chọn in # hay dấu chấm, luôn với end=\"\". Sau vòng trong, print() để xuống dòng.", en: "Use 2 nested range(n) loops. Inside the inner loop, use if with (i + j) % 2 == 0 to choose whether to print # or a dot, always with end=\"\". After the inner loop, print() starts a new line." }
+      - { vi: "Trong vòng trong, thụt lề 8 dấu cách: if (i + j) % 2 == 0:, rồi print(\"#\", end=\"\") thụt lề 12 dấu cách, rồi else:, rồi print(\".\", end=\"\") thụt lề 12 dấu cách. Dòng print() thụt lề 4 dấu cách.", en: "Inside the inner loop, indented by 8 spaces: if (i + j) % 2 == 0:, then print(\"#\", end=\"\") indented by 12 spaces, then else:, then print(\".\", end=\"\") indented by 12 spaces. The line print() is indented by 4 spaces." }
+    test_eligible: true
+
+  - id: s4.long-nhau.c3
+    type: code
+    concepts: [row-col-pattern, nested-inner-full]
+    prompt:
+      vi: "Robo xếp các số 1, 2, 3, ... thành 1 tam giác: hàng thứ i có i số, và các số cứ tăng dần từ hàng này sang hàng sau. Ô Dữ liệu nhập có 1 dòng: số hàng n, là số nguyên không âm. Các số trên 1 hàng cách nhau 1 dấu cách, không có dấu cách ở đầu hàng, đúng như phần Ví dụ. Nếu n là 0, Robo không in ra gì."
+      en: "Robo arranges the numbers 1, 2, 3, ... as a triangle: row i has i numbers, and the numbers keep going up from one row to the next. The Input data box has 1 line: the number of rows n, an integer that is not negative. The numbers on a row are separated by 1 space, with no space at the start of a row, exactly as in the Example. If n is 0, Robo prints nothing."
+    starter: |
+      # Viết lệnh của con ở dưới dòng này
+    solution: |
+      n = int(input())
+      so = 1
+      for i in range(1, n + 1):
+          for j in range(i):
+              print(so, end=" ")
+              so += 1
+          print()
+    tests:
+      - input: "4"
+        output: |
+          1
+          2 3
+          4 5 6
+          7 8 9 10
+      - input: "1"
+        output: "1"
+        hidden: true
+      - input: "0"
+        output: ""
+        hidden: true
+      - input: "5"
+        output: |
+          1
+          2 3
+          4 5 6
+          7 8 9 10
+          11 12 13 14 15
+        hidden: true
+    common_wrong:
+      - test: 0
+        output: |
+          1
+          1 2
+          1 2 3
+          1 2 3 4
+        misconception: accumulator-init
+        sample: |
+          n = int(input())
+          for i in range(1, n + 1):
+              so = 1
+              for j in range(i):
+                  print(so, end=" ")
+                  so += 1
+              print()
+    hints:
+      - { vi: "Hàng thứ i có i số, nên vòng trong chạy i lần. Số cần in không phải là j: con dùng 1 biến so, bắt đầu là 1 trước cả 2 vòng lặp, và cộng thêm 1 sau mỗi lần in.", en: "Row i has i numbers, so the inner loop runs i times. The number to print is not j: use a variable so that starts at 1 before both loops, and add 1 to it after each print." }
+      - { vi: "Sau n = int(input()) và so = 1 là for i in range(1, n + 1):, rồi for j in range(i): thụt lề 4 dấu cách. Thụt lề 8 dấu cách: print(so, end=\" \") và so += 1. Cuối cùng, thụt lề 4 dấu cách: print().", en: "After n = int(input()) and so = 1 comes for i in range(1, n + 1):, then for j in range(i): indented by 4 spaces. Indented by 8 spaces: print(so, end=\" \") and so += 1. Last, indented by 4 spaces: print()." }
+    test_eligible: true
+
+  - id: s4.long-nhau.c4
+    type: code
+    concepts: [leading-spaces, row-col-pattern]
+    prompt:
+      vi: "Robo vẽ 1 viên kim cương: 1 kim tự tháp n hàng, rồi ngay bên dưới là 1 kim tự tháp ngược n - 1 hàng. Ô Dữ liệu nhập có 1 dòng: số n, là số nguyên không âm. Hàng giữa dài nhất, có 2 * n - 1 dấu * và không có dấu cách ở đầu. Các hàng khác có dấu cách ở đầu hàng, để mọi hàng thẳng giữa, đúng như phần Ví dụ. Nếu n là 0, Robo không in ra gì."
+      en: "Robo draws a diamond: a pyramid of n rows, and right below it an upside-down pyramid of n - 1 rows. The Input data box has 1 line: a number n, an integer that is not negative. The middle row is the longest, with 2 * n - 1 * signs and no spaces at the start. The other rows have spaces at the start, so that every row is centred, exactly as in the Example. If n is 0, Robo prints nothing."
+    starter: |
+      # Viết lệnh của con ở dưới dòng này
+    solution: |
+      n = int(input())
+      for i in range(1, n + 1):
+          print(" " * (n - i) + "*" * (2 * i - 1))
+      for i in range(n - 1, 0, -1):
+          print(" " * (n - i) + "*" * (2 * i - 1))
+    tests:
+      - input: "3"
+        output: "  *\n ***\n*****\n ***\n  *"
+      - input: "1"
+        output: "*"
+        hidden: true
+      - input: "0"
+        output: ""
+        hidden: true
+      - input: "4"
+        output: "   *\n  ***\n *****\n*******\n *****\n  ***\n   *"
+        hidden: true
+    common_wrong:
+      - test: 0
+        output: "  *\n ***\n*****\n*****\n ***\n  *"
+        misconception: range-stop-excluded
+        sample: |
+          n = int(input())
+          for i in range(1, n + 1):
+              print(" " * (n - i) + "*" * (2 * i - 1))
+          for i in range(n, 0, -1):
+              print(" " * (n - i) + "*" * (2 * i - 1))
+      - test: 0
+        output: "   *\n  ***\n *****\n  ***\n   *"
+        misconception: leading-spaces
+        sample: |
+          n = int(input())
+          for i in range(1, n + 1):
+              print(" " * (n - i), "*" * (2 * i - 1))
+          for i in range(n - 1, 0, -1):
+              print(" " * (n - i), "*" * (2 * i - 1))
+    hints:
+      - { vi: "Nửa trên là kim tự tháp n hàng, với i từ 1 đến n. Nửa dưới dùng cùng công thức cho mỗi hàng, nhưng i đếm ngược từ n - 1 về 1, để hàng giữa không bị in 2 lần.", en: "The top half is a pyramid of n rows, with i from 1 to n. The bottom half uses the same formula for each row, but i counts down from n - 1 to 1, so that the middle row is not printed twice." }
+      - { vi: "Dùng 2 vòng lặp nối tiếp nhau, cả 2 đều sát lề trái: for i in range(1, n + 1): và for i in range(n - 1, 0, -1):. Trong mỗi vòng lặp là print(\" \" * (n - i) + \"*\" * (2 * i - 1)).", en: "Use 2 loops one after the other, both at the left edge: for i in range(1, n + 1): and for i in range(n - 1, 0, -1):. Inside each loop is print(\" \" * (n - i) + \"*\" * (2 * i - 1))." }
+    test_eligible: true

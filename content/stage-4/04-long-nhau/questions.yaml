@@ -1,0 +1,233 @@
+questions:
+  - id: s4.long-nhau.b1
+    type: predict
+    concepts: [nested-inner-full, print-end-newline]
+    lessons: [s4.long-nhau.l2]
+    code: |
+      for i in range(2):
+          for ch in "ab":
+              print(ch, end="")
+          print("!")
+    prompt:
+      vi: "Đoạn code in ra gì?"
+      en: "What is the output of this code?"
+    choices:
+      - { text: "a\nb\n!\na\nb\n!", misconception: print-end-newline }
+      - { text: "ab!\nab!", correct: true }
+      - { text: "a!\nb!\na!\nb!", misconception: nested-inner-full }
+      - { text: "abab!", misconception: for-repeat }
+    explanation:
+      vi: "Vòng trong đi qua 2 ký tự a và b, in liền nhau vì end=\"\". Sau vòng trong, print(\"!\") in dấu ! ngay sau b rồi xuống dòng, nên 1 hàng là ab!. Dòng print(\"!\") thụt lề 4 dấu cách, nằm trong vòng ngoài, nên chạy 2 lần."
+      en: "The inner loop goes through the 2 characters a and b and prints them next to each other because of end=\"\". After the inner loop, print(\"!\") prints ! right after b and then starts a new line, so one row is ab!. The line print(\"!\") is indented by 4 spaces and is inside the outer loop, so it runs 2 times."
+
+  - id: s4.long-nhau.b2
+    type: mcq
+    concepts: [nested-inner-full]
+    lessons: [s4.long-nhau.l1]
+    prompt:
+      vi: "Trong 2 vòng lặp lồng nhau, vòng ngoài chạy 5 lần. Mỗi lần vòng ngoài chạy, vòng trong chạy 2 lần. Lệnh print nằm trong vòng trong chạy tất cả bao nhiêu lần?"
+      en: "In 2 nested loops, the outer loop runs 5 times. Each time the outer loop runs, the inner loop runs 2 times. How many times in total does the print statement inside the inner loop run?"
+    choices:
+      - { text: "7", misconception: nested-inner-full }
+      - { text: "2", misconception: nested-inner-full }
+      - { text: "10", correct: true }
+      - { text: "5", misconception: nested-inner-full }
+    explanation:
+      vi: "Mỗi lần vòng ngoài chạy, vòng trong chạy hết 2 lần. Vòng ngoài chạy 5 lần, nên lệnh print chạy 5 × 2 = 10 lần. Cộng 5 + 2 = 7 là sai, vì vòng trong không chỉ chạy 1 lượt, mà chạy lại từ đầu ở mỗi lần của vòng ngoài."
+      en: "Each time the outer loop runs, the inner loop runs all 2 times. The outer loop runs 5 times, so the print statement runs 5 × 2 = 10 times. Adding 5 + 2 = 7 is wrong, because the inner loop does not run just one round: it starts again from the beginning on every pass of the outer loop."
+
+  - id: s4.long-nhau.b3
+    type: predict
+    concepts: [nested-inner-full]
+    lessons: [s4.long-nhau.l1]
+    code: |
+      total = 0
+      for i in range(1, 3):
+          for j in range(1, 4):
+              total += i
+      print(total)
+    prompt:
+      vi: "Đoạn code in ra gì?"
+      en: "What is the output of this code?"
+    choices:
+      - { text: "9", correct: true }
+      - { text: "3", misconception: nested-inner-full }
+      - { text: "12", misconception: loop-variable }
+      - { text: "6", misconception: nested-inner-full }
+    explanation:
+      vi: "Khi i là 1, vòng trong chạy 3 lần và mỗi lần cộng 1 vào total, nên total là 3. Khi i là 2, vòng trong lại chạy 3 lần và mỗi lần cộng 2, nên total thêm 6, thành 9. Mỗi lần cộng i chứ không cộng j."
+      en: "When i is 1, the inner loop runs 3 times and adds 1 to total each time, so total is 3. When i is 2, the inner loop runs 3 times again and adds 2 each time, so total gets 6 more and becomes 9. Each time it adds i, not j."
+
+  - id: s4.long-nhau.b4
+    type: predict
+    concepts: [print-end-newline]
+    lessons: [s4.long-nhau.l2]
+    code: |
+      for i in range(3):
+          print("#", end="")
+      print()
+      print("#" * 2)
+    prompt:
+      vi: "Đoạn code in ra gì?"
+      en: "What is the output of this code?"
+    choices:
+      - { text: "#\n#\n#\n##", misconception: print-end-newline }
+      - { text: "###\n\n##", misconception: print-end-newline }
+      - { text: "#####", misconception: print-end-newline }
+      - { text: "###\n##", correct: true }
+    explanation:
+      vi: "Vòng lặp in 3 dấu # liền nhau, vì end=\"\" không xuống dòng. Sau đó print() để trống chỉ kết thúc hàng đó, chứ không tạo thêm 1 dòng trống, vì hàng chưa xuống dòng lần nào. Lệnh cuối in ## ở dòng mới."
+      en: "The loop prints 3 # signs next to each other, because end=\"\" does not start a new line. Then the empty print() just ends that row and does not add an empty line, because the row has not ended yet. The last statement prints ## on a new line."
+
+  - id: s4.long-nhau.b5
+    type: predict
+    concepts: [print-end-newline]
+    lessons: [s4.long-nhau.l2]
+    code: |
+      print("Go")
+      for i in range(2):
+          print()
+          for j in range(3):
+              print("*", end="")
+    prompt:
+      vi: "Đoạn code in ra gì?"
+      en: "What is the output of this code?"
+    choices:
+      - { text: "Go\n***\n***", misconception: print-end-newline }
+      - { text: "Go\n\n***\n***", correct: true }
+      - { text: "Go***\n***", misconception: print-end-newline }
+      - { text: "Go\n***\n\n***", misconception: print-end-newline }
+    explanation:
+      vi: "Dòng print(\"Go\") đã xuống dòng, nên print() đầu tiên tạo ra 1 dòng trống. Ở đây print() đứng trước vòng trong, nên nó chạy trước khi in các dấu * của mỗi hàng. Lần lặp thứ hai, print() kết thúc hàng *** đầu tiên, rồi hàng *** thứ hai được in ra."
+      en: "The line print(\"Go\") has already started a new line, so the first print() makes an empty line. Here print() comes before the inner loop, so it runs before the * signs of each row. On the second pass, print() ends the first *** row, and then the second *** row is printed."
+
+  - id: s4.long-nhau.b6
+    type: predict
+    concepts: [row-col-pattern]
+    lessons: [s4.long-nhau.l3]
+    code: |
+      for i in range(1, 4):
+          print(str(i) * i)
+    prompt:
+      vi: "Đoạn code in ra gì?"
+      en: "What is the output of this code?"
+    choices:
+      - { text: "1\n12\n123", misconception: row-col-pattern }
+      - { text: "3\n6\n9", misconception: string-repeat }
+      - { text: "1\n22\n333", correct: true }
+      - { text: "111\n222\n333", misconception: row-col-pattern }
+    explanation:
+      vi: "str(i) đổi số i thành chuỗi, như \"2\". Nhân 1 chuỗi với 1 số là lặp lại chuỗi đó, nên \"2\" * 2 là 22, chứ không phải 4. Hàng thứ i có i ký tự, và ký tự đó là chữ số i."
+      en: "str(i) turns the number i into a string, such as \"2\". Multiplying a string by a number repeats the string, so \"2\" * 2 is 22, not 4. Row i has i characters, and that character is the digit i."
+
+  - id: s4.long-nhau.b7
+    type: mcq
+    concepts: [row-col-pattern]
+    lessons: [s4.long-nhau.l3]
+    code: |
+      for i in range(4):
+          print("*" * i)
+    prompt:
+      vi: "Robo muốn vẽ 1 tam giác. Hàng đầu tiên mà đoạn code in ra là gì?"
+      en: "Robo wants to draw a triangle. What is the first row that this code prints?"
+    choices:
+      - { vi: "1 dấu *", en: "1 *", misconception: range-stop-excluded }
+      - { vi: "4 dấu *", en: "4 * signs", misconception: row-col-pattern }
+      - { vi: "Không in được, Python báo lỗi vì không nhân chuỗi với 0 được", en: "Nothing, Python gives an error because a string cannot be multiplied by 0", error: true, misconception: string-repeat }
+      - { vi: "1 dòng trống, vì ở lần lặp đầu tiên i là 0", en: "An empty line, because i is 0 on the first pass", correct: true }
+    explanation:
+      vi: "range(4) bắt đầu từ 0, nên lần lặp đầu tiên in \"*\" * 0, là 1 chuỗi rỗng: Python in ra 1 dòng trống, không báo lỗi. Muốn hàng đầu có 1 dấu *, con dùng range(1, 5)."
+      en: "range(4) starts at 0, so the first pass prints \"*\" * 0, which is an empty string: Python prints an empty line and gives no error. To make the first row have 1 *, use range(1, 5)."
+
+  - id: s4.long-nhau.b8
+    type: predict
+    concepts: [row-col-pattern, nested-inner-full]
+    lessons: [s4.long-nhau.l3]
+    code: |
+      for i in range(3, 0, -1):
+          for j in range(i):
+              print(j, end="")
+          print()
+    prompt:
+      vi: "Đoạn code in ra gì?"
+      en: "What is the output of this code?"
+    choices:
+      - { text: "012\n01\n0", correct: true }
+      - { text: "123\n12\n1", misconception: range-stop-excluded }
+      - { text: "0\n01\n012", misconception: row-col-pattern }
+      - { text: "321\n21\n1", misconception: loop-variable }
+    explanation:
+      vi: "i lần lượt là 3, 2, 1, nên các hàng ngắn dần: 3 số, 2 số, 1 số. Vòng trong là range(i), nên j luôn bắt đầu từ 0 và dừng trước i. Mỗi hàng in giá trị của j, không in i."
+      en: "i is 3, then 2, then 1, so the rows get shorter: 3 numbers, 2 numbers, 1 number. The inner loop is range(i), so j always starts at 0 and stops before i. Each row prints the value of j, not i."
+
+  - id: s4.long-nhau.b9
+    type: mcq
+    concepts: [leading-spaces]
+    lessons: [s4.long-nhau.l5]
+    prompt:
+      vi: "Khi chấm 1 bài vẽ hình, Robo so sánh kết quả của con với kết quả mong đợi. Robo bỏ qua loại dấu cách nào?"
+      en: "When Robo checks a drawing task, it compares your output with the expected output. Which spaces does Robo ignore?"
+    choices:
+      - { vi: "Dấu cách ở đầu mỗi dòng", en: "Spaces at the start of each line", misconception: leading-spaces }
+      - { vi: "Dấu cách ở cuối mỗi dòng", en: "Spaces at the end of each line", correct: true }
+      - { vi: "Mọi dấu cách, ở đầu, ở giữa hay ở cuối dòng", en: "All spaces, at the start, in the middle or at the end of a line", misconception: leading-spaces }
+      - { vi: "Không bỏ qua dấu cách nào, kể cả ở cuối dòng", en: "No spaces at all, not even at the end of a line", misconception: leading-spaces }
+    explanation:
+      vi: "Robo bỏ qua dấu cách ở cuối dòng, vì không ai nhìn thấy chúng. Dấu cách ở đầu dòng làm hình dịch sang phải, nên Robo so sánh chúng như mọi ký tự khác. Vì vậy, kim tự tháp phải có đúng số dấu cách ở đầu mỗi hàng."
+      en: "Robo ignores spaces at the end of a line, because nobody can see them. Spaces at the start of a line move the shape to the right, so Robo compares them like any other character. That is why a pyramid needs exactly the right number of spaces at the start of each row."
+
+  - id: s4.long-nhau.b10
+    type: predict
+    concepts: [leading-spaces]
+    lessons: [s4.long-nhau.l5]
+    code: |
+      n = 3
+      for i in range(n):
+          print("-" * i + "*")
+    prompt:
+      vi: "Đoạn code in ra gì?"
+      en: "What is the output of this code?"
+    choices:
+      - { text: "--*\n-*\n*", misconception: leading-spaces }
+      - { text: "*\n*-\n*--", misconception: leading-spaces }
+      - { text: "*\n-*\n--*", correct: true }
+      - { text: "-*\n--*\n---*", misconception: range-stop-excluded }
+    explanation:
+      vi: "range(3) cho i là 0, 1, 2, nên số dấu - ở đầu hàng tăng dần: 0, 1, 2. Chuỗi dấu - đứng trước dấu + nên nằm ở đầu hàng, còn dấu * nằm sau cùng. Hình là 1 đường chéo đi xuống bên phải."
+      en: "range(3) gives i the values 0, 1, 2, so the number of - signs at the start of a row goes up: 0, 1, 2. The string of - signs comes before the + sign, so it is at the start of the row, and the * comes last. The shape is a line going down to the right."
+
+  - id: s4.long-nhau.b11
+    type: mcq
+    concepts: [leading-spaces]
+    lessons: [s4.long-nhau.l5]
+    prompt:
+      vi: "Lệnh nào in ra đúng 2 dấu cách rồi 3 dấu *?"
+      en: "Which statement prints exactly 2 spaces and then 3 * signs?"
+    choices:
+      - { text: "print(\" \" * 2, \"*\" * 3)", misconception: leading-spaces }
+      - { text: "print(\"*\" * 3 + \" \" * 2)", misconception: leading-spaces }
+      - { text: "print(\" \" * 3 + \"*\" * 2)", misconception: string-repeat }
+      - { text: "print(\" \" * 2 + \"*\" * 3)", correct: true }
+    explanation:
+      vi: "Dấu + nối 2 chuỗi liền nhau, nên \" \" * 2 + \"*\" * 3 cho đúng 2 dấu cách rồi 3 dấu *. Dấu phẩy thêm 1 dấu cách nữa, thành 3 dấu cách. Đặt chuỗi dấu cách sau dấu * thì dấu cách nằm ở cuối dòng, không ở đầu dòng."
+      en: "The + sign joins 2 strings with nothing between them, so \" \" * 2 + \"*\" * 3 gives exactly 2 spaces and then 3 * signs. A comma adds 1 more space, making 3 spaces. Putting the spaces after the * signs puts them at the end of the line, not at the start."
+
+  - id: s4.long-nhau.b12
+    type: mcq
+    concepts: [print-end-newline, nested-inner-full]
+    lessons: [s4.long-nhau.l4]
+    code: |
+      for a in range(2, 4):
+          for b in range(1, 11):
+              print(f"{a} x {b} = {a * b}")
+    prompt:
+      vi: "Robo muốn có 1 dòng trống sau mỗi bảng nhân. Robo nên thêm dòng print() ở đâu?"
+      en: "Robo wants an empty line after each times table. Where should Robo add the line print()?"
+    choices:
+      - { vi: "Sau dòng 3, thụt lề 4 dấu cách, thẳng hàng với dòng for bên trong", en: "After line 3, indented by 4 spaces, lined up with the inner for line", correct: true }
+      - { vi: "Sau dòng 3, thụt lề 8 dấu cách, thẳng hàng với dòng print ở trên", en: "After line 3, indented by 8 spaces, lined up with the print line above", misconception: print-end-newline }
+      - { vi: "Sau dòng 3, sát lề trái", en: "After line 3, at the left edge", misconception: nested-inner-full }
+      - { vi: "Trước dòng 1, sát lề trái", en: "Before line 1, at the left edge", misconception: nested-inner-full }
+    explanation:
+      vi: "Dòng trống cần có 1 lần sau mỗi bảng, tức là sau khi vòng trong chạy xong, nên print() nằm trong vòng ngoài và thụt lề 4 dấu cách. Thụt lề 8 dấu cách thì có 1 dòng trống sau mỗi phép nhân. Sát lề trái thì print() chỉ chạy 1 lần, khi cả 2 vòng lặp đã xong."
+      en: "The empty line is needed once after each table, that is, after the inner loop is done, so print() goes inside the outer loop, indented by 4 spaces. Indented by 8 spaces, there is an empty line after every multiplication. At the left edge, print() runs only once, when both loops are done."
