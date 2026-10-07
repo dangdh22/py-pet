@@ -4,8 +4,9 @@ import { DECOR_COLORS as D } from "./palette";
 
 /*
  * The 5 decorations of the shop (spec 5.12). Each one is drawn once in its own viewBox; the room places that drawing
- * at its fixed spot (design decision 6) and the shop fits the same drawing into a 40 × 40 icon. The rug is the one
- * exception: in the room it lies flat on the floor, so its icon is the same rug seen from higher up.
+ * at its fixed spot (design decision 6) and the shop fits the same drawing into a 40 × 40 icon. Two exceptions: the
+ * rug lies flat on the floor in the room, so its icon is the same rug seen from higher up; the icon of the night
+ * lamp leaves out the bedside table.
  */
 
 interface DecorDrawing {
@@ -43,6 +44,18 @@ function Plant() {
   );
 }
 
+/** The lamp alone, standing on y = 39 between x 8 and 32. */
+function LampTop() {
+  return (
+    <>
+      <ellipse cx={20} cy={37} rx={7} ry={2.2} fill={D.lampBase} />
+      <rect x={18.8} y={22} width={2.4} height={15} fill={D.lampBase} />
+      <path d="M8 24 L13 6 H27 L32 24 Z" fill={D.shade} stroke={D.shadeDark} strokeWidth={1.2} strokeLinejoin="round" />
+      <path d="M13 6 H27" stroke={D.shadeDark} strokeWidth={1.6} />
+    </>
+  );
+}
+
 function Lamp({ lit }: { lit: boolean }) {
   return (
     <>
@@ -54,11 +67,7 @@ function Lamp({ lit }: { lit: boolean }) {
       <circle cx={20} cy={50.5} r={1.3} fill={D.woodDeep} />
       <rect x={7} y={58} width={4} height={6} fill={D.woodDeep} />
       <rect x={29} y={58} width={4} height={6} fill={D.woodDeep} />
-      {/* The lamp on it. */}
-      <ellipse cx={20} cy={37} rx={7} ry={2.2} fill={D.lampBase} />
-      <rect x={18.8} y={22} width={2.4} height={15} fill={D.lampBase} />
-      <path d="M8 24 L13 6 H27 L32 24 Z" fill={D.shade} stroke={D.shadeDark} strokeWidth={1.2} strokeLinejoin="round" />
-      <path d="M13 6 H27" stroke={D.shadeDark} strokeWidth={1.6} />
+      <LampTop />
     </>
   );
 }
@@ -151,7 +160,18 @@ function Bookshelf() {
 
 const DRAWINGS: Record<string, DecorDrawing> = {
   "chau-cay": { w: 40, h: 56, art: () => <Plant /> },
-  "den-ngu": { w: 40, h: 64, art: (lit) => <Lamp lit={lit} /> },
+  "den-ngu": {
+    w: 40,
+    h: 64,
+    art: (lit) => <Lamp lit={lit} />,
+    // At 40 px the table makes the lamp too small: the icon is the lamp alone, lit.
+    icon: (
+      <g transform="translate(-2 -4.5) scale(1.1)">
+        <circle cx={20} cy={18.5} r={13.5} fill={D.glow} />
+        <LampTop />
+      </g>
+    ),
+  },
   tranh: { w: 48, h: 38, art: () => <Painting /> },
   tham: {
     w: 120,

@@ -242,11 +242,11 @@ button.danger:disabled { opacity: 0.5; }
 }
 
 .scene-window, .decor, .scene-sun, .scene-umbrella, .scene-ball, .scene-foam { position: absolute; z-index: 0; height: auto; }
-.scene-window { top: 18px; right: 7%; width: 124px; }
-.decor-tranh { top: 28px; left: 9%; width: 88px; }
-.decor-ke-sach { left: 3%; bottom: calc(var(--floor-h) - 12px); width: 78px; }
-.decor-chau-cay { left: 13%; bottom: 20px; width: 62px; z-index: 1; }
-.decor-den-ngu { right: 6%; bottom: calc(var(--floor-h) - 16px); width: 66px; }
+.scene-window { top: 18px; right: 7%; width: 132px; }
+.decor-tranh { top: 28px; left: 9%; width: 100px; }
+.decor-ke-sach { left: 3%; bottom: calc(var(--floor-h) - 12px); width: 90px; }
+.decor-chau-cay { left: 13%; bottom: 20px; width: 70px; z-index: 1; }
+.decor-den-ngu { right: 6%; bottom: calc(var(--floor-h) - 16px); width: 74px; }
 .decor-tham { left: 50%; bottom: 6px; width: 290px; transform: translateX(-50%); }
 .scene-dark .decor:not(.decor-den-ngu) { filter: brightness(0.72); }
 .scene-sun { top: 16px; right: 8%; width: 76px; }
@@ -283,13 +283,15 @@ button.danger:disabled { opacity: 0.5; }
   transform: translateY(var(--lie-drop)) rotate(-90deg);
   margin: 0 var(--lie-side);
 }
-.scene-charger { width: 50px; height: auto; flex: none; }
+.scene-charger { width: 56px; height: auto; flex: none; }
 .robot-pose-happy { animation: robo-bounce 1.6s ease-in-out infinite; }
 @keyframes robo-bounce {
   0%, 100% { transform: translateY(0); }
   45% { transform: translateY(-9px); }
   60% { transform: translateY(-9px); }
 }
+/* The flying Z of the room replace the small "zz" drawn beside the head. */
+.room-scene [data-part="zzz"] { display: none; }
 .scene-z {
   position: absolute;
   left: 82%;
@@ -305,13 +307,13 @@ button.danger:disabled { opacity: 0.5; }
 @keyframes robo-z {
   0% { opacity: 0; transform: translate(0, 0) scale(0.6); }
   20% { opacity: 1; }
-  100% { opacity: 0; transform: translate(34px, -46px) scale(1.15); }
+  100% { opacity: 0; transform: translate(30px, -34px) scale(1.15); }
 }
 @media (prefers-reduced-motion: reduce) {
   .robot-pose-happy { animation: none; }
   .scene-z { animation: none; opacity: 1; }
-  .scene-z:nth-child(3) { transform: translate(14px, -20px); }
-  .scene-z:nth-child(4) { transform: translate(30px, -42px); }
+  .scene-z:nth-child(3) { transform: translate(14px, -14px); }
+  .scene-z:nth-child(4) { transform: translate(30px, -28px); }
 }
 
 @container scene (max-width: 640px) {
