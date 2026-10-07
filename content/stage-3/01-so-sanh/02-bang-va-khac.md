@@ -57,7 +57,7 @@ exercises:
       en: "What is the output of this code?"
     choices:
       - { text: "5 6", misconception: eq-vs-assign }
-      - { text: "False False", misconception: var-reassign }
+      - { text: "False False" }
       - { text: "True False", correct: true }
       - { text: "True True", misconception: compare-ops }
     explanation:
@@ -67,16 +67,16 @@ exercises:
     type: mcq
     concepts: [eq-vs-assign]
     prompt:
-      vi: "Biến diem đang chứa số 10. Robo muốn in ra True nếu diem bằng 10. Dòng nào viết đúng?"
-      en: "The variable diem holds the number 10. Robo wants to print True if diem is equal to 10. Which line is right?"
+      vi: "Biến n đang chứa số 10. Robo muốn in ra True nếu n bằng 10. Dòng nào viết đúng?"
+      en: "The variable n holds the number 10. Robo wants to print True if n is equal to 10. Which line is right?"
     choices:
-      - { text: "print(diem = 10)", misconception: eq-vs-assign }
-      - { text: "print(\"diem\" == 10)", misconception: var-assign }
-      - { text: "diem == 10", misconception: compare-ops }
-      - { text: "print(diem == 10)", correct: true }
+      - { text: "print(n = 10)", misconception: eq-vs-assign }
+      - { text: "print(\"n\" == 10)", misconception: var-assign }
+      - { text: "n == 10", misconception: compare-ops }
+      - { text: "print(n == 10)", correct: true }
     explanation:
-      vi: "print(diem == 10) hỏi \"diem có bằng 10 không?\" rồi in ra câu trả lời True. Với 1 dấu =, Python báo lỗi TypeError. Có dấu nháy thì \"diem\" là chữ diem, không phải biến, nên so với 10 ra False. Còn diem == 10 không có print thì chẳng in ra gì."
-      en: "print(diem == 10) asks \"is diem equal to 10?\" and prints the answer True. With one =, Python shows a TypeError. With quotes, \"diem\" is the word diem, not the variable, so comparing it with 10 gives False. And diem == 10 without print prints nothing."
+      vi: "print(n == 10) hỏi \"n có bằng 10 không?\" rồi in ra câu trả lời True. Với 1 dấu =, Python báo lỗi TypeError. Có dấu nháy thì \"n\" là chữ n, không phải biến, nên so với 10 ra False. Còn n == 10 không có print thì chẳng in ra gì."
+      en: "print(n == 10) asks \"is n equal to 10?\" and prints the answer True. With one =, Python shows a TypeError. With quotes, \"n\" is the letter n, not the variable, so comparing it with 10 gives False. And n == 10 without print prints nothing."
 ---
 Muốn hỏi "2 giá trị có **bằng nhau** không?", con dùng phép **==**, gồm 2 dấu bằng viết liền nhau:
 

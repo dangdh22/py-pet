@@ -106,7 +106,7 @@ exercises:
       en: "What is the output of this code?"
     choices:
       - { text: "True\nTrue", misconception: boundary-check }
-      - { text: "False\nFalse", misconception: chained-compare }
+      - { text: "False\nFalse", misconception: boundary-check }
       - { vi: "Báo lỗi SyntaxError ở dòng 2, vì 1 phép so sánh chỉ có 1 dấu", en: "A SyntaxError on line 2, because a comparison can have only 1 sign", error: true, misconception: chained-compare }
       - { text: "True\nFalse", correct: true }
     explanation:
@@ -121,7 +121,7 @@ exercises:
     choices:
       - { text: "n < 10 or n > 20", correct: true }
       - { text: "n < 10 and n > 20", misconception: and-both }
-      - { text: "10 <= n <= 20", misconception: chained-compare }
+      - { text: "10 <= n <= 20", misconception: not-flip }
       - { text: "n < 10 or > 20", misconception: chained-compare }
     explanation:
       vi: "\"Nhỏ hơn 10 hoặc lớn hơn 20\" là n < 10 or n > 20. Với and, điều kiện không bao giờ đúng, vì không số nào vừa nhỏ hơn 10 vừa lớn hơn 20. 10 <= n <= 20 hỏi điều ngược lại: n nằm trong khoảng. Còn n < 10 or > 20 thiếu tên biến ở bên phải or, nên Python báo lỗi SyntaxError."

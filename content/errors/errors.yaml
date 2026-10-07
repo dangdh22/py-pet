@@ -36,8 +36,8 @@
   match: { type: IndentationError, message: "^unexpected indent$" }
   misconception: indent-block
   explain:
-    vi: "Dòng {line} bị thụt lề thừa. Nếu dòng này không nằm trong khối lệnh nào, hãy xóa hết dấu cách ở đầu dòng. Nếu nó nằm trong khối của 1 lệnh như if, hãy cho nó thẳng hàng với các dòng khác trong khối."
-    en: "Line {line} has extra indentation. If this line is not inside a block, delete all the spaces at the start of the line. If it is inside the block of a statement like if, line it up with the other lines of the block."
+    vi: "Dòng {line} bị thụt lề thừa. Nếu dòng này không nằm trong khối lệnh nào, hãy xóa hết dấu cách ở đầu dòng. Nếu nó nằm trong 1 khối lệnh, hãy cho nó thẳng hàng với các dòng khác trong khối."
+    en: "Line {line} has extra indentation. If this line is not inside a block, delete all the spaces at the start of the line. If it is inside a block, line it up with the other lines of the block."
   sample: "print(1)\n    print(2)"
 
 - id: indent-unmatched
@@ -210,7 +210,7 @@
 
 - id: compare-str-int
   match: { type: TypeError, message: "^'(?<op>[<>=!]+)' not supported between instances of '(?<left>\\w+)' and '(?<right>\\w+)'$" }
-  misconception: convert-before-compare
+  misconception: compare-str-num
   explain:
     vi: "Dòng {line}: không so sánh được bằng phép {op} giữa kiểu {left} và kiểu {right}. Python chỉ so sánh lớn nhỏ giữa số với số, hoặc giữa chuỗi với chuỗi. Có thể một giá trị là chuỗi (str) đọc từ input(): hãy đổi nó thành số bằng int() trước khi so sánh, ví dụ tuoi = int(input())."
     en: "Line {line}: you cannot compare with {op} between type {left} and type {right}. Python compares bigger or smaller only between numbers, or between strings. Maybe one value is a string (str) from input(): change it into a number with int() before comparing, for example tuoi = int(input())."

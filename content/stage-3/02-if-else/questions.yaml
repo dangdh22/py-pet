@@ -24,16 +24,16 @@ questions:
     concepts: [if-colon]
     lessons: [s3.if-else.l1]
     prompt:
-      vi: "Trong lệnh if, dấu hai chấm đặt ở đâu?"
-      en: "In an if statement, where does the colon go?"
+      vi: "Khối lệnh của 1 lệnh if chỉ có đúng 1 dòng print. Dòng if có cần dấu hai chấm ở cuối không?"
+      en: "The block of an if statement has only 1 print line. Does the if line need a colon at the end?"
     choices:
-      - { vi: "Ngay sau chữ if, trước điều kiện", en: "Right after the word if, before the condition", misconception: if-colon }
-      - { vi: "Ở cuối dòng if, ngay sau điều kiện", en: "At the end of the if line, right after the condition", correct: true }
-      - { vi: "Ở đầu dòng thụt lề bên dưới", en: "At the start of the indented line below", misconception: if-colon }
-      - { vi: "Chỉ cần khi khối lệnh có từ 2 dòng trở lên", en: "Only when the block has 2 lines or more", misconception: if-colon }
+      - { vi: "Không, chỉ khối có từ 2 dòng trở lên mới cần dấu hai chấm", en: "No, only a block with 2 lines or more needs a colon", misconception: if-colon }
+      - { vi: "Có, dòng if luôn cần dấu hai chấm, dù khối chỉ có 1 dòng", en: "Yes, an if line always needs a colon, even for a 1-line block", correct: true }
+      - { vi: "Không, vì dòng print bên dưới đã thụt lề 4 dấu cách", en: "No, because the print line below is already indented by 4 spaces", misconception: if-colon }
+      - { vi: "Không, khi đó dấu hai chấm đặt ở cuối dòng print", en: "No, in that case the colon goes at the end of the print line", misconception: if-colon }
     explanation:
-      vi: "Dấu hai chấm luôn đứng ở cuối dòng if, ngay sau điều kiện, ví dụ if pin < 20:. Khối lệnh chỉ có 1 dòng cũng vẫn cần dấu hai chấm. Đặt dấu này ở chỗ khác thì Python báo lỗi SyntaxError."
-      en: "The colon always goes at the end of the if line, right after the condition, for example if pin < 20:. A block with only 1 line still needs the colon. Putting it anywhere else gives a SyntaxError."
+      vi: "Dòng if luôn kết thúc bằng dấu hai chấm, dù khối lệnh có 1 dòng hay nhiều dòng. Thụt lề không thay được dấu hai chấm: thiếu dấu này, Python vẫn báo lỗi SyntaxError. Dòng print không có dấu hai chấm ở cuối."
+      en: "An if line always ends with a colon, whether its block has 1 line or many. Indentation does not replace the colon: without it, Python still gives a SyntaxError. A print line has no colon at the end."
 
   - id: s3.if-else.b3
     type: mcq
@@ -201,7 +201,7 @@ questions:
   - id: s3.if-else.b11
     type: mcq
     concepts: [convert-before-compare]
-    lessons: [s3.if-else.l4]
+    lessons: [s3.if-else.l3]
     code: |
       a = input()
       b = input()
@@ -224,7 +224,7 @@ questions:
   - id: s3.if-else.b12
     type: mcq
     concepts: [convert-before-compare]
-    lessons: [s3.if-else.l4]
+    lessons: [s3.if-else.l3]
     code: |
       key = input()
       if key == 1234:

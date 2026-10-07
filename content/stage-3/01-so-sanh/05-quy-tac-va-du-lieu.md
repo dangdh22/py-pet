@@ -14,8 +14,8 @@ exercises:
       - { vi: "Hiểu giọng nói của nhiều người khác nhau", en: "Understanding the voices of many different people", misconception: ai-rules-vs-data }
       - { vi: "Đọc chữ viết tay của cả lớp", en: "Reading the handwriting of the whole class", misconception: ai-rules-vs-data }
     explanation:
-      vi: "Điểm từ 5 trở lên là 1 quy tắc rõ ràng, viết được bằng 1 phép so sánh: diem >= 5. Khuôn mặt, giọng nói và chữ viết tay thì mỗi người mỗi khác, không ai viết hết được quy tắc, nên cần AI học từ rất nhiều ví dụ."
-      en: "A score of 5 or more is a clear rule that you can write with one comparison: diem >= 5. Faces, voices and handwriting are different for every person, and nobody can write down all the rules, so an AI that learns from many examples is needed."
+      vi: "Điểm từ 5 trở lên là 1 quy tắc rõ ràng, viết được bằng 1 phép so sánh: score >= 5. Khuôn mặt, giọng nói và chữ viết tay thì mỗi người mỗi khác, không ai viết hết được quy tắc, nên cần AI học từ rất nhiều ví dụ."
+      en: "A score of 5 or more is a clear rule that you can write with one comparison: score >= 5. Faces, voices and handwriting are different for every person, and nobody can write down all the rules, so an AI that learns from many examples is needed."
   - id: s3.so-sanh.l5.q2
     type: mcq
     concepts: [ai-rules-vs-data]

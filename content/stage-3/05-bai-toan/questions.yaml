@@ -242,10 +242,10 @@ questions:
       - { vi: "Khi chỉ cần biết cả 2 điều kiện có cùng đúng không", en: "When you only need to know whether both conditions are True", misconception: nested-if }
       - { vi: "Khi khối lệnh cần chạy nếu ít nhất 1 điều kiện đúng", en: "When the block must run if at least 1 condition is True", misconception: or-either }
       - { vi: "Khi mỗi trường hợp cần 1 câu trả lời riêng", en: "When each case needs its own answer", correct: true }
-      - { vi: "Không bao giờ, vì if lồng nhau luôn báo lỗi IndentationError", en: "Never, because a nested if always gives an IndentationError", misconception: nested-if }
+      - { vi: "Khi 2 điều kiện hỏi về 2 biến khác nhau, như tuổi và chiều cao", en: "When the 2 conditions ask about 2 different variables, like age and height", misconception: nested-if }
     explanation:
-      vi: "if lồng nhau hữu ích khi mỗi trường hợp có câu trả lời riêng, như: chưa đủ tuổi, đủ tuổi nhưng chưa đủ cao, và đủ cả 2. Khi đó, if bên trong có else riêng, và if bên ngoài cũng có else riêng. Khi chỉ cần biết cả 2 điều kiện cùng đúng, 1 lệnh if có and gọn hơn. \"Ít nhất 1 điều kiện đúng\" là việc của or. if lồng nhau chạy tốt khi khối bên trong thụt lề 8 dấu cách."
-      en: "A nested if is useful when each case has its own answer, like: too young, old enough but not tall enough, and both. Then the inner if has its own else, and the outer if has its own else too. When you only need to know that both conditions are True, 1 if statement with and is shorter. \"At least 1 condition is True\" is the job of or. A nested if works fine when the inner block is indented by 8 spaces."
+      vi: "if lồng nhau hữu ích khi mỗi trường hợp có câu trả lời riêng, như: chưa đủ tuổi, đủ tuổi nhưng chưa đủ cao, và đủ cả 2. Khi đó, if bên trong có else riêng, và if bên ngoài cũng có else riêng. Khi chỉ cần biết cả 2 điều kiện cùng đúng, 1 lệnh if có and gọn hơn. \"Ít nhất 1 điều kiện đúng\" là việc của or. Hỏi về 2 biến khác nhau thì and cũng làm được, như tuoi >= 10 and chieu_cao >= 130."
+      en: "A nested if is useful when each case has its own answer, like: too young, old enough but not tall enough, and both. Then the inner if has its own else, and the outer if has its own else too. When you only need to know that both conditions are True, 1 if statement with and is shorter. \"At least 1 condition is True\" is the job of or. and can also ask about 2 different variables, like tuoi >= 10 and chieu_cao >= 130."
 
   - id: s3.bai-toan.b13
     type: predict

@@ -128,7 +128,7 @@ print("10" < "9")
 print(10 < 9)
 ```
 
-Dòng 2 ra True. Python so ký tự đầu trước: "1" đứng trước "9", nên Python trả lời ngay, không xét tiếp. Python không xem "10" là số mười. Ngoài ra, các chữ hoa từ A đến Z đều đứng trước chữ thường, nên `"Z" < "a"` cũng ra True.
+Dòng 2 ra True. Python so ký tự đầu trước: "1" đứng trước "9", nên Python trả lời ngay, không xét tiếp. Python không xem "10" là số mười.
 ---
 Vì vậy, khi so sánh số con nhập vào, con phải **đổi sang số** bằng `int()` trước:
 

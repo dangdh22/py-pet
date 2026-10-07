@@ -139,10 +139,10 @@ exercises:
       vi: "Bài toán nào nên dùng nhiều lệnh if riêng, thay vì 1 chuỗi if, elif, else?"
       en: "Which task should use several separate if statements instead of 1 if, elif, else chain?"
     choices:
-      - { vi: "Robo xếp loại điểm thành Giỏi, Khá, Trung bình hoặc Cần cố gắng", en: "Robo grades a score as Giỏi, Khá, Trung bình or Cần cố gắng", misconception: elif-vs-if }
-      - { vi: "Robo chọn 1 chiếc áo theo nhiệt độ: áo cộc, áo dài tay hoặc áo khoác", en: "Robo picks 1 piece of clothing by the temperature: a T-shirt, a long-sleeved shirt or a jacket", misconception: elif-vs-if }
-      - { vi: "Robo bật 1 màu đèn theo số pin: xanh, vàng hoặc đỏ", en: "Robo turns on 1 light colour by the battery: green, yellow or red", misconception: elif-vs-if }
-      - { vi: "Robo kiểm tra 3 việc riêng: pin yếu thì đi sạc, bình nước cạn thì đổ nước, bánh xe bẩn thì đi rửa", en: "Robo checks 3 separate things: charge if the battery is low, add water if the tank is empty, wash the wheels if they are dirty", correct: true }
+      - { vi: "Robo xếp loại điểm bài kiểm tra của con thành Giỏi, Khá, Trung bình hoặc Cần cố gắng", en: "Robo grades your test score as Giỏi, Khá, Trung bình or Cần cố gắng", misconception: elif-vs-if }
+      - { vi: "Robo chọn 1 chiếc áo theo nhiệt độ ngoài trời: áo cộc, áo dài tay hoặc áo khoác", en: "Robo picks 1 piece of clothing by the outdoor temperature: a T-shirt, a long-sleeved shirt or a jacket", misconception: elif-vs-if }
+      - { vi: "Robo bật 1 màu đèn trên lưng theo số pin còn lại: đèn xanh, đèn vàng hoặc đèn đỏ", en: "Robo turns on 1 light colour on its back by the battery left: green, yellow or red", misconception: elif-vs-if }
+      - { vi: "Robo kiểm tra 3 việc riêng: pin yếu thì sạc, bình cạn thì đổ nước, bánh xe bẩn thì rửa", en: "Robo checks 3 separate things: charge a low battery, fill an empty tank, wash dirty wheels", correct: true }
     explanation:
       vi: "Pin, nước và bánh xe là 3 câu hỏi riêng, có thể cùng đúng một lúc, nên Robo cần 3 lệnh if riêng. Ở 3 bài toán kia, Robo chỉ cần đúng 1 câu trả lời trong nhiều trường hợp, nên dùng chuỗi if, elif, else."
       en: "The battery, the water and the wheels are 3 separate questions that can all be True at the same time, so Robo needs 3 separate if statements. In the other 3 tasks, Robo needs exactly 1 answer out of several cases, so it uses an if, elif, else chain."

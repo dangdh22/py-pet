@@ -89,11 +89,11 @@ exercises:
     choices:
       - { text: "ans = int(input())", misconception: convert-before-compare }
       - { text: "ans = input()", correct: true }
-      - { text: "ans = input(\"blue\")", misconception: input-prompt }
+      - { text: "ans == input()", misconception: eq-vs-assign }
       - { text: "ans = \"input()\"", misconception: string-quotes }
     explanation:
-      vi: "Câu trả lời là chữ, nên con chỉ đọc bằng input() và để nguyên là chuỗi. Chỉ đổi bằng int() khi dữ liệu là số: int(\"blue\") báo lỗi ValueError. Chữ trong ngoặc của input() không phải đáp án, còn \"input()\" có dấu nháy chỉ là 1 chuỗi, không đọc gì cả."
-      en: "The answer is text, so just read it with input() and keep it as a string. Only change it with int() when the data is a number: int(\"blue\") gives a ValueError. The text inside the brackets of input() is not the answer, and \"input()\" with quotes is just a string that reads nothing."
+      vi: "Câu trả lời là chữ, nên con chỉ đọc bằng input() và để nguyên là chuỗi. Chỉ đổi bằng int() khi dữ liệu là số: int(\"blue\") báo lỗi ValueError. ans == input() là 1 phép so sánh, không cất gì vào ans, nên Python báo lỗi NameError vì ans chưa có giá trị. Còn \"input()\" có dấu nháy chỉ là 1 chuỗi, không đọc gì cả."
+      en: "The answer is text, so just read it with input() and keep it as a string. Only change it with int() when the data is a number: int(\"blue\") gives a ValueError. ans == input() is a comparison that stores nothing in ans, so Python gives a NameError because ans has no value yet. And \"input()\" with quotes is just a string that reads nothing."
 ---
 Khi điều kiện dùng số con nhập vào, con nhớ đổi sang số bằng `int()` trước, như đã học ở giai đoạn 2:
 

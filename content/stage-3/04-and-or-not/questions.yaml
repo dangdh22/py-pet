@@ -61,9 +61,8 @@ questions:
     concepts: [or-either]
     lessons: [s3.logic.l2]
     code: |
-      a = 15
-      b = 20
-      print(a > 10 or b > 10)
+      x = 4
+      print(x < 5 or x > 3)
     prompt:
       vi: "Đoạn code in ra gì?"
       en: "What is the output of this code?"
@@ -73,24 +72,24 @@ questions:
       - { text: "True\nTrue", misconception: or-either }
       - { vi: "Báo lỗi, vì or chỉ dùng được trong dòng if", en: "An error, because or can only be used in an if line", error: true, misconception: or-either }
     explanation:
-      vi: "Cả a > 10 và b > 10 đều là True. or ra True khi ít nhất 1 bên True, kể cả khi cả 2 bên cùng True, nên Python in ra True. print in ra 1 giá trị cho cả điều kiện. or dùng được ở bất cứ đâu cần 1 giá trị bool, kể cả trong print."
-      en: "Both a > 10 and b > 10 are True. or is True when at least 1 side is True, even when both sides are True, so Python prints True. print shows 1 value for the whole condition. or can be used wherever a bool value is needed, print included."
+      vi: "4 < 5 là True, và 4 > 3 cũng là True. or ra True khi ít nhất 1 bên True, kể cả khi cả 2 bên cùng True, nên Python in ra True. print in ra 1 giá trị cho cả điều kiện. or dùng được ở bất cứ đâu cần 1 giá trị bool, kể cả trong print."
+      en: "4 < 5 is True, and 4 > 3 is True too. or is True when at least 1 side is True, even when both sides are True, so Python prints True. print shows 1 value for the whole condition. or can be used wherever a bool value is needed, print included."
 
   - id: s3.logic.b5
     type: mcq
     concepts: [or-either]
     lessons: [s3.logic.l2]
     prompt:
-      vi: "A và B là 2 điều kiện. Khi nào A or B là False?"
-      en: "A and B are 2 conditions. When is A or B False?"
+      vi: "Robo đi nghỉ khi pin dưới 10 phần trăm hoặc khi đã quá 21 giờ. Trường hợp nào Robo vẫn làm việc tiếp?"
+      en: "Robo goes to rest when its battery is below 10 percent or when it is later than 21 o'clock. In which case does Robo keep working?"
     choices:
-      - { vi: "Khi cả A và B đều True", en: "When both A and B are True", misconception: or-either }
-      - { vi: "Khi chỉ 1 trong 2 điều kiện là False", en: "When only 1 of the 2 conditions is False", misconception: or-either }
-      - { vi: "Chỉ khi cả A và B đều False", en: "Only when both A and B are False", correct: true }
-      - { vi: "Khi A là False, dù B là True hay False", en: "When A is False, whether B is True or False", misconception: or-either }
+      - { vi: "Pin 5 phần trăm, lúc 22 giờ", en: "Battery 5 percent, at 22 o'clock", misconception: or-either }
+      - { vi: "Pin 50 phần trăm, lúc 22 giờ", en: "Battery 50 percent, at 22 o'clock", misconception: or-either }
+      - { vi: "Pin 50 phần trăm, lúc 20 giờ", en: "Battery 50 percent, at 20 o'clock", correct: true }
+      - { vi: "Pin 5 phần trăm, lúc 20 giờ", en: "Battery 5 percent, at 20 o'clock", misconception: or-either }
     explanation:
-      vi: "or chỉ cần 1 bên True là ra True. Vì vậy, A or B chỉ là False khi không bên nào True, tức là cả A và B đều False. Khi cả 2 cùng True, A or B vẫn là True."
-      en: "or needs only 1 True side to be True. So A or B is False only when no side is True, that is, when both A and B are False. When both are True, A or B is still True."
+      vi: "Luật có or, nên chỉ cần 1 điều kiện đúng là Robo đi nghỉ. Robo chỉ làm việc tiếp khi cả 2 điều kiện đều sai: pin không dưới 10 phần trăm, và chưa quá 21 giờ. Chỉ trường hợp pin 50 phần trăm lúc 20 giờ là như vậy. Lúc 22 giờ, dù pin còn 50 phần trăm, Robo vẫn đi nghỉ."
+      en: "The rule has or, so 1 True condition is enough for Robo to rest. Robo keeps working only when both conditions are False: the battery is not below 10 percent, and it is not later than 21 o'clock. Only battery 50 percent at 20 o'clock is like that. At 22 o'clock, Robo rests even with 50 percent battery."
 
   - id: s3.logic.b6
     type: mcq
@@ -116,10 +115,10 @@ questions:
       vi: "Vì sao dòng if n == 1 or 2: luôn chạy khối lệnh bên dưới, dù n là số nào?"
       en: "Why does the line if n == 1 or 2: always run the block under it, whatever number n is?"
     choices:
-      - { vi: "Vì Python tự hiểu điều kiện thành n == 1 or n == 2", en: "Because Python reads the condition as n == 1 or n == 2", misconception: or-misuse }
-      - { vi: "Vì bên phải or chỉ là số 2, không phải phép so sánh, và Python hiểu số 2 là đúng", en: "Because on the right of or there is only the number 2, not a comparison, and Python takes the number 2 as True", correct: true }
-      - { vi: "Vì or luôn cho ra True", en: "Because or always gives True", misconception: or-either }
-      - { vi: "Vì dấu == so sánh n với cả 2 số cùng lúc", en: "Because the sign == compares n with both numbers at once", misconception: or-misuse }
+      - { vi: "Vì Python tự hiểu điều kiện này thành n == 1 or n == 2, như khi con nói", en: "Because Python reads this condition as n == 1 or n == 2, the way you say it", misconception: or-misuse }
+      - { vi: "Vì bên phải or chỉ là số 2 đứng 1 mình, và Python hiểu số 2 là đúng", en: "Because on the right of or there is only the number 2, which Python takes as True", correct: true }
+      - { vi: "Vì or luôn cho ra True, dù 2 bên của nó là True hay False", en: "Because or always gives True, whether its 2 sides are True or False", misconception: or-either }
+      - { vi: "Vì dấu == so sánh n với cả 2 số 1 và 2 cùng một lúc", en: "Because the sign == compares n with both numbers 1 and 2 at once", misconception: or-misuse }
     explanation:
       vi: "Python đọc điều kiện thành 2 phần: n == 1, và số 2 đứng 1 mình. Python hiểu số 2 là đúng, nên cả điều kiện luôn đúng. Nếu Python hiểu thành n == 1 or n == 2, hay so sánh n với cả 2 số, thì khối lệnh chỉ chạy khi n là 1 hoặc 2. or cũng không luôn ra True: False or False là False."
       en: "Python reads the condition as 2 parts: n == 1, and the number 2 on its own. Python takes the number 2 as True, so the whole condition is always True. If Python read it as n == 1 or n == 2, or compared n with both numbers, the block would run only when n is 1 or 2. And or is not always True: False or False is False."
@@ -141,7 +140,7 @@ questions:
       - { text: "work", correct: true }
       - { text: "play", misconception: not-flip }
       - { text: "work\nplay", misconception: else-branch }
-      - { vi: "Báo lỗi SyntaxError ở dòng 2, vì sau if phải có 1 phép so sánh", en: "A SyntaxError on line 2, because if must be followed by a comparison", error: true }
+      - { vi: "Báo lỗi SyntaxError ở dòng 2, vì sau if phải có 1 phép so sánh", en: "A SyntaxError on line 2, because if must be followed by a comparison", error: true, misconception: bool-value }
     explanation:
       vi: "done là False, nên not done là True. Điều kiện đúng, nên Python chạy nhánh if, in ra work, và bỏ qua nhánh else. Sau if có thể là 1 biến bool hay not với 1 biến bool, không cần phép so sánh."
       en: "done is False, so not done is True. The condition is True, so Python runs the if branch, prints work, and skips the else branch. After if you can write a bool variable, or not with a bool variable; no comparison is needed."
@@ -160,11 +159,11 @@ questions:
     choices:
       - { text: "False", misconception: not-flip }
       - { text: "True", correct: true }
-      - { text: "not False", misconception: not-flip }
+      - { vi: "Không in ra gì, vì a != b là False", en: "Nothing is printed, because a != b is False", misconception: compare-ops }
       - { vi: "Báo lỗi SyntaxError, vì không được viết not trước dấu !=", en: "A SyntaxError, because not cannot go before the sign !=", error: true, misconception: not-flip }
     explanation:
-      vi: "Python làm phép so sánh trước: a bằng b, nên a != b là False. Sau đó not đảo False thành True, và Python in ra True. Vì vậy not a != b giống hệt a == b. print in ra giá trị, không in ra chữ not."
-      en: "Python does the comparison first: a equals b, so a != b is False. Then not flips False to True, and Python prints True. So not a != b is the same as a == b. print shows the value, not the word not."
+      vi: "Python làm phép so sánh trước: a bằng b, nên a != b là False. Sau đó not đảo False thành True, và Python in ra True. Vì vậy not a != b giống hệt a == b. print luôn in ra giá trị của điều kiện, kể cả khi giá trị đó là False."
+      en: "Python does the comparison first: a equals b, so a != b is False. Then not flips False to True, and Python prints True. So not a != b is the same as a == b. print always shows the value of the condition, even when that value is False."
 
   - id: s3.logic.b10
     type: mcq
@@ -234,9 +233,9 @@ questions:
       en: "What is the output of this code?"
     choices:
       - { text: "False\nTrue", correct: true }
-      - { text: "False\nFalse" }
+      - { text: "False\nFalse", misconception: precedence }
       - { text: "True\nTrue", misconception: and-both }
-      - { vi: "Báo lỗi SyntaxError ở dòng 3, vì không được đặt ngoặc trong điều kiện", en: "A SyntaxError on line 3, because brackets are not allowed in a condition", error: true }
+      - { vi: "Báo lỗi SyntaxError ở dòng 3, vì không được đặt ngoặc trong điều kiện", en: "A SyntaxError on line 3, because brackets are not allowed in a condition", error: true, misconception: precedence }
     explanation:
       vi: "Dòng 3 có ngoặc, nên Python làm phần trong ngoặc trước: a > 5 or b > 5 là True. Sau đó True and b > 3 là True and False, ra False. Dòng 4 không có ngoặc, nên Python làm and trước: b > 5 and b > 3 là False. Còn lại a > 5 or False là True or False, ra True."
       en: "Line 3 has brackets, so Python does the part in brackets first: a > 5 or b > 5 is True. Then True and b > 3 is True and False, which is False. Line 4 has no brackets, so Python does the and first: b > 5 and b > 3 is False. What is left, a > 5 or False, is True or False, which is True."
@@ -249,9 +248,9 @@ questions:
       vi: "Con viết 1 chương trình có điều kiện a > 0 and b > 0. Để chắc chắn chương trình chạy đúng, con nên thử những trường hợp nào?"
       en: "You write a program with the condition a > 0 and b > 0. To be sure the program works, which cases should you try?"
     choices:
-      - { vi: "Chỉ cần thử 1 lần, khi cả a và b đều lớn hơn 0", en: "Just 1 try, when both a and b are greater than 0", misconception: and-both }
-      - { vi: "Cả a và b lớn hơn 0, chỉ a lớn hơn 0, chỉ b lớn hơn 0, và cả 2 không lớn hơn 0", en: "Both a and b greater than 0, only a greater than 0, only b greater than 0, and neither greater than 0", correct: true }
-      - { vi: "Chỉ cần thử khi cả a và b đều không lớn hơn 0", en: "Just the case when neither a nor b is greater than 0", misconception: and-both }
+      - { vi: "Chỉ cần thử 1 lần, khi cả a và b đều lớn hơn 0, vì lúc đó khối lệnh chạy", en: "Just 1 try, when both a and b are greater than 0, because then the block runs", misconception: and-both }
+      - { vi: "Đủ 4 trường hợp: cả 2 số lớn hơn 0, chỉ a, chỉ b, và không số nào lớn hơn 0", en: "All 4 cases: both numbers greater than 0, only a, only b, and neither", correct: true }
+      - { vi: "Chỉ cần thử khi cả a và b đều không lớn hơn 0, vì đó là lúc dễ sai nhất", en: "Just the case when neither a nor b is greater than 0, because that is where mistakes hide", misconception: and-both }
       - { vi: "Chỉ cần thử các giá trị của a, vì Python chỉ xem điều kiện bên trái and", en: "Just values of a, because Python only looks at the condition on the left of and", misconception: and-both }
     explanation:
       vi: "Điều kiện có and phụ thuộc vào cả 2 bên. Con thử đủ 4 trường hợp: cả 2 bên đúng, chỉ bên trái đúng, chỉ bên phải đúng, và cả 2 bên sai. Nếu con viết nhầm b > 0 thành a > 0, lỗi chỉ lộ ra khi con thử trường hợp chỉ a lớn hơn 0."

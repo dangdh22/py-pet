@@ -12,7 +12,7 @@ concepts:
   - id: max-by-compare
     name: { vi: "Tìm số lớn nhất bằng phép so sánh", en: "Finding the largest number by comparing" }
     misconception_card: |
-      Nhiều bạn tìm số lớn nhất bằng cách hỏi `a > b and a > c`, rồi `b > a and b > c`, và để c cho nhánh else. Cách này sai khi có 2 số bằng nhau: với a = 9, b = 9, c = 5, cả 2 điều kiện đều False, nên chương trình chọn c là 5. Con dùng dấu `>=`, hoặc dùng biến `lon_nhat` cập nhật dần, và luôn thử cả trường hợp các số bằng nhau.
+      Nhiều bạn tìm số lớn nhất bằng cách hỏi `a > b and a > c`, rồi `b > a and b > c`, và để c cho nhánh else. Cách này sai khi a và b bằng nhau và cùng lớn hơn c: với a = 9, b = 9, c = 5, cả 2 điều kiện đều False, nên chương trình chọn c là 5. Con dùng dấu `>=`, hoặc dùng biến `lon_nhat` cập nhật dần, và luôn thử cả trường hợp các số bằng nhau.
     parent_tip: |
       Bố mẹ úp 3 lá bài có số, rồi lật từng lá: con chỉ được giữ 1 lá, và khi thấy lá lớn hơn lá đang giữ thì đổi. Lật hết 3 lá, lá con đang giữ chính là lá lớn nhất.
     practice:

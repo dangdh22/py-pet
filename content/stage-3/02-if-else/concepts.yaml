@@ -12,7 +12,7 @@ concepts:
   - id: indent-block
     name: { vi: "Khối lệnh thụt lề 4 dấu cách", en: "A block is indented by 4 spaces" }
     misconception_card: |
-      Nhiều bạn nghĩ chỉ dòng đầu tiên dưới `if` mới thuộc khối, hoặc nghĩ thụt lề chỉ để code trông đẹp. Thực ra mọi dòng thụt lề cùng 4 dấu cách ngay dưới `if pin < 20:` đều thuộc khối, và cả khối chỉ chạy khi điều kiện đúng. Thiếu thụt lề, thụt thừa hay thụt lệch nhau đều làm Python báo lỗi IndentationError.
+      Nhiều bạn nghĩ chỉ dòng đầu tiên dưới `if` mới thuộc khối, hoặc nghĩ thụt lề chỉ để code trông đẹp. Thực ra mọi dòng thụt lề cùng 4 dấu cách ngay dưới `if pin < 20:` đều thuộc khối, và cả khối chỉ chạy khi điều kiện đúng. Thiếu thụt lề hay thụt lệch nhau đều làm Python báo lỗi IndentationError.
     parent_tip: |
       Viết lên giấy dòng "Nếu trời mưa:", rồi viết lùi vào 2 việc bên dưới là "mang ô" và "đi ủng". Hỏi con: khi trời nắng, những việc viết lùi vào có cần làm không?
     practice:

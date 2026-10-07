@@ -111,35 +111,25 @@ exercises:
     type: code
     concepts: [eq-vs-assign]
     prompt:
-      vi: "Robo muốn biết An và Bình có mặc áo cùng số không. Ô Dữ liệu nhập có 2 dòng: số áo của An và số áo của Bình. Code bên phải lại in ra 1 con số, vì dòng 3 dùng nhầm dấu =. Hãy sửa code để in ra True hoặc False như phần Ví dụ."
-      en: "Robo wants to know if An and Bình wear the same shirt number. The Input data box has 2 lines: An's shirt number and Bình's shirt number. The code on the right prints a number instead, because line 3 uses = by mistake. Fix the code to print True or False as in the Example."
+      vi: "Robo muốn biết An và Bình có mặc áo cùng số không. Ô Dữ liệu nhập có 2 dòng: số áo của An và số áo của Bình. Code bên phải báo lỗi TypeError ở dòng 3, vì dòng này dùng nhầm dấu =. Hãy sửa code để in ra True hoặc False như phần Ví dụ."
+      en: "Robo wants to know if An and Bình wear the same shirt number. The Input data box has 2 lines: An's shirt number and Bình's shirt number. The code on the right shows a TypeError on line 3, because this line uses = by mistake. Fix the code to print True or False as in the Example."
     starter: |
       so_ao_an = int(input())
       so_ao_binh = int(input())
-      cung_so = so_ao_an = so_ao_binh
-      print("Cùng số áo:", cung_so)
+      print("Cùng số áo:", so_ao_an = so_ao_binh)
     solution: |
       so_ao_an = int(input())
       so_ao_binh = int(input())
-      cung_so = so_ao_an == so_ao_binh
-      print("Cùng số áo:", cung_so)
+      print("Cùng số áo:", so_ao_an == so_ao_binh)
     tests:
       - input: "10\n10"
         output: "Cùng số áo: True"
       - input: "7\n9"
         output: "Cùng số áo: False"
         hidden: true
-    common_wrong:
-      - output: "Cùng số áo: 10"
-        misconception: eq-vs-assign
-        sample: |
-          so_ao_an = int(input())
-          so_ao_binh = int(input())
-          cung_so = so_ao_an = so_ao_binh
-          print("Cùng số áo:", cung_so)
     hints:
-      - { vi: "Dòng 3 có 2 dấu =, nên Python gán 2 lần: số áo của Bình được cất vào cả cung_so lẫn so_ao_an. Dấu = thứ hai phải là câu hỏi bằng nhau.", en: "Line 3 has two = signs, so Python assigns twice: Bình's shirt number is stored in both cung_so and so_ao_an. The second = must be a question about being equal." }
-      - { vi: "Sửa dòng 3 thành cung_so = so_ao_an == so_ao_binh.", en: "Change line 3 to cung_so = so_ao_an == so_ao_binh." }
+      - { vi: "Bên trong print, Python tưởng so_ao_an = ... là 1 tham số như sep= hay end=, nên báo lỗi. Muốn hỏi 2 số áo có bằng nhau không, con cần 2 dấu bằng.", en: "Inside print, Python thinks so_ao_an = ... is an option like sep= or end=, so it shows an error. To ask whether the 2 shirt numbers are equal, you need 2 equal signs." }
+      - { vi: "Sửa so_ao_an = so_ao_binh ở dòng 3 thành so_ao_an == so_ao_binh.", en: "On line 3, change so_ao_an = so_ao_binh to so_ao_an == so_ao_binh." }
     test_eligible: true
 
   - id: s3.so-sanh.c2

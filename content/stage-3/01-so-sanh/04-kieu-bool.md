@@ -85,7 +85,7 @@ exercises:
     choices:
       - { text: "False <class 'bool'>", correct: true }
       - { text: "False <class 'str'>", misconception: bool-value }
-      - { text: "3 <class 'int'>", misconception: eq-vs-assign }
+      - { text: "3 <class 'int'>", misconception: compare-ops }
       - { text: "True <class 'bool'>", misconception: compare-ops }
     explanation:
       vi: "Python so sánh 3 > 5 trước: 3 không lớn hơn 5, nên ra False. Sau đó dấu = cất False vào biến x. False không có dấu nháy, nên không phải chuỗi: kiểu của nó là bool."
@@ -113,7 +113,7 @@ print(type(5 > 3))
 print(type(10))
 ```
 
-Kết quả của mọi phép so sánh đều có kiểu bool.
+Con nhìn chữ nằm trong dấu nháy đơn: `<class 'bool'>` nghĩa là giá trị có kiểu bool, giống như `<class 'int'>` là số nguyên. Kết quả của mọi phép so sánh đều có kiểu bool.
 ---
 True và False phải viết **hoa chữ đầu** và **không có dấu nháy**. Viết `true` thì Python báo lỗi NameError, vì không biết `true` là gì:
 

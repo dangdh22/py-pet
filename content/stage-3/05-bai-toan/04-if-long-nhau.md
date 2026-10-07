@@ -194,4 +194,4 @@ if tuoi >= 10 and chieu_cao >= 130:
     print("Dùng and: con được chơi")
 ```
 
-Cả 2 cách đều in ra 1 dòng. Khi chỉ cần biết cả 2 điều kiện có cùng đúng không, con dùng and cho gọn. Khi mỗi trường hợp cần 1 câu trả lời riêng, như ở thẻ trước, con dùng if lồng nhau.
+Mỗi cách đều in ra 1 dòng. Khi chỉ cần biết cả 2 điều kiện có cùng đúng không, con dùng and cho gọn. Khi mỗi trường hợp cần 1 câu trả lời riêng, như ở thẻ trước, con dùng if lồng nhau.

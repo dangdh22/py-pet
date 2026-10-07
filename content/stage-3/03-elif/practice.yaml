@@ -256,10 +256,10 @@ exercises:
 
   - id: s3.elif.c3
     type: code
-    concepts: [elif-vs-if]
+    concepts: [elif-vs-if, elif-chain]
     prompt:
-      vi: "Robo chuẩn bị cho con đi học. Ô Dữ liệu nhập có 2 dòng: dòng 1 là nhiệt độ, dòng 2 là khả năng có mưa, tính bằng phần trăm. Cả 2 đều là số nguyên. Nếu nhiệt độ dưới 20, in ra Con mặc áo ấm. Nếu khả năng có mưa từ 50 phần trăm trở lên, in ra Con mang ô. Cuối cùng, Robo luôn in ra Chúc con đi học vui, như phần Ví dụ."
-      en: "Robo gets you ready for school. The Input data box has 2 lines: line 1 is the temperature, and line 2 is the chance of rain, in percent. Both are integers. If the temperature is below 20, print Con mặc áo ấm. If the chance of rain is 50 percent or more, print Con mang ô. At the end, Robo always prints Chúc con đi học vui, as in the Example."
+      vi: "Robo chuẩn bị cho con đi học. Ô Dữ liệu nhập có 2 dòng: dòng 1 là nhiệt độ, dòng 2 là khả năng có mưa, tính bằng phần trăm. Cả 2 đều là số nguyên. Robo chọn đúng 1 chiếc áo: dưới 20 độ in ra Con mặc áo ấm, từ 20 đến dưới 30 độ in ra Con mặc áo dài tay, từ 30 độ trở lên in ra Con mặc áo cộc. Sau đó, nếu khả năng có mưa từ 50 phần trăm trở lên, Robo in thêm Con mang ô, như phần Ví dụ."
+      en: "Robo gets you ready for school. The Input data box has 2 lines: line 1 is the temperature, and line 2 is the chance of rain, in percent. Both are integers. Robo picks exactly 1 piece of clothing: below 20 degrees, print Con mặc áo ấm; from 20 to below 30 degrees, print Con mặc áo dài tay; 30 degrees or more, print Con mặc áo cộc. After that, if the chance of rain is 50 percent or more, Robo also prints Con mang ô, as in the Example."
     starter: |
       # Viết lệnh của con ở dưới dòng này
     solution: |
@@ -267,48 +267,55 @@ exercises:
       kha_nang_mua = int(input())
       if nhiet_do < 20:
           print("Con mặc áo ấm")
+      elif nhiet_do < 30:
+          print("Con mặc áo dài tay")
+      else:
+          print("Con mặc áo cộc")
       if kha_nang_mua >= 50:
           print("Con mang ô")
-      print("Chúc con đi học vui")
     tests:
       - input: "15\n80"
         output: |
           Con mặc áo ấm
           Con mang ô
-          Chúc con đi học vui
-      - input: "25\n60"
-        output: |
-          Con mang ô
-          Chúc con đi học vui
-        hidden: true
-      - input: "15\n10"
-        output: |
-          Con mặc áo ấm
-          Chúc con đi học vui
-        hidden: true
       - input: "20\n49"
-        output: "Chúc con đi học vui"
+        output: "Con mặc áo dài tay"
         hidden: true
-      - input: "28\n50"
+      - input: "29\n50"
         output: |
+          Con mặc áo dài tay
           Con mang ô
-          Chúc con đi học vui
+        hidden: true
+      - input: "30\n10"
+        output: "Con mặc áo cộc"
+        hidden: true
+      - input: "35\n70"
+        output: |
+          Con mặc áo cộc
+          Con mang ô
+        hidden: true
+      - input: "19\n20"
+        output: "Con mặc áo ấm"
         hidden: true
     common_wrong:
       - test: 0
         output: |
           Con mặc áo ấm
-          Chúc con đi học vui
+          Con mặc áo dài tay
+          Con mang ô
         misconception: elif-vs-if
         sample: |
           nhiet_do = int(input())
           kha_nang_mua = int(input())
           if nhiet_do < 20:
               print("Con mặc áo ấm")
-          elif kha_nang_mua >= 50:
+          if nhiet_do < 30:
+              print("Con mặc áo dài tay")
+          else:
+              print("Con mặc áo cộc")
+          if kha_nang_mua >= 50:
               print("Con mang ô")
-          print("Chúc con đi học vui")
     hints:
-      - { vi: "Trời lạnh và trời mưa là 2 câu hỏi riêng, có thể cùng đúng. Con dùng 2 lệnh if riêng, không dùng elif. \"Từ 50 trở lên\" viết là >= 50.", en: "Cold weather and rain are 2 separate questions that can both be True. Use 2 separate if statements, not elif. \"50 or more\" is written >= 50." }
-      - { vi: "Dòng 1 là nhiet_do = int(input()), dòng 2 là kha_nang_mua = int(input()). Sau đó là if nhiet_do < 20: và if kha_nang_mua >= 50:, dưới mỗi dòng là 1 lệnh print thụt lề. Dòng print(\"Chúc con đi học vui\") sát lề trái, ở cuối.", en: "Line 1 is nhiet_do = int(input()), and line 2 is kha_nang_mua = int(input()). Then come if nhiet_do < 20: and if kha_nang_mua >= 50:, each with 1 indented print statement under it. The line print(\"Chúc con đi học vui\") is at the left edge, at the end." }
+      - { vi: "Chọn áo là 1 câu hỏi chỉ có đúng 1 câu trả lời, nên con dùng chuỗi if, elif, else, với số nhỏ nhất hỏi trước. Mang ô là 1 câu hỏi riêng, có thể cùng đúng với câu hỏi chọn áo, nên con viết 1 lệnh if mới sau chuỗi đó.", en: "Picking clothes is a question with exactly 1 answer, so use an if, elif, else chain, asking about the smallest number first. Taking an umbrella is a separate question that can be True at the same time, so write a new if statement after that chain." }
+      - { vi: "Sau 2 dòng đọc dữ liệu, viết if nhiet_do < 20:, elif nhiet_do < 30: và else:, dưới mỗi dòng là 1 lệnh print thụt lề. Cuối cùng là if kha_nang_mua >= 50: sát lề trái, với print(\"Con mang ô\") thụt lề bên dưới.", en: "After the 2 input lines, write if nhiet_do < 20:, elif nhiet_do < 30: and else:, each with 1 indented print statement under it. Last comes if kha_nang_mua >= 50: at the left edge, with print(\"Con mang ô\") indented under it." }
     test_eligible: true

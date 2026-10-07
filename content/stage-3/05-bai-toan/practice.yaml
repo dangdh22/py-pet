@@ -28,8 +28,8 @@ exercises:
         output: "Còn lẻ 4 cây"
         hidden: true
     hints:
-      - { vi: "Cả 2 chỗ trống đều cần số dư của phép chia cho 5. Chỗ thứ nhất hỏi số dư có bằng 0 không; chỗ thứ hai in ra chính số dư đó.", en: "Both blanks need the remainder of dividing by 5. The first one asks whether the remainder is 0; the second one prints that remainder." }
-      - { vi: "Điền % vào cả 2 chỗ trống.", en: "Fill both blanks with %." }
+      - { vi: "Chỗ trống thứ nhất giúp hỏi số cây có chia hết cho 5 không. Chỗ trống thứ hai giúp in ra số cây còn lẻ khi xếp mỗi hàng 5 cây.", en: "The first blank helps to ask whether the number of trees can be divided by 5. The second blank helps to print how many trees are left over in rows of 5." }
+      - { vi: "Cả 2 chỗ trống dùng cùng 1 phép tính đã học ở giai đoạn 2: phép lấy số dư. Với 23 cây, số dư khi chia cho 5 là 3.", en: "Both blanks use the same operation from stage 2: the remainder. With 23 trees, the remainder when dividing by 5 is 3." }
 
   - id: s3.bai-toan.p2
     type: fill
@@ -64,7 +64,7 @@ exercises:
         output: "Cây cao nhất: 9 cm"
         hidden: true
     hints:
-      - { vi: "Gặp cây cao hơn lon_nhat thì Robo đổi lon_nhat thành chiều cao của cây đó. Chỗ trống thứ nhất là dấu so sánh \"cao hơn\". Chỗ trống thứ hai là tên biến được gán lại.", en: "When a plant is taller than lon_nhat, Robo changes lon_nhat to that plant's height. The first blank is the comparison sign for \"taller than\". The second blank is the name of the variable that gets a new value." }
+      - { vi: "Gặp cây cao hơn lon_nhat thì Robo đổi lon_nhat thành chiều cao của cây đó. Chỗ trống thứ nhất là dấu so sánh \"cao hơn\"; dấu >= cũng cho kết quả đúng, vì khi 2 cây cao bằng nhau, lon_nhat vẫn là chiều cao đó. Chỗ trống thứ hai là tên biến được gán lại.", en: "When a plant is taller than lon_nhat, Robo changes lon_nhat to that plant's height. The first blank is the comparison sign for \"taller than\"; >= also gives the right result, because when 2 plants are equally tall, lon_nhat is still that height. The second blank is the name of the variable that gets a new value." }
       - { vi: "Điền > vào chỗ trống thứ nhất và lon_nhat vào chỗ trống thứ hai.", en: "Fill the first blank with > and the second blank with lon_nhat." }
 
   - id: s3.bai-toan.p3

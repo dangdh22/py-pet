@@ -31,23 +31,21 @@ questions:
     lessons: [s3.elif.l1]
     code: |
       n = 3
-      if n > 5:
-          print("big")
-      else:
-          print("small")
       elif n > 2:
           print("medium")
+      else:
+          print("small")
     prompt:
       vi: "Chuyện gì xảy ra khi chạy đoạn code này?"
       en: "What happens when this code runs?"
     choices:
-      - { vi: "Báo lỗi SyntaxError ở dòng 6", en: "A SyntaxError on line 6", correct: true, error: true }
+      - { vi: "Báo lỗi SyntaxError ở dòng 2", en: "A SyntaxError on line 2", correct: true, error: true }
       - { text: "small", misconception: elif-chain }
-      - { text: "small\nmedium", misconception: elif-chain }
+      - { text: "medium\nsmall", misconception: elif-chain }
       - { text: "medium", misconception: elif-chain }
     explanation:
-      vi: "elif không được đứng sau else, vì else luôn là nhánh cuối cùng của chuỗi. Python báo lỗi SyntaxError ở dòng 6 trước khi chạy, nên không dòng nào được chạy, kể cả dòng 1. Muốn có 3 nhánh, con đặt elif n > 2: ngay sau nhánh if và để else ở cuối."
-      en: "elif cannot come after else, because else is always the last branch of a chain. Python gives a SyntaxError on line 6 before running, so no line runs, not even line 1. To get 3 branches, put elif n > 2: right after the if branch and keep the else at the end."
+      vi: "elif không đứng 1 mình được: nó luôn đi sau 1 lệnh if. Ở đây không có lệnh if nào phía trên, nên Python báo lỗi SyntaxError ở dòng 2 trước khi chạy, và không dòng nào được chạy, kể cả dòng 1. Đổi elif ở dòng 2 thành if thì đoạn code in ra medium."
+      en: "elif cannot stand on its own: it always comes after an if statement. There is no if statement above it here, so Python gives a SyntaxError on line 2 before running, and no line runs, not even line 1. With if instead of elif on line 2, the code prints medium."
 
   - id: s3.elif.b3
     type: mcq
@@ -149,40 +147,45 @@ questions:
     concepts: [boundary-check]
     lessons: [s3.elif.l3]
     prompt:
-      vi: "Một chương trình xếp loại điểm dùng các ranh giới 8, 6.5 và 5. Con nghi chương trình viết nhầm n > 6.5 thay vì n >= 6.5. Con chỉ được thử 1 điểm. Con nên thử điểm nào?"
-      en: "A grading program uses the boundaries 8, 6.5 and 5. You think the program wrongly says n > 6.5 instead of n >= 6.5. You may try only 1 score. Which score should you try?"
+      vi: "Đề bài: \"Từ 12 tuổi trở lên mua vé người lớn (adult), dưới 12 tuổi mua vé trẻ em (child)\". Con viết đoạn code này, rồi gõ thử 1 tuổi vào ô Dữ liệu nhập. Lần thử nào cho thấy đoạn code sai?"
+      en: "The task says: \"12 years old or older buys an adult ticket, under 12 buys a child ticket\". You write this code, then try 1 age in the Input data box. Which try shows that the code is wrong?"
+    code: |
+      age = int(input())
+      if age > 12:
+          print("adult")
+      else:
+          print("child")
     choices:
-      - { text: "7", misconception: boundary-check }
-      - { text: "6", misconception: boundary-check }
-      - { text: "6.5", correct: true }
-      - { text: "10", misconception: boundary-check }
+      - { text: "11", misconception: boundary-check }
+      - { text: "13", misconception: boundary-check }
+      - { text: "12", correct: true }
+      - { text: "5", misconception: boundary-check }
     explanation:
-      vi: "n > 6.5 và n >= 6.5 chỉ khác nhau khi n bằng đúng 6.5. Với 7, cả 2 điều kiện đều đúng; với 6, cả 2 đều sai; còn 10 đã vào nhánh n >= 8 từ trước. Chỉ lần thử đúng ranh giới 6.5 mới cho thấy lỗi: chương trình viết nhầm sẽ xếp 6.5 điểm xuống loại thấp hơn."
-      en: "n > 6.5 and n >= 6.5 differ only when n is exactly 6.5. With 7, both conditions are True; with 6, both are False; and 10 already goes into the n >= 8 branch. Only a try exactly at the boundary 6.5 shows the mistake: the wrong program puts a score of 6.5 in a lower grade."
+      vi: "Với 11 và 5, đoạn code in ra child, đúng với đề bài. Với 13, đoạn code in ra adult, cũng đúng. Chỉ với 12, đúng ranh giới, đoạn code in ra child, trong khi đề bài nói bạn 12 tuổi mua vé người lớn. Đề bài nói \"từ 12 tuổi trở lên\", nên điều kiện đúng là age >= 12."
+      en: "With 11 and 5, the code prints child, which matches the task. With 13, the code prints adult, which is also right. Only with 12, exactly at the boundary, does the code print child, while the task says a 12-year-old buys an adult ticket. The task says \"12 years old or older\", so the right condition is age >= 12."
 
   - id: s3.elif.b9
     type: predict
     concepts: [boundary-check]
     lessons: [s3.elif.l3]
     code: |
-      kg = 20
-      if kg <= 7:
-          print("cabin")
-      elif kg <= 20:
-          print("check-in")
+      a = 7
+      b = 13
+      if a + b > 20:
+          print("over")
       else:
-          print("too heavy")
+          print("ok")
     prompt:
       vi: "Đoạn code in ra gì?"
       en: "What is the output of this code?"
     choices:
-      - { text: "too heavy", misconception: boundary-check }
-      - { text: "check-in", correct: true }
-      - { text: "cabin", misconception: compare-ops }
-      - { text: "check-in\ntoo heavy", misconception: elif-chain }
+      - { text: "over", misconception: boundary-check }
+      - { text: "ok", correct: true }
+      - { text: "over\nok", misconception: else-branch }
+      - { vi: "Báo lỗi, vì điều kiện có phép tính", en: "An error, because the condition has a calculation", error: true, misconception: compare-ops }
     explanation:
-      vi: "20 <= 7 là False. Python thử tiếp kg <= 20: 20 bằng 20, nên 20 <= 20 là True, và Python in ra check-in. Dấu <= gồm cả số ở ranh giới. Chỉ khi kg lớn hơn 20, nhánh else mới chạy."
-      en: "20 <= 7 is False. Python tries kg <= 20 next: 20 equals 20, so 20 <= 20 is True, and Python prints check-in. The sign <= includes the number at the boundary. Only when kg is greater than 20 does the else branch run."
+      vi: "Python tính a + b được 20 trước, rồi hỏi 20 > 20. 20 không lớn hơn chính nó, nên điều kiện là False, và Python chạy nhánh else: in ra ok. Dấu > không gồm số ở ranh giới: chỉ khi a + b từ 21 trở lên, Python mới in ra over. Điều kiện có phép tính thì vẫn đúng cách viết."
+      en: "Python works out a + b first, which is 20, then asks 20 > 20. 20 is not greater than itself, so the condition is False, and Python runs the else branch: it prints ok. The sign > does not include the number at the boundary: only when a + b is 21 or more does Python print over. A condition with a calculation is still written correctly."
 
   - id: s3.elif.b10
     type: mcq
@@ -194,11 +197,11 @@ questions:
     choices:
       - { vi: "từ 18 tuổi trở lên", en: "18 years old or older", correct: true }
       - { vi: "trên 18 tuổi", en: "over 18 years old", misconception: boundary-check }
-      - { vi: "hơn 18 tuổi", en: "more than 18 years old", misconception: boundary-check }
+      - { vi: "dưới 18 tuổi", en: "under 18 years old", misconception: boundary-check }
       - { vi: "không quá 18 tuổi", en: "not more than 18 years old", misconception: boundary-check }
     explanation:
-      vi: "\"Từ 18 tuổi trở lên\" gồm cả người đúng 18 tuổi, nên viết là >= 18. \"Trên 18\" và \"hơn 18\" không gồm số 18, nên viết là > 18. \"Không quá 18\" nghĩa là 18 hoặc ít hơn, viết là <= 18."
-      en: "\"18 years old or older\" includes someone who is exactly 18, so it is written >= 18. \"Over 18\" and \"more than 18\" do not include 18, so they are written > 18. \"Not more than 18\" means 18 or less, written <= 18."
+      vi: "\"Từ 18 tuổi trở lên\" gồm cả người đúng 18 tuổi, nên viết là >= 18. \"Trên 18\" không gồm số 18, nên viết là > 18. \"Dưới 18\" là ít hơn 18, viết là < 18. \"Không quá 18\" nghĩa là 18 hoặc ít hơn, viết là <= 18."
+      en: "\"18 years old or older\" includes someone who is exactly 18, so it is written >= 18. \"Over 18\" does not include 18, so it is written > 18. \"Under 18\" means less than 18, written < 18. \"Not more than 18\" means 18 or less, written <= 18."
 
   - id: s3.elif.b11
     type: predict

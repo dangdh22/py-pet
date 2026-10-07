@@ -34,7 +34,7 @@ concepts:
     misconception_card: |
       Nhiều bạn nghĩ not làm cho điều kiện thay đổi theo cách khó đoán. Thực ra not chỉ làm 1 việc: đổi True thành False, và False thành True. Python làm phép so sánh trước rồi mới đảo, nên `not 5 > 3` là not True, tức là False. Vì vậy `not a == b` giống `a != b`, còn `not a != b` giống `a == b`.
     parent_tip: |
-      Bố mẹ nói 1 câu như "Đèn đang bật", con thêm chữ "không" để đảo ý thành "Đèn đang không bật", rồi nói câu mới đúng hay sai. Thử cả với câu đã có chữ "không": thêm 1 chữ "không" nữa thì ý quay về như cũ.
+      Bố mẹ nói câu "Đèn bật", con thêm chữ "không" để được câu ngược lại là "Đèn không bật", rồi nhìn đèn trong phòng và nói mỗi câu đúng hay sai. Con sẽ thấy 2 câu luôn có 1 câu đúng và 1 câu sai, giống như not đổi True thành False.
     practice:
       level1: [s3.logic.l3.q1, s3.logic.l3.q2, s3.logic.b8, s3.logic.b9, s3.logic.b10]
       level2: [s3.logic.p3]

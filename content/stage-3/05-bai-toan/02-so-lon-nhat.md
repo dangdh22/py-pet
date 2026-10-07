@@ -158,8 +158,8 @@ exercises:
       - { text: "a = 2, b = 5, c = 9", misconception: max-by-compare }
       - { text: "a = 9, b = 9, c = 2", correct: true }
     explanation:
-      vi: "Khi a và b cùng là 9, a > b là False và b > a cũng là False, vì 9 không lớn hơn chính nó. Cả 2 điều kiện đều False, nên Python chạy nhánh else và in ra 2. Với 3 số khác nhau, đoạn code in đúng. Đổi mọi dấu > thành >= thì đoạn code đúng cả khi có số bằng nhau."
-      en: "When a and b are both 9, a > b is False and b > a is also False, because 9 is not greater than itself. Both conditions are False, so Python runs the else branch and prints 2. With 3 different numbers, the code prints the right number. Changing every > to >= makes the code right even when some numbers are equal."
+      vi: "Khi a và b cùng là 9, a > b là False và b > a cũng là False, vì 9 không lớn hơn chính nó. Cả 2 điều kiện đều False, nên Python chạy nhánh else và in ra 2. Đoạn code chỉ in sai khi a và b bằng nhau và cùng lớn hơn c, như ở đây. Với 3 số khác nhau, đoạn code in đúng. Đổi mọi dấu > thành >= thì đoạn code đúng với mọi trường hợp."
+      en: "When a and b are both 9, a > b is False and b > a is also False, because 9 is not greater than itself. Both conditions are False, so Python runs the else branch and prints 2. The code prints the wrong number only when a and b are equal and both larger than c, as here. With 3 different numbers, the code prints the right number. Changing every > to >= makes the code right in every case."
 ---
 Robo và con thi nhảy dây. Muốn biết ai nhảy được nhiều lần hơn, con **so sánh** 2 số bằng if và else, rồi cất số lớn hơn vào biến lon_nhat:
 
@@ -192,7 +192,7 @@ print("Số lớn nhất là", lon_nhat)
 
 8 không lớn hơn 15, nên Python thử elif: 15 >= 11 là True, và lon_nhat là 15. Con thử đổi c thành 20 rồi chạy lại.
 ---
-Con nhớ thử cả trường hợp có **các số bằng nhau**. Đoạn code dưới đây dùng dấu > và hỏi đủ 2 điều kiện cho từng số. Nó chạy đúng khi 3 số khác nhau, nhưng sai khi a và b bằng nhau:
+Con nhớ thử cả trường hợp có **các số bằng nhau**. Đoạn code dưới đây dùng dấu > và hỏi đủ 2 điều kiện cho từng số. Nó chạy đúng khi 3 số khác nhau, và đúng cả với nhiều trường hợp có số bằng nhau. Nó chỉ sai khi a và b bằng nhau và cùng lớn hơn c:
 
 ```python run
 a = 9

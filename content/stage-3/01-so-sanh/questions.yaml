@@ -14,10 +14,10 @@ questions:
       - { text: "True", correct: true }
       - { text: "False", misconception: compare-ops }
       - { text: "20", misconception: compare-ops }
-      - { text: "a + 8 >= b", misconception: string-quotes }
+      - { text: "20 True", misconception: compare-ops }
     explanation:
-      vi: "Python tính a + 8 trước, được 20, rồi hỏi \"20 có lớn hơn hoặc bằng 20 không?\". 20 bằng 20, nên câu trả lời là True. Phép so sánh cho ra True hoặc False, không in ra con số hay chữ của đoạn code."
-      en: "Python works out a + 8 first, which is 20, then asks \"is 20 greater than or equal to 20?\". 20 is equal to 20, so the answer is True. A comparison gives True or False: it does not print a number or the text of the code."
+      vi: "Python tính a + 8 trước, được 20, rồi hỏi \"20 có lớn hơn hoặc bằng 20 không?\". 20 bằng 20, nên câu trả lời là True. Phép so sánh chỉ cho ra True hoặc False: print không in kèm kết quả của phép cộng."
+      en: "Python works out a + 8 first, which is 20, then asks \"is 20 greater than or equal to 20?\". 20 is equal to 20, so the answer is True. A comparison gives only True or False: print does not also show the result of the addition."
 
   - id: s3.so-sanh.b2
     type: mcq
@@ -338,13 +338,13 @@ questions:
       vi: "Một AI học nhận ra quả chín và quả xanh từ rất nhiều ảnh có nhãn. Câu nào đúng?"
       en: "An AI learns to tell ripe fruit from unripe fruit using a huge number of labeled photos. Which sentence is right?"
     choices:
-      - { vi: "AI luôn đúng, vì nó đã học từ rất nhiều ảnh", en: "The AI is always right, because it learned from a huge number of photos", misconception: ai-rules-vs-data }
-      - { vi: "AI tự tìm ra quy tắc, và quy tắc đó vẫn có thể sai với ảnh lạ", en: "The AI finds the rule by itself, and that rule can still be wrong for an unusual photo", correct: true }
-      - { vi: "Người lập trình đã viết sẵn quy tắc cho từng bức ảnh", en: "A programmer wrote a rule for each photo in advance", misconception: ai-rules-vs-data }
-      - { vi: "AI không cần nhãn, chỉ cần xem thật nhiều ảnh", en: "The AI needs no labels, it only needs to see a lot of photos", misconception: ai-data }
+      - { vi: "AI luôn đoán đúng, vì nó đã học từ rất nhiều ảnh", en: "The AI always guesses right, because it learned from a huge number of photos", misconception: ai-rules-vs-data }
+      - { vi: "AI vẫn có thể đoán sai, nhất là với ảnh lạ, nên con người cần kiểm tra lại", en: "The AI can still guess wrong, mostly with an unusual photo, so people need to check", correct: true }
+      - { vi: "Nếu AI đoán sai, đó là vì người lập trình gõ nhầm 1 phép so sánh", en: "If the AI guesses wrong, it is because a programmer typed a comparison wrongly", misconception: ai-rules-vs-data }
+      - { vi: "AI chỉ đoán sai khi máy tính bị hỏng hoặc hết pin", en: "The AI only guesses wrong when the computer is broken or out of battery", misconception: ai-rules-vs-data }
     explanation:
-      vi: "AI tự tìm ra quy tắc từ các ảnh có nhãn \"chín\" hoặc \"xanh\". Quy tắc đó không phải do người viết, và có thể sai khi gặp ảnh khác hẳn những ảnh đã học, như ảnh chụp tối. Vì vậy, con người vẫn cần kiểm tra lại."
-      en: "The AI finds the rule by itself from photos labeled \"ripe\" or \"unripe\". That rule is not written by a person, and it can be wrong for a photo very different from the ones it learned from, such as a dark photo. So people still need to check."
+      vi: "Học từ rất nhiều ảnh giúp AI đoán đúng nhiều hơn, nhưng không phải lúc nào cũng đúng. Gặp ảnh khác hẳn những ảnh đã học, như ảnh chụp tối, AI có thể đoán sai, dù máy tính vẫn chạy tốt. Người lập trình không viết từng phép so sánh cho AI này, nên lỗi không đến từ 1 phép so sánh gõ nhầm. Vì vậy, con người vẫn cần kiểm tra lại."
+      en: "Learning from many photos helps the AI guess right more often, but not every time. With a photo very different from the ones it learned from, such as a dark photo, the AI can guess wrong, even when the computer works fine. No programmer wrote each comparison for this AI, so the mistake does not come from a mistyped comparison. So people still need to check."
 
   - id: s3.so-sanh.b20
     type: mcq
@@ -353,15 +353,15 @@ questions:
     code: |
       a = input()
       b = input()
-      print(a > b)
+      print(a < b)
     prompt:
-      vi: "Ô Dữ liệu nhập có 2 dòng: 10 và 9, nhưng đoạn code in ra False. Cách sửa nào làm cho đoạn code so sánh 2 số?"
-      en: "The Input data box has 2 lines: 10 and 9, but the code prints False. Which fix makes the code compare 2 numbers?"
+      vi: "Ô Dữ liệu nhập có 2 dòng: 7 và 12, nhưng đoạn code in ra False. Cách sửa nào làm cho đoạn code so sánh 2 số?"
+      en: "The Input data box has 2 lines: 7 and 12, but the code prints False. Which fix makes the code compare 2 numbers?"
     choices:
-      - { vi: "Đổi dòng 3 thành print(\"a\" > \"b\")", en: "Change line 3 to print(\"a\" > \"b\")", misconception: string-quotes }
-      - { vi: "Đổi dấu > thành dấu >=", en: "Change > to >=", misconception: compare-ops }
-      - { vi: "Đổi 2 dòng đầu thành a = str(input()) và b = str(input())", en: "Change the first 2 lines to a = str(input()) and b = str(input())", misconception: str-convert }
-      - { vi: "Đổi 2 dòng đầu thành a = int(input()) và b = int(input())", en: "Change the first 2 lines to a = int(input()) and b = int(input())", correct: true }
+      - { vi: "Đổi dòng 3 thành print(\"a\" < \"b\")", en: "Change line 3 to print(\"a\" < \"b\")", misconception: string-quotes }
+      - { vi: "Đổi dấu < thành dấu <=", en: "Change < to <=", misconception: compare-ops }
+      - { vi: "Đổi dòng 3 thành print(str(a) < str(b))", en: "Change line 3 to print(str(a) < str(b))", misconception: str-convert }
+      - { vi: "Đổi dòng 3 thành print(int(a) < int(b))", en: "Change line 3 to print(int(a) < int(b))", correct: true }
     explanation:
-      vi: "input() đưa lại chuỗi, và chuỗi được so sánh theo từng ký tự, nên \"10\" nhỏ hơn \"9\". int() đổi 2 chuỗi thành 2 số, nên 10 > 9 ra True. str() vẫn để nguyên chuỗi. Có dấu nháy thì Python so sánh 2 chữ cái a và b, không phải 2 biến. Dấu >= vẫn so sánh 2 chuỗi."
-      en: "input() gives back strings, and strings are compared character by character, so \"10\" is smaller than \"9\". int() changes the 2 strings into 2 numbers, so 10 > 9 gives True. str() keeps them as strings. With quotes, Python compares the letters a and b, not the 2 variables. >= still compares 2 strings."
+      vi: "input() đưa lại chuỗi, và chuỗi được so sánh theo từng ký tự: ký tự 7 đứng sau ký tự 1, nên \"7\" < \"12\" ra False. int(a) và int(b) đổi 2 chuỗi thành 2 số ngay trong phép so sánh, nên 7 < 12 ra True. str() vẫn để nguyên chuỗi. Có dấu nháy thì Python so sánh 2 chữ cái a và b, không phải 2 biến. Dấu <= vẫn so sánh 2 chuỗi."
+      en: "input() gives back strings, and strings are compared character by character: the character 7 comes after the character 1, so \"7\" < \"12\" gives False. int(a) and int(b) change the 2 strings into 2 numbers right inside the comparison, so 7 < 12 gives True. str() keeps them as strings. With quotes, Python compares the letters a and b, not the 2 variables. <= still compares 2 strings."

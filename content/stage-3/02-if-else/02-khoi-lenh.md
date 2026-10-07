@@ -21,19 +21,19 @@ exercises:
           print("Robo đi sạc")
       print("Pin còn", pin, "phần trăm")
     tests:
+      - input: "75"
+        output: "Pin còn 75 phần trăm"
       - input: "12"
         output: |
           Pin yếu
           Robo đi sạc
           Pin còn 12 phần trăm
+        hidden: true
       - input: "20"
         output: "Pin còn 20 phần trăm"
         hidden: true
-      - input: "75"
-        output: "Pin còn 75 phần trăm"
-        hidden: true
     common_wrong:
-      - test: 1
+      - test: 2
         output: |
           Robo đi sạc
           Pin còn 20 phần trăm
@@ -73,7 +73,7 @@ exercises:
         output: "Chúc con chơi vui"
         hidden: true
     hints:
-      - { vi: "Dòng Con được vào miễn phí nằm trong khối của if, nên thụt lề 4 dấu cách. Dòng Chúc con chơi vui luôn chạy, nên viết sát lề trái, sau khối của if. Bạn đúng 6 tuổi thì không được miễn phí.", en: "The line Con được vào miễn phí is in the block of the if, so it is indented by 4 spaces. The line Chúc con chơi vui always runs, so it starts at the left edge, after the block of the if. A child who is exactly 6 does not get in for free." }
+      - { vi: "Dòng Con được vào miễn phí nằm trong khối của if, nên thụt lề 4 dấu cách. Dòng Chúc con chơi vui luôn chạy, nên viết sát lề trái, sau khối của if. Bạn nhỏ đúng 6 tuổi thì không được miễn phí.", en: "The line Con được vào miễn phí is in the block of the if, so it is indented by 4 spaces. The line Chúc con chơi vui always runs, so it starts at the left edge, after the block of the if. A child who is exactly 6 does not get in for free." }
       - { vi: "Chương trình có 4 dòng: tuoi = int(input()), rồi if tuoi < 6:, rồi print(\"Con được vào miễn phí\") thụt lề 4 dấu cách, và cuối cùng là print(\"Chúc con chơi vui\") sát lề trái.", en: "The program has 4 lines: tuoi = int(input()), then if tuoi < 6:, then print(\"Con được vào miễn phí\") indented by 4 spaces, and last print(\"Chúc con chơi vui\") at the left edge." }
     test_eligible: true
   - id: s3.if-else.l2.q1
@@ -158,9 +158,4 @@ if pin < 20:
   print("Robo đi sạc")
 ```
 
-Còn nếu 1 dòng thụt vào mà không nằm trong khối nào, Python báo lỗi thụt lề **thừa** (unexpected indent):
-
-```python run expect-error
-print("Robo thức dậy")
-    print("Robo đánh răng")
-```
+Lời báo lỗi là IndentationError: unindent does not match any outer indentation level. Câu này nghĩa là "dòng này không thẳng hàng với dòng nào ở phía trên". Con sửa bằng cách cho dòng 4 lùi vào đúng 4 dấu cách, thẳng hàng với dòng 3.

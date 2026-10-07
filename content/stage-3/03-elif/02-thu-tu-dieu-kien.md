@@ -115,24 +115,22 @@ exercises:
     type: predict
     concepts: [condition-order]
     code: |
-      score = 9
-      if score >= 5:
-          print("pass")
-      elif score >= 8:
-          print("great")
-      else:
-          print("fail")
+      n = 95
+      if n > 50:
+          print("ok")
+      elif n > 90:
+          print("top")
     prompt:
       vi: "Đoạn code in ra gì?"
       en: "What is the output of this code?"
     choices:
-      - { text: "pass", correct: true }
-      - { text: "great", misconception: condition-order }
-      - { text: "pass\ngreat", misconception: elif-chain }
+      - { text: "ok", correct: true }
+      - { text: "top", misconception: condition-order }
+      - { text: "ok\ntop", misconception: elif-chain }
       - { vi: "Báo lỗi, vì các điều kiện xếp sai thứ tự", en: "An error, because the conditions are in the wrong order", error: true, misconception: condition-order }
     explanation:
-      vi: "Python thử từ trên xuống. 9 >= 5 là True, nên Python in ra pass và bỏ qua mọi nhánh bên dưới, dù 9 >= 8 cũng đúng. Xếp sai thứ tự không làm Python báo lỗi: chương trình vẫn chạy, chỉ là kết quả không như con muốn."
-      en: "Python tries from the top down. 9 >= 5 is True, so Python prints pass and skips every branch below, even though 9 >= 8 is also True. The wrong order does not make Python give an error: the program still runs, but the result is not what you want."
+      vi: "Python thử từ trên xuống. 95 > 50 là True, nên Python in ra ok và bỏ qua elif, dù 95 > 90 cũng đúng. Vì vậy nhánh top không bao giờ chạy được. Xếp sai thứ tự không làm Python báo lỗi: chương trình vẫn chạy, chỉ là kết quả không như con muốn."
+      en: "Python tries from the top down. 95 > 50 is True, so Python prints ok and skips the elif, even though 95 > 90 is also True. So the top branch can never run. The wrong order does not make Python give an error: the program still runs, but the result is not what you want."
   - id: s3.elif.l2.q2
     type: mcq
     concepts: [condition-order]
