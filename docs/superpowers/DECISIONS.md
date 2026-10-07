@@ -69,3 +69,6 @@ Người bảo trì chưa duyệt kế hoạch M5a; Claude tự chốt theo yêu
 4. **Khái niệm AI chỉ cần bài luyện mức 1.** Luật 8 của spec 3.9 được hiểu theo cách này. Nơi sửa: `tools/content/coverage.ts`.
 5. **Điểm cao nhất của kiểm tra chủ đề được quy đổi** theo cỡ đề mới khi cỡ đề đổi (6/6 thành 14/14). Giá nếu sai: con có thể giữ điểm "cao nhất" mà chưa làm đề mới.
 6. **E2E "thi tiến hóa chưa đạt → ôn → thi lại"** vẫn chỉ có test tích hợp jsdom (đi hết 18 bài trong Playwright quá chậm).
+7. **Thêm bài 5 "AI là gì?" vào cuối chủ đề 1** (phát sinh khi chạy): câu hỏi AI cần 1 bài dạy về AI; bài có 2 thẻ, không có bài code. Giai đoạn 1 có 19 bài.
+8. **Thứ tự lựa chọn được xáo theo ID câu hỏi** khi hiển thị (phát sinh khi chạy, Task 7): đáp án đúng của hầu hết câu hỏi nằm đầu tiên trong file. Thứ tự cố định cho mỗi câu (tải lại không đổi); lịch sử vẫn lưu vị trí trong file.
+9. **App chạy Python 3.14 (Pyodide), validator chạy CPython 3.13**: thông báo lỗi có thể khác nhau; mục từ điển lỗi mới được kiểm trong Pyodide bằng test parity. Mục `quote-inside-string` khớp thông báo của 3.14.

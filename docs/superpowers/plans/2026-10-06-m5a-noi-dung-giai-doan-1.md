@@ -475,3 +475,157 @@ git commit -m "docs: stage 1 content summary for the parents' review
 
 Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 ```
+
+---
+
+### Task 7: Thứ tự lựa chọn được xáo theo câu hỏi
+
+Thêm sau khi chạy Task 6: trong 95 câu `predict`/`mcq` của giai đoạn 1, 92 câu có đáp án đúng ở vị trí đầu, và màn hình hiện lựa chọn đúng theo thứ tự trong file. Con chọn đáp án đầu tiên sẽ đúng gần hết. Task 6 đã đảo vị trí đáp án đúng ở chủ đề 2–4; task này sửa tận gốc ở giao diện.
+
+**Files:**
+- Modify: `src/game/random.ts`, `src/ui/QuestionCard.tsx`
+- Test: `src/ui/QuestionCard.test.tsx`
+
+**Interfaces:**
+- Consumes: `seededRng`, `shuffled` (`src/game/random.ts`).
+- Produces:
+  - `seedFromText(text): number` (FNV-1a): cùng chữ cho cùng số.
+  - `QuestionCard` hiện các lựa chọn theo thứ tự xáo bằng `seededRng(seedFromText(question.id))`: cùng câu hỏi luôn cùng thứ tự (tải lại trang không đổi), câu khác nhau có thứ tự khác nhau. `onAnswered` vẫn báo `choiceIndex` theo thứ tự trong nội dung, nên lịch sử làm bài, bằng chứng cho phụ huynh và thẻ hiểu lầm không đổi.
+
+- [ ] **Step 1: Viết test thất bại**
+
+```diff
+diff --git a/src/ui/QuestionCard.test.tsx b/src/ui/QuestionCard.test.tsx
+index 2ea38a4..ae05e02 100644
+--- a/src/ui/QuestionCard.test.tsx
++++ b/src/ui/QuestionCard.test.tsx
+@@ -57,6 +57,38 @@ describe("QuestionCard", () => {
+   });
+ });
+ 
++describe("QuestionCard choice order", () => {
++  const question = (id: string) => ({
++    ...fixtureQuestion,
++    id,
++    choices: ["A", "B", "C", "D"].map((text, i) => ({ text: { vi: text, en: text }, correct: i === 0, error: false, misconception: null })),
++  });
++  const shown = () => screen.getAllByRole("radio").map((radio) => radio.closest("label")!.textContent);
++
++  test("is shuffled by the question ID, the same on every render, and answers keep their content index", async () => {
++    const onAnswered = vi.fn();
++    const first = renderWithApp(<QuestionCard question={question("q.order")} onAnswered={onAnswered} />);
++    const order = shown();
++    expect([...order].sort()).toEqual(["A", "B", "C", "D"]);
++    first.unmount();
++    renderWithApp(<QuestionCard question={question("q.order")} onAnswered={onAnswered} />);
++    expect(shown()).toEqual(order);
++    await userEvent.click(screen.getByRole("radio", { name: "C" }));
++    await userEvent.click(screen.getByRole("button", { name: "Kiểm tra" }));
++    expect(onAnswered).toHaveBeenCalledWith(false, { choiceIndex: 2, lang: "vi" });
++  });
++
++  test("the right answer is not always shown first", () => {
++    const firsts = new Set<string | null>();
++    for (const id of ["q1", "q2", "q3", "q4", "q5", "q6", "q7", "q8"]) {
++      const view = renderWithApp(<QuestionCard question={question(id)} onAnswered={() => {}} />);
++      firsts.add(shown()[0] ?? null);
++      view.unmount();
++    }
++    expect(firsts.size).toBeGreaterThan(1);
++  });
++});
++
+ describe("QuestionCard in a test", () => {
+   test("records the answer without marks or explanation", async () => {
+     const onAnswered = vi.fn();
+```
+
+- [ ] **Step 2: Chạy test, xác nhận thất bại**
+
+Run: `npx vitest run src/ui/QuestionCard.test.tsx`
+Expected: FAIL: `the right answer is not always shown first`.
+
+- [ ] **Step 3: Viết code**
+
+```diff
+diff --git a/src/game/random.ts b/src/game/random.ts
+index c146e51..cee2a26 100644
+--- a/src/game/random.ts
++++ b/src/game/random.ts
+@@ -21,3 +21,13 @@ export function shuffled<T>(items: readonly T[], rng: Rng): T[] {
+   }
+   return copy;
+ }
++
++/** A number from a text (FNV-1a): the same text always gives the same seed. */
++export function seedFromText(text: string): number {
++  let hash = 0x811c9dc5;
++  for (let i = 0; i < text.length; i += 1) {
++    hash ^= text.charCodeAt(i);
++    hash = Math.imul(hash, 0x01000193);
++  }
++  return hash >>> 0;
++}
+diff --git a/src/ui/QuestionCard.tsx b/src/ui/QuestionCard.tsx
+index 56b2534..2616a72 100644
+--- a/src/ui/QuestionCard.tsx
++++ b/src/ui/QuestionCard.tsx
+@@ -1,5 +1,6 @@
+-import { useState } from "react";
++import { useMemo, useState } from "react";
+ import type { ChoiceQuestion } from "../content/types";
++import { seedFromText, seededRng, shuffled } from "../game/random";
+ import type { QuestionLang } from "../i18n/lang";
+ import { useLang } from "../i18n/LangProvider";
+ import { LangSwitch, Prompt, showText } from "./LangSwitch";
+@@ -7,7 +8,8 @@ import { RobotBubble } from "./RobotBubble";
+ 
+ /**
+  * 1 predict/mcq question. In a test (`exam`), the answer is only recorded: no right/wrong marks and no explanation
+- * until the end (spec 8.2.4).
++ * until the end (spec 8.2.4). The choices are shown in an order shuffled by the question ID, the same every time,
++ * so the place of the right answer gives nothing away; answers are still reported by their index in the content.
+  */
+ export function QuestionCard({
+   question,
+@@ -22,6 +24,10 @@ export function QuestionCard({
+   const [lang, setLang] = useState<QuestionLang>(questionLang);
+   const [selected, setSelected] = useState<number | null>(null);
+   const [checked, setChecked] = useState(false);
++  const order = useMemo(
++    () => shuffled(question.choices.map((_, i) => i), seededRng(seedFromText(question.id))),
++    [question],
++  );
+   const correctIndex = question.choices.findIndex((choice) => choice.correct);
+   const isCorrect = selected === correctIndex;
+ 
+@@ -49,10 +55,12 @@ export function QuestionCard({
+       )}
+       <fieldset disabled={checked}>
+         <legend className="sr-only">{t("question.choices")}</legend>
+-        {question.choices.map((choice, i) => (
++        {order.map((i) => (
+           <label key={i} className={choiceClass(i)}>
+             <input type="radio" name={question.id} checked={selected === i} onChange={() => setSelected(i)} />
+-            <span className={question.type === "predict" ? "choice-text code" : "choice-text"}>{showText(choice.text, lang)}</span>
++            <span className={question.type === "predict" ? "choice-text code" : "choice-text"}>
++              {showText(question.choices[i]!.text, lang)}
++            </span>
+           </label>
+         ))}
+       </fieldset>
+```
+
+- [ ] **Step 4: Chạy kiểm tra toàn bộ**
+
+Run: `export PW_CHROMIUM_PATH=/opt/pw-browsers/chromium; npm run check`
+Expected: typecheck; Vitest 750; pytest 21; nội dung qua; Playwright 14 passed (e2e chọn lựa chọn đầu tiên trên màn hình và không đòi trả lời đúng).
+
+- [ ] **Step 5: Commit**
+
+```bash
+git add src/game/random.ts src/ui/QuestionCard.tsx src/ui/QuestionCard.test.tsx
+git commit -m "feat(ui): answer choices are shown in an order shuffled by the question
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
+```
