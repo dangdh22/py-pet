@@ -1,0 +1,51 @@
+concepts:
+  - id: accumulator-init
+    name: { vi: "Gán giá trị ban đầu trước vòng lặp", en: "Set the starting value before the loop" }
+    misconception_card: |
+      Nhiều bạn đặt `tong = 0` ngay trong vòng lặp, hoặc quên luôn dòng đó. Thực ra dòng gán giá trị ban đầu phải nằm trước vòng lặp, sát lề trái, để chỉ chạy 1 lần: nếu nằm trong vòng lặp, tong bị đặt lại về 0 ở mỗi lần lặp, và cuối cùng chỉ còn số của lần lặp cuối. Nếu quên dòng đó, Python báo NameError ngay ở lần cộng đầu tiên.
+    parent_tip: |
+      Cùng con bỏ mỗi ngày 1 đồng xu vào 1 cái hộp, rồi hỏi: nếu sáng nào cũng đổ hết xu ra trước khi bỏ xu mới, cuối tuần hộp còn mấy đồng? Giải thích rằng chiếc hộp rỗng chỉ được chuẩn bị 1 lần, trước khi bắt đầu, giống dòng tong = 0.
+    practice:
+      level1: [s4.tong-dem.l1.q2, s4.tong-dem.b1, s4.tong-dem.b2, s4.tong-dem.l5.q1, s4.tong-dem.b12, s4.tong-dem.l6.q2]
+      level2: [s4.tong-dem.p1]
+      level3: [s4.tong-dem.l1.ex1, s4.tong-dem.l4.ex1, s4.tong-dem.l5.ex1, s4.tong-dem.l6.ex2, s4.tong-dem.c1]
+  - id: plus-equals
+    name: { vi: "Phép += cộng thêm vào biến", en: "+= adds to a variable" }
+    misconception_card: |
+      Nhiều bạn nghĩ `tong += 5` gán cho tong số 5, hoặc viết ngược thành `tong =+ 5`. Thực ra `tong += 5` nghĩa là `tong = tong + 5`: lấy giá trị cũ của tong rồi cộng thêm 5. Còn `tong =+ 5` nghĩa là `tong = +5`: Python không báo lỗi, nhưng tong chỉ là 5, nên con luôn viết dấu + trước dấu =.
+    parent_tip: |
+      Rót nước vào 1 cái cốc làm nhiều lần, mỗi lần 1 ít, và hỏi con: rót thêm có làm mất nước cũ trong cốc không? Giải thích rằng += cũng rót thêm vào giá trị cũ, chứ không đổ đi rồi rót lại.
+    practice:
+      level1: [s4.tong-dem.l1.q1, s4.tong-dem.b3, s4.tong-dem.b4]
+      level2: [s4.tong-dem.p2]
+      level3: [s4.tong-dem.l1.ex2, s4.tong-dem.c1]
+  - id: count-if
+    name: { vi: "Đếm khi điều kiện đúng", en: "Counting when a condition is True" }
+    misconception_card: |
+      Nhiều bạn đặt `dem += 1` ngang hàng với dòng if, hoặc cộng cả số đang xét vào biến đếm, như `dem += so`. Thực ra muốn chỉ đếm những số thỏa điều kiện, dòng `dem += 1` phải nằm trong khối của if, thụt lề sâu hơn dòng if; nếu ngang hàng với if, dòng đó chạy ở mọi lần lặp. Biến đếm luôn cộng thêm 1, vì mỗi lần con chỉ đếm thêm 1 thứ.
+    parent_tip: |
+      Đọc cho con nghe 1 dãy số và dặn con chỉ giơ tay khi nghe số chẵn, rồi hỏi con đã giơ tay mấy lần. Giải thích rằng biến đếm cũng chỉ tăng khi điều kiện đúng.
+    practice:
+      level1: [s4.tong-dem.l2.q1, s4.tong-dem.l2.q2, s4.tong-dem.b5, s4.tong-dem.b6, s4.tong-dem.b12, s4.tong-dem.l6.q2]
+      level2: [s4.tong-dem.p3]
+      level3: [s4.tong-dem.l2.ex1, s4.tong-dem.l2.ex2, s4.tong-dem.l5.ex1, s4.tong-dem.c2, s4.tong-dem.l4.ex2]
+  - id: running-max
+    name: { vi: "Tìm lớn nhất bắt đầu từ số đầu tiên", en: "Finding the largest starts from the first number" }
+    misconception_card: |
+      Nhiều bạn bắt đầu với `lon_nhat = 0`, giống như biến tổng. Thực ra khi mọi số đều âm, không số nào lớn hơn 0, nên chương trình in ra 0, dù 0 không có trong dữ liệu; với số nhỏ nhất, `nho_nhat = 0` còn sai cả khi mọi số đều dương. Con cho lon_nhat bắt đầu từ số đầu tiên, vì đó luôn là 1 số thật trong dữ liệu.
+    parent_tip: |
+      Úp vài lá bài xuống bàn, để con lật từng lá và chỉ giữ trên tay lá lớn nhất đã thấy. Hỏi con: trước khi lật lá đầu tiên, con giữ lá nào, và sau khi lật lá đầu tiên thì sao?
+    practice:
+      level1: [s4.tong-dem.l3.q1, s4.tong-dem.l3.q2, s4.tong-dem.b7, s4.tong-dem.b8, s4.tong-dem.l5.q2]
+      level2: [s4.tong-dem.p4, s4.tong-dem.p5]
+      level3: [s4.tong-dem.l3.ex1, s4.tong-dem.l3.ex2, s4.tong-dem.l5.ex2, s4.tong-dem.c3, s4.tong-dem.l6.ex2]
+  - id: average-zero-count
+    name: { vi: "Trung bình: không chia cho 0", en: "Average: never divide by 0" }
+    misconception_card: |
+      Nhiều bạn nghĩ khi không có số nào thì `tong / dem` sẽ ra 0, hoặc chia cho `dem + 1` cho khỏi lỗi. Thực ra khi dem là 0, Python báo ZeroDivisionError, còn chia cho dem + 1 thì trung bình sai mỗi khi có số. Con kiểm tra `if dem > 0:` trước khi chia, và dùng else để báo là chưa có số nào.
+    parent_tip: |
+      Hỏi con: chia đều 12 cái kẹo cho 0 bạn thì mỗi bạn được mấy cái? Cùng con thấy câu hỏi này không có câu trả lời, nên trước khi chia phải hỏi xem có bạn nào không.
+    practice:
+      level1: [s4.tong-dem.l4.q1, s4.tong-dem.l4.q2, s4.tong-dem.b9, s4.tong-dem.b10, s4.tong-dem.b11, s4.tong-dem.l6.q1]
+      level2: [s4.tong-dem.p6]
+      level3: [s4.tong-dem.l4.ex1, s4.tong-dem.l4.ex2, s4.tong-dem.c4, s4.tong-dem.l6.ex1]

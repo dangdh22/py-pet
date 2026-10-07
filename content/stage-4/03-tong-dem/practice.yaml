@@ -1,0 +1,424 @@
+exercises:
+  - id: s4.tong-dem.p1
+    type: parsons
+    concepts: [accumulator-init]
+    prompt:
+      vi: "Heo đất của Robo đã có sẵn 1 ít tiền, và Robo bỏ thêm tiền trong n ngày. Ô Dữ liệu nhập: dòng 1 là số tiền đã có trong heo đất, dòng 2 là số ngày n, n dòng sau là số tiền bỏ thêm mỗi ngày, tất cả tính bằng nghìn đồng. Sắp xếp các dòng lệnh để in ra như phần Ví dụ."
+      en: "Robo's piggy bank already has some money, and Robo adds money on n days. The Input data box: line 1 is the money already in the piggy bank, line 2 is the number of days n, and the n lines after it are the money added each day, all in thousands of dong. Put the lines in order to print as in the Example."
+    solution: |
+      tong = int(input())
+      n = int(input())
+      for i in range(n):
+          tien = int(input())
+          tong += tien
+      print("Heo đất có", tong, "nghìn đồng")
+    tests:
+      - input: "20\n3\n5\n10\n15"
+        output: "Heo đất có 50 nghìn đồng"
+      - input: "50\n0"
+        output: "Heo đất có 50 nghìn đồng"
+        hidden: true
+      - input: "0\n1\n15"
+        output: "Heo đất có 15 nghìn đồng"
+        hidden: true
+      - input: "8\n4\n2\n2\n3\n10"
+        output: "Heo đất có 25 nghìn đồng"
+        hidden: true
+    hints:
+      - { vi: "Ở bài này, giá trị ban đầu của tong không phải là 0, mà là số tiền đã có, được đọc ở dòng 1. Các dòng được đọc theo đúng thứ tự trong ô Dữ liệu nhập. Trong vòng lặp, Robo đọc tiền của 1 ngày trước, rồi mới cộng vào tong.", en: "In this task, the starting value of tong is not 0 but the money already there, read on line 1. The lines are read in the same order as in the Input data box. Inside the loop, Robo reads the money of 1 day first, and only then adds it to tong." }
+
+  - id: s4.tong-dem.p2
+    type: fill
+    concepts: [plus-equals]
+    prompt:
+      vi: "Robo xếp các hình vuông bằng gạch: hình cạnh 1, hình cạnh 2, và cứ thế đến hình cạnh n. Hình vuông cạnh i cần i * i viên gạch. Ô Dữ liệu nhập có 1 dòng: số n, là số nguyên không âm. Điền vào chỗ trống để chương trình in ra tổng số viên gạch, như phần Ví dụ."
+      en: "Robo builds squares out of bricks: a square with side 1, a square with side 2, and so on up to a square with side n. A square with side i needs i * i bricks. The Input data box has 1 line: a number n, an integer that is not negative. Fill the blank so that the program prints the total number of bricks, as in the Example."
+    template: |
+      n = int(input())
+      tong = 0
+      for i in range(1, n + 1):
+          tong ___ i * i
+      print("Robo cần", tong, "viên gạch")
+    answers: ["+="]
+    tests:
+      - input: "3"
+        output: "Robo cần 14 viên gạch"
+      - input: "1"
+        output: "Robo cần 1 viên gạch"
+        hidden: true
+      - input: "0"
+        output: "Robo cần 0 viên gạch"
+        hidden: true
+      - input: "5"
+        output: "Robo cần 55 viên gạch"
+        hidden: true
+    hints:
+      - { vi: "Mỗi lần lặp, số gạch của hình mới phải được cộng thêm vào tong, chứ không thay cho số gạch cũ. Dấu nào viết gọn cho tong = tong + i * i?", en: "On each pass, the bricks of the new square must be added to tong, not put in place of the old number. Which sign is the short way to write tong = tong + i * i?" }
+      - { vi: "Điền += vào chỗ trống, với dấu + đứng trước dấu =.", en: "Fill the blank with +=, with the + sign before the = sign." }
+
+  - id: s4.tong-dem.p3
+    type: fill
+    concepts: [count-if]
+    prompt:
+      vi: "Robo đếm số bạn đạt trong 5 bạn. Bạn đạt là bạn có điểm từ 5 trở lên. Ô Dữ liệu nhập có 5 dòng: điểm của 5 bạn, mỗi dòng 1 số nguyên từ 0 đến 10. Điền vào 2 chỗ trống để chương trình in ra như phần Ví dụ."
+      en: "Robo counts how many of 5 children passed. A child passes with a score of 5 or more. The Input data box has 5 lines: the scores of the 5 children, each line an integer from 0 to 10. Fill the 2 blanks so that the program prints as in the Example."
+    template: |
+      dem = 0
+      for i in range(5):
+          diem = int(input())
+          if diem ___ 5:
+              dem ___
+      print("Có", dem, "bạn đạt")
+    answers: [">=", "+= 1"]
+    tests:
+      - input: "6\n5\n2\n10\n4"
+        output: "Có 3 bạn đạt"
+      - input: "1\n2\n3\n4\n0"
+        output: "Có 0 bạn đạt"
+        hidden: true
+      - input: "5\n4\n4\n4\n4"
+        output: "Có 1 bạn đạt"
+        hidden: true
+      - input: "9\n8\n7\n6\n5"
+        output: "Có 5 bạn đạt"
+        hidden: true
+    hints:
+      - { vi: "Bạn được đúng 5 điểm cũng đạt, nên dấu so sánh phải đúng cả khi diem bằng 5. Mỗi khi có 1 bạn đạt, biến đếm tăng thêm 1.", en: "A child with exactly 5 also passes, so the comparison sign must be True when diem is 5 too. Each time a child passes, the counter goes up by 1." }
+      - { vi: "Điền dấu >= vào chỗ trống thứ nhất và += 1 vào chỗ trống thứ hai.", en: "Fill the first blank with the sign >= and the second blank with += 1." }
+
+  - id: s4.tong-dem.p4
+    type: fill
+    concepts: [running-max]
+    prompt:
+      vi: "Robo tìm số lớn nhất trong n số. Ô Dữ liệu nhập: dòng đầu là n (n lớn hơn 0), n dòng sau là các số nguyên, có thể âm. Điền vào 2 chỗ trống để lon_nhat bắt đầu từ số đầu tiên, và chương trình in ra như phần Ví dụ."
+      en: "Robo finds the largest of n numbers. The Input data box: the first line is n (n is greater than 0), and the n lines after it are integers, which may be negative. Fill the 2 blanks so that lon_nhat starts from the first number, and the program prints as in the Example."
+    template: |
+      n = int(input())
+      for i in range(n):
+          so = int(input())
+          if i ___ 0:
+              lon_nhat = so
+          if so ___ lon_nhat:
+              lon_nhat = so
+      print("Lớn nhất:", lon_nhat)
+    answers: ["==", ">"]
+    tests:
+      - input: "4\n3\n-1\n7\n2"
+        output: "Lớn nhất: 7"
+      - input: "1\n-5"
+        output: "Lớn nhất: -5"
+        hidden: true
+      - input: "3\n-8\n-2\n-6"
+        output: "Lớn nhất: -2"
+        hidden: true
+      - input: "5\n9\n1\n4\n9\n0"
+        output: "Lớn nhất: 9"
+        hidden: true
+    hints:
+      - { vi: "Lần lặp đầu tiên là lần có i bằng 0: lúc đó, số đầu tiên được gán cho lon_nhat. Sau đó, lon_nhat chỉ đổi khi gặp 1 số lớn hơn nó.", en: "The first pass is the one where i is 0: then the first number is given to lon_nhat. After that, lon_nhat changes only when a bigger number comes." }
+      - { vi: "Điền == vào chỗ trống thứ nhất và dấu > vào chỗ trống thứ hai.", en: "Fill the first blank with == and the second blank with the sign >." }
+
+  - id: s4.tong-dem.p5
+    type: parsons
+    concepts: [running-max]
+    prompt:
+      vi: "Robo đo nhiệt độ 4 lần trong 1 ngày mùa đông và tìm nhiệt độ thấp nhất. Ô Dữ liệu nhập có 4 dòng: 4 nhiệt độ, mỗi dòng 1 số nguyên, có thể âm. Sắp xếp các dòng lệnh để in ra như phần Ví dụ."
+      en: "Robo measures the temperature 4 times on a winter day and finds the lowest. The Input data box has 4 lines: 4 temperatures, each line an integer, which may be negative. Put the lines in order to print as in the Example."
+    solution: |
+      thap_nhat = int(input())
+      for i in range(3):
+          t = int(input())
+          if t < thap_nhat:
+              thap_nhat = t
+      print("Thấp nhất:", thap_nhat, "độ")
+    tests:
+      - input: "5\n-2\n3\n0"
+        output: "Thấp nhất: -2 độ"
+      - input: "-1\n-4\n-9\n-3"
+        output: "Thấp nhất: -9 độ"
+        hidden: true
+      - input: "2\n6\n8\n7"
+        output: "Thấp nhất: 2 độ"
+        hidden: true
+      - input: "10\n9\n8\n7"
+        output: "Thấp nhất: 7 độ"
+        hidden: true
+    hints:
+      - { vi: "Nhiệt độ đầu tiên được đọc trước vòng lặp và là thấp nhất cho tới lúc đó. Vòng lặp đọc 3 nhiệt độ còn lại. Trong vòng lặp, Robo đọc nhiệt độ trước, rồi mới so sánh.", en: "The first temperature is read before the loop and is the lowest so far. The loop reads the other 3 temperatures. Inside the loop, Robo reads the temperature first, and only then compares." }
+
+  - id: s4.tong-dem.p6
+    type: fill
+    concepts: [average-zero-count]
+    prompt:
+      vi: "Robo tính trung bình các số con nhập vào. Ô Dữ liệu nhập có nhiều dòng, mỗi dòng 1 số nguyên khác 0 (có thể âm), và dòng cuối cùng là 0. Điền vào chỗ trống để chương trình không bao giờ chia cho 0, và in ra như phần Ví dụ."
+      en: "Robo works out the average of the numbers you type. The Input data box has several lines, each with an integer that is not 0 (it may be negative), and the last line is 0. Fill the blank so that the program never divides by 0, and prints as in the Example."
+    template: |
+      tong = 0
+      dem = 0
+      so = int(input())
+      while so != 0:
+          tong += so
+          dem += 1
+          so = int(input())
+      if ___:
+          print(f"Trung bình: {tong / dem:.2f}")
+      else:
+          print("Không có số nào")
+    answers: ["dem > 0"]
+    tests:
+      - input: "4\n7\n2\n0"
+        output: "Trung bình: 4.33"
+      - input: "0"
+        output: "Không có số nào"
+        hidden: true
+      - input: "5\n-5\n0"
+        output: "Trung bình: 0.00"
+        hidden: true
+      - input: "-3\n0"
+        output: "Trung bình: -3.00"
+        hidden: true
+    hints:
+      - { vi: "Phép chia tong / dem chỉ được chạy khi có ít nhất 1 số. Biến nào cho biết có bao nhiêu số? Đừng dùng tong, vì các số âm và dương có thể cộng lại ra 0.", en: "The division tong / dem may run only when there is at least 1 number. Which variable tells how many numbers there are? Do not use tong, because negative and positive numbers can add up to 0." }
+      - { vi: "Điền dem > 0 vào chỗ trống.", en: "Fill the blank with dem > 0." }
+
+  - id: s4.tong-dem.c1
+    type: code
+    concepts: [accumulator-init, plus-equals]
+    prompt:
+      vi: "Robo đi chợ. Ô Dữ liệu nhập có nhiều dòng: mỗi dòng là giá 1 món Robo mua (số nguyên lớn hơn 0, tính bằng nghìn đồng), và dòng cuối cùng là 0. Hãy dùng phép += để tính số món và tổng số tiền, rồi in ra đúng 1 dòng như phần Ví dụ."
+      en: "Robo goes to the market. The Input data box has several lines: each line is the price of 1 item Robo buys (an integer greater than 0, in thousands of dong), and the last line is 0. Use the += operation to work out the number of items and the total money, then print exactly 1 line as in the Example."
+    starter: |
+      # Viết lệnh của con ở dưới dòng này
+    solution: |
+      dem = 0
+      tong = 0
+      gia = int(input())
+      while gia != 0:
+          tong += gia
+          dem += 1
+          gia = int(input())
+      print("Robo mua", dem, "món, hết", tong, "nghìn đồng")
+    tests:
+      - input: "15\n30\n12\n0"
+        output: "Robo mua 3 món, hết 57 nghìn đồng"
+      - input: "0"
+        output: "Robo mua 0 món, hết 0 nghìn đồng"
+        hidden: true
+      - input: "25\n0"
+        output: "Robo mua 1 món, hết 25 nghìn đồng"
+        hidden: true
+      - input: "5\n5\n5\n5\n5\n0"
+        output: "Robo mua 5 món, hết 25 nghìn đồng"
+        hidden: true
+    common_wrong:
+      - test: 0
+        output: "Robo mua 3 món, hết 12 nghìn đồng"
+        misconception: plus-equals
+        sample: |
+          dem = 0
+          tong = 0
+          gia = int(input())
+          while gia != 0:
+              tong =+ gia
+              dem += 1
+              gia = int(input())
+          print("Robo mua", dem, "món, hết", tong, "nghìn đồng")
+    hints:
+      - { vi: "Đặt dem = 0 và tong = 0 trước vòng lặp, rồi đọc giá đầu tiên. Vòng lặp while chạy trong khi gia != 0. Trong khối lệnh: cộng giá vào tong, cộng 1 vào dem, rồi đọc giá tiếp theo ở dòng cuối của khối.", en: "Set dem = 0 and tong = 0 before the loop, then read the first price. The while loop runs while gia != 0. Inside the block: add the price to tong, add 1 to dem, then read the next price on the last line of the block." }
+      - { vi: "Khối của while gia != 0: có 3 dòng: tong += gia, dem += 1 và gia = int(input()). Sau vòng lặp: print(\"Robo mua\", dem, \"món, hết\", tong, \"nghìn đồng\").", en: "The block of while gia != 0: has 3 lines: tong += gia, dem += 1 and gia = int(input()). After the loop: print(\"Robo mua\", dem, \"món, hết\", tong, \"nghìn đồng\")." }
+    test_eligible: true
+
+  - id: s4.tong-dem.c2
+    type: code
+    concepts: [count-if]
+    prompt:
+      vi: "Robo đếm các số chia hết cho k, từ a đến b (có cả a và b). Ô Dữ liệu nhập có 3 dòng: số a, số b và số k (k lớn hơn 0). Hãy in ra đúng 1 dòng như phần Ví dụ. Nếu a lớn hơn b, không có số nào."
+      en: "Robo counts the numbers that can be divided by k, from a to b (a and b included). The Input data box has 3 lines: the number a, the number b and the number k (k is greater than 0). Print exactly 1 line as in the Example. If a is greater than b, there are no numbers."
+    starter: |
+      # Viết lệnh của con ở dưới dòng này
+    solution: |
+      a = int(input())
+      b = int(input())
+      k = int(input())
+      dem = 0
+      for i in range(a, b + 1):
+          if i % k == 0:
+              dem += 1
+      print("Từ", a, "đến", b, "có", dem, "số chia hết cho", k)
+    tests:
+      - input: "1\n20\n4"
+        output: "Từ 1 đến 20 có 5 số chia hết cho 4"
+      - input: "10\n5\n2"
+        output: "Từ 10 đến 5 có 0 số chia hết cho 2"
+        hidden: true
+      - input: "7\n7\n7"
+        output: "Từ 7 đến 7 có 1 số chia hết cho 7"
+        hidden: true
+      - input: "7\n7\n2"
+        output: "Từ 7 đến 7 có 0 số chia hết cho 2"
+        hidden: true
+      - input: "15\n40\n5"
+        output: "Từ 15 đến 40 có 6 số chia hết cho 5"
+        hidden: true
+    common_wrong:
+      - test: 0
+        output: "Từ 1 đến 20 có 4 số chia hết cho 4"
+        misconception: range-stop-excluded
+        sample: |
+          a = int(input())
+          b = int(input())
+          k = int(input())
+          dem = 0
+          for i in range(a, b):
+              if i % k == 0:
+                  dem += 1
+          print("Từ", a, "đến", b, "có", dem, "số chia hết cho", k)
+      - test: 0
+        output: "Từ 1 đến 20 có 20 số chia hết cho 4"
+        misconception: count-if
+        sample: |
+          a = int(input())
+          b = int(input())
+          k = int(input())
+          dem = 0
+          for i in range(a, b + 1):
+              dem += 1
+          print("Từ", a, "đến", b, "có", dem, "số chia hết cho", k)
+    hints:
+      - { vi: "i phải đi từ a đến b, có cả b, nên con dùng range(a, b + 1). Số i chia hết cho k khi i % k == 0; chỉ khi đó mới cộng 1 vào dem.", en: "i must go from a to b, b included, so use range(a, b + 1). The number i can be divided by k when i % k == 0; only then add 1 to dem." }
+      - { vi: "Sau 3 dòng đọc a, b, k và dòng dem = 0: for i in range(a, b + 1):, rồi if i % k == 0: thụt lề 4 dấu cách, và dem += 1 thụt lề 8 dấu cách. Cuối cùng là print(\"Từ\", a, \"đến\", b, \"có\", dem, \"số chia hết cho\", k).", en: "After the 3 lines that read a, b, k and the line dem = 0: for i in range(a, b + 1):, then if i % k == 0: indented by 4 spaces, and dem += 1 indented by 8 spaces. Last comes print(\"Từ\", a, \"đến\", b, \"có\", dem, \"số chia hết cho\", k)." }
+    test_eligible: true
+
+  - id: s4.tong-dem.c3
+    type: code
+    concepts: [running-max]
+    prompt:
+      vi: "Robo tìm ngày lạnh nhất. Ô Dữ liệu nhập: dòng đầu là số ngày n (số nguyên không âm), n dòng sau là nhiệt độ của ngày 1, ngày 2, và cứ thế, mỗi dòng 1 số nguyên, có thể âm. Hãy in ra nhiệt độ thấp nhất và đó là ngày thứ mấy, như phần Ví dụ. Nếu có nhiều ngày cùng lạnh nhất, in ngày đầu tiên trong số đó. Nếu n là 0, in ra Chưa có ngày nào."
+      en: "Robo finds the coldest day. The Input data box: the first line is the number of days n (an integer that is not negative), and the n lines after it are the temperatures of day 1, day 2, and so on, each line an integer, which may be negative. Print the lowest temperature and which day it was, as in the Example. If several days are equally coldest, print the first of them. If n is 0, print Chưa có ngày nào."
+    starter: |
+      # Viết lệnh của con ở dưới dòng này
+    solution: |
+      n = int(input())
+      for i in range(n):
+          t = int(input())
+          if i == 0:
+              lanh_nhat = t
+              ngay = 1
+          if t < lanh_nhat:
+              lanh_nhat = t
+              ngay = i + 1
+      if n > 0:
+          print("Lạnh nhất:", lanh_nhat, "độ vào ngày", ngay)
+      else:
+          print("Chưa có ngày nào")
+    tests:
+      - input: "5\n12\n8\n15\n8\n10"
+        output: "Lạnh nhất: 8 độ vào ngày 2"
+      - input: "0"
+        output: "Chưa có ngày nào"
+        hidden: true
+      - input: "1\n-3"
+        output: "Lạnh nhất: -3 độ vào ngày 1"
+        hidden: true
+      - input: "4\n9\n7\n5\n2"
+        output: "Lạnh nhất: 2 độ vào ngày 4"
+        hidden: true
+      - input: "3\n-1\n4\n6"
+        output: "Lạnh nhất: -1 độ vào ngày 1"
+        hidden: true
+    common_wrong:
+      - test: 0
+        output: "Lạnh nhất: 0 độ vào ngày 0"
+        misconception: running-max
+        sample: |
+          n = int(input())
+          lanh_nhat = 0
+          ngay = 0
+          for i in range(n):
+              t = int(input())
+              if t < lanh_nhat:
+                  lanh_nhat = t
+                  ngay = i + 1
+          if n > 0:
+              print("Lạnh nhất:", lanh_nhat, "độ vào ngày", ngay)
+          else:
+              print("Chưa có ngày nào")
+      - test: 0
+        output: "Lạnh nhất: 8 độ vào ngày 4"
+        misconception: boundary-check
+        sample: |
+          n = int(input())
+          for i in range(n):
+              t = int(input())
+              if i == 0:
+                  lanh_nhat = t
+                  ngay = 1
+              if t <= lanh_nhat:
+                  lanh_nhat = t
+                  ngay = i + 1
+          if n > 0:
+              print("Lạnh nhất:", lanh_nhat, "độ vào ngày", ngay)
+          else:
+              print("Chưa có ngày nào")
+    hints:
+      - { vi: "Ở lần lặp đầu tiên (i == 0), gán lanh_nhat là nhiệt độ đầu tiên và ngay = 1. Khi gặp nhiệt độ nhỏ hơn, đổi cả lanh_nhat và ngay, với ngay = i + 1 vì i bắt đầu từ 0. Dùng dấu <, không dùng <=, để giữ ngày đầu tiên khi có nhiệt độ bằng nhau.", en: "On the first pass (i == 0), set lanh_nhat to the first temperature and ngay = 1. When a smaller temperature comes, change both lanh_nhat and ngay, with ngay = i + 1 because i starts at 0. Use the sign <, not <=, to keep the first day when temperatures are equal." }
+      - { vi: "Trong for i in range(n):, sau t = int(input()), viết if i == 0: với lanh_nhat = t và ngay = 1, rồi if t < lanh_nhat: với lanh_nhat = t và ngay = i + 1. Sau vòng lặp: if n > 0: với print(\"Lạnh nhất:\", lanh_nhat, \"độ vào ngày\", ngay), và else: với print(\"Chưa có ngày nào\").", en: "In for i in range(n):, after t = int(input()), write if i == 0: with lanh_nhat = t and ngay = 1, then if t < lanh_nhat: with lanh_nhat = t and ngay = i + 1. After the loop: if n > 0: with print(\"Lạnh nhất:\", lanh_nhat, \"độ vào ngày\", ngay), and else: with print(\"Chưa có ngày nào\")." }
+    test_eligible: true
+
+  - id: s4.tong-dem.c4
+    type: code
+    concepts: [average-zero-count, count-if]
+    prompt:
+      vi: "Robo tính trung bình các số chia hết cho 3, từ a đến b (có cả a và b). Ô Dữ liệu nhập có 2 dòng: số a và số b, là số nguyên dương. Hãy in ra trung bình với đúng 2 chữ số sau dấu chấm, như phần Ví dụ. Nếu không có số nào chia hết cho 3, in ra Không có số nào chia hết cho 3."
+      en: "Robo works out the average of the numbers that can be divided by 3, from a to b (a and b included). The Input data box has 2 lines: the number a and the number b, positive integers. Print the average with exactly 2 digits after the decimal point, as in the Example. If no number can be divided by 3, print Không có số nào chia hết cho 3."
+    starter: |
+      # Viết lệnh của con ở dưới dòng này
+    solution: |
+      a = int(input())
+      b = int(input())
+      tong = 0
+      dem = 0
+      for i in range(a, b + 1):
+          if i % 3 == 0:
+              tong += i
+              dem += 1
+      if dem > 0:
+          print(f"Trung bình: {tong / dem:.2f}")
+      else:
+          print("Không có số nào chia hết cho 3")
+    tests:
+      - input: "1\n10"
+        output: "Trung bình: 6.00"
+      - input: "3\n7"
+        output: "Trung bình: 4.50"
+        hidden: true
+      - input: "4\n5"
+        output: "Không có số nào chia hết cho 3"
+        hidden: true
+      - input: "6\n6"
+        output: "Trung bình: 6.00"
+        hidden: true
+      - input: "10\n2"
+        output: "Không có số nào chia hết cho 3"
+        hidden: true
+    common_wrong:
+      - test: 0
+        output: "Trung bình: 1.80"
+        misconception: count-if
+        sample: |
+          a = int(input())
+          b = int(input())
+          tong = 0
+          dem = 0
+          for i in range(a, b + 1):
+              if i % 3 == 0:
+                  tong += i
+              dem += 1
+          if dem > 0:
+              print(f"Trung bình: {tong / dem:.2f}")
+          else:
+              print("Không có số nào chia hết cho 3")
+    hints:
+      - { vi: "Dùng 2 biến tích lũy: tong cộng các số chia hết cho 3, và dem đếm các số đó. Cả 2 dòng tong += i và dem += 1 nằm trong khối của if. Sau vòng lặp, chỉ chia khi dem > 0.", en: "Use 2 running variables: tong adds the numbers that can be divided by 3, and dem counts those numbers. Both lines tong += i and dem += 1 go inside the if block. After the loop, divide only when dem > 0." }
+      - { vi: "Trong for i in range(a, b + 1):, viết if i % 3 == 0: với tong += i và dem += 1 thụt lề 8 dấu cách. Sau vòng lặp: if dem > 0: với print(f\"Trung bình: {tong / dem:.2f}\"), và else: với print(\"Không có số nào chia hết cho 3\").", en: "In for i in range(a, b + 1):, write if i % 3 == 0: with tong += i and dem += 1 indented by 8 spaces. After the loop: if dem > 0: with print(f\"Trung bình: {tong / dem:.2f}\"), and else: with print(\"Không có số nào chia hết cho 3\")." }
+    test_eligible: true

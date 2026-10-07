@@ -1,0 +1,12 @@
+id: s4.tong-dem
+title: { vi: "Tổng, đếm, lớn nhất", en: "Sum, count, maximum" }
+lessons:
+  - 01-tinh-tong.md
+  - 02-dem.md
+  - 03-lon-nhat.md
+  - 04-trung-binh.md
+  - 05-doc-n-so.md
+  - 06-bai-toan.md
+reviews:
+  - { id: s4.tong-dem.r1, after: s4.tong-dem.l2 }
+  - { id: s4.tong-dem.r2, after: s4.tong-dem.l4 }

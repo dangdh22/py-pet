@@ -1,0 +1,258 @@
+questions:
+  - id: s4.tong-dem.b1
+    type: predict
+    concepts: [accumulator-init]
+    lessons: [s4.tong-dem.l1]
+    code: |
+      total = 5
+      for i in range(3):
+          total = total + i
+      print(total)
+    prompt:
+      vi: "Đoạn code in ra gì?"
+      en: "What is the output of this code?"
+    choices:
+      - { text: "8", correct: true }
+      - { text: "3", misconception: accumulator-init }
+      - { text: "11", misconception: range-stop-excluded }
+      - { text: "5\n6\n8", misconception: for-repeat }
+    explanation:
+      vi: "total bắt đầu là 5, không phải 0. range(3) cho i là 0, 1, 2, nên total lần lượt là 5, 6, rồi 8. Giá trị ban đầu là số mà phép cộng dồn bắt đầu, nên nó cũng có trong kết quả. Dòng print(total) sát lề trái, nên chỉ in 1 lần."
+      en: "total starts at 5, not 0. range(3) gives i the values 0, 1, 2, so total is 5, then 6, then 8. The starting value is where the adding up begins, so it is part of the result too. The line print(total) starts at the left edge, so it prints only once."
+
+  - id: s4.tong-dem.b2
+    type: mcq
+    concepts: [accumulator-init]
+    lessons: [s4.tong-dem.l1]
+    code: |
+      for i in range(1, 4):
+          total = total + i
+      print(total)
+    prompt:
+      vi: "Đoạn code muốn in ra tổng 1 + 2 + 3, nhưng Python báo lỗi NameError: name 'total' is not defined. Sửa thế nào là đúng?"
+      en: "This code is meant to print the sum 1 + 2 + 3, but Python gives the error NameError: name 'total' is not defined. Which fix is right?"
+    choices:
+      - { vi: "Thêm total = 0 vào trong vòng lặp, ngay trên dòng 2", en: "Add total = 0 inside the loop, right above line 2", misconception: accumulator-init }
+      - { vi: "Đặt total trong dấu nháy, thành \"total\"", en: "Put total in quotes, as \"total\"", misconception: string-quotes }
+      - { vi: "Thêm total = 0 trước vòng lặp, sát lề trái", en: "Add total = 0 before the loop, at the left edge", correct: true }
+      - { vi: "Đổi dòng 2 thành total = i", en: "Change line 2 to total = i", misconception: plus-equals }
+    explanation:
+      vi: "Ở lần lặp đầu tiên, Python cần giá trị cũ của total để cộng thêm, nhưng total chưa có giá trị. Thêm total = 0 trước vòng lặp thì Python cộng được 1 + 2 + 3 và in ra 6. Nếu đặt total = 0 trong vòng lặp, Python không báo lỗi, nhưng in ra 3. Đổi thành total = i cũng in ra 3, vì total chỉ giữ số cuối."
+      en: "On the first pass, Python needs the old value of total to add to it, but total has no value yet. Adding total = 0 before the loop lets Python add 1 + 2 + 3 and print 6. If total = 0 is put inside the loop, Python gives no error, but it prints 3. Changing to total = i also prints 3, because total keeps only the last number."
+
+  - id: s4.tong-dem.b3
+    type: mcq
+    concepts: [plus-equals]
+    lessons: [s4.tong-dem.l1]
+    prompt:
+      vi: "Dòng nào làm đúng việc giống hệt dòng score += 3?"
+      en: "Which line does exactly the same as the line score += 3?"
+    choices:
+      - { text: "score = score + 3", correct: true }
+      - { text: "score =+ 3", misconception: plus-equals }
+      - { text: "score = 3", misconception: plus-equals }
+      - { text: "score + 3 = score", misconception: var-assign }
+    explanation:
+      vi: "score += 3 nghĩa là lấy giá trị cũ của score, cộng thêm 3, rồi cất lại vào score, tức là score = score + 3. Dòng score =+ 3 là score = +3, nên giống score = 3: score chỉ còn là 3. Dòng score + 3 = score làm Python báo lỗi, vì tên biến phải đứng bên trái dấu =."
+      en: "score += 3 means take the old value of score, add 3, and store it back in score, that is, score = score + 3. The line score =+ 3 is score = +3, so it is the same as score = 3: score just becomes 3. The line score + 3 = score makes Python give an error, because the variable name must be on the left of the = sign."
+
+  - id: s4.tong-dem.b4
+    type: predict
+    concepts: [plus-equals]
+    lessons: [s4.tong-dem.l1]
+    code: |
+      x = 1
+      for i in range(3):
+          x += x
+      print(x)
+    prompt:
+      vi: "Đoạn code in ra gì?"
+      en: "What is the output of this code?"
+    choices:
+      - { text: "4", misconception: plus-equals }
+      - { text: "8", correct: true }
+      - { text: "1", misconception: plus-equals }
+      - { text: "2", misconception: for-repeat }
+    explanation:
+      vi: "x += x nghĩa là x = x + x, dùng giá trị mới nhất của x. Lần lặp 1: x là 1 + 1 = 2. Lần lặp 2: x là 2 + 2 = 4. Lần lặp 3: x là 4 + 4 = 8. Mỗi lần lặp, x được cộng thêm chính giá trị hiện tại của nó, không phải số 1 lúc đầu."
+      en: "x += x means x = x + x, using the newest value of x. Pass 1: x is 1 + 1 = 2. Pass 2: x is 2 + 2 = 4. Pass 3: x is 4 + 4 = 8. On each pass, x gets its own current value added, not the 1 it had at the start."
+
+  - id: s4.tong-dem.b5
+    type: predict
+    concepts: [count-if]
+    lessons: [s4.tong-dem.l2]
+    code: |
+      count = 0
+      for ch in "banana":
+          if ch == "a":
+              print("a")
+          count += 1
+      print(count)
+    prompt:
+      vi: "Đoạn code in ra gì?"
+      en: "What is the output of this code?"
+    choices:
+      - { text: "a\na\na\n3", misconception: count-if }
+      - { text: "3", misconception: count-if }
+      - { text: "6", misconception: for-repeat }
+      - { text: "a\na\na\n6", correct: true }
+    explanation:
+      vi: "Dòng print(\"a\") nằm trong khối của if, nên chạy 3 lần, cho 3 chữ a. Nhưng dòng count += 1 chỉ thụt lề 4 dấu cách, ngang hàng với if, nên nó không thuộc khối của if: nó chạy ở cả 6 lần lặp. Vì vậy count là 6, là số ký tự của banana, không phải số chữ a."
+      en: "The line print(\"a\") is inside the if block, so it runs 3 times, for the 3 letters a. But the line count += 1 is indented by only 4 spaces, level with the if, so it is not part of the if block: it runs on all 6 passes. So count is 6, the number of characters in banana, not the number of letters a."
+
+  - id: s4.tong-dem.b6
+    type: predict
+    concepts: [count-if]
+    lessons: [s4.tong-dem.l2]
+    code: |
+      count = 0
+      for ch in "hi you":
+          if ch != " ":
+              count += 1
+      print(count)
+    prompt:
+      vi: "Đoạn code in ra gì?"
+      en: "What is the output of this code?"
+    choices:
+      - { text: "5", correct: true }
+      - { text: "6", misconception: for-over-string }
+      - { text: "2", misconception: count-if }
+      - { text: "1", misconception: count-if }
+    explanation:
+      vi: "Chuỗi \"hi you\" có 6 ký tự: h, i, dấu cách, y, o, u. Điều kiện ch != \" \" đúng với mọi ký tự trừ dấu cách, nên count tăng 5 lần. Đoạn code đếm các ký tự khác dấu cách, không đếm số từ."
+      en: "The string \"hi you\" has 6 characters: h, i, a space, y, o, u. The condition ch != \" \" is True for every character except the space, so count goes up 5 times. The code counts the characters that are not spaces; it does not count the words."
+
+  - id: s4.tong-dem.b7
+    type: predict
+    concepts: [running-max]
+    lessons: [s4.tong-dem.l3]
+    code: |
+      low = 9
+      for x in range(12, 2, -4):
+          if x < low:
+              low = x
+              print(low)
+    prompt:
+      vi: "Đoạn code in ra gì?"
+      en: "What is the output of this code?"
+    choices:
+      - { text: "12\n8\n4", misconception: running-max }
+      - { text: "4", misconception: after-block }
+      - { text: "8\n4", correct: true }
+      - { text: "8", misconception: range-start-step }
+    explanation:
+      vi: "range(12, 2, -4) cho x là 12, 8, 4. Với 12, điều kiện 12 < 9 sai, nên low vẫn là 9 và không in gì. Với 8, low đổi thành 8 và in ra 8. Với 4, low đổi thành 4 và in ra 4. Dòng print(low) nằm trong khối của if, nên chỉ in khi low đổi."
+      en: "range(12, 2, -4) gives x the values 12, 8, 4. For 12, the condition 12 < 9 is False, so low stays 9 and nothing is printed. For 8, low changes to 8 and 8 is printed. For 4, low changes to 4 and 4 is printed. The line print(low) is inside the if block, so it prints only when low changes."
+
+  - id: s4.tong-dem.b8
+    type: mcq
+    concepts: [running-max]
+    lessons: [s4.tong-dem.l3]
+    prompt:
+      vi: "Robo đọc các số nguyên, có thể là số âm, và muốn tìm số lớn nhất. Cách bắt đầu nào đúng với mọi dữ liệu?"
+      en: "Robo reads integers, which may be negative, and wants to find the largest. Which way of starting is right for any data?"
+    choices:
+      - { vi: "Đọc số đầu tiên và gán lon_nhat bằng số đó", en: "Read the first number and set lon_nhat to that number", correct: true }
+      - { vi: "Gán lon_nhat = 0, giống như biến tổng", en: "Set lon_nhat = 0, like a running total", misconception: running-max }
+      - { vi: "Gán lon_nhat = -1000, vì số này rất nhỏ", en: "Set lon_nhat = -1000, because it is a very small number", misconception: running-max }
+      - { vi: "Không cần gán, vì lệnh if sẽ gán cho lon_nhat", en: "No need to set it, because the if will set lon_nhat", misconception: accumulator-init }
+    explanation:
+      vi: "Số đầu tiên luôn là 1 số thật trong dữ liệu, nên bắt đầu từ nó thì luôn đúng. Nếu mọi số đều âm, lon_nhat = 0 cho kết quả 0. Nếu mọi số đều nhỏ hơn -1000, lon_nhat = -1000 cũng sai. Nếu không gán gì, Python báo NameError ngay ở lần so sánh đầu tiên."
+      en: "The first number is always a real number in the data, so starting from it is always right. If every number is negative, lon_nhat = 0 gives 0. If every number is smaller than -1000, lon_nhat = -1000 is wrong too. If nothing is set, Python gives a NameError at the very first comparison."
+
+  - id: s4.tong-dem.b9
+    type: predict
+    concepts: [average-zero-count, count-if]
+    lessons: [s4.tong-dem.l4]
+    code: |
+      total = 0
+      count = 0
+      for x in range(1, 6):
+          if x > 3:
+              total += x
+              count += 1
+      print(total / count)
+    prompt:
+      vi: "Đoạn code in ra gì?"
+      en: "What is the output of this code?"
+    choices:
+      - { text: "3.0", misconception: count-if }
+      - { text: "4.5", correct: true }
+      - { text: "4", misconception: div-float }
+      - { vi: "Báo lỗi ZeroDivisionError ở dòng 7", en: "A ZeroDivisionError on line 7", error: true, misconception: average-zero-count }
+    explanation:
+      vi: "Chỉ có 4 và 5 lớn hơn 3, nên total là 4 + 5 = 9 và count là 2. count khác 0, nên không có lỗi chia cho 0. 9 / 2 là 4.5, vì phép / luôn cho số thực."
+      en: "Only 4 and 5 are greater than 3, so total is 4 + 5 = 9 and count is 2. count is not 0, so there is no division by 0. 9 / 2 is 4.5, because / always gives a decimal number."
+
+  - id: s4.tong-dem.b10
+    type: mcq
+    concepts: [average-zero-count]
+    lessons: [s4.tong-dem.l4]
+    code: |
+      total = 0
+      count = 0
+      x = int(input())
+      while x != 0:
+          total += x
+          count += 1
+          x = int(input())
+      print(total / count)
+    prompt:
+      vi: "Ô Dữ liệu nhập chỉ có 1 dòng: 0. Điều gì xảy ra?"
+      en: "The Input data box has only 1 line: 0. What happens?"
+    choices:
+      - { text: "0.0", misconception: average-zero-count }
+      - { vi: "Không in ra gì, vì vòng lặp chạy 0 lần", en: "Nothing is printed, because the loop runs 0 times", misconception: while-check-first }
+      - { vi: "Báo lỗi ZeroDivisionError ở dòng 8", en: "A ZeroDivisionError on line 8", correct: true, error: true }
+      - { text: "0", misconception: div-float }
+    explanation:
+      vi: "x là 0 ngay từ đầu, nên vòng lặp chạy 0 lần, và count vẫn là 0. Dòng 8 nằm ngoài vòng lặp, nên vẫn chạy, và total / count là chia cho 0. Python báo lỗi ZeroDivisionError, không in ra số nào. Muốn tránh lỗi, con kiểm tra count > 0 trước khi chia."
+      en: "x is 0 from the start, so the loop runs 0 times, and count is still 0. Line 8 is outside the loop, so it still runs, and total / count divides by 0. Python gives a ZeroDivisionError and prints no number. To avoid the error, check count > 0 before dividing."
+
+  - id: s4.tong-dem.b11
+    type: predict
+    concepts: [average-zero-count]
+    lessons: [s4.tong-dem.l4]
+    code: |
+      total = 0
+      count = 0
+      for x in range(2, 7, 2):
+          total += x
+          count += 1
+      print(total / (count + 1))
+    prompt:
+      vi: "Đoạn code chia cho count + 1 để không bao giờ phải chia cho 0. Đoạn code in ra gì?"
+      en: "This code divides by count + 1 so that it never has to divide by 0. What is the output of this code?"
+    choices:
+      - { text: "3.0", correct: true }
+      - { text: "4.0", misconception: average-zero-count }
+      - { text: "3", misconception: div-float }
+      - { text: "2.0", misconception: range-stop-excluded }
+    explanation:
+      vi: "range(2, 7, 2) cho x là 2, 4, 6, nên total là 12 và count là 3. Đoạn code chia 12 cho 3 + 1 = 4, nên in ra 3.0. Trung bình đúng là 12 / 3 = 4.0. Cộng thêm 1 vào count tránh được lỗi, nhưng làm trung bình sai; cách đúng là kiểm tra count > 0 trước khi chia."
+      en: "range(2, 7, 2) gives x the values 2, 4, 6, so total is 12 and count is 3. The code divides 12 by 3 + 1 = 4, so it prints 3.0. The right average is 12 / 3 = 4.0. Adding 1 to count avoids the error but makes the average wrong; the right way is to check count > 0 before dividing."
+
+  - id: s4.tong-dem.b12
+    type: predict
+    concepts: [count-if, accumulator-init]
+    lessons: [s4.tong-dem.l2]
+    code: |
+      even = 0
+      odd = 0
+      for i in range(1, 8):
+          if i % 2 == 0:
+              even += 1
+          else:
+              odd += 1
+      print(even, odd)
+    prompt:
+      vi: "Đoạn code in ra gì?"
+      en: "What is the output of this code?"
+    choices:
+      - { text: "4 3", misconception: else-branch }
+      - { text: "3 3", misconception: range-stop-excluded }
+      - { text: "7 7", misconception: count-if }
+      - { text: "3 4", correct: true }
+    explanation:
+      vi: "range(1, 8) cho i từ 1 đến 7. Các số chẵn là 2, 4, 6, nên even là 3. Các số lẻ là 1, 3, 5, 7, nên odd là 4. Mỗi lần lặp, chỉ 1 trong 2 biến đếm được cộng thêm 1, nên even + odd là 7."
+      en: "range(1, 8) gives i the values 1 to 7. The even numbers are 2, 4, 6, so even is 3. The odd numbers are 1, 3, 5, 7, so odd is 4. On each pass, only 1 of the 2 counters gets 1 added, so even + odd is 7."
