@@ -100,8 +100,8 @@ describe("DevGalleryGate", () => {
       );
       expect(screen.getByRole("heading", { name: "Robo gallery (dev only)" })).toBeInTheDocument();
       expect(screen.queryByText("app")).not.toBeInTheDocument();
-      // 4 forms and the graduate × 7 faces, the 12 room sizes and 12 bubbles.
-      expect(screen.getAllByRole("img", { name: "Robo" })).toHaveLength(35 + 12 + 12);
+      // 4 forms and the graduate × 7 faces, 10 accessories and 6 outfits × 4 forms, the 12 room sizes and 12 bubbles.
+      expect(screen.getAllByRole("img", { name: "Robo" })).toHaveLength(35 + 64 + 12 + 12);
     } finally {
       window.location.hash = "";
     }

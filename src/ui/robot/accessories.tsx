@@ -31,7 +31,7 @@ export const ACCESSORY_ANCHORS: Record<RobotForm, Record<AccessorySlot, Anchor>>
   1: { head: { x: 32, y: 26.5, w: 30 }, face: faceAnchor(1), neck: { x: 32, y: 50, w: 15 } },
   2: { head: { x: 32, y: 20, w: 36 }, face: faceAnchor(2), neck: { x: 32, y: 53, w: 16 } },
   3: { head: { x: 32, y: 18, w: 33 }, face: faceAnchor(3), neck: { x: 32, y: 48, w: 16 } },
-  4: { head: { x: 32, y: 11.5, w: 29 }, face: faceAnchor(4), neck: { x: 32, y: 37.5, w: 15 } },
+  4: { head: { x: 32, y: 11.5, w: 29 }, face: faceAnchor(4), neck: { x: 32, y: 36.6, w: 14 } },
 };
 
 const UNIT_W: Record<AccessorySlot, number> = { head: 40, face: 30, neck: 20 };
@@ -251,6 +251,26 @@ const CAPE_ON: Record<RobotForm, CapeGeometry> = {
   4: { x: 32, top: 32.5, shoulder: 19, hem: 26, bottom: FLOOR_Y - 1 },
 };
 
+/** The cape alone, seen from the front: a stand-up collar, a gold clasp and a wavy hem flying a little. */
+function CapeIcon() {
+  return (
+    <>
+      <path
+        d="M14 9 Q8 18 4 34 Q9 31 13 35 Q17 31 21 35 Q25 31 29 35 Q33 31 37 33 Q32 18 26 9 Z"
+        fill={A.cape}
+        stroke={A.capeDark}
+        strokeWidth={0.9}
+        strokeLinejoin="round"
+      />
+      <path d="M17 13 L11 32 M23 13 L28 32 M20 13 V33" stroke={A.capeDark} strokeWidth={0.9} strokeLinecap="round" />
+      <path d="M4 34 Q9 31 13 35 Q17 31 21 35 Q25 31 29 35 Q33 31 37 33" fill="none" stroke={C.gold} strokeWidth={1.3} />
+      {/* The collar stands up on both sides of the neck. */}
+      <path d="M19 10 L9 3.5 L12.5 12 Z M21 10 L31 3.5 L27.5 12 Z" fill={A.capeDark} strokeLinejoin="round" />
+      <circle cx={20} cy={10} r={2.6} fill={C.gold} stroke={C.goldDark} strokeWidth={0.7} />
+    </>
+  );
+}
+
 /* ---- The 10 accessories: on Robo, and alone in a 40 × 40 icon for the shop. ---- */
 
 interface Art {
@@ -266,7 +286,7 @@ const ARTS: Record<string, Art> = {
       </OnAnchor>
     ),
     icon: (
-      <g transform="translate(15.5 27) scale(0.82)">
+      <g transform="translate(14 26) scale(0.86)">
         <Cap button />
       </g>
     ),
@@ -303,7 +323,7 @@ const ARTS: Record<string, Art> = {
       </OnAnchor>
     ),
     icon: (
-      <g transform="translate(4.6 12.5) scale(1.04)">
+      <g transform="translate(2.75 11) scale(1.15)">
         <Sunglasses />
       </g>
     ),
@@ -315,7 +335,7 @@ const ARTS: Record<string, Art> = {
       </OnAnchor>
     ),
     icon: (
-      <g transform="translate(4.6 11.5) scale(1.04)">
+      <g transform="translate(2.75 10.5) scale(1.15)">
         <RoundGlasses />
       </g>
     ),
@@ -350,14 +370,7 @@ const ARTS: Record<string, Art> = {
   },
   "ao-choang": {
     robot: (form) => <Cape {...CAPE_ON[form]} />,
-    icon: (
-      <>
-        <Cape x={20} top={9} shoulder={8} hem={15} bottom={36} />
-        <circle cx={14} cy={9.5} r={2.4} fill={C.gold} stroke={C.goldDark} strokeWidth={0.6} />
-        <circle cx={26} cy={9.5} r={2.4} fill={C.gold} stroke={C.goldDark} strokeWidth={0.6} />
-        <path d="M14 9.5 Q20 12 26 9.5" fill="none" stroke={C.goldDark} strokeWidth={1} />
-      </>
-    ),
+    icon: <CapeIcon />,
   },
 };
 

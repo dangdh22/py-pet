@@ -1,7 +1,9 @@
 import type { CSSProperties, ReactNode } from "react";
 import { FORM_COUNT, robotPixelSize, type RobotForm } from "../game/look";
 import type { GrowthSize } from "../game/progress";
-import { Robot } from "./Robot";
+import { SHOP_ITEMS } from "../game/shop";
+import { Robot, type RobotMood } from "./Robot";
+import { ItemIcon } from "./robot/accessories";
 import { ROBOT_MOODS } from "./robot/faces";
 import { useHashRoute } from "./routing";
 
@@ -12,6 +14,16 @@ import { useHashRoute } from "./routing";
 const FORMS = Array.from({ length: FORM_COUNT }, (_, i) => (i + 1) as RobotForm);
 const SIZES: readonly GrowthSize[] = [1, 2, 3];
 const FORM_NAMES: Record<RobotForm, string> = { 1: "Capsule", 2: "Newborn", 3: "Kid", 4: "Teen" };
+const ACCESSORIES = SHOP_ITEMS.filter((item) => item.kind === "accessory").map((item) => item.id);
+/** One accessory in each slot together, and the states that change how they show. */
+const OUTFITS: readonly { label: string; mood: RobotMood; equipped: string[]; graduated?: boolean }[] = [
+  { label: "cap + sunglasses + bow", mood: "happy", equipped: ["mu-luoi-trai", "kinh-ram", "no-buom"] },
+  { label: "crown + round glasses + cape", mood: "neutral", equipped: ["vuong-mien", "kinh-tron", "ao-choang"], graduated: true },
+  { label: "headphones + scarf, thinking", mood: "thinking", equipped: ["tai-nghe", "khan-quang"] },
+  { label: "gold antenna + pin, drained", mood: "drained", equipped: ["ang-ten-vang", "ghim-sao"] },
+  { label: "vacation: no face accessory", mood: "vacation", equipped: ["mu-luoi-trai", "kinh-tron", "khan-quang"] },
+  { label: "sleepy + crown + cape", mood: "sleepy", equipped: ["vuong-mien", "ao-choang"] },
+];
 
 // Inline styles, so a production build carries no gallery CSS.
 const cell: CSSProperties = {
@@ -79,6 +91,43 @@ export function GalleryScreen() {
                 </td>
               ))}
             </tr>
+          </tbody>
+        </table>
+      </section>
+      <section>
+        <h2>Accessories × forms, 112 px (shop icon at 40 px)</h2>
+        <table style={{ borderCollapse: "collapse" }}>
+          <tbody>
+            {ACCESSORIES.map((id) => (
+              <tr key={id}>
+                <th style={head}>{id}</th>
+                <td style={cell}>
+                  <ItemIcon id={id} />
+                </td>
+                {FORMS.map((form) => (
+                  <td key={form} style={cell}>
+                    <Robot form={form} equipped={[id]} size={112} />
+                  </td>
+                ))}
+              </tr>
+            ))}
+            {OUTFITS.map((outfit) => (
+              <tr key={outfit.label}>
+                <th style={head}>{outfit.label}</th>
+                <td style={cell} />
+                {FORMS.map((form) => (
+                  <td key={form} style={cell}>
+                    <Robot
+                      form={form}
+                      mood={outfit.mood}
+                      equipped={outfit.equipped}
+                      graduated={form === 4 && outfit.graduated}
+                      size={112}
+                    />
+                  </td>
+                ))}
+              </tr>
+            ))}
           </tbody>
         </table>
       </section>
