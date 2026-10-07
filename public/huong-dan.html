@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Hướng dẫn Py-Pet</title>
+<style>
+/* Layout: one reading column; a hero with Robo, then numbered steps only where order matters. Tokens follow the app's own palette. */
+:root {
+  --bg: #f6f8fc;
+  --surface: #ffffff;
+  --fg: #1d2440;
+  --muted: #5b6475;
+  --accent: #3a66e6;
+  --line: #d5dcea;
+  --screen: #1d2440;
+  --eye: #66ffff;
+  --body: #9aa8cc;
+  --body-dark: #7b8bb3;
+  --light: #ff5c7a;
+  --pin: #2a9d4a;
+  --vui: #f0508c;
+  --tip: #fff8ea;
+  --tip-line: #f0d9a8;
+  --font-body: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, Menlo, Consolas, monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #121625; --surface: #1b2135; --fg: #e6e9f2; --muted: #a3abc0; --accent: #8aa6ff;
+    --line: #2f3752; --screen: #0b0e19; --body: #8f9cc2; --body-dark: #6d7aa3;
+    --pin: #4cc06b; --vui: #ff7aa8; --tip: #2a2416; --tip-line: #5a4a26; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #121625; --surface: #1b2135; --fg: #e6e9f2; --muted: #a3abc0; --accent: #8aa6ff;
+  --line: #2f3752; --screen: #0b0e19; --body: #8f9cc2; --body-dark: #6d7aa3;
+  --pin: #4cc06b; --vui: #ff7aa8; --tip: #2a2416; --tip-line: #5a4a26; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--fg); font-family: var(--font-body); font-size: 1rem; line-height: 1.6; }
+.page { max-width: 46rem; margin: 0 auto; padding-inline: 16px; padding-block: 32px 64px; display: grid; gap: 40px; }
+h1, h2, h3 { line-height: 1.25; text-wrap: balance; margin: 0; }
+h1 { font-size: clamp(1.9rem, 5vw, 2.6rem); letter-spacing: -0.01em; }
+h2 { font-size: 1.35rem; }
+h3 { font-size: 1.05rem; }
+p { margin: 0; }
+a { color: var(--accent); }
+a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+section { display: grid; gap: 14px; }
+.eyebrow { font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+.lead { font-size: 1.12rem; color: var(--muted); max-width: 38rem; }
+.hero { display: grid; grid-template-columns: 1fr auto; gap: 24px; align-items: center; }
+.hero > div { display: grid; gap: 12px; min-width: 0; }
+.robo { width: 132px; height: auto; }
+.facts { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; padding: 0; margin: 0; }
+.facts li { border: 1px solid var(--line); border-radius: 999px; padding: 3px 12px; font-size: 0.9rem; background: var(--surface); }
+ol.steps { margin: 0; padding-left: 1.4rem; display: grid; gap: 8px; }
+ol.steps li { padding-left: 4px; }
+ul.plain { margin: 0; padding-left: 1.2rem; display: grid; gap: 6px; }
+.ui { font-weight: 600; white-space: nowrap; }
+.forms { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.form { display: grid; gap: 6px; justify-items: center; text-align: center; padding: 12px 8px; border-top: 3px solid var(--line); }
+.form svg { width: 56px; height: auto; }
+.form b { font-size: 0.95rem; }
+.form span { font-size: 0.85rem; color: var(--muted); }
+.stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.stat { display: grid; gap: 6px; min-width: 0; }
+.bar { height: 10px; border-radius: 5px; background: var(--line); overflow: hidden; }
+.bar i { display: block; height: 100%; }
+.stat p { font-size: 0.92rem; color: var(--muted); }
+.tip { background: var(--tip); border: 1px solid var(--tip-line); border-radius: 10px; padding: 12px 16px; }
+.table-wrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 0.95rem; }
+th, td { text-align: left; vertical-align: top; padding: 8px 10px; border-bottom: 1px solid var(--line); }
+th { color: var(--muted); font-weight: 600; font-size: 0.85rem; }
+code { font-family: var(--font-mono); font-size: 0.92em; }
+footer { color: var(--muted); font-size: 0.88rem; border-top: 1px solid var(--line); padding-top: 16px; }
+@media (max-width: 560px) {
+  .hero { grid-template-columns: 1fr; }
+  .robo { width: 96px; order: -1; }
+  .forms { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .stats { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<main class="page">
+
+  <header class="hero">
+    <div>
+      <p class="eyebrow">Hướng dẫn sử dụng</p>
+      <h1>Py-Pet: học Python cùng Robo</h1>
+      <p class="lead">Con học lập trình Python từ con số 0 và nuôi 1 robot ảo tên Robo. Mỗi bài con làm giúp Robo lớn lên; qua bài kiểm tra cuối giai đoạn, Robo tiến hóa sang dạng mới.</p>
+      <ul class="facts">
+        <li>Học sinh lớp 6</li>
+        <li>15 đến 30 phút mỗi ngày</li>
+        <li>Chạy trong trình duyệt, không cần cài đặt</li>
+      </ul>
+    </div>
+    <svg class="robo" viewBox="0 0 64 72" role="img" aria-label="Robo">
+      <line x1="32" y1="10" x2="32" y2="3" stroke="var(--body-dark)" stroke-width="2"/>
+      <circle cx="32" cy="3.5" r="3" fill="var(--light)"/>
+      <rect x="12" y="10" width="40" height="28" rx="10" fill="var(--body)"/>
+      <rect x="17" y="15" width="30" height="17" rx="6" fill="var(--screen)"/>
+      <path d="M23 25 q3 -5 6 0 M35 25 q3 -5 6 0" stroke="var(--eye)" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+      <rect x="18" y="40" width="28" height="20" rx="7" fill="var(--body-dark)"/>
+      <path d="M18 46 l-8 -8 M46 46 l8 -8" stroke="var(--body-dark)" stroke-width="3.5" stroke-linecap="round"/>
+      <circle cx="9" cy="37" r="3" fill="var(--body)"/>
+      <circle cx="55" cy="37" r="3" fill="var(--body)"/>
+      <rect x="22" y="60" width="8" height="10" rx="2" fill="var(--body-dark)"/>
+      <rect x="34" y="60" width="8" height="10" rx="2" fill="var(--body-dark)"/>
+    </svg>
+  </header>
+
+  <section aria-labelledby="muc-tieu">
+    <h2 id="muc-tieu">Mục tiêu</h2>
+    <ul class="plain">
+      <li>Dạy nền tảng lập trình và ngôn ngữ Python cho học sinh chưa từng viết code.</li>
+      <li>Chuẩn bị cho kỳ thi Tin học trẻ (tự viết chương trình, chấm bằng test) và kỳ thi SCO IAIO (đọc code, kiến thức AI, có bản tiếng Anh).</li>
+      <li>Giúp con học đều mỗi ngày nhờ Robo. Robo không bao giờ mất cấp; khi con vắng lâu, Robo chỉ buồn ngủ hoặc hết pin.</li>
+      <li>Cho bố mẹ thấy con đang vướng ở đâu, kèm bài làm thật của con.</li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="chuan-bi">
+    <h2 id="chuan-bi">Chuẩn bị</h2>
+    <ul class="plain">
+      <li>1 laptop có bàn phím. Điện thoại và máy tính bảng chưa được hỗ trợ.</li>
+      <li>Trình duyệt Chrome hoặc Edge bản mới.</li>
+      <li>Lần đầu mở, app tải khoảng 10 MB để chạy Python. Khi đầu trang hiện <span class="ui">Robo sẵn sàng</span> là con bắt đầu được.</li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="bat-dau">
+    <h2 id="bat-dau">Bắt đầu lần đầu</h2>
+    <ol class="steps">
+      <li>Mở trang Py-Pet.</li>
+      <li>Chọn ngôn ngữ: Tiếng Việt hoặc English.</li>
+      <li>Nhập tên của con và đặt tên cho robot.</li>
+      <li>Bố mẹ đặt mã PIN gồm 4 đến 6 chữ số. Mã PIN dùng để vào Khu phụ huynh, duyệt phần thưởng và nhập file sao lưu.</li>
+      <li>Bấm <span class="ui">Bắt đầu</span>. App mở Phòng của Robo.</li>
+    </ol>
+  </section>
+
+  <section aria-labelledby="buoi-hoc">
+    <h2 id="buoi-hoc">Một buổi học</h2>
+    <ol class="steps">
+      <li>Ở Phòng của Robo, bấm <span class="ui">Học tiếp</span>. App tự chọn việc tiếp theo: bài bố mẹ giao, bộ ôn tập đang mở, rồi bài tiếp theo trên bản đồ.</li>
+      <li>Đọc từng thẻ lý thuyết. Ví dụ có nút chạy để con thấy kết quả ngay. Bấm <span class="ui">Tiếp</span> để sang thẻ sau.</li>
+      <li>Làm bài tập. Với bài viết code: đọc đề bên trái, viết code bên phải, bấm <span class="ui">Chạy thử</span> để thử với ô Input, rồi bấm <span class="ui">Nộp bài</span> để chấm bằng các test.</li>
+      <li>Giữa các bài học có trạm ôn gồm 5 câu, chọn theo lịch ôn ngắt quãng. Trạm ôn là bắt buộc và sạc Pin cho Robo.</li>
+      <li>Cuối mỗi chủ đề có 1 bài kiểm tra chủ đề (8 câu và 2 bài code). Điểm thế nào cũng được đi tiếp.</li>
+      <li>Xong cả giai đoạn thì làm kiểm tra tiến hóa. Đạt từ 80% thì Robo tiến hóa. Chưa đạt thì con làm bộ ôn tập trọng tâm rồi thi lại; con không bị trừ gì.</li>
+    </ol>
+    <p class="tip">Mỗi ngày con cần 2 điểm hoạt động để giữ chuỗi ngày: 1 bài học hoặc 1 trạm ôn được 1 điểm. Học 7 ngày liền được 1 thẻ giữ chuỗi cho ngày lỡ học.</p>
+  </section>
+
+  <section aria-labelledby="lo-trinh">
+    <h2 id="lo-trinh">Lộ trình và 4 dạng của Robo</h2>
+    <p>Bản đầu có 4 giai đoạn, 94 bài học. Mỗi giai đoạn có 1 bài về AI. Mỗi lần tiến hóa, Robo có thêm 1 bộ phận mới.</p>
+    <div class="forms">
+      <div class="form">
+        <svg viewBox="0 0 64 72" aria-hidden="true"><rect x="14" y="20" width="36" height="42" rx="18" fill="var(--body)"/><rect x="19" y="27" width="26" height="15" rx="6" fill="var(--screen)"/><circle cx="27" cy="34" r="2.5" fill="var(--eye)"/><circle cx="37" cy="34" r="2.5" fill="var(--eye)"/><rect x="22" y="62" width="8" height="8" rx="2" fill="var(--body-dark)"/><rect x="34" y="62" width="8" height="8" rx="2" fill="var(--body-dark)"/></svg>
+        <b>Viên nang</b><span>Giai đoạn 1: Khởi động, 19 bài</span>
+      </div>
+      <div class="form">
+        <svg viewBox="0 0 64 72" aria-hidden="true"><line x1="32" y1="16" x2="32" y2="8" stroke="var(--body-dark)" stroke-width="2"/><circle cx="32" cy="8" r="3" fill="var(--light)"/><rect x="12" y="16" width="40" height="28" rx="10" fill="var(--body)"/><rect x="17" y="21" width="30" height="17" rx="6" fill="var(--screen)"/><circle cx="27" cy="29" r="2.5" fill="var(--eye)"/><circle cx="37" cy="29" r="2.5" fill="var(--eye)"/><rect x="20" y="46" width="24" height="16" rx="6" fill="var(--body-dark)"/><rect x="22" y="62" width="8" height="8" rx="2" fill="var(--body-dark)"/><rect x="34" y="62" width="8" height="8" rx="2" fill="var(--body-dark)"/></svg>
+        <b>Sơ sinh</b><span>Giai đoạn 2: Dữ liệu, 25 bài. Thêm ăng-ten</span>
+      </div>
+      <div class="form">
+        <svg viewBox="0 0 64 72" aria-hidden="true"><line x1="32" y1="12" x2="32" y2="5" stroke="var(--body-dark)" stroke-width="2"/><circle cx="32" cy="5" r="3" fill="var(--light)"/><rect x="12" y="12" width="40" height="28" rx="10" fill="var(--body)"/><rect x="17" y="17" width="30" height="17" rx="6" fill="var(--screen)"/><circle cx="27" cy="25" r="2.5" fill="var(--eye)"/><circle cx="37" cy="25" r="2.5" fill="var(--eye)"/><rect x="18" y="42" width="28" height="20" rx="7" fill="var(--body-dark)"/><path d="M18 48 l-7 8 M46 48 l7 8" stroke="var(--body-dark)" stroke-width="3.5" stroke-linecap="round"/><rect x="22" y="62" width="8" height="8" rx="2" fill="var(--body-dark)"/><rect x="34" y="62" width="8" height="8" rx="2" fill="var(--body-dark)"/></svg>
+        <b>Bé con</b><span>Giai đoạn 3: Rẽ nhánh, 22 bài. Thêm 2 tay</span>
+      </div>
+      <div class="form">
+        <svg viewBox="0 0 64 72" aria-hidden="true"><line x1="32" y1="8" x2="32" y2="2" stroke="var(--body-dark)" stroke-width="2"/><circle cx="32" cy="3" r="2.5" fill="var(--light)"/><rect x="15" y="8" width="34" height="24" rx="9" fill="var(--body)"/><rect x="19" y="12" width="26" height="15" rx="5" fill="var(--screen)"/><circle cx="27" cy="20" r="2.2" fill="var(--eye)"/><circle cx="37" cy="20" r="2.2" fill="var(--eye)"/><rect x="17" y="34" width="30" height="26" rx="7" fill="var(--body-dark)"/><rect x="22" y="39" width="20" height="11" rx="3" fill="var(--screen)"/><path d="M25 45 h4 l2 -3 l2 6 l2 -3 h4" stroke="var(--eye)" stroke-width="1.4" fill="none"/><path d="M17 40 l-7 9 M47 40 l7 9" stroke="var(--body-dark)" stroke-width="3.5" stroke-linecap="round"/><rect x="22" y="60" width="8" height="10" rx="2" fill="var(--body-dark)"/><rect x="34" y="60" width="8" height="10" rx="2" fill="var(--body-dark)"/></svg>
+        <b>Thiếu niên</b><span>Giai đoạn 4: Vòng lặp, 28 bài. Thêm màn hình ngực</span>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="cham-robo">
+    <h2 id="cham-robo">Chăm sóc Robo</h2>
+    <div class="stats">
+      <div class="stat"><h3>Pin</h3><div class="bar"><i style="width:60%;background:var(--pin)"></i></div><p>Tăng khi con học bài và làm trạm ôn. Giảm 1 mỗi ngày con vắng, từ ngày vắng thứ 2.</p></div>
+      <div class="stat"><h3>Vui</h3><div class="bar"><i style="width:80%;background:var(--vui)"></i></div><p>Tăng khi con đạt bài kiểm tra, đúng 3 câu liên tiếp, hoặc cho Robo đồ chơi.</p></div>
+      <div class="stat"><h3>Lớn lên</h3><div class="bar"><i style="width:45%;background:var(--accent)"></i></div><p>Theo XP con kiếm được trong giai đoạn. XP không bao giờ mất.</p></div>
+    </div>
+    <ul class="plain">
+      <li>Robo buồn ngủ khi Pin hoặc Vui còn 2 trở xuống. Phòng tối hơn và Robo ngáp.</li>
+      <li>Robo hết pin khi Pin hoặc Vui về 0. Robo nằm cạnh ổ sạc; bấm <span class="ui">Sạc cho Robo</span> để làm 1 trạm ôn và sạc lại.</li>
+      <li>Khi bố mẹ bật chế độ nghỉ, Robo ra bãi biển và các chỉ số giữ nguyên. Con vẫn học được nếu muốn.</li>
+      <li>Làm sai không làm Robo mất Pin hay Vui.</li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="xu">
+    <h2 id="xu">Xu, cửa hàng và phần thưởng</h2>
+    <ul class="plain">
+      <li>Con được xu khi làm đúng bài code, làm trạm ôn, đạt kiểm tra, giữ chuỗi ngày và khi Robo tiến hóa.</li>
+      <li>Trong <span class="ui">Cửa hàng</span>, con mua pin, dầu nhớt, đồ chơi, phụ kiện cho Robo đeo và đồ trang trí phòng.</li>
+      <li>Tab <span class="ui">Phần thưởng từ bố mẹ</span> có các phần thưởng thật do bố mẹ đặt giá. Con bấm đổi thì yêu cầu chờ bố mẹ duyệt; xu chỉ bị trừ khi bố mẹ duyệt.</li>
+      <li><span class="ui">Sổ thành tích</span> lưu huy hiệu và các dạng Robo con đã đạt.</li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="gap-kho">
+    <h2 id="gap-kho">Khi con gặp khó</h2>
+    <ul class="plain">
+      <li>Khi code báo lỗi, Robo giải thích lỗi bằng tiếng Việt và chỉ dòng bị lỗi.</li>
+      <li>Bấm <span class="ui">Gợi ý</span> để xem gợi ý từng bước, từ chung đến cụ thể.</li>
+      <li>Sai 3 lần thì có nút <span class="ui">Xem lời giải</span> kèm giải thích.</li>
+      <li>Khi app nhận ra con đang hiểu sai 1 điều, Robo mời con xem thẻ <span class="ui">Hiểu lầm thường gặp</span> và làm 2 bài luyện.</li>
+      <li>Nếu 1 bài bị lỗi hiển thị, con bấm <span class="ui">Bỏ qua</span>; bài đó không tính điểm.</li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="bo-me">
+    <h2 id="bo-me">Dành cho bố mẹ</h2>
+    <p>Vào <span class="ui">Khu phụ huynh</span> từ Phòng của Robo bằng mã PIN. Khu này tự khóa sau 5 phút không thao tác.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th scope="col">Tab</th><th scope="col">Bố mẹ dùng để</th></tr></thead>
+        <tbody>
+          <tr><td class="ui">Tổng quan</td><td>Xem cảnh báo, số phút học 7 ngày, kế hoạch tuần, chuỗi ngày và xu.</td></tr>
+          <tr><td class="ui">Con cần hỗ trợ</td><td>Xem khái niệm con đang vướng, các hiểu lầm hay gặp, bài làm thật của con và gợi ý cách kèm con ngoài đời. Giao thêm bài luyện.</td></tr>
+          <tr><td class="ui">Tiến độ</td><td>Xem kết quả theo chủ đề, từng bài và các lần kiểm tra tiến hóa.</td></tr>
+          <tr><td class="ui">Phần thưởng</td><td>Duyệt yêu cầu đổi thưởng, thêm hoặc sửa phần thưởng, đặt giới hạn mỗi tuần.</td></tr>
+          <tr><td class="ui">Cài đặt</td><td>Bật chế độ nghỉ hoặc lên lịch nghỉ, đặt mục tiêu ngày và tuần, ngưỡng đạt, ngôn ngữ, đổi PIN, xem nhật ký lỗi.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Quên mã PIN thì bấm <span class="ui">Quên mã PIN?</span> ở cửa vào. Lần đặt lại PIN luôn được ghi lại trong Khu phụ huynh.</p>
+  </section>
+
+  <section aria-labelledby="du-lieu">
+    <h2 id="du-lieu">Dữ liệu và sao lưu</h2>
+    <ul class="plain">
+      <li>Tiến độ của con lưu ngay trong trình duyệt trên máy này. App không gửi dữ liệu đi đâu.</li>
+      <li>Mỗi tuần, vào <span class="ui">Sao lưu</span> và bấm <span class="ui">Xuất file sao lưu</span> để lưu file <code>.pypet</code>. App nhắc khi quá 7 ngày chưa sao lưu.</li>
+      <li>Đổi máy hoặc trình duyệt: mở Py-Pet trên máy mới, vào <span class="ui">Sao lưu</span>, nhập file <code>.pypet</code> bằng mã PIN.</li>
+      <li>Xóa dữ liệu trình duyệt hoặc dùng cửa sổ ẩn danh sẽ mất tiến độ chưa sao lưu.</li>
+      <li>Chỉ mở Py-Pet ở 1 tab. Tab thứ 2 sẽ báo app đang mở ở tab khác.</li>
+    </ul>
+  </section>
+
+  <footer>
+    <p>Py-Pet bản đầu, cập nhật 2026-10-07. Tài liệu cho người phát triển nằm trong <code>README.md</code> của repo.</p>
+  </footer>
+</main>
+</body>
+</html>
