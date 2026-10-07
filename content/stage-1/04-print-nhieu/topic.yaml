@@ -1,0 +1,11 @@
+id: s1.print-nhieu
+title: { vi: "In nhiều giá trị: sep và end", en: "Printing many values: sep and end" }
+lessons:
+  - 01-dau-phay.md
+  - 02-so-va-chu.md
+  - 03-sep.md
+  - 04-end.md
+  - 05-ve-hinh.md
+reviews:
+  - { id: s1.print-nhieu.r1, after: s1.print-nhieu.l2 }
+  - { id: s1.print-nhieu.r2, after: s1.print-nhieu.l5 }

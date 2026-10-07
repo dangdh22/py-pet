@@ -1,0 +1,51 @@
+concepts:
+  - id: print-comma-space
+    name: { vi: "Dấu phẩy trong print tự thêm dấu cách", en: "A comma in print adds a space" }
+    misconception_card: |
+      Nhiều bạn nghĩ dấu phẩy trong print được in ra, hoặc các giá trị dính sát nhau như khi dùng dấu `+`. Thực ra dấu phẩy chỉ ngăn cách các giá trị, và print tự đặt **1 dấu cách** giữa 2 giá trị liền nhau: `print("Py", "Pet")` in ra Py Pet. Nếu chuỗi đã có dấu cách ở cuối, như `print("Py ", "Pet")`, con sẽ thấy 2 dấu cách.
+    parent_tip: |
+      Xếp 3 tấm thẻ chữ lên bàn, giữa 2 tấm liền nhau để cách 1 ngón tay. Dấu phẩy trong print giống ngón tay đó: tự tạo 1 khoảng trống giữa 2 giá trị, còn bản thân nó thì không được in ra.
+    practice:
+      level1: [s1.print-nhieu.l1.q1, s1.print-nhieu.l1.q2, s1.print-nhieu.b1, s1.print-nhieu.b2, s1.print-nhieu.b3, s1.print-nhieu.b4]
+      level2: [s1.print-nhieu.p1, s1.print-nhieu.p6]
+      level3: [s1.print-nhieu.l1.ex1, s1.print-nhieu.c1, s1.print-nhieu.l5.ex2]
+  - id: number-vs-text
+    name: { vi: "Số và chữ số trong dấu nháy khác nhau", en: "Numbers and digits in quotes are different" }
+    misconception_card: |
+      Nhiều bạn nghĩ `"2" + "3"` cũng ra 5. Thực ra chữ số nằm trong dấu nháy là **chữ**, nên dấu `+` chỉ đặt chúng cạnh nhau thành 23. Số viết **không có dấu nháy** mới là số thật: `print(2 + 3)` in ra 5. Muốn in chữ cùng với số, hãy ngăn cách bằng dấu phẩy: `print("Tổng:", 2 + 3)`.
+    parent_tip: |
+      Đưa con 2 tấm thẻ ghi chữ số 2 và 3, rồi hỏi: đặt 2 tấm thẻ cạnh nhau thì đọc được số nào (23)? Còn 2 cái kẹo thêm 3 cái kẹo thì được mấy cái (5)? Chữ số trong dấu nháy giống tấm thẻ, số không có dấu nháy giống những cái kẹo.
+    practice:
+      level1: [s1.print-nhieu.l2.q1, s1.print-nhieu.l2.q2, s1.print-nhieu.b5, s1.print-nhieu.b6, s1.print-nhieu.b7, s1.print-nhieu.b8]
+      level2: [s1.print-nhieu.p2]
+      level3: [s1.print-nhieu.l2.ex1, s1.print-nhieu.c2, s1.print-nhieu.l5.ex2]
+  - id: sep-param
+    name: { vi: "sep chỉ nằm giữa các giá trị", en: "sep goes only between values" }
+    misconception_card: |
+      Nhiều bạn nghĩ `sep` cũng được in ở đầu hoặc ở cuối dòng. Thực ra print chỉ đặt `sep` vào **giữa** 2 giá trị liền nhau: `print("A", "B", "C", sep="-")` in ra A-B-C, không phải A-B-C-. Khi có sep, print không tự thêm dấu cách nữa. Muốn có dấu cách, hãy đặt dấu cách vào chuỗi của sep, như `sep=" - "`.
+    parent_tip: |
+      Cho 3 bạn hoặc 3 con thú bông đứng thành hàng và nắm tay nhau, rồi cùng con đếm số cái nắm tay. Ba bạn chỉ có 2 cái nắm tay, nằm giữa các bạn, giống như sep chỉ nằm giữa các giá trị.
+    practice:
+      level1: [s1.print-nhieu.l3.q1, s1.print-nhieu.l3.q2, s1.print-nhieu.b9, s1.print-nhieu.b10, s1.print-nhieu.b16]
+      level2: [s1.print-nhieu.p3, s1.print-nhieu.p6]
+      level3: [s1.print-nhieu.l3.ex1, s1.print-nhieu.l5.ex1, s1.print-nhieu.c3]
+  - id: end-param
+    name: { vi: "end thay ký tự xuống dòng ở cuối", en: "end replaces the new line at the end" }
+    misconception_card: |
+      Nhiều bạn nghĩ mỗi lệnh print luôn in trên 1 dòng riêng. Thực ra print in thêm `end` ở cuối, và nếu con không viết end thì end là ký tự xuống dòng `\n`. Với `end=""`, lệnh print sau in tiếp ngay trên cùng dòng: `print("A", end="")` rồi `print("B")` in ra AB. `end` chỉ đổi phần cuối của đúng lệnh print chứa nó.
+    parent_tip: |
+      Đọc cho con viết từng từ lên giấy, mỗi từ xong thì xuống dòng. Thỉnh thoảng bố mẹ dặn "đừng xuống dòng", và con viết từ tiếp theo ngay trên dòng đó. Tham số end chính là lời dặn ấy.
+    practice:
+      level1: [s1.print-nhieu.l4.q1, s1.print-nhieu.l4.q2, s1.print-nhieu.b13, s1.print-nhieu.b14, s1.print-nhieu.b15, s1.print-nhieu.b17, s1.print-nhieu.l5.q1]
+      level2: [s1.print-nhieu.p4, s1.print-nhieu.p7]
+      level3: [s1.print-nhieu.l4.ex1, s1.print-nhieu.c4]
+  - id: named-option-order
+    name: { vi: "Viết sep và end sau các giá trị", en: "Write sep and end after the values" }
+    misconception_card: |
+      Nhiều bạn viết sep ở đầu, quên dấu nháy, hoặc đặt cả `sep=-` vào trong dấu nháy. Thực ra `sep` và `end` viết **sau tất cả giá trị**, có dấu `=`, và giá trị của chúng là 1 **chuỗi** trong dấu nháy: `print("A", "B", sep="-")`. Nếu viết `"sep=-"` trong dấu nháy thì đó chỉ là 1 chuỗi bình thường, và print in ra A B sep=-.
+    parent_tip: |
+      Chơi trò gọi món: con nói tên các món trước, rồi mới dặn thêm như "ít cay" hay "không hành". Trong print, các giá trị là các món, còn sep và end là lời dặn thêm, luôn nói sau cùng.
+    practice:
+      level1: [s1.print-nhieu.l3.q3, s1.print-nhieu.b11, s1.print-nhieu.b12, s1.print-nhieu.b15]
+      level2: [s1.print-nhieu.p5]
+      level3: [s1.print-nhieu.c5, s1.print-nhieu.l3.ex1]

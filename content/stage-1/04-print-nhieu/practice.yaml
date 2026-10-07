@@ -1,0 +1,277 @@
+exercises:
+  - id: s1.print-nhieu.p1
+    type: fill
+    concepts: [print-comma-space]
+    prompt:
+      vi: "Điền vào 2 chỗ trống để in ra đúng dòng chữ: == Robo =="
+      en: "Fill the 2 blanks to print exactly this text: == Robo =="
+    template: |
+      print("=" * 2___ "Robo"___ "=" * 2)
+    answers: [",", ","]
+    tests:
+      - { output: "== Robo ==" }
+    hints:
+      - { vi: "Có 3 giá trị cần ngăn cách. Ký hiệu nào ngăn cách các giá trị và làm print tự thêm 1 dấu cách?", en: "There are 3 values to separate. Which sign separates the values and makes print add 1 space?" }
+      - { vi: "Điền dấu phẩy vào cả 2 chỗ trống.", en: "Fill both blanks with a comma." }
+
+  - id: s1.print-nhieu.p2
+    type: fill
+    concepts: [number-vs-text]
+    prompt:
+      vi: "Điền 1 phép nhân vào chỗ trống để Python tự tính và in ra: 6 * 7 = 42"
+      en: "Fill the blank with a multiplication so that Python works it out and prints: 6 * 7 = 42"
+    template: |
+      print("6 * 7 =", ___)
+    answers: ["6 * 7"]
+    tests:
+      - { output: "6 * 7 = 42" }
+    hints:
+      - { vi: "Phần trong dấu nháy được in y nguyên. Phần không có dấu nháy thì Python tính.", en: "The part inside quotes is printed exactly as it is. The part without quotes is worked out by Python." }
+      - { vi: "Điền 6 * 7, không có dấu nháy.", en: "Fill in 6 * 7, with no quotes." }
+
+  - id: s1.print-nhieu.p3
+    type: fill
+    concepts: [sep-param]
+    prompt:
+      vi: "Điền giá trị của sep vào chỗ trống để in ra: Py-Pet-Robo"
+      en: "Fill the blank with the value of sep to print: Py-Pet-Robo"
+    template: |
+      print("Py", "Pet", "Robo", sep=___)
+    answers: ['"-"']
+    tests:
+      - { output: "Py-Pet-Robo" }
+    hints:
+      - { vi: "Giữa 2 giá trị liền nhau có 1 dấu gạch ngang và không có dấu cách.", en: "Between 2 values next to each other there is 1 dash and no space." }
+      - { vi: "Giá trị của sep là 1 chuỗi, nên cần dấu nháy: \"-\".", en: "The value of sep is a string, so it needs quotes: \"-\"." }
+
+  - id: s1.print-nhieu.p4
+    type: parsons
+    concepts: [end-param]
+    prompt:
+      vi: "Sắp xếp các dòng lệnh để in ra 2 dòng như phần Ví dụ: câu Robo thích Python, rồi 1 đường kẻ."
+      en: "Put the lines in order to print the 2 lines in the Example: the sentence Robo thích Python, then a line."
+    solution: |
+      print("Robo", end=" ")
+      print("thích", end=" ")
+      print("Python")
+      print("-" * 17)
+    tests:
+      - output: |
+          Robo thích Python
+          -----------------
+    hints:
+      - { vi: "Lệnh có end=\" \" không xuống dòng, nên chữ của lệnh sau nằm cùng dòng với nó.", en: "A statement with end=\" \" does not start a new line, so the text of the next statement is on the same line." }
+
+  - id: s1.print-nhieu.p5
+    type: fill
+    concepts: [named-option-order, sep-param]
+    prompt:
+      vi: "Điền dấu nháy vào 2 chỗ trống để in ra: 7:30"
+      en: "Fill the 2 blanks with quotes to print: 7:30"
+    template: |
+      print(7, 30, sep=___:___)
+    answers: ['"', '"']
+    tests:
+      - { output: "7:30" }
+    hints:
+      - { vi: "Giá trị của sep luôn là 1 chuỗi, nên phải nằm trong dấu nháy.", en: "The value of sep is always a string, so it must be inside quotes." }
+      - { vi: "Đặt dấu : vào giữa 2 dấu nháy kép: sep=\":\".", en: "Put the : between 2 double quotes: sep=\":\"." }
+
+  - id: s1.print-nhieu.p6
+    type: parsons
+    concepts: [sep-param, print-comma-space]
+    prompt:
+      vi: "Sắp xếp các dòng lệnh để in ra biển tên như phần Ví dụ: viền trên bằng dấu gạch ngang, tên Robo, rồi viền dưới bằng dấu bằng."
+      en: "Put the lines in order to print the name sign in the Example: a top edge of dashes, the name Robo, then a bottom edge of equal signs."
+    solution: |
+      print("+", "-" * 6, "+", sep="")
+      print("|", "Robo", "|")
+      print("+", "=" * 6, "+", sep="")
+    tests:
+      - output: |
+          +------+
+          | Robo |
+          +======+
+    hints:
+      - { vi: "Lệnh có sep=\"\" in các giá trị sát nhau. Lệnh không có sep thì có 1 dấu cách giữa 2 giá trị.", en: "A statement with sep=\"\" prints the values right next to each other. A statement without sep has 1 space between 2 values." }
+
+  - id: s1.print-nhieu.p7
+    type: fill
+    concepts: [end-param]
+    prompt:
+      vi: "Điền giá trị của end vào chỗ trống để 2 lệnh print in ra 1 dòng: PyPet"
+      en: "Fill the blank with the value of end so that the 2 print statements print 1 line: PyPet"
+    template: |
+      print("Py", end=___)
+      print("Pet")
+    answers: ['""']
+    tests:
+      - { output: "PyPet" }
+    hints:
+      - { vi: "Py và Pet dính sát nhau, nên ở cuối lệnh print đầu không có gì cả: không xuống dòng, không có dấu cách.", en: "Py and Pet are stuck together, so there is nothing at the end of the first print statement: no new line, no space." }
+      - { vi: "Điền chuỗi rỗng: 2 dấu nháy kép liền nhau.", en: "Fill in the empty string: 2 double quotes next to each other." }
+
+  - id: s1.print-nhieu.c1
+    type: code
+    concepts: [print-comma-space]
+    prompt:
+      vi: "Code bên phải in thẻ giới thiệu của Robo nhưng bị thừa dấu cách. Giữ nguyên các dấu phẩy. Hãy xóa các dấu cách thừa trong chuỗi để in ra đúng 3 dòng như phần Ví dụ."
+      en: "The code on the right prints the profile card of Robo, but it has extra spaces. Keep the commas. Delete the extra spaces inside the strings to print the 3 lines exactly as in the Example."
+    starter: |
+      print("Tên: ", "Robo")
+      print("Màu: ", "xanh")
+      print("Bạn thân: ", "Mimi", " và ", "Bin")
+    solution: |
+      print("Tên:", "Robo")
+      print("Màu:", "xanh")
+      print("Bạn thân:", "Mimi", "và", "Bin")
+    tests:
+      - output: |
+          Tên: Robo
+          Màu: xanh
+          Bạn thân: Mimi và Bin
+    hints:
+      - { vi: "Dấu phẩy đã tự thêm 1 dấu cách giữa 2 giá trị. Dấu cách nằm trong chuỗi là dấu cách thứ hai, bị thừa.", en: "The comma already adds 1 space between 2 values. A space inside the string is a second space, which is extra." }
+      - { vi: "Dòng 1 là print(\"Tên:\", \"Robo\"). Ở dòng 3, \" và \" cần đổi thành \"và\".", en: "Line 1 is print(\"Tên:\", \"Robo\"). On line 3, \" và \" must become \"và\"." }
+    test_eligible: true
+
+  - id: s1.print-nhieu.c2
+    type: code
+    concepts: [number-vs-text]
+    prompt:
+      vi: "Code bên phải đếm chân và bánh xe, nhưng có lỗi. Hãy sửa từng dòng để in ra đúng 3 dòng như phần Ví dụ. Ở dòng 3, Python phải tự tính 4 + 2."
+      en: "The code on the right counts legs and wheels, but it has errors. Fix each line to print the 3 lines exactly as in the Example. On line 3, Python must work out 4 + 2 by itself."
+    starter: |
+      print("Robo có " + 4 + " bánh xe")
+      print("Mimi có " + 2 + " chân")
+      print("Tổng cộng:", "4 + 2")
+    solution: |
+      print("Robo có", 4, "bánh xe")
+      print("Mimi có", 2, "chân")
+      print("Tổng cộng:", 4 + 2)
+    tests:
+      - output: |
+          Robo có 4 bánh xe
+          Mimi có 2 chân
+          Tổng cộng: 6
+    common_wrong:
+      - output: |
+          Robo có 4 bánh xe
+          Mimi có 2 chân
+          Tổng cộng: 4 + 2
+        misconception: number-vs-text
+        sample: |
+          print("Robo có", 4, "bánh xe")
+          print("Mimi có", 2, "chân")
+          print("Tổng cộng:", "4 + 2")
+    hints:
+      - { vi: "Dấu + không ghép được chuỗi với số. Hãy dùng dấu phẩy, và nhớ dấu phẩy tự thêm dấu cách. Phép tính nằm trong dấu nháy thì không được tính.", en: "+ cannot put a string and a number together. Use commas, and remember that a comma adds a space. A calculation inside quotes is not worked out." }
+      - { vi: "Dòng 1 là print(\"Robo có\", 4, \"bánh xe\"). Ở dòng 3, bỏ 2 dấu nháy quanh 4 + 2.", en: "Line 1 is print(\"Robo có\", 4, \"bánh xe\"). On line 3, remove the 2 quotes around 4 + 2." }
+    test_eligible: true
+
+  - id: s1.print-nhieu.c3
+    type: code
+    concepts: [sep-param, print-comma-space]
+    prompt:
+      vi: "Ngày 20/11 là ngày Nhà giáo Việt Nam. Robo in ngày và giờ của buổi chúc mừng thầy cô, đúng 2 dòng như phần Ví dụ. Mỗi dòng dùng 1 lệnh print với các số và tham số sep."
+      en: "20/11 is Vietnamese Teachers' Day. Robo prints the date and the time of the party for the teachers: 2 lines, exactly as in the Example. Each line uses 1 print statement with the numbers and the sep option."
+    starter: |
+      # Viết lệnh của con ở dưới dòng này
+    solution: |
+      print(20, 11, 2026, sep="/")
+      print(9, 45, sep=":")
+    tests:
+      - output: |
+          20/11/2026
+          9:45
+    common_wrong:
+      - output: |
+          20 / 11 / 2026
+          9 : 45
+        misconception: print-comma-space
+        sample: |
+          print(20, "/", 11, "/", 2026)
+          print(9, ":", 45)
+    hints:
+      - { vi: "Các số cách nhau bằng dấu / ở dòng 1 và dấu : ở dòng 2, không có dấu cách. Hãy dùng sep thay cho dấu cách.", en: "The numbers are separated by / on line 1 and by : on line 2, with no spaces. Use sep instead of the space." }
+      - { vi: "Dòng 1 là print(20, 11, 2026, sep=\"/\"). Dòng 2 làm tương tự với 9, 45 và dấu :.", en: "Line 1 is print(20, 11, 2026, sep=\"/\"). Do line 2 the same way with 9, 45 and the : sign." }
+    test_eligible: true
+
+  - id: s1.print-nhieu.c4
+    type: code
+    concepts: [end-param]
+    prompt:
+      vi: "Robo đếm từ 1 tới 5 trên cùng 1 dòng, rồi in Xong! ở dòng sau. Đừng gộp các lệnh print. Hãy thêm end vào những lệnh cần thiết để in ra đúng 2 dòng như phần Ví dụ."
+      en: "Robo counts from 1 to 5 on the same line, then prints Xong! on the next line. Do not merge the print statements. Add end to the statements that need it to print the 2 lines exactly as in the Example."
+    starter: |
+      print(1)
+      print(2)
+      print(3)
+      print(4)
+      print(5)
+      print("Xong!")
+    solution: |
+      print(1, end=" ")
+      print(2, end=" ")
+      print(3, end=" ")
+      print(4, end=" ")
+      print(5)
+      print("Xong!")
+    tests:
+      - output: |
+          1 2 3 4 5
+          Xong!
+    common_wrong:
+      - output: "1 2 3 4 5 Xong!"
+        misconception: end-param
+        sample: |
+          print(1, end=" ")
+          print(2, end=" ")
+          print(3, end=" ")
+          print(4, end=" ")
+          print(5, end=" ")
+          print("Xong!")
+      - output: |
+          12345
+          Xong!
+        misconception: end-param
+        sample: |
+          print(1, end="")
+          print(2, end="")
+          print(3, end="")
+          print(4, end="")
+          print(5)
+          print("Xong!")
+    hints:
+      - { vi: "Lệnh có end=\" \" không xuống dòng. Lệnh không có end thì xuống dòng như bình thường.", en: "A statement with end=\" \" does not start a new line. A statement without end starts a new line as usual." }
+      - { vi: "Thêm end=\" \" vào 4 lệnh print đầu. Giữ nguyên print(5), để chữ Xong! nằm ở dòng mới.", en: "Add end=\" \" to the first 4 print statements. Keep print(5) as it is, so that Xong! is on a new line." }
+    test_eligible: true
+
+  - id: s1.print-nhieu.c5
+    type: code
+    concepts: [named-option-order, sep-param]
+    prompt:
+      vi: "Robo in ngày khai giảng và giờ vào học, nhưng viết sai tham số sep ở cả 2 dòng. Hãy sửa từng lỗi để in ra đúng 2 dòng như phần Ví dụ."
+      en: "Robo prints the first day of school and the time school starts, but the sep option is written wrong on both lines. Fix the mistakes one by one to print the 2 lines exactly as in the Example."
+    starter: |
+      print(5, 9, 2026, "sep=/")
+      print(7, 30, sep=:)
+    solution: |
+      print(5, 9, 2026, sep="/")
+      print(7, 30, sep=":")
+    tests:
+      - output: |
+          5/9/2026
+          7:30
+    common_wrong:
+      - output: |
+          5 9 2026 sep=/
+          7:30
+        misconception: named-option-order
+        sample: |
+          print(5, 9, 2026, "sep=/")
+          print(7, 30, sep=":")
+    hints:
+      - { vi: "Tên sep và dấu = nằm ngoài dấu nháy. Chỉ giá trị của sep nằm trong dấu nháy.", en: "The name sep and the = sign go outside the quotes. Only the value of sep goes inside the quotes." }
+      - { vi: "Dòng 1 là print(5, 9, 2026, sep=\"/\"). Ở dòng 2, viết sep=\":\".", en: "Line 1 is print(5, 9, 2026, sep=\"/\"). On line 2, write sep=\":\"." }
+    test_eligible: true
