@@ -129,7 +129,7 @@ Người bảo trì chưa duyệt kế hoạch M6a; Claude tự chốt theo yêu
 
 Người bảo trì chưa duyệt kế hoạch M6b; Claude tự chốt theo yêu cầu chạy liên tục. Chi tiết trong mục "Quyết định thiết kế" của `docs/superpowers/plans/2026-10-07-m6b-ci-loi.md`.
 
-1. **Lint tối thiểu** bằng ESLint 9 (`@eslint/js`, `typescript-eslint`, `eslint-plugin-react-hooks`), nằm trong `npm run check`.
+1. **Lint tối thiểu** bằng ESLint 10 (kế hoạch ghi 9; npm cài bản mới nhất) (`@eslint/js`, `typescript-eslint`, `eslint-plugin-react-hooks`), nằm trong `npm run check`.
 2. **CI chạy `npm run check`** trên Node 22 và Python 3.13; **deploy GitHub Pages** bằng workflow riêng khi push vào `main`. Người bảo trì cần bật Pages (Source: GitHub Actions).
 3. **Trình duyệt không hỗ trợ** gồm cả thiếu `indexedDB`; màn hình song ngữ theo ngôn ngữ trình duyệt.
 4. **Pyodide khởi động quá 60 giây** coi như lỗi, có nút Thử lại.
