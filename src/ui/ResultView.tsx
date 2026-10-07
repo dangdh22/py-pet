@@ -8,7 +8,7 @@ import { pick } from "../i18n/lang";
 import { useLang } from "../i18n/LangProvider";
 import { useContent } from "./contexts";
 import { useGame } from "./GameProvider";
-import { Robot } from "./Robot";
+import { PetRobot } from "./PetRobot";
 import { routeToHash, stepRoute } from "./routing";
 
 export function ResultView({
@@ -41,7 +41,7 @@ export function ResultView({
     .filter((concept) => buildPracticeSet(bundle, after, concept.id, Math.random).length > 0);
   return (
     <main className="lesson-done">
-      <Robot mood="happy" size={96} />
+      <PetRobot mood="happy" size={96} />
       <h2>{title}</h2>
       <p>{message}</p>
       <ul className="result-rewards">

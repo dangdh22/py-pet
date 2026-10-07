@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import type { RobotForm } from "../../game/look";
 import { BatteryEmpty, Face, SleepyZ, type Box, type RobotMood } from "./faces";
 import { PALETTE as C } from "./palette";
@@ -26,6 +27,17 @@ export const HEAD_BOX: Record<RobotForm, Box> = {
   2: { x: 9, y: 17, w: 46, h: 33 },
   3: { x: 11, y: 15, w: 42, h: 30 },
   4: { x: 14, y: 9, w: 36, h: 25 },
+};
+
+/**
+ * The antenna of each form: the top of the light, the head top where it stands, the light radius. The capsule has
+ * none; its entry places the gold antenna accessory on top of the capsule.
+ */
+export const ANTENNA: Record<RobotForm, { top: number; base: number; r: number }> = {
+  1: { top: 13, base: 22.5, r: 3.2 },
+  2: { top: 8, base: 17, r: 3.5 },
+  3: { top: 6, base: 15, r: 3.2 },
+  4: { top: 3.2, base: 9, r: 2.7 },
 };
 
 /** Where the empty battery shows: the belly, or the chest screen of the teen. */
@@ -97,7 +109,8 @@ function Arms({ form, mood }: { form: 3 | 4; mood: RobotMood }) {
   );
 }
 
-function Antenna({ top, base, r }: { top: number; base: number; r: number }) {
+function Antenna({ form }: { form: 2 | 3 | 4 }) {
+  const { top, base, r } = ANTENNA[form];
   return (
     <g data-part="antenna">
       <line x1={32} y1={base + 1} x2={32} y2={top + r} stroke={C.joint} strokeWidth={2} strokeLinecap="round" />
@@ -135,7 +148,7 @@ function Feet({ left, right, y }: { left: number; right: number; y: number }) {
   );
 }
 
-function starPoints(cx: number, cy: number, outer: number): string {
+export function starPoints(cx: number, cy: number, outer: number): string {
   const inner = outer * 0.45;
   return Array.from({ length: 10 }, (_, i) => {
     const r = i % 2 === 0 ? outer : inner;
@@ -198,7 +211,7 @@ function Newborn() {
     <>
       <Feet left={20} right={34} y={61} />
       <rect data-part="body" x={19} y={46} width={26} height={17} rx={7} fill={C.bodyDark} />
-      <Antenna top={8} base={17} r={3.5} />
+      <Antenna form={2} />
       <Head form={2} />
     </>
   );
@@ -209,7 +222,7 @@ function Kid({ mood }: { mood: RobotMood }) {
     <>
       <Feet left={20} right={34} y={61} />
       <rect data-part="body" x={17} y={43} width={30} height={20} rx={7} fill={C.bodyDark} />
-      <Antenna top={6} base={15} r={3.2} />
+      <Antenna form={3} />
       <Head form={3} />
       <Arms form={3} mood={mood} />
     </>
@@ -227,27 +240,49 @@ function Teen({ mood, graduated }: { mood: RobotMood; graduated: boolean }) {
       <rect x={28} y={31} width={8} height={7} fill={C.joint} />
       <rect data-part="body" x={16} y={35} width={32} height={25} rx={7} fill={C.bodyDark} />
       <Chest mood={mood} graduated={graduated} />
-      <Antenna top={3.2} base={9} r={2.7} />
+      <Antenna form={4} />
       <Head form={4} />
       <Arms form={4} mood={mood} />
     </>
   );
 }
 
-/** Robo of one form in one mood, without accessories. */
-export function RobotBody({ form, mood, graduated }: { form: RobotForm; mood: RobotMood; graduated: boolean }) {
+/** Accessories drawn in their layer: behind the body, then in front of the neck, on the face, on the head. */
+export interface AccessoryLayers {
+  back?: ReactNode;
+  neck?: ReactNode;
+  face?: ReactNode;
+  head?: ReactNode;
+}
+
+/** Robo of one form in one mood; accessories go between the parts in the order of their layer. */
+export function RobotBody({
+  form,
+  mood,
+  graduated,
+  layers = {},
+}: {
+  form: RobotForm;
+  mood: RobotMood;
+  graduated: boolean;
+  layers?: AccessoryLayers;
+}) {
   const belly = BELLY[form];
   const z = Z_SPOT[form];
   return (
     <>
+      {layers.back}
       {form === 1 && <Capsule />}
       {form === 2 && <Newborn />}
       {form === 3 && <Kid mood={mood} />}
       {form === 4 && <Teen mood={mood} graduated={graduated} />}
       <Screen form={form} />
       <Face mood={mood} box={FACE_BOX[form]} />
+      {layers.neck}
+      {layers.face}
       {mood === "drained" && <BatteryEmpty x={form === 4 && graduated ? belly.x + 4 : belly.x} y={belly.y} />}
       {mood === "sleepy" && <SleepyZ x={z.x} y={z.y} />}
+      {layers.head}
     </>
   );
 }

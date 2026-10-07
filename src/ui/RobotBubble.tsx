@@ -1,5 +1,6 @@
 import { useLang } from "../i18n/LangProvider";
-import { Robot, type RobotMood } from "./Robot";
+import { PetRobot } from "./PetRobot";
+import type { RobotMood } from "./Robot";
 
 export interface RobotBubbleProps {
   mood: RobotMood;
@@ -12,7 +13,7 @@ export function RobotBubble({ mood, message, hint = null, rawError = null }: Rob
   const { t } = useLang();
   return (
     <div className="robot-bubble" role="status">
-      <Robot mood={mood} size={44} />
+      <PetRobot mood={mood} size={44} />
       <div className="bubble">
         <p>{message}</p>
         {hint && <p className="bubble-hint">{hint}</p>}

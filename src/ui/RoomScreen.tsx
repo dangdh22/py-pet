@@ -3,16 +3,14 @@ import {
   currentStage,
   displayStreak,
   growthPercent,
-  growthSize,
   roomCondition,
   stageXp,
   stageXpMax,
   todayPoints,
   weekLessons,
-  type PetCondition,
 } from "../game/progress";
 import { weekStart } from "../game/dates";
-import { formOf, robotPixelSize } from "../game/look";
+import { robotLook, robotPixelSize } from "../game/look";
 import { SHOP_ITEMS } from "../game/shop";
 import { STAT_MAX } from "../game/state";
 import { weekTarget } from "../game/vacation";
@@ -20,16 +18,8 @@ import { useLang } from "../i18n/LangProvider";
 import { useContent } from "./contexts";
 import { useGame } from "./GameProvider";
 import { itemKey } from "./names";
-import { Robot, type RobotMood } from "./Robot";
+import { PetRobot } from "./PetRobot";
 import { routeToHash, stepRoute } from "./routing";
-
-export const CONDITION_MOOD: Record<PetCondition | "vacation", RobotMood> = {
-  happy: "happy",
-  normal: "neutral",
-  sleepy: "sleepy",
-  drained: "drained",
-  vacation: "vacation",
-};
 
 export function RoomScreen() {
   const game = useGame();
@@ -46,6 +36,7 @@ export function RoomScreen() {
   // An empty battery wins over an empty joy: charging by review fixes the battery first.
   const message = condition === "drained" && state.pet.pin > 0 ? "pet.drainedVui" : (`pet.${condition}` as const);
   const names = (ids: string[]) => ids.map((id) => t(itemKey(id))).join(", ");
+  const look = robotLook(bundle, state, today);
   const decor = SHOP_ITEMS.filter((item) => item.kind === "decor" && state.inventory.owned.includes(item.id)).map(
     (item) => item.id,
   );
@@ -55,10 +46,10 @@ export function RoomScreen() {
       <h1>{t("room.title", { name: profile.robotName })}</h1>
       <p>{t("room.greeting", { child: profile.childName })}</p>
       <div className={`room-scene condition-${condition}`}>
-        <Robot mood={CONDITION_MOOD[condition]} size={robotPixelSize(formOf(state.pet.stage), growthSize(xp, max))} />
+        <PetRobot size={robotPixelSize(look.form, look.size)} />
         <p className="pet-says">{t(message, { name: profile.robotName })}</p>
-        {state.inventory.equipped.length > 0 && (
-          <p className="room-wearing">{t("room.wearing", { items: names(state.inventory.equipped) })}</p>
+        {look.equipped.length > 0 && (
+          <p className="room-wearing">{t("room.wearing", { items: names(look.equipped) })}</p>
         )}
         {decor.length > 0 && <p className="room-decor">{t("room.decor", { items: names(decor) })}</p>}
       </div>

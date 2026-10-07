@@ -158,6 +158,7 @@ a.button.primary { background: var(--primary); border-color: var(--primary); col
 .shop-items { list-style: none; padding: 0; display: grid; gap: 8px; }
 .shop-item { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 8px 12px; border: 1px solid #dde3ef; border-radius: var(--radius); }
 .shop-name { font-weight: 700; min-width: 10em; }
+.item-icon { flex: none; }
 .shop-price, .shop-detail { color: var(--muted); }
 .shop-actions { margin-left: auto; display: flex; gap: 8px; align-items: center; }
 .badges { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 8px; }

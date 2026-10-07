@@ -11,7 +11,7 @@ import { useLang } from "../i18n/LangProvider";
 import { useContent } from "./contexts";
 import { ExamRunner, formatScore } from "./ExamRunner";
 import { useGame } from "./GameProvider";
-import { Robot } from "./Robot";
+import { PetRobot } from "./PetRobot";
 import { routeToHash, stepRoute } from "./routing";
 
 /**
@@ -130,7 +130,7 @@ function EvolutionPassed({
   return (
     <main className="evolution-done">
       <div className="evolve">
-        <Robot mood="happy" size={200} />
+        <PetRobot mood="happy" size={200} />
       </div>
       <h1>{t("evolution.title", { name: profile.robotName })}</h1>
       <p>{t("evolution.body", { name: profile.robotName })}</p>
@@ -171,7 +171,7 @@ function EvolutionFailed({
     .filter((concept): concept is Concept => concept !== undefined);
   return (
     <main className="lesson-done">
-      <Robot mood="thinking" size={96} />
+      <PetRobot mood="thinking" size={96} />
       <h2>{t("evolution.failTitle")}</h2>
       <p>{t("evolution.failBody")}</p>
       <p>{t("exam.score", { score: formatScore(grade.score, uiLang), max: grade.max })}</p>

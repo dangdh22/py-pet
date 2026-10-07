@@ -52,6 +52,15 @@ describe("ShopScreen: things for the robot", () => {
     expect(within(row("Vương miện")).queryByRole("button")).not.toBeInTheDocument();
   });
 
+  test("each accessory has a picture beside its name", async () => {
+    await renderWithGame(<ShopScreen />, { state: richState(100) });
+    for (const item of SHOP_ITEMS.filter((i) => i.kind === "accessory")) {
+      const icons = row(vi[itemKey(item.id)]).querySelectorAll("svg");
+      expect(icons).toHaveLength(1);
+      expect(icons[0]).toHaveAttribute("aria-hidden", "true");
+    }
+  });
+
   test("an item costing more than the balance cannot be bought", async () => {
     await renderWithGame(<ShopScreen />, { state: richState(20) });
     expect(screen.getByRole("button", { name: "Mua Kệ sách" })).toBeDisabled();

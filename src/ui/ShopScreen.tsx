@@ -5,6 +5,7 @@ import { STAT_MAX, type GameState } from "../game/state";
 import { useLang } from "../i18n/LangProvider";
 import { useGame } from "./GameProvider";
 import { itemKey } from "./names";
+import { ItemIcon } from "./robot/accessories";
 
 type Tab = "robot" | "rewards";
 
@@ -117,6 +118,7 @@ function ShopRow({ item, state }: { item: ShopItem; state: GameState }) {
   }
   return (
     <li className="shop-item">
+      <ItemIcon id={item.id} />
       <span className="shop-name">{name}</span>
       {item.price !== null && <span className="shop-price">{t("shop.price", { n: item.price })}</span>}
       {detail && <span className="shop-detail">{detail}</span>}
