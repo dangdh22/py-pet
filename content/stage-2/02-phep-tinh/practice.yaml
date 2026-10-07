@@ -1,0 +1,176 @@
+exercises:
+  - id: s2.phep-tinh.p1
+    type: fill
+    concepts: [div-float]
+    prompt:
+      vi: "Robo chia đều 9 cái bánh cho 2 bạn, bánh thì cắt được. Điền 1 dấu phép tính vào chỗ trống để in ra đúng dòng như phần Ví dụ."
+      en: "Robo shares 9 cakes equally between 2 friends, and the cakes can be cut. Fill the blank with 1 operator sign to print the line in the Example."
+    template: |
+      banh = 9
+      ban = 2
+      print("Mỗi bạn được", banh ___ ban, "cái bánh")
+    answers: ["/"]
+    tests:
+      - { output: "Mỗi bạn được 4.5 cái bánh" }
+    hints:
+      - { vi: "Kết quả 4.5 có phần lẻ, nên là số thực. Phép chia nào cho ra số thực?", en: "The result 4.5 has a decimal part, so it is a float. Which division gives a float?" }
+      - { vi: "Điền dấu / vào chỗ trống.", en: "Fill the blank with /." }
+
+  - id: s2.phep-tinh.p2
+    type: fill
+    concepts: [floor-div]
+    prompt:
+      vi: "Mỗi vỉ đựng đúng 6 quả trứng. Điền 1 dấu phép tính vào chỗ trống để in ra số vỉ đựng đầy khi có 20 quả trứng, như phần Ví dụ."
+      en: "Each egg box holds exactly 6 eggs. Fill the blank with 1 operator sign to print how many boxes are full when there are 20 eggs, as in the Example."
+    template: |
+      trung = 20
+      moi_vi = 6
+      print("Số vỉ đầy:", trung ___ moi_vi)
+    answers: ["//"]
+    tests:
+      - { output: "Số vỉ đầy: 3" }
+    hints:
+      - { vi: "Số vỉ đầy là số nguyên, là phần nguyên của phép chia 20 cho 6.", en: "The number of full boxes is a whole number: the whole part of 20 divided by 6." }
+      - { vi: "Điền dấu // (2 dấu gạch chéo) vào chỗ trống.", en: "Fill the blank with // (2 slashes)." }
+
+  - id: s2.phep-tinh.p3
+    type: parsons
+    concepts: [modulo, floor-div]
+    prompt:
+      vi: "Sắp xếp các dòng lệnh để in ra chữ số hàng đơn vị, rồi chữ số hàng chục của số 365, như phần Ví dụ."
+      en: "Put the lines in order to print the ones digit, then the tens digit of the number 365, as in the Example."
+    solution: |
+      so = 365
+      print("Hàng đơn vị:", so % 10)
+      so = so // 10
+      print("Hàng chục:", so % 10)
+    tests:
+      - output: |
+          Hàng đơn vị: 5
+          Hàng chục: 6
+    hints:
+      - { vi: "so % 10 lấy chữ số hàng đơn vị. so = so // 10 bỏ chữ số hàng đơn vị đi, để chữ số hàng chục trở thành chữ số cuối cùng.", en: "so % 10 takes the ones digit. so = so // 10 drops the ones digit, so that the tens digit becomes the last digit." }
+
+  - id: s2.phep-tinh.p4
+    type: fill
+    concepts: [power-op]
+    prompt:
+      vi: "Thể tích hình lập phương bằng cạnh mũ 3. Điền 1 dấu phép tính vào chỗ trống để in ra đúng dòng như phần Ví dụ."
+      en: "The volume of a cube is its side to the power of 3. Fill the blank with 1 operator sign to print the line in the Example."
+    template: |
+      canh = 3
+      print("Thể tích:", canh ___ 3)
+    answers: ["**"]
+    tests:
+      - { output: "Thể tích: 27" }
+    hints:
+      - { vi: "3 mũ 3 là 3 * 3 * 3. Trong Python, lũy thừa không viết bằng dấu ^.", en: "3 to the power of 3 is 3 * 3 * 3. In Python, a power is not written with ^." }
+      - { vi: "Điền dấu ** (2 dấu sao) vào chỗ trống.", en: "Fill the blank with ** (2 stars)." }
+
+  - id: s2.phep-tinh.p5
+    type: fill
+    concepts: [precedence]
+    prompt:
+      vi: "Robo mua 3 hộp bút, mỗi hộp có 2 bút xanh và 5 bút đỏ. Điền 1 dấu ngoặc vào mỗi chỗ trống để Python cộng trước rồi mới nhân, và in ra đúng dòng như phần Ví dụ."
+      en: "Robo buys 3 boxes of pens, and each box has 2 blue pens and 5 red pens. Fill each blank with 1 bracket so that Python adds first and then multiplies, to print the line in the Example."
+    template: |
+      so_hop = 3
+      but_xanh = 2
+      but_do = 5
+      print("Tổng số bút:", so_hop * ___but_xanh + but_do___)
+    answers: ["(", ")"]
+    tests:
+      - { output: "Tổng số bút: 21" }
+    hints:
+      - { vi: "Không có ngoặc thì Python nhân 3 * 2 trước rồi mới cộng 5, ra 11. Số bút trong 1 hộp là but_xanh + but_do, phải cộng trước.", en: "Without brackets, Python multiplies 3 * 2 first and then adds 5, which gives 11. The pens in 1 box are but_xanh + but_do, and they must be added first." }
+      - { vi: "Điền dấu ( vào chỗ thứ nhất và dấu ) vào chỗ thứ hai.", en: "Fill the first blank with ( and the second blank with )." }
+
+  - id: s2.phep-tinh.c1
+    type: code
+    concepts: [div-float, precedence]
+    prompt:
+      vi: "Robo được 3 điểm kiểm tra: 6, 9 và 9. Hãy dùng 3 biến diem_1, diem_2, diem_3 để tính điểm trung bình (tổng 3 điểm chia cho 3), rồi in ra đúng dòng như phần Ví dụ."
+      en: "Robo gets 3 test marks: 6, 9 and 9. Use the 3 variables diem_1, diem_2, diem_3 to work out the average mark (the sum of the 3 marks divided by 3), then print the line in the Example."
+    starter: |
+      diem_1 = 6
+      diem_2 = 9
+      diem_3 = 9
+      # Viết lệnh của con ở dưới dòng này
+    solution: |
+      diem_1 = 6
+      diem_2 = 9
+      diem_3 = 9
+      print("Điểm trung bình:", (diem_1 + diem_2 + diem_3) / 3)
+    tests:
+      - output: "Điểm trung bình: 8.0"
+    common_wrong:
+      - output: "Điểm trung bình: 18.0"
+        misconception: precedence
+        sample: |
+          diem_1 = 6
+          diem_2 = 9
+          diem_3 = 9
+          print("Điểm trung bình:", diem_1 + diem_2 + diem_3 / 3)
+    hints:
+      - { vi: "Phải cộng cả 3 điểm trước rồi mới chia cho 3. Python làm phép chia trước phép cộng, nên con cần ngoặc tròn.", en: "You must add all 3 marks first and then divide by 3. Python divides before it adds, so you need round brackets." }
+      - { vi: "Viết print(\"Điểm trung bình:\", (diem_1 + diem_2 + diem_3) / 3).", en: "Write print(\"Điểm trung bình:\", (diem_1 + diem_2 + diem_3) / 3)." }
+    test_eligible: true
+
+  - id: s2.phep-tinh.c2
+    type: code
+    concepts: [floor-div, modulo]
+    prompt:
+      vi: "Biến so chứa số 47. Hãy dùng phép // và phép % với biến so để in ra chữ số hàng chục và chữ số hàng đơn vị, như phần Ví dụ."
+      en: "The variable so holds the number 47. Use // and % with the variable so to print the tens digit and the ones digit, as in the Example."
+    starter: |
+      so = 47
+      # Viết 2 lệnh print ở dưới dòng này
+    solution: |
+      so = 47
+      print("Hàng chục:", so // 10)
+      print("Hàng đơn vị:", so % 10)
+    tests:
+      - output: |
+          Hàng chục: 4
+          Hàng đơn vị: 7
+    common_wrong:
+      - output: |
+          Hàng chục: 7
+          Hàng đơn vị: 4
+        misconception: modulo
+        sample: |
+          so = 47
+          print("Hàng chục:", so % 10)
+          print("Hàng đơn vị:", so // 10)
+    hints:
+      - { vi: "47 chia 10 được 4, còn dư 7. Phần nguyên là chữ số hàng chục, số dư là chữ số hàng đơn vị.", en: "47 divided by 10 is 4 with a remainder of 7. The whole part is the tens digit, and the remainder is the ones digit." }
+      - { vi: "Hàng chục là so // 10, hàng đơn vị là so % 10.", en: "The tens digit is so // 10, and the ones digit is so % 10." }
+    test_eligible: true
+
+  - id: s2.phep-tinh.c3
+    type: code
+    concepts: [power-op, precedence]
+    prompt:
+      vi: "Robo sơn 1 bức tường hình vuông cạnh 4 m. Trên tường có 1 cửa sổ hình vuông cạnh 1 m, không cần sơn. Hãy dùng 2 biến canh_tuong, canh_cua và phép ** để tính phần diện tích cần sơn (diện tích tường trừ diện tích cửa sổ), rồi in ra đúng dòng như phần Ví dụ."
+      en: "Robo paints a square wall with sides of 4 m. The wall has a square window with sides of 1 m, which is not painted. Use the 2 variables canh_tuong, canh_cua and ** to work out the area to paint (the area of the wall minus the area of the window), then print the line in the Example."
+    starter: |
+      canh_tuong = 4
+      canh_cua = 1
+      # Viết lệnh của con ở dưới dòng này
+    solution: |
+      canh_tuong = 4
+      canh_cua = 1
+      print("Diện tích cần sơn:", canh_tuong ** 2 - canh_cua ** 2)
+    tests:
+      - output: "Diện tích cần sơn: 15"
+    common_wrong:
+      - output: "Diện tích cần sơn: 6"
+        misconception: power-op
+        sample: |
+          canh_tuong = 4
+          canh_cua = 1
+          print("Diện tích cần sơn:", canh_tuong * 2 - canh_cua * 2)
+    hints:
+      - { vi: "Diện tích hình vuông là cạnh mũ 2, viết bằng **. Python làm phép ** trước phép trừ, nên không cần ngoặc.", en: "The area of a square is its side to the power of 2, written with **. Python does ** before the subtraction, so you need no brackets." }
+      - { vi: "Diện tích tường là canh_tuong ** 2. Lấy nó trừ đi canh_cua ** 2.", en: "The area of the wall is canh_tuong ** 2. Subtract canh_cua ** 2 from it." }
+    test_eligible: true

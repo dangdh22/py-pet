@@ -1,0 +1,51 @@
+concepts:
+  - id: div-float
+    name: { vi: "Phép / luôn cho ra số thực", en: "/ always gives a float" }
+    misconception_card: |
+      Nhiều bạn nghĩ `6 / 2` ra 3, vì 6 chia hết cho 2. Thực ra phép `/` luôn cho ra **số thực** (float), nên `print(6 / 2)` in ra 3.0. Python viết phần lẻ sau dấu chấm, không dùng dấu phẩy: `7 / 2` in ra 3.5. Muốn có số nguyên, con dùng phép `//`.
+    parent_tip: |
+      Cùng con đọc số trên nhiệt kế hoặc cân điện tử, như 36.5 hay 2.0. Giải thích rằng máy tính viết dấu chấm ở chỗ ta viết dấu phẩy, và 2.0 cũng bằng 2.
+    practice:
+      level1: [s2.phep-tinh.l1.q1, s2.phep-tinh.l1.q2, s2.phep-tinh.b1, s2.phep-tinh.b2, s2.phep-tinh.b3]
+      level2: [s2.phep-tinh.p1]
+      level3: [s2.phep-tinh.l1.ex1, s2.phep-tinh.c1]
+  - id: floor-div
+    name: { vi: "Phép // lấy phần nguyên", en: "// keeps the whole part" }
+    misconception_card: |
+      Nhiều bạn nghĩ phép `//` làm tròn đến số gần nhất, nên `9 // 2` ra 5. Thực ra `//` chỉ giữ **phần nguyên** của phép chia và bỏ phần lẻ đi: `9 / 2` là 4.5, còn `9 // 2` là 4. Nếu số bị chia nhỏ hơn số chia thì kết quả là 0, ví dụ `3 // 5` ra 0.
+    parent_tip: |
+      Đưa con 9 viên kẹo và nhờ con chia đều cho 2 người, không được cắt viên nào. Mỗi người được 4 viên: đó chính là 9 // 2.
+    practice:
+      level1: [s2.phep-tinh.l2.q1, s2.phep-tinh.l2.q2, s2.phep-tinh.b4, s2.phep-tinh.b5, s2.phep-tinh.b6, s2.phep-tinh.l5.q1]
+      level2: [s2.phep-tinh.p2, s2.phep-tinh.p3]
+      level3: [s2.phep-tinh.l2.ex1, s2.phep-tinh.c2, s2.phep-tinh.l5.ex1]
+  - id: modulo
+    name: { vi: "Phép % lấy số dư", en: "% gives the remainder" }
+    misconception_card: |
+      Nhiều bạn nghĩ dấu `%` là phần trăm, hoặc nhầm nó với phép `//`. Thực ra `%` cho ra **số dư** của phép chia: `7 % 2` ra 1, vì 7 chia 2 được 3, còn dư 1. Chia hết thì số dư là 0, nên `n % 2` ra 0 khi n chẵn và ra 1 khi n lẻ.
+    parent_tip: |
+      Cùng con chia 1 nắm kẹo đều cho mọi người trong nhà, ai cũng nhận số kẹo bằng nhau. Số kẹo còn lại trên bàn chính là số dư mà phép % tính ra.
+    practice:
+      level1: [s2.phep-tinh.l3.q1, s2.phep-tinh.l3.q2, s2.phep-tinh.b6, s2.phep-tinh.b7, s2.phep-tinh.b8, s2.phep-tinh.b9, s2.phep-tinh.b10, s2.phep-tinh.l5.q1]
+      level2: [s2.phep-tinh.p3]
+      level3: [s2.phep-tinh.l3.ex1, s2.phep-tinh.c2, s2.phep-tinh.l5.ex1]
+  - id: power-op
+    name: { vi: "Phép ** là lũy thừa", en: "** means a power" }
+    misconception_card: |
+      Nhiều bạn nghĩ `2 ** 3` là 2 nhân 3, ra 6. Thực ra `**` là **lũy thừa**: `2 ** 3` là 2 * 2 * 2, ra 8. Có bạn viết `2 ^ 3` như trên máy tính bỏ túi, nhưng trong Python dấu `^` là một phép khác: Python không báo lỗi mà in ra 1. Muốn tính lũy thừa, con luôn dùng `**`.
+    parent_tip: |
+      Gấp đôi 1 tờ giấy 3 lần rồi mở ra đếm số ô: có 2 ** 3 = 8 ô. Hỏi con nếu gấp 4 lần thì sẽ có mấy ô.
+    practice:
+      level1: [s2.phep-tinh.l4.q1, s2.phep-tinh.l4.q2, s2.phep-tinh.b11, s2.phep-tinh.b12, s2.phep-tinh.b13]
+      level2: [s2.phep-tinh.p4]
+      level3: [s2.phep-tinh.l4.ex1, s2.phep-tinh.c3]
+  - id: precedence
+    name: { vi: "Thứ tự phép tính", en: "Order of operations" }
+    misconception_card: |
+      Nhiều bạn tính từ trái sang phải, nên nghĩ `2 + 3 * 4` ra 20. Thực ra Python làm theo thứ tự như môn Toán: `**` trước, rồi `* / // %`, cuối cùng là `+ -`, nên kết quả là 14. Phép tính trong **ngoặc tròn** luôn được làm đầu tiên: `(2 + 3) * 4` ra 20.
+    parent_tip: |
+      Đố con tính nhẩm 2 + 3 × 4 và hỏi con làm phép nào trước. Sau đó thêm ngoặc thành (2 + 3) × 4 rồi cùng so sánh 2 kết quả.
+    practice:
+      level1: [s2.phep-tinh.l4.q2, s2.phep-tinh.l5.q2, s2.phep-tinh.b3, s2.phep-tinh.b14, s2.phep-tinh.b15, s2.phep-tinh.b16]
+      level2: [s2.phep-tinh.p5]
+      level3: [s2.phep-tinh.l4.ex2, s2.phep-tinh.l5.ex2, s2.phep-tinh.c1]

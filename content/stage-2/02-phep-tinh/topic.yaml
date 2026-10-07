@@ -1,0 +1,11 @@
+id: s2.phep-tinh
+title: { vi: "Phép tính // % **", en: "Operators // % **" }
+lessons:
+  - 01-cong-tru-nhan-chia.md
+  - 02-chia-lay-nguyen.md
+  - 03-chia-lay-du.md
+  - 04-luy-thua.md
+  - 05-bai-toan.md
+reviews:
+  - { id: s2.phep-tinh.r1, after: s2.phep-tinh.l2 }
+  - { id: s2.phep-tinh.r2, after: s2.phep-tinh.l5 }

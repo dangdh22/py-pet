@@ -1,0 +1,261 @@
+questions:
+  - id: s2.phep-tinh.b1
+    type: mcq
+    concepts: [div-float]
+    lessons: [s2.phep-tinh.l1]
+    prompt:
+      vi: "Vì sao print(6 / 2) in ra 3.0 mà không in ra 3?"
+      en: "Why does print(6 / 2) print 3.0 and not 3?"
+    choices:
+      - { vi: "Vì Python tính sai phép chia này", en: "Because Python gets this division wrong", misconception: div-float }
+      - { vi: "Vì 6 không chia hết cho 2", en: "Because 6 cannot be divided exactly by 2", misconception: div-float }
+      - { vi: "Vì print luôn thêm .0 vào sau mọi số", en: "Because print always adds .0 after every number", misconception: div-float }
+      - { vi: "Vì phép / luôn cho ra số thực", en: "Because / always gives a float", correct: true }
+    explanation:
+      vi: "Python tính đúng: 6 chia 2 được 3. Nhưng kết quả của phép / luôn là số thực, nên được viết là 3.0. Lệnh print(3) vẫn in ra 3 như bình thường."
+      en: "Python is right: 6 divided by 2 is 3. But the result of / is always a float, so it is written as 3.0. The statement print(3) still prints 3 as usual."
+
+  - id: s2.phep-tinh.b2
+    type: mcq
+    concepts: [div-float]
+    lessons: [s2.phep-tinh.l1]
+    prompt:
+      vi: "Lệnh nào in ra 5.0?"
+      en: "Which statement prints 5.0?"
+    choices:
+      - { text: "print(10 / 2)", correct: true }
+      - { text: "print(10 - 5)", misconception: div-float }
+      - { text: "print(2 * 2 + 1)", misconception: div-float }
+      - { text: "print(5)", misconception: div-float }
+    explanation:
+      vi: "Chỉ phép / mới cho ra số thực: 10 / 2 in ra 5.0. Các lệnh còn lại tính với số nguyên bằng + - *, nên đều in ra 5, không có .0."
+      en: "Only / gives a float: 10 / 2 prints 5.0. The other statements work with integers using + - *, so they all print 5, with no .0."
+
+  - id: s2.phep-tinh.b3
+    type: predict
+    concepts: [div-float, precedence]
+    lessons: [s2.phep-tinh.l4]
+    code: |
+      print(1 + 6 / 2)
+    prompt: { vi: "Đoạn code in ra gì?", en: "What is the output of this code?" }
+    choices:
+      - { text: "4", misconception: div-float }
+      - { text: "3.5", misconception: precedence }
+      - { text: "4.0", correct: true }
+      - { text: "3", misconception: precedence }
+    explanation:
+      vi: "Python làm phép chia trước phép cộng: 6 / 2 ra 3.0. Sau đó 1 + 3.0 ra 4.0. Kết quả vẫn là số thực, vì trong phép tính có số thực 3.0."
+      en: "Python divides before it adds: 6 / 2 gives 3.0. Then 1 + 3.0 gives 4.0. The result is still a float, because the calculation has the float 3.0 in it."
+
+  - id: s2.phep-tinh.b4
+    type: predict
+    concepts: [floor-div]
+    lessons: [s2.phep-tinh.l2]
+    code: |
+      n = 50
+      n = n // 7
+      print(n)
+    prompt: { vi: "Đoạn code in ra gì?", en: "What is the output of this code?" }
+    choices:
+      - { text: "8", misconception: floor-div }
+      - { text: "7", correct: true }
+      - { text: "7.142857142857143", misconception: floor-div }
+      - { text: "7.0", misconception: floor-div }
+    explanation:
+      vi: "50 chia 7 được 7.14..., phần nguyên là 7. Dòng 2 cất 7 vào n. Phép // không làm tròn lên. Chia 2 số nguyên bằng // thì ra số nguyên, nên Python in ra 7, không có .0."
+      en: "50 divided by 7 is 7.14..., and its whole part is 7. Line 2 stores 7 in n. // does not round up. // with 2 integers gives an integer, so Python prints 7, with no .0."
+
+  - id: s2.phep-tinh.b5
+    type: mcq
+    concepts: [floor-div]
+    lessons: [s2.phep-tinh.l2]
+    prompt:
+      vi: "Lớp có 30 bạn, mỗi bàn ngồi đúng 4 bạn. Muốn biết có bao nhiêu bàn ngồi đủ 4 bạn, con tính bằng phép nào?"
+      en: "A class has 30 pupils, and each table seats exactly 4. To find how many tables are full with 4 pupils, which calculation do you use?"
+    choices:
+      - { text: "30 / 4", misconception: floor-div }
+      - { text: "4 // 30", misconception: floor-div }
+      - { text: "30 // 4 + 1", misconception: floor-div }
+      - { text: "30 // 4", correct: true }
+    explanation:
+      vi: "30 // 4 ra 7: có 7 bàn ngồi đủ 4 bạn. 30 / 4 ra 7.5, mà không có nửa cái bàn. 4 // 30 viết ngược thứ tự nên ra 0. Thêm 1 là đếm cả bàn chưa đủ 4 bạn."
+      en: "30 // 4 gives 7: 7 tables have 4 pupils each. 30 / 4 gives 7.5, but there is no half table. 4 // 30 has the numbers the wrong way round, so it gives 0. Adding 1 also counts a table that is not full."
+
+  - id: s2.phep-tinh.b6
+    type: predict
+    concepts: [floor-div, modulo]
+    lessons: [s2.phep-tinh.l3]
+    code: |
+      n = 2026
+      print(n // 10, n % 10)
+    prompt: { vi: "Đoạn code in ra gì?", en: "What is the output of this code?" }
+    choices:
+      - { text: "202 6", correct: true }
+      - { text: "6 202", misconception: modulo }
+      - { text: "202.6 6", misconception: floor-div }
+      - { text: "20 26", misconception: floor-div }
+    explanation:
+      vi: "2026 chia 10 được 202, còn dư 6. Phép // 10 bỏ chữ số hàng đơn vị nên ra 202. Phép % 10 lấy chữ số hàng đơn vị nên ra 6."
+      en: "2026 divided by 10 is 202 with a remainder of 6. // 10 drops the ones digit, so it gives 202. % 10 takes the ones digit, so it gives 6."
+
+  - id: s2.phep-tinh.b7
+    type: mcq
+    concepts: [modulo]
+    lessons: [s2.phep-tinh.l3]
+    prompt:
+      vi: "Trong Python, dấu % dùng để làm gì?"
+      en: "In Python, what is the % sign used for?"
+    choices:
+      - { vi: "Tính phần trăm", en: "Working out a percentage", misconception: modulo }
+      - { vi: "Lấy phần nguyên của phép chia", en: "Getting the whole part of a division", misconception: modulo }
+      - { vi: "Lấy số dư của phép chia", en: "Getting the remainder of a division", correct: true }
+      - { vi: "Chia ra số thực, như 3.5", en: "Dividing to get a float, such as 3.5", misconception: modulo }
+    explanation:
+      vi: "Trong Python, dấu % cho ra số dư: 7 % 2 ra 1. Phần nguyên là việc của dấu //, còn chia ra số thực là việc của dấu /."
+      en: "In Python, % gives the remainder: 7 % 2 gives 1. The whole part is the job of //, and dividing to get a float is the job of /."
+
+  - id: s2.phep-tinh.b8
+    type: mcq
+    concepts: [modulo]
+    lessons: [s2.phep-tinh.l3]
+    prompt:
+      vi: "Với 1 số nguyên n, lệnh print(n % 2) in ra 1. Câu nào chắc chắn đúng?"
+      en: "For a whole number n, print(n % 2) prints 1. Which sentence is surely right?"
+    choices:
+      - { vi: "n là số chẵn", en: "n is even", misconception: modulo }
+      - { vi: "n là số lẻ", en: "n is odd", correct: true }
+      - { vi: "n bằng 1", en: "n is 1", misconception: modulo }
+      - { vi: "n chia cho 2 được 1", en: "n divided by 2 gives 1", misconception: modulo }
+    explanation:
+      vi: "n % 2 là số dư khi chia n cho 2. Số dư là 1 nghĩa là n không chia hết cho 2, nên n là số lẻ. n có thể là 1, 3, 15 hay bất kỳ số lẻ nào."
+      en: "n % 2 is the remainder when n is divided by 2. A remainder of 1 means n cannot be divided exactly by 2, so n is odd. n can be 1, 3, 15 or any odd number."
+
+  - id: s2.phep-tinh.b9
+    type: predict
+    concepts: [modulo]
+    lessons: [s2.phep-tinh.l3]
+    code: |
+      print(4 % 7)
+    prompt: { vi: "Đoạn code in ra gì?", en: "What is the output of this code?" }
+    choices:
+      - { text: "0", misconception: modulo }
+      - { text: "3", misconception: modulo }
+      - { text: "7", misconception: modulo }
+      - { text: "4", correct: true }
+    explanation:
+      vi: "4 chia 7 được 0, còn dư 4. Khi số bị chia nhỏ hơn số chia, số dư chính là số bị chia. Giống như 4 viên kẹo chia cho 7 bạn: không ai được viên nào, còn nguyên 4 viên."
+      en: "4 divided by 7 is 0 with a remainder of 4. When the number you divide is smaller than the number you divide by, the remainder is that first number. It is like sharing 4 sweets among 7 friends: nobody gets one, and all 4 are left."
+
+  - id: s2.phep-tinh.b10
+    type: mcq
+    concepts: [modulo]
+    lessons: [s2.phep-tinh.l3]
+    prompt:
+      vi: "Muốn lấy chữ số hàng đơn vị của số trong biến n, con viết gì?"
+      en: "To get the ones digit of the number in the variable n, what do you write?"
+    choices:
+      - { text: "n % 10", correct: true }
+      - { text: "n // 10", misconception: floor-div }
+      - { text: "n / 10", misconception: div-float }
+      - { text: "n % 2", misconception: modulo }
+    explanation:
+      vi: "Chữ số hàng đơn vị là số dư khi chia cho 10, nên viết n % 10. Phép n // 10 thì bỏ chữ số hàng đơn vị đi. Phép n % 2 chỉ cho biết n chẵn hay lẻ."
+      en: "The ones digit is the remainder when you divide by 10, so write n % 10. n // 10 drops the ones digit. n % 2 only tells whether n is even or odd."
+
+  - id: s2.phep-tinh.b11
+    type: mcq
+    concepts: [power-op]
+    lessons: [s2.phep-tinh.l4]
+    prompt:
+      vi: "Lệnh nào in ra 8?"
+      en: "Which statement prints 8?"
+    choices:
+      - { text: "print(2 ^ 3)", misconception: power-op }
+      - { text: "print(3 ** 2)", misconception: power-op }
+      - { text: "print(2 ** 3)", correct: true }
+      - { text: "print(2 * 3)", misconception: power-op }
+    explanation:
+      vi: "2 ** 3 là 2 * 2 * 2, ra 8. 3 ** 2 là 3 * 3, ra 9. 2 * 3 ra 6. Còn 2 ^ 3 không phải lũy thừa: Python in ra 1."
+      en: "2 ** 3 is 2 * 2 * 2, which gives 8. 3 ** 2 is 3 * 3, which gives 9. 2 * 3 gives 6. And 2 ^ 3 is not a power: Python prints 1."
+
+  - id: s2.phep-tinh.b12
+    type: mcq
+    concepts: [power-op]
+    lessons: [s2.phep-tinh.l4]
+    prompt:
+      vi: "Phép tính nào có cùng kết quả với 5 ** 2?"
+      en: "Which calculation gives the same result as 5 ** 2?"
+    choices:
+      - { text: "5 * 2", misconception: power-op }
+      - { text: "5 * 5", correct: true }
+      - { text: "2 * 2 * 2 * 2 * 2", misconception: power-op }
+      - { text: "5 ^ 2", misconception: power-op }
+    explanation:
+      vi: "5 ** 2 là 5 mũ 2, tức là 2 số 5 nhân với nhau: 5 * 5, ra 25. 2 * 2 * 2 * 2 * 2 là 2 ** 5, ra 32. Dấu ^ không phải lũy thừa trong Python."
+      en: "5 ** 2 is 5 to the power of 2, that is 2 fives multiplied together: 5 * 5, which gives 25. 2 * 2 * 2 * 2 * 2 is 2 ** 5, which gives 32. ^ is not a power in Python."
+
+  - id: s2.phep-tinh.b13
+    type: mcq
+    concepts: [power-op]
+    lessons: [s2.phep-tinh.l4]
+    prompt:
+      vi: "Một bạn viết print(2 ^ 3) để tính 2 mũ 3. Chuyện gì xảy ra?"
+      en: "A friend writes print(2 ^ 3) to work out 2 to the power of 3. What happens?"
+    choices:
+      - { vi: "Python in ra 8", en: "Python prints 8", misconception: power-op }
+      - { vi: "Python báo lỗi SyntaxError", en: "Python shows a SyntaxError", error: true, misconception: power-op }
+      - { vi: "Python in ra 6", en: "Python prints 6", misconception: power-op }
+      - { vi: "Python in ra 1 và không báo lỗi", en: "Python prints 1 and shows no error", correct: true }
+    explanation:
+      vi: "Trong Python, dấu ^ là một phép tính khác, không phải lũy thừa. Python không báo lỗi mà in ra 1, nên rất khó nhận ra là viết sai. Muốn tính 2 mũ 3, con viết 2 ** 3."
+      en: "In Python, ^ is a different operation, not a power. Python shows no error and prints 1, so the mistake is hard to notice. To work out 2 to the power of 3, write 2 ** 3."
+
+  - id: s2.phep-tinh.b14
+    type: mcq
+    concepts: [precedence]
+    lessons: [s2.phep-tinh.l4]
+    prompt:
+      vi: "Muốn tính trung bình cộng của 2 số trong biến a và b, con viết phép tính nào?"
+      en: "To work out the average of the 2 numbers in the variables a and b, which calculation do you write?"
+    choices:
+      - { text: "(a + b) / 2", correct: true }
+      - { text: "a + b / 2", misconception: precedence }
+      - { text: "a + b // 2", misconception: precedence }
+      - { text: "(a + b) % 2", misconception: modulo }
+    explanation:
+      vi: "Trung bình cộng là tổng chia cho 2, nên phải cộng trước. Ngoặc tròn giúp Python cộng a + b trước rồi mới chia. Không có ngoặc thì Python chia b cho 2 trước, rồi mới cộng a."
+      en: "The average is the sum divided by 2, so you must add first. The round brackets make Python add a + b first and then divide. Without brackets, Python divides b by 2 first, and then adds a."
+
+  - id: s2.phep-tinh.b15
+    type: predict
+    concepts: [precedence, floor-div]
+    lessons: [s2.phep-tinh.l4]
+    code: |
+      a = 7
+      b = 3
+      print(a + b // 2)
+    prompt: { vi: "Đoạn code in ra gì?", en: "What is the output of this code?" }
+    choices:
+      - { text: "5", misconception: precedence }
+      - { text: "8.5", misconception: floor-div }
+      - { text: "8", correct: true }
+      - { text: "5.0", misconception: precedence }
+    explanation:
+      vi: "Python làm phép // trước phép cộng: 3 // 2 ra 1. Sau đó 7 + 1 ra 8. Muốn cộng trước thì phải viết (a + b) // 2, ra 5."
+      en: "Python does // before the addition: 3 // 2 gives 1. Then 7 + 1 gives 8. To add first, you must write (a + b) // 2, which gives 5."
+
+  - id: s2.phep-tinh.b16
+    type: mcq
+    concepts: [precedence]
+    lessons: [s2.phep-tinh.l4]
+    prompt:
+      vi: "Phép tính 2 + 3 * 4 ra 14. Thêm ngoặc tròn như thế nào thì ra 20?"
+      en: "The calculation 2 + 3 * 4 gives 14. Where do you add round brackets to get 20?"
+    choices:
+      - { text: "2 + (3 * 4)", misconception: precedence }
+      - { text: "(2 + 3) * 4", correct: true }
+      - { text: "(2 + 3 * 4)", misconception: precedence }
+      - { text: "2 + 3 * (4)", misconception: precedence }
+    explanation:
+      vi: "Phép tính trong ngoặc được làm trước. (2 + 3) * 4 cộng trước ra 5, rồi 5 * 4 ra 20. Ba cách còn lại vẫn nhân 3 * 4 trước, nên vẫn ra 14."
+      en: "The calculation in brackets comes first. (2 + 3) * 4 adds first to get 5, then 5 * 4 gives 20. The other 3 ways still multiply 3 * 4 first, so they still give 14."
