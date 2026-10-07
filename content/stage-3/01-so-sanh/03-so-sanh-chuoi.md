@@ -120,7 +120,7 @@ print("10" < 9)
 
 Lời báo lỗi là '<' not supported between instances of 'str' and 'int'. Câu này nghĩa là phép < không dùng được giữa 1 chuỗi (str) và 1 số nguyên (int).
 ---
-Python so sánh lớn nhỏ được 2 chuỗi: nó xét **từng ký tự từ trái sang phải**, giống như cách xếp tên theo thứ tự trong sổ điểm danh. Với chữ số, ký tự 1 đứng trước ký tự 9:
+Python so sánh lớn nhỏ được 2 chuỗi: nó xét **từng ký tự từ trái sang phải**, giống như cách xếp các từ trong từ điển. Với chữ số, ký tự 1 đứng trước ký tự 9:
 
 ```python run
 print("an" < "binh")
@@ -128,7 +128,7 @@ print("10" < "9")
 print(10 < 9)
 ```
 
-Dòng 2 ra True. Python so ký tự đầu trước: "1" đứng trước "9", nên Python trả lời ngay, không xét tiếp. Python không xem "10" là số mười. Ngoài ra, mọi chữ hoa đều đứng trước chữ thường, nên `"Z" < "a"` cũng ra True.
+Dòng 2 ra True. Python so ký tự đầu trước: "1" đứng trước "9", nên Python trả lời ngay, không xét tiếp. Python không xem "10" là số mười. Ngoài ra, các chữ hoa từ A đến Z đều đứng trước chữ thường, nên `"Z" < "a"` cũng ra True.
 ---
 Vì vậy, khi so sánh số con nhập vào, con phải **đổi sang số** bằng `int()` trước:
 

@@ -309,7 +309,7 @@ questions:
       - { vi: "Máy tính tự học ra từ dữ liệu", en: "The computer learned it by itself from data", misconception: ai-rules-vs-data }
       - { vi: "Người viết chương trình", en: "The person who wrote the program", correct: true }
       - { vi: "Python tự chọn khi chạy", en: "Python chose it by itself while running", misconception: ai-rules-vs-data }
-      - { vi: "Người dùng gõ vào khi chạy chương trình", en: "The user typed it in while running the program", misconception: input-order }
+      - { vi: "Người dùng gõ vào khi chạy chương trình", en: "The user typed it in while running the program", misconception: ai-rules-vs-data }
     explanation:
       vi: "Đây là 1 quy tắc cố định: chính người viết chương trình đã chọn số 30 và viết vào code. Người dùng chỉ gõ nhiệt độ, còn số 30 thì lần chạy nào cũng giống nhau. Chương trình này không học gì từ dữ liệu."
       en: "This is a fixed rule: the person who wrote the program chose the number 30 and wrote it in the code. The user only types the temperature, and the number 30 is the same every time it runs. This program does not learn anything from data."
