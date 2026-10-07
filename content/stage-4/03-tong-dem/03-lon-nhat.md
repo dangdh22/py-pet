@@ -147,7 +147,7 @@ print("Lớn nhất:", lon_nhat)
 
 Dòng 1 đọc số đầu tiên, và Robo coi số đó là lớn nhất. Vòng lặp đọc 4 số còn lại. Với 5 dòng là 7, 12, 5, 15 và 9, lon_nhat lần lượt là 7, 12, 12, 15, 15, và chương trình in ra Lớn nhất: 15.
 ---
-Vì sao không bắt đầu với `lon_nhat = 0`? Đêm trên đỉnh núi rất lạnh: lúc 1 giờ sáng nhiệt độ là -2 độ, và mỗi giờ giảm thêm 2 độ. Robo tìm lúc nóng nhất, nhưng bắt đầu từ 0:
+Vì sao không bắt đầu với `lon_nhat = 0`? Đêm trên đỉnh núi rất lạnh: lúc 1 giờ sáng nhiệt độ là -2 độ, và mỗi giờ giảm thêm 2 độ. Robo tìm lúc ấm nhất, nhưng bắt đầu từ 0:
 
 ```python run
 lon_nhat = 0
@@ -156,7 +156,7 @@ for gio in range(1, 5):
     print("Lúc", gio, "giờ:", nhiet_do, "độ")
     if nhiet_do > lon_nhat:
         lon_nhat = nhiet_do
-print("Nóng nhất:", lon_nhat, "độ")
+print("Ấm nhất:", lon_nhat, "độ")
 ```
 
 Không giờ nào có 0 độ, nhưng Robo in ra 0! Mọi nhiệt độ đều nhỏ hơn 0, nên lon_nhat không bao giờ đổi. Số đầu tiên luôn là 1 số thật trong dữ liệu, nên con bắt đầu từ **số đầu tiên**. Bắt đầu từ -2, Robo in đúng là -2 độ.

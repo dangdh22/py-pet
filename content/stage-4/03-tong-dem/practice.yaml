@@ -185,47 +185,47 @@ exercises:
     type: code
     concepts: [accumulator-init, plus-equals]
     prompt:
-      vi: "Robo đi chợ. Ô Dữ liệu nhập có nhiều dòng: mỗi dòng là giá 1 món Robo mua (số nguyên lớn hơn 0, tính bằng nghìn đồng), và dòng cuối cùng là 0. Hãy dùng phép += để tính số món và tổng số tiền, rồi in ra đúng 1 dòng như phần Ví dụ."
-      en: "Robo goes to the market. The Input data box has several lines: each line is the price of 1 item Robo buys (an integer greater than 0, in thousands of dong), and the last line is 0. Use the += operation to work out the number of items and the total money, then print exactly 1 line as in the Example."
+      vi: "Robo thu tiền quỹ lớp. Ô Dữ liệu nhập có nhiều dòng: mỗi dòng là số tiền 1 bạn nộp (số nguyên lớn hơn 0, tính bằng nghìn đồng), và dòng cuối cùng là 0. Hãy dùng phép += để tính số bạn đã nộp và tổng số tiền, rồi in ra đúng 1 dòng như phần Ví dụ."
+      en: "Robo collects the class fund. The Input data box has several lines: each line is the money 1 child pays (an integer greater than 0, in thousands of dong), and the last line is 0. Use the += operation to work out how many children paid and the total money, then print exactly 1 line as in the Example."
     starter: |
       # Viết lệnh của con ở dưới dòng này
     solution: |
       dem = 0
       tong = 0
-      gia = int(input())
-      while gia != 0:
-          tong += gia
+      tien = int(input())
+      while tien != 0:
+          tong += tien
           dem += 1
-          gia = int(input())
-      print("Robo mua", dem, "món, hết", tong, "nghìn đồng")
+          tien = int(input())
+      print("Có", dem, "bạn nộp, tổng cộng", tong, "nghìn đồng")
     tests:
       - input: "15\n30\n12\n0"
-        output: "Robo mua 3 món, hết 57 nghìn đồng"
+        output: "Có 3 bạn nộp, tổng cộng 57 nghìn đồng"
       - input: "0"
-        output: "Robo mua 0 món, hết 0 nghìn đồng"
+        output: "Có 0 bạn nộp, tổng cộng 0 nghìn đồng"
         hidden: true
       - input: "25\n0"
-        output: "Robo mua 1 món, hết 25 nghìn đồng"
+        output: "Có 1 bạn nộp, tổng cộng 25 nghìn đồng"
         hidden: true
       - input: "5\n5\n5\n5\n5\n0"
-        output: "Robo mua 5 món, hết 25 nghìn đồng"
+        output: "Có 5 bạn nộp, tổng cộng 25 nghìn đồng"
         hidden: true
     common_wrong:
       - test: 0
-        output: "Robo mua 3 món, hết 12 nghìn đồng"
+        output: "Có 3 bạn nộp, tổng cộng 12 nghìn đồng"
         misconception: plus-equals
         sample: |
           dem = 0
           tong = 0
-          gia = int(input())
-          while gia != 0:
-              tong =+ gia
+          tien = int(input())
+          while tien != 0:
+              tong =+ tien
               dem += 1
-              gia = int(input())
-          print("Robo mua", dem, "món, hết", tong, "nghìn đồng")
+              tien = int(input())
+          print("Có", dem, "bạn nộp, tổng cộng", tong, "nghìn đồng")
     hints:
-      - { vi: "Đặt dem = 0 và tong = 0 trước vòng lặp, rồi đọc giá đầu tiên. Vòng lặp while chạy trong khi gia != 0. Trong khối lệnh: cộng giá vào tong, cộng 1 vào dem, rồi đọc giá tiếp theo ở dòng cuối của khối.", en: "Set dem = 0 and tong = 0 before the loop, then read the first price. The while loop runs while gia != 0. Inside the block: add the price to tong, add 1 to dem, then read the next price on the last line of the block." }
-      - { vi: "Khối của while gia != 0: có 3 dòng: tong += gia, dem += 1 và gia = int(input()). Sau vòng lặp: print(\"Robo mua\", dem, \"món, hết\", tong, \"nghìn đồng\").", en: "The block of while gia != 0: has 3 lines: tong += gia, dem += 1 and gia = int(input()). After the loop: print(\"Robo mua\", dem, \"món, hết\", tong, \"nghìn đồng\")." }
+      - { vi: "Đặt dem = 0 và tong = 0 trước vòng lặp, rồi đọc số tiền đầu tiên. Vòng lặp while chạy trong khi tien != 0. Trong khối lệnh: cộng số tiền vào tong, cộng 1 vào dem, rồi đọc số tiền tiếp theo ở dòng cuối của khối.", en: "Set dem = 0 and tong = 0 before the loop, then read the first amount. The while loop runs while tien != 0. Inside the block: add the money to tong, add 1 to dem, then read the next amount on the last line of the block." }
+      - { vi: "Khối của while tien != 0: có 3 dòng: tong += tien, dem += 1 và tien = int(input()). Sau vòng lặp: print(\"Có\", dem, \"bạn nộp, tổng cộng\", tong, \"nghìn đồng\").", en: "The block of while tien != 0: has 3 lines: tong += tien, dem += 1 and tien = int(input()). After the loop: print(\"Có\", dem, \"bạn nộp, tổng cộng\", tong, \"nghìn đồng\")." }
     test_eligible: true
 
   - id: s4.tong-dem.c2

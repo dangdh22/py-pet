@@ -106,7 +106,7 @@ questions:
     lessons: [s4.tong-dem.l2]
     code: |
       count = 0
-      for ch in "hi you":
+      for ch in "go on up":
           if ch != " ":
               count += 1
       print(count)
@@ -114,13 +114,13 @@ questions:
       vi: "Đoạn code in ra gì?"
       en: "What is the output of this code?"
     choices:
-      - { text: "5", correct: true }
-      - { text: "6", misconception: for-over-string }
+      - { text: "6", correct: true }
+      - { text: "8", misconception: for-over-string }
+      - { text: "3", misconception: count-if }
       - { text: "2", misconception: count-if }
-      - { text: "1", misconception: count-if }
     explanation:
-      vi: "Chuỗi \"hi you\" có 6 ký tự: h, i, dấu cách, y, o, u. Điều kiện ch != \" \" đúng với mọi ký tự trừ dấu cách, nên count tăng 5 lần. Đoạn code đếm các ký tự khác dấu cách, không đếm số từ."
-      en: "The string \"hi you\" has 6 characters: h, i, a space, y, o, u. The condition ch != \" \" is True for every character except the space, so count goes up 5 times. The code counts the characters that are not spaces; it does not count the words."
+      vi: "Chuỗi \"go on up\" có 8 ký tự, trong đó có 2 dấu cách. Điều kiện ch != \" \" đúng với mọi ký tự trừ dấu cách, nên count tăng 6 lần. Đoạn code đếm các ký tự khác dấu cách: nó không đếm số từ, cũng không đếm số dấu cách."
+      en: "The string \"go on up\" has 8 characters, and 2 of them are spaces. The condition ch != \" \" is True for every character except a space, so count goes up 6 times. The code counts the characters that are not spaces: it does not count the words, and it does not count the spaces."
 
   - id: s4.tong-dem.b7
     type: predict
