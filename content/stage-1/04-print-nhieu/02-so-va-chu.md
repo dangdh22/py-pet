@@ -113,4 +113,4 @@ print("Hai Robo có", 2 * 4, "bánh xe")
 print("Robo có " + 4 + " bánh xe")
 ```
 
-Trong thông báo, **int** là tên Python dùng cho số nguyên, còn **str** là tên của chuỗi. Robo gợi ý vài cách sửa mà con sẽ học ở giai đoạn sau. Bây giờ, con chỉ cần dùng dấu phẩy: `print("Robo có", 4, "bánh xe")`.
+Trong thông báo, **int** là tên Python dùng cho số nguyên, còn **str** là tên của chuỗi. Robo gợi ý dùng dấu phẩy, đúng cách con vừa học. Robo cũng nhắc đến **str()**, một cách khác mà con sẽ học ở giai đoạn sau. Bây giờ, con chỉ cần dùng dấu phẩy: `print("Robo có", 4, "bánh xe")`.

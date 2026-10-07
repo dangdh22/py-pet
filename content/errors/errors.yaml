@@ -52,8 +52,8 @@
   match: { type: SyntaxError, message: "^unterminated (triple-quoted )?string literal" }
   misconception: string-quotes
   explain:
-    vi: "Dòng {line}: chuỗi chưa có dấu nháy đóng. Mở chuỗi bằng dấu nháy nào thì phải đóng bằng đúng dấu nháy đó."
-    en: "Line {line}: the string has no closing quote. Close the string with the same quote that opens it."
+    vi: "Dòng {line}: chuỗi chưa có dấu nháy đóng. Mở chuỗi bằng dấu nháy nào thì phải đóng bằng đúng dấu nháy đó. Nếu bên trong chuỗi có 1 dấu nháy cùng loại, như It's, hãy bao ngoài chuỗi bằng loại dấu nháy còn lại."
+    en: "Line {line}: the string has no closing quote. Close the string with the same quote that opens it. If the string has 1 quote of the same type inside it, like It's, put the other type of quote around the string."
   hint:
     vi: "Ví dụ đúng: print(\"Xin chào\")"
     en: "Correct example: print(\"Hello\")"
@@ -98,8 +98,8 @@
 - id: missing-comma
   match: { type: SyntaxError, message: "Perhaps you forgot a comma\\?" }
   explain:
-    vi: "Dòng {line}: có thể con quên dấu phẩy giữa 2 giá trị đứng cạnh nhau. Nếu chuỗi có dấu nháy cùng loại ở bên trong, hãy bao ngoài chuỗi bằng loại dấu nháy còn lại, ví dụ print('Robo nói: \"Chào!\"')."
-    en: "Line {line}: maybe a comma is missing between 2 values that stand next to each other. If a string has a quote of the same type inside it, put the other type of quote around the string, for example print('Robo says: \"Hi!\"')."
+    vi: "Dòng {line}: Python thấy 2 thứ đứng cạnh nhau mà không có gì ngăn cách. Nếu đó là chữ cần in ra, hãy đặt cả câu trong 1 cặp dấu nháy, ví dụ print(\"Xin chào Robo\"). Nếu bên trong chuỗi có dấu nháy cùng loại, hãy bao ngoài bằng loại dấu nháy còn lại. Nếu đó là nhiều giá trị, hãy ngăn cách chúng bằng dấu phẩy."
+    en: "Line {line}: Python sees 2 things next to each other with nothing between them. If it is text to print, put the whole sentence inside 1 pair of quotes, for example print(\"Hello Robo\"). If the string has a quote of the same type inside it, put the other type of quote around the string. If they are several values, separate them with commas."
   sample: "print(\"a\" \"b\" 1)"
 
 - id: invalid-decimal

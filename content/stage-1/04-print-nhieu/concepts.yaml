@@ -7,7 +7,7 @@ concepts:
       Xếp 3 tấm thẻ chữ lên bàn, giữa 2 tấm liền nhau để cách 1 ngón tay. Dấu phẩy trong print giống ngón tay đó: tự tạo 1 khoảng trống giữa 2 giá trị, còn bản thân nó thì không được in ra.
     practice:
       level1: [s1.print-nhieu.l1.q1, s1.print-nhieu.l1.q2, s1.print-nhieu.b1, s1.print-nhieu.b2, s1.print-nhieu.b3, s1.print-nhieu.b4]
-      level2: [s1.print-nhieu.p1, s1.print-nhieu.p6]
+      level2: [s1.print-nhieu.p1]
       level3: [s1.print-nhieu.l1.ex1, s1.print-nhieu.c1, s1.print-nhieu.l5.ex2]
   - id: number-vs-text
     name: { vi: "Số và chữ số trong dấu nháy khác nhau", en: "Numbers and digits in quotes are different" }

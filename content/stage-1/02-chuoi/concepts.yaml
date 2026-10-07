@@ -27,8 +27,8 @@ concepts:
       Viết "Py" và "Pet" lên 2 mảnh giấy rồi đặt sát nhau: con sẽ đọc được PyPet. Muốn có khoảng trống thì phải chèn thêm 1 mảnh giấy trắng vào giữa.
     practice:
       level1: [s1.chuoi.l3.q1, s1.chuoi.b7, s1.chuoi.b9, s1.chuoi.b17]
-      level2: [s1.chuoi.p3, s1.chuoi.p4]
-      level3: [s1.chuoi.l3.ex1, s1.chuoi.c1]
+      level2: [s1.chuoi.p3]
+      level3: [s1.chuoi.l3.ex1]
   - id: string-repeat
     name: { vi: "Lặp chuỗi bằng dấu *", en: "Repeating a string with *" }
     misconception_card: |
