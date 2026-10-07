@@ -58,8 +58,8 @@ const FACES: Record<RobotMood, ReactNode> = {
   // Half-closed eyes and a yawning round mouth.
   sleepy: (
     <>
-      <path d="M6.5 8 a3 2.8 0 0 0 6 0 z M17.5 8 a3 2.8 0 0 0 6 0 z" fill={C.eye} />
-      <path d="M5.8 8 h7.4 M16.8 8 h7.4" {...line} strokeWidth={1.4} />
+      <path d="M7 9.2 a2.5 2.1 0 0 0 5 0 z M18 9.2 a2.5 2.1 0 0 0 5 0 z" fill={C.eye} />
+      <path d="M5.8 8.2 q3.7 2.4 7.4 0 M16.8 8.2 q3.7 2.4 7.4 0" {...line} strokeWidth={1.4} />
       <ellipse cx={15} cy={13.6} rx={2.3} ry={2.7} fill={C.screenDeep} stroke={C.eye} strokeWidth={1.4} />
     </>
   ),

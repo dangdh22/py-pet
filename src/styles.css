@@ -188,13 +188,3 @@ a.button.primary { background: var(--primary); border-color: var(--primary); col
 .parent-settings h2 { margin-top: 24px; }
 button.danger { background: #c62828; border-color: #c62828; color: #fff; }
 button.danger:disabled { opacity: 0.5; }
-
-/* Dev-only robot gallery (#/gallery). */
-.gallery { padding: 20px; }
-.gallery-grid { border-collapse: collapse; }
-.gallery-grid th { font-size: 0.85rem; color: var(--muted); padding: 4px 8px; text-align: center; }
-.gallery-grid td { padding: 6px; background: var(--surface); border: 1px solid var(--border); text-align: center; vertical-align: bottom; }
-.gallery-floor { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 12px; padding: 8px; background: var(--surface); border-bottom: 3px solid var(--border); }
-.gallery-floor figure { margin: 0; text-align: center; }
-.gallery-floor svg { display: block; margin: 0 auto; }
-.gallery-floor figcaption { font-size: 0.75rem; color: var(--muted); }
