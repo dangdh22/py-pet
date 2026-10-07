@@ -62,6 +62,14 @@ export function isAssignedInCode(name: string, code: string): boolean {
   return new RegExp(`^[ \\t]*${escaped}[ \\t]*=(?!=)`, "mu").test(stripStringsAndComments(code));
 }
 
+/** True when the header of an if/elif/while line has a lone `=` (not part of == <= >= != or :=). */
+export function hasLoneEqualsInCondition(lineText: string): boolean {
+  const line = stripStringsAndComments(lineText);
+  if (!/^\s*(if|elif|while)\b/.test(line)) return false;
+  const header = line.split(/:(?!=)/)[0] ?? "";
+  return /(?<![=<>!:])=(?!=)/.test(header);
+}
+
 export const checks: Record<CheckName, (input: CheckInput) => CheckResult> = {
   "similar-name": ({ code, vars }) => {
     const name = vars.name;
@@ -73,5 +81,6 @@ export const checks: Record<CheckName, (input: CheckInput) => CheckResult> = {
     vars.name && isAssignedInCode(vars.name, code) ? { ok: true, vars } : { ok: false },
   "assign-in-condition": ({ error, vars }) =>
     /^\s*(if|elif|while)\b/.test(error.lineText) ? { ok: true, vars } : { ok: false },
+  "assign-in-if": ({ error, vars }) => (hasLoneEqualsInCondition(error.lineText) ? { ok: true, vars } : { ok: false }),
   "while-loop": ({ code, vars }) => (/^\s*while\b/m.test(code) ? { ok: true, vars } : { ok: false }),
 };

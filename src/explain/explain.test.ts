@@ -44,7 +44,10 @@ const entries: ErrorEntry[] = [
     explain: { vi: "Ký tự lạ {char} ({code})", en: "Strange character {char} ({code})" },
   }),
   entry("assign-in-condition", "SyntaxError", {
-    match: { type: "SyntaxError", message: "Maybe you meant '=='", check: "assign-in-condition" },
+    match: { type: "SyntaxError", message: "Maybe you meant '==' (or ':=' )?instead of '='", check: "assign-in-condition" },
+  }),
+  entry("assign-in-if", "SyntaxError", {
+    match: { type: "SyntaxError", message: "^invalid syntax$", check: "assign-in-if" },
   }),
   entry("syntax-other", "SyntaxError"),
   entry("timeout-while", "Timeout", { match: { type: "Timeout", message: null, check: "while-loop" } }),
@@ -69,6 +72,38 @@ describe("checks", () => {
     expect(findSimilarName("Robo", "print(Robo)")).toBeNull();
     expect(findSimilarName("Xin", "print(Xin)")).toBeNull();
     expect(findSimilarName("tuoii", 'print("tuoi")\nprint(tuoii)')).toBeNull();
+  });
+});
+
+describe("assign-in-if check", () => {
+  const lineOf = (lineText: string) => ({ error: error("SyntaxError", "invalid syntax", 2, lineText), code: "", vars: {} });
+
+  test("is ok for a lone = in an if, elif or while line", () => {
+    expect(checks["assign-in-if"](lineOf("if n % 4 == 0 and n % 100 = 0:"))).toMatchObject({ ok: true });
+    expect(checks["assign-in-if"](lineOf("    elif a == 1 and b = 2:"))).toMatchObject({ ok: true });
+    expect(checks["assign-in-if"](lineOf("while x > 0 or y = 2:"))).toMatchObject({ ok: true });
+    expect(checks["assign-in-if"](lineOf("if not x = 2:"))).toMatchObject({ ok: true });
+  });
+
+  test("is not ok when every = belongs to ==, <=, >= or !=", () => {
+    expect(checks["assign-in-if"](lineOf("if a == 1 and b != 2:"))).toEqual({ ok: false });
+    expect(checks["assign-in-if"](lineOf("if a <= 1 and b >= 2 or c ==3:"))).toEqual({ ok: false });
+  });
+
+  test("ignores an = inside a string or a comment", () => {
+    expect(checks["assign-in-if"](lineOf('if a == "x = 1" and b ==:'))).toEqual({ ok: false });
+    expect(checks["assign-in-if"](lineOf("if a == 'b = 2' and"))).toEqual({ ok: false });
+    expect(checks["assign-in-if"](lineOf("if a == 1 and  # b = 2"))).toEqual({ ok: false });
+  });
+
+  test("is not ok for a line that is not if, elif or while", () => {
+    expect(checks["assign-in-if"](lineOf("x = 5 +"))).toEqual({ ok: false });
+    expect(checks["assign-in-if"](lineOf("print(a = 1 and b"))).toEqual({ ok: false });
+    expect(checks["assign-in-if"](lineOf("iffy = 5 and"))).toEqual({ ok: false });
+  });
+
+  test("does not look at an = after the colon of a one-line body", () => {
+    expect(checks["assign-in-if"](lineOf("if a == 1: b = 2 +"))).toEqual({ ok: false });
   });
 });
 
@@ -126,6 +161,18 @@ describe("matchError", () => {
     const message = "invalid syntax. Maybe you meant '==' or ':=' instead of '='?";
     expect(matchError(entries, error("SyntaxError", message, 2, "if x = 5:"), "")?.entry.id).toBe("assign-in-condition");
     expect(matchError(entries, error("SyntaxError", message, 2, "print(x = 5)"), "")?.entry.id).toBe("syntax-other");
+  });
+
+  test("assign-in-condition also matches the message without ':='", () => {
+    const message = "cannot assign to expression here. Maybe you meant '==' instead of '='?";
+    expect(matchError(entries, error("SyntaxError", message, 2, "if n % 2 = 0:"), "")?.entry.id).toBe("assign-in-condition");
+    expect(matchError(entries, error("SyntaxError", message, 1, "11 = tuoi"), "")?.entry.id).toBe("syntax-other");
+  });
+
+  test("assign-in-if catches a plain invalid syntax on a condition line only", () => {
+    const message = "invalid syntax";
+    expect(matchError(entries, error("SyntaxError", message, 2, "if a == 1 and b = 2:"), "")?.entry.id).toBe("assign-in-if");
+    expect(matchError(entries, error("SyntaxError", message, 2, "if a == 1 and b == 2 3:"), "")?.entry.id).toBe("syntax-other");
   });
 
   test("while-loop check for timeouts", () => {

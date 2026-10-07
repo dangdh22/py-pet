@@ -168,7 +168,7 @@ export interface Stage {
   evolution: EvolutionTestConfig;
 }
 
-export const CHECK_NAMES = ["similar-name", "assigned-in-code", "assign-in-condition", "while-loop"] as const;
+export const CHECK_NAMES = ["similar-name", "assigned-in-code", "assign-in-condition", "assign-in-if", "while-loop"] as const;
 export type CheckName = (typeof CHECK_NAMES)[number];
 
 export interface BilingualText {
