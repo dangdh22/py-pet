@@ -129,6 +129,12 @@ describe("assigned-in-code check", () => {
     expect(checks["assigned-in-code"]({ error: error("NameError"), code: "x = 1", vars: {} })).toEqual({ ok: false });
   });
 
+  test("an augmented assignment such as += counts as an assignment", () => {
+    expect(checks["assigned-in-code"](input("tong", "for i in range(3):\n    tong += i"))).toMatchObject({ ok: true });
+    expect(checks["assigned-in-code"](input("x", "x //= 2"))).toMatchObject({ ok: true });
+    expect(checks["assigned-in-code"](input("x", "x <= 2\nx != 2\nx == 2"))).toEqual({ ok: false });
+  });
+
   test("escapes the name for a RegExp", () => {
     expect(isAssignedInCode("a.b", "axb = 1")).toBe(false);
   });

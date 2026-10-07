@@ -56,10 +56,10 @@ export function findSimilarName(name: string, code: string): string | null {
   return best;
 }
 
-/** True when `name` is the target of a plain assignment (`name = ...`, not `==`) on some line of the code. */
+/** True when `name` is the target of an assignment (`name = ...` or `name += ...`, not `==`) on some line of the code. */
 export function isAssignedInCode(name: string, code: string): boolean {
   const escaped = name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-  return new RegExp(`^[ \\t]*${escaped}[ \\t]*=(?!=)`, "mu").test(stripStringsAndComments(code));
+  return new RegExp(`^[ \\t]*${escaped}[ \\t]*(?:\\*\\*|//|[-+*/%])?=(?!=)`, "mu").test(stripStringsAndComments(code));
 }
 
 /**
