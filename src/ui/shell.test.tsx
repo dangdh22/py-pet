@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { render, screen } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, test, vi } from "vitest";
 import { fakeRunner, okResult, renderWithApp } from "../test/render";
@@ -17,13 +17,26 @@ describe("Header", () => {
     expect(screen.getByText("Robo đang khởi động...")).toBeInTheDocument();
   });
 
-  test("offers retry when the runner failed", async () => {
+  test("a runner that failed gets a Robo panel with retry and reload advice instead of the small text", async () => {
     const runner = fakeRunner(() => okResult(""), "failed");
     renderWithApp(<Header />, { runner });
-    expect(screen.getByText("Robo chưa khởi động được.")).toBeInTheDocument();
-    await userEvent.click(screen.getByRole("button", { name: "Thử lại" }));
+    const panel = screen.getByRole("alert");
+    expect(within(panel).getByRole("img", { name: "Robo" })).toHaveAttribute("data-mood", "sad");
+    expect(within(panel).getByText("Robo chưa khởi động được")).toBeInTheDocument();
+    expect(within(panel).getByText("Nếu vẫn lỗi, con tải lại trang nhé.")).toBeInTheDocument();
+    expect(screen.getAllByRole("button", { name: "Thử lại" })).toHaveLength(1);
+    await userEvent.click(within(panel).getByRole("button", { name: "Thử lại" }));
     expect(runner.retry).toHaveBeenCalledOnce();
-    expect(screen.getByText("Nếu vẫn lỗi, con tải lại trang nhé.")).toBeInTheDocument();
+  });
+
+  test("shows no panel while loading or ready", () => {
+    renderWithApp(<Header />, { runner: fakeRunner(() => okResult(""), "ready") });
+    expect(screen.queryByRole("alert")).not.toBeInTheDocument();
+  });
+
+  test("the panel follows the interface language", () => {
+    renderWithApp(<Header />, { runner: fakeRunner(() => okResult(""), "failed"), lang: "en" });
+    expect(screen.getByText("Robo could not start")).toBeInTheDocument();
   });
 
   test("switches the interface language", async () => {

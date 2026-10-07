@@ -3,13 +3,17 @@ import { FakeWorker } from "../test/fakeWorker";
 import { RunnerClient, RunnerCrashError } from "./client";
 import type { RunResult } from "./types";
 
-function setup() {
+function setup(startTimeoutMs?: number) {
   const workers: FakeWorker[] = [];
-  const client = new RunnerClient(() => {
-    const worker = new FakeWorker();
-    workers.push(worker);
-    return worker;
-  }, "http://localhost/pyodide/");
+  const client = new RunnerClient(
+    () => {
+      const worker = new FakeWorker();
+      workers.push(worker);
+      return worker;
+    },
+    "http://localhost/pyodide/",
+    startTimeoutMs,
+  );
   return { client, workers, current: () => workers[workers.length - 1] as FakeWorker };
 }
 
@@ -174,6 +178,71 @@ describe("RunnerClient", () => {
       expect(workers).toHaveLength(2);
       expect(workers[1]!.sent[0]).toMatchObject({ type: "init" });
       expect(client.status).toBe("loading");
+    });
+  });
+
+  describe("start timeout", () => {
+    beforeEach(() => {
+      vi.useFakeTimers();
+    });
+    afterEach(() => {
+      vi.useRealTimers();
+    });
+
+    test("a worker that never reports ready makes the status failed after the wait", async () => {
+      const { client, current } = setup(5000);
+      const pending = client.run("print(1)", "");
+      const rejected = expect(pending).rejects.toThrow();
+      vi.advanceTimersByTime(4999);
+      expect(client.status).toBe("loading");
+      vi.advanceTimersByTime(1);
+      expect(client.status).toBe("failed");
+      expect(current().terminated).toBe(true);
+      await rejected;
+    });
+
+    test("the default wait is 60 seconds", () => {
+      const { client } = setup();
+      vi.advanceTimersByTime(59_999);
+      expect(client.status).toBe("loading");
+      vi.advanceTimersByTime(1);
+      expect(client.status).toBe("failed");
+    });
+
+    test("ready in time cancels the wait", () => {
+      const { client, current } = setup(5000);
+      current().emit({ type: "ready" });
+      vi.advanceTimersByTime(10_000);
+      expect(client.status).toBe("ready");
+    });
+
+    test("retry starts a new worker with a fresh wait and drops the old timer", () => {
+      const { client, workers, current } = setup(5000);
+      vi.advanceTimersByTime(5000);
+      expect(client.status).toBe("failed");
+      client.retry();
+      expect(workers).toHaveLength(2);
+      expect(client.status).toBe("loading");
+      vi.advanceTimersByTime(4999);
+      expect(client.status).toBe("loading");
+      vi.advanceTimersByTime(1);
+      expect(client.status).toBe("failed");
+      client.retry();
+      current().emit({ type: "ready" });
+      vi.advanceTimersByTime(10_000);
+      expect(client.status).toBe("ready");
+    });
+
+    test("a worker restarted after a crash gets its own wait", () => {
+      const { client, workers, current } = setup(5000);
+      current().emit({ type: "ready" });
+      current().crash();
+      expect(workers).toHaveLength(2);
+      expect(client.status).toBe("loading");
+      vi.advanceTimersByTime(4999);
+      expect(client.status).toBe("loading");
+      vi.advanceTimersByTime(1);
+      expect(client.status).toBe("failed");
     });
   });
 });

@@ -1,11 +1,11 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { contentBundle } from "./content/bundle";
-import { translate } from "./i18n/translate";
 import { createBrowserRunner } from "./runner/browser";
 import { acquireTabLock, openGameStore } from "./storage/bootstrap";
 import { App } from "./ui/App";
-import { isBrowserSupported } from "./ui/browserSupport";
+import { browserLang, isBrowserSupported } from "./ui/browserSupport";
+import { UnsupportedBrowser } from "./ui/UnsupportedBrowser";
 import "./styles.css";
 
 const container = document.getElementById("root");
@@ -24,5 +24,5 @@ async function start() {
 if (isBrowserSupported()) {
   void start();
 } else {
-  root.render(<p className="crash">{translate("vi", "browser.unsupported")}</p>);
+  root.render(<UnsupportedBrowser lang={browserLang()} />);
 }

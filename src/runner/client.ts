@@ -20,6 +20,8 @@ export class RunnerCrashError extends Error {
 }
 
 export const MAX_CONSECUTIVE_CRASHES = 3;
+/** Design decision 5: Pyodide that is not ready after this long counts as failed to start. */
+export const START_TIMEOUT_MS = 60_000;
 
 interface PendingRun {
   id: number;
@@ -36,11 +38,13 @@ export class RunnerClient {
   private nextId = 1;
   private crashes = 0;
   private currentStatus: RunnerStatus = "loading";
+  private startTimer: ReturnType<typeof setTimeout> | null = null;
   private readonly listeners = new Set<(status: RunnerStatus) => void>();
 
   constructor(
     private readonly createWorker: WorkerFactory,
     private readonly indexURL: string,
+    private readonly startTimeoutMs: number = START_TIMEOUT_MS,
   ) {
     this.start();
   }
@@ -71,10 +75,18 @@ export class RunnerClient {
 
   private setStatus(status: RunnerStatus): void {
     this.currentStatus = status;
+    if (status !== "loading") this.clearStartTimer();
     for (const listener of this.listeners) listener(status);
   }
 
+  private clearStartTimer(): void {
+    if (this.startTimer === null) return;
+    clearTimeout(this.startTimer);
+    this.startTimer = null;
+  }
+
   private start(): void {
+    this.clearStartTimer();
     const worker = this.createWorker();
     this.worker = worker;
     this.setStatus("loading");
@@ -101,6 +113,13 @@ export class RunnerClient {
             break;
         }
       };
+      this.startTimer = setTimeout(() => {
+        this.startTimer = null;
+        if (this.worker !== worker || this.currentStatus !== "loading") return;
+        worker.terminate();
+        this.setStatus("failed");
+        reject(new Error("Pyodide did not become ready in time"));
+      }, this.startTimeoutMs);
       worker.onerror = () => {
         if (this.currentStatus === "loading") {
           this.setStatus("failed");

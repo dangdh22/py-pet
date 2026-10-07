@@ -1,5 +1,5 @@
 import { describe, expect, test, vi } from "vitest";
-import { isBrowserSupported } from "./browserSupport";
+import { browserLang, isBrowserSupported } from "./browserSupport";
 import { nodeRoute, parseHash, routeToHash, stepRoute } from "./routing";
 
 describe("routing", () => {
@@ -106,9 +106,25 @@ describe("gallery route", () => {
 });
 
 describe("isBrowserSupported", () => {
-  test("needs WebAssembly and Worker", () => {
-    expect(isBrowserSupported({ WebAssembly: {}, Worker: function Worker() {} })).toBe(true);
-    expect(isBrowserSupported({ Worker: function Worker() {} })).toBe(false);
-    expect(isBrowserSupported({ WebAssembly: {} })).toBe(false);
+  const full = { WebAssembly: {}, Worker: function Worker() {}, indexedDB: {} };
+
+  test("needs WebAssembly, Worker and indexedDB", () => {
+    expect(isBrowserSupported(full)).toBe(true);
+    expect(isBrowserSupported({ ...full, WebAssembly: undefined })).toBe(false);
+    expect(isBrowserSupported({ ...full, Worker: undefined })).toBe(false);
+    expect(isBrowserSupported({ ...full, indexedDB: undefined })).toBe(false);
+    expect(isBrowserSupported({ ...full, indexedDB: null })).toBe(false);
+  });
+});
+
+describe("browserLang", () => {
+  test("is Vietnamese for vi languages and English for the rest", () => {
+    expect(browserLang({ language: "vi" })).toBe("vi");
+    expect(browserLang({ language: "vi-VN" })).toBe("vi");
+    expect(browserLang({ language: "VI-vn" })).toBe("vi");
+    expect(browserLang({ language: "en-US" })).toBe("en");
+    expect(browserLang({ language: "fr" })).toBe("en");
+    expect(browserLang({ language: "" })).toBe("en");
+    expect(browserLang({})).toBe("vi");
   });
 });
