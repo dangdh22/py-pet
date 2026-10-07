@@ -18,8 +18,9 @@ import { useLang } from "../i18n/LangProvider";
 import { useContent } from "./contexts";
 import { useGame } from "./GameProvider";
 import { itemKey } from "./names";
-import { PetRobot } from "./PetRobot";
+import { RoomScene } from "./robot/RoomScene";
 import { routeToHash, stepRoute } from "./routing";
+import { StatBar } from "./StatBar";
 
 export function RoomScreen() {
   const game = useGame();
@@ -45,25 +46,16 @@ export function RoomScreen() {
     <main className="room">
       <h1>{t("room.title", { name: profile.robotName })}</h1>
       <p>{t("room.greeting", { child: profile.childName })}</p>
-      <div className={`room-scene condition-${condition}`}>
-        <PetRobot size={robotPixelSize(look.form, look.size)} />
+      <RoomScene look={look} decor={decor} robotSize={robotPixelSize(look.form, look.size)}>
         <p className="pet-says">{t(message, { name: profile.robotName })}</p>
-        {look.equipped.length > 0 && (
-          <p className="room-wearing">{t("room.wearing", { items: names(look.equipped) })}</p>
-        )}
-        {decor.length > 0 && <p className="room-decor">{t("room.decor", { items: names(decor) })}</p>}
+      </RoomScene>
+      {look.equipped.length > 0 && <p className="room-wearing">{t("room.wearing", { items: names(look.equipped) })}</p>}
+      {decor.length > 0 && <p className="room-decor">{t("room.decor", { items: names(decor) })}</p>}
+      <div className="room-stats">
+        <StatBar label={t("room.pin")} value={state.pet.pin} max={STAT_MAX} tone="pin" />
+        <StatBar label={t("room.vui")} value={state.pet.vui} max={STAT_MAX} tone="vui" />
+        <StatBar label={t("room.growth")} value={growthPercent(xp, max)} max={100} tone="growth" />
       </div>
-      <ul className="room-stats">
-        <li>
-          {t("room.pin")}: {state.pet.pin}/{STAT_MAX}
-        </li>
-        <li>
-          {t("room.vui")}: {state.pet.vui}/{STAT_MAX}
-        </li>
-        <li>
-          {t("room.growth")}: {growthPercent(xp, max)}%
-        </li>
-      </ul>
       <ul className="room-goals">
         <li>{t("room.today", { done: todayPoints(state, today), goal: state.settings.dailyGoal })}</li>
         <li>

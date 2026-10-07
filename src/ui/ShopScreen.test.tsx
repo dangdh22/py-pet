@@ -52,9 +52,9 @@ describe("ShopScreen: things for the robot", () => {
     expect(within(row("Vương miện")).queryByRole("button")).not.toBeInTheDocument();
   });
 
-  test("each accessory has a picture beside its name", async () => {
+  test("each accessory and decoration has a picture beside its name", async () => {
     await renderWithGame(<ShopScreen />, { state: richState(100) });
-    for (const item of SHOP_ITEMS.filter((i) => i.kind === "accessory")) {
+    for (const item of SHOP_ITEMS.filter((i) => i.kind === "accessory" || i.kind === "decor")) {
       const icons = row(vi[itemKey(item.id)]).querySelectorAll("svg");
       expect(icons).toHaveLength(1);
       expect(icons[0]).toHaveAttribute("aria-hidden", "true");

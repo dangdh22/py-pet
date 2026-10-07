@@ -1,9 +1,11 @@
 import type { CSSProperties, ReactNode } from "react";
-import { FORM_COUNT, robotPixelSize, type RobotForm } from "../game/look";
+import { FORM_COUNT, robotPixelSize, type RobotForm, type RobotLook } from "../game/look";
 import type { GrowthSize } from "../game/progress";
 import { SHOP_ITEMS } from "../game/shop";
 import { Robot, type RobotMood } from "./Robot";
 import { ItemIcon } from "./robot/accessories";
+import { DECOR_IDS } from "./robot/decor";
+import { RoomScene } from "./robot/RoomScene";
 import { ROBOT_MOODS } from "./robot/faces";
 import { useHashRoute } from "./routing";
 
@@ -24,6 +26,17 @@ const OUTFITS: readonly { label: string; mood: RobotMood; equipped: string[]; gr
   { label: "vacation: no face accessory", mood: "vacation", equipped: ["mu-luoi-trai", "kinh-tron", "khan-quang"] },
   { label: "sleepy + crown + cape", mood: "sleepy", equipped: ["vuong-mien", "ao-choang"] },
 ];
+
+/** The 5 room states, each on another form, so the scenes also show each form at its room size. */
+const SCENES: readonly RobotLook[] = [
+  { state: "happy", form: 1, graduated: false, size: 2, equipped: ["mu-luoi-trai", "no-buom"] },
+  { state: "neutral", form: 2, graduated: false, size: 3, equipped: [] },
+  { state: "sleepy", form: 3, graduated: false, size: 1, equipped: ["vuong-mien"] },
+  { state: "drained", form: 4, graduated: true, size: 2, equipped: ["khan-quang"] },
+  { state: "vacation", form: 3, graduated: false, size: 3, equipped: ["mu-luoi-trai", "kinh-tron"] },
+];
+/** A phone (360 px screen) and a laptop (the 860 px the room gets inside its 900 px column). */
+const SCENE_WIDTHS = [328, 860] as const;
 
 // Inline styles, so a production build carries no gallery CSS.
 const cell: CSSProperties = {
@@ -144,6 +157,39 @@ export function GalleryScreen() {
               </figure>
             )),
           )}
+        </div>
+      </section>
+      <section>
+        <h2>Room scenes: phone without and with decor, laptop with decor</h2>
+        {SCENES.map((look) => (
+          <div key={look.state} style={{ display: "flex", flexWrap: "wrap", gap: 12, alignItems: "flex-start", marginBottom: 16 }}>
+            {[
+              { width: SCENE_WIDTHS[0], decor: [] as readonly string[] },
+              { width: SCENE_WIDTHS[0], decor: DECOR_IDS },
+              { width: SCENE_WIDTHS[1], decor: DECOR_IDS },
+            ].map(({ width, decor }) => (
+              <figure key={`${width}-${decor.length}`} style={{ ...figure, width }}>
+                <RoomScene look={look} decor={[...decor]} robotSize={robotPixelSize(look.form, look.size)}>
+                  <p>Robo is {look.state}. A sentence long enough to wrap on a phone.</p>
+                </RoomScene>
+                <figcaption style={caption}>
+                  {look.state} · form {look.form}.{look.size} · {width} px · {decor.length} decor
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+        ))}
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 12 }}>
+          {FORMS.map((form) => (
+            <figure key={form} style={{ ...figure, width: SCENE_WIDTHS[0] }}>
+              <RoomScene
+                look={{ state: "drained", form, graduated: false, size: 3, equipped: [] }}
+                decor={[]}
+                robotSize={robotPixelSize(form, 3)}
+              />
+              <figcaption style={caption}>drained · form {form}.3, lying on the floor line</figcaption>
+            </figure>
+          ))}
         </div>
       </section>
       <section>

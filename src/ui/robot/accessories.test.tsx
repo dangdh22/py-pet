@@ -6,6 +6,7 @@ import { Robot } from "../Robot";
 import { ACCESSORY_ANCHORS, AccessoryArt, ItemIcon } from "./accessories";
 
 const ACCESSORIES = SHOP_ITEMS.filter((item) => item.kind === "accessory").map((item) => item.id);
+const DECOR = SHOP_ITEMS.filter((item) => item.kind === "decor").map((item) => item.id);
 const FORMS = [1, 2, 3, 4] as const;
 
 const svg = (children: React.ReactNode) => render(<svg>{children}</svg>).container;
@@ -84,7 +85,19 @@ describe("ItemIcon", () => {
     }
   });
 
-  test("nothing for an unknown id (decorations come with the room)", () => {
+  test("a hidden 40 px picture for each decoration", () => {
+    for (const id of DECOR) {
+      const { container, unmount } = render(<ItemIcon id={id} />);
+      const icon = container.querySelector("svg")!;
+      expect(icon).toHaveAttribute("aria-hidden", "true");
+      expect(icon).toHaveAttribute("width", "40");
+      expect(icon.querySelector(`[data-decor="${id}"]`)).not.toBeNull();
+      unmount();
+    }
+  });
+
+  test("nothing for an unknown id or a Pin or Vui item", () => {
     expect(render(<ItemIcon id="khong-co" />).container.firstChild).toBeNull();
+    expect(render(<ItemIcon id="pin-sac" />).container.firstChild).toBeNull();
   });
 });

@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import type { RobotForm } from "../../game/look";
 import { findShopItem, type AccessorySlot } from "../../game/shop";
 import { ANTENNA, FACE_BOX, FLOOR_Y, HEAD_BOX, starPoints } from "./bodies";
+import { decorIcon } from "./decor";
 import { ACCESSORY_COLORS as A, PALETTE as C } from "./palette";
 
 /*
@@ -386,13 +387,14 @@ export function AccessoryArt({ id, form }: { id: string; form: RobotForm }) {
   );
 }
 
-/** The picture of a shop item, 40 × 40, beside its name; null when the item has no picture yet. */
+/** The picture of a shop item (accessory or decoration), 40 × 40, beside its name; null for Pin and Vui items. */
 export function ItemIcon({ id, size = 40 }: { id: string; size?: number }) {
   const art = ARTS[id];
-  if (!art) return null;
+  const content = art ? <g data-accessory={id}>{art.icon}</g> : decorIcon(id);
+  if (!content) return null;
   return (
     <svg className="item-icon" aria-hidden="true" focusable="false" width={size} height={size} viewBox="0 0 40 40">
-      <g data-accessory={id}>{art.icon}</g>
+      {content}
     </svg>
   );
 }

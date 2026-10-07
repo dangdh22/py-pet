@@ -19,6 +19,11 @@ describe("RoomScreen", () => {
     expect(screen.getByText("Pin: 4/5")).toBeInTheDocument();
     expect(screen.getByText("Vui: 4/5")).toBeInTheDocument();
     expect(screen.getByText("Lớn lên: 0%")).toBeInTheDocument();
+    expect(screen.getByRole("meter", { name: "Pin" })).toHaveAttribute("aria-valuenow", "4");
+    expect(screen.getByRole("meter", { name: "Vui" })).toHaveAttribute("aria-valuemax", "5");
+    expect(screen.getByRole("meter", { name: "Lớn lên" })).toHaveAttribute("aria-valuenow", "0");
+    expect(document.querySelector(".room-scene")).toHaveAttribute("data-scene", "room");
+    expect(document.querySelector(".room-scene")).toHaveAttribute("data-condition", "happy");
     expect(screen.getByText("Mục tiêu hôm nay: 0/2")).toBeInTheDocument();
     expect(screen.getByText("Tuần này: 0/10 bài")).toBeInTheDocument();
     expect(screen.getByText("Chuỗi: 0 ngày")).toBeInTheDocument();
@@ -50,7 +55,9 @@ describe("RoomScreen", () => {
     expect(screen.getByRole("img", { name: "Robo" })).toHaveAttribute("width", "112");
     expect(screen.getByText("Robo hết pin rồi. Con làm 1 trạm ôn để sạc cho Robo nhé!")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Sạc cho Robo" })).toHaveAttribute("href", "#/review");
+    expect(document.querySelector('.room-scene [data-part="charger"]')).not.toBeNull();
     expect(screen.getByText("Lớn lên: 79%")).toBeInTheDocument();
+    expect(screen.getByRole("meter", { name: "Lớn lên" })).toHaveAttribute("aria-valuenow", "79");
     expect(screen.getByText("Xu: 75")).toBeInTheDocument();
     expect(screen.queryByRole("link", { name: "Học tiếp" })).not.toBeInTheDocument();
     expect(screen.getByText("Con đã học hết các bài hiện có. Robo chờ bài mới nhé!")).toBeInTheDocument();
@@ -111,6 +118,7 @@ describe("RoomScreen", () => {
     await renderWithGame(<RoomScreen />, { state });
     expect(screen.getByText("Robo đang đi nghỉ. Con vẫn học được nếu muốn!")).toBeInTheDocument();
     expect(screen.getByRole("img", { name: "Robo" })).toHaveAttribute("data-mood", "vacation");
+    expect(document.querySelector(".room-scene")).toHaveAttribute("data-scene", "beach");
     expect(screen.getByText("Tuần này: 0/2 bài")).toBeInTheDocument();
     expect(screen.queryByRole("link", { name: "Sạc cho Robo" })).not.toBeInTheDocument();
   });
@@ -129,6 +137,10 @@ describe("RoomScreen", () => {
     await renderWithGame(<RoomScreen />, { state });
     expect(screen.getByText("Đang đeo: Kính râm")).toBeInTheDocument();
     expect(screen.getByText("Trong phòng: Chậu cây, Bức tranh")).toBeInTheDocument();
+    expect([...document.querySelectorAll(".room-scene [data-decor]")].map((el) => el.getAttribute("data-decor"))).toEqual(
+      expect.arrayContaining(["chau-cay", "tranh"]),
+    );
+    expect(document.querySelectorAll(".room-scene [data-decor]")).toHaveLength(2);
     expect(screen.getByRole("link", { name: "Cửa hàng" })).toHaveAttribute("href", "#/shop");
     expect(screen.getByRole("link", { name: "Sổ thành tích" })).toHaveAttribute("href", "#/achievements");
     expect(screen.getByRole("link", { name: "Khu phụ huynh" })).toHaveAttribute("href", "#/parent");
