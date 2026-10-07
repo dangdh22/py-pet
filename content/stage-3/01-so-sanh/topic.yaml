@@ -1,0 +1,11 @@
+id: s3.so-sanh
+title: { vi: "So sánh và bool", en: "Comparisons and bool" }
+lessons:
+  - 01-phep-so-sanh.md
+  - 02-bang-va-khac.md
+  - 03-so-sanh-chuoi.md
+  - 04-kieu-bool.md
+  - 05-quy-tac-va-du-lieu.md
+reviews:
+  - { id: s3.so-sanh.r1, after: s3.so-sanh.l2 }
+  - { id: s3.so-sanh.r2, after: s3.so-sanh.l4 }

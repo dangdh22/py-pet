@@ -1,0 +1,367 @@
+questions:
+  - id: s3.so-sanh.b1
+    type: predict
+    concepts: [compare-ops]
+    lessons: [s3.so-sanh.l1]
+    code: |
+      a = 12
+      b = 20
+      print(a + 8 >= b)
+    prompt:
+      vi: "Đoạn code in ra gì?"
+      en: "What is the output of this code?"
+    choices:
+      - { text: "True", correct: true }
+      - { text: "False", misconception: compare-ops }
+      - { text: "20", misconception: compare-ops }
+      - { text: "a + 8 >= b", misconception: string-quotes }
+    explanation:
+      vi: "Python tính a + 8 trước, được 20, rồi hỏi \"20 có lớn hơn hoặc bằng 20 không?\". 20 bằng 20, nên câu trả lời là True. Phép so sánh cho ra True hoặc False, không in ra con số hay chữ của đoạn code."
+      en: "Python works out a + 8 first, which is 20, then asks \"is 20 greater than or equal to 20?\". 20 is equal to 20, so the answer is True. A comparison gives True or False: it does not print a number or the text of the code."
+
+  - id: s3.so-sanh.b2
+    type: mcq
+    concepts: [compare-ops]
+    lessons: [s3.so-sanh.l1]
+    prompt:
+      vi: "Trong Python, phép so sánh \"nhỏ hơn hoặc bằng\" viết thế nào?"
+      en: "In Python, how do you write the comparison \"less than or equal to\"?"
+    choices:
+      - { text: "=<", misconception: compare-ops }
+      - { text: "<", misconception: compare-ops }
+      - { text: ">=", misconception: compare-ops }
+      - { text: "<=", correct: true }
+    explanation:
+      vi: "\"Nhỏ hơn hoặc bằng\" viết là <=: dấu < đứng trước, dấu = đứng sau, sát nhau. Viết ngược thành =< thì Python báo lỗi. Dấu < một mình không tính trường hợp bằng nhau, còn >= là lớn hơn hoặc bằng."
+      en: "\"Less than or equal to\" is written <=: the < comes first and the = comes after, with no space. Written the other way round as =<, it gives an error. The sign < alone does not include being equal, and >= means greater than or equal to."
+
+  - id: s3.so-sanh.b3
+    type: mcq
+    concepts: [compare-ops]
+    lessons: [s3.so-sanh.l1]
+    code: |
+      n = int(input())
+      print(n * 2 > 20)
+    prompt:
+      vi: "Ô Dữ liệu nhập có 1 dòng: 9. Đoạn code in ra gì?"
+      en: "The Input data box has 1 line: 9. What is the output of this code?"
+    choices:
+      - { text: "18", misconception: compare-ops }
+      - { text: "False", correct: true }
+      - { text: "18 > 20", misconception: string-quotes }
+      - { vi: "Báo lỗi TypeError ở dòng 2, vì không so sánh được 1 phép tính", en: "A TypeError on line 2, because a calculation cannot be compared", error: true, misconception: compare-ops }
+    explanation:
+      vi: "n là số 9. Python tính n * 2 được 18 trước, rồi hỏi \"18 có lớn hơn 20 không?\". Câu trả lời là không, nên in ra False. So sánh 1 phép tính với 1 số thì được, không có lỗi."
+      en: "n is the number 9. Python works out n * 2 first, which is 18, then asks \"is 18 greater than 20?\". The answer is no, so it prints False. Comparing a calculation with a number is fine: there is no error."
+
+  - id: s3.so-sanh.b4
+    type: predict
+    concepts: [eq-vs-assign]
+    lessons: [s3.so-sanh.l2]
+    code: |
+      x = 4
+      print(x == 4 + 1)
+    prompt:
+      vi: "Đoạn code in ra gì?"
+      en: "What is the output of this code?"
+    choices:
+      - { text: "5", misconception: eq-vs-assign }
+      - { text: "True", misconception: compare-ops }
+      - { text: "False", correct: true }
+      - { vi: "Báo lỗi ở dòng 2, vì không được tính trong phép so sánh", en: "An error on line 2, because you cannot calculate inside a comparison", error: true, misconception: compare-ops }
+    explanation:
+      vi: "Python tính 4 + 1 được 5 trước, rồi hỏi \"x có bằng 5 không?\". x bằng 4, nên in ra False. Dấu == chỉ hỏi, không cất 5 vào x và không in ra con số."
+      en: "Python works out 4 + 1 first, which is 5, then asks \"is x equal to 5?\". x is 4, so it prints False. == only asks: it does not store 5 in x, and it does not print a number."
+
+  - id: s3.so-sanh.b5
+    type: predict
+    concepts: [eq-vs-assign]
+    lessons: [s3.so-sanh.l2]
+    code: |
+      n = 3
+      print(n = 3)
+    prompt:
+      vi: "Chuyện gì xảy ra khi chạy đoạn code này?"
+      en: "What happens when this code runs?"
+    choices:
+      - { text: "True", misconception: eq-vs-assign }
+      - { text: "3", misconception: eq-vs-assign }
+      - { vi: "Báo lỗi TypeError ở dòng 2", en: "A TypeError on line 2", correct: true, error: true }
+      - { text: "n = 3", misconception: string-quotes }
+    explanation:
+      vi: "Bên trong print, 1 dấu = không phải câu hỏi bằng nhau. Python tưởng n = 3 là 1 tham số như sep= hay end=, mà print không có tham số tên n, nên báo lỗi TypeError ở dòng 2. Muốn hỏi n có bằng 3 không, con viết print(n == 3)."
+      en: "Inside print, one = is not a question about being equal. Python thinks n = 3 is an option like sep= or end=, and print has no option called n, so it shows a TypeError on line 2. To ask whether n is equal to 3, write print(n == 3)."
+
+  - id: s3.so-sanh.b6
+    type: mcq
+    concepts: [eq-vs-assign]
+    lessons: [s3.so-sanh.l2]
+    prompt:
+      vi: "Câu nào nói đúng về dấu = và dấu ==?"
+      en: "Which sentence about = and == is right?"
+    choices:
+      - { vi: "Dấu = và dấu == giống nhau, viết cách nào cũng được", en: "= and == are the same, you can write either one", misconception: eq-vs-assign }
+      - { vi: "Dấu == cất giá trị vào biến, còn dấu = hỏi 2 giá trị có bằng nhau không", en: "== stores a value in a variable, and = asks whether 2 values are equal", misconception: eq-vs-assign }
+      - { vi: "Dấu = cất giá trị vào biến, còn dấu == hỏi 2 giá trị có bằng nhau không", en: "= stores a value in a variable, and == asks whether 2 values are equal", correct: true }
+      - { vi: "Dấu == chỉ dùng được với số, không dùng được với chuỗi", en: "== only works with numbers, not with strings", misconception: str-equality }
+    explanation:
+      vi: "Dấu = là lệnh gán: cất giá trị ở bên phải vào biến ở bên trái. Dấu == là câu hỏi: 2 giá trị có bằng nhau không, và cho ra True hoặc False. Dấu == dùng được với cả số và chuỗi."
+      en: "= is an assignment: it stores the value on the right in the variable on the left. == is a question: are the 2 values equal? It gives True or False. == works with both numbers and strings."
+
+  - id: s3.so-sanh.b7
+    type: predict
+    concepts: [compare-ops]
+    lessons: [s3.so-sanh.l2]
+    code: |
+      a = 10 // 3
+      print(a != 3, a == 3)
+    prompt:
+      vi: "Đoạn code in ra gì?"
+      en: "What is the output of this code?"
+    choices:
+      - { text: "False True", correct: true }
+      - { text: "True False", misconception: floor-div }
+      - { text: "True True", misconception: compare-ops }
+      - { text: "3 3", misconception: compare-ops }
+    explanation:
+      vi: "10 // 3 lấy phần nguyên của phép chia, nên a là 3. Phép a != 3 hỏi \"a có khác 3 không?\": không, nên ra False. Phép a == 3 ra True. Phép != luôn cho kết quả ngược với phép ==."
+      en: "10 // 3 keeps the whole part of the division, so a is 3. a != 3 asks \"is a different from 3?\": no, so it gives False. a == 3 gives True. != always gives the opposite result of ==."
+
+  - id: s3.so-sanh.b8
+    type: predict
+    concepts: [str-equality]
+    lessons: [s3.so-sanh.l3]
+    code: |
+      a = "Robo"
+      b = "ro" + "bo"
+      print(a == b)
+    prompt:
+      vi: "Đoạn code in ra gì?"
+      en: "What is the output of this code?"
+    choices:
+      - { text: "True", misconception: str-equality }
+      - { text: "robo", misconception: eq-vs-assign }
+      - { vi: "Báo lỗi TypeError ở dòng 3, vì không so sánh được 2 chuỗi", en: "A TypeError on line 3, because 2 strings cannot be compared", error: true, misconception: str-equality }
+      - { text: "False", correct: true }
+    explanation:
+      vi: "\"ro\" + \"bo\" nối thành \"robo\", có chữ r viết thường. Biến a là \"Robo\", có chữ R viết hoa. Hai chuỗi khác nhau ở chữ đầu, nên a == b ra False. So sánh 2 chuỗi bằng == thì được, không có lỗi."
+      en: "\"ro\" + \"bo\" joins into \"robo\", with a small r. The variable a is \"Robo\", with a capital R. The 2 strings differ in the first letter, so a == b gives False. Comparing 2 strings with == is fine: there is no error."
+
+  - id: s3.so-sanh.b9
+    type: mcq
+    concepts: [str-equality]
+    lessons: [s3.so-sanh.l3]
+    prompt:
+      vi: "Biến a đang chứa chuỗi \"Hello\". Phép so sánh nào cho ra True?"
+      en: "The variable a holds the string \"Hello\". Which comparison gives True?"
+    choices:
+      - { text: "a == \"Hello\"", correct: true }
+      - { text: "a == \"hello\"", misconception: str-equality }
+      - { text: "a == \"Hello \"", misconception: str-equality }
+      - { text: "a == \" Hello\"", misconception: str-equality }
+    explanation:
+      vi: "Hai chuỗi chỉ bằng nhau khi giống hệt nhau từng ký tự, kể cả chữ hoa, chữ thường và dấu cách. \"hello\" có chữ h viết thường. \"Hello \" và \" Hello\" có thêm 1 dấu cách ở cuối hoặc ở đầu."
+      en: "Two strings are equal only when they are the same in every character, including capital letters, small letters and spaces. \"hello\" has a small h. \"Hello \" and \" Hello\" have 1 extra space at the end or at the start."
+
+  - id: s3.so-sanh.b10
+    type: mcq
+    concepts: [str-equality]
+    lessons: [s3.so-sanh.l3]
+    code: |
+      ans = input()
+      print(ans == "yes")
+    prompt:
+      vi: "Ô Dữ liệu nhập có 1 dòng: Yes, có chữ Y viết hoa. Đoạn code in ra gì?"
+      en: "The Input data box has 1 line: Yes, with a capital Y. What is the output of this code?"
+    choices:
+      - { text: "True", misconception: str-equality }
+      - { text: "yes", misconception: compare-ops }
+      - { text: "False", correct: true }
+      - { text: "Yes", misconception: compare-ops }
+    explanation:
+      vi: "ans là chuỗi \"Yes\", có chữ Y viết hoa, còn chuỗi trong code là \"yes\", viết thường. Python phân biệt chữ hoa và chữ thường, nên 2 chuỗi khác nhau và in ra False. Lệnh print in ra kết quả so sánh, không in ra chữ con gõ."
+      en: "ans is the string \"Yes\", with a capital Y, and the string in the code is \"yes\", in small letters. Python sees capital and small letters as different, so the 2 strings are different and it prints False. The print statement prints the result of the comparison, not the text you typed."
+
+  - id: s3.so-sanh.b11
+    type: mcq
+    concepts: [compare-str-num]
+    lessons: [s3.so-sanh.l3]
+    code: |
+      a = input()
+      b = input()
+      print(a < b)
+    prompt:
+      vi: "Ô Dữ liệu nhập có 2 dòng: 8 và 25. Đoạn code in ra gì?"
+      en: "The Input data box has 2 lines: 8 and 25. What is the output of this code?"
+    choices:
+      - { text: "True", misconception: compare-str-num }
+      - { vi: "Báo lỗi TypeError ở dòng 3", en: "A TypeError on line 3", error: true, misconception: compare-str-num }
+      - { text: "825", misconception: input-str }
+      - { text: "False", correct: true }
+    explanation:
+      vi: "input() đưa lại chuỗi, nên a là \"8\" và b là \"25\". Hai chuỗi được so sánh theo từng ký tự: ký tự đầu 8 đứng sau ký tự đầu 2, nên \"8\" < \"25\" ra False. So sánh 2 chuỗi thì không có lỗi. Muốn so sánh như số, con dùng int(input())."
+      en: "input() gives back strings, so a is \"8\" and b is \"25\". The 2 strings are compared character by character: the first character 8 comes after the first character 2, so \"8\" < \"25\" gives False. Comparing 2 strings gives no error. To compare them as numbers, use int(input())."
+
+  - id: s3.so-sanh.b12
+    type: predict
+    concepts: [compare-str-num]
+    lessons: [s3.so-sanh.l3]
+    code: |
+      print("7" > 3)
+    prompt:
+      vi: "Chuyện gì xảy ra khi chạy đoạn code này?"
+      en: "What happens when this code runs?"
+    choices:
+      - { vi: "Báo lỗi TypeError ở dòng 1", en: "A TypeError on line 1", correct: true, error: true }
+      - { text: "True", misconception: compare-str-num }
+      - { text: "False", misconception: compare-str-num }
+      - { vi: "Báo lỗi ValueError ở dòng 1", en: "A ValueError on line 1", error: true, misconception: int-invalid }
+    explanation:
+      vi: "\"7\" là chuỗi, còn 3 là số nguyên. Python không so sánh lớn nhỏ được giữa chuỗi và số, nên báo lỗi TypeError ở dòng 1. Muốn so sánh như số, con đổi chuỗi trước: int(\"7\") > 3 ra True."
+      en: "\"7\" is a string, and 3 is an integer. Python cannot compare a string and a number for bigger or smaller, so it shows a TypeError on line 1. To compare them as numbers, change the string first: int(\"7\") > 3 gives True."
+
+  - id: s3.so-sanh.b13
+    type: predict
+    concepts: [compare-str-num]
+    lessons: [s3.so-sanh.l3]
+    code: |
+      print("10" == 10, int("10") == 10)
+    prompt:
+      vi: "Đoạn code in ra gì?"
+      en: "What is the output of this code?"
+    choices:
+      - { text: "True True", misconception: str-vs-int }
+      - { vi: "Báo lỗi TypeError ở dòng 1", en: "A TypeError on line 1", error: true, misconception: compare-str-num }
+      - { text: "False True", correct: true }
+      - { text: "False False", misconception: int-convert }
+    explanation:
+      vi: "\"10\" là chuỗi, còn 10 là số, nên chúng không bằng nhau: ra False. Hỏi bằng nhau giữa chuỗi và số thì Python trả lời False chứ không báo lỗi. int(\"10\") đổi chuỗi thành số 10, nên phép so sánh thứ hai ra True."
+      en: "\"10\" is a string, and 10 is a number, so they are not equal: False. When you ask whether a string and a number are equal, Python answers False and shows no error. int(\"10\") changes the string into the number 10, so the second comparison gives True."
+
+  - id: s3.so-sanh.b14
+    type: predict
+    concepts: [bool-value]
+    lessons: [s3.so-sanh.l4]
+    code: |
+      print(type(10 > 2), type("True"))
+    prompt:
+      vi: "Đoạn code in ra gì?"
+      en: "What is the output of this code?"
+    choices:
+      - { text: "<class 'int'> <class 'str'>", misconception: bool-value }
+      - { text: "<class 'bool'> <class 'str'>", correct: true }
+      - { text: "True True", misconception: bool-value }
+      - { text: "<class 'bool'> <class 'bool'>", misconception: bool-value }
+    explanation:
+      vi: "10 > 2 là 1 phép so sánh, cho ra True, có kiểu bool. \"True\" có dấu nháy, nên là 1 chuỗi, kiểu str. type() cho biết kiểu dữ liệu, không in ra giá trị."
+      en: "10 > 2 is a comparison that gives True, of type bool. \"True\" has quotes, so it is a string, of type str. type() tells the data type: it does not print the value."
+
+  - id: s3.so-sanh.b15
+    type: predict
+    concepts: [bool-value]
+    lessons: [s3.so-sanh.l4]
+    code: |
+      a = 8
+      big = a > 5
+      print(f"big = {big}")
+    prompt:
+      vi: "Đoạn code in ra gì?"
+      en: "What is the output of this code?"
+    choices:
+      - { text: "big = a > 5", misconception: bool-value }
+      - { text: "big = True", correct: true }
+      - { text: "big = 8", misconception: eq-vs-assign }
+      - { text: "big = true", misconception: bool-value }
+    explanation:
+      vi: "Ở dòng 2, Python so sánh a > 5 trước: 8 lớn hơn 5, nên được True. Dấu = cất giá trị True vào biến big, chứ không cất chữ a > 5. Chuỗi f in giá trị của big, và True luôn viết hoa chữ đầu."
+      en: "On line 2, Python compares a > 5 first: 8 is greater than 5, so it gets True. = stores the value True in the variable big, not the text a > 5. The f-string prints the value of big, and True always has a capital first letter."
+
+  - id: s3.so-sanh.b16
+    type: predict
+    concepts: [bool-value]
+    lessons: [s3.so-sanh.l4]
+    code: |
+      ok = false
+      print(ok)
+    prompt:
+      vi: "Chuyện gì xảy ra khi chạy đoạn code này?"
+      en: "What happens when this code runs?"
+    choices:
+      - { vi: "Báo lỗi NameError ở dòng 1", en: "A NameError on line 1", correct: true, error: true }
+      - { text: "False", misconception: bool-value }
+      - { text: "false", misconception: bool-value }
+      - { vi: "Báo lỗi NameError ở dòng 2", en: "A NameError on line 2", error: true, misconception: var-before-use }
+    explanation:
+      vi: "Giá trị bool phải viết hoa chữ đầu: False. Python không biết false viết thường là gì, nên báo lỗi NameError ngay ở dòng 1, và dòng 2 không được chạy. Python không tự sửa false thành False."
+      en: "A bool value must have a capital first letter: False. Python does not know what false in small letters is, so it shows a NameError right on line 1, and line 2 does not run. Python does not change false into False by itself."
+
+  - id: s3.so-sanh.b17
+    type: mcq
+    concepts: [ai-rules-vs-data]
+    lessons: [s3.so-sanh.l5]
+    code: |
+      temp = int(input())
+      print(temp > 30)
+    prompt:
+      vi: "Chương trình này in ra True khi trời nóng. Ai đã chọn con số 30 trong quy tắc?"
+      en: "This program prints True when it is hot. Who chose the number 30 in the rule?"
+    choices:
+      - { vi: "Máy tính tự học ra từ dữ liệu", en: "The computer learned it by itself from data", misconception: ai-rules-vs-data }
+      - { vi: "Người viết chương trình", en: "The person who wrote the program", correct: true }
+      - { vi: "Python tự chọn khi chạy", en: "Python chose it by itself while running", misconception: ai-rules-vs-data }
+      - { vi: "Người dùng gõ vào khi chạy chương trình", en: "The user typed it in while running the program", misconception: input-order }
+    explanation:
+      vi: "Đây là 1 quy tắc cố định: chính người viết chương trình đã chọn số 30 và viết vào code. Người dùng chỉ gõ nhiệt độ, còn số 30 thì lần chạy nào cũng giống nhau. Chương trình này không học gì từ dữ liệu."
+      en: "This is a fixed rule: the person who wrote the program chose the number 30 and wrote it in the code. The user only types the temperature, and the number 30 is the same every time it runs. This program does not learn anything from data."
+
+  - id: s3.so-sanh.b18
+    type: mcq
+    concepts: [ai-rules-vs-data]
+    lessons: [s3.so-sanh.l5]
+    prompt:
+      vi: "Vì sao rất khó viết quy tắc cố định để nhận ra con mèo trong ảnh?"
+      en: "Why is it very hard to write a fixed rule for recognizing a cat in a photo?"
+    choices:
+      - { vi: "Vì mèo có rất nhiều màu lông, kích thước và tư thế, nên không viết hết được các trường hợp", en: "Because cats have many fur colours, sizes and poses, so you cannot write every case", correct: true }
+      - { vi: "Vì máy tính chạy quá chậm, không kịp so sánh", en: "Because a computer is too slow to do the comparisons", misconception: ai-rules-vs-data }
+      - { vi: "Vì ảnh không phải là dữ liệu", en: "Because a photo is not data", misconception: ai-data }
+      - { vi: "Vì máy tính không cất được ảnh", en: "Because a computer cannot store photos", misconception: ai-data }
+    explanation:
+      vi: "Con mèo trong ảnh có thể trắng, đen hay vằn, nằm hay chạy, to hay nhỏ. Không ai viết đủ phép so sánh cho mọi trường hợp. Vì vậy, người ta cho AI học từ rất nhiều ảnh có nhãn. Máy tính so sánh rất nhanh, ảnh cũng là dữ liệu, và máy tính cất được ảnh."
+      en: "A cat in a photo can be white, black or striped, lying down or running, big or small. Nobody can write enough comparisons for every case. So people let an AI learn from a huge number of labeled photos. A computer compares very fast, a photo is data too, and a computer can store photos."
+
+  - id: s3.so-sanh.b19
+    type: mcq
+    concepts: [ai-rules-vs-data]
+    lessons: [s3.so-sanh.l5]
+    prompt:
+      vi: "Một AI học nhận ra quả chín và quả xanh từ rất nhiều ảnh có nhãn. Câu nào đúng?"
+      en: "An AI learns to tell ripe fruit from unripe fruit using a huge number of labeled photos. Which sentence is right?"
+    choices:
+      - { vi: "AI luôn đúng, vì nó đã học từ rất nhiều ảnh", en: "The AI is always right, because it learned from a huge number of photos", misconception: ai-rules-vs-data }
+      - { vi: "AI tự tìm ra quy tắc, và quy tắc đó vẫn có thể sai với ảnh lạ", en: "The AI finds the rule by itself, and that rule can still be wrong for an unusual photo", correct: true }
+      - { vi: "Người lập trình đã viết sẵn quy tắc cho từng bức ảnh", en: "A programmer wrote a rule for each photo in advance", misconception: ai-rules-vs-data }
+      - { vi: "AI không cần nhãn, chỉ cần xem thật nhiều ảnh", en: "The AI needs no labels, it only needs to see a lot of photos", misconception: ai-data }
+    explanation:
+      vi: "AI tự tìm ra quy tắc từ các ảnh có nhãn \"chín\" hoặc \"xanh\". Quy tắc đó không phải do người viết, và có thể sai khi gặp ảnh khác hẳn những ảnh đã học, như ảnh chụp tối. Vì vậy, con người vẫn cần kiểm tra lại."
+      en: "The AI finds the rule by itself from photos labeled \"ripe\" or \"unripe\". That rule is not written by a person, and it can be wrong for a photo very different from the ones it learned from, such as a dark photo. So people still need to check."
+
+  - id: s3.so-sanh.b20
+    type: mcq
+    concepts: [compare-str-num]
+    lessons: [s3.so-sanh.l3]
+    code: |
+      a = input()
+      b = input()
+      print(a > b)
+    prompt:
+      vi: "Ô Dữ liệu nhập có 2 dòng: 10 và 9, nhưng đoạn code in ra False. Cách sửa nào làm cho đoạn code so sánh 2 số?"
+      en: "The Input data box has 2 lines: 10 and 9, but the code prints False. Which fix makes the code compare 2 numbers?"
+    choices:
+      - { vi: "Đổi dòng 3 thành print(\"a\" > \"b\")", en: "Change line 3 to print(\"a\" > \"b\")", misconception: string-quotes }
+      - { vi: "Đổi dấu > thành dấu >=", en: "Change > to >=", misconception: compare-ops }
+      - { vi: "Đổi 2 dòng đầu thành a = str(input()) và b = str(input())", en: "Change the first 2 lines to a = str(input()) and b = str(input())", misconception: str-convert }
+      - { vi: "Đổi 2 dòng đầu thành a = int(input()) và b = int(input())", en: "Change the first 2 lines to a = int(input()) and b = int(input())", correct: true }
+    explanation:
+      vi: "input() đưa lại chuỗi, và chuỗi được so sánh theo từng ký tự, nên \"10\" nhỏ hơn \"9\". int() đổi 2 chuỗi thành 2 số, nên 10 > 9 ra True. str() vẫn để nguyên chuỗi. Có dấu nháy thì Python so sánh 2 chữ cái a và b, không phải 2 biến. Dấu >= vẫn so sánh 2 chuỗi."
+      en: "input() gives back strings, and strings are compared character by character, so \"10\" is smaller than \"9\". int() changes the 2 strings into 2 numbers, so 10 > 9 gives True. str() keeps them as strings. With quotes, Python compares the letters a and b, not the 2 variables. >= still compares 2 strings."

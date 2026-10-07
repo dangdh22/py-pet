@@ -23,7 +23,7 @@ beforeAll(async () => {
 
 describe("error dictionary on Pyodide", () => {
   test("has the expected number of entries", () => {
-    expect(bundle.errors.length).toBe(34);
+    expect(bundle.errors.length).toBe(37);
   });
 
   for (const entry of bundle.errors) {
@@ -55,6 +55,18 @@ describe("error dictionary on Pyodide", () => {
     expect(match?.vars.name).toBe("diem");
     const other = "print(Robo)";
     expect(matchError(bundle.errors, problemFromOutcome(run(other, ""), false)!, other)?.entry.id).toBe("name-undefined");
+  });
+
+  test("stage-3 comparison errors: => and a reversed str/int comparison are recognized, a sep typo is not", () => {
+    const cases: [string, string][] = [
+      ["print(5 => 3)", "assign-in-call"],
+      ['print(9 >= "8")', "compare-str-int"],
+      ['print("A", sap="-")', "type-other"],
+    ];
+    for (const [code, id] of cases) {
+      const problem = problemFromOutcome(run(code, ""), false);
+      expect(matchError(bundle.errors, problem!, code)?.entry.id).toBe(id);
+    }
   });
 
   test("smart-quote: real curly quotes pasted from Word are recognized (added test)", () => {

@@ -1,0 +1,60 @@
+concepts:
+  - id: compare-ops
+    name: { vi: "Phép so sánh cho ra True hoặc False", en: "A comparison gives True or False" }
+    misconception_card: |
+      Nhiều bạn nghĩ `print(5 > 3)` in ra 5, hoặc nghĩ `>` cũng tính trường hợp bằng nhau. Thực ra phép so sánh chỉ cho ra **True** hoặc **False**: `print(5 > 3)` in ra True. Dấu `>` không tính bằng nhau, nên `5 > 5` ra False; muốn tính cả bằng nhau, con viết `5 >= 5`, và kết quả là True.
+    parent_tip: |
+      Chơi trò "Đúng hay Sai": bố mẹ đọc 1 câu như "7 lớn hơn 9", "5 lớn hơn hoặc bằng 5", con chỉ được trả lời Đúng hoặc Sai. Giải thích rằng phép so sánh trong Python cũng chỉ trả lời True hoặc False.
+    practice:
+      level1: [s3.so-sanh.l1.q1, s3.so-sanh.l1.q2, s3.so-sanh.l2.q1, s3.so-sanh.b1, s3.so-sanh.b2, s3.so-sanh.b3, s3.so-sanh.b7]
+      level2: [s3.so-sanh.p1]
+      level3: [s3.so-sanh.l1.ex1, s3.so-sanh.l1.ex2, s3.so-sanh.l4.ex1, s3.so-sanh.c3]
+  - id: eq-vs-assign
+    name: { vi: "Dấu == để hỏi bằng nhau, dấu = để gán", en: "== asks if values are equal, = assigns" }
+    misconception_card: |
+      Nhiều bạn viết `print(tuoi = 11)` để hỏi tuoi có bằng 11 không. Thực ra 1 dấu `=` là lệnh **gán**, cất giá trị vào biến, nên ở đây Python báo lỗi. Muốn hỏi bằng nhau, con viết 2 dấu bằng: `print(tuoi == 11)` in ra True. Hỏi khác nhau thì dùng `!=`.
+    parent_tip: |
+      Viết 2 tấm thẻ: thẻ "=" có hình 1 mũi tên bỏ đồ vào hộp, thẻ "==" có hình dấu hỏi. Đọc các câu như "bỏ 5 viên bi vào hộp" hay "hộp có đúng 5 viên bi không?", rồi nhờ con giơ đúng thẻ.
+    practice:
+      level1: [s3.so-sanh.l2.q1, s3.so-sanh.l2.q2, s3.so-sanh.b4, s3.so-sanh.b5, s3.so-sanh.b6]
+      level2: [s3.so-sanh.p2]
+      level3: [s3.so-sanh.l2.ex1, s3.so-sanh.l2.ex2, s3.so-sanh.c1]
+  - id: str-equality
+    name: { vi: "So sánh chuỗi phân biệt chữ hoa, chữ thường và dấu cách", en: "String comparison sees case and spaces" }
+    misconception_card: |
+      Nhiều bạn nghĩ `"Robo" == "robo"` ra True, vì 2 chữ đọc giống nhau. Thực ra 2 chuỗi chỉ bằng nhau khi giống hệt nhau **từng ký tự**: chữ R hoa khác chữ r thường, nên kết quả là False. Dấu cách cũng là 1 ký tự, nên `"Robo " == "Robo"` cũng ra False.
+    parent_tip: |
+      Viết 2 thẻ tên "Robo" và "robo", rồi đố con 2 thẻ có giống hệt nhau không. Giải thích rằng máy tính so từng chữ một, nên 1 chữ hoa hay 1 khoảng trắng thừa cũng làm 2 thẻ khác nhau.
+    practice:
+      level1: [s3.so-sanh.l3.q1, s3.so-sanh.b8, s3.so-sanh.b9, s3.so-sanh.b10]
+      level2: [s3.so-sanh.p3]
+      level3: [s3.so-sanh.l3.ex1, s3.so-sanh.c2]
+  - id: compare-str-num
+    name: { vi: "Chuỗi chữ số được so sánh theo từng ký tự, không như số", en: "Digit strings compare by character, not as numbers" }
+    misconception_card: |
+      Nhiều bạn nghĩ `"10" < "9"` ra False, như khi so sánh số mười với số chín. Thực ra Python so sánh 2 chuỗi theo **từng ký tự**: ký tự 1 đứng trước ký tự 9, nên kết quả là True. Chuỗi và số cũng khác nhau: `"10" == 10` ra False, còn `"10" < 9` báo lỗi TypeError. Vì vậy, con đổi số nhập vào bằng `int(input())` trước khi so sánh.
+    parent_tip: |
+      Đưa con 2 thẻ số 10 và 9 rồi nhờ con xếp theo thứ tự như xếp tên trong từ điển, chỉ nhìn chữ số đầu tiên: thẻ 10 đứng trước. Sau đó hỏi con số nào lớn hơn, để con thấy 2 cách so sánh cho kết quả khác nhau.
+    practice:
+      level1: [s3.so-sanh.l3.q2, s3.so-sanh.b11, s3.so-sanh.b12, s3.so-sanh.b13, s3.so-sanh.b20]
+      level2: [s3.so-sanh.p4]
+      level3: [s3.so-sanh.l3.ex2, s3.so-sanh.c3]
+  - id: bool-value
+    name: { vi: "True và False viết hoa chữ đầu, có kiểu bool", en: "True and False have a capital letter and type bool" }
+    misconception_card: |
+      Nhiều bạn viết `true` thường, hoặc viết `"True"` có dấu nháy. Thực ra kiểu **bool** chỉ có 2 giá trị `True` và `False`, viết hoa chữ đầu, không có dấu nháy: `true` báo lỗi NameError, còn `"True"` là 1 chuỗi. Con cất được kết quả so sánh vào biến, như `du_pin = pin >= 50`.
+    parent_tip: |
+      Làm 2 tấm thẻ chỉ ghi True và False, rồi hỏi con vài câu có hoặc không, như "hôm nay trời mưa à?". Con trả lời bằng cách giơ 1 trong 2 thẻ, để thấy kiểu bool chỉ có đúng 2 giá trị.
+    practice:
+      level1: [s3.so-sanh.l4.q1, s3.so-sanh.l4.q2, s3.so-sanh.b14, s3.so-sanh.b15, s3.so-sanh.b16]
+      level2: [s3.so-sanh.p5, s3.so-sanh.p3]
+      level3: [s3.so-sanh.l4.ex1, s3.so-sanh.l4.ex2]
+  - id: ai-rules-vs-data
+    name: { vi: "Quy tắc cố định và học từ dữ liệu", en: "Fixed rules and learning from data" }
+    ai: true
+    misconception_card: |
+      Nhiều bạn nghĩ AI chỉ là 1 chương trình có thật nhiều quy tắc do người viết sẵn. Thực ra với việc rõ ràng, như "trên 30 độ là nóng", người viết đặt ra **quy tắc cố định**. Với việc khó mô tả, như nhận ra con mèo, AI **tự tìm ra quy tắc** từ rất nhiều ví dụ có nhãn, và quy tắc đó vẫn có thể sai.
+    parent_tip: |
+      Hỏi con cách nhận ra 1 con mèo, rồi đưa ra các trường hợp đặc biệt như mèo không đuôi hay mèo cuộn tròn. Giải thích rằng vì khó viết đủ quy tắc, người ta cho AI tự học từ thật nhiều ảnh.
+    practice:
+      level1: [s3.so-sanh.l5.q1, s3.so-sanh.l5.q2, s3.so-sanh.b17, s3.so-sanh.b18, s3.so-sanh.b19]

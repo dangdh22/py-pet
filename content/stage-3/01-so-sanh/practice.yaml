@@ -1,0 +1,209 @@
+exercises:
+  - id: s3.so-sanh.p1
+    type: fill
+    concepts: [compare-ops]
+    prompt:
+      vi: "Robo cần đi sạc khi pin dưới 20 phần trăm. Ô Dữ liệu nhập có 1 dòng: số phần trăm pin của Robo. Điền vào chỗ trống để in ra True khi pin dưới 20, False khi pin từ 20 trở lên, như phần Ví dụ."
+      en: "Robo needs charging when the battery is below 20 percent. The Input data box has 1 line: Robo's battery percent. Fill the blank to print True when the battery is below 20, and False when it is 20 or more, as in the Example."
+    template: |
+      pin = int(input())
+      print("Cần đi sạc:", pin ___ 20)
+    answers: ["<"]
+    tests:
+      - { input: "15", output: "Cần đi sạc: True" }
+      - { input: "20", output: "Cần đi sạc: False", hidden: true }
+      - { input: "64", output: "Cần đi sạc: False", hidden: true }
+    hints:
+      - { vi: "\"Dưới 20\" là nhỏ hơn 20, không tính đúng 20. Với đúng 20 phần trăm, Robo chưa cần đi sạc.", en: "\"Below 20\" means less than 20, not including 20 itself. With exactly 20 percent, Robo does not need charging yet." }
+      - { vi: "Điền dấu < vào chỗ trống.", en: "Fill the blank with <." }
+
+  - id: s3.so-sanh.p2
+    type: fill
+    concepts: [eq-vs-assign]
+    prompt:
+      vi: "Robo nghĩ ra số bí mật là 7. Ô Dữ liệu nhập có 1 dòng: số con đoán. Điền vào 2 chỗ trống để dòng thứ nhất in True khi con đoán đúng, dòng thứ hai in True khi con đoán sai, như phần Ví dụ."
+      en: "Robo thinks of the secret number 7. The Input data box has 1 line: the number you guess. Fill the 2 blanks so that the first line prints True when your guess is right, and the second line prints True when your guess is wrong, as in the Example."
+    template: |
+      so_bi_mat = 7
+      doan = int(input())
+      print("Đoán đúng:", doan ___ so_bi_mat)
+      print("Đoán sai:", doan ___ so_bi_mat)
+    answers: ["==", "!="]
+    tests:
+      - input: "7"
+        output: |
+          Đoán đúng: True
+          Đoán sai: False
+      - input: "3"
+        output: |
+          Đoán đúng: False
+          Đoán sai: True
+        hidden: true
+    hints:
+      - { vi: "Đoán đúng là số đoán bằng số bí mật. Đoán sai là số đoán khác số bí mật. Hỏi bằng nhau cần 2 dấu bằng.", en: "A right guess is equal to the secret number. A wrong guess is different from the secret number. Asking about being equal needs 2 equal signs." }
+      - { vi: "Điền == vào chỗ trống thứ nhất và != vào chỗ trống thứ hai.", en: "Fill the first blank with == and the second blank with !=." }
+
+  - id: s3.so-sanh.p3
+    type: parsons
+    concepts: [str-equality, bool-value]
+    prompt:
+      vi: "Robo hỏi: \"Thủ đô của Việt Nam là gì?\". Ô Dữ liệu nhập có 1 dòng: câu trả lời của con. Đáp án đúng là Hà Nội, viết hoa 2 chữ đầu. Sắp xếp các dòng lệnh để in ra True nếu con trả lời đúng, như phần Ví dụ."
+      en: "Robo asks: \"What is the capital of Vietnam?\". The Input data box has 1 line: your answer. The right answer is Hà Nội, with 2 capital first letters. Put the lines in order to print True if your answer is right, as in the Example."
+    solution: |
+      tra_loi = input()
+      dung = tra_loi == "Hà Nội"
+      print("Trả lời đúng:", dung)
+    tests:
+      - input: "Hà Nội"
+        output: "Trả lời đúng: True"
+      - input: "hà nội"
+        output: "Trả lời đúng: False"
+        hidden: true
+    hints:
+      - { vi: "Phải đọc câu trả lời trước, rồi mới so sánh được. Kết quả so sánh được cất vào biến dung, và lệnh print in biến đó ở cuối cùng.", en: "The answer must be read first, before it can be compared. The result of the comparison is stored in the variable dung, and the print statement prints that variable at the end." }
+
+  - id: s3.so-sanh.p4
+    type: parsons
+    concepts: [compare-str-num]
+    prompt:
+      vi: "An và Bình so tuổi. Ô Dữ liệu nhập có 2 dòng: dòng 1 là tuổi của An, dòng 2 là tuổi của Bình. Sắp xếp các dòng lệnh để in ra True nếu An lớn tuổi hơn Bình, như phần Ví dụ."
+      en: "An and Bình compare their ages. The Input data box has 2 lines: line 1 is An's age, and line 2 is Bình's age. Put the lines in order to print True if An is older than Bình, as in the Example."
+    solution: |
+      tuoi_an = int(input())
+      tuoi_binh = int(input())
+      print("An lớn tuổi hơn:", tuoi_an > tuoi_binh)
+    tests:
+      - input: "12\n9"
+        output: "An lớn tuổi hơn: True"
+      - input: "8\n11"
+        output: "An lớn tuổi hơn: False"
+        hidden: true
+    hints:
+      - { vi: "Tuổi của An nằm ở dòng 1, nên được đọc trước. Cả 2 tuổi đều đổi sang số bằng int() trước khi so sánh, để 12 lớn hơn 9.", en: "An's age is on line 1, so it is read first. Both ages are changed into numbers with int() before comparing, so that 12 is greater than 9." }
+
+  - id: s3.so-sanh.p5
+    type: fill
+    concepts: [bool-value]
+    prompt:
+      vi: "Ô Dữ liệu nhập có 1 dòng: 1 số nguyên. Chương trình cất câu trả lời \"số này có phải số chẵn không\" vào biến la_so_chan. Điền vào chỗ trống để dòng cuối in ra kiểu dữ liệu của biến này, như phần Ví dụ."
+      en: "The Input data box has 1 line: an integer. The program stores the answer to \"is this number even?\" in the variable la_so_chan. Fill the blank so that the last line prints the data type of this variable, as in the Example."
+    template: |
+      so = int(input())
+      la_so_chan = so % 2 == 0
+      print("Số chẵn:", la_so_chan)
+      print("Kiểu:", ___(la_so_chan))
+    answers: ["type"]
+    tests:
+      - input: "4"
+        output: |
+          Số chẵn: True
+          Kiểu: <class 'bool'>
+      - input: "7"
+        output: |
+          Số chẵn: False
+          Kiểu: <class 'bool'>
+        hidden: true
+    hints:
+      - { vi: "Ở giai đoạn 2, con đã dùng 1 lệnh để xem kiểu dữ liệu của 1 giá trị, như kiểu int hay str.", en: "In stage 2, you used a command to see the data type of a value, such as int or str." }
+      - { vi: "Điền type vào chỗ trống.", en: "Fill the blank with type." }
+
+  - id: s3.so-sanh.c1
+    type: code
+    concepts: [eq-vs-assign]
+    prompt:
+      vi: "Robo muốn biết An và Bình có mặc áo cùng số không. Ô Dữ liệu nhập có 2 dòng: số áo của An và số áo của Bình. Code bên phải lại in ra 1 con số, vì dòng 3 dùng nhầm dấu =. Hãy sửa code để in ra True hoặc False như phần Ví dụ."
+      en: "Robo wants to know if An and Bình wear the same shirt number. The Input data box has 2 lines: An's shirt number and Bình's shirt number. The code on the right prints a number instead, because line 3 uses = by mistake. Fix the code to print True or False as in the Example."
+    starter: |
+      so_ao_an = int(input())
+      so_ao_binh = int(input())
+      cung_so = so_ao_an = so_ao_binh
+      print("Cùng số áo:", cung_so)
+    solution: |
+      so_ao_an = int(input())
+      so_ao_binh = int(input())
+      cung_so = so_ao_an == so_ao_binh
+      print("Cùng số áo:", cung_so)
+    tests:
+      - input: "10\n10"
+        output: "Cùng số áo: True"
+      - input: "7\n9"
+        output: "Cùng số áo: False"
+        hidden: true
+    common_wrong:
+      - output: "Cùng số áo: 10"
+        misconception: eq-vs-assign
+        sample: |
+          so_ao_an = int(input())
+          so_ao_binh = int(input())
+          cung_so = so_ao_an = so_ao_binh
+          print("Cùng số áo:", cung_so)
+    hints:
+      - { vi: "Dòng 3 có 2 dấu =, nên Python gán 2 lần: số áo của Bình được cất vào cả cung_so lẫn so_ao_an. Dấu = thứ hai phải là câu hỏi bằng nhau.", en: "Line 3 has two = signs, so Python assigns twice: Bình's shirt number is stored in both cung_so and so_ao_an. The second = must be a question about being equal." }
+      - { vi: "Sửa dòng 3 thành cung_so = so_ao_an == so_ao_binh.", en: "Change line 3 to cung_so = so_ao_an == so_ao_binh." }
+    test_eligible: true
+
+  - id: s3.so-sanh.c2
+    type: code
+    concepts: [str-equality]
+    prompt:
+      vi: "Tài khoản của Robo có tên đăng nhập là robo, viết thường, và mật khẩu là Pet2026. Ô Dữ liệu nhập có 2 dòng: tên đăng nhập và mật khẩu con gõ. Hãy đọc 2 dòng vào 2 biến ten và mat_khau, rồi in ra 2 dòng như phần Ví dụ: tên có đúng không, mật khẩu có đúng không."
+      en: "Robo's account has the user name robo, in small letters, and the password Pet2026. The Input data box has 2 lines: the user name and the password you type. Read the 2 lines into the 2 variables ten and mat_khau, then print the 2 lines in the Example: is the name right, and is the password right."
+    starter: |
+      # Viết lệnh của con ở dưới dòng này
+    solution: |
+      ten = input()
+      mat_khau = input()
+      print("Đúng tên:", ten == "robo")
+      print("Đúng mật khẩu:", mat_khau == "Pet2026")
+    tests:
+      - input: "robo\nPet2026"
+        output: |
+          Đúng tên: True
+          Đúng mật khẩu: True
+      - input: "Robo\nPet2026"
+        output: |
+          Đúng tên: False
+          Đúng mật khẩu: True
+        hidden: true
+      - input: "robo\npet2026"
+        output: |
+          Đúng tên: True
+          Đúng mật khẩu: False
+        hidden: true
+    hints:
+      - { vi: "Tên và mật khẩu là chữ, nên đọc bằng input() và không đổi sang số. So sánh mỗi dòng với chuỗi đúng của nó bằng ==, viết đúng từng chữ hoa, chữ thường.", en: "The name and the password are text, so read them with input() and do not change them into numbers. Compare each line with its right string using ==, with every capital and small letter exactly right." }
+      - { vi: "Hai dòng đầu là ten = input() và mat_khau = input(). Hai dòng in là print(\"Đúng tên:\", ten == \"robo\") và print(\"Đúng mật khẩu:\", mat_khau == \"Pet2026\").", en: "The first 2 lines are ten = input() and mat_khau = input(). The 2 print lines are print(\"Đúng tên:\", ten == \"robo\") and print(\"Đúng mật khẩu:\", mat_khau == \"Pet2026\")." }
+    test_eligible: true
+
+  - id: s3.so-sanh.c3
+    type: code
+    concepts: [compare-str-num, compare-ops]
+    prompt:
+      vi: "Robo so giá 2 món đồ chơi. Ô Dữ liệu nhập có 2 dòng: giá món 1 và giá món 2, tính bằng nghìn đồng, là số nguyên. Hãy đọc 2 giá vào 2 biến gia_1 và gia_2, rồi in ra True nếu món 1 rẻ hơn món 2, False nếu không, đúng như phần Ví dụ."
+      en: "Robo compares the prices of 2 toys. The Input data box has 2 lines: the price of toy 1 and the price of toy 2, in thousands of dong, as integers. Read the 2 prices into the 2 variables gia_1 and gia_2, then print True if toy 1 is cheaper than toy 2, and False if not, exactly as in the Example."
+    starter: |
+      # Viết lệnh của con ở dưới dòng này
+    solution: |
+      gia_1 = int(input())
+      gia_2 = int(input())
+      print("Món 1 rẻ hơn:", gia_1 < gia_2)
+    tests:
+      - input: "9\n12"
+        output: "Món 1 rẻ hơn: True"
+      - input: "25\n8"
+        output: "Món 1 rẻ hơn: False"
+        hidden: true
+      - input: "15\n15"
+        output: "Món 1 rẻ hơn: False"
+        hidden: true
+    common_wrong:
+      - output: "Món 1 rẻ hơn: False"
+        misconception: compare-str-num
+        sample: |
+          gia_1 = input()
+          gia_2 = input()
+          print("Món 1 rẻ hơn:", gia_1 < gia_2)
+    hints:
+      - { vi: "Giá là số, nên con đổi mỗi dòng nhập sang số bằng int() trước khi so sánh. Nếu so sánh 2 chuỗi, \"9\" lại lớn hơn \"12\". \"Rẻ hơn\" là nhỏ hơn, viết là <.", en: "Prices are numbers, so change each input line into a number with int() before comparing. If you compare 2 strings, \"9\" is bigger than \"12\". \"Cheaper\" means smaller, written <." }
+      - { vi: "Hai dòng đầu là gia_1 = int(input()) và gia_2 = int(input()). Dòng 3 là print(\"Món 1 rẻ hơn:\", gia_1 < gia_2).", en: "The first 2 lines are gia_1 = int(input()) and gia_2 = int(input()). Line 3 is print(\"Món 1 rẻ hơn:\", gia_1 < gia_2)." }
+    test_eligible: true

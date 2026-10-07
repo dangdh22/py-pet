@@ -88,6 +88,14 @@
     en: "Line {line}: in a condition, write == (2 equal signs) to compare. One = gives a value to a variable."
   sample: "x = 5\nif x = 5:\n    print(x)"
 
+- id: assign-in-call
+  match: { type: SyntaxError, message: "expression cannot contain assignment, perhaps you meant \"==\"\\?" }
+  misconception: eq-vs-assign
+  explain:
+    vi: "Dòng {line}: trong dấu ngoặc có 1 dấu = đứng sau 1 thứ không phải tên tham số như sep hay end. Muốn hỏi 2 giá trị có bằng nhau không, hãy viết == (2 dấu bằng), ví dụ print(so % 2 == 0). Nếu con muốn viết >= hay <=, hãy đặt dấu = ở sau, không đặt ở trước."
+    en: "Line {line}: inside the brackets there is an = after something that is not an option name like sep or end. To ask whether 2 values are equal, write == (2 equal signs), for example print(so % 2 == 0). If you want to write >= or <=, put the = after the other sign, not before it."
+  sample: "print(5 = 5)"
+
 - id: quote-inside-string
   match: { type: SyntaxError, message: "Is this intended to be part of the string\\?" }
   explain:
@@ -182,6 +190,22 @@
     vi: "Dòng {line}: con đang dùng một giá trị kiểu {kind} như 1 lệnh, có dấu ngoặc tròn ( ) ở sau. Có thể con đã đặt tên biến trùng tên lệnh, ví dụ print = 5: từ đó print là 1 biến, không còn là lệnh in nữa. Hãy đổi tên biến đó."
     en: "Line {line}: you use a value of type {kind} as if it were a command, with round brackets ( ) after it. Maybe a variable has the same name as a command, for example print = 5: after that, print is a variable, not the print command any more. Change the name of that variable."
   sample: "print = 5\nprint(1)"
+
+- id: compare-str-int
+  match: { type: TypeError, message: "^'(?<op>[<>=!]+)' not supported between instances of '(?<left>\\w+)' and '(?<right>\\w+)'$" }
+  misconception: compare-str-num
+  explain:
+    vi: "Dòng {line}: không so sánh được bằng phép {op} giữa kiểu {left} và kiểu {right}. Python chỉ so sánh lớn nhỏ giữa số với số, hoặc giữa chuỗi với chuỗi. Có thể một giá trị là chuỗi (str) đọc từ input(): hãy đổi nó thành số bằng int() trước khi so sánh, ví dụ tuoi = int(input())."
+    en: "Line {line}: you cannot compare with {op} between type {left} and type {right}. Python compares bigger or smaller only between numbers, or between strings. Maybe one value is a string (str) from input(): change it into a number with int() before comparing, for example tuoi = int(input())."
+  sample: "print(\"10\" < 9)"
+
+- id: print-unknown-option
+  match: { type: TypeError, message: "^print\\(\\) got an unexpected keyword argument '(?<name>[^']+)'$" }
+  misconception: eq-vs-assign
+  explain:
+    vi: "Dòng {line}: trong print, Python hiểu {name}=... là 1 tham số như sep= hay end=, nhưng print không có tham số tên {name}. Nếu con muốn hỏi {name} có bằng 1 giá trị không, hãy viết == (2 dấu bằng), ví dụ print({name} == 5). Nếu con muốn dùng sep hay end, hãy kiểm tra lại cách viết."
+    en: "Line {line}: inside print, Python reads {name}=... as an option like sep= or end=, but print has no option called {name}. If you want to ask whether {name} is equal to a value, write == (2 equal signs), for example print({name} == 5). If you want to use sep or end, check the spelling."
+  sample: "tuoi = 11\nprint(tuoi = 11)"
 
 - id: type-other
   match: { type: TypeError }
