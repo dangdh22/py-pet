@@ -135,6 +135,14 @@
     en: "Line {line}: Python does not understand this line. Check the brackets, the quotes and the colons. If this line has a variable name, check the name too: it has only letters, digits and the underscore _, with no spaces."
   sample: "class = 1"
 
+- id: name-before-assign
+  match: { type: NameError, message: "^name '(?<name>[^']+)' is not defined$", check: assigned-in-code }
+  misconception: var-before-use
+  explain:
+    vi: "Dòng {line}: biến {name} được dùng trước khi được gán. Python chạy từ trên xuống: hãy đặt dòng gán {name} = ... lên trên dòng này."
+    en: "Line {line}: the variable {name} is used before it is given a value. Python runs from top to bottom: put the line {name} = ... above this line."
+  sample: "print(diem)\ndiem = 5"
+
 - id: name-similar
   match: { type: NameError, message: "^name '(?<name>[^']+)' is not defined$", check: similar-name }
   misconception: case-sensitive

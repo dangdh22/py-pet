@@ -23,7 +23,7 @@ beforeAll(async () => {
 
 describe("error dictionary on Pyodide", () => {
   test("has the expected number of entries", () => {
-    expect(bundle.errors.length).toBe(33);
+    expect(bundle.errors.length).toBe(34);
   });
 
   for (const entry of bundle.errors) {
@@ -46,6 +46,15 @@ describe("error dictionary on Pyodide", () => {
     const match = matchError(bundle.errors, problem!, code);
     expect(match?.entry.id).toBe("name-undefined");
     expect(match?.vars.name).toBe("tên");
+  });
+
+  test("name-before-assign: a variable used before its assignment is recognized, a never-assigned name is not", () => {
+    const code = "print(diem)\ndiem = 5";
+    const match = matchError(bundle.errors, problemFromOutcome(run(code, ""), false)!, code);
+    expect(match?.entry.id).toBe("name-before-assign");
+    expect(match?.vars.name).toBe("diem");
+    const other = "print(Robo)";
+    expect(matchError(bundle.errors, problemFromOutcome(run(other, ""), false)!, other)?.entry.id).toBe("name-undefined");
   });
 
   test("smart-quote: real curly quotes pasted from Word are recognized (added test)", () => {

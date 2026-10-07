@@ -1,7 +1,7 @@
 import { describe, expect, test } from "vitest";
 import type { ErrorEntry } from "../content/types";
 import type { PyErrorInfo } from "../runner/types";
-import { findSimilarName, levenshtein } from "./checks";
+import { checks, findSimilarName, isAssignedInCode, levenshtein } from "./checks";
 import { matchError, renderTemplate } from "./match";
 import { isPseudoError, problemFromOutcome } from "./problem";
 import { DictionaryProvider, errorMisconceptionFrom, explainWithChain } from "./providers";
@@ -26,6 +26,10 @@ function error(type: string, message = "", line: number | null = 1, lineText = "
 
 const NAME_MESSAGE = "^name '(?<name>[^']+)' is not defined$";
 const entries: ErrorEntry[] = [
+  entry("name-before-assign", "NameError", {
+    match: { type: "NameError", message: NAME_MESSAGE, check: "assigned-in-code" },
+    misconception: "var-before-use",
+  }),
   entry("name-similar", "NameError", {
     match: { type: "NameError", message: NAME_MESSAGE, check: "similar-name" },
     explain: { vi: 'Dòng {line}: "{name}" hay "{suggestion}"?', en: 'Line {line}: "{name}" or "{suggestion}"?' },
@@ -65,6 +69,31 @@ describe("checks", () => {
     expect(findSimilarName("Robo", "print(Robo)")).toBeNull();
     expect(findSimilarName("Xin", "print(Xin)")).toBeNull();
     expect(findSimilarName("tuoii", 'print("tuoi")\nprint(tuoii)')).toBeNull();
+  });
+});
+
+describe("assigned-in-code check", () => {
+  const input = (name: string, code: string) => ({
+    error: error("NameError", `name '${name}' is not defined`, 1),
+    code,
+    vars: { name },
+  });
+
+  test("ok when the name is assigned later in the code", () => {
+    expect(checks["assigned-in-code"](input("diem", "print(diem)\ndiem = 5"))).toMatchObject({ ok: true });
+    expect(checks["assigned-in-code"](input("điểm", "print(điểm)\n  điểm=5"))).toMatchObject({ ok: true });
+  });
+
+  test("not ok when the name is never assigned", () => {
+    expect(checks["assigned-in-code"](input("Robo", "print(Robo)"))).toEqual({ ok: false });
+    expect(checks["assigned-in-code"](input("diem", "print(diem)\nprint(diem == 5)"))).toEqual({ ok: false });
+    expect(checks["assigned-in-code"](input("diem", "print(diem)\n# diem = 5\nprint('diem = 5')"))).toEqual({ ok: false });
+    expect(checks["assigned-in-code"](input("a", "print(a)\nab = 5"))).toEqual({ ok: false });
+    expect(checks["assigned-in-code"]({ error: error("NameError"), code: "x = 1", vars: {} })).toEqual({ ok: false });
+  });
+
+  test("escapes the name for a RegExp", () => {
+    expect(isAssignedInCode("a.b", "axb = 1")).toBe(false);
   });
 });
 
@@ -176,6 +205,17 @@ describe("providers", () => {
       provider.explain({ error: error("NameError", `name '${name}' is not defined`, 1), code: `${name}(1)`, lang: "vi" });
     expect(await explain("Print")).toMatchObject({ entryId: "name-similar", misconception: "case-sensitive" });
     expect(await explain("pirnt")).toMatchObject({ entryId: "name-similar", misconception: null });
+  });
+
+  test("a name used before its assignment is var-before-use; a never-assigned name stays string-quotes", async () => {
+    const find = errorMisconceptionFrom(entries);
+    const message = "name 'diem' is not defined";
+    expect(find(error("NameError", message, 1), "print(diem)\ndiem = 5")).toBe("var-before-use");
+    expect(find(error("NameError", "name 'Robo' is not defined", 1), "print(Robo)")).toBe("string-quotes");
+    const provider = new DictionaryProvider(entries);
+    expect(
+      await provider.explain({ error: error("NameError", message, 1), code: "print(diem)\ndiem = 5", lang: "vi" }),
+    ).toMatchObject({ entryId: "name-before-assign", misconception: "var-before-use" });
   });
 
   test("errorMisconceptionFrom", () => {

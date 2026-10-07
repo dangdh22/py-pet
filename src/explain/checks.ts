@@ -56,6 +56,12 @@ export function findSimilarName(name: string, code: string): string | null {
   return best;
 }
 
+/** True when `name` is the target of a plain assignment (`name = ...`, not `==`) on some line of the code. */
+export function isAssignedInCode(name: string, code: string): boolean {
+  const escaped = name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  return new RegExp(`^[ \\t]*${escaped}[ \\t]*=(?!=)`, "mu").test(stripStringsAndComments(code));
+}
+
 export const checks: Record<CheckName, (input: CheckInput) => CheckResult> = {
   "similar-name": ({ code, vars }) => {
     const name = vars.name;
@@ -63,6 +69,8 @@ export const checks: Record<CheckName, (input: CheckInput) => CheckResult> = {
     const suggestion = findSimilarName(name, code);
     return suggestion ? { ok: true, vars: { ...vars, suggestion } } : { ok: false };
   },
+  "assigned-in-code": ({ code, vars }) =>
+    vars.name && isAssignedInCode(vars.name, code) ? { ok: true, vars } : { ok: false },
   "assign-in-condition": ({ error, vars }) =>
     /^\s*(if|elif|while)\b/.test(error.lineText) ? { ok: true, vars } : { ok: false },
   "while-loop": ({ code, vars }) => (/^\s*while\b/m.test(code) ? { ok: true, vars } : { ok: false }),
