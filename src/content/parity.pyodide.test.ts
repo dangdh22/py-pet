@@ -23,7 +23,7 @@ beforeAll(async () => {
 
 describe("error dictionary on Pyodide", () => {
   test("has the expected number of entries", () => {
-    expect(bundle.errors.length).toBe(38);
+    expect(bundle.errors.length).toBe(39);
   });
 
   for (const entry of bundle.errors) {
@@ -62,9 +62,28 @@ describe("error dictionary on Pyodide", () => {
       ["print(5 => 3)", "assign-in-call"],
       ['print(9 >= "8")', "compare-str-int"],
       ['print("A", sap="-")', "type-other"],
+      ["print(6 * 7 = 42)", "assign-in-call"],
+      ["11 = tuoi", "assign-to-literal"],
     ];
     for (const [code, id] of cases) {
       const problem = problemFromOutcome(run(code, ""), false);
+      expect(matchError(bundle.errors, problem!, code)?.entry.id).toBe(id);
+    }
+  });
+
+  test("= instead of == in an if/elif/while condition: every form is recognized in Pyodide 3.14", () => {
+    const cases: [string, string][] = [
+      ["n = 4\nif n % 2 = 0:\n    print(1)", "assign-in-condition"],
+      ["a = 1\nb = 2\nif a + b = 3:\n    print(1)", "assign-in-condition"],
+      ["a = 1\nb = 9\nif a + b > 20:\n    print(1)\nelif a + b = 10:\n    print(2)", "assign-in-condition"],
+      ["x = 5\nif x = 5:\n    print(x)", "assign-in-condition"],
+      ["n = 4\nif n % 4 == 0 and n % 100 = 0:\n    print(1)", "assign-in-if"],
+      ["a = 1\nb = 2\nif a == 1 and b = 2:\n    print(1)", "assign-in-if"],
+      ["x = 1\nif x == 1 or x = 2:\n    print(1)", "assign-in-if"],
+    ];
+    for (const [code, id] of cases) {
+      const problem = problemFromOutcome(run(code, ""), false);
+      expect(problem?.type).toBe("SyntaxError");
       expect(matchError(bundle.errors, problem!, code)?.entry.id).toBe(id);
     }
   });

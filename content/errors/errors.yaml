@@ -9,8 +9,8 @@
     vi: "Dòng {line}: Python cần 1 dấu hai chấm (:) ở cuối dòng này. Dòng mở đầu 1 khối lệnh, như dòng if hay dòng else, luôn kết thúc bằng dấu hai chấm."
     en: "Line {line}: Python needs a colon (:) at the end of this line. A line that starts a block, like an if line or an else line, always ends with a colon."
   hint:
-    vi: "Thêm dấu : vào cuối dòng {line}. Nếu đó là dòng else, hãy xóa phần điều kiện và chỉ để lại else:, vì else không có điều kiện."
-    en: "Add : at the end of line {line}. If it is an else line, delete the condition and keep only else:, because else has no condition."
+    vi: "Thêm dấu : vào cuối dòng {line}. Nếu đó là dòng else, hãy xóa phần điều kiện và chỉ để lại else:, vì else không có điều kiện. Nếu con cần thêm 1 điều kiện, hãy viết elif thay cho else if."
+    en: "Add : at the end of line {line}. If it is an else line, delete the condition and keep only else:, because else has no condition. If you need to add another condition, write elif instead of else if."
   sample: "if True\n    print(1)"
 
 - id: elif-after-else
@@ -34,7 +34,6 @@
 
 - id: indent-unexpected
   match: { type: IndentationError, message: "^unexpected indent$" }
-  misconception: indent-block
   explain:
     vi: "Dòng {line} bị thụt lề thừa. Nếu dòng này không nằm trong khối lệnh nào, hãy xóa hết dấu cách ở đầu dòng. Nếu nó nằm trong 1 khối lệnh, hãy cho nó thẳng hàng với các dòng khác trong khối."
     en: "Line {line} has extra indentation. If this line is not inside a block, delete all the spaces at the start of the line. If it is inside a block, line it up with the other lines of the block."
@@ -98,19 +97,30 @@
   sample: "print \"Robo\""
 
 - id: assign-in-condition
-  match: { type: SyntaxError, message: "Maybe you meant '==' or ':=' instead of '='", check: assign-in-condition }
+  match: { type: SyntaxError, message: "Maybe you meant '==' (or ':=' )?instead of '='", check: assign-in-condition }
   misconception: eq-vs-assign
   explain:
     vi: "Dòng {line}: trong điều kiện, so sánh bằng phải viết == (2 dấu bằng). Một dấu = dùng để gán giá trị."
     en: "Line {line}: in a condition, write == (2 equal signs) to compare. One = gives a value to a variable."
   sample: "x = 5\nif x = 5:\n    print(x)"
 
+- id: assign-in-if
+  match: { type: SyntaxError, message: "^invalid syntax$", check: assign-in-if }
+  misconception: eq-vs-assign
+  explain:
+    vi: "Dòng {line}: trong điều kiện có 1 dấu = đứng 1 mình. Để so sánh bằng, con viết == (2 dấu bằng). Một dấu = dùng để gán giá trị cho biến, không dùng để so sánh."
+    en: "Line {line}: the condition has a single = on its own. To compare for equal, write == (2 equal signs). One = gives a value to a variable. It is not used to compare."
+  hint:
+    vi: "Nếu điều kiện nối nhiều phép so sánh bằng and hoặc or, hãy kiểm tra từng phép so sánh. Ví dụ đúng: if n % 4 == 0 and n % 100 != 0:"
+    en: "If the condition joins several comparisons with and or or, check each comparison. Correct example: if n % 4 == 0 and n % 100 != 0:"
+  sample: "n = 4\nif n % 4 == 0 and n % 100 = 0:\n    print(1)"
+
 - id: assign-in-call
   match: { type: SyntaxError, message: "expression cannot contain assignment, perhaps you meant \"==\"\\?" }
   misconception: eq-vs-assign
   explain:
-    vi: "Dòng {line}: trong dấu ngoặc có 1 dấu = đứng sau 1 thứ không phải tên tham số như sep hay end. Muốn hỏi 2 giá trị có bằng nhau không, hãy viết == (2 dấu bằng), ví dụ print(so % 2 == 0). Nếu con muốn viết >= hay <=, hãy đặt dấu = ở sau, không đặt ở trước."
-    en: "Line {line}: inside the brackets there is an = after something that is not an option name like sep or end. To ask whether 2 values are equal, write == (2 equal signs), for example print(so % 2 == 0). If you want to write >= or <=, put the = after the other sign, not before it."
+    vi: "Dòng {line}: trong dấu ngoặc có 1 dấu = đứng sau 1 thứ không phải tên tham số như sep hay end. Nếu con muốn in cả dấu = ra màn hình, hãy đặt nó trong dấu nháy, ví dụ print(\"6 * 7 =\", 6 * 7). Muốn hỏi 2 giá trị có bằng nhau không, hãy viết == (2 dấu bằng), ví dụ print(so % 2 == 0). Nếu con muốn viết >= hay <=, hãy đặt dấu = ở sau, không đặt ở trước."
+    en: "Line {line}: inside the brackets there is an = after something that is not an option name like sep or end. If you want to print the = sign itself on the screen, put it inside quotes, for example print(\"6 * 7 =\", 6 * 7). To ask whether 2 values are equal, write == (2 equal signs), for example print(so % 2 == 0). If you want to write >= or <=, put the = after the other sign, not before it."
   sample: "print(5 = 5)"
 
 - id: quote-inside-string

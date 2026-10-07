@@ -12,7 +12,7 @@ concepts:
   - id: indent-block
     name: { vi: "Khối lệnh thụt lề 4 dấu cách", en: "A block is indented by 4 spaces" }
     misconception_card: |
-      Nhiều bạn nghĩ chỉ dòng đầu tiên dưới `if` mới thuộc khối, hoặc nghĩ thụt lề chỉ để code trông đẹp. Thực ra mọi dòng thụt lề cùng 4 dấu cách ngay dưới `if pin < 20:` đều thuộc khối, và cả khối chỉ chạy khi điều kiện đúng. Thiếu thụt lề hay thụt lệch nhau đều làm Python báo lỗi IndentationError.
+      Nhiều bạn nghĩ chỉ dòng đầu tiên dưới `if` mới thuộc khối, hoặc nghĩ thụt lề chỉ để code trông đẹp. Thực ra mọi dòng thụt lề cùng 4 dấu cách ngay dưới `if pin < 20:` đều thuộc khối, và cả khối chỉ chạy khi điều kiện đúng. Thiếu thụt lề, thụt thừa hay thụt lệch nhau đều làm Python báo lỗi IndentationError.
     parent_tip: |
       Viết lên giấy dòng "Nếu trời mưa:", rồi viết lùi vào 2 việc bên dưới là "mang ô" và "đi ủng". Hỏi con: khi trời nắng, những việc viết lùi vào có cần làm không?
     practice:
@@ -42,7 +42,7 @@ concepts:
   - id: convert-before-compare
     name: { vi: "Đổi số nhập bằng int() trước khi so sánh", en: "Convert input with int() before comparing" }
     misconception_card: |
-      Nhiều bạn viết `tuoi = input()` rồi so sánh luôn `tuoi >= 10`. Thực ra input() đưa lại chuỗi: so lớn nhỏ chuỗi với số thì báo lỗi TypeError, còn so 2 chuỗi chữ số với nhau thì ra kết quả sai, vì `"9" > "10"` là True. Con đổi sang số ngay khi đọc, bằng `tuoi = int(input())`, rồi mới so sánh.
+      Nhiều bạn viết `tuoi = input()` rồi so sánh `tuoi >= 10`, nên Python báo lỗi TypeError. Con hãy đặt int() ngay ở dòng nhập: `tuoi = int(input())`, rồi dùng `tuoi` ở mọi dòng sau. Câu trả lời bằng chữ, như `ten = input()`, vẫn là chuỗi, và con không đổi nó bằng int().
     parent_tip: |
       Đưa con 1 tờ phiếu ghi "15 tuổi" và hỏi người này có lớn hơn 12 tuổi không: con phải đọc phiếu, hiểu thành số 15, rồi mới so sánh được. Giải thích rằng Python cũng phải đổi chữ đọc từ input() thành số bằng int() trước khi so sánh.
     practice:

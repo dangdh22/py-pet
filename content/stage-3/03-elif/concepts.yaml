@@ -22,7 +22,7 @@ concepts:
   - id: boundary-check
     name: { vi: "Ranh giới: chọn >= hay >", en: "Boundaries: >= or >" }
     misconception_card: |
-      Nhiều bạn nghĩ `>=` và `>` gần như nhau, nên chỉ thử những số ở xa ranh giới như 9 hay 3. Thực ra 2 dấu này chỉ khác nhau ở đúng ranh giới: `8 >= 8` là True, còn `8 > 8` là False. "Từ 8 trở lên" là `>= 8`, còn "trên 8" là `> 8`. Vì vậy, con luôn thử đúng số ở ranh giới, như 8 điểm.
+      Nhiều bạn đọc đề lướt qua nên chọn nhầm giữa `>=` và `>`, rồi chỉ thử những số ở xa ranh giới như 9 hay 3. Con hãy đọc kỹ từ trong đề: "từ 8 trở lên" là `>= 8`, "trên 8" là `> 8`, "dưới 5" là `< 5`, còn "không quá 5" là `<= 5`. Sau đó con thử đúng số ở ranh giới: `8 >= 8` là True, còn `8 > 8` là False.
     parent_tip: |
       Hỏi con: "Cầu trượt dành cho bạn cao từ 120 cm trở lên, bạn cao đúng 120 cm có được chơi không?", rồi hỏi lại với "cao trên 120 cm". Cùng con tìm thêm các biển báo ngoài đời có chữ "từ", "trên", "dưới" hay "không quá".
     practice:

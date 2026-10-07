@@ -96,8 +96,8 @@ exercises:
       - { text: "False", correct: true }
       - { vi: "Báo lỗi SyntaxError, vì not phải đứng sau phép so sánh", en: "A SyntaxError, because not must come after the comparison", error: true, misconception: not-flip }
     explanation:
-      vi: "Python làm phép so sánh trước: 5 > 3 là True. Sau đó not đảo True thành False, nên Python in ra False. not đảo kết quả của cả phép so sánh a > 3, không đứng riêng với số 5, nên không có lỗi. not đứng trước điều kiện, như cách viết ở đây, là đúng."
-      en: "Python does the comparison first: 5 > 3 is True. Then not flips True to False, so Python prints False. not flips the result of the whole comparison a > 3, it is not used on the number 5 alone, so there is no error. not goes before the condition, as it does here, so this is correct."
+      vi: "Python làm phép so sánh trước: 5 > 3 là True. Sau đó not đảo True thành False, nên Python in ra False. not đảo kết quả của cả phép so sánh a > 3, không đứng riêng với số 5, nên không có lỗi."
+      en: "Python does the comparison first: 5 > 3 is True. Then not flips True to False, so Python prints False. not flips the result of the whole comparison a > 3, it is not used on the number 5 alone, so there is no error."
   - id: s3.logic.l3.q2
     type: mcq
     concepts: [not-flip]

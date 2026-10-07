@@ -2,7 +2,7 @@ concepts:
   - id: compare-ops
     name: { vi: "Phép so sánh cho ra True hoặc False", en: "A comparison gives True or False" }
     misconception_card: |
-      Nhiều bạn nghĩ `print(5 > 3)` in ra 5, hoặc nghĩ `>` cũng tính trường hợp bằng nhau. Thực ra phép so sánh chỉ cho ra **True** hoặc **False**: `print(5 > 3)` in ra True. Dấu `>` không tính bằng nhau, nên `5 > 5` ra False; muốn tính cả bằng nhau, con viết `5 >= 5`, và kết quả là True.
+      Nhiều bạn nghĩ `print(5 > 3)` in ra 5, hoặc in ra cả phép so sánh. Thực ra phép so sánh chỉ cho ra **True** hoặc **False**: `print(5 > 3)` in ra True, còn `print(2 > 7)` in ra False.
     parent_tip: |
       Chơi trò "Đúng hay Sai": bố mẹ đọc 1 câu như "7 lớn hơn 9", "5 lớn hơn hoặc bằng 5", con chỉ được trả lời Đúng hoặc Sai. Giải thích rằng phép so sánh trong Python cũng chỉ trả lời True hoặc False.
     practice:
