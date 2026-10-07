@@ -38,22 +38,24 @@ questions:
   - id: s3.if-else.b3
     type: mcq
     concepts: [if-colon]
-    lessons: [s3.if-else.l1]
+    lessons: [s3.if-else.l3]
     code: |
-      x = 5
-      if x == 5
-          print("five")
+      x = 7
+      if x > 5
+          print("big")
+      else
+          print("small")
     prompt:
-      vi: "Chạy đoạn code này, Python báo lỗi SyntaxError: expected ':' ở dòng 2. Con sửa thế nào?"
-      en: "When this code runs, Python gives SyntaxError: expected ':' on line 2. How do you fix it?"
+      vi: "Đoạn code này còn thiếu dấu hai chấm. Những dòng nào phải kết thúc bằng dấu hai chấm?"
+      en: "This code is missing colons. Which lines must end with a colon?"
     choices:
-      - { vi: "Thêm dấu : vào cuối dòng 2", en: "Add : at the end of line 2", correct: true }
-      - { vi: "Đổi == thành = ở dòng 2", en: "Change == to = on line 2", misconception: eq-vs-assign }
-      - { vi: "Thụt lề dòng 2 vào 4 dấu cách", en: "Indent line 2 by 4 spaces", misconception: indent-block }
-      - { vi: "Thêm dấu : vào đầu dòng 3", en: "Add : at the start of line 3", misconception: if-colon }
+      - { vi: "Dòng 2 và dòng 4", en: "Line 2 and line 4", correct: true }
+      - { vi: "Chỉ dòng 2", en: "Only line 2", misconception: if-colon }
+      - { vi: "Dòng 3 và dòng 5", en: "Line 3 and line 5", misconception: if-colon }
+      - { vi: "Cả 5 dòng", en: "All 5 lines", misconception: if-colon }
     explanation:
-      vi: "expected ':' nghĩa là Python cần 1 dấu hai chấm. Dấu này đứng ở cuối dòng if: if x == 5:. Dấu == là đúng, vì đây là câu hỏi bằng nhau. Dòng if không thụt lề, chỉ dòng bên dưới mới thụt lề."
-      en: "expected ':' means that Python needs a colon. It goes at the end of the if line: if x == 5:. The == is right, because this is a question about being equal. The if line is not indented: only the line under it is."
+      vi: "Dấu hai chấm đứng ở cuối dòng mở đầu 1 khối lệnh: dòng if ở dòng 2 và dòng else ở dòng 4. Dòng else cũng cần dấu hai chấm, dù nó không có điều kiện. Các dòng print thụt lề và dòng gán x = 7 không có dấu hai chấm."
+      en: "A colon goes at the end of a line that starts a block: the if line on line 2 and the else line on line 4. The else line needs a colon too, even though it has no condition. The indented print lines and the line x = 7 have no colon."
 
   - id: s3.if-else.b4
     type: predict
@@ -268,20 +270,20 @@ questions:
     concepts: [else-branch, after-block]
     lessons: [s3.if-else.l3]
     code: |
-      total = 4 + 5
-      if total >= 10:
-          print("pass")
+      x = 3
+      if x > 5:
+          x = x - 5
       else:
-          print("try again")
-      print(total)
+          x = x + 5
+      print(x)
     prompt:
       vi: "Đoạn code in ra gì?"
       en: "What is the output of this code?"
     choices:
-      - { text: "try again\n9", correct: true }
-      - { text: "pass\n9", misconception: compare-ops }
-      - { text: "try again", misconception: after-block }
-      - { text: "9\ntry again", misconception: run-order }
+      - { text: "8", correct: true }
+      - { text: "-2", misconception: compare-ops }
+      - { text: "3", misconception: var-reassign }
+      - { text: "x", misconception: string-quotes }
     explanation:
-      vi: "Python tính 4 + 5 được 9. 9 không lớn hơn hoặc bằng 10, nên nhánh else chạy và in ra try again. Dòng cuối sát lề trái, nên luôn chạy và in ra 9 ở dòng sau."
-      en: "Python works out 4 + 5, which is 9. 9 is not greater than or equal to 10, so the else branch runs and prints try again. The last line starts at the left edge, so it always runs and prints 9 on the next line."
+      vi: "3 không lớn hơn 5, nên điều kiện là False và nhánh else chạy: x thành 3 + 5, tức là 8. Dòng print(x) sát lề trái, nên luôn chạy, và in ra giá trị gán sau cùng của x là 8. x không có dấu nháy, nên Python in giá trị của biến chứ không in chữ x."
+      en: "3 is not greater than 5, so the condition is False and the else branch runs: x becomes 3 + 5, which is 8. The line print(x) starts at the left edge, so it always runs, and it prints the last value given to x, which is 8. x has no quotes, so Python prints the value of the variable, not the letter x."
