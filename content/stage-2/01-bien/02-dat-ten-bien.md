@@ -13,14 +13,14 @@ exercises:
       so pin = 3
       print(2robo, "có", so pin, "cục pin")
     solution: |
-      robo2 = "Robo"
+      ten_robo = "Robo"
       so_pin = 3
-      print(robo2, "có", so_pin, "cục pin")
+      print(ten_robo, "có", so_pin, "cục pin")
     tests:
       - output: "Robo có 3 cục pin"
     hints:
       - { vi: "Tên biến không được bắt đầu bằng chữ số, và không được có dấu cách. Đọc số dòng trong thông báo lỗi để biết tên nào sai.", en: "A variable name cannot start with a digit, and it cannot have a space. Read the line number in the error message to find the wrong name." }
-      - { vi: "Đổi 2robo thành robo2, và đổi so pin thành so_pin. Đổi cả ở dòng print.", en: "Change 2robo to robo2, and change so pin to so_pin. Change them in the print line too." }
+      - { vi: "Ví dụ: đổi 2robo thành ten_robo, và đổi so pin thành so_pin. Nhớ đổi cả ở dòng print.", en: "For example, change 2robo to ten_robo, and change so pin to so_pin. Remember to change them in the print line too." }
     test_eligible: true
   - id: s2.bien.l2.q1
     type: mcq
