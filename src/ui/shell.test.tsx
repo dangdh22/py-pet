@@ -4,6 +4,7 @@ import userEvent from "@testing-library/user-event";
 import { describe, expect, test, vi } from "vitest";
 import { fakeRunner, okResult, renderWithApp } from "../test/render";
 import { useContent } from "./contexts";
+import { DevGalleryGate } from "./GalleryScreen";
 import { Header } from "./Header";
 import { Robot } from "./Robot";
 import { RobotBubble } from "./RobotBubble";
@@ -38,10 +39,81 @@ describe("Robot", () => {
     expect(screen.getByRole("img", { name: "Robo" })).toHaveAttribute("data-mood", "happy");
   });
 
+  test("defaults to the neutral capsule", () => {
+    render(<Robot />);
+    const robot = screen.getByRole("img", { name: "Robo" });
+    expect(robot).toHaveAttribute("data-mood", "neutral");
+    expect(robot).toHaveAttribute("data-form", "1");
+    expect(robot).toHaveAttribute("data-size", "56");
+    expect(robot).toHaveAttribute("viewBox", "0 0 64 72");
+  });
+
+  test("each form adds a new part", () => {
+    const parts = (form: 1 | 2 | 3 | 4) => {
+      const { container, unmount } = render(<Robot form={form} />);
+      const found = ["antenna", "arms", "chest", "star"].filter((part) => container.querySelector(`[data-part="${part}"]`));
+      unmount();
+      return found;
+    };
+    expect(parts(1)).toEqual([]);
+    expect(parts(2)).toEqual(["antenna"]);
+    expect(parts(3)).toEqual(["antenna", "arms"]);
+    expect(parts(4)).toEqual(["antenna", "arms", "chest"]);
+  });
+
+  test("a graduated robot wears a star on its chest screen", () => {
+    const { container } = render(<Robot form={4} graduated />);
+    expect(container.querySelector('[data-part="chest"] [data-part="star"]')).not.toBeNull();
+  });
+
+  test("draws every form with every face", () => {
+    const moods = ["happy", "neutral", "sleepy", "drained", "vacation", "sad", "thinking"] as const;
+    for (const form of [1, 2, 3, 4] as const) {
+      for (const mood of moods) {
+        const { container, unmount } = render(<Robot form={form} mood={mood} size={112} />);
+        const robot = screen.getByRole("img", { name: "Robo" });
+        expect(robot).toHaveAttribute("data-form", String(form));
+        expect(robot).toHaveAttribute("height", "126");
+        expect(container.querySelector(`[data-part="face"][data-face="${mood}"]`)).not.toBeNull();
+        expect(container.querySelector('[data-part="zzz"]') !== null).toBe(mood === "sleepy");
+        expect(container.querySelector('[data-part="battery"]') !== null).toBe(mood === "drained");
+        unmount();
+      }
+    }
+  });
+
   test("has sleepy and drained moods", () => {
     render(<Robot mood="sleepy" />);
     render(<Robot mood="drained" />);
     expect(screen.getAllByRole("img", { name: "Robo" }).map((el) => el.getAttribute("data-mood"))).toEqual(["sleepy", "drained"]);
+  });
+});
+
+describe("DevGalleryGate", () => {
+  test("shows the gallery at #/gallery instead of the app, without a game", () => {
+    window.location.hash = "#/gallery";
+    try {
+      render(
+        <DevGalleryGate>
+          <p>app</p>
+        </DevGalleryGate>,
+      );
+      expect(screen.getByRole("heading", { name: "Robo gallery (dev only)" })).toBeInTheDocument();
+      expect(screen.queryByText("app")).not.toBeInTheDocument();
+      // 4 forms and the graduate × 7 faces, the 12 room sizes and 12 bubbles.
+      expect(screen.getAllByRole("img", { name: "Robo" })).toHaveLength(35 + 12 + 12);
+    } finally {
+      window.location.hash = "";
+    }
+  });
+
+  test("shows the app on any other hash", () => {
+    render(
+      <DevGalleryGate>
+        <p>app</p>
+      </DevGalleryGate>,
+    );
+    expect(screen.getByText("app")).toBeInTheDocument();
   });
 });
 

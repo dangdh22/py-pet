@@ -17,7 +17,9 @@ export type Route =
   | { name: "shop" }
   | { name: "achievements" }
   /** Spec 9: behind the PIN. */
-  | { name: "parent" };
+  | { name: "parent" }
+  /** Every robot drawing, for the maintainer and reviewers; dev builds only. */
+  | { name: "gallery" };
 
 function decode(raw: string): string {
   try {
@@ -27,7 +29,9 @@ function decode(raw: string): string {
   }
 }
 
-export function parseHash(hash: string): Route {
+/** `dev` is false in a production build, so "#/gallery" opens the room there. */
+export function parseHash(hash: string, dev: boolean = import.meta.env.DEV): Route {
+  if (dev && hash === "#/gallery") return { name: "gallery" };
   if (hash === "#/map") return { name: "map" };
   if (hash === "#/backup") return { name: "backup" };
   if (hash === "#/review") return { name: "review", stationId: null };
@@ -80,6 +84,8 @@ export function routeToHash(route: Route): string {
       return "#/map";
     case "backup":
       return "#/backup";
+    case "gallery":
+      return "#/gallery";
     default:
       return "#/";
   }

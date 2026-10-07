@@ -1,4 +1,4 @@
-import { describe, expect, test } from "vitest";
+import { describe, expect, test, vi } from "vitest";
 import { isBrowserSupported } from "./browserSupport";
 import { nodeRoute, parseHash, routeToHash, stepRoute } from "./routing";
 
@@ -84,6 +84,24 @@ describe("M4a routes", () => {
 
   test("stepRoute opens the practice a parent gave", () => {
     expect(stepRoute({ kind: "assigned", id: "p1" })).toEqual({ name: "assigned", id: "p1" });
+  });
+});
+
+describe("gallery route", () => {
+  test("opens only in a dev build", () => {
+    expect(parseHash("#/gallery", true)).toEqual({ name: "gallery" });
+    expect(parseHash("#/gallery", false)).toEqual({ name: "home" });
+    expect(routeToHash({ name: "gallery" })).toBe("#/gallery");
+  });
+
+  test("follows import.meta.env.DEV by default", () => {
+    vi.stubEnv("DEV", false);
+    try {
+      expect(parseHash("#/gallery")).toEqual({ name: "home" });
+    } finally {
+      vi.unstubAllEnvs();
+    }
+    expect(parseHash("#/gallery")).toEqual({ name: "gallery" });
   });
 });
 
