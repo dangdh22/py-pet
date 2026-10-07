@@ -96,13 +96,13 @@ exercises:
     type: mcq
     concepts: [if-colon]
     prompt:
-      vi: "Robo muốn kiểm tra pin có dưới 20 không. Dòng if nào viết đúng?"
-      en: "Robo wants to check whether the battery is below 20. Which if line is written correctly?"
+      vi: "Robo muốn kiểm tra biến n có nhỏ hơn 20 không. Dòng if nào viết đúng?"
+      en: "Robo wants to check whether the variable n is less than 20. Which if line is written correctly?"
     choices:
-      - { text: "if pin < 20", misconception: if-colon }
-      - { text: "if: pin < 20", misconception: if-colon }
-      - { text: "if pin < 20:", correct: true }
-      - { text: "If pin < 20:", misconception: case-sensitive }
+      - { text: "if n < 20", misconception: if-colon }
+      - { text: "if: n < 20", misconception: if-colon }
+      - { text: "if n < 20:", correct: true }
+      - { text: "If n < 20:", misconception: case-sensitive }
     explanation:
       vi: "Dòng if gồm chữ if viết thường, rồi điều kiện, rồi dấu hai chấm ở cuối dòng. Thiếu dấu hai chấm, hay đặt nó ngay sau chữ if, đều báo lỗi SyntaxError. Python phân biệt chữ hoa và chữ thường, nên viết If với chữ I hoa cũng báo lỗi."
       en: "An if line has the word if in small letters, then the condition, then a colon at the end of the line. A missing colon, or a colon right after the word if, gives a SyntaxError. Python sees the difference between capital and small letters, so If with a capital I also gives an error."

@@ -244,8 +244,8 @@ questions:
       - { vi: "Khi mỗi trường hợp cần 1 câu trả lời riêng", en: "When each case needs its own answer", correct: true }
       - { vi: "Khi 2 điều kiện hỏi về 2 biến khác nhau, như tuổi và chiều cao", en: "When the 2 conditions ask about 2 different variables, like age and height", misconception: nested-if }
     explanation:
-      vi: "if lồng nhau hữu ích khi mỗi trường hợp có câu trả lời riêng, như: chưa đủ tuổi, đủ tuổi nhưng chưa đủ cao, và đủ cả 2. Khi đó, if bên trong có else riêng, và if bên ngoài cũng có else riêng. Khi chỉ cần biết cả 2 điều kiện cùng đúng, 1 lệnh if có and gọn hơn. \"Ít nhất 1 điều kiện đúng\" là việc của or. Hỏi về 2 biến khác nhau thì and cũng làm được, như tuoi >= 10 and chieu_cao >= 130."
-      en: "A nested if is useful when each case has its own answer, like: too young, old enough but not tall enough, and both. Then the inner if has its own else, and the outer if has its own else too. When you only need to know that both conditions are True, 1 if statement with and is shorter. \"At least 1 condition is True\" is the job of or. and can also ask about 2 different variables, like tuoi >= 10 and chieu_cao >= 130."
+      vi: "if lồng nhau hữu ích khi mỗi trường hợp có câu trả lời riêng, như: chưa đủ tuổi, đủ tuổi nhưng chưa đủ cao, và đủ cả 2. Khi đó, if bên trong có else riêng, và if bên ngoài cũng có else riêng. Khi chỉ cần biết cả 2 điều kiện cùng đúng, 1 lệnh if có and gọn hơn. \"Ít nhất 1 điều kiện đúng\" là việc của or. Hỏi về 2 biến khác nhau thì and cũng làm được, như age >= 10 and height >= 130."
+      en: "A nested if is useful when each case has its own answer, like: too young, old enough but not tall enough, and both. Then the inner if has its own else, and the outer if has its own else too. When you only need to know that both conditions are True, 1 if statement with and is shorter. \"At least 1 condition is True\" is the job of or. and can also ask about 2 different variables, like age >= 10 and height >= 130."
 
   - id: s3.bai-toan.b13
     type: predict
