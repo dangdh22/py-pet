@@ -17,13 +17,13 @@ Cập nhật lần cuối: 2026-10-07.
 | M5c | Nội dung giai đoạn 3 "Rẽ nhánh" (5 chủ đề, 22 bài), nhận ra dấu `=` trong điều kiện | Xong, đã merge vào `main` và push (2026-10-07). Phụ huynh chưa duyệt lời văn (`docs/superpowers/content-stage-3.md`) |
 | M5d | Nội dung giai đoạn 4 "Vòng lặp" (5 chủ đề, 28 bài), luật 8 và 9 của spec 3.9 thành lỗi khi build nội dung, nhận ra `+=` khi biến chưa được gán | Xong, đã merge vào `main` và push (2026-10-07). Phụ huynh chưa duyệt lời văn (`docs/superpowers/content-stage-4.md`) |
 | M6a | Hình robot 4 dạng × 3 cỡ × 5 trạng thái, 10 phụ kiện trên người Robo, cảnh phòng (đồ trang trí, buồn ngủ, hết pin cạnh ổ sạc, bãi biển), thanh Pin/Vui/Lớn lên, hoạt cảnh tiến hóa toàn màn hình, Sổ thành tích có hình, trang `#/gallery` ở bản dev | Xong, đã merge vào `main` và push (2026-10-07). Người bảo trì chưa thử bằng mắt (mở `#/gallery` khi chạy `npm run dev`) |
-| M6b | CI/CD (GitHub Actions, GitHub Pages), lint, phần còn thiếu của spec 10, bài luyện mở theo khái niệm đã học, việc chuyển của khu phụ huynh | **Việc tiếp theo** |
+| M6b | CI/CD (GitHub Actions chạy `npm run check`, deploy GitHub Pages khi push vào `main`), ESLint, trình duyệt không hỗ trợ, Pyodide khởi động lỗi hoặc treo (120 giây) có nút Thử lại, bài lỗi lúc chạy bỏ qua được và không tính điểm, bài luyện mở theo khái niệm đã học, khu phụ huynh hiện tên bài và hiểu lầm hay gặp, mục lỗi số thực, danh sách kiểm tra thủ công | Xong, đã merge vào `main` và push (2026-10-07). Người bảo trì cần bật GitHub Pages (README mục "CI và deploy") |
 
 Tài liệu:
 
 - Spec (bắt buộc tuân theo): `docs/superpowers/specs/2026-10-06-py-pet-design.md`
-- Kế hoạch đã chạy: `docs/superpowers/plans/2026-10-06-m1-lat-cat-doc.md`, `docs/superpowers/plans/2026-10-06-m2-vong-choi-pet.md`, `docs/superpowers/plans/2026-10-06-m3a-on-tap-thanh-thao.md`, `docs/superpowers/plans/2026-10-06-m3b-kiem-tra-tien-hoa.md`, `docs/superpowers/plans/2026-10-06-m4a-cua-hang-nghi.md`, `docs/superpowers/plans/2026-10-06-m4b-khu-phu-huynh.md`, `docs/superpowers/plans/2026-10-06-m5a-noi-dung-giai-doan-1.md`, `docs/superpowers/plans/2026-10-07-m5b-noi-dung-giai-doan-2.md`, `docs/superpowers/plans/2026-10-07-m5c-noi-dung-giai-doan-3.md`, `docs/superpowers/plans/2026-10-07-m5d-noi-dung-giai-doan-4.md`, `docs/superpowers/plans/2026-10-07-m6a-hinh-robot.md`
-- Sổ ghi (ledger) của từng mốc, gồm mọi phán quyết và finding nhỏ đã hoãn: `docs/superpowers/ledgers/m1-sdd-ledger.md`, `docs/superpowers/ledgers/m2-sdd-ledger.md`, `docs/superpowers/ledgers/m3a-sdd-ledger.md`, `docs/superpowers/ledgers/m3b-sdd-ledger.md`, `docs/superpowers/ledgers/m4a-sdd-ledger.md`, `docs/superpowers/ledgers/m4b-sdd-ledger.md`, `docs/superpowers/ledgers/m5a-sdd-ledger.md`, `docs/superpowers/ledgers/m5b-sdd-ledger.md`, `docs/superpowers/ledgers/m5c-sdd-ledger.md`, `docs/superpowers/ledgers/m5d-sdd-ledger.md`, `docs/superpowers/ledgers/m6a-sdd-ledger.md`
+- Kế hoạch đã chạy: `docs/superpowers/plans/2026-10-06-m1-lat-cat-doc.md`, `docs/superpowers/plans/2026-10-06-m2-vong-choi-pet.md`, `docs/superpowers/plans/2026-10-06-m3a-on-tap-thanh-thao.md`, `docs/superpowers/plans/2026-10-06-m3b-kiem-tra-tien-hoa.md`, `docs/superpowers/plans/2026-10-06-m4a-cua-hang-nghi.md`, `docs/superpowers/plans/2026-10-06-m4b-khu-phu-huynh.md`, `docs/superpowers/plans/2026-10-06-m5a-noi-dung-giai-doan-1.md`, `docs/superpowers/plans/2026-10-07-m5b-noi-dung-giai-doan-2.md`, `docs/superpowers/plans/2026-10-07-m5c-noi-dung-giai-doan-3.md`, `docs/superpowers/plans/2026-10-07-m5d-noi-dung-giai-doan-4.md`, `docs/superpowers/plans/2026-10-07-m6a-hinh-robot.md`, `docs/superpowers/plans/2026-10-07-m6b-ci-loi.md`
+- Sổ ghi (ledger) của từng mốc, gồm mọi phán quyết và finding nhỏ đã hoãn: `docs/superpowers/ledgers/m1-sdd-ledger.md`, `docs/superpowers/ledgers/m2-sdd-ledger.md`, `docs/superpowers/ledgers/m3a-sdd-ledger.md`, `docs/superpowers/ledgers/m3b-sdd-ledger.md`, `docs/superpowers/ledgers/m4a-sdd-ledger.md`, `docs/superpowers/ledgers/m4b-sdd-ledger.md`, `docs/superpowers/ledgers/m5a-sdd-ledger.md`, `docs/superpowers/ledgers/m5b-sdd-ledger.md`, `docs/superpowers/ledgers/m5c-sdd-ledger.md`, `docs/superpowers/ledgers/m5d-sdd-ledger.md`, `docs/superpowers/ledgers/m6a-sdd-ledger.md`, `docs/superpowers/ledgers/m6b-sdd-ledger.md`
 - Quyết định Claude tự chốt khi chạy liên tục các mốc, cần người bảo trì xem lại: `docs/superpowers/DECISIONS.md`
 
 ## Quyết định của người bảo trì ở M3a
@@ -37,17 +37,22 @@ Tài liệu:
 - Kiểm tra chủ đề gồm 8 câu và 2 bài code. Đề tiến hóa rút theo số câu đang có (luật 9 chỉ cảnh báo tới M5; từ M5d là lỗi). Khi tiến hóa chỉ cần màn hình chúc mừng đơn giản.
 - Ngày 2026-10-06 người bảo trì yêu cầu chạy liên tục: implement M3b, push, rồi lần lượt plan và implement M4, M5, M6, merge vào `main` theo từng mốc, ghi các quyết định cần xem lại vào `docs/superpowers/DECISIONS.md`.
 
-## Việc chuyển sang M6b và sau đó
+## Bản đầu đã đủ các mốc M1 đến M6. Việc tiếp theo
+
+- Người bảo trì: thử app bằng mắt (`npm run dev`, trang `#/gallery` ở bản dev), duyệt lời văn nội dung (`docs/superpowers/content-stage-1.md` đến `-4.md`), xem lại `docs/superpowers/DECISIONS.md`, bật GitHub Pages, rồi cho học sinh dùng thử theo `docs/manual-test-checklist.md` (spec 11.6).
+
+## Việc tồn đọng cho bản sau
 
 1. (Đã xong ở M6a) Robo không còn nhỏ lại sau khi tiến hóa: cỡ theo dạng tiến hóa và tăng đơn điệu.
 2. Khi xuất file mà đọc kho lỗi, file chỉ chứa hồ sơ đang dùng. Xử lý khi có giao diện nhiều hồ sơ.
 3. App chạy Python 3.14 (Pyodide), còn `content:validate` chạy CPython 3.13: thông báo lỗi có thể khác. Test `src/content/parity.pyodide.test.ts` chạy mọi mục nội dung và mẫu từ điển lỗi trong Pyodide; khi soạn nội dung về lỗi, kiểm thông báo trong Pyodide.
 4. E2E luồng "thi tiến hóa chưa đạt → ôn trọng tâm → thi lại đạt" (spec 11 mục 5) đang được kiểm tra bằng test tích hợp jsdom; đi hết 19 bài của giai đoạn 1 trong Playwright quá chậm cho `npm run check` (DECISIONS M5a mục 6).
-5. Khu phụ huynh (M4b), để bản sau: thẻ "Con cần hỗ trợ" chưa hiện nội dung hiểu lầm hay gặp và chưa có đầu ra so với đầu ra mong đợi; tab Tiến độ chưa có thời gian học và ngôn ngữ câu hỏi từng bài, và đang hiện ID bài tập thay cho tên. Xem `DECISIONS.md` mục M4b.
+5. Khu phụ huynh: đã có hiểu lầm hay gặp và tên bài (M6b). Còn thiếu đầu ra so với đầu ra mong đợi (cần lưu thêm dữ liệu, tăng `SCHEMA_VERSION`), thời gian học và ngôn ngữ câu hỏi từng bài.
 
-6. Bài luyện của 1 chủ đề mở hết khi con xong 1 bài học bất kỳ của chủ đề (`src/game/reviewSet.ts`), nên nội dung phải giữ bài luyện mức 3 trong danh sách của khái niệm đã dạy kiến thức nó cần (DECISIONS M5d mục 7). Sửa ở app: mở bài luyện theo bài học đã xong.
+6. (Đã xong ở M6b) Bài luyện mở khi mọi khái niệm của nó đã gặp trong 1 bài học đã xong.
 7. Bài "viết lại bằng while" và các bài yêu cầu `break`, `continue`, `+=` chỉ được chấm theo đầu ra; chưa có kiểu kiểm tra "phải dùng" 1 cú pháp (DECISIONS M5d mục 6).
-8. Số thực trong `range(n / 2)` hay `"*" * (n / 2)` chỉ nhận lời giải thích chung `type-other`; có thể thêm mục gợi ý dùng `//`.
+8. (Đã xong ở M6b) Mục lỗi `float-not-integer` khuyên dùng `//`.
+9. Deploy không chờ CI của cùng commit (DECISIONS M6b mục 2); nhật ký `content-error` chưa gộp lỗi trùng; logic `failInit` của worker chỉ có e2e kiểm tra.
 
 Các finding nhỏ khác đã hoãn nằm trong các file ledger (tìm dòng `minor (deferred)` và `parked`).
 
@@ -57,4 +62,4 @@ Các finding nhỏ khác đã hoãn nằm trong các file ledger (tìm dòng `mi
 - npm 12 chặn script cài đặt của esbuild/fsevents và in cảnh báo; cảnh báo này vô hại.
 - Cài lần đầu: xem `README.md` mục "Cài đặt lần đầu".
 - Phiên cloud (kiểm tra 2026-10-06): Node 22.22.0, npm 10.9.4, Python 3.13. npm in cảnh báo `EBADENGINE` (jsdom 30 cần Node 22.22.2 trở lên) nhưng `npm run check` vẫn xanh. Hook SessionStart tự cài môi trường; e2e dùng Chromium có sẵn qua `PW_CHROMIUM_PATH` (xem `CLAUDE.md`).
-- `npm run check` phải xanh trước mọi merge: typecheck, Vitest (1373 test sau M6a; số test tăng theo số mục nội dung), pytest (21), kiểm tra nội dung, Playwright e2e (15).
+- `npm run check` phải xanh trước mọi merge: lint, typecheck, Vitest (1418 test sau M6b; số test tăng theo số mục nội dung), pytest (21), kiểm tra nội dung, Playwright e2e (17, gồm 1 test chạy dưới đường dẫn `/py-pet/`). CI trên GitHub chạy cùng lệnh cho mỗi lần push.
