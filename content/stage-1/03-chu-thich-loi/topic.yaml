@@ -1,0 +1,10 @@
+id: s1.chu-thich-loi
+title: { vi: "Chú thích và đọc thông báo lỗi", en: "Comments and error messages" }
+lessons:
+  - 01-chu-thich.md
+  - 02-tat-dong-lenh.md
+  - 03-doc-thong-bao-loi.md
+  - 04-loi-hay-gap.md
+reviews:
+  - { id: s1.chu-thich-loi.r1, after: s1.chu-thich-loi.l2 }
+  - { id: s1.chu-thich-loi.r2, after: s1.chu-thich-loi.l4 }

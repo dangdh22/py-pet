@@ -88,11 +88,22 @@
     en: "Line {line}: in a condition, write == (2 equal signs) to compare. One = gives a value to a variable."
   sample: "x = 5\nif x = 5:\n    print(x)"
 
+- id: quote-inside-string
+  match: { type: SyntaxError, message: "Is this intended to be part of the string\\?" }
+  misconception: quote-inside
+  explain:
+    vi: "Dòng {line}: chuỗi bị đóng quá sớm. Bên trong chuỗi có dấu nháy cùng loại với dấu nháy bao ngoài, nên Python tưởng chuỗi đã kết thúc ở đó. Hãy bao ngoài chuỗi bằng loại dấu nháy còn lại, hoặc đặt dấu \\ ngay trước dấu nháy bên trong. Nếu chữ nằm giữa 2 chuỗi là tên biến, có thể con quên dấu phẩy."
+    en: "Line {line}: the string ends too early. There is a quote inside the string of the same type as the quotes around it, so Python thinks the string ends there. Put the other type of quote around the string, or put a \\ right before the quote inside. If the word between 2 strings is a variable name, maybe a comma is missing."
+  hint:
+    vi: "Ví dụ đúng: print('Robo nói: \"Chào\"')"
+    en: "Correct example: print('Robo says: \"Hi\"')"
+  sample: "print(\"Robo nói: \"Chào\"\")"
+
 - id: missing-comma
   match: { type: SyntaxError, message: "Perhaps you forgot a comma\\?" }
   explain:
-    vi: "Dòng {line}: có thể con quên dấu phẩy giữa các giá trị."
-    en: "Line {line}: maybe a comma is missing between the values."
+    vi: "Dòng {line}: có 2 giá trị đứng sát nhau mà không có gì ngăn cách. Có thể chuỗi có dấu nháy cùng loại ở bên trong, nên chuỗi bị đóng quá sớm. Khi đó, hãy bao ngoài chuỗi bằng loại dấu nháy còn lại, ví dụ print('Robo nói: \"Chào\"'). Cũng có thể con quên dấu phẩy giữa các giá trị, hoặc quên dấu ) ở cuối dòng."
+    en: "Line {line}: 2 values stand next to each other with nothing between them. Maybe a string has a quote of the same type inside it, so the string ends too early. Then put the other type of quote around the string, for example print('Robo says: \"Hi\"'). Or maybe a comma is missing between the values, or a ) is missing at the end of the line."
   sample: "print(\"a\" \"b\" 1)"
 
 - id: invalid-decimal
@@ -116,8 +127,8 @@
     vi: "Dòng {line}: Python không biết \"{name}\" là gì. Có phải con muốn viết \"{suggestion}\" không?"
     en: "Line {line}: Python does not know \"{name}\". Did you mean \"{suggestion}\"?"
   hint:
-    vi: "Python phân biệt chữ hoa và chữ thường: print khác Print."
-    en: "Python sees upper-case and lower-case letters as different: print is not Print."
+    vi: "Kiểm tra từng chữ cái của tên. Python phân biệt chữ hoa và chữ thường, và không tự sửa lỗi gõ sai: print khác Print, cũng khác pirnt."
+    en: "Check each letter of the name. Python sees upper-case and lower-case letters as different, and it does not fix typos: print is not Print, and not pirnt either."
   sample: "Print(\"Robo\")"
 
 - id: name-undefined

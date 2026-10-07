@@ -23,7 +23,7 @@ beforeAll(async () => {
 
 describe("error dictionary on Pyodide", () => {
   test("has the expected number of entries", () => {
-    expect(bundle.errors.length).toBe(28);
+    expect(bundle.errors.length).toBe(29);
   });
 
   for (const entry of bundle.errors) {

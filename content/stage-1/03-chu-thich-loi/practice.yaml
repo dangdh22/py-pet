@@ -1,0 +1,210 @@
+exercises:
+  - id: s1.chu-thich-loi.p1
+    type: fill
+    concepts: [comment-hash]
+    prompt:
+      vi: "Điền vào chỗ trống để tắt dòng 2, sao cho chương trình chỉ in ra 2 dòng: Robo và Pet"
+      en: "Fill the blank to turn off line 2, so that the program prints only 2 lines: Robo and Pet"
+    template: |
+      print("Robo")
+      ___print("Py")
+      print("Pet")
+    answers: ["#"]
+    tests:
+      - output: |
+          Robo
+          Pet
+    hints:
+      - { vi: "Ký hiệu nào đặt ở đầu dòng sẽ biến cả dòng thành chú thích?", en: "Which sign at the start of a line turns the whole line into a comment?" }
+      - { vi: "Điền dấu # vào chỗ trống.", en: "Fill the blank with the # sign." }
+
+  - id: s1.chu-thich-loi.p2
+    type: fill
+    concepts: [hash-in-string]
+    prompt:
+      vi: "Điền dấu nháy vào 2 chỗ trống để in ra đúng dòng chữ: Robo #1"
+      en: "Fill the 2 blanks with quotes to print exactly this text: Robo #1"
+    template: |
+      print(___Robo #1___)  # số thứ tự của Robo
+    answers: ['"', '"']
+    tests:
+      - { output: "Robo #1" }
+    hints:
+      - { vi: "Dấu # nằm ngoài dấu nháy sẽ bắt đầu chú thích. Dấu # nằm trong dấu nháy thì được in ra.", en: "A # outside quotes starts a comment. A # inside quotes is printed." }
+      - { vi: "Cả Robo #1 phải nằm giữa 2 dấu nháy kép.", en: "All of Robo #1 must sit between 2 double quotes." }
+
+  - id: s1.chu-thich-loi.p3
+    type: fill
+    concepts: [syntax-error-nothing-runs, bracket-pairs]
+    prompt:
+      vi: "Python báo: SyntaxError ở dòng 3 ('(' was never closed, nghĩa là dấu ( chưa được đóng). Vì có lỗi cú pháp nên chưa dòng nào được in, kể cả Py và Pet. Điền vào chỗ trống để chương trình in ra 3 dòng: Py, Pet và Robo"
+      en: "Python reports: SyntaxError on line 3 ('(' was never closed, which means a ( is not closed). Because of the syntax error, no line is printed yet, not even Py and Pet. Fill the blank so that the program prints 3 lines: Py, Pet and Robo"
+    template: |
+      print("Py")
+      print("Pet")
+      print("Robo"___
+    answers: [")"]
+    tests:
+      - output: |
+          Py
+          Pet
+          Robo
+    hints:
+      - { vi: "Dòng 1 và dòng 2 đã đúng. Chỉ cần sửa dòng có số trong thông báo lỗi.", en: "Lines 1 and 2 are already right. Only fix the line whose number is in the error message." }
+      - { vi: "Dòng 3 đã mở dấu ( nhưng chưa đóng. Điền dấu ) vào chỗ trống.", en: "Line 3 opens a ( but does not close it. Fill the blank with a )." }
+
+  - id: s1.chu-thich-loi.p4
+    type: fill
+    concepts: [runtime-error-stops]
+    prompt:
+      vi: "Chương trình in ra Một và Hai, rồi dừng ở dòng 3 với lỗi NameError: name 'Ba' is not defined. Điền vào 2 chỗ trống để chương trình in đủ 4 dòng: Một, Hai, Ba và Bốn"
+      en: "The program prints Một and Hai, then stops on line 3 with NameError: name 'Ba' is not defined. Fill the 2 blanks so that the program prints all 4 lines: Một, Hai, Ba and Bốn"
+    template: |
+      print("Một")
+      print("Hai")
+      print(___Ba___)
+      print("Bốn")
+    answers: ['"', '"']
+    tests:
+      - output: |
+          Một
+          Hai
+          Ba
+          Bốn
+    hints:
+      - { vi: "Dòng 1 và dòng 2 đã chạy xong. Python dừng ở dòng 3 vì không biết Ba là gì.", en: "Lines 1 and 2 have already run. Python stops on line 3 because it does not know Ba." }
+      - { vi: "Ba là chữ cần in ra, nên phải nằm trong dấu nháy: \"Ba\".", en: "Ba is text to print, so it must be inside quotes: \"Ba\"." }
+
+  - id: s1.chu-thich-loi.p5
+    type: fill
+    concepts: [bracket-pairs, quote-inside]
+    prompt:
+      vi: "Điền dấu nháy vào 2 chỗ trống để in ra đúng dòng chữ: Robo nói: \"Chào\""
+      en: "Fill the 2 blanks with quotes to print exactly this text: Robo nói: \"Chào\""
+    template: |
+      print(___Robo nói: "Chào"___)
+    answers: ["'", "'"]
+    tests:
+      - { output: "Robo nói: \"Chào\"" }
+    hints:
+      - { vi: "Dấu nháy bao ngoài phải đi thành cặp, và khác loại với dấu nháy kép ở bên trong.", en: "The quotes around the string must come in a pair, and be a different type from the double quotes inside." }
+      - { vi: "Bao ngoài chuỗi bằng 2 dấu nháy đơn.", en: "Put 2 single quotes around the string." }
+
+  - id: s1.chu-thich-loi.p6
+    type: parsons
+    concepts: [hash-in-string]
+    prompt:
+      vi: "Sắp xếp các dòng lệnh để in ra biển tên của Robo như phần Ví dụ: 8 dấu #, rồi dòng # Robo #, rồi 8 dấu gạch ngang."
+      en: "Put the lines in order to print the name sign of Robo in the Example: 8 # signs, then the line # Robo #, then 8 dashes."
+    solution: |
+      print("#" * 8)
+      print("# Robo #")
+      print("-" * 8)
+    tests:
+      - output: |
+          ########
+          # Robo #
+          --------
+    hints:
+      - { vi: "Dấu # nằm trong dấu nháy được in ra như mọi ký tự khác. Hãy đoán từng dòng lệnh in ra gì.", en: "A # inside quotes is printed like any other character. Guess what each line prints." }
+
+  - id: s1.chu-thich-loi.c1
+    type: code
+    concepts: [comment-hash]
+    prompt:
+      vi: "Robo đang thử 2 kiểu mắt và 2 kiểu miệng, nên khuôn mặt có 2 dòng thừa. Đừng xóa dòng nào. Hãy thêm dấu # để tắt 2 dòng thừa, sao cho chương trình in ra khuôn mặt đúng như phần Ví dụ."
+      en: "Robo is trying 2 kinds of eyes and 2 kinds of mouth, so the face has 2 extra lines. Do not delete any line. Add # signs to turn off the 2 extra lines, so that the program prints the face exactly as in the Example."
+    starter: |
+      print("+-----+")
+      print("| o o |")
+      print("| x x |")
+      print("|  -  |")
+      print("|  o  |")
+      print("+-----+")
+    solution: |
+      print("+-----+")
+      print("| o o |")
+      # print("| x x |")
+      print("|  -  |")
+      # print("|  o  |")
+      print("+-----+")
+    tests:
+      - output: |
+          +-----+
+          | o o |
+          |  -  |
+          +-----+
+    common_wrong:
+      - output: |
+          +-----+
+          | o o |
+          | x x |
+          |  -  |
+          |  o  |
+          +-----+
+        misconception: comment-hash
+        sample: |
+          print("+-----+")
+          print("| o o |")
+          print("| x x |")  #
+          print("|  -  |")
+          print("|  o  |")  #
+          print("+-----+")
+    hints:
+      - { vi: "So sánh với phần Ví dụ: dòng | x x | và dòng |  o  | không có trong khuôn mặt cần in.", en: "Compare with the Example: the lines | x x | and |  o  | are not in the face to print." }
+      - { vi: "Thêm # vào đầu dòng 3 và đầu dòng 5, ví dụ: # print(\"| x x |\")", en: "Add # at the start of line 3 and line 5, for example: # print(\"| x x |\")" }
+    test_eligible: true
+
+  - id: s1.chu-thich-loi.c2
+    type: code
+    concepts: [runtime-error-stops]
+    prompt:
+      vi: "Chương trình liệt kê đồ dùng của Robo có 2 lỗi. Mỗi lần chạy, Python in ra vài dòng rồi dừng ở dòng lỗi. Hãy sửa từng lỗi, để chương trình in ra đủ 5 dòng như phần Ví dụ."
+      en: "The program that lists the things of Robo has 2 errors. Each time it runs, Python prints a few lines and then stops at the line with the error. Fix the errors one by one, so that the program prints all 5 lines in the Example."
+    starter: |
+      print("Đồ dùng của Robo:")
+      print("- Pin")
+      print("- " + Loa)
+      print("- Bánh xe")
+      Print("- Ăng-ten")
+    solution: |
+      print("Đồ dùng của Robo:")
+      print("- Pin")
+      print("- " + "Loa")
+      print("- Bánh xe")
+      print("- Ăng-ten")
+    tests:
+      - output: |
+          Đồ dùng của Robo:
+          - Pin
+          - Loa
+          - Bánh xe
+          - Ăng-ten
+    hints:
+      - { vi: "Bấm Chạy thử và nhìn đầu ra: các dòng trên dòng lỗi đã được in. Lỗi nằm ở dòng có số trong thông báo.", en: "Click Run and look at the output: the lines above the error have been printed. The error is on the line whose number is in the message." }
+      - { vi: "Dòng 3: chữ Loa cần nằm trong dấu nháy. Dòng 5: lệnh in phải viết thường.", en: "Line 3: the word Loa must be inside quotes. Line 5: the print statement must be in lower-case letters." }
+    test_eligible: true
+
+  - id: s1.chu-thich-loi.c3
+    type: code
+    concepts: [bracket-pairs]
+    prompt:
+      vi: "Robo muốn in khung tên như phần Ví dụ, nhưng mỗi dòng đều sai 1 dấu ngoặc hoặc dấu nháy. Hãy sửa từng lỗi một để chương trình in ra đúng 3 dòng."
+      en: "Robo wants to print the name frame in the Example, but each line has 1 wrong bracket or quote. Fix the errors one by one so that the program prints exactly 3 lines."
+    starter: |
+      print("+" + "-" * 6 + "+"))
+      print("| Robo |)
+      print("+" + "-" * 6 + "+"
+    solution: |
+      print("+" + "-" * 6 + "+")
+      print("| Robo |")
+      print("+" + "-" * 6 + "+")
+    tests:
+      - output: |
+          +------+
+          | Robo |
+          +------+
+    hints:
+      - { vi: "Đếm cặp trên từng dòng: mỗi dấu ( cần 1 dấu ), mỗi chuỗi cần 1 dấu nháy mở và 1 dấu nháy đóng.", en: "Count the pairs on each line: each ( needs 1 ), and each string needs 1 opening quote and 1 closing quote." }
+      - { vi: "Dòng 1 thừa 1 dấu ). Dòng 2 thiếu dấu nháy đóng. Dòng 3 thiếu dấu ).", en: "Line 1 has 1 extra ). Line 2 is missing its closing quote. Line 3 is missing a )." }
+    test_eligible: true

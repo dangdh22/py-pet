@@ -1,0 +1,51 @@
+concepts:
+  - id: comment-hash
+    name: { vi: "Python bỏ qua chú thích", en: "Python skips comments" }
+    misconception_card: |
+      Nhiều bạn nghĩ đặt dấu `#` ở đâu trên dòng cũng tắt được cả dòng. Thực ra Python chỉ bỏ qua phần **từ dấu # tới hết dòng**. Với `print("A")  # chào`, lệnh print đứng trước dấu # vẫn chạy và in ra A. Muốn tắt cả dòng, hãy đặt `#` ở **đầu dòng**: `# print("A")`.
+    parent_tip: |
+      Đưa con xem 1 công thức nấu ăn có vài ghi chú bút chì bên lề, rồi hỏi: khi nấu, mình có làm theo ghi chú bên lề không? Chú thích trong code cũng vậy: chỉ để người đọc, máy tính không làm theo.
+    practice:
+      level1: [s1.chu-thich-loi.l1.q1, s1.chu-thich-loi.l2.q1, s1.chu-thich-loi.l2.q2, s1.chu-thich-loi.b1, s1.chu-thich-loi.b2, s1.chu-thich-loi.b6, s1.chu-thich-loi.b7]
+      level2: [s1.chu-thich-loi.p1]
+      level3: [s1.chu-thich-loi.l2.ex1, s1.chu-thich-loi.c1]
+  - id: hash-in-string
+    name: { vi: "Dấu # trong chuỗi không phải chú thích", en: "A # inside a string is not a comment" }
+    misconception_card: |
+      Nhiều bạn nghĩ dấu `#` lúc nào cũng bắt đầu chú thích, nên `print("Robo #1")` chỉ in ra Robo. Thực ra dấu # nằm **giữa 2 dấu nháy** chỉ là 1 ký tự của chuỗi, nên Python in ra Robo #1. Chỉ dấu # nằm **ngoài dấu nháy** mới bắt đầu chú thích.
+    parent_tip: |
+      Viết lên giấy dòng print("Phòng #5")  # phòng của Robo. Cho con tô màu phần nằm giữa 2 dấu nháy, rồi chỉ ra dấu # nào được in ra và dấu # nào bắt đầu chú thích.
+    practice:
+      level1: [s1.chu-thich-loi.l1.q2, s1.chu-thich-loi.b3, s1.chu-thich-loi.b4, s1.chu-thich-loi.b5]
+      level2: [s1.chu-thich-loi.p2, s1.chu-thich-loi.p6]
+      level3: [s1.chu-thich-loi.l1.ex1]
+  - id: syntax-error-nothing-runs
+    name: { vi: "Lỗi cú pháp: không dòng nào được chạy", en: "A syntax error: no line runs" }
+    misconception_card: |
+      Nhiều bạn nghĩ Python sẽ chạy các dòng đúng ở phía trên, rồi mới dừng ở dòng có lỗi cú pháp. Thực ra Python kiểm tra cách viết của **cả chương trình** trước khi chạy. Chỉ cần 1 dòng sai cú pháp, ví dụ `print("C"` thiếu dấu ), là **không dòng nào được chạy**, kể cả dòng đầu tiên.
+    parent_tip: |
+      Đưa con 1 tờ giấy ghi 3 việc cần làm, trong đó việc thứ 3 bị viết thiếu chữ, không đọc được. Luật chơi là đọc hết tờ giấy trước, có chỗ không đọc được thì trả lại và chưa làm việc nào, giống Python gặp lỗi cú pháp.
+    practice:
+      level1: [s1.chu-thich-loi.l3.q1, s1.chu-thich-loi.b8, s1.chu-thich-loi.b11, s1.chu-thich-loi.l4.q2]
+      level2: [s1.chu-thich-loi.p3]
+      level3: [s1.chu-thich-loi.l3.ex1, s1.chu-thich-loi.l4.ex1]
+  - id: runtime-error-stops
+    name: { vi: "Lỗi khi chạy: dừng tại dòng lỗi", en: "A runtime error stops at its line" }
+    misconception_card: |
+      Nhiều bạn nghĩ gặp dòng lỗi thì Python bỏ qua dòng đó rồi chạy tiếp. Thực ra với lỗi khi chạy như NameError, các dòng **phía trên** đã chạy xong và in ra, còn tới dòng lỗi thì Python **dừng hẳn**. Ví dụ, 3 dòng `print("A")`, `Print("B")`, `print("C")` chỉ in ra A, rồi báo lỗi ở dòng 2. Dòng 3 không được chạy.
+    parent_tip: |
+      Chơi trò làm theo danh sách việc: con làm lần lượt từng việc, gặp việc không làm được thì dừng hẳn và báo lại. Các việc phía trên đã làm xong, các việc phía dưới chưa làm.
+    practice:
+      level1: [s1.chu-thich-loi.l3.q2, s1.chu-thich-loi.b9, s1.chu-thich-loi.b10, s1.chu-thich-loi.b14]
+      level2: [s1.chu-thich-loi.p4]
+      level3: [s1.chu-thich-loi.l3.ex1, s1.chu-thich-loi.c2]
+  - id: bracket-pairs
+    name: { vi: "Ngoặc và dấu nháy đi thành cặp", en: "Brackets and quotes come in pairs" }
+    misconception_card: |
+      Nhiều bạn quên dấu đóng, hoặc thêm thừa 1 dấu `)` cho chắc. Thực ra mỗi dấu `(` cần **đúng 1** dấu `)`, và mỗi chuỗi cần 1 dấu nháy mở và 1 dấu nháy đóng cùng loại. `print("Robo"` thiếu dấu ), `print("Robo)` thiếu dấu nháy đóng, `print("Robo"))` thừa dấu ). Chỉ `print("Robo")` là đủ cặp.
+    parent_tip: |
+      Viết 1 dòng code lên giấy, rồi cho con dùng bút màu nối mỗi dấu mở với dấu đóng của nó, giống như ghép đôi tất. Dấu nào không có đôi là chỗ bị lỗi.
+    practice:
+      level1: [s1.chu-thich-loi.l4.q1, s1.chu-thich-loi.b12, s1.chu-thich-loi.b13, s1.chu-thich-loi.l4.q2]
+      level2: [s1.chu-thich-loi.p3, s1.chu-thich-loi.p5]
+      level3: [s1.chu-thich-loi.l4.ex1, s1.chu-thich-loi.c3]
