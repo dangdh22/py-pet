@@ -26,6 +26,15 @@ const ICONS: Record<StatTone, ReactNode> = {
   ),
 };
 
+/** The picture of a stat: beside its bar, and beside the shop items that raise it. */
+export function StatIcon({ tone, size = 20, className = "stat-icon" }: { tone: StatTone; size?: number; className?: string }) {
+  return (
+    <svg className={className} aria-hidden="true" focusable="false" width={size} height={size} viewBox="0 0 20 20">
+      {ICONS[tone]}
+    </svg>
+  );
+}
+
 /**
  * Spec 8.2.1: a bar for Pin, Vui or Lớn lên. The text stays inside ("Pin: 3/5", "Lớn lên: 79%"); the growth is a
  * percentage, so its max is 100. Pin and Vui are cut into one segment per point.
@@ -46,9 +55,7 @@ export function StatBar({ label, value, max, tone }: { label: string; value: num
       aria-valuetext={shown}
     >
       <span className="stat-head">
-        <svg className="stat-icon" aria-hidden="true" focusable="false" width={20} height={20} viewBox="0 0 20 20">
-          {ICONS[tone]}
-        </svg>
+        <StatIcon tone={tone} />
         <span className="stat-text">
           {label}: {shown}
         </span>

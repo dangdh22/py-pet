@@ -136,6 +136,8 @@ function headphonesOn(form: RobotForm): PhoneGeometry {
 
 function GoldAntenna({ top, base, r, x = 32 }: { top: number; base: number; r: number; x?: number }) {
   const ball = r + 0.5;
+  // The top of the twinkle stays inside the drawing, also over the teen's antenna near the top edge.
+  const twinkle = Math.max(0.5, top - ball - 1.2);
   return (
     <>
       <line x1={x} y1={base} x2={x} y2={top + ball} stroke={C.goldDark} strokeWidth={2.4} strokeLinecap="round" />
@@ -143,7 +145,7 @@ function GoldAntenna({ top, base, r, x = 32 }: { top: number; base: number; r: n
       <circle cx={x - ball * 0.35} cy={top - ball * 0.35} r={ball * 0.3} fill="#fff" opacity={0.8} />
       {/* A twinkle beside the ball. */}
       <path
-        d={`M${x + ball + 2.2} ${top - ball - 1.2} v3 M${x + ball + 0.7} ${top - ball + 0.3} h3`}
+        d={`M${x + ball + 2.2} ${twinkle} v3 M${x + ball + 0.7} ${twinkle + 1.5} h3`}
         stroke={C.gold}
         strokeWidth={1}
         strokeLinecap="round"
@@ -189,13 +191,20 @@ function BowTie() {
   );
 }
 
-/** The red scarf: a band round the neck, a knot and two short tails spread apart. */
-function Scarf() {
+/**
+ * The red scarf: a band round the neck, a knot and two short tails spread apart. On the teen the tails are shorter
+ * and spread wider, so they end above its chest screen (and the star of a graduate).
+ */
+function Scarf({ short = false }: { short?: boolean }) {
+  const tails = short
+    ? ["M-1.6 2.2 L-9.5 5.6 L-6.6 7.4 Z", "M1.6 2.2 L9.5 5.6 L6.6 7.4 Z"]
+    : ["M-1.6 2.2 L-8.5 9.5 L-4.2 10.4 Z", "M1.6 2.2 L8 10.2 L3.6 10.6 Z"];
   return (
     <>
       <path d="M-10 -3 Q0 1.5 10 -3 L10 0.5 Q0 5 -10 0.5 Z" fill={A.scarf} stroke={A.scarfDark} strokeWidth={0.7} />
-      <path d="M-1.6 2.2 L-8.5 9.5 L-4.2 10.4 Z" fill={A.scarf} stroke={A.scarfDark} strokeWidth={0.7} strokeLinejoin="round" />
-      <path d="M1.6 2.2 L8 10.2 L3.6 10.6 Z" fill={A.scarf} stroke={A.scarfDark} strokeWidth={0.7} strokeLinejoin="round" />
+      {tails.map((d) => (
+        <path key={d} d={d} fill={A.scarf} stroke={A.scarfDark} strokeWidth={0.7} strokeLinejoin="round" />
+      ))}
       <circle cx={0} cy={2} r={2.6} fill={A.scarf} stroke={A.scarfDark} strokeWidth={0.7} />
     </>
   );
@@ -356,7 +365,7 @@ const ARTS: Record<string, Art> = {
   "khan-quang": {
     robot: (form) => (
       <OnAnchor form={form} slot="neck">
-        <Scarf />
+        <Scarf short={form === 4} />
       </OnAnchor>
     ),
     icon: (

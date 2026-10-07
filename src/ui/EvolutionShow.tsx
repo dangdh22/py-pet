@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, type CSSProperties } from "react";
 import type { RobotForm } from "../game/look";
 import { useLang } from "../i18n/LangProvider";
 import type { MessageKey } from "../i18n/vi";
@@ -34,6 +34,11 @@ const NEW_PART: Partial<Record<RobotForm, MessageKey>> = {
 /** Grows with the form, so the new form is never smaller than the old one on the show. */
 function showSize(form: RobotForm): number {
   return 140 + 20 * form;
+}
+
+/** styles.css scales this size up on big screens (--evo-scale), the same for both forms. */
+function sizeStyle(form: RobotForm): CSSProperties {
+  return { "--evo-size": `${showSize(form)}px` } as CSSProperties;
 }
 
 export function prefersReducedMotion(): boolean {
@@ -106,10 +111,10 @@ export function EvolutionShow({ from, to, equipped, robotName, onDone, reducedMo
     >
       <div className="evo-stage">
         <div className="evo-halo" aria-hidden="true" />
-        <div className="evo-old">
+        <div className="evo-old" style={sizeStyle(from.form)}>
           <Robot form={from.form} graduated={from.graduated} equipped={equipped} size={showSize(from.form)} />
         </div>
-        <div className="evo-new">
+        <div className="evo-new" style={sizeStyle(to.form)}>
           <Robot
             form={to.form}
             graduated={to.graduated}

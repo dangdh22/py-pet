@@ -187,10 +187,6 @@ export const DECOR_IDS: readonly string[] = SHOP_ITEMS.filter((item) => item.kin
   (item) => item.id,
 );
 
-export function isDecor(id: string): boolean {
-  return DECOR_IDS.includes(id);
-}
-
 /** A decoration standing in the room; `lit` turns the night lamp on. Null for an id that is not a decoration. */
 export function DecorArt({ id, lit = false }: { id: string; lit?: boolean }) {
   const drawing = DRAWINGS[id];

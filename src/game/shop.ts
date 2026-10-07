@@ -49,6 +49,6 @@ export function findShopItem(id: string): ShopItem | undefined {
   return SHOP_ITEMS.find((item) => item.id === id);
 }
 
-export function isConsumable(item: ShopItem): boolean {
+export function isConsumable(item: ShopItem): item is ShopItem & { kind: "pin" | "vui" } {
   return item.kind === "pin" || item.kind === "vui";
 }

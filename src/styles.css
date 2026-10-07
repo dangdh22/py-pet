@@ -3,10 +3,17 @@
   --surface: #ffffff;
   --text: #1d2440;
   --muted: #5b6475;
-  --primary: #4f7cff;
+  /* 4.97:1 under white text (the main buttons), 4.68:1 as link text on the page background: WCAG AA. */
+  --primary: #3a66e6;
   --success: #2a9d4a;
   --danger: #d33a3a;
   --border: #d5dcea;
+  /* Stat bars (spec 8.2.1) and the shop items that raise them. */
+  --stat-pin: #2a9d4a;
+  --stat-vui: #f0508c;
+  --stat-growth: #4f7cff;
+  --stat-low: #d33a3a;
+  --stat-track: #e4e9f3;
   --code-bg: #1e1e2e;
   --code-text: #e6e9f2;
   --radius: 10px;
@@ -166,19 +173,23 @@ a.button.primary { background: var(--primary); border-color: var(--primary); col
   color: #fff;
   text-align: center;
   animation: evo-dim 0.4s ease-out both;
+  /* Robo (160 to 220 px on a phone) grows with big screens: the teen is about 320 px on a laptop. */
+  --evo-scale: 1;
 }
+@media (min-width: 720px) and (min-height: 600px) { .evolution-show { --evo-scale: 1.2; } }
+@media (min-width: 720px) and (min-height: 760px) { .evolution-show { --evo-scale: 1.45; } }
 .evo-stage { position: relative; isolation: isolate; display: grid; place-items: end center; }
 .evo-stage > * { grid-area: 1 / 1; }
-.evo-stage svg { display: block; }
+.evo-stage svg { display: block; width: calc(var(--evo-size) * var(--evo-scale)); height: auto; }
 /* Centred on the robots and behind them, without making the stage taller than the new form. */
 .evo-halo {
   position: absolute;
   z-index: -1;
   left: 50%;
   top: 50%;
-  width: 320px;
-  height: 320px;
-  margin: -160px 0 0 -160px;
+  width: calc(320px * var(--evo-scale));
+  height: calc(320px * var(--evo-scale));
+  margin: calc(-160px * var(--evo-scale)) 0 0 calc(-160px * var(--evo-scale));
   border-radius: 50%;
   background: radial-gradient(circle, rgba(255, 200, 61, 0.55) 0%, rgba(255, 200, 61, 0.15) 45%, transparent 70%);
   animation: evo-halo 1.2s ease-out 1.6s both;
@@ -262,6 +273,9 @@ a.button.primary { background: var(--primary); border-color: var(--primary); col
 .shop-item { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 8px 12px; border: 1px solid #dde3ef; border-radius: var(--radius); }
 .shop-name { font-weight: 700; min-width: 10em; }
 .item-icon { flex: none; }
+/* Pin and Vui items show the picture of the stat they raise, so every row starts with a 40 px picture. */
+.item-icon-pin { color: var(--stat-pin); }
+.item-icon-vui { color: var(--stat-vui); }
 .shop-price, .shop-detail { color: var(--muted); }
 .shop-actions { margin-left: auto; display: flex; gap: 8px; align-items: center; }
 .badges { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 8px; }
@@ -469,10 +483,10 @@ button.danger:disabled { opacity: 0.5; }
   margin: 14px auto 6px;
   text-align: left;
 }
-.stat-bar { display: grid; gap: 4px; --stat: #2a9d4a; }
-.stat-vui { --stat: #f0508c; }
-.stat-growth { --stat: #4f7cff; }
-.stat-pin.stat-low { --stat: #d33a3a; }
+.stat-bar { display: grid; gap: 4px; --stat: var(--stat-pin); }
+.stat-vui { --stat: var(--stat-vui); }
+.stat-growth { --stat: var(--stat-growth); }
+.stat-pin.stat-low { --stat: var(--stat-low); }
 .stat-head { display: flex; align-items: center; gap: 6px; font-weight: 600; }
 .stat-icon { flex: none; color: var(--stat); }
 .stat-track {
@@ -480,7 +494,7 @@ button.danger:disabled { opacity: 0.5; }
   display: block;
   height: 14px;
   border-radius: 7px;
-  background: #e4e9f3;
+  background: var(--stat-track);
   overflow: hidden;
   box-shadow: inset 0 1px 2px rgba(29, 36, 64, 0.15);
 }

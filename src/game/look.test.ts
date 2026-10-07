@@ -65,6 +65,23 @@ describe("robotLook", () => {
     expect(robotLook(bundle, state, TODAY).state).toBe("vacation");
   });
 
+  test("Vui counts like Pin: 0 is drained, 2 or less sleepy, and happy needs both at 4 or more", () => {
+    const stateWith = (pin: number, vui: number) => {
+      const state = initialGameState(TODAY);
+      state.pet.pin = pin;
+      state.pet.vui = vui;
+      return robotLook(bundle, state, TODAY).state;
+    };
+    expect(stateWith(5, 0)).toBe("drained");
+    expect(stateWith(5, 2)).toBe("sleepy");
+    expect(stateWith(5, 1)).toBe("sleepy");
+    expect(stateWith(5, 3)).toBe("neutral");
+    expect(stateWith(5, 4)).toBe("happy");
+    expect(stateWith(4, 5)).toBe("happy");
+    expect(stateWith(3, 5)).toBe("neutral");
+    expect(stateWith(0, 5)).toBe("drained");
+  });
+
   test("the size follows the XP of the stage", () => {
     const state = initialGameState(TODAY);
     const max = stageXpMax(bundle.stages[0]!);

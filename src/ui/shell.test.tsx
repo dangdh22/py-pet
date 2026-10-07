@@ -3,11 +3,13 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, test, vi } from "vitest";
 import { fakeRunner, okResult, renderWithApp } from "../test/render";
+import { SHOP_ITEMS } from "../game/shop";
 import { useContent } from "./contexts";
 import { DevGalleryGate } from "./GalleryScreen";
 import { Header } from "./Header";
 import { Robot } from "./Robot";
 import { RobotBubble } from "./RobotBubble";
+import { ROBOT_MOODS } from "./robot/faces";
 
 describe("Header", () => {
   test("shows the runner status", () => {
@@ -93,16 +95,23 @@ describe("DevGalleryGate", () => {
   test("shows the gallery at #/gallery instead of the app, without a game", () => {
     window.location.hash = "#/gallery";
     try {
-      render(
+      const { container } = render(
         <DevGalleryGate>
           <p>app</p>
         </DevGalleryGate>,
       );
       expect(screen.getByRole("heading", { name: "Robo gallery (dev only)" })).toBeInTheDocument();
       expect(screen.queryByText("app")).not.toBeInTheDocument();
-      // 4 forms and the graduate × 7 faces, 10 accessories and 6 outfits × 4 forms, the 12 room sizes, 5 states × 3
-      // room scenes and 4 drained forms, and 12 bubbles.
-      expect(screen.getAllByRole("img", { name: "Robo" })).toHaveLength(35 + 64 + 12 + 15 + 4 + 12);
+      // Whatever rows the gallery grows, it keeps every form with every face, and every accessory on every form.
+      const robots = screen.getAllByRole("img", { name: "Robo" });
+      for (const form of ["1", "2", "3", "4"]) {
+        for (const mood of ROBOT_MOODS) {
+          expect(robots.some((svg) => svg.getAttribute("data-form") === form && svg.getAttribute("data-mood") === mood)).toBe(true);
+        }
+        for (const { id } of SHOP_ITEMS.filter((item) => item.kind === "accessory")) {
+          expect(container.querySelector(`svg[data-form="${form}"] [data-accessory="${id}"]`)).not.toBeNull();
+        }
+      }
     } finally {
       window.location.hash = "";
     }

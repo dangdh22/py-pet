@@ -4,6 +4,7 @@ import type { GrowthSize } from "../game/progress";
 import { SHOP_ITEMS } from "../game/shop";
 import { EvolutionShow } from "./EvolutionShow";
 import { Robot, type RobotMood } from "./Robot";
+import { BUBBLE_ROBOT_SIZE } from "./RobotBubble";
 import { ItemIcon } from "./robot/accessories";
 import { DECOR_IDS } from "./robot/decor";
 import { RoomScene } from "./robot/RoomScene";
@@ -26,6 +27,7 @@ const OUTFITS: readonly { label: string; mood: RobotMood; equipped: string[]; gr
   { label: "gold antenna + pin, drained", mood: "drained", equipped: ["ang-ten-vang", "ghim-sao"] },
   { label: "vacation: no face accessory", mood: "vacation", equipped: ["mu-luoi-trai", "kinh-tron", "khan-quang"] },
   { label: "sleepy + crown + cape", mood: "sleepy", equipped: ["vuong-mien", "ao-choang"] },
+  { label: "gold antenna + scarf, graduated", mood: "happy", equipped: ["ang-ten-vang", "khan-quang"], graduated: true },
 ];
 
 /** The 5 room states, each on another form, so the scenes also show each form at its room size. */
@@ -44,8 +46,12 @@ const SHOWS: readonly { label: string; from: RobotForm; to: RobotForm; graduated
   { label: "4 → 4 graduated", from: 4, to: 4, graduated: true, equipped: ["vuong-mien", "ao-choang"] },
 ];
 
-/** A phone (360 px screen) and a laptop (the 860 px the room gets inside its 900 px column). */
+/**
+ * A phone (360 px screen) and a laptop (the 860 px the room gets inside its 900 px column); the drained forms also
+ * on the smallest phone (320 px screen, 280 px for the room).
+ */
 const SCENE_WIDTHS = [328, 860] as const;
+const SMALL_PHONE = 280;
 
 // Inline styles, so a production build carries no gallery CSS.
 const cell: CSSProperties = {
@@ -223,24 +229,26 @@ export function GalleryScreen() {
         ))}
         <div style={{ display: "flex", flexWrap: "wrap", gap: 12 }}>
           {FORMS.map((form) => (
-            <figure key={form} style={{ ...figure, width: SCENE_WIDTHS[0] }}>
+            <figure key={form} style={{ ...figure, width: SMALL_PHONE }}>
               <RoomScene
                 look={{ state: "drained", form, graduated: false, size: 3, equipped: [] }}
                 decor={[]}
                 robotSize={robotPixelSize(form, 3)}
               />
-              <figcaption style={caption}>drained · form {form}.3, lying on the floor line</figcaption>
+              <figcaption style={caption}>
+                drained · form {form}.3 · {SMALL_PHONE} px (320 px screen), lying on the floor line
+              </figcaption>
             </figure>
           ))}
         </div>
       </section>
       <section>
-        <h2>Explanation bubble, 44 px</h2>
+        <h2>Explanation bubble, {BUBBLE_ROBOT_SIZE} px</h2>
         <div style={floor}>
           {FORMS.flatMap((form) =>
             (["happy", "sad", "thinking"] as const).map((mood) => (
               <figure key={`${form}-${mood}`} style={figure}>
-                <Robot form={form} mood={mood} size={44} />
+                <Robot form={form} mood={mood} size={BUBBLE_ROBOT_SIZE} />
                 <figcaption style={caption}>
                   {form} {mood}
                 </figcaption>
