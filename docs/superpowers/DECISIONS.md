@@ -82,3 +82,6 @@ Người bảo trì chưa duyệt kế hoạch M5b; Claude tự chốt theo yêu
 3. **`round(2.5)` ra `2`** được dạy như 1 hiểu lầm hay gặp.
 4. **Không dạy phép chia số âm** ở giai đoạn 2.
 5. **`input()` luôn để trống ngoặc** trong bài tập, vì chữ trong ngoặc bị tính vào đầu ra khi chấm (đã có mục từ điển `input-prompt`).
+6. **Khái niệm `input-prompt`** (đổi từ `input-empty-prompt` của kế hoạch): trùng mã hiểu lầm mà bộ chấm tự thêm khi con viết chữ trong `input(...)`, nên thẻ hiểu lầm và bài luyện tự xuất hiện.
+7. **Sửa 1 phần code của app trong M5b** (kế hoạch ghi chỉ có nội dung): (a) lỗi `NameError` khi dùng biến trước khi gán được nhận ra riêng (mục từ điển `name-before-assign`, check `assigned-in-code`) và ghi hiểu lầm `var-before-use`, không ghi nhầm thành "quên dấu nháy"; (b) hiểu lầm thuộc khái niệm của giai đoạn con chưa tới thì không được ghi vào điểm thành thạo và không hiện thẻ (`isConceptReached` trong `src/content/lookup.ts`). Lý do: nội dung giai đoạn 2 làm 2 lỗi này hay gặp.
+8. **Mục từ điển lỗi mới của giai đoạn 2**: `assign-to-literal`, `float-invalid`, `format-code-str`, `name-before-assign` (34 mục).
