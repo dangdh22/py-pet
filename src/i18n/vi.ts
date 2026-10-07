@@ -3,6 +3,8 @@ export const vi = {
   "app.uiLanguage": "Ngôn ngữ giao diện",
   "app.crash": "Robo bị trục trặc rồi. Con tải lại trang nhé.",
   "app.reload": "Tải lại trang",
+  "item.broken": "Bài này đang bị lỗi, con bỏ qua nhé",
+  "item.skip": "Bỏ qua",
   "browser.unsupportedTitle": "Trình duyệt này chưa chạy được Py-Pet",
   "browser.unsupportedAdvice": "Con nhờ bố mẹ mở Py-Pet bằng Chrome hoặc Edge bản mới nhé.",
   "runner.loading": "Robo đang khởi động...",

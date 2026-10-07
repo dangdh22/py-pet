@@ -1,10 +1,12 @@
 // @vitest-environment jsdom
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { describe, expect, test, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
+import type { ChoiceQuestion } from "../content/types";
 import { findItem } from "../content/lookup";
-import type { ExamItem } from "../game/exam";
+import { gradePaper, itemMax, type ExamItem } from "../game/exam";
 import { initialGameState } from "../game/state";
+import { brokenQuestion } from "../test/brokenItem";
 import { examBundle } from "../test/examBundle";
 import { fakeRunner, okResult } from "../test/render";
 import { renderWithGame, TODAY } from "../test/renderGame";
@@ -63,6 +65,50 @@ describe("ExamRunner", () => {
     expect(screen.getByText("Chưa có câu hỏi cho bài kiểm tra này.")).toBeInTheDocument();
     await userEvent.click(screen.getByRole("button", { name: "Nộp bài kiểm tra" }));
     expect(onFinish).toHaveBeenCalledWith([]);
+  });
+
+  describe("a broken item", () => {
+    beforeEach(() => {
+      vi.spyOn(console, "error").mockImplementation(() => {});
+    });
+    afterEach(() => vi.restoreAllMocks());
+
+    test("is skipped as 0 points: no event is sent for it and the next item goes on", async () => {
+      const onFinish = vi.fn();
+      const paper = [brokenQuestion(items[0] as ChoiceQuestion) as ExamItem, items[1]!];
+      const { store } = await renderWithGame(<ExamRunner title="Đề thử" items={paper} onFinish={onFinish} />, {
+        bundle,
+        runner: fakeRunner(() => okResult("Hi\n")),
+      });
+      expect(screen.getByRole("alert")).toHaveTextContent("Bài này đang bị lỗi, con bỏ qua nhé");
+      expect(screen.getByRole("button", { name: "Tiếp" })).toBeDisabled();
+      await userEvent.click(screen.getByRole("button", { name: "Bỏ qua" }));
+      expect(screen.getByText("Câu 2/2")).toBeInTheDocument();
+      await userEvent.click(screen.getByRole("button", { name: "Nộp bài" }));
+      await screen.findByText("Đã nộp bài. Kết quả hiện ở cuối bài.");
+      await userEvent.click(screen.getByRole("button", { name: "Nộp bài kiểm tra" }));
+
+      expect(onFinish).toHaveBeenCalledWith([undefined, { kind: "code", passed: 2, total: 2 }]);
+      expect(gradePaper(paper, onFinish.mock.calls[0]![0]).score).toBe(itemMax(items[1]!));
+      await waitFor(async () => expect((await store.readMeta()).errorLog).toHaveLength(1));
+      expect((await store.readMeta()).errorLog[0]).toMatchObject({ kind: "content-error" });
+      const attempts = (await store.exportProfiles())[0]!.attempts;
+      expect(attempts.map((a) => a.itemId)).toEqual(["x.l1.ex1"]);
+    });
+
+    test("skipping the last item hands the paper in", async () => {
+      const onFinish = vi.fn();
+      const paper = [items[1]!, brokenQuestion(items[0] as ChoiceQuestion) as ExamItem];
+      await renderWithGame(<ExamRunner title="Đề thử" items={paper} onFinish={onFinish} />, {
+        bundle,
+        runner: fakeRunner(() => okResult("Hi\n")),
+      });
+      await userEvent.click(screen.getByRole("button", { name: "Nộp bài" }));
+      await screen.findByText("Đã nộp bài. Kết quả hiện ở cuối bài.");
+      await userEvent.click(screen.getByRole("button", { name: "Tiếp" }));
+      await userEvent.click(screen.getByRole("button", { name: "Bỏ qua" }));
+      expect(onFinish).toHaveBeenCalledWith([{ kind: "code", passed: 2, total: 2 }, undefined]);
+    });
   });
 
   describe("a misconception of a later stage", () => {

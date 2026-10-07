@@ -4,6 +4,7 @@ import { pick } from "../i18n/lang";
 import { useLang } from "../i18n/LangProvider";
 import { CardView } from "./CardView";
 import { useGame } from "./GameProvider";
+import { ItemBoundary } from "./ItemBoundary";
 import { ItemView } from "./ItemView";
 import { ResultView } from "./ResultView";
 
@@ -64,15 +65,19 @@ export function LessonScreen({ lesson, onExit }: LessonScreenProps) {
 
   const body =
     step.kind === "card" ? (
-      <CardView key={`card-${index}`} card={step.card} />
+      <ItemBoundary key={`card-${index}`} itemId={`${lesson.id}#card${index + 1}`} onSkip={next}>
+        <CardView card={step.card} />
+      </ItemBoundary>
     ) : (
-      <ItemView
-        key={step.exercise.id}
-        item={step.exercise}
-        source="lesson"
-        onDone={() => markDone(index)}
-        onMisconception={(id) => setPracticeConcepts((current) => (current.includes(id) ? current : [...current, id]))}
-      />
+      // A skipped exercise sends no grading event; it only moves on (the lesson still completes after the last step).
+      <ItemBoundary key={step.exercise.id} itemId={step.exercise.id} onSkip={next}>
+        <ItemView
+          item={step.exercise}
+          source="lesson"
+          onDone={() => markDone(index)}
+          onMisconception={(id) => setPracticeConcepts((current) => (current.includes(id) ? current : [...current, id]))}
+        />
+      </ItemBoundary>
     );
 
   return (

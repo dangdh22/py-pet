@@ -7,6 +7,7 @@ import { useLang } from "../i18n/LangProvider";
 import { useContent } from "./contexts";
 import { ExamCodeView } from "./ExamCodeView";
 import { useGame } from "./GameProvider";
+import { ItemBoundary } from "./ItemBoundary";
 import { QuestionCard } from "./QuestionCard";
 
 /** A score with at most 1 decimal, written the way the language writes decimals (19,2 in Vietnamese). */
@@ -17,7 +18,8 @@ export function formatScore(score: number, lang: Lang): string {
 
 /**
  * The items of a test, 1 per card (spec 8.2.4). Each answer is recorded at once (mastery, Leitner, attempt history)
- * with the source "test", which pays nothing per item; the results appear only after the last item.
+ * with the source "test", which pays nothing per item; the results appear only after the last item. A broken item can
+ * be skipped: nothing is recorded for it and its answer stays undefined, which the grade counts as 0 points.
  */
 export function ExamRunner({
   title,
@@ -38,13 +40,14 @@ export function ExamRunner({
   const record = (answer: ExamAnswer) =>
     setAnswers((current) => current.map((old, i) => (i === index && old === undefined ? answer : old)));
 
+  const advance = () => (isLast ? onFinish(answers) : setIndex(index + 1));
+
   let body;
   if (!item) {
     body = <p>{t("exam.empty")}</p>;
   } else if (isChoiceQuestion(item)) {
     body = (
       <QuestionCard
-        key={item.id}
         question={item}
         exam
         onAnswered={(correct, detail) => {
@@ -67,7 +70,6 @@ export function ExamRunner({
   } else {
     body = (
       <ExamCodeView
-        key={item.id}
         exercise={item}
         onSubmitted={({ result, code }) => {
           const misconceptions = result.misconceptions.filter((id) => isConceptReached(bundle, id, game.state.pet.stage));
@@ -99,6 +101,14 @@ export function ExamRunner({
     );
   }
 
+  if (item) {
+    body = (
+      <ItemBoundary key={item.id} itemId={item.id} onSkip={advance}>
+        {body}
+      </ItemBoundary>
+    );
+  }
+
   return (
     <main className="lesson">
       <div className="lesson-top">
@@ -110,7 +120,7 @@ export function ExamRunner({
         <button
           className="primary"
           disabled={item !== undefined && answers[index] === undefined}
-          onClick={() => (isLast ? onFinish(answers) : setIndex(index + 1))}
+          onClick={advance}
         >
           {isLast ? t("exam.finish") : t("lesson.next")}
         </button>

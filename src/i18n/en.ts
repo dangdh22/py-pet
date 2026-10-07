@@ -4,6 +4,8 @@ export const en: Record<MessageKey, string> = {
   "app.title": "Py-Pet",
   "app.uiLanguage": "Interface language",
   "app.crash": "Robo has a problem. Please reload the page.",
+  "item.broken": "This item is broken, please skip it",
+  "item.skip": "Skip",
   "app.reload": "Reload the page",
   "browser.unsupportedTitle": "This browser cannot run Py-Pet",
   "browser.unsupportedAdvice": "Please open Py-Pet in a recent version of Chrome or Edge.",

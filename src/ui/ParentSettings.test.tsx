@@ -105,4 +105,10 @@ describe("ParentSettings", () => {
     await userEvent.click(screen.getByRole("button", { name: "Xuất nhật ký lỗi" }));
     expect(downloadText).toHaveBeenCalledWith("py-pet-error-log-2026-10-06.json", JSON.stringify(errorLog, null, 2));
   });
+
+  test("lists a broken-item entry with its kind, the item id and the message", async () => {
+    const errorLog = [{ at: FIXED_NOW.toISOString(), kind: "content-error" as const, detail: "x.q1: kaboom" }];
+    await renderWithGame(<ParentSettings />, { meta: { errorLog } });
+    expect(screen.getByText("2026-10-06 09:00 · content-error · x.q1: kaboom")).toBeInTheDocument();
+  });
 });

@@ -1,7 +1,8 @@
 // @vitest-environment jsdom
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { describe, expect, test, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
+import { brokenQuestion } from "../test/brokenItem";
 import { seededRng } from "../game/random";
 import { initialGameState } from "../game/state";
 import { renderWithGame, TODAY } from "../test/renderGame";
@@ -90,5 +91,37 @@ describe("ReviewScreen", () => {
     expect(screen.getByText("Chưa có câu nào để ôn. Con học thêm bài nhé!")).toBeInTheDocument();
     await userEvent.click(screen.getByRole("button", { name: "Hoàn thành" }));
     expect(screen.getByText("Con đúng 0/0 câu.")).toBeInTheDocument();
+  });
+
+  describe("a broken item", () => {
+    beforeEach(() => {
+      vi.spyOn(console, "error").mockImplementation(() => {});
+    });
+    afterEach(() => vi.restoreAllMocks());
+
+    test("each can be skipped; no mastery, Leitner or attempt is recorded for it, and the station still finishes", async () => {
+      const broken = reviewBundle();
+      const topic = broken.stages[0]!.topics[0]!;
+      topic.questions = topic.questions.map(brokenQuestion);
+      const { store } = await renderWithGame(<ReviewScreen stationId="r.r1" onExit={() => {}} rng={seededRng(1)} />, {
+        bundle: broken,
+        state: stateWith(["r.l1", "r.l2"]),
+      });
+      expect(screen.getByText("Câu 1/5")).toBeInTheDocument();
+      expect(screen.getByRole("alert")).toHaveTextContent("Bài này đang bị lỗi, con bỏ qua nhé");
+      await userEvent.click(screen.getByRole("button", { name: "Bỏ qua" }));
+      expect(screen.getByText("Câu 2/5")).toBeInTheDocument();
+      for (let n = 2; n <= 5; n += 1) await userEvent.click(screen.getByRole("button", { name: "Bỏ qua" }));
+
+      expect(screen.getByRole("heading", { name: "Xong trạm ôn!" })).toBeInTheDocument();
+      expect(screen.getByText("Con đúng 0/5 câu.")).toBeInTheDocument();
+      await waitFor(async () => expect((await store.readMeta()).errorLog).toHaveLength(5));
+      expect((await store.readMeta()).errorLog.every((entry) => entry.kind === "content-error")).toBe(true);
+      const saved = (await store.loadActive())!.state;
+      expect(saved.reviews).toEqual({});
+      expect(saved.mastery).toEqual({});
+      expect(saved.progress.answeredQuestions).toEqual([]);
+      expect((await store.exportProfiles())[0]!.attempts).toEqual([]);
+    });
   });
 });

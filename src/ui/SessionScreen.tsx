@@ -3,6 +3,7 @@ import type { Exercise } from "../content/types";
 import type { ResultSource } from "../game/mastery";
 import { useLang } from "../i18n/LangProvider";
 import { useGame } from "./GameProvider";
+import { ItemBoundary } from "./ItemBoundary";
 import { ItemView } from "./ItemView";
 import { ResultView } from "./ResultView";
 
@@ -16,7 +17,10 @@ export interface SessionScreenProps {
   onExit(): void;
 }
 
-/** A series of items, 1 per card (spec 8.2.4): a review station or a practice set. With no item it can still finish. */
+/**
+ * A series of items, 1 per card (spec 8.2.4): a review station or a practice set. With no item it can still finish.
+ * A broken item can be skipped: it counts as done and not correct, and sends no grading event.
+ */
 export function SessionScreen({ title, items, source, onFinish, doneTitle, onExit }: SessionScreenProps) {
   const { t } = useLang();
   const game = useGame();
@@ -59,15 +63,16 @@ export function SessionScreen({ title, items, source, onFinish, doneTitle, onExi
         {item && <span>{t("review.itemOf", { current: index + 1, total: items.length })}</span>}
       </div>
       {item ? (
-        <ItemView
-          key={item.id}
-          item={item}
-          source={source}
-          onDone={(result) =>
-            setResults((current) => current.map((old, i) => (i === index && old === undefined ? result.correct : old)))
-          }
-          onMisconception={(id) => setPracticeConcepts((current) => (current.includes(id) ? current : [...current, id]))}
-        />
+        <ItemBoundary key={item.id} itemId={item.id} onSkip={next}>
+          <ItemView
+            item={item}
+            source={source}
+            onDone={(result) =>
+              setResults((current) => current.map((old, i) => (i === index && old === undefined ? result.correct : old)))
+            }
+            onMisconception={(id) => setPracticeConcepts((current) => (current.includes(id) ? current : [...current, id]))}
+          />
+        </ItemBoundary>
       ) : (
         <p>{t("review.empty")}</p>
       )}

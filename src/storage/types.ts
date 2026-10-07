@@ -56,7 +56,7 @@ export interface PinHash {
 
 export interface ErrorLogEntry {
   at: string;
-  kind: "unknown-python-error" | "ui-crash" | "load-failed";
+  kind: "unknown-python-error" | "ui-crash" | "load-failed" | "content-error";
   detail: string;
 }
 

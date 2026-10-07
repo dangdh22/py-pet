@@ -1,7 +1,9 @@
 // @vitest-environment jsdom
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { expect, test, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
+import type { ChoiceQuestion } from "../content/types";
+import { brokenQuestion } from "../test/brokenItem";
 import { fixtureLesson } from "../test/fixtures";
 import { fakeRunner, okResult } from "../test/render";
 import { renderWithGame } from "../test/renderGame";
@@ -153,4 +155,48 @@ test("a misconception without practice items offers no practice link", async () 
   await renderWithGame(<LessonScreen lesson={lesson} onExit={() => {}} />, { bundle });
   await finishWithWrongAnswer();
   expect(screen.queryByRole("link", { name: /^Luyện thêm/ })).not.toBeInTheDocument();
+});
+
+describe("a broken exercise", () => {
+  beforeEach(() => {
+    vi.spyOn(console, "error").mockImplementation(() => {});
+  });
+  afterEach(() => vi.restoreAllMocks());
+
+  const question = fixtureLesson.exercises[1] as ChoiceQuestion;
+  const lesson = {
+    ...fixtureLesson,
+    cards: [],
+    exercises: [brokenQuestion({ ...question, id: "t.l1.bad" }), question],
+  };
+
+  test("shows the message, logs it, and Bỏ qua goes on without any result for it", async () => {
+    const { store } = await renderWithGame(<LessonScreen lesson={lesson} onExit={() => {}} />);
+    expect(screen.getByText("Bài tập 1/2")).toBeInTheDocument();
+    expect(screen.getByRole("alert")).toHaveTextContent("Bài này đang bị lỗi, con bỏ qua nhé");
+    expect(screen.getByRole("button", { name: "Tiếp" })).toBeDisabled();
+    await userEvent.click(screen.getByRole("button", { name: "Bỏ qua" }));
+    expect(screen.getByText("Bài tập 2/2")).toBeInTheDocument();
+    expect(screen.queryByRole("alert")).not.toBeInTheDocument();
+
+    await waitFor(async () => expect((await store.readMeta()).errorLog).toHaveLength(1));
+    const [entry] = (await store.readMeta()).errorLog;
+    expect(entry).toMatchObject({ kind: "content-error" });
+    expect(entry!.detail).toContain("t.l1.bad");
+    const saved = (await store.loadActive())!.state;
+    expect(saved.pet.xp).toBe(0);
+    expect(saved.progress.solvedExercises).toEqual([]);
+    expect(saved.progress.answeredQuestions).toEqual([]);
+    expect(saved.mastery).toEqual({});
+    expect((await store.exportProfiles())[0]!.attempts).toEqual([]);
+  });
+
+  test("skipping the last exercise still completes the lesson as usual", async () => {
+    const onlyBroken = { ...lesson, exercises: [lesson.exercises[0]!] };
+    const { store } = await renderWithGame(<LessonScreen lesson={onlyBroken} onExit={() => {}} />);
+    await userEvent.click(screen.getByRole("button", { name: "Bỏ qua" }));
+    expect(screen.getByText("Hoàn thành bài học!")).toBeInTheDocument();
+    await waitFor(async () => expect((await store.loadActive())?.state.progress.completedLessons).toEqual(["t.l1"]));
+    expect((await store.exportProfiles())[0]!.attempts).toEqual([]);
+  });
 });
