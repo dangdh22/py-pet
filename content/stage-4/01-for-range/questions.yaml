@@ -1,0 +1,283 @@
+questions:
+  - id: s4.for-range.b1
+    type: predict
+    concepts: [for-repeat]
+    lessons: [s4.for-range.l1]
+    code: |
+      for i in range(3):
+          print("A")
+          print("B")
+    prompt:
+      vi: "Đoạn code in ra gì?"
+      en: "What is the output of this code?"
+    choices:
+      - { text: "A\nA\nA\nB", misconception: for-repeat }
+      - { text: "A\nB\nA\nB\nA\nB", correct: true }
+      - { text: "A\nA\nA\nB\nB\nB", misconception: for-repeat }
+      - { text: "A\nB", misconception: for-repeat }
+    explanation:
+      vi: "Cả 2 dòng print đều thụt lề, nên cùng nằm trong khối lệnh của vòng lặp. Mỗi lần lặp, Python chạy hết cả khối từ trên xuống: in A rồi in B. Vòng lặp chạy 3 lần, nên A và B xen kẽ nhau 3 lần."
+      en: "Both print lines are indented, so both are in the block of the loop. On each pass, Python runs the whole block from top to bottom: it prints A, then B. The loop runs 3 times, so A and B take turns 3 times."
+
+  - id: s4.for-range.b2
+    type: mcq
+    concepts: [for-repeat]
+    lessons: [s4.for-range.l1]
+    prompt:
+      vi: "Dòng print(\"Xong\") viết sát lề trái, ngay sau khối lệnh của vòng lặp for i in range(4):. Dòng này chạy mấy lần, và chạy lúc nào?"
+      en: "The line print(\"Xong\") starts at the left edge, right after the block of the loop for i in range(4):. How many times does this line run, and when?"
+    choices:
+      - { vi: "4 lần, mỗi lần lặp 1 lần", en: "4 times, once on each pass", misconception: for-repeat }
+      - { vi: "Không lần nào, vì nó nằm ngoài vòng lặp", en: "Never, because it is outside the loop", misconception: for-repeat }
+      - { vi: "1 lần, trước khi vòng lặp bắt đầu", en: "Once, before the loop starts", misconception: run-order }
+      - { vi: "1 lần, sau khi vòng lặp chạy xong", en: "Once, after the loop is done", correct: true }
+    explanation:
+      vi: "Chỉ những dòng thụt lề dưới dòng for mới được lặp lại. Dòng sát lề trái sau khối không nằm trong vòng lặp, nên chạy đúng 1 lần. Python chạy từ trên xuống, nên dòng này chạy sau khi đã xong cả 4 lần lặp."
+      en: "Only the indented lines under the for line are repeated. A line at the left edge after the block is not in the loop, so it runs exactly once. Python runs from top to bottom, so this line runs after all 4 passes are done."
+
+  - id: s4.for-range.b3
+    type: predict
+    concepts: [for-repeat, indent-block]
+    lessons: [s4.for-range.l1]
+    code: |
+      for i in range(2):
+      print("hi")
+    prompt:
+      vi: "Chuyện gì xảy ra khi chạy đoạn code này?"
+      en: "What happens when this code runs?"
+    choices:
+      - { vi: "Báo lỗi IndentationError ở dòng 2", en: "An IndentationError on line 2", correct: true, error: true }
+      - { text: "hi\nhi", misconception: indent-block }
+      - { text: "hi", misconception: indent-block }
+      - { vi: "Báo lỗi SyntaxError ở dòng 1", en: "A SyntaxError on line 1", error: true, misconception: for-repeat }
+    explanation:
+      vi: "Dòng 1 viết đúng, có đủ dấu hai chấm. Nhưng sau dòng for phải có ít nhất 1 dòng thụt lề 4 dấu cách, mà dòng 2 lại sát lề trái. Vì vậy Python báo lỗi IndentationError ở dòng 2 và không in gì."
+      en: "Line 1 is written correctly, with its colon. But after a for line there must be at least 1 line indented by 4 spaces, and line 2 starts at the left edge. So Python gives an IndentationError on line 2 and prints nothing."
+
+  - id: s4.for-range.b4
+    type: mcq
+    concepts: [range-stop-excluded]
+    lessons: [s4.for-range.l2]
+    code: |
+      for i in range(10):
+          print(i)
+    prompt:
+      vi: "Đoạn code in ra bao nhiêu dòng, và dòng cuối cùng là số nào?"
+      en: "How many lines does this code print, and which number is on the last line?"
+    choices:
+      - { vi: "10 dòng, dòng cuối là 10", en: "10 lines, and the last one is 10", misconception: range-stop-excluded }
+      - { vi: "11 dòng, dòng cuối là 10", en: "11 lines, and the last one is 10", misconception: range-stop-excluded }
+      - { vi: "10 dòng, dòng cuối là 9", en: "10 lines, and the last one is 9", correct: true }
+      - { vi: "9 dòng, dòng cuối là 9", en: "9 lines, and the last one is 9", misconception: range-stop-excluded }
+    explanation:
+      vi: "range(10) cho 10 số, từ 0 đến 9. Vòng lặp chạy 10 lần nên in ra 10 dòng. Số 10 là chỗ dừng và không có mặt, nên dòng cuối là 9."
+      en: "range(10) gives 10 numbers, from 0 to 9. The loop runs 10 times, so it prints 10 lines. The number 10 is where it stops and is not included, so the last line is 9."
+
+  - id: s4.for-range.b5
+    type: mcq
+    concepts: [range-stop-excluded, range-start-step]
+    lessons: [s4.for-range.l3]
+    prompt:
+      vi: "Robo muốn biến i lần lượt là 0, 1, 2 và cứ thế đến 10, có cả số 10. Dòng for nào viết đúng?"
+      en: "Robo wants the variable i to be 0, 1, 2 and so on up to 10, including 10. Which for line is written correctly?"
+    choices:
+      - { text: "for i in range(10):", misconception: range-stop-excluded }
+      - { text: "for i in range(11):", correct: true }
+      - { text: "for i in range(1, 11):", misconception: range-start-step }
+      - { text: "for i in range(0, 10):", misconception: range-stop-excluded }
+    explanation:
+      vi: "range dừng trước số dừng, nên muốn có số 10 thì số dừng phải là 11. range(11) bắt đầu từ 0 và cho 0, 1, ..., 10. range(10) và range(0, 10) đều thiếu số 10, còn range(1, 11) thiếu số 0."
+      en: "range stops before its stop number, so to include 10 the stop number must be 11. range(11) starts at 0 and gives 0, 1, ..., 10. range(10) and range(0, 10) both miss 10, and range(1, 11) misses 0."
+
+  - id: s4.for-range.b6
+    type: predict
+    concepts: [range-start-step]
+    lessons: [s4.for-range.l3]
+    code: |
+      for i in range(2, 6):
+          print(i, end=" ")
+    prompt:
+      vi: "Đoạn code in ra gì?"
+      en: "What is the output of this code?"
+    choices:
+      - { text: "2 3 4 5 6", misconception: range-stop-excluded }
+      - { text: "3 4 5", misconception: range-start-step }
+      - { text: "0 1 2 3 4 5", misconception: range-start-step }
+      - { text: "2 3 4 5", correct: true }
+    explanation:
+      vi: "range(2, 6) bắt đầu đúng ở số 2, nên có cả 2, và dừng trước 6, nên không có 6. Vì end=\" \", các số được in trên cùng 1 dòng, cách nhau 1 dấu cách."
+      en: "range(2, 6) starts exactly at 2, so 2 is included, and it stops before 6, so 6 is not. Because of end=\" \", the numbers are printed on one line, with a space between them."
+
+  - id: s4.for-range.b7
+    type: predict
+    concepts: [range-start-step]
+    lessons: [s4.for-range.l3]
+    code: |
+      for i in range(20, 4, -5):
+          print(i)
+    prompt:
+      vi: "Đoạn code in ra gì?"
+      en: "What is the output of this code?"
+    choices:
+      - { text: "20\n15\n10\n5", correct: true }
+      - { text: "5\n10\n15\n20", misconception: range-start-step }
+      - { text: "20\n15\n10\n5\n0", misconception: range-stop-excluded }
+      - { vi: "Không in ra gì, vì 20 lớn hơn 4", en: "Nothing, because 20 is greater than 4", misconception: range-start-step }
+    explanation:
+      vi: "Bước nhảy là -5, nên range đếm ngược từ 20, mỗi lần bớt 5: 20, 15, 10, 5. Số tiếp theo là 0, nhưng 0 đã đi qua chỗ dừng 4, nên range dừng lại. Có bước nhảy âm thì bắt đầu từ số lớn là đúng."
+      en: "The step is -5, so range counts down from 20, taking away 5 each time: 20, 15, 10, 5. The next number would be 0, but 0 is past the stop number 4, so range stops. With a negative step, starting from a bigger number is right."
+
+  - id: s4.for-range.b8
+    type: mcq
+    concepts: [range-start-step]
+    lessons: [s4.for-range.l3]
+    prompt:
+      vi: "Trong dòng for i in range(1, 20, 3):, số 3 có nghĩa là gì?"
+      en: "In the line for i in range(1, 20, 3):, what does the number 3 mean?"
+    choices:
+      - { vi: "Vòng lặp chạy 3 lần", en: "The loop runs 3 times", misconception: range-start-step }
+      - { vi: "i bắt đầu từ 3", en: "i starts at 3", misconception: range-start-step }
+      - { vi: "Mỗi lần lặp, i được cộng thêm 3", en: "On each pass, i goes up by 3", correct: true }
+      - { vi: "i dừng lại ở số 3", en: "i stops at 3", misconception: range-start-step }
+    explanation:
+      vi: "Trong range(1, 20, 3), số thứ nhất là chỗ bắt đầu (1), số thứ hai là chỗ dừng (20), và số thứ ba là bước nhảy (3). i lần lượt là 1, 4, 7, 10, 13, 16, 19."
+      en: "In range(1, 20, 3), the first number is the start (1), the second is the stop (20), and the third is the step (3). i is 1, 4, 7, 10, 13, 16, 19, one after another."
+
+  - id: s4.for-range.b9
+    type: predict
+    concepts: [loop-variable]
+    lessons: [s4.for-range.l2]
+    code: |
+      i = 10
+      for i in range(3):
+          print(i)
+    prompt:
+      vi: "Đoạn code in ra gì?"
+      en: "What is the output of this code?"
+    choices:
+      - { text: "10\n11\n12", misconception: loop-variable }
+      - { text: "0\n1\n2", correct: true }
+      - { text: "10\n10\n10", misconception: loop-variable }
+      - { text: "0\n1\n2\n3", misconception: range-stop-excluded }
+    explanation:
+      vi: "Mỗi lần lặp, for tự gán cho i số tiếp theo trong range(3): 0, rồi 1, rồi 2. Giá trị 10 gán ở dòng 1 bị thay ngay ở lần lặp đầu tiên, nên không được in ra."
+      en: "On each pass, for gives i the next number of range(3): 0, then 1, then 2. The value 10 from line 1 is replaced on the very first pass, so it is never printed."
+
+  - id: s4.for-range.b10
+    type: mcq
+    concepts: [loop-variable]
+    lessons: [s4.for-range.l2]
+    prompt:
+      vi: "Trong vòng lặp for i in range(5):, con có cần tự viết thêm dòng i = i + 1 để i tăng lên không?"
+      en: "In the loop for i in range(5):, do you need to write the line i = i + 1 yourself to make i go up?"
+    choices:
+      - { vi: "Có, nếu không thì i luôn là 0", en: "Yes, or else i is always 0", misconception: loop-variable }
+      - { vi: "Có, nếu không thì vòng lặp chạy mãi không dừng", en: "Yes, or else the loop never stops", misconception: loop-variable }
+      - { vi: "Không, vì i giữ nguyên giá trị 5 từ đầu đến cuối", en: "No, because i keeps the value 5 from start to end", misconception: loop-variable }
+      - { vi: "Không, vì mỗi lần lặp, for tự cho i số tiếp theo trong range", en: "No, because on each pass, for gives i the next number of the range by itself", correct: true }
+    explanation:
+      vi: "Vòng lặp for tự lo việc đổi giá trị của i: lần lặp đầu i là 0, lần sau là 1, và cứ thế đến 4. Vòng lặp chạy đúng 5 lần rồi dừng, con không cần viết i = i + 1."
+      en: "A for loop changes the value of i by itself: on the first pass i is 0, then 1, and so on up to 4. The loop runs exactly 5 times and stops, so you do not need to write i = i + 1."
+
+  - id: s4.for-range.b11
+    type: predict
+    concepts: [for-over-string]
+    lessons: [s4.for-range.l5]
+    code: |
+      for ch in "Hi!":
+          print(ch * 2)
+    prompt:
+      vi: "Đoạn code in ra gì?"
+      en: "What is the output of this code?"
+    choices:
+      - { text: "HH\nii\n!!", correct: true }
+      - { text: "Hi!Hi!", misconception: for-over-string }
+      - { text: "HH\nii", misconception: for-over-string }
+      - { text: "H\ni\n!", misconception: string-repeat }
+    explanation:
+      vi: "Chuỗi \"Hi!\" có 3 ký tự: H, i và dấu chấm than. Dấu ! cũng là 1 ký tự. Mỗi lần lặp, ch là 1 ký tự, và ch * 2 lặp lại ký tự đó 2 lần, nên Python in ra 3 dòng HH, ii, !!."
+      en: "The string \"Hi!\" has 3 characters: H, i and the exclamation mark. The ! is a character too. On each pass, ch is one character, and ch * 2 repeats that character 2 times, so Python prints 3 lines: HH, ii, !!."
+
+  - id: s4.for-range.b12
+    type: predict
+    concepts: [for-over-string]
+    lessons: [s4.for-range.l5]
+    code: |
+      word = "ok"
+      for ch in word:
+          print(word)
+    prompt:
+      vi: "Đoạn code in ra gì?"
+      en: "What is the output of this code?"
+    choices:
+      - { text: "o\nk", misconception: for-over-string }
+      - { text: "ok", misconception: for-over-string }
+      - { text: "ok\nok", correct: true }
+      - { text: "word\nword", misconception: string-quotes }
+    explanation:
+      vi: "word có 2 ký tự, nên vòng lặp chạy 2 lần. Bên trong vòng lặp, code in word chứ không in ch, nên mỗi lần lặp in ra cả chữ ok. word không có dấu nháy, nên Python in giá trị của biến, không in chữ word."
+      en: "word has 2 characters, so the loop runs 2 times. Inside the loop, the code prints word, not ch, so each pass prints the whole word ok. word has no quotes, so Python prints the value of the variable, not the text word."
+
+  - id: s4.for-range.b13
+    type: mcq
+    concepts: [ai-supervised]
+    lessons: [s4.for-range.l6]
+    prompt:
+      vi: "Điểm khác nhau chính giữa học có giám sát và học không giám sát là gì?"
+      en: "What is the main difference between supervised and unsupervised learning?"
+    choices:
+      - { vi: "Học có giám sát thì có người ngồi cạnh máy tính suốt lúc AI học", en: "In supervised learning, someone sits next to the computer the whole time the AI learns", misconception: ai-supervised }
+      - { vi: "Học có giám sát dùng dữ liệu có nhãn, học không giám sát dùng dữ liệu không có nhãn", en: "Supervised learning uses labeled data, and unsupervised learning uses data without labels", correct: true }
+      - { vi: "Học không giám sát không cần dữ liệu, còn học có giám sát thì cần", en: "Unsupervised learning needs no data, while supervised learning does", misconception: ai-data }
+      - { vi: "Học có giám sát chỉ dùng cho ảnh, học không giám sát chỉ dùng cho âm thanh", en: "Supervised learning is only for pictures, and unsupervised learning is only for sounds", misconception: ai-supervised }
+    explanation:
+      vi: "Cả 2 cách đều học từ dữ liệu, và đều dùng được cho ảnh, âm thanh hay chữ. Khác nhau ở nhãn: học có giám sát có đáp án sẵn cho mỗi ví dụ, còn học không giám sát thì không có, nên AI tự xếp những thứ giống nhau vào cùng nhóm."
+      en: "Both ways learn from data, and both work for pictures, sounds or text. The difference is the labels: supervised learning has an answer for each example, and unsupervised learning does not, so the AI puts things that are alike into the same group by itself."
+
+  - id: s4.for-range.b14
+    type: mcq
+    concepts: [ai-supervised]
+    lessons: [s4.for-range.l6]
+    prompt:
+      vi: "Việc nào hợp với học không giám sát nhất?"
+      en: "Which task fits unsupervised learning best?"
+    choices:
+      - { vi: "Dạy AI nhận ra thư rác từ hàng nghìn thư đã được đánh dấu là rác hoặc không rác", en: "Teaching an AI to spot spam from thousands of emails already marked as spam or not spam", misconception: ai-supervised }
+      - { vi: "Dạy AI đọc chữ số viết tay từ hàng nghìn ảnh có ghi sẵn chữ số trong ảnh", en: "Teaching an AI to read handwritten digits from thousands of photos with the digit written next to each", misconception: ai-supervised }
+      - { vi: "Kiểm tra 1 bạn đã đủ 6 tuổi để vào lớp 1 hay chưa", en: "Checking whether a child is old enough, 6 years, to start grade 1", misconception: ai-rules-vs-data }
+      - { vi: "Chia khách hàng của 1 cửa hàng thành các nhóm mua sắm giống nhau, khi chưa ai biết có những nhóm nào", en: "Splitting the customers of a shop into groups that shop alike, when nobody knows yet which groups there are", correct: true }
+    explanation:
+      vi: "Khi chưa có nhãn và chưa ai biết có những nhóm nào, AI học không giám sát tự tìm ra các nhóm giống nhau. Thư rác và chữ số viết tay đều có nhãn sẵn, nên hợp với học có giám sát. Kiểm tra đủ 6 tuổi chỉ cần 1 quy tắc cố định, không cần AI."
+      en: "When there are no labels and nobody knows which groups exist, unsupervised learning finds groups that are alike by itself. Spam emails and handwritten digits come with labels, so they fit supervised learning. Checking an age of 6 only needs a fixed rule, not AI."
+
+  - id: s4.for-range.b15
+    type: mcq
+    concepts: [ai-supervised]
+    lessons: [s4.for-range.l6]
+    prompt:
+      vi: "Vì sao học không giám sát có ích?"
+      en: "Why is unsupervised learning useful?"
+    choices:
+      - { vi: "Vì ghi nhãn cho thật nhiều dữ liệu rất tốn công, và có khi chưa ai biết nên chia thành những nhóm nào", en: "Because labeling a lot of data takes a lot of work, and sometimes nobody knows yet which groups to make", correct: true }
+      - { vi: "Vì học không giám sát luôn cho kết quả đúng hơn học có giám sát", en: "Because unsupervised learning always gives better answers than supervised learning", misconception: ai-supervised }
+      - { vi: "Vì dữ liệu không có nhãn thì không phải là dữ liệu, nên không cần xem kỹ", en: "Because data without labels is not really data, so it does not need a close look", misconception: ai-data }
+      - { vi: "Vì học không giám sát tự đặt tên đúng cho mọi nhóm, con người không cần xem lại", en: "Because unsupervised learning names every group correctly by itself, so people do not need to look", misconception: ai-supervised }
+    explanation:
+      vi: "Ghi nhãn cho hàng triệu bài hát hay ảnh cần rất nhiều người và thời gian. Học không giám sát dùng được ngay dữ liệu chưa có nhãn để tìm các nhóm. Nhưng nó không đúng hơn học có giám sát, và người vẫn phải xem các nhóm rồi đặt tên."
+      en: "Labeling millions of songs or photos takes many people and a lot of time. Unsupervised learning can use data without labels right away to find groups. But it is not better than supervised learning, and people still need to look at the groups and name them."
+
+  - id: s4.for-range.b16
+    type: mcq
+    concepts: [ai-supervised]
+    lessons: [s4.for-range.l6]
+    prompt:
+      vi: "Con có 1 hộp hình dán, không cái nào ghi chữ gì. Con tự xếp những hình dán giống nhau, như cùng màu hay cùng hình con vật, vào từng nhóm. Cách làm của con giống cách học nào của AI?"
+      en: "You have a box of stickers, and none of them has any words on it. You sort the stickers that are alike, such as the same colour or the same animal, into groups by yourself. Which way of AI learning is your way like?"
+    choices:
+      - { vi: "Học có giám sát, vì chính con là người giám sát", en: "Supervised learning, because you are the one supervising", misconception: ai-supervised }
+      - { vi: "Học có giám sát, vì hình dán có màu và có hình con vật", en: "Supervised learning, because the stickers have colours and animals", misconception: ai-supervised }
+      - { vi: "Học không giám sát", en: "Unsupervised learning", correct: true }
+      - { vi: "Không giống cách nào, vì AI không biết xếp nhóm", en: "Neither, because AI cannot sort things into groups", misconception: ai-supervised }
+    explanation:
+      vi: "Các hình dán không có nhãn, và con tự tìm những cái giống nhau để xếp chung nhóm. Đó chính là cách học không giám sát. Màu và hình con vật là đặc điểm của hình dán, không phải nhãn ghi sẵn đáp án."
+      en: "The stickers have no labels, and you find the ones that are alike to put them in groups yourself. That is exactly how unsupervised learning works. The colour and the animal are features of a sticker, not a label with the answer written on it."

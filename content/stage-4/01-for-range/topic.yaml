@@ -1,0 +1,12 @@
+id: s4.for-range
+title: { vi: "for và range", en: "for and range" }
+lessons:
+  - 01-lap-lai.md
+  - 02-range.md
+  - 03-range-a-b.md
+  - 04-bien-trong-vong-lap.md
+  - 05-for-qua-chuoi.md
+  - 06-giam-sat.md
+reviews:
+  - { id: s4.for-range.r1, after: s4.for-range.l2 }
+  - { id: s4.for-range.r2, after: s4.for-range.l5 }

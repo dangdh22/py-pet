@@ -88,6 +88,23 @@ describe("error dictionary on Pyodide", () => {
     }
   });
 
+  test("stage-4 for lines: a missing colon or indentation is explained like on an if line", () => {
+    const cases: [string, string][] = [
+      ["for i in range(3)\n    print(i)", "missing-colon"],
+      ["n = 4\nfor i in range(1, n + 1)\n    print(i)", "missing-colon"],
+      ['for ch in "Robo"\n    print(ch)', "missing-colon"],
+      ["for i in range(3):\n    print(i)\nelse\n    print(9)", "missing-colon"],
+      ["x = 5\nif x > 3\n    print(x)", "missing-colon"],
+      ["x = 5\nif x > 3:\n    print(1)\nelse\n    print(2)", "missing-colon"],
+      ["for i in range(2):\nprint(i)", "indent-expected"],
+      ["for i in range(2):\n    print(i)\n  print(1)", "indent-unmatched"],
+    ];
+    for (const [code, id] of cases) {
+      const problem = problemFromOutcome(run(code, ""), false);
+      expect(matchError(bundle.errors, problem!, code)?.entry.id).toBe(id);
+    }
+  });
+
   test("smart-quote: real curly quotes pasted from Word are recognized (added test)", () => {
     const code = "print(“Xin chào”)";
     const result = run(code, "");

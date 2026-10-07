@@ -6,8 +6,8 @@
   match: { type: SyntaxError, message: "^expected ':'$" }
   misconception: if-colon
   explain:
-    vi: "Dòng {line}: Python cần 1 dấu hai chấm (:) ở cuối dòng này. Dòng mở đầu 1 khối lệnh, như dòng if hay dòng else, luôn kết thúc bằng dấu hai chấm."
-    en: "Line {line}: Python needs a colon (:) at the end of this line. A line that starts a block, like an if line or an else line, always ends with a colon."
+    vi: "Dòng {line}: Python cần 1 dấu hai chấm (:) ở cuối dòng này. Dòng mở đầu 1 khối lệnh, như dòng if, dòng else hay dòng for, luôn kết thúc bằng dấu hai chấm."
+    en: "Line {line}: Python needs a colon (:) at the end of this line. A line that starts a block, like an if line, an else line or a for line, always ends with a colon."
   hint:
     vi: "Thêm dấu : vào cuối dòng {line}. Nếu đó là dòng else, hãy xóa phần điều kiện và chỉ để lại else:, vì else không có điều kiện. Nếu con cần thêm 1 điều kiện, hãy viết elif thay cho else if."
     en: "Add : at the end of line {line}. If it is an else line, delete the condition and keep only else:, because else has no condition. If you need to add another condition, write elif instead of else if."

@@ -1,0 +1,449 @@
+exercises:
+  - id: s4.for-range.p1
+    type: fill
+    concepts: [for-repeat]
+    prompt:
+      vi: "Robo hát 1 câu 3 lần rồi nghỉ. Ô Dữ liệu nhập có 1 dòng: câu hát. Điền vào 2 chỗ trống để chương trình in câu hát 3 lần, rồi in ra Hết bài 1 lần, như phần Ví dụ."
+      en: "Robo sings a line 3 times and then rests. The Input data box has 1 line: the song line. Fill the 2 blanks so that the program prints the song line 3 times, then prints Hết bài once, as in the Example."
+    template: |
+      cau_hat = input()
+      ___ i in range(3)___
+          print(cau_hat)
+      print("Hết bài")
+    answers: ["for", ":"]
+    tests:
+      - input: "La la la"
+        output: |
+          La la la
+          La la la
+          La la la
+          Hết bài
+      - input: "Đồ rê mi"
+        output: |
+          Đồ rê mi
+          Đồ rê mi
+          Đồ rê mi
+          Hết bài
+        hidden: true
+    hints:
+      - { vi: "Dòng 2 mở đầu 1 vòng lặp. Dòng này bắt đầu bằng 1 chữ viết thường và kết thúc bằng 1 dấu đặc biệt, giống dòng if.", en: "Line 2 starts a loop. This line begins with a word in small letters and ends with a special sign, just like an if line." }
+      - { vi: "Điền for vào chỗ trống thứ nhất và dấu : vào chỗ trống thứ hai.", en: "Fill the first blank with for and the second blank with :." }
+
+  - id: s4.for-range.p2
+    type: parsons
+    concepts: [range-start-step]
+    prompt:
+      vi: "Robo đếm ngược, mỗi lần bớt 2, từ số n cho tới khi gần hết giờ, rồi báo Hết giờ. Ô Dữ liệu nhập có 1 dòng: số n. Sắp xếp các dòng lệnh để in ra như phần Ví dụ."
+      en: "Robo counts down, taking away 2 each time, from the number n until time is nearly up, then says Hết giờ. The Input data box has 1 line: the number n. Put the lines in order to print as in the Example."
+    solution: |
+      n = int(input())
+      for i in range(n, 0, -2):
+          print(i)
+      print("Hết giờ")
+    tests:
+      - input: "10"
+        output: |
+          10
+          8
+          6
+          4
+          2
+          Hết giờ
+      - input: "7"
+        output: |
+          7
+          5
+          3
+          1
+          Hết giờ
+        hidden: true
+      - input: "1"
+        output: |
+          1
+          Hết giờ
+        hidden: true
+      - input: "0"
+        output: "Hết giờ"
+        hidden: true
+    hints:
+      - { vi: "Phải đọc n trước khi dùng n trong range. Dòng print(i) thụt lề nên nằm ngay dưới dòng for. Dòng báo Hết giờ chỉ chạy 1 lần, sau vòng lặp.", en: "n must be read before range uses it. The indented line print(i) goes right under the for line. The line that says Hết giờ runs only once, after the loop." }
+
+  - id: s4.for-range.p3
+    type: fill
+    concepts: [range-stop-excluded]
+    prompt:
+      vi: "Robo đếm từ 1 đến n, có cả số n, rồi báo Robo đếm xong. Ô Dữ liệu nhập có 1 dòng: số n, là số nguyên không âm. Điền vào chỗ trống để in ra như phần Ví dụ."
+      en: "Robo counts from 1 to n, including n, and then says Robo đếm xong. The Input data box has 1 line: a number n, an integer that is not negative. Fill the blank to print as in the Example."
+    template: |
+      n = int(input())
+      for i in range(1, ___):
+          print(i)
+      print("Robo đếm xong")
+    answers: ["n + 1"]
+    tests:
+      - input: "5"
+        output: |
+          1
+          2
+          3
+          4
+          5
+          Robo đếm xong
+      - input: "1"
+        output: |
+          1
+          Robo đếm xong
+        hidden: true
+      - input: "0"
+        output: "Robo đếm xong"
+        hidden: true
+    hints:
+      - { vi: "range dừng trước số dừng. Muốn có cả số n, số dừng phải lớn hơn n đúng 1.", en: "range stops before its stop number. To include n, the stop number must be exactly 1 more than n." }
+      - { vi: "Điền n + 1 vào chỗ trống.", en: "Fill the blank with n + 1." }
+
+  - id: s4.for-range.p4
+    type: fill
+    concepts: [range-start-step]
+    prompt:
+      vi: "Robo in các số chẵn từ 0 đến n. Ô Dữ liệu nhập có 1 dòng: số n, là số nguyên không âm. Điền vào chỗ trống để in ra như phần Ví dụ."
+      en: "Robo prints the even numbers from 0 to n. The Input data box has 1 line: a number n, an integer that is not negative. Fill the blank to print as in the Example."
+    template: |
+      n = int(input())
+      for i in range(0, n + 1, ___):
+          print(i)
+    answers: ["2"]
+    tests:
+      - input: "10"
+        output: |
+          0
+          2
+          4
+          6
+          8
+          10
+      - input: "7"
+        output: |
+          0
+          2
+          4
+          6
+        hidden: true
+      - input: "0"
+        output: "0"
+        hidden: true
+    hints:
+      - { vi: "Số chẵn cách nhau 2 đơn vị: 0, 2, 4. Chỗ trống là bước nhảy của range.", en: "Even numbers are 2 apart: 0, 2, 4. The blank is the step of the range." }
+      - { vi: "Điền 2 vào chỗ trống.", en: "Fill the blank with 2." }
+
+  - id: s4.for-range.p5
+    type: fill
+    concepts: [loop-variable]
+    prompt:
+      vi: "Robo tính bình phương các số từ 1 đến n. Ô Dữ liệu nhập có 1 dòng: số n, là số nguyên không âm. Điền vào chỗ trống để in ra như phần Ví dụ."
+      en: "Robo works out the squares of the numbers from 1 to n. The Input data box has 1 line: a number n, an integer that is not negative. Fill the blank to print as in the Example."
+    template: |
+      n = int(input())
+      print("Robo tính bình phương")
+      for i in range(1, n + 1):
+          print(i, "x", i, "=", ___)
+    answers: ["i * i"]
+    tests:
+      - input: "4"
+        output: |
+          Robo tính bình phương
+          1 x 1 = 1
+          2 x 2 = 4
+          3 x 3 = 9
+          4 x 4 = 16
+      - input: "1"
+        output: |
+          Robo tính bình phương
+          1 x 1 = 1
+        hidden: true
+      - input: "0"
+        output: "Robo tính bình phương"
+        hidden: true
+    hints:
+      - { vi: "Mỗi lần lặp, i là 1 số mới. Bình phương của i là i nhân với chính nó.", en: "On each pass, i is a new number. The square of i is i times itself." }
+      - { vi: "Điền i * i vào chỗ trống.", en: "Fill the blank with i * i." }
+
+  - id: s4.for-range.p6
+    type: parsons
+    concepts: [for-over-string]
+    prompt:
+      vi: "Robo đọc to từng ký tự của 1 từ, rồi báo Hết từ. Ô Dữ liệu nhập có 1 dòng: 1 từ. Sắp xếp các dòng lệnh để in ra như phần Ví dụ."
+      en: "Robo reads out each character of a word, then says Hết từ. The Input data box has 1 line: a word. Put the lines in order to print as in the Example."
+    solution: |
+      tu = input()
+      for ch in tu:
+          print("Ký tự:", ch)
+      print("Hết từ")
+    tests:
+      - input: "Bo"
+        output: |
+          Ký tự: B
+          Ký tự: o
+          Hết từ
+      - input: "A"
+        output: |
+          Ký tự: A
+          Hết từ
+        hidden: true
+      - input: "Robo"
+        output: |
+          Ký tự: R
+          Ký tự: o
+          Ký tự: b
+          Ký tự: o
+          Hết từ
+        hidden: true
+    hints:
+      - { vi: "Đọc từ trước, rồi mới đi qua từng ký tự của nó. Dòng thụt lề nằm ngay dưới dòng for. Dòng Hết từ chỉ chạy 1 lần, sau vòng lặp.", en: "Read the word first, then go through each of its characters. The indented line goes right under the for line. The line Hết từ runs only once, after the loop." }
+
+  - id: s4.for-range.p7
+    type: fill
+    concepts: [for-over-string]
+    prompt:
+      vi: "Robo gõ phím chậm: mỗi ký tự, kể cả dấu cách, Robo gõ mất 2 giây. Ô Dữ liệu nhập có 1 dòng: chữ Robo cần gõ. Điền vào 2 chỗ trống để tính Robo gõ mất bao nhiêu giây, như phần Ví dụ."
+      en: "Robo types slowly: each character, spaces included, takes Robo 2 seconds. The Input data box has 1 line: the text Robo must type. Fill the 2 blanks to work out how many seconds Robo needs, as in the Example."
+    template: |
+      chu = input()
+      giay = ___
+      for ch in ___:
+          giay = giay + 2
+      print("Robo gõ mất", giay, "giây")
+    answers: ["0", "chu"]
+    tests:
+      - input: "Robo"
+        output: "Robo gõ mất 8 giây"
+      - input: "A"
+        output: "Robo gõ mất 2 giây"
+        hidden: true
+      - input: "Hi Bo"
+        output: "Robo gõ mất 10 giây"
+        hidden: true
+    hints:
+      - { vi: "Trước khi gõ, Robo chưa mất giây nào. Vòng lặp phải đi qua từng ký tự của chuỗi đã đọc vào.", en: "Before typing, Robo has used no seconds. The loop must go through each character of the string that was read." }
+      - { vi: "Điền 0 vào chỗ trống thứ nhất và chu vào chỗ trống thứ hai.", en: "Fill the first blank with 0 and the second blank with chu." }
+
+  - id: s4.for-range.c1
+    type: code
+    concepts: [for-repeat]
+    prompt:
+      vi: "Robo vỗ tay chào khán giả. Ô Dữ liệu nhập có 1 dòng: số lần vỗ tay n, là số nguyên không âm. Hãy in ra dòng Bốp đúng n lần, rồi in ra dòng Cảm ơn các bạn đúng 1 lần, như phần Ví dụ. Nếu n là 0, Robo chỉ in ra Cảm ơn các bạn."
+      en: "Robo claps for the audience. The Input data box has 1 line: the number of claps n, an integer that is not negative. Print the line Bốp exactly n times, then print the line Cảm ơn các bạn exactly once, as in the Example. If n is 0, Robo prints only Cảm ơn các bạn."
+    starter: |
+      # Viết lệnh của con ở dưới dòng này
+    solution: |
+      n = int(input())
+      for i in range(n):
+          print("Bốp")
+      print("Cảm ơn các bạn")
+    tests:
+      - input: "3"
+        output: |
+          Bốp
+          Bốp
+          Bốp
+          Cảm ơn các bạn
+      - input: "1"
+        output: |
+          Bốp
+          Cảm ơn các bạn
+        hidden: true
+      - input: "0"
+        output: "Cảm ơn các bạn"
+        hidden: true
+      - input: "5"
+        output: |
+          Bốp
+          Bốp
+          Bốp
+          Bốp
+          Bốp
+          Cảm ơn các bạn
+        hidden: true
+    common_wrong:
+      - test: 0
+        output: |
+          Bốp
+          Cảm ơn các bạn
+          Bốp
+          Cảm ơn các bạn
+          Bốp
+          Cảm ơn các bạn
+        misconception: for-repeat
+        sample: |
+          n = int(input())
+          for i in range(n):
+              print("Bốp")
+              print("Cảm ơn các bạn")
+    hints:
+      - { vi: "Đọc n bằng int(input()), rồi dùng range(n) để vòng lặp chạy n lần. Dòng Cảm ơn các bạn viết sát lề trái, sau vòng lặp.", en: "Read n with int(input()), then use range(n) so that the loop runs n times. The line Cảm ơn các bạn starts at the left edge, after the loop." }
+      - { vi: "Chương trình có 4 dòng: n = int(input()), rồi for i in range(n):, rồi print(\"Bốp\") thụt lề 4 dấu cách, và cuối cùng là print(\"Cảm ơn các bạn\") sát lề trái.", en: "The program has 4 lines: n = int(input()), then for i in range(n):, then print(\"Bốp\") indented by 4 spaces, and last print(\"Cảm ơn các bạn\") at the left edge." }
+    test_eligible: true
+
+  - id: s4.for-range.c2
+    type: code
+    concepts: [range-start-step, range-stop-excluded]
+    prompt:
+      vi: "Robo nhảy trên thước kẻ, mỗi lần nhảy 5 vạch, bắt đầu từ vạch số 5. Ô Dữ liệu nhập có 1 dòng: số n, là số nguyên dương. Hãy in ra các vạch Robo đứng: 5, 10, 15, và cứ thế, không vượt quá n, mỗi số 1 dòng. Cuối cùng, luôn in ra dòng Robo dừng nhảy, như phần Ví dụ."
+      en: "Robo jumps along a ruler, 5 marks at a time, starting at mark 5. The Input data box has 1 line: a number n, a positive integer. Print the marks Robo lands on: 5, 10, 15, and so on, never more than n, one number on each line. At the end, always print the line Robo dừng nhảy, as in the Example."
+    starter: |
+      # Viết lệnh của con ở dưới dòng này
+    solution: |
+      n = int(input())
+      for i in range(5, n + 1, 5):
+          print(i)
+      print("Robo dừng nhảy")
+    tests:
+      - input: "20"
+        output: |
+          5
+          10
+          15
+          20
+          Robo dừng nhảy
+      - input: "7"
+        output: |
+          5
+          Robo dừng nhảy
+        hidden: true
+      - input: "3"
+        output: "Robo dừng nhảy"
+        hidden: true
+      - input: "33"
+        output: |
+          5
+          10
+          15
+          20
+          25
+          30
+          Robo dừng nhảy
+        hidden: true
+    common_wrong:
+      - test: 0
+        output: |
+          5
+          10
+          15
+          Robo dừng nhảy
+        misconception: range-stop-excluded
+        sample: |
+          n = int(input())
+          for i in range(5, n, 5):
+              print(i)
+          print("Robo dừng nhảy")
+      - test: 0
+        output: |
+          0
+          5
+          10
+          15
+          20
+          Robo dừng nhảy
+        misconception: range-start-step
+        sample: |
+          n = int(input())
+          for i in range(0, n + 1, 5):
+              print(i)
+          print("Robo dừng nhảy")
+    hints:
+      - { vi: "range có 3 số: bắt đầu từ 5, bước nhảy là 5. Số n cũng có thể là 1 vạch Robo đứng, nên số dừng phải là n + 1.", en: "The range has 3 numbers: it starts at 5 and the step is 5. n itself can be a mark Robo lands on, so the stop number must be n + 1." }
+      - { vi: "Dòng for là for i in range(5, n + 1, 5):. Bên trong vòng lặp là print(i). Dòng print(\"Robo dừng nhảy\") sát lề trái.", en: "The for line is for i in range(5, n + 1, 5):. Inside the loop is print(i). The line print(\"Robo dừng nhảy\") starts at the left edge." }
+    test_eligible: true
+
+  - id: s4.for-range.c3
+    type: code
+    concepts: [for-over-string]
+    prompt:
+      vi: "Robo đánh số từng ký tự của 1 từ. Ô Dữ liệu nhập có 1 dòng: 1 từ, không có dấu cách. Hãy dùng 1 biến đếm và vòng lặp for để in ra mỗi ký tự trên 1 dòng, kèm số thứ tự của nó bắt đầu từ 1, đúng như phần Ví dụ."
+      en: "Robo numbers each character of a word. The Input data box has 1 line: a word with no spaces. Use a counter variable and a for loop to print each character on its own line, with its number in front, starting from 1, exactly as in the Example."
+    starter: |
+      # Viết lệnh của con ở dưới dòng này
+    solution: |
+      tu = input()
+      dem = 0
+      for ch in tu:
+          dem = dem + 1
+          print(dem, ch)
+    tests:
+      - input: "Robo"
+        output: |
+          1 R
+          2 o
+          3 b
+          4 o
+      - input: "A"
+        output: "1 A"
+        hidden: true
+      - input: "Minh"
+        output: |
+          1 M
+          2 i
+          3 n
+          4 h
+        hidden: true
+    common_wrong:
+      - test: 0
+        output: |
+          0 R
+          1 o
+          2 b
+          3 o
+        misconception: run-order
+        sample: |
+          tu = input()
+          dem = 0
+          for ch in tu:
+              print(dem, ch)
+              dem = dem + 1
+    hints:
+      - { vi: "Đặt dem = 0 trước vòng lặp. Mỗi lần lặp, tăng dem thêm 1 trước, rồi mới in dem và ch, để ký tự đầu tiên có số 1.", en: "Set dem = 0 before the loop. On each pass, first add 1 to dem, then print dem and ch, so that the first character gets the number 1." }
+      - { vi: "Bên trong vòng lặp for ch in tu: có 2 dòng thụt lề: dem = dem + 1, rồi print(dem, ch).", en: "Inside the loop for ch in tu: there are 2 indented lines: dem = dem + 1, then print(dem, ch)." }
+    test_eligible: true
+
+  - id: s4.for-range.c4
+    type: code
+    concepts: [loop-variable]
+    prompt:
+      vi: "Robo in các số lẻ đầu tiên. Ô Dữ liệu nhập có 1 dòng: số n, là số nguyên không âm. Hãy in ra n số lẻ đầu tiên, bắt đầu từ 1: 1, 3, 5, và cứ thế, mỗi số 1 dòng. Cuối cùng, luôn in ra dòng Hết, như phần Ví dụ."
+      en: "Robo prints the first odd numbers. The Input data box has 1 line: a number n, an integer that is not negative. Print the first n odd numbers, starting from 1: 1, 3, 5, and so on, one number on each line. At the end, always print the line Hết, as in the Example."
+    starter: |
+      # Viết lệnh của con ở dưới dòng này
+    solution: |
+      n = int(input())
+      for i in range(n):
+          print(2 * i + 1)
+      print("Hết")
+    tests:
+      - input: "4"
+        output: |
+          1
+          3
+          5
+          7
+          Hết
+      - input: "1"
+        output: |
+          1
+          Hết
+        hidden: true
+      - input: "0"
+        output: "Hết"
+        hidden: true
+      - input: "6"
+        output: |
+          1
+          3
+          5
+          7
+          9
+          11
+          Hết
+        hidden: true
+    hints:
+      - { vi: "Vòng lặp chạy n lần, và mỗi lần i có 1 giá trị mới: 0, 1, 2. Con tìm 1 phép tính với i cho ra 1, 3, 5. Con cũng có thể dùng range với bước nhảy 2.", en: "The loop runs n times, and each time i has a new value: 0, 1, 2. Find a calculation with i that gives 1, 3, 5. You can also use a range with a step of 2." }
+      - { vi: "Với for i in range(n):, số lẻ thứ i + 1 là 2 * i + 1. Dòng print(\"Hết\") sát lề trái.", en: "With for i in range(n):, the odd number in place i + 1 is 2 * i + 1. The line print(\"Hết\") starts at the left edge." }
+    test_eligible: true

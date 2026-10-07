@@ -1,0 +1,60 @@
+concepts:
+  - id: for-repeat
+    name: { vi: "Vòng lặp for lặp lại cả khối lệnh thụt lề", en: "A for loop repeats its whole indented block" }
+    misconception_card: |
+      Nhiều bạn nghĩ chỉ dòng đầu tiên dưới `for` được lặp lại, hoặc nghĩ dòng sát lề trái bên dưới cũng lặp theo. Thực ra mọi dòng thụt lề 4 dấu cách dưới `for i in range(3):` là khối lệnh, và cả khối chạy 3 lần; dòng sát lề trái chỉ chạy 1 lần, sau khi vòng lặp xong. Giống dòng if, dòng for luôn kết thúc bằng dấu hai chấm.
+    parent_tip: |
+      Cùng con tập thể dục theo lời đọc: "Làm 3 lần: nhảy lên, vỗ tay. Sau đó: ngồi xuống." Hỏi con việc nào làm 3 lần, việc nào chỉ làm 1 lần.
+    practice:
+      level1: [s4.for-range.l1.q1, s4.for-range.l1.q2, s4.for-range.b1, s4.for-range.b2, s4.for-range.b3, s4.for-range.l4.q2]
+      level2: [s4.for-range.p1]
+      level3: [s4.for-range.l1.ex1, s4.for-range.l1.ex2, s4.for-range.c1, s4.for-range.l5.ex2]
+  - id: range-stop-excluded
+    name: { vi: "range không có số dừng", en: "range leaves out its stop number" }
+    misconception_card: |
+      Nhiều bạn nghĩ `range(5)` cho các số từ 1 đến 5, hoặc từ 0 đến 5. Thực ra `range(5)` bắt đầu từ 0 và dừng trước 5: 0, 1, 2, 3, 4, vẫn đủ 5 số, còn `range(0)` không có số nào. Muốn có cả số cuối, con viết số dừng lớn hơn số đó 1 đơn vị, như `range(1, 6)` để có 1 đến 5.
+    parent_tip: |
+      Xếp 5 viên kẹo thành hàng và cùng con đánh số chúng, bắt đầu từ 0: viên cuối mang số 4, dù có đủ 5 viên. Giải thích rằng range(5) cũng đếm như vậy.
+    practice:
+      level1: [s4.for-range.l2.q1, s4.for-range.l2.q2, s4.for-range.b4, s4.for-range.b5, s4.for-range.l4.q2, s4.for-range.l3.q2]
+      level2: [s4.for-range.p3]
+      level3: [s4.for-range.l2.ex1, s4.for-range.l3.ex1, s4.for-range.l4.ex2, s4.for-range.l4.ex1, s4.for-range.c2]
+  - id: range-start-step
+    name: { vi: "Số bắt đầu và bước nhảy của range", en: "The start and the step of range" }
+    misconception_card: |
+      Nhiều bạn nghĩ số thứ ba trong `range(1, 10, 3)` là số lần lặp, hoặc nghĩ `range(5, 0)` sẽ tự đếm ngược. Thực ra số thứ ba là bước nhảy: mỗi lần lặp, i được cộng thêm số đó, nên ra 1, 4, 7. Muốn đếm ngược, con phải viết bước nhảy âm, như `range(5, 0, -1)` cho 5, 4, 3, 2, 1.
+    parent_tip: |
+      Cùng con đi cầu thang và đếm bậc, lúc bước từng bậc, lúc bước 2 bậc một lần, rồi đi xuống và đếm ngược. Giải thích rằng số thứ ba trong range chính là số bậc của mỗi bước.
+    practice:
+      level1: [s4.for-range.l3.q1, s4.for-range.l3.q2, s4.for-range.b5, s4.for-range.b6, s4.for-range.b7, s4.for-range.b8]
+      level2: [s4.for-range.p2, s4.for-range.p4]
+      level3: [s4.for-range.l3.ex2, s4.for-range.c2, s4.for-range.l3.ex1]
+  - id: loop-variable
+    name: { vi: "Biến của vòng lặp đổi giá trị mỗi lần lặp", en: "The loop variable changes on each pass" }
+    misconception_card: |
+      Nhiều bạn nghĩ i giữ nguyên 1 giá trị trong suốt vòng lặp, hoặc phải tự viết `i = i + 1` thì i mới tăng. Thực ra mỗi lần lặp, for tự cho i số tiếp theo trong range: lần đầu i là 0, lần sau là 1, và cứ thế. Vì vậy `print(i * 10)` trong vòng lặp in ra 0, 10, 20, mỗi lần 1 số khác.
+    parent_tip: |
+      Chơi trò điểm danh: mỗi người trong nhà lần lượt nói số thứ tự của mình rồi nhân số đó với 2. Giải thích rằng i trong vòng lặp cũng giống số thứ tự, mỗi lượt là 1 số mới.
+    practice:
+      level1: [s4.for-range.l2.q1, s4.for-range.l4.q1, s4.for-range.b9, s4.for-range.b10]
+      level2: [s4.for-range.p5]
+      level3: [s4.for-range.l4.ex1, s4.for-range.c4, s4.for-range.l2.ex1, s4.for-range.l4.ex2]
+  - id: for-over-string
+    name: { vi: "for đi qua từng ký tự của chuỗi", en: "for goes through each character of a string" }
+    misconception_card: |
+      Nhiều bạn nghĩ `for ch in "Hi Bo":` chỉ chạy 1 lần với cả chuỗi, hoặc nghĩ dấu cách không được tính. Thực ra mỗi ký tự, kể cả dấu cách và dấu câu, là 1 lần lặp, và ch chỉ giữ đúng 1 ký tự. Chuỗi "Hi Bo" có 5 ký tự, nên vòng lặp chạy 5 lần.
+    parent_tip: |
+      Viết tên của con lên giấy rồi để con chỉ tay vào từng chữ cái và đếm, kể cả khoảng trống giữa các chữ. Giải thích rằng vòng lặp for cũng đi qua từng ký tự như ngón tay của con.
+    practice:
+      level1: [s4.for-range.l5.q1, s4.for-range.l5.q2, s4.for-range.b11, s4.for-range.b12]
+      level2: [s4.for-range.p6, s4.for-range.p7]
+      level3: [s4.for-range.l5.ex1, s4.for-range.l5.ex2, s4.for-range.c3]
+  - id: ai-supervised
+    name: { vi: "Học có giám sát và không giám sát", en: "Supervised and unsupervised learning" }
+    ai: true
+    misconception_card: |
+      Nhiều bạn nghĩ "giám sát" là có người ngồi trông máy tính lúc AI học. Thực ra học có giám sát nghĩa là mỗi ví dụ có sẵn **nhãn** là đáp án, như ảnh có ghi "mèo". Học không giám sát dùng dữ liệu không có nhãn: AI tự xếp những thứ giống nhau vào cùng 1 nhóm, nhưng không biết tên nhóm, nên người phải xem rồi đặt tên.
+    parent_tip: |
+      Đổ 1 nắm cúc áo hay đồ chơi nhỏ ra bàn, để con tự chia thành nhóm theo cách con thấy giống nhau, rồi cùng đặt tên cho từng nhóm. Giải thích rằng AI học không giám sát cũng tự chia nhóm như vậy.
+    practice:
+      level1: [s4.for-range.l6.q1, s4.for-range.l6.q2, s4.for-range.b13, s4.for-range.b14, s4.for-range.b15, s4.for-range.b16]
