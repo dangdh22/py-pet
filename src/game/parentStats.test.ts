@@ -1,6 +1,14 @@
 import { describe, expect, test } from "vitest";
 import { emptyMastery } from "./mastery";
-import { accuracyPercent, averageXuPerDay, conceptsNeedingHelp, conceptsPractising, minutesByDay } from "./parentStats";
+import type { AttemptRecord } from "../storage/types";
+import {
+  accuracyPercent,
+  averageXuPerDay,
+  conceptsNeedingHelp,
+  conceptsPractising,
+  minutesByDay,
+  topMisconceptions,
+} from "./parentStats";
 import { initialGameState } from "./state";
 
 describe("parent statistics", () => {
@@ -43,5 +51,45 @@ describe("parent statistics", () => {
     };
     expect(conceptsNeedingHelp(state).map(([id]) => id)).toEqual(["a", "b", "d"]);
     expect(conceptsPractising(state).map(([id]) => id)).toEqual(["c"]);
+  });
+
+  test("the most common misconceptions: code and wrong choices count, right choices and unknown ids do not", () => {
+    const base = { profileId: "p1", at: "2026-10-05T03:00:00.000Z" };
+    const code = (misconceptions: string[]): AttemptRecord => ({
+      ...base,
+      itemId: "e1",
+      kind: "code",
+      code: "",
+      status: "wrong-answer",
+      passedCount: 0,
+      total: 1,
+      misconceptions,
+    });
+    const choice = (choiceIndex: number, correct: boolean): AttemptRecord => ({
+      ...base,
+      itemId: "q1",
+      kind: "choice",
+      choiceIndex,
+      correct,
+      lang: "vi",
+    });
+    const attempts = [
+      code(["b", "ghost"]),
+      code(["b", "a"]),
+      code(["c"]),
+      choice(1, false),
+      choice(1, false),
+      choice(2, false),
+      choice(0, true),
+      code([]),
+    ];
+    const lookup = {
+      choice: (_itemId: string, index: number) => (index === 1 ? "a" : index === 2 ? "d" : null),
+      known: (id: string) => id !== "ghost",
+    };
+    // a: 1 (code) + 2 (choice) = 3, b: 2, c: 1, d: 1; ties by id.
+    expect(topMisconceptions(attempts, lookup)).toEqual([["a", 3], ["b", 2], ["c", 1]]);
+    expect(topMisconceptions(attempts, lookup, 4).map(([id]) => id)).toEqual(["a", "b", "c", "d"]);
+    expect(topMisconceptions([], lookup)).toEqual([]);
   });
 });

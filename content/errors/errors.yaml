@@ -267,6 +267,17 @@
     en: "If line {line} has a number in quotes, such as \"5\", delete the quotes. If it is a variable, look at the line that gives it a value: if that line is n = input(), change it to n = int(input())."
   sample: "n = \"3\"\nfor i in range(n):\n    print(i)"
 
+- id: float-not-integer
+  match: { type: TypeError, message: "^('float' object cannot be interpreted as an integer|can't multiply sequence by non-int of type 'float')$" }
+  misconception: floor-div
+  explain:
+    vi: "Dòng {line}: ở đây Python cần 1 số nguyên, nhưng con đưa cho nó 1 số thực (có phần .0 hoặc phần lẻ sau dấu chấm). Phép / luôn cho ra số thực, ví dụ 4 / 2 ra 2.0, chứ không ra 2. Hãy dùng // để chia lấy phần nguyên, ví dụ 4 // 2 ra 2, hoặc đổi số thực thành số nguyên bằng int(...)."
+    en: "Line {line}: Python needs an integer here, but you gave it a float (a number with .0 or a part after the dot). The / operator always gives a float, for example 4 / 2 gives 2.0, not 2. Use // to divide and keep the whole part, for example 4 // 2 gives 2, or change the float into an integer with int(...)."
+  hint:
+    vi: "Nhìn dòng {line}: nếu có phép / trong range(...) hoặc cạnh dấu *, hãy đổi / thành //. Hoặc bọc phép tính trong int(...), ví dụ int(n / 2)."
+    en: "Look at line {line}: if there is a / inside range(...) or next to *, change / into //. Or wrap the calculation in int(...), for example int(n / 2)."
+  sample: "for i in range(5 / 2):\n    print(i)"
+
 - id: type-other
   match: { type: TypeError }
   explain:

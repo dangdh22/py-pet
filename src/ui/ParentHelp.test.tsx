@@ -71,6 +71,50 @@ describe("ParentHelp", () => {
     expect(screen.getByText("Khái niệm c2: 55 điểm")).toBeInTheDocument();
   });
 
+  test("the most common misconceptions of the concept, with counts; unknown ids are skipped", async () => {
+    const store = new MemoryStore({ persistent: true });
+    const state = helpState();
+    await store.createProfile(testProfile(), state);
+    const at = (h: number) => `2026-10-05T0${h}:00:00.000Z`;
+    for (const [h, choiceIndex] of [[1, 1], [2, 1], [3, 0]] as const) {
+      await store.saveState("p1", state, {
+        profileId: "p1",
+        itemId: "r.q1",
+        at: at(h),
+        kind: "choice",
+        choiceIndex,
+        correct: choiceIndex === 0,
+        lang: "vi",
+      });
+    }
+    await store.saveState("p1", state, {
+      profileId: "p1",
+      itemId: "r.l1.ex1",
+      at: at(4),
+      kind: "code",
+      code: "x",
+      status: "wrong-answer",
+      passedCount: 0,
+      total: 1,
+      misconceptions: ["c2", "not-a-concept"],
+    });
+    await renderWithGame(<ParentHelp />, { bundle, state, store });
+    const card = screen.getByRole("heading", { name: "Khái niệm c1" }).closest("article") as HTMLElement;
+    expect(await within(card).findByRole("heading", { name: "Hiểu lầm hay gặp" })).toBeInTheDocument();
+    const list = within(card).getByRole("list", { name: "Hiểu lầm hay gặp" });
+    expect(within(list).getAllByRole("listitem").map((li) => li.textContent)).toEqual([
+      "Khái niệm c1: 2 lần",
+      "Khái niệm c2: 1 lần",
+    ]);
+  });
+
+  test("no misconception section without counted misconceptions", async () => {
+    await renderWithGame(<ParentHelp />, { bundle, state: helpState() });
+    const card = screen.getByRole("heading", { name: "Khái niệm c1" }).closest("article") as HTMLElement;
+    await within(card).findByText("Chưa có bài làm được lưu.");
+    expect(within(card).queryByRole("heading", { name: "Hiểu lầm hay gặp" })).not.toBeInTheDocument();
+  });
+
   test("a concept already assigned stays assigned after the card is shown again", async () => {
     const state = helpState();
     state.assigned = [{ id: "p-1", conceptId: "c1", items: ["r.q1"], day: TODAY }];

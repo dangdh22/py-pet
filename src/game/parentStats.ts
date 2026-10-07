@@ -2,6 +2,7 @@ import { addDays } from "./dates";
 import { MASTERY } from "./mastery";
 import { PRACTISING_FROM } from "./badges";
 import type { ConceptMastery, GameState } from "./state";
+import type { AttemptRecord } from "../storage/types";
 import { isVacationDay } from "./vacation";
 
 export interface DayMinutes {
@@ -50,4 +51,31 @@ export function conceptsPractising(state: GameState): [string, ConceptMastery][]
   return Object.entries(state.mastery)
     .filter(([, m]) => !m.needsHelp && m.score >= PRACTISING_FROM && m.score <= MASTERY.clearHelpAbove)
     .sort((a, b) => a[1].score - b[1].score || a[0].localeCompare(b[0]));
+}
+
+/** What `topMisconceptions` needs from the content: the misconception of a chosen answer, and which ids are concepts. */
+export interface MisconceptionLookup {
+  choice(itemId: string, choiceIndex: number): string | null;
+  known(misconceptionId: string): boolean;
+}
+
+/**
+ * Spec 9.2: the misconceptions seen most often in these attempts, as [concept id, count], most frequent first
+ * (ties by id). A code attempt counts the misconceptions its judge found; a wrong choice counts the misconception of
+ * the chosen answer. Right choices and ids that are not concepts are left out.
+ */
+export function topMisconceptions(attempts: AttemptRecord[], lookup: MisconceptionLookup, n = 3): [string, number][] {
+  const counts = new Map<string, number>();
+  for (const attempt of attempts) {
+    const found =
+      attempt.kind === "code"
+        ? attempt.misconceptions
+        : attempt.correct
+          ? []
+          : [lookup.choice(attempt.itemId, attempt.choiceIndex)];
+    for (const id of found) {
+      if (id && lookup.known(id)) counts.set(id, (counts.get(id) ?? 0) + 1);
+    }
+  }
+  return [...counts].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).slice(0, n);
 }

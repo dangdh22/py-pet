@@ -85,18 +85,17 @@ export function ParentProgress() {
               <strong>{pick(lesson.title, uiLang)}</strong>{" "}
               {t(done.has(lesson.id) ? "progress.lessonDone" : "progress.lessonNotDone")}
               <ul>
-                {lesson.exercises
-                  .filter((exercise) => stats[exercise.id])
-                  .map((exercise) => {
-                    const s = stats[exercise.id]!;
-                    const parts = [t("progress.fails", { n: s.fails }), t("progress.hints", { n: s.hints })];
-                    if (s.viewedSolution) parts.push(t("progress.solution"));
-                    return (
-                      <li key={exercise.id}>
-                        {exercise.id}: {parts.join(", ")}
-                      </li>
-                    );
-                  })}
+                {lesson.exercises.flatMap((exercise, index) => {
+                  const s = stats[exercise.id];
+                  if (!s) return [];
+                  const parts = [t("progress.fails", { n: s.fails }), t("progress.hints", { n: s.hints })];
+                  if (s.viewedSolution) parts.push(t("progress.solution"));
+                  return [
+                    <li key={exercise.id}>
+                      {t("progress.exercise", { n: index + 1 })}: {parts.join(", ")}
+                    </li>,
+                  ];
+                })}
               </ul>
             </li>
           )),

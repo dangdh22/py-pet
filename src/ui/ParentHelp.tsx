@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { allExercises, findConcept, findItem } from "../content/lookup";
 import { isChoiceQuestion } from "../content/types";
-import { accuracyPercent, conceptsNeedingHelp, conceptsPractising } from "../game/parentStats";
+import { accuracyPercent, conceptsNeedingHelp, conceptsPractising, topMisconceptions } from "../game/parentStats";
 import type { Rng } from "../game/random";
 import { buildPracticeSet } from "../game/reviewSet";
 import type { ConceptMastery } from "../game/state";
@@ -71,6 +71,17 @@ function HelpCard({
   // The set is drawn when the parent clicks (with rng); its size does not depend on the draw.
   const canPractice = buildPracticeSet(bundle, game.state, conceptId, () => 0).length > 0;
   const accuracy = accuracyPercent(mastery);
+  // Newest first, a few of them; the misconception counts use the whole history.
+  const evidence = attempts?.slice(-EVIDENCE_COUNT).reverse() ?? null;
+  const common = attempts
+    ? topMisconceptions(attempts, {
+        choice: (itemId, index) => {
+          const item = findItem(bundle, itemId);
+          return item && isChoiceQuestion(item) ? (item.choices[index]?.misconception ?? null) : null;
+        },
+        known: (id) => findConcept(bundle, id) !== undefined,
+      })
+    : [];
 
   useEffect(() => {
     let alive = true;
@@ -78,7 +89,7 @@ function HelpCard({
       .filter((item) => item.concepts.includes(conceptId))
       .map((item) => item.id);
     game.attemptsFor(ids).then(
-      (found) => alive && setAttempts(found.slice(-EVIDENCE_COUNT).reverse()),
+      (found) => alive && setAttempts(found),
       () => alive && setAttempts([]),
     );
     return () => {
@@ -108,10 +119,10 @@ function HelpCard({
         {mastery.coachedAt && <li>{t("help.coached", { day: mastery.coachedAt })}</li>}
       </ul>
       <h3>{t("help.evidence")}</h3>
-      {attempts !== null && attempts.length === 0 && <p>{t("help.noEvidence")}</p>}
-      {attempts !== null && attempts.length > 0 && (
+      {evidence !== null && evidence.length === 0 && <p>{t("help.noEvidence")}</p>}
+      {evidence !== null && evidence.length > 0 && (
         <ul className="help-evidence">
-          {attempts.map((attempt) => (
+          {evidence.map((attempt) => (
             <li key={`${attempt.itemId}-${attempt.at}`}>
               <span>{describe(attempt)}</span>
               {attempt.kind === "code" && (
@@ -122,6 +133,16 @@ function HelpCard({
             </li>
           ))}
         </ul>
+      )}
+      {common.length > 0 && (
+        <>
+          <h3 id={`help-common-${conceptId}`}>{t("help.topMisconceptions")}</h3>
+          <ul className="help-common" aria-labelledby={`help-common-${conceptId}`}>
+            {common.map(([id, n]) => (
+              <li key={id}>{t("help.misconceptionItem", { name: pick(findConcept(bundle, id)!.name, uiLang), n })}</li>
+            ))}
+          </ul>
+        </>
       )}
       {concept?.parentTip && (
         <>

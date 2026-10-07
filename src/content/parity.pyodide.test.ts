@@ -23,7 +23,7 @@ beforeAll(async () => {
 
 describe("error dictionary on Pyodide", () => {
   test("has the expected number of entries", () => {
-    expect(bundle.errors.length).toBe(42);
+    expect(bundle.errors.length).toBe(43);
   });
 
   for (const entry of bundle.errors) {
@@ -147,8 +147,8 @@ describe("error dictionary on Pyodide", () => {
       ["n = input()\nfor i in range(1, n + 1):\n    print(i)", "concat-str"],
       ['print("*" + 3)', "concat-str"],
       ['print(1 + "2")', "unsupported-operand"],
-      ['print("*" * 2.5)', "type-other"],
-      ["for i in range(2.5):\n    print(i)", "type-other"],
+      ['print("*" * 2.5)', "float-not-integer"],
+      ["for i in range(2.5):\n    print(i)", "float-not-integer"],
       ["print(len(5))", "type-other"],
     ];
     for (const [code, id] of cases) {
@@ -156,6 +156,28 @@ describe("error dictionary on Pyodide", () => {
       expect(problem?.type).toBe("TypeError");
       expect(matchError(bundle.errors, problem!, code)?.entry.id).toBe(id);
     }
+  });
+
+  test("a float where an integer is needed (a / result in range() or after *) is explained with // and int(); a str is not", () => {
+    const cases: [string, string][] = [
+      ["for i in range(5 / 2):\n    print(i)", "float-not-integer"],
+      ['n = 4\nprint("*" * (n / 2))', "float-not-integer"],
+      ['print("*" * (4 / 2))', "float-not-integer"],
+      ["print(list(range(1, 10 / 2)))", "float-not-integer"],
+      ['for i in range("3"):\n    print(i)', "str-not-integer"],
+      ['print("*" * "3")', "repeat-str-by-str"],
+      ["print(len(5))", "type-other"],
+    ];
+    for (const [code, id] of cases) {
+      const problem = problemFromOutcome(run(code, ""), false);
+      expect(problem?.type).toBe("TypeError");
+      expect(matchError(bundle.errors, problem!, code)?.entry.id).toBe(id);
+    }
+    const entry = bundle.errors.find((e) => e.id === "float-not-integer")!;
+    expect(entry.misconception).toBe("floor-div");
+    expect(entry.explain.vi).toContain("//");
+    expect(entry.explain.vi).toContain("int(");
+    expect(entry.hint?.vi).toContain("//");
   });
 
   test("stage-4 break and continue (lesson s4.chu-so.l5): outside a loop they are explained, inside a loop they run", () => {
