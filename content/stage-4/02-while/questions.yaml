@@ -32,7 +32,7 @@ questions:
       - { vi: "Bị bỏ qua, vì vòng lặp dừng ngay ở dòng đó", en: "They are skipped, because the loop stops right at that line", misconception: while-check-first }
       - { vi: "Vẫn chạy hết, rồi Python mới kiểm tra lại điều kiện", en: "They still all run, and then Python checks the condition again", correct: true }
       - { vi: "Python báo lỗi, vì điều kiện bị sai giữa chừng", en: "Python gives an error, because the condition became False halfway", error: true, misconception: while-check-first }
-      - { vi: "Bị bỏ qua, rồi Python chạy lại khối từ dòng đầu", en: "They are skipped, and Python runs the block again from its first line", misconception: while-check-first }
+      - { vi: "Bị bỏ qua, rồi Python chạy lại khối lệnh từ dòng đầu", en: "They are skipped, and Python runs the block again from its first line", misconception: while-check-first }
     explanation:
       vi: "Python chỉ kiểm tra điều kiện ở dòng while, trước mỗi lần lặp. Khi đã bắt đầu 1 lần lặp, Python chạy hết cả khối lệnh, dù điều kiện đã trở thành sai. Sau đó Python quay lên dòng while, thấy điều kiện sai, và dừng vòng lặp."
       en: "Python checks the condition only on the while line, before each pass. Once a pass has started, Python runs the whole block, even if the condition has become False. Then Python goes back up to the while line, sees that the condition is False, and stops the loop."
@@ -87,7 +87,7 @@ questions:
       vi: "Muốn vòng lặp while dừng được, trong khối lệnh phải có gì?"
       en: "For a while loop to be able to stop, what must its block have?"
     choices:
-      - { vi: "1 dòng thay đổi biến trong điều kiện, để có lúc điều kiện sai", en: "A line that changes the variable in the condition, so that it becomes False", correct: true }
+      - { vi: "1 dòng thay đổi biến trong điều kiện, theo đúng chiều", en: "A line that changes the variable in the condition, the right way", correct: true }
       - { vi: "1 lệnh print, để Python biết vòng lặp vẫn đang chạy", en: "A print statement, so that Python knows the loop is still running", misconception: while-update }
       - { vi: "Không cần gì thêm, vì while tự tăng biến sau mỗi lần lặp", en: "Nothing more, because while makes the variable bigger after each pass", misconception: while-update }
       - { vi: "1 dòng gán lại giá trị ban đầu cho biến trong điều kiện", en: "A line that gives the variable in the condition its start value again", misconception: while-update }
@@ -142,7 +142,7 @@ questions:
       vi: "Robo viết lại vòng lặp for i in range(5): bằng vòng lặp while i < 5:. Ngoài dòng while, Robo phải tự viết thêm những gì?"
       en: "Robo rewrites the loop for i in range(5): as the loop while i < 5:. Besides the while line, what else must Robo write?"
     choices:
-      - { vi: "Dòng i = 0 trước vòng lặp, và dòng i = i + 1 trong khối lệnh", en: "The line i = 0 before the loop, and the line i = i + 1 in the block", correct: true }
+      - { vi: "Dòng i = 0 trước vòng lặp và i = i + 1 trong khối", en: "The line i = 0 before the loop and i = i + 1 in the block", correct: true }
       - { vi: "Không gì cả, vì while làm mọi việc giống hệt for", en: "Nothing, because while does everything exactly like for", misconception: while-vs-for }
       - { vi: "Chỉ dòng i = i + 1, vì while tự cho i bắt đầu từ 0", en: "Only the line i = i + 1, because while starts i at 0 by itself", misconception: while-vs-for }
       - { vi: "Chỉ dòng i = 0, vì while tự tăng i sau mỗi lần lặp", en: "Only the line i = 0, because while makes i bigger after each pass", misconception: while-update }
