@@ -88,6 +88,8 @@ describe("assign-in-if check", () => {
   test("is not ok when every = belongs to ==, <=, >= or !=", () => {
     expect(checks["assign-in-if"](lineOf("if a == 1 and b != 2:"))).toEqual({ ok: false });
     expect(checks["assign-in-if"](lineOf("if a <= 1 and b >= 2 or c ==3:"))).toEqual({ ok: false });
+    expect(checks["assign-in-if"](lineOf("if x => 3:"))).toEqual({ ok: false });
+    expect(checks["assign-in-if"](lineOf("if x > 3 and y =< 3:"))).toEqual({ ok: false });
   });
 
   test("ignores an = inside a string or a comment", () => {
