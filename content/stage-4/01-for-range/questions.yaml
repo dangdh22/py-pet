@@ -134,10 +134,10 @@ questions:
       vi: "Trong dòng for i in range(1, 20, 3):, số 3 có nghĩa là gì?"
       en: "In the line for i in range(1, 20, 3):, what does the number 3 mean?"
     choices:
-      - { vi: "Vòng lặp chạy 3 lần", en: "The loop runs 3 times", misconception: range-start-step }
-      - { vi: "i bắt đầu từ 3", en: "i starts at 3", misconception: range-start-step }
+      - { vi: "Vòng lặp chạy đúng 3 lần rồi dừng", en: "The loop runs exactly 3 times and stops", misconception: range-start-step }
+      - { vi: "i bắt đầu từ 3 thay vì từ 1", en: "i starts at 3 instead of 1", misconception: range-start-step }
       - { vi: "Mỗi lần lặp, i được cộng thêm 3", en: "On each pass, i goes up by 3", correct: true }
-      - { vi: "i dừng lại ở số 3", en: "i stops at 3", misconception: range-start-step }
+      - { vi: "i dừng lại ngay khi tới số 3", en: "i stops as soon as it reaches 3", misconception: range-start-step }
     explanation:
       vi: "Trong range(1, 20, 3), số thứ nhất là chỗ bắt đầu (1), số thứ hai là chỗ dừng (20), và số thứ ba là bước nhảy (3). i lần lượt là 1, 4, 7, 10, 13, 16, 19."
       en: "In range(1, 20, 3), the first number is the start (1), the second is the stop (20), and the third is the step (3). i is 1, 4, 7, 10, 13, 16, 19, one after another."
@@ -173,7 +173,7 @@ questions:
       - { vi: "Có, nếu không thì i luôn là 0", en: "Yes, or else i is always 0", misconception: loop-variable }
       - { vi: "Có, nếu không thì vòng lặp chạy mãi không dừng", en: "Yes, or else the loop never stops", misconception: loop-variable }
       - { vi: "Không, vì for tự cho i lần lượt các số từ 1 đến 5", en: "No, because for gives i the numbers from 1 to 5, one after another", misconception: range-stop-excluded }
-      - { vi: "Không, vì mỗi lần lặp, for tự cho i số tiếp theo trong range", en: "No, because on each pass, for gives i the next number of the range by itself", correct: true }
+      - { vi: "Không, vì for tự cho i số tiếp theo ở mỗi lần lặp", en: "No, because for gives i the next number on each pass by itself", correct: true }
     explanation:
       vi: "Vòng lặp for tự lo việc đổi giá trị của i: lần lặp đầu i là 0, lần sau là 1, và cứ thế đến 4. Vòng lặp chạy đúng 5 lần rồi dừng, con không cần viết i = i + 1."
       en: "A for loop changes the value of i by itself: on the first pass i is 0, then 1, and so on up to 4. The loop runs exactly 5 times and stops, so you do not need to write i = i + 1."

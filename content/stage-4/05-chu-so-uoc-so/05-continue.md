@@ -114,11 +114,11 @@ exercises:
       en: "What happens when Python meets continue inside a for loop?"
     choices:
       - { vi: "Vòng lặp dừng hẳn, và Python chạy dòng sau vòng lặp", en: "The loop stops for good, and Python runs the line after the loop", misconception: continue-skip }
-      - { vi: "Python chạy lại lần lặp này từ đầu, với cùng giá trị của biến lặp", en: "Python runs this pass again from the top, with the same value of the loop variable", misconception: continue-skip }
+      - { vi: "Python chạy lại lần lặp này từ đầu, và biến của vòng lặp giữ nguyên giá trị", en: "Python runs this pass again from the top, and the loop variable keeps its value", misconception: continue-skip }
       - { vi: "Python chỉ bỏ qua 1 dòng ngay sau continue, rồi chạy tiếp các dòng còn lại trong khối", en: "Python skips only the 1 line right after continue, then runs the rest of the block", misconception: continue-skip }
       - { vi: "Python bỏ qua phần còn lại của lần lặp này, rồi sang lần lặp tiếp theo", en: "Python skips the rest of this pass, then moves on to the next pass", correct: true }
     explanation:
-      vi: "continue bỏ qua mọi dòng còn lại trong khối của lần lặp đang chạy, không chỉ 1 dòng. Sau đó, biến lặp nhận giá trị tiếp theo và vòng lặp chạy tiếp. Vòng lặp không dừng hẳn: dừng hẳn là việc của break."
+      vi: "continue bỏ qua mọi dòng còn lại trong khối của lần lặp đang chạy, không chỉ 1 dòng. Sau đó, biến của vòng lặp nhận giá trị tiếp theo và vòng lặp chạy tiếp. Vòng lặp không dừng hẳn: dừng hẳn là việc của break."
       en: "continue skips every line left in the block for the pass that is running, not just 1 line. Then the loop variable takes its next value and the loop goes on. The loop does not stop for good: stopping for good is what break does."
 ---
 Robo tưới 7 cây trong vườn, đánh số từ 1 đến 7. Cây có số chia hết cho 3 là cây xương rồng, không cần tưới. Lệnh **continue** giúp Robo **bỏ qua 1 lần lặp**:

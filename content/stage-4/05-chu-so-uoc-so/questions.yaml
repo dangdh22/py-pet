@@ -334,7 +334,7 @@ questions:
       - { vi: "Chỉ số 2, vì số lẻ nào cũng là số nguyên tố", en: "Only 2, because every odd number is a prime number", misconception: prime-check }
       - { vi: "Mọi số từ 1 đến 23, kể cả 1 và chính 23", en: "Every number from 1 to 23, 1 and 23 included", misconception: prime-check }
       - { vi: "Chỉ số 1 và số 23, vì đó là 2 ước của 23", en: "Only 1 and 23, because those are the 2 divisors of 23", misconception: prime-check }
-      - { vi: "Mọi số từ 2 đến 22, tức là các số nằm giữa 1 và 23", en: "Every number from 2 to 22, the numbers between 1 and 23", correct: true }
+      - { vi: "Mọi số từ 2 đến 22, các số nằm giữa 1 và 23", en: "Every number from 2 to 22, the numbers between 1 and 23", correct: true }
     explanation:
       vi: "Số nguyên tố chỉ có 2 ước là 1 và chính nó, nên Robo thử các số nằm giữa: từ 2 đến 22. Không số nào chia hết 23, nên 23 là số nguyên tố. 23 luôn chia hết cho 1 và cho 23, nên thử 2 số này không cho biết gì. Số lẻ chưa chắc là số nguyên tố: 9 là số lẻ, nhưng 9 = 3 x 3."
       en: "A prime number has only 2 divisors, 1 and itself, so Robo tries the numbers in between: from 2 to 22. None of them divides 23, so 23 is a prime number. 23 can always be divided by 1 and by 23, so trying those 2 numbers tells nothing. An odd number is not always prime: 9 is odd, but 9 = 3 x 3."

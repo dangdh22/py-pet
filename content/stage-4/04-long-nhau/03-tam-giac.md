@@ -130,7 +130,7 @@ exercises:
       - { text: "1\n12\n123", correct: true }
       - { text: "12\n123\n1234", misconception: range-stop-excluded }
     explanation:
-      vi: "Vòng trong chạy từ 1 đến i, nên số lần chạy của nó thay đổi theo i: hàng 1 có 1 số, hàng 2 có 2 số, hàng 3 có 3 số. Mỗi hàng in giá trị của j, nên hàng nào cũng bắt đầu từ 1. range(1, i + 1) dừng trước i + 1, nên số lớn nhất của hàng là i."
+      vi: "Vòng trong chạy từ 1 đến i, nên số lần lặp của nó thay đổi theo i: hàng 1 có 1 số, hàng 2 có 2 số, hàng 3 có 3 số. Mỗi hàng in giá trị của j, nên hàng nào cũng bắt đầu từ 1. range(1, i + 1) dừng trước i + 1, nên số lớn nhất của hàng là i."
       en: "The inner loop runs from 1 to i, so how many times it runs changes with i: row 1 has 1 number, row 2 has 2 numbers, row 3 has 3 numbers. Each row prints the value of j, so every row starts at 1. range(1, i + 1) stops before i + 1, so the biggest number in a row is i."
   - id: s4.long-nhau.l3.q2
     type: mcq
@@ -166,7 +166,7 @@ print("Hết")
 
 Kết quả có 1 dòng trống ở trên cùng, và hàng dài nhất chỉ có 3 dấu *. Trước khi viết code, con hãy vẽ hình ra giấy và ghi số dấu * bên cạnh từng hàng.
 ---
-Với 2 vòng lặp lồng nhau, vòng trong chạy i lần: số lần chạy của vòng trong thay đổi theo vòng ngoài.
+Với 2 vòng lặp lồng nhau, vòng trong chạy i lần: số lần lặp của vòng trong thay đổi theo vòng ngoài.
 
 ```python run
 for i in range(1, 5):

@@ -189,6 +189,9 @@ exercises:
       - input: "2"
         output: "2 là số nguyên tố"
         hidden: true
+      - input: "4"
+        output: "4 không phải là số nguyên tố"
+        hidden: true
       - input: "25"
         output: "25 không phải là số nguyên tố"
         hidden: true
@@ -598,6 +601,9 @@ exercises:
         output: "6 là số hoàn hảo"
       - input: "1"
         output: "1 không phải là số hoàn hảo"
+        hidden: true
+      - input: "2"
+        output: "2 không phải là số hoàn hảo"
         hidden: true
       - input: "28"
         output: "28 là số hoàn hảo"

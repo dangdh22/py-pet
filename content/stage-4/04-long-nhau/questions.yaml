@@ -158,7 +158,7 @@ questions:
       - { text: "6", misconception: range-stop-excluded }
       - { text: "4", misconception: nested-inner-full }
     explanation:
-      vi: "Vòng trong chạy i lần, nên số lần chạy tăng dần theo hàng: 1, 2, 3, rồi 4 lần. count là 1 + 2 + 3 + 4 = 10, giống số dấu * của tam giác 4 hàng. Vòng trong không chạy 4 lần ở mọi hàng, vì range(i) thay đổi theo i."
+      vi: "Vòng trong chạy i lần, nên số lần lặp tăng dần theo hàng: 1, 2, 3, rồi 4 lần. count là 1 + 2 + 3 + 4 = 10, giống số dấu * của tam giác 4 hàng. Vòng trong không chạy 4 lần ở mọi hàng, vì range(i) thay đổi theo i."
       en: "The inner loop runs i times, so the number of passes goes up row by row: 1, 2, 3, then 4 times. count is 1 + 2 + 3 + 4 = 10, the same as the number of * signs in a triangle with 4 rows. The inner loop does not run 4 times on every row, because range(i) changes with i."
 
   - id: s4.long-nhau.b9
