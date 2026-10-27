@@ -7,7 +7,9 @@ import { useLang } from "../i18n/LangProvider";
 import { judge, type JudgeResult } from "../runner/judge";
 import { CodeEditor } from "./CodeEditor";
 import { useContent, useRunner } from "./contexts";
+import { ExampleTable } from "./ExampleTable";
 import { feedbackForProblem, type Feedback } from "./feedback";
+import { Icon } from "./icons";
 import { LangSwitch, Prompt } from "./LangSwitch";
 import { OutputPanel } from "./OutputPanel";
 import { RobotBubble } from "./RobotBubble";
@@ -80,41 +82,34 @@ export function ExamCodeView({
   const disabled = busy || submitted || runner.status !== "ready";
   return (
     <div className="exercise-split">
-      <section className="exercise-left">
+      <section className="card problem-card">
         <LangSwitch lang={lang} onChange={setLang} />
         <Prompt text={exercise.prompt} lang={lang} />
-        {example && (
-          <div className="example">
-            <h4>{t("exercise.example")}</h4>
-            {example.input !== "" && (
-              <>
-                <span>{t("judge.input")}</span>
-                <pre>{example.input.trimEnd()}</pre>
-              </>
-            )}
-            <span>{t("exercise.expectedOutput")}</span>
-            <pre>{example.output.trimEnd()}</pre>
-          </div>
-        )}
+        {example && <ExampleTable input={example.input} output={example.output} />}
+        {feedback && <RobotBubble {...feedback} />}
       </section>
-      <section className="exercise-right">
+      <section className="ide">
         <CodeEditor value={code} onChange={setCode} errorLine={errorLine} ariaLabel={t("code.editorLabel")} />
-        <label className="input-label">
-          {t("code.inputLabel")}
-          <textarea value={stdin} onChange={(event) => setStdin(event.target.value)} rows={3} />
-        </label>
-        <div className="exercise-actions">
+        <div className="io">
+          <label className="box input-box">
+            <span className="box-head">{t("code.inputLabel")}</span>
+            <textarea value={stdin} onChange={(event) => setStdin(event.target.value)} rows={4} />
+          </label>
+          <div className="io-result">
+            {busy && <p>{t("code.running")}</p>}
+            {failed && <p role="alert">{t(failed === "submit" ? "exam.submitFailed" : "app.crash")}</p>}
+            {output !== null && <OutputPanel stdout={output} />}
+          </div>
+        </div>
+        <div className="actions">
           <button onClick={handleRun} disabled={disabled}>
+            <Icon name="play" />
             {t("code.run")}
           </button>
           <button className="primary" onClick={handleSubmit} disabled={disabled}>
             {t("code.submit")}
           </button>
         </div>
-        {busy && <p>{t("code.running")}</p>}
-        {failed && <p role="alert">{t(failed === "submit" ? "exam.submitFailed" : "app.crash")}</p>}
-        {feedback && <RobotBubble {...feedback} />}
-        {output !== null && <OutputPanel stdout={output} />}
         {submitted && <p className="exam-answered">{t("exam.submitted")}</p>}
       </section>
     </div>

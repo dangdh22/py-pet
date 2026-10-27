@@ -134,3 +134,179 @@
   background: var(--chip-xu);
 }
 .misconception-card h4 { margin: 0 0 8px; }
+
+/* The code exercise: the problem on the left, the editor and the results on the right (about 45 : 55). Under 900 px it is 1 column. */
+.exercise-split {
+  display: grid;
+  grid-template-columns: minmax(0, 45fr) minmax(0, 55fr);
+  gap: 22px;
+}
+@media (max-width: 899px) {
+  .exercise-split { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* The problem card is a column; Robo's bubble sits at the bottom, whatever the height of the right side. */
+.problem-card {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 0;
+  padding: 16px 18px;
+}
+.problem-card > * { margin: 0; }
+.problem-card > .robot-bubble { margin-top: auto; }
+.problem-card .exercise-prompt,
+.problem-card .question-prompt {
+  font-size: 17px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+/* The example of an exercise: the input (when there is one) and the expected output side by side. */
+.example-table {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+  border: var(--border-w) solid var(--ink);
+  background: var(--surface);
+}
+.example-table > div { min-width: 0; padding: 8px 12px; }
+.example-table > div + div { border-left: var(--border-w) solid var(--ink); }
+.example-label {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 12px;
+  font-weight: 700;
+}
+.example-table pre {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  overflow-x: auto;
+}
+
+/* The help of an exercise: hints like sticky notes, then the buttons for the next hint and the solution. */
+.exercise-help { display: flex; flex-direction: column; gap: 10px; }
+.exercise-help > * { margin: 0; }
+.hint {
+  padding: 8px 12px;
+  border: var(--border-w) solid var(--ink);
+  background: var(--chip-xu);
+}
+.exercise-help-buttons { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.exercise-help-buttons small { font-size: 12px; font-weight: 500; }
+/* The solution button is off, not faded: its reason ("after 3 wrong submits") must stay readable, so the dim of a disabled button
+   gives way to a dashed border and the muted color. */
+.exercise-help-buttons button:disabled {
+  background: var(--bg);
+  color: var(--muted);
+  border-style: dashed;
+  opacity: 1;
+}
+.solution h4 { margin: 0 0 6px; }
+.solution pre {
+  margin: 0;
+  padding: 8px 12px;
+  border: var(--border-w) solid var(--ink);
+  background: var(--code-bg);
+  font-family: var(--font-mono);
+  font-size: 14px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  overflow-x: auto;
+}
+
+/* The right side: the editor, then the input and the results in 2 columns, then the buttons at the right end. */
+.ide { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.io {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
+  gap: 14px;
+}
+/* The input box is a label: its head names the textarea, and 1 focus ring goes around the whole box. */
+.input-box { display: flex; flex-direction: column; }
+.input-box:focus-within { outline: 3px solid var(--primary); outline-offset: 2px; }
+.input-box textarea {
+  flex: 1;
+  width: 100%;
+  min-height: 5em;
+  padding: 8px 10px;
+  border: 0;
+  background: var(--code-bg);
+  font-family: var(--font-mono);
+  font-size: 14px;
+  line-height: 1.6;
+  resize: vertical;
+}
+.input-box textarea:focus-visible { outline: none; }
+.io-result { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.io-result > p { margin: 0; }
+.io-result .output { margin-top: 0; }
+.ide > .actions { display: flex; justify-content: flex-end; gap: 12px; }
+/* The note that a test answer is in (under the buttons of a code answer; also used by a test question). */
+.exam-answered { color: var(--muted); font-style: italic; }
+.ide > .exam-answered { margin: 0; text-align: right; }
+
+/* The test results: a head with the count, then 1 row per test with a square mark. Under the mark, the state is also a word. */
+.test-box ol {
+  margin: 0;
+  padding: 6px 10px;
+  list-style: none;
+  font-size: 14px;
+}
+.test-box li { padding: 4px 0; }
+.test-row { display: flex; align-items: center; gap: 8px; }
+.test-mark {
+  flex: none;
+  width: 14px;
+  height: 14px;
+  border: var(--border-w) solid var(--ink);
+  background: color-mix(in srgb, var(--ink) 14%, var(--surface));
+}
+.test-box .pass .test-mark { background: var(--stat-pin); }
+.test-box .fail .test-mark { background: var(--coral); }
+
+/* The comparison of a failed test: the input above, then what Robo expected beside what the code printed. */
+.diff {
+  /* Under the mark: the width of the mark and the gap of the row. */
+  margin: 6px 0 4px 22px;
+}
+.diff-input { margin-bottom: 8px; }
+.diff-columns {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+/* Both code blocks are as tall as the taller one. */
+.diff-columns > div { display: flex; flex-direction: column; min-width: 0; }
+.diff-columns pre { flex: 1; }
+.diff-label {
+  display: block;
+  margin-bottom: 2px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+}
+.diff pre {
+  margin: 0;
+  padding: 6px 0;
+  border: var(--border-w) solid var(--ink);
+  background: var(--code-bg);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  overflow-x: auto;
+}
+.diff pre > span { display: block; padding: 0 8px; }
+.diff-input pre { padding: 6px 8px; }
+.diff pre > .diff-line { background: var(--danger-bg); }
+.test-box summary {
+  margin: 4px 0 0 22px;
+  color: var(--primary);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}

@@ -8,7 +8,10 @@ import { useLang } from "../i18n/LangProvider";
 import { judge, type JudgeResult } from "../runner/judge";
 import { CodeEditor } from "./CodeEditor";
 import { useContent, useRunner } from "./contexts";
+import { ExampleTable } from "./ExampleTable";
+import { ExerciseHelp } from "./ExerciseHelp";
 import { crashFeedback, feedbackForProblem, type Feedback } from "./feedback";
+import { Icon } from "./icons";
 import { OutputPanel } from "./OutputPanel";
 import { RobotBubble } from "./RobotBubble";
 import { TestResultList } from "./TestResultList";
@@ -23,8 +26,6 @@ export interface JudgedInfo {
   hintsUsed: number;
   viewedSolution: boolean;
 }
-
-export const FAILED_SUBMITS_BEFORE_SOLUTION = 3;
 
 export function CodeExerciseView({
   exercise,
@@ -63,6 +64,7 @@ export function CodeExerciseView({
   const [hintsShown, setHintsShown] = useState(() => Math.min(initialStats?.hints ?? 0, exercise.hints.length));
   const [failedSubmits, setFailedSubmits] = useState(initialStats?.fails ?? 0);
   const [solutionShown, setSolutionShown] = useState(initialStats?.viewedSolution ?? false);
+  const [solved, setSolved] = useState(false);
 
   // A solution seen before a reload still counts as this step's outcome. Runs once, on mount.
   useEffect(() => {
@@ -103,6 +105,7 @@ export function CodeExerciseView({
       setJudgeResult(result);
       onJudged?.({ result, code, failedSubmitsBefore: failedSubmits, hintsUsed: hintsShown, viewedSolution: solutionShown });
       if (result.status === "accepted") {
+        setSolved(true);
         setFeedback({ mood: "happy", message: t("judge.accepted", { passed: result.passedCount, total: result.total }), hint: null, rawError: null });
         onComplete("solved");
         return;
@@ -140,66 +143,53 @@ export function CodeExerciseView({
 
   return (
     <div className="exercise-split">
-      <section className="exercise-left">
+      <section className="card problem-card">
+        <p className="kicker">{t("exercise.kindCode")}</p>
         <p className="exercise-prompt">{pick(exercise.prompt, uiLang)}</p>
-        {example && (
-          <div className="example">
-            <h4>{t("exercise.example")}</h4>
-            {example.input !== "" && (
-              <>
-                <span>{t("judge.input")}</span>
-                <pre>{example.input.trimEnd()}</pre>
-              </>
-            )}
-            <span>{t("exercise.expectedOutput")}</span>
-            <pre>{example.output.trimEnd()}</pre>
-          </div>
-        )}
-        {exercise.hints.slice(0, hintsShown).map((hint, i) => (
-          <p key={i} className="hint">
-            {t("hint.title", { n: i + 1 })}: {pick(hint, uiLang)}
-          </p>
-        ))}
-        {hintsShown < exercise.hints.length && (
-          <button onClick={showHint}>{hintsShown === 0 ? t("hint.show") : t("hint.next")}</button>
-        )}
-        {failedSubmits >= FAILED_SUBMITS_BEFORE_SOLUTION && !solutionShown && (
-          <button onClick={showSolution}>{t("solution.show")}</button>
-        )}
-        {solutionShown && (
-          <div className="solution">
-            <h4>{t("solution.title")}</h4>
-            <pre>{exercise.solution.trimEnd()}</pre>
-          </div>
-        )}
+        {example && <ExampleTable input={example.input} output={example.output} />}
+        <ExerciseHelp
+          hints={exercise.hints}
+          shown={hintsShown}
+          onHint={showHint}
+          failedSubmits={failedSubmits}
+          solution={exercise.solution}
+          solutionShown={solutionShown}
+          onShowSolution={showSolution}
+          finished={solved}
+        />
         {feedback && <RobotBubble {...feedback} />}
       </section>
-      <section className="exercise-right">
+      <section className="ide">
         <CodeEditor value={code} onChange={(value) => {
             setCode(value);
             onCodeChange?.(value);
           }}
           errorLine={errorLine} ariaLabel={t("code.editorLabel")} />
-        <label className="input-label">
-          {t("code.inputLabel")}
-          <textarea
-            value={stdin}
-            onChange={(event) => setStdin(event.target.value)}
-            placeholder={t("code.inputPlaceholder")}
-            rows={3}
-          />
-        </label>
-        <div className="exercise-actions">
+        <div className="io">
+          <label className="box input-box">
+            <span className="box-head">{t("code.inputLabel")}</span>
+            <textarea
+              value={stdin}
+              onChange={(event) => setStdin(event.target.value)}
+              placeholder={t("code.inputPlaceholder")}
+              rows={4}
+            />
+          </label>
+          <div className="io-result">
+            {busy && <p>{t("code.running")}</p>}
+            {runOutput !== null && <OutputPanel stdout={runOutput} />}
+            {judgeResult && <TestResultList result={judgeResult} />}
+          </div>
+        </div>
+        <div className="actions">
           <button onClick={handleRun} disabled={disabled}>
+            <Icon name="play" />
             {t("code.run")}
           </button>
           <button className="primary" onClick={handleSubmit} disabled={disabled}>
             {t("code.submit")}
           </button>
         </div>
-        {busy && <p>{t("code.running")}</p>}
-        {runOutput !== null && <OutputPanel stdout={runOutput} />}
-        {judgeResult && <TestResultList result={judgeResult} />}
       </section>
     </div>
   );
