@@ -6,12 +6,13 @@ import { isValidPin } from "../storage/pin";
 import { ErrorBoundary } from "./ErrorBoundary";
 import { formatDateTime } from "./format";
 import { useGame } from "./GameProvider";
+import { Icon } from "./icons";
 import { ParentHelp } from "./ParentHelp";
 import { ParentOverview } from "./ParentOverview";
 import { ParentProgress } from "./ParentProgress";
 import { ParentRewards } from "./ParentRewards";
 import { ParentSettings } from "./ParentSettings";
-import { PARENT_PANEL_ID, PARENT_TABS, ParentNav, type ParentTab } from "./shell/ParentNav";
+import { PARENT_PANEL_ID, PARENT_TABS, ParentNav, parentTabId, type ParentTab } from "./shell/ParentNav";
 import { RailLayout } from "./shell/RailLayout";
 import { SideNav } from "./shell/SideNav";
 
@@ -89,64 +90,74 @@ function ParentGate({ autoLocked, onOpen }: { autoLocked: boolean; onOpen(): voi
 
   return (
     <main className="parent-gate">
-      <h1>{t("parent.title")}</h1>
-      {autoLocked && <p>{t("parent.autoLocked")}</p>}
-      {mode === "pin" ? (
-        <form onSubmit={check}>
-          <p>{t("parent.pinPrompt")}</p>
-          <label>
-            {t("backup.pinLabel")}
-            <input
-              type="password"
-              inputMode="numeric"
-              autoComplete="off"
-              value={pin}
-              onChange={(e) => setPin(e.target.value)}
-            />
-          </label>
-          <button className="primary" type="submit" disabled={busy || pin === ""}>
-            {t("parent.open")}
-          </button>
-          <button
-            type="button"
-            onClick={() => {
-              setMode("reset");
-              setPin("");
-              setError(null);
-            }}
-          >
-            {t("parent.forgot")}
-          </button>
-        </form>
-      ) : (
-        <form onSubmit={reset}>
-          <h2>{t("parent.resetTitle")}</h2>
-          <p>{t("parent.resetNote")}</p>
-          <label>
-            {t("parent.newPin")}
-            <input type="password" inputMode="numeric" autoComplete="new-password" value={pin} onChange={(e) => setPin(e.target.value)} />
-          </label>
-          <label>
-            {t("parent.newPinAgain")}
-            <input type="password" inputMode="numeric" autoComplete="new-password" value={again} onChange={(e) => setAgain(e.target.value)} />
-          </label>
-          <button className="primary" type="submit" disabled={busy}>
-            {t("parent.resetSave")}
-          </button>
-          <button
-            type="button"
-            onClick={() => {
-              setMode("pin");
-              setPin("");
-              setAgain("");
-              setError(null);
-            }}
-          >
-            {t("backup.cancel")}
-          </button>
-        </form>
-      )}
-      {error && <p role="alert">{t(error)}</p>}
+      <section className="card gate-card">
+        <span className="gate-lock">
+          <Icon name="lock" />
+        </span>
+        <h1>{t("parent.title")}</h1>
+        {autoLocked && (
+          <p role="status" className="gate-note">
+            {t("parent.autoLocked")}
+          </p>
+        )}
+        {mode === "pin" ? (
+          <form className="pin-form" onSubmit={check}>
+            <p>{t("parent.pinPrompt")}</p>
+            <label>
+              {t("backup.pinLabel")}
+              <input
+                type="password"
+                inputMode="numeric"
+                autoComplete="off"
+                value={pin}
+                onChange={(e) => setPin(e.target.value)}
+              />
+            </label>
+            <button className="primary" type="submit" disabled={busy || pin === ""}>
+              {t("parent.open")}
+            </button>
+            <button
+              type="button"
+              className="link-button"
+              onClick={() => {
+                setMode("reset");
+                setPin("");
+                setError(null);
+              }}
+            >
+              {t("parent.forgot")}
+            </button>
+          </form>
+        ) : (
+          <form className="pin-form" onSubmit={reset}>
+            <h2>{t("parent.resetTitle")}</h2>
+            <p>{t("parent.resetNote")}</p>
+            <label>
+              {t("parent.newPin")}
+              <input type="password" inputMode="numeric" autoComplete="new-password" value={pin} onChange={(e) => setPin(e.target.value)} />
+            </label>
+            <label>
+              {t("parent.newPinAgain")}
+              <input type="password" inputMode="numeric" autoComplete="new-password" value={again} onChange={(e) => setAgain(e.target.value)} />
+            </label>
+            <button className="primary" type="submit" disabled={busy}>
+              {t("parent.resetSave")}
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setMode("pin");
+                setPin("");
+                setAgain("");
+                setError(null);
+              }}
+            >
+              {t("backup.cancel")}
+            </button>
+          </form>
+        )}
+        {error && <p role="alert">{t(error)}</p>}
+      </section>
     </main>
   );
 }
@@ -190,12 +201,26 @@ function ParentArea({ onLock }: { onLock(auto: boolean): void }) {
     heading.current?.focus();
   }, []);
 
+  // A button of the overview ("Xem") leaves the page it was on: the focus goes to the heading of the new section once it is drawn.
+  const focusHeadingAfterShow = useRef(false);
+  useEffect(() => {
+    if (!focusHeadingAfterShow.current) return;
+    focusHeadingAfterShow.current = false;
+    heading.current?.focus();
+  }, [tab]);
+  const show = (next: ParentTab) => {
+    focusHeadingAfterShow.current = true;
+    setTab(next);
+  };
+
   const tabLabel = PARENT_TABS.find((item) => item.id === tab)?.label ?? "parent.title";
   // Leaving the route unmounts the area, and that locks it: the PIN form must not show up for a moment on the way out.
   const leave = () => {
     window.location.hash = "#/";
   };
   const navProps = { tab, onTab: setTab, onLock: leave };
+  // The name of the child is the one part of the line that is not translated: it goes in bold between the 2 halves of the text.
+  const [profileBefore, profileAfter] = t("parent.profileOf", { name: "{name}" }).split("{name}");
 
   return (
     <RailLayout
@@ -208,18 +233,25 @@ function ParentArea({ onLock }: { onLock(auto: boolean): void }) {
       }
     >
       <main className="parent">
-        <h1 ref={heading} tabIndex={-1}>
-          {t(tabLabel)}
-        </h1>
+        <div className="page-head">
+          <h1 ref={heading} tabIndex={-1}>
+            {t(tabLabel)}
+          </h1>
+          <p className="page-head-side">
+            {profileBefore}
+            <b>{game.profile.childName}</b>
+            {profileAfter}
+          </p>
+        </div>
         {game.pinResetAt && (
           <p role="status" className="banner">
             {t("parent.resetAt", { time: formatDateTime(game.pinResetAt) })}
           </p>
         )}
-        <div role="tabpanel" id={PARENT_PANEL_ID} aria-labelledby={`parent-tab-${tab}`}>
+        <div role="tabpanel" id={PARENT_PANEL_ID} aria-labelledby={parentTabId(tab)}>
           {/* A tab that crashes shows the crash message here and keeps the side menu; choosing another tab starts clean. */}
           <ErrorBoundary key={tab}>
-            {tab === "overview" && <ParentOverview />}
+            {tab === "overview" && <ParentOverview onShow={show} />}
             {tab === "help" && <ParentHelp />}
             {tab === "progress" && <ParentProgress />}
             {tab === "rewards" && <ParentRewards />}

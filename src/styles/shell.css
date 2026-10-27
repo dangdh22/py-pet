@@ -784,22 +784,3 @@
   .room-page { padding: 16px 20px 32px; }
   .room-body { grid-template-columns: minmax(0, 1fr); }
 }
-
-/* Parent area (spec 7.10): the content next to the tab menu, and the PIN form. The 5 tabs keep their own layout until R3. */
-.parent,
-.parent-gate { padding: 24px 32px 40px; }
-.parent h1 {
-  margin: 0 0 18px;
-  font-size: 30px;
-  font-weight: 800;
-  letter-spacing: -0.01em;
-}
-.parent .banner {
-  margin-bottom: 16px;
-  border: var(--border-w) solid var(--ink);
-}
-
-@media (max-width: 899px) {
-  .parent,
-  .parent-gate { padding: 16px 20px 32px; }
-}

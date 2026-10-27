@@ -1,1 +1,202 @@
 /* The parent area (UI revamp spec, section 7.10): the PIN screen and the 5 sections. */
+
+/* The content next to the tab menu, and the screen with the PIN card. */
+.parent,
+.parent-gate { padding: 24px 32px 40px; }
+.parent .banner {
+  margin-bottom: 16px;
+  border: var(--border-w) solid var(--ink);
+}
+/* The line about the child at the right of the page head: the name sits close to its label, in ink. */
+.parent .page-head-side { gap: 4px; }
+.parent .page-head-side b { color: var(--ink); }
+
+@media (max-width: 899px) {
+  .parent,
+  .parent-gate { padding: 16px 20px 32px; }
+}
+
+/* The PIN screen: one card in the middle, a yellow square with a lock on top, then the form. */
+.gate-card {
+  display: grid;
+  gap: 12px;
+  max-width: 440px;
+  margin: 32px auto 0;
+}
+.gate-card h1 {
+  margin: 0;
+  font-size: 30px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+.gate-card .pin-form { max-width: none; }
+.gate-card .pin-form h2 {
+  margin: 0;
+  font-size: 18px;
+}
+.gate-card [role="alert"] {
+  margin: 0;
+  color: var(--danger);
+  font-weight: 600;
+}
+.gate-lock {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: var(--border-w) solid var(--ink);
+  background: var(--yellow);
+}
+/* The note that the area locked itself: a yellow line, as the alerts of the overview. */
+.gate-note {
+  margin: 0;
+  padding: 8px 12px;
+  border: var(--border-w) solid var(--ink);
+  background: var(--chip-xu);
+}
+
+/* A button that looks like a link: no frame, no shadow and no sliding, the primary color with an underline. */
+.link-button,
+.link-button:hover:not(:disabled),
+.link-button:active:not(:disabled) {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  transform: none;
+}
+.link-button {
+  justify-self: start;
+  color: var(--primary);
+  text-decoration: underline;
+}
+
+/* The overview: alert cards, then the chart and the 4 figures. */
+.parent-overview > .section-title:first-child { margin-top: 0; }
+.parent-overview > p { margin: 0 0 18px; }
+
+.alert-cards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin: 0 0 18px;
+  padding: 0;
+  list-style: none;
+}
+@media (max-width: 1099px) {
+  .alert-cards { grid-template-columns: minmax(0, 1fr); }
+}
+.alert-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 14px;
+  border: var(--border-w) solid var(--ink);
+  background: var(--chip-xu);
+  box-shadow: var(--shadow-card);
+}
+/* The concepts that need help: light red instead of yellow. */
+.alert-red { background: var(--danger-bg); }
+.alert-card > div {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.alert-card b {
+  display: block;
+  font-size: 15px;
+}
+.alert-card span {
+  display: block;
+  color: var(--ink);
+  font-size: 13px;
+}
+.alert-card > .small {
+  flex: none;
+  margin-left: auto;
+}
+
+.overview-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+@media (max-width: 1099px) {
+  .overview-grid { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* The chart of 7 days: a column for each day, standing on a rule. The value is above the bar, the weekday under the rule. */
+.minutes-chart {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  grid-template-rows: 100%;
+  gap: 12px;
+  align-items: end;
+  height: 190px;
+  margin: 0 0 30px;
+  padding: 22px 4px 0;
+  border-bottom: var(--border-w) solid var(--ink);
+  list-style: none;
+}
+.minutes-day {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  height: 100%;
+}
+.minutes-value {
+  flex: none;
+  text-align: center;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 16px;
+}
+.minutes-bar {
+  flex: none;
+  border: var(--border-w) solid var(--ink);
+  border-bottom: 0;
+  background: var(--primary);
+}
+.minutes-label {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  left: 0;
+  padding-top: 8px;
+  color: var(--muted);
+  font-size: 12px;
+  text-align: center;
+}
+/* A day off: a short grey striped bar (like the stage of a form not reached, with darker stripes so they show on 10 px), and "off" in words above it. */
+.minutes-vacation .minutes-bar {
+  height: 10px;
+  background: repeating-linear-gradient(
+    45deg,
+    color-mix(in srgb, var(--ink) 12%, var(--surface)) 0 5px,
+    color-mix(in srgb, var(--ink) 28%, var(--surface)) 5px 10px
+  );
+}
+
+.overview-stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin: 0;
+}
+.overview-stats .card { padding: 12px 14px; }
+.overview-stats dt {
+  color: var(--muted);
+  font-size: 12px;
+}
+.overview-stats dd {
+  margin: 2px 0 0;
+  font-size: 20px;
+  font-weight: 800;
+}
+.overview-stats dd small {
+  display: block;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 400;
+}
