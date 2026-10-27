@@ -7,6 +7,9 @@ body {
   background: var(--bg);
   color: var(--ink);
   font-family: var(--font-ui);
+  /* Code is shown as typed: JetBrains Mono would draw `!=`, `==`, `<=`, `>=` and `->` as single signs. The property is inherited,
+     so this one line covers every mono text; a rule with the `font` shorthand resets it and sets it again. */
+  font-variant-ligatures: none;
 }
 
 /* Buttons. `.button` gives a link (`<a class="button">`) the same look as a `<button>`. */
@@ -87,8 +90,6 @@ select[aria-invalid="true"] { border-color: var(--danger); }
 .kicker {
   color: var(--primary);
   font-family: var(--font-mono);
-  font-variant-ligatures: none;
-  font-feature-settings: "calt" 0, "liga" 0;
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.08em;

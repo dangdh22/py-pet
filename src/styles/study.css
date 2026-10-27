@@ -51,8 +51,6 @@
   border-right: var(--border-w) solid var(--ink);
   background: var(--yellow);
   font-family: var(--font-mono);
-  font-variant-ligatures: none;
-  font-feature-settings: "calt" 0, "liga" 0;
   font-size: 13px;
 }
 
@@ -74,8 +72,6 @@
   background: var(--code-bg);
   color: var(--code-text);
   font-family: var(--font-mono);
-  font-variant-ligatures: none;
-  font-feature-settings: "calt" 0, "liga" 0;
   font-size: 15px;
   white-space: pre-wrap;
   overflow-x: auto;
@@ -127,8 +123,6 @@
   background: var(--code-bg);
   color: var(--code-text);
   font-family: var(--font-mono);
-  font-variant-ligatures: none;
-  font-feature-settings: "calt" 0, "liga" 0;
   font-size: 14px;
   white-space: pre-wrap;
   overflow-x: auto;
