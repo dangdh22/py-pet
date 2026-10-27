@@ -62,12 +62,14 @@ describe("EvolutionTestScreen", () => {
     await userEvent.click(screen.getByRole("button", { name: "Bỏ qua" }));
 
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
-    const heading = screen.getByRole("heading", { name: "Robo đã tiến hóa!" });
+    const heading = screen.getByRole("heading", { level: 1, name: "Robo đã tiến hóa!" });
     expect(heading).toHaveFocus();
+    expect(screen.getAllByRole("heading", { level: 1 })).toHaveLength(1);
     expect(screen.getByRole("img", { name: "Robo" })).toHaveAttribute("data-form", "2");
     expect(screen.getByRole("img", { name: "Robo" })).toHaveAttribute("data-size", "200");
     expect(screen.getByText("Con được 7/7 điểm.")).toBeInTheDocument();
     expect(screen.getByText("+100 xu")).toBeInTheDocument();
+    expect(screen.getByRole("list", { name: "Phần thưởng" })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Học tiếp" })).toHaveAttribute("href", "#/lesson/y.l1");
     await waitFor(async () => expect((await store.loadActive())!.state.pet.stage).toBe(2));
     expect((await store.loadActive())!.state.remedial).toBeNull();
@@ -100,7 +102,7 @@ describe("EvolutionTestScreen", () => {
       { bundle: twoStages },
     );
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: "Robo đã tiến hóa!" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { level: 1, name: "Robo đã tiến hóa!" })).toBeInTheDocument();
   });
 
   test("a fail lists the weak concepts and opens the focused review set", async () => {
@@ -110,10 +112,14 @@ describe("EvolutionTestScreen", () => {
     );
     await answerPaper("Sai");
 
-    expect(screen.getByRole("heading", { name: "Lần này chưa đạt" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { level: 1, name: "Lần này chưa đạt" })).toBeInTheDocument();
+    expect(screen.getAllByRole("heading", { level: 1 })).toHaveLength(1);
     expect(screen.getByText("Con được 0/7 điểm.")).toBeInTheDocument();
-    expect(screen.getByText("Khái niệm k1")).toBeInTheDocument();
-    expect(screen.getByText("Khái niệm a1")).toBeInTheDocument();
+    expect(screen.getByRole("heading", { level: 2, name: "Phần cần ôn" })).toBeInTheDocument();
+    // Each weak concept is a small chip.
+    expect(screen.getByText("Khái niệm k1").closest("li")).toHaveClass("chip");
+    expect(screen.getByText("Khái niệm a1").closest("li")).toHaveClass("chip");
+    expect(screen.getByText("Khái niệm k1").closest("ul")).toHaveClass("concept-chips");
     expect(screen.getByRole("link", { name: "Bắt đầu ôn tập trọng tâm" })).toHaveAttribute("href", "#/remedial");
     await waitFor(async () => expect((await store.loadActive())!.state.remedial).not.toBeNull());
     const saved = (await store.loadActive())!.state;

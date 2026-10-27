@@ -22,6 +22,56 @@
 .study-notice .card > p { margin: 0 0 16px; }
 .study-notice .card > :last-child { margin-bottom: 0; }
 
+/* The result of a lesson, a session or a test: 1 card in the middle, with everything centered. The evolution test uses the same card
+   for a pass (Robo 200 px) and for a fail (the concepts to review). */
+.result-page { padding: 0 24px 24px; }
+.result-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  max-width: 560px;
+  margin: 32px auto 0;
+  padding: 24px 20px;
+  text-align: center;
+}
+.result-card > * { margin: 0; }
+.result-card h1 { font-size: 1.6rem; line-height: 1.25; }
+
+/* The rewards: big chips, 18 px bold. XP is the primary blue; the colors of the others come from the chip tokens. */
+.reward-chips {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.chip-big { padding: 8px 16px; font-size: 18px; font-weight: 800; }
+.chip-xp { background: var(--primary); color: var(--on-primary); }
+.chip-vui { background: var(--chip-streak); }
+
+/* The goal of the day: the text beside its squares. */
+.result-goal { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px; }
+
+/* The concepts to review after a failed evolution test: small chips that may wrap onto 2 lines. */
+.result-weak { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.result-weak h2 { margin: 0; font-size: 1.1rem; }
+.concept-chips {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.concept-chips .chip { white-space: normal; }
+
+/* The buttons at the end: the way on first, the way back to the room last. */
+.result-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 6px; }
+
 /* A box: a white frame with a 2 px border. Its head is a strip of small capitals (the output of a run, the input, the test results). */
 .box {
   border: var(--border-w) solid var(--ink);

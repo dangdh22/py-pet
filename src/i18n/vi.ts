@@ -170,6 +170,7 @@ export const vi = {
   "remedial.title": "Ôn tập trọng tâm",
   "remedial.doneTitle": "Xong ôn tập trọng tâm! Con có thể thi lại.",
   "remedial.none": "Con không có bộ ôn tập trọng tâm nào.",
+  "result.rewards": "Phần thưởng",
   "result.xp": "+{n} XP",
   "result.xu": "+{n} xu",
   "result.pin": "Pin +{n}",

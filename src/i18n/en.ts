@@ -172,6 +172,7 @@ export const en: Record<MessageKey, string> = {
   "remedial.title": "Focused review",
   "remedial.doneTitle": "Focused review done! You can take the test again.",
   "remedial.none": "You have no focused review.",
+  "result.rewards": "Rewards",
   "result.xp": "+{n} XP",
   "result.xu": "+{n} coins",
   "result.pin": "Battery +{n}",
