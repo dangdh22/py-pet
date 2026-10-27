@@ -16,6 +16,22 @@ vi.mock("./CodeEditor", () => ({
   ),
 }));
 
+test("the focus bar names the lesson with its number and topic, and the squares follow the steps", async () => {
+  await renderWithGame(<LessonScreen lesson={fixtureLesson} onExit={() => {}} />);
+  expect(screen.getByRole("heading", { level: 1, name: "Bài 1 · Bài thử" })).toBeInTheDocument();
+  expect(screen.getByText("Chủ đề thử")).toBeInTheDocument();
+  const squareClasses = () => [...document.querySelectorAll(".squares.steps > *")].map((square) => square.className);
+  expect(squareClasses()).toEqual(["current", "todo", "todo", "todo"]);
+  await userEvent.click(screen.getByRole("button", { name: "Tiếp" }));
+  expect(squareClasses()).toEqual(["done", "current", "todo", "todo"]);
+});
+
+test("a lesson that the content does not place has only its own name as the title", async () => {
+  await renderWithGame(<LessonScreen lesson={{ ...fixtureLesson, id: "x.l9" }} onExit={() => {}} />);
+  expect(screen.getByRole("heading", { level: 1, name: "Bài thử" })).toBeInTheDocument();
+  expect(screen.queryByText("Chủ đề thử")).not.toBeInTheDocument();
+});
+
 test("goes through the lesson, records the attempts and shows the rewards", async () => {
   const onExit = vi.fn();
   const { store } = await renderWithGame(<LessonScreen lesson={fixtureLesson} onExit={onExit} />, {

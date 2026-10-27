@@ -7,6 +7,7 @@ import { useLang } from "../i18n/LangProvider";
 import { useContent } from "./contexts";
 import { useGame } from "./GameProvider";
 import { SessionScreen } from "./SessionScreen";
+import { StudyNotice } from "./StudyNotice";
 
 /** 2 practice items for 1 concept at the child's ladder level. Each item pays and records as usual; the set adds nothing. */
 export function PracticeScreen({ conceptId, onExit, rng = Math.random }: { conceptId: string; onExit(): void; rng?: Rng }) {
@@ -17,11 +18,7 @@ export function PracticeScreen({ conceptId, onExit, rng = Math.random }: { conce
   const [items] = useState(() => buildPracticeSet(bundle, game.state, conceptId, rng));
 
   if (!concept || items.length === 0) {
-    return (
-      <main className="room">
-        <p>{t(concept ? "practice.empty" : "practice.notFound")}</p>
-      </main>
-    );
+    return <StudyNotice message={t(concept ? "practice.empty" : "practice.notFound")} />;
   }
   return (
     <SessionScreen

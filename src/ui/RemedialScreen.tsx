@@ -5,6 +5,7 @@ import { useLang } from "../i18n/LangProvider";
 import { useContent } from "./contexts";
 import { useGame } from "./GameProvider";
 import { SessionScreen } from "./SessionScreen";
+import { StudyNotice } from "./StudyNotice";
 
 /** The focused review set of a failed evolution test (spec 5.11). Finishing it opens the retake. */
 export function RemedialScreen({ onExit }: { onExit(): void }) {
@@ -19,11 +20,7 @@ export function RemedialScreen({ onExit }: { onExit(): void }) {
   const [open] = useState(() => game.state.remedial !== null);
 
   if (!open) {
-    return (
-      <main className="room">
-        <p>{t("remedial.none")}</p>
-      </main>
-    );
+    return <StudyNotice message={t("remedial.none")} />;
   }
   return (
     <SessionScreen

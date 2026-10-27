@@ -18,6 +18,20 @@ export function findLesson(bundle: ContentBundle, id: string): Lesson | undefine
   return allLessons(bundle).find((lesson) => lesson.id === id);
 }
 
+/** Where a lesson stands in the content: its stage, its topic and its 1-based number in the topic. */
+export function lessonPlace(
+  bundle: ContentBundle,
+  lessonId: string,
+): { stage: Stage; topic: Topic; number: number } | undefined {
+  for (const stage of bundle.stages) {
+    for (const topic of stage.topics) {
+      const index = topic.lessons.findIndex((lesson) => lesson.id === lessonId);
+      if (index !== -1) return { stage, topic, number: index + 1 };
+    }
+  }
+  return undefined;
+}
+
 export function allExercises(bundle: ContentBundle): Exercise[] {
   return bundle.stages.flatMap((stage) =>
     stage.topics.flatMap((topic) => [

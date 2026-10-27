@@ -80,6 +80,24 @@ describe("AppRoutes", () => {
     expect(screen.getByRole("link", { name: "Về phòng" })).toHaveAttribute("href", "#/");
   });
 
+  test("a lesson puts its number and name in the top bar as the only page title", async () => {
+    window.location.hash = "#/lesson/t.l1";
+    await renderWithGame(<AppRoutes />);
+    expect(within(screen.getByRole("banner")).getByRole("heading", { level: 1, name: "Bài 1 · Bài thử" })).toBeInTheDocument();
+    expect(screen.getAllByRole("heading", { level: 1 })).toHaveLength(1);
+  });
+
+  test("the message for an unknown lesson is a card with a link to the map", async () => {
+    window.location.hash = "#/lesson/khong-co";
+    const { container } = await renderWithGame(<AppRoutes />);
+    const main = screen.getByRole("main");
+    expect(within(main).getByText("Không tìm thấy bài học này.")).toBeInTheDocument();
+    expect(within(main).getByRole("link", { name: "Bản đồ học" })).toHaveAttribute("href", "#/map");
+    expect(main).toHaveClass("study-notice");
+    expect(main.querySelector(".card")).not.toBeNull();
+    expect(container.querySelector(".room")).toBeNull();
+  });
+
   test("a message for an unknown lesson also has the focus frame", async () => {
     window.location.hash = "#/lesson/khong-co";
     await renderWithGame(<AppRoutes />);
@@ -436,6 +454,7 @@ describe("tests and evolution", () => {
     await renderWithGame(<AppRoutes />, { bundle: examBundle(), state });
     expect(screen.getByText("Con làm xong bộ ôn tập trọng tâm trước rồi thi lại nhé.")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Bắt đầu ôn tập trọng tâm" })).toHaveAttribute("href", "#/remedial");
+    expect(screen.getByRole("main")).toHaveClass("study-notice");
   });
 
   test("a passed evolution test cannot be taken again from the map", async () => {
@@ -510,5 +529,20 @@ describe("M4a routes", () => {
     window.location.hash = "#/assigned/nope";
     await renderWithGame(<AppRoutes />);
     expect(screen.getByText("Không tìm thấy bài luyện này.")).toBeInTheDocument();
+  });
+
+  // The empty states of the study screens share 1 card in the middle of the page, under the focus bar.
+  test.each([
+    ["#/assigned/nope", "Không tìm thấy bài luyện này."],
+    ["#/practice/nope", "Không tìm thấy phần luyện tập này."],
+    ["#/remedial", "Con không có bộ ôn tập trọng tâm nào."],
+    ["#/review", "Chưa có câu nào để ôn. Con học thêm bài nhé!"],
+  ])("%s shows its message as a card", async (hash, message) => {
+    window.location.hash = hash;
+    await renderWithGame(<AppRoutes />, { bundle: examBundle() });
+    const main = screen.getByRole("main");
+    expect(main).toHaveClass("study-notice");
+    expect(within(main).getByText(message)).toBeInTheDocument();
+    expect(within(screen.getByRole("banner")).getByRole("link", { name: "Về phòng" })).toBeInTheDocument();
   });
 });

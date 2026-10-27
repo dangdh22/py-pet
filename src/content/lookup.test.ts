@@ -1,5 +1,6 @@
 import { expect, test } from "vitest";
-import { allExercises, allLessons, conceptStage, findConcept, findItem, findLesson, isConceptReached } from "./lookup";
+import { testBundle } from "../test/fixtures";
+import { allExercises, allLessons, conceptStage, findConcept, findItem, findLesson, isConceptReached, lessonPlace } from "./lookup";
 import type { ChoiceQuestion, CodeExercise, ContentBundle, FillExercise, Lesson } from "./types";
 
 const code: CodeExercise = {
@@ -60,6 +61,15 @@ test("allLessons lists lessons in order", () => {
 test("findLesson finds by id", () => {
   expect(findLesson(bundle, "a.l2")).toBe(lesson2);
   expect(findLesson(bundle, "missing")).toBeUndefined();
+});
+
+test("lessonPlace names the stage, the topic and the 1-based number of the lesson in its topic", () => {
+  const place = lessonPlace(testBundle(), "t.l2");
+  expect(place?.stage.id).toBe("t");
+  expect(place?.topic.id).toBe("t.topic");
+  expect(place?.number).toBe(2);
+  expect(lessonPlace(testBundle(), "t.l1")?.number).toBe(1);
+  expect(lessonPlace(testBundle(), "missing")).toBeUndefined();
 });
 
 test("allExercises includes lesson exercises and bank questions", () => {

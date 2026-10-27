@@ -1,12 +1,16 @@
 import { useMemo, useState } from "react";
+import { lessonPlace } from "../content/lookup";
 import type { Card, Exercise, Lesson } from "../content/types";
 import { pick } from "../i18n/lang";
 import { useLang } from "../i18n/LangProvider";
 import { CardView } from "./CardView";
+import { useContent } from "./contexts";
 import { useGame } from "./GameProvider";
 import { ItemBoundary } from "./ItemBoundary";
 import { ItemView } from "./ItemView";
 import { ResultView } from "./ResultView";
+import { FocusTitle } from "./shell/FocusTitle";
+import { stepStates } from "./shell/Squares";
 
 type Step = { kind: "card"; card: Card } | { kind: "exercise"; exercise: Exercise };
 
@@ -18,6 +22,7 @@ export interface LessonScreenProps {
 export function LessonScreen({ lesson, onExit }: LessonScreenProps) {
   const { t, uiLang } = useLang();
   const game = useGame();
+  const bundle = useContent();
   const [before] = useState(() => game.state);
   const steps = useMemo<Step[]>(
     () => [
@@ -62,6 +67,11 @@ export function LessonScreen({ lesson, onExit }: LessonScreenProps) {
       : t("lesson.exerciseOf", { current: index - cardCount + 1, total: lesson.exercises.length });
   const canGoNext = step.kind === "card" || doneSteps.has(index);
   const isLast = index === steps.length - 1;
+  // The title is the number and the name of the lesson; the topic is the small line above it. A lesson that the content
+  // does not place (it should not happen) keeps its own name.
+  const place = lessonPlace(bundle, lesson.id);
+  const lessonName = pick(lesson.title, uiLang);
+  const title = place ? t("focus.lessonTitle", { n: place.number, title: lessonName }) : lessonName;
 
   const body =
     step.kind === "card" ? (
@@ -81,13 +91,15 @@ export function LessonScreen({ lesson, onExit }: LessonScreenProps) {
     );
 
   return (
-    <main className="lesson">
-      <div className="lesson-top">
-        <h1>{pick(lesson.title, uiLang)}</h1>
-        <span>{progress}</span>
-      </div>
+    <main className="study-page">
+      <FocusTitle
+        title={title}
+        kicker={place && pick(place.topic.title, uiLang)}
+        progress={progress}
+        steps={stepStates(steps.length, index, (i) => doneSteps.has(i))}
+      />
       {body}
-      <nav className="lesson-nav">
+      <nav className="study-nav">
         <button onClick={() => setIndex(index - 1)} disabled={index === 0}>
           {t("lesson.back")}
         </button>

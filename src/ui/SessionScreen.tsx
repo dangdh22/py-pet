@@ -6,6 +6,8 @@ import { useGame } from "./GameProvider";
 import { ItemBoundary } from "./ItemBoundary";
 import { ItemView } from "./ItemView";
 import { ResultView } from "./ResultView";
+import { FocusTitle } from "./shell/FocusTitle";
+import { stepStates } from "./shell/Squares";
 
 export interface SessionScreenProps {
   title: string;
@@ -59,11 +61,12 @@ export function SessionScreen({ title, items, source, onFinish, doneTitle, onExi
   };
 
   return (
-    <main className="lesson">
-      <div className="lesson-top">
-        <h1>{title}</h1>
-        {item && <span>{t("review.itemOf", { current: index + 1, total: items.length })}</span>}
-      </div>
+    <main className="study-page">
+      <FocusTitle
+        title={title}
+        progress={item && t("review.itemOf", { current: index + 1, total: items.length })}
+        steps={item && stepStates(items.length, index, (i) => results[i] !== undefined)}
+      />
       {item ? (
         <ItemBoundary key={item.id} itemId={item.id} onSkip={next}>
           <ItemView
@@ -78,7 +81,7 @@ export function SessionScreen({ title, items, source, onFinish, doneTitle, onExi
       ) : (
         <p>{t("review.empty")}</p>
       )}
-      <nav className="lesson-nav">
+      <nav className="study-nav">
         <button className="primary" onClick={next} disabled={item !== undefined && results[index] === undefined}>
           {isLast ? t("lesson.finish") : t("lesson.next")}
         </button>

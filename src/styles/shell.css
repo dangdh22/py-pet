@@ -182,7 +182,7 @@
   font-size: 14px;
 }
 
-/* Focus layout (study screens): a 60 px bar with the way back, the Python status and the chips; no side menu. */
+/* Focus layout (study screens): a 60 px bar with the way back, the title of the screen, the Python status and the chips; no side menu. */
 .focus-layout { min-height: 100vh; }
 .focus-bar {
   display: flex;
@@ -198,6 +198,45 @@
   gap: 10px;
   margin-left: auto;
 }
+/* The place of the title: a study screen draws its topic, title, step squares and progress here (`FocusTitle`). It takes
+   the room that the bar leaves, and the title is cut with "…" before it can push the chips out. */
+.focus-title-slot {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: 16px;
+  min-width: 0;
+}
+.focus-title { min-width: 0; }
+.focus-title h1 {
+  margin: 0;
+  overflow: hidden;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.3;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.focus-kicker {
+  margin: 0;
+  overflow: hidden;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.2;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.focus-title-slot > .squares,
+.focus-title-slot > .focus-progress { flex: none; }
+.focus-progress {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+/* The step squares: ink when done, blue for the current step. */
+.squares.steps > .done { background: var(--ink); }
+.squares.steps > .current { background: var(--primary); }
 
 /* Narrow windows (spec 6.4): the menu shrinks to 64 px of icons. The text of an item stays in the page, so it still names the
    link; it shows as a floating caption while the item has the pointer or the keyboard focus. */
@@ -264,6 +303,9 @@
     border-left: 0;
     border-top: var(--border-w) solid var(--ink);
   }
+  /* The focus bar needs the room for the title: no row of step squares (the progress text stays) and no words for the status. */
+  .focus-bar .squares { display: none; }
+  .focus-bar .runner-status { gap: 0; font-size: 0; }
 }
 
 /* Landing page (spec 6.3 and 7.1, option C "bold sticker"): a top bar, then the copy on the left and a sticker stage on the right. */

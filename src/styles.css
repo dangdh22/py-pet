@@ -1,15 +1,13 @@
 @import "./styles/tokens.css";
 @import "./styles/base.css";
 @import "./styles/shell.css";
+@import "./styles/study.css";
 
 .app-loading { padding: 40px 20px; text-align: center; }
 .unsupported h1 { font-size: 1.4rem; }
 
-.home, .lesson { max-width: 1200px; margin: 0 auto; padding: 20px; }
 .lesson-list a { color: var(--primary); font-size: 1.1rem; }
 .badge-done { margin-left: 8px; color: var(--success); font-weight: 600; }
-.lesson-top { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; }
-.lesson-nav { display: flex; justify-content: space-between; margin-top: 16px; }
 .lesson-done, .crash { text-align: center; padding: 40px; }
 
 .question-card {
@@ -18,7 +16,7 @@
   box-shadow: var(--shadow-card);
 }
 /* The wide reading box of a lesson card and of a question; other `.card` boxes (room, parent area) keep the base look. */
-.lesson .card, .question-card {
+.study-page .card, .question-card {
   max-width: 760px;
   margin: 0 auto;
   padding: 20px;
@@ -85,8 +83,7 @@
 .backup label { display: grid; gap: 4px; font-weight: 600; }
 [role="alert"] { color: var(--danger); }
 
-/* The narrow centered box of the review, remedial and evolution test screens; the room itself is `.room-page` (shell.css). */
-.room { max-width: 900px; margin: 0 auto; padding: 20px; text-align: center; }
+/* The row of buttons at the end of a result screen. */
 .room-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 12px; }
 
 .map { max-width: 900px; margin: 0 auto; padding: 20px; }

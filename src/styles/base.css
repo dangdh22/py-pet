@@ -83,6 +83,16 @@ select[aria-invalid="true"] { border-color: var(--danger); }
 /* The battery is drawn by the stat icon, which takes its color from a stat bar; on a chip it takes the ink. */
 .chip-pin .stat-icon { color: var(--ink); }
 
+/* Kicker: a small line of capitals above a title (the topic, the kind of an item). */
+.kicker {
+  color: var(--primary);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
 /* Card: white box with a 4 px shadow and a small caps title. */
 .card {
   padding: 14px 16px;

@@ -24,6 +24,8 @@ async function answer(choice: "Đúng" | "Sai", last = false) {
   await userEvent.click(screen.getByRole("button", { name: last ? "Hoàn thành" : "Tiếp" }));
 }
 
+const squares = () => [...document.querySelectorAll(".squares.steps > *")].map((square) => square.className);
+
 describe("ReviewScreen", () => {
   test("a station: 5 questions, explanations at once, then the rewards and the next lesson", async () => {
     const { store } = await renderWithGame(<ReviewScreen stationId="r.r1" onExit={() => {}} rng={seededRng(1)} />, {
@@ -32,11 +34,13 @@ describe("ReviewScreen", () => {
     });
     expect(screen.getByRole("heading", { name: "Trạm ôn" })).toBeInTheDocument();
     expect(screen.getByText("Câu 1/5")).toBeInTheDocument();
+    expect(squares()).toEqual(["current", "todo", "todo", "todo", "todo"]);
     expect(screen.getByRole("button", { name: "Tiếp" })).toBeDisabled();
     await userEvent.click(screen.getByRole("radio", { name: "Sai" }));
     await userEvent.click(screen.getByRole("button", { name: "Kiểm tra" }));
     expect(screen.getByText("Giải thích.")).toBeInTheDocument();
     await userEvent.click(screen.getByRole("button", { name: "Tiếp" }));
+    expect(squares()).toEqual(["done", "current", "todo", "todo", "todo"]);
     for (let n = 2; n <= 4; n += 1) await answer("Đúng");
     await answer("Đúng", true);
 

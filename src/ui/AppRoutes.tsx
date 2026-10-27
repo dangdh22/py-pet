@@ -23,6 +23,7 @@ import { FocusLayout } from "./shell/FocusLayout";
 import { RailLayout } from "./shell/RailLayout";
 import { SideNav, type RailItem } from "./shell/SideNav";
 import { ShopScreen } from "./ShopScreen";
+import { StudyNotice } from "./StudyNotice";
 import { TopicTestScreen } from "./TopicTestScreen";
 import { useStudyTimer } from "./useStudyTimer";
 
@@ -141,9 +142,10 @@ function EvolutionRoute({ stage, stageNumber, onExit }: { stage: Stage; stageNum
 function Notice({ message }: { message: string }) {
   const { t } = useLang();
   return (
-    <main className="room">
-      <p>{message}</p>
-      <a href="#/map">{t("room.map")}</a>
-    </main>
+    <StudyNotice message={message}>
+      <a href="#/map" className="button">
+        {t("room.map")}
+      </a>
+    </StudyNotice>
   );
 }

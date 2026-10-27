@@ -6,6 +6,7 @@ import { useLang } from "../i18n/LangProvider";
 import { useContent } from "./contexts";
 import { useGame } from "./GameProvider";
 import { SessionScreen } from "./SessionScreen";
+import { StudyNotice } from "./StudyNotice";
 
 /** Practice a parent gave (spec 9.2): a practice session; finishing it removes it from "Học tiếp". */
 export function AssignedPracticeScreen({ id, onExit }: { id: string; onExit(): void }) {
@@ -19,11 +20,7 @@ export function AssignedPracticeScreen({ id, onExit }: { id: string; onExit(): v
   const concept = assigned ? findConcept(bundle, assigned.conceptId) : undefined;
 
   if (!assigned) {
-    return (
-      <main className="room">
-        <p>{t("assigned.notFound")}</p>
-      </main>
-    );
+    return <StudyNotice message={t("assigned.notFound")} />;
   }
   return (
     <SessionScreen

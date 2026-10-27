@@ -1,17 +1,20 @@
 // @vitest-environment jsdom
 import { screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { beforeEach, describe, expect, test } from "vitest";
+import { beforeEach, describe, expect, test, vi } from "vitest";
 import { initialGameState } from "../../game/state";
 import { MemoryStore } from "../../storage/memoryStore";
 import { fakeRunner, okResult, renderWithApp } from "../../test/render";
 import { renderWithGame, TODAY } from "../../test/renderGame";
+import { ErrorBoundary } from "../ErrorBoundary";
 import { PinChip, StreakChip, XuChip } from "./Chips";
 import { FocusLayout } from "./FocusLayout";
+import { FocusTitle } from "./FocusTitle";
 import { Logo } from "./Logo";
 import { RailLayout } from "./RailLayout";
 import { RunnerAlert, RunnerStatus } from "./RunnerStatus";
 import { SideNav, type RailItem } from "./SideNav";
+import { GoalSquares, stepStates, StepSquares } from "./Squares";
 import { UiLangSwitch } from "./UiLangSwitch";
 
 const NOT_PERSISTENT = "Trình duyệt đang chặn lưu dữ liệu. Tiến độ sẽ không được lưu.";
@@ -297,5 +300,107 @@ describe("FocusLayout", () => {
     expect(screen.getAllByRole("alert")).toHaveLength(2);
     expect(screen.getByText(NOT_PERSISTENT)).toBeInTheDocument();
     expect(screen.getByText("Robo chưa khởi động được")).toBeInTheDocument();
+  });
+});
+
+describe("FocusTitle", () => {
+  test("puts the title, the topic, the step squares and the progress in the bar of the focus layout", async () => {
+    await renderWithGame(
+      <FocusLayout>
+        <FocusTitle title="Bài 1 · Bài thử" kicker="Chủ đề thử" progress="Thẻ 1/2" steps={["current", "todo"]} />
+        <main>
+          <p>page</p>
+        </main>
+      </FocusLayout>,
+    );
+    const bar = screen.getByRole("banner");
+    expect(within(bar).getByRole("heading", { level: 1, name: "Bài 1 · Bài thử" })).toBeInTheDocument();
+    expect(within(bar).getByText("Chủ đề thử")).toBeInTheDocument();
+    expect(within(bar).getByText("Thẻ 1/2")).toBeInTheDocument();
+    const squares = bar.querySelector(".squares.steps");
+    expect(squares).toHaveAttribute("aria-hidden", "true");
+    expect([...(squares?.children ?? [])].map((square) => square.className)).toEqual(["current", "todo"]);
+    // The bar holds the only page title: the screen below it adds none.
+    expect(screen.getAllByRole("heading", { level: 1 })).toHaveLength(1);
+  });
+
+  test("keeps the order of the bar: the way back, the title, the Python status, the chips", async () => {
+    await renderWithGame(
+      <FocusLayout>
+        <FocusTitle title="Bài 1 · Bài thử" />
+      </FocusLayout>,
+    );
+    const bar = screen.getByRole("banner");
+    const parts = [...bar.children].map((part) => part.className || part.tagName);
+    expect(parts).toEqual(["button small", "focus-title-slot", "runner-status runner-ready", "focus-chips"]);
+    expect(bar.querySelector(".focus-title-slot")).toContainElement(screen.getByRole("heading", { level: 1 }));
+  });
+
+  test("leaves out the topic, the squares and the progress that it does not get", async () => {
+    await renderWithGame(
+      <FocusLayout>
+        <FocusTitle title="Ôn tập" />
+      </FocusLayout>,
+    );
+    const bar = screen.getByRole("banner");
+    expect(within(bar).getByRole("heading", { level: 1, name: "Ôn tập" })).toBeInTheDocument();
+    expect(bar.querySelector(".focus-kicker")).toBeNull();
+    expect(bar.querySelector(".squares")).toBeNull();
+    expect(bar.querySelector(".focus-progress")).toBeNull();
+  });
+
+  test("without a focus layout it draws in place, so a screen can be tested alone", () => {
+    const { container } = renderWithApp(<FocusTitle title="Bài 1 · Bài thử" kicker="Chủ đề thử" progress="Thẻ 1/2" />);
+    expect(screen.getByRole("heading", { level: 1, name: "Bài 1 · Bài thử" })).toBeInTheDocument();
+    expect(container.querySelector(".focus-title-inline")).toContainElement(screen.getByText("Thẻ 1/2"));
+  });
+
+  test("a screen that crashes below the bar takes its title away and keeps the way back", async () => {
+    const error = vi.spyOn(console, "error").mockImplementation(() => {});
+    function Boom(): never {
+      throw new Error("boom");
+    }
+    await renderWithGame(
+      <FocusLayout>
+        <ErrorBoundary>
+          <FocusTitle title="X" />
+          <Boom />
+        </ErrorBoundary>
+      </FocusLayout>,
+    );
+    error.mockRestore();
+    expect(screen.getByRole("alert")).toHaveTextContent("Robo bị trục trặc rồi.");
+    expect(screen.getByRole("link", { name: "Về phòng" })).toBeInTheDocument();
+    expect(screen.queryByRole("heading", { name: "X" })).not.toBeInTheDocument();
+  });
+});
+
+describe("step squares", () => {
+  test("stepStates marks the current step, the steps before it and any step that is done", () => {
+    expect(stepStates(4, 2, (index) => index === 3)).toEqual(["done", "done", "current", "done"]);
+    expect(stepStates(3, 0, () => false)).toEqual(["current", "todo", "todo"]);
+    expect(stepStates(0, 0, () => false)).toEqual([]);
+  });
+
+  test("StepSquares draws a hidden square for each state", () => {
+    const { container } = renderWithApp(<StepSquares steps={["done", "current", "todo"]} />);
+    const squares = container.querySelector(".squares.steps");
+    expect(squares).toHaveAttribute("aria-hidden", "true");
+    expect([...(squares?.children ?? [])].map((square) => square.className)).toEqual(["done", "current", "todo"]);
+  });
+
+  test.each([
+    [0, 2, 0, 2],
+    [1, 28, 1, 10],
+    [14, 28, 5, 10],
+    [3, 10, 3, 10],
+    [12, 10, 10, 10],
+    [1, 0, 0, 0],
+  ])("GoalSquares for %i of %i fills %i of %i squares", (done, goal, filled, shown) => {
+    const { container } = renderWithApp(<GoalSquares done={done} goal={goal} />);
+    const squares = container.querySelector(".squares");
+    expect(squares).toHaveAttribute("aria-hidden", "true");
+    expect(squares?.children).toHaveLength(shown);
+    expect(squares?.querySelectorAll(".on")).toHaveLength(filled);
   });
 });

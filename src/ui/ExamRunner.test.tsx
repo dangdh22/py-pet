@@ -34,10 +34,13 @@ describe("ExamRunner", () => {
     });
     expect(screen.getByRole("heading", { name: "Đề thử" })).toBeInTheDocument();
     expect(screen.getByText("Câu 1/2")).toBeInTheDocument();
+    const squares = () => [...document.querySelectorAll(".squares.steps > *")].map((square) => square.className);
+    expect(squares()).toEqual(["current", "todo"]);
     expect(screen.getByRole("button", { name: "Tiếp" })).toBeDisabled();
     await userEvent.click(screen.getByRole("radio", { name: "Sai" }));
     await userEvent.click(screen.getByRole("button", { name: "Chọn đáp án này" }));
     await userEvent.click(screen.getByRole("button", { name: "Tiếp" }));
+    expect(squares()).toEqual(["done", "current"]);
 
     expect(screen.getByText("In ra Hi (x.l1.ex1)")).toBeInTheDocument();
     expect(screen.queryByRole("button", { name: /gợi ý/i })).not.toBeInTheDocument();

@@ -422,6 +422,7 @@ export const vi = {
   "rail.guide": "Hướng dẫn",
   "rail.skip": "Bỏ qua menu",
   "focus.pin": "Pin: {n}/{max}",
+  "focus.lessonTitle": "Bài {n} · {title}",
   "landing.navLabel": "Trang giới thiệu",
   "landing.home": "Trang chủ",
   "landing.lessons": "Bài học",

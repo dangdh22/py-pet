@@ -15,6 +15,7 @@ import { ExamRunner, formatScore } from "./ExamRunner";
 import { useGame } from "./GameProvider";
 import { PetRobot } from "./PetRobot";
 import { routeToHash, stepRoute } from "./routing";
+import { StudyNotice } from "./StudyNotice";
 
 /**
  * The evolution test of a stage (spec 5.11). The paper avoids the previous attempt's items. Passed: the robot
@@ -72,12 +73,11 @@ function EvolutionAttempt({
 
   if (remedialFirst) {
     return (
-      <main className="room">
-        <p>{t("evolution.remedialFirst")}</p>
+      <StudyNotice message={t("evolution.remedialFirst")}>
         <a className="button primary" href={routeToHash({ name: "remedial" })}>
           {t("evolution.startRemedial")}
         </a>
-      </main>
+      </StudyNotice>
     );
   }
   if (grade) {

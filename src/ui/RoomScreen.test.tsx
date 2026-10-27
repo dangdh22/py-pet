@@ -104,6 +104,17 @@ describe("RoomScreen", () => {
     expect(week?.querySelectorAll(".on")).toHaveLength(5);
   });
 
+  test("a plan of 28 lessons with 1 done still fills 1 square of the 10", async () => {
+    const state = initialGameState(TODAY);
+    state.settings.weeklyTarget = 28;
+    state.week = { ...state.week, start: weekStart(TODAY), lessonsDone: 1 };
+    await renderWithGame(<RoomScreen />, { state });
+    const week = document.querySelectorAll(".room-goals .squares")[1];
+    expect(screen.getByText("Tuần này: 1/28 bài")).toBeInTheDocument();
+    expect(week?.children).toHaveLength(10);
+    expect(week?.querySelectorAll(".on")).toHaveLength(1);
+  });
+
   test("offers a free review once a lesson is done, and the next node of the map", async () => {
     const state = initialGameState(TODAY);
     state.progress.completedLessons = ["r.l1", "r.l2"];

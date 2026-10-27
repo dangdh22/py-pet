@@ -24,23 +24,8 @@ import { nextStepLabel } from "./nextStepLabel";
 import { RoomScene } from "./robot/RoomScene";
 import { routeToHash, stepRoute } from "./routing";
 import { StreakChip, XuChip } from "./shell/Chips";
+import { GoalSquares } from "./shell/Squares";
 import { StatBar } from "./StatBar";
-
-/** The most squares a goal row shows; a longer goal fills them in proportion. */
-const SQUARES_MAX = 10;
-
-/** A row of squares for a goal: `done` of `goal`, with the numbers in the text beside it, so the squares are only a picture. */
-function Squares({ done, goal }: { done: number; goal: number }) {
-  const shown = Math.min(goal, SQUARES_MAX);
-  const filled = goal > 0 ? Math.min(shown, Math.floor((done * shown) / goal)) : 0;
-  return (
-    <span className="squares" aria-hidden="true">
-      {Array.from({ length: shown }, (_, index) => (
-        <span key={index} className={index < filled ? "on" : undefined} />
-      ))}
-    </span>
-  );
-}
 
 export function RoomScreen() {
   const game = useGame();
@@ -138,7 +123,7 @@ export function RoomScreen() {
             <ul className="room-goals">
               <li>
                 <span>{t("room.today", { done: points, goal: state.settings.dailyGoal })}</span>
-                <Squares done={points} goal={state.settings.dailyGoal} />
+                <GoalSquares done={points} goal={state.settings.dailyGoal} />
               </li>
               <li>
                 {target === 0 ? (
@@ -146,7 +131,7 @@ export function RoomScreen() {
                 ) : (
                   <>
                     <span>{t("room.week", { done: weekDone, target })}</span>
-                    <Squares done={weekDone} goal={target} />
+                    <GoalSquares done={weekDone} goal={target} />
                   </>
                 )}
               </li>

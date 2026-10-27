@@ -424,6 +424,7 @@ export const en: Record<MessageKey, string> = {
   "rail.guide": "Guide",
   "rail.skip": "Skip the menu",
   "focus.pin": "Battery: {n}/{max}",
+  "focus.lessonTitle": "Lesson {n} · {title}",
   "landing.navLabel": "Welcome page",
   "landing.home": "Home",
   "landing.lessons": "Lessons",

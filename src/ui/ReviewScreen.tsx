@@ -6,6 +6,7 @@ import { useLang } from "../i18n/LangProvider";
 import { useContent } from "./contexts";
 import { useGame } from "./GameProvider";
 import { SessionScreen } from "./SessionScreen";
+import { StudyNotice } from "./StudyNotice";
 
 /**
  * A review station of the map (stationId) or a free review (null). A free review needs at least 1 item: it charges
@@ -22,11 +23,7 @@ export function ReviewScreen({ stationId, onExit, rng = Math.random }: { station
   });
 
   if (stationId === null && items.length === 0) {
-    return (
-      <main className="room">
-        <p>{t("review.empty")}</p>
-      </main>
-    );
+    return <StudyNotice message={t("review.empty")} />;
   }
   return (
     <SessionScreen

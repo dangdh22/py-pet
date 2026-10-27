@@ -9,6 +9,8 @@ import { ExamCodeView } from "./ExamCodeView";
 import { useGame } from "./GameProvider";
 import { ItemBoundary } from "./ItemBoundary";
 import { QuestionCard } from "./QuestionCard";
+import { FocusTitle } from "./shell/FocusTitle";
+import { stepStates } from "./shell/Squares";
 
 /** A score with at most 1 decimal, written the way the language writes decimals (19,2 in Vietnamese). */
 export function formatScore(score: number, lang: Lang): string {
@@ -110,13 +112,14 @@ export function ExamRunner({
   }
 
   return (
-    <main className="lesson">
-      <div className="lesson-top">
-        <h1>{title}</h1>
-        {item && <span>{t("review.itemOf", { current: index + 1, total: items.length })}</span>}
-      </div>
+    <main className="study-page">
+      <FocusTitle
+        title={title}
+        progress={item && t("review.itemOf", { current: index + 1, total: items.length })}
+        steps={item && stepStates(items.length, index, (i) => answers[i] !== undefined)}
+      />
       {body}
-      <nav className="lesson-nav">
+      <nav className="study-nav">
         <button
           className="primary"
           disabled={item !== undefined && answers[index] === undefined}
