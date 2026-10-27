@@ -29,7 +29,7 @@ test("progress survives a reload", async ({ page }) => {
   await expect(page.getByText("Mục tiêu hôm nay: 1/2")).toBeVisible();
   await expect(page.getByText("Xu: 8")).toBeVisible();
   await page.getByRole("link", { name: "Bản đồ học" }).click();
-  await expect(page.getByRole("listitem").filter({ hasText: "Chương trình là gì?" })).toContainText("Đã xong");
+  await expect(page.getByRole("link", { name: "Chương trình là gì?: Đã xong" })).toBeVisible();
 });
 
 test("a second tab only shows the other-tab message", async ({ page, context }) => {

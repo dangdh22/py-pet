@@ -7,8 +7,6 @@
 .app-loading { padding: 40px 20px; text-align: center; }
 .unsupported h1 { font-size: 1.4rem; }
 
-.lesson-list a { color: var(--primary); font-size: 1.1rem; }
-.badge-done { margin-left: 8px; color: var(--success); font-weight: 600; }
 .crash { text-align: center; padding: 40px; }
 
 .code-block {
@@ -22,8 +20,6 @@
   white-space: pre-wrap;
   overflow-x: auto;
 }
-
-.exercise-prompt { white-space: pre-wrap; font-size: 1.1rem; }
 
 .backup { max-width: 560px; margin: 0 auto; padding: 24px; text-align: center; }
 .backup form { display: grid; gap: 12px; text-align: left; margin-top: 16px; }
