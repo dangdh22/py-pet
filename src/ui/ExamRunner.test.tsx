@@ -10,18 +10,10 @@ import { brokenQuestion } from "../test/brokenItem";
 import { examBundle } from "../test/examBundle";
 import { fakeRunner, okResult } from "../test/render";
 import { renderWithGame, TODAY } from "../test/renderGame";
-import { ExamRunner, formatScore } from "./ExamRunner";
+import { ExamRunner } from "./ExamRunner";
 
 const bundle = examBundle();
 const items = ["x.q1", "x.l1.ex1"].map((id) => findItem(bundle, id) as ExamItem);
-
-describe("formatScore", () => {
-  test("writes at most 1 decimal, with a comma in Vietnamese", () => {
-    expect(formatScore(19, "vi")).toBe("19");
-    expect(formatScore(19.25, "vi")).toBe("19,3");
-    expect(formatScore(19.25, "en")).toBe("19.3");
-  });
-});
 
 describe("ExamRunner", () => {
   test("1 item per card; the answers are recorded as test answers and handed in at the end", async () => {

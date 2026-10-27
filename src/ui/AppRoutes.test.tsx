@@ -571,6 +571,9 @@ describe("M4a routes", () => {
     const main = screen.getByRole("main");
     expect(main).toHaveClass("study-notice");
     expect(within(main).getByText(message)).toBeInTheDocument();
+    // The message is the h1 of the page, and the only one.
+    expect(screen.getAllByRole("heading", { level: 1 })).toHaveLength(1);
+    expect(screen.getByRole("heading", { level: 1, name: message })).toBeInTheDocument();
     expect(within(screen.getByRole("banner")).getByRole("link", { name: "Về phòng" })).toBeInTheDocument();
   });
 });

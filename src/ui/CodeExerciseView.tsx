@@ -178,9 +178,10 @@ export function CodeExerciseView({
           <div className="io-result">
             {busy && <p>{t("code.running")}</p>}
             {runOutput !== null && <OutputPanel stdout={runOutput} />}
-            {judgeResult && <TestResultList result={judgeResult} />}
           </div>
         </div>
+        {/* Under the row, not in it: the comparison puts 2 code blocks side by side and needs the width of the whole side. */}
+        {judgeResult && <TestResultList result={judgeResult} />}
         <div className="actions">
           <button onClick={handleRun} disabled={disabled}>
             <Icon name="play" />

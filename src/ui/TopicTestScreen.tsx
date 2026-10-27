@@ -5,7 +5,8 @@ import type { Rng } from "../game/random";
 import { isPass } from "../game/rewards";
 import { pick } from "../i18n/lang";
 import { useLang } from "../i18n/LangProvider";
-import { ExamRunner, formatScore } from "./ExamRunner";
+import { ExamRunner } from "./ExamRunner";
+import { formatScore } from "./format";
 import { useGame } from "./GameProvider";
 import { ResultView } from "./ResultView";
 

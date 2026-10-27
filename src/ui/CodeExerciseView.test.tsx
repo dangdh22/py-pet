@@ -116,6 +116,20 @@ describe("CodeExerciseView", () => {
     expect(within(results).getByText("Test ẩn")).toBeInTheDocument();
   });
 
+  test("the run output stays beside the input; the test results take the full width of the right side, under that row", async () => {
+    renderWithApp(<CodeExerciseView exercise={fixtureCodeExercise} onComplete={() => {}} />, {
+      runner: fakeRunner(() => okResult("Hello\n")),
+    });
+    const row = () => document.querySelector(".io")!;
+    await userEvent.click(screen.getByRole("button", { name: "Chạy thử" }));
+    expect(within(row() as HTMLElement).getByRole("region", { name: "Kết quả" })).toHaveTextContent("Hello");
+    await userEvent.click(submitButton());
+    const box = (await screen.findByRole("list", { name: "Kết quả chấm" })).closest(".test-box")!;
+    expect(row().contains(box)).toBe(false);
+    expect(box.parentElement).toHaveClass("ide");
+    expect(row().nextElementSibling).toBe(box);
+  });
+
   test("hints appear one by one", async () => {
     renderWithApp(<CodeExerciseView exercise={fixtureCodeExercise} onComplete={() => {}} />);
     await userEvent.click(screen.getByRole("button", { name: "Gợi ý 1/2" }));

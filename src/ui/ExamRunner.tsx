@@ -2,7 +2,6 @@ import { useState } from "react";
 import { isConceptReached } from "../content/lookup";
 import { isChoiceQuestion } from "../content/types";
 import type { ExamAnswer, ExamItem } from "../game/exam";
-import type { Lang } from "../i18n/lang";
 import { useLang } from "../i18n/LangProvider";
 import { useContent } from "./contexts";
 import { ExamCodeView } from "./ExamCodeView";
@@ -11,12 +10,6 @@ import { ItemBoundary } from "./ItemBoundary";
 import { QuestionCard } from "./QuestionCard";
 import { FocusTitle } from "./shell/FocusTitle";
 import { stepStates } from "./shell/Squares";
-
-/** A score with at most 1 decimal, written the way the language writes decimals (19,2 in Vietnamese). */
-export function formatScore(score: number, lang: Lang): string {
-  const text = Number.isInteger(score) ? String(score) : score.toFixed(1);
-  return lang === "vi" ? text.replace(".", ",") : text;
-}
 
 /**
  * The items of a test, 1 per card (spec 8.2.4). Each answer is recorded at once (mastery, Leitner, attempt history)

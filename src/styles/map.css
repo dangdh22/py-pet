@@ -48,12 +48,11 @@
 }
 .map-key-done { background: var(--mint); }
 .map-key-next { background: var(--primary); }
+/* The review station (a diamond) and the test (a square) are only shapes: the map has 3 colors (done, next, locked), so they stay white. */
 .map-key-review {
   margin: 0 3px;
-  background: var(--yellow);
   transform: rotate(45deg);
 }
-.map-key-test { background: var(--pink); }
 .map-key-locked {
   border-color: var(--muted);
   background: repeating-linear-gradient(45deg, var(--surface) 0 3px, var(--map-soft) 3px 6px);
