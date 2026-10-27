@@ -41,6 +41,9 @@ const theme = EditorView.theme(
     },
     ".cm-scroller": {
       fontFamily: "var(--font-mono)",
+      // The code is shown as typed: `!=`, `==`, `<=` and `->` must not turn into one sign (the font joins them).
+      fontVariantLigatures: "none",
+      fontFeatureSettings: '"calt" 0, "liga" 0',
       lineHeight: "1.6",
     },
     ".cm-content": {

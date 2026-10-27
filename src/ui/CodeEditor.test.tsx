@@ -49,6 +49,14 @@ describe("CodeEditor", () => {
     expect(tab).toHaveAttribute("aria-hidden", "true");
   });
 
+  test("shows the code as typed: no font ligatures, so `!=` is not drawn as a single sign", () => {
+    const { container } = renderEditor();
+    const scroller = container.querySelector(".cm-scroller") as HTMLElement;
+    const style = getComputedStyle(scroller);
+    expect(style.getPropertyValue("font-variant-ligatures")).toBe("none");
+    expect(style.getPropertyValue("font-feature-settings")).toBe('"calt" 0, "liga" 0');
+  });
+
   test("marks the error line, and removes the mark when the line is null", () => {
     const { container, rerender, props } = renderEditor({ errorLine: 1 });
     expect(container.querySelectorAll(".cm-error-line")).toHaveLength(1);
