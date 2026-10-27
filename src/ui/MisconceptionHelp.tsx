@@ -15,11 +15,11 @@ export function MisconceptionHelp({ conceptId }: { conceptId: string }) {
   if (!concept?.misconceptionHtml) return null;
   return (
     <div className="misconception">
-      <button aria-expanded={open} onClick={() => setOpen(!open)}>
+      <button className="small" aria-expanded={open} onClick={() => setOpen(!open)}>
         {t("misconception.show")}
       </button>
       {open && (
-        <section className="misconception-card" aria-label={t("misconception.title")}>
+        <section className="misconception-card card" aria-label={t("misconception.title")}>
           <h4>
             {t("misconception.title")}: {pick(concept.name, uiLang)}
           </h4>

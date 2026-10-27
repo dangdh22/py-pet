@@ -3,6 +3,7 @@ import { problemFromOutcome } from "../explain/problem";
 import { useLang } from "../i18n/LangProvider";
 import { useRunner } from "./contexts";
 import { crashFeedback, feedbackForProblem, type Feedback } from "./feedback";
+import { Icon } from "./icons";
 import { OutputPanel } from "./OutputPanel";
 import { RobotBubble } from "./RobotBubble";
 import { useExplain } from "./useExplain";
@@ -37,6 +38,7 @@ export function CodeExample({ code }: { code: string }) {
         <code>{code}</code>
       </pre>
       <button onClick={handleRun} disabled={running || runner.status !== "ready"}>
+        <Icon name="play" />
         {running ? t("code.running") : t("code.run")}
       </button>
       {stdout !== null && <OutputPanel stdout={stdout} />}

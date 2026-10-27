@@ -21,3 +21,116 @@
 }
 .study-notice .card > p { margin: 0 0 16px; }
 .study-notice .card > :last-child { margin-bottom: 0; }
+
+/* A box: a white frame with a 2 px border. Its head is a strip of small capitals (the output of a run, the input, the test results). */
+.box {
+  border: var(--border-w) solid var(--ink);
+  background: var(--surface);
+}
+.box-head {
+  padding: 6px 10px;
+  border-bottom: var(--border-w) solid var(--ink);
+  background: #f6efdc;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* The code editor: a box with a file tab on top. The colors inside come from `editorTheme.ts`. */
+.code-editor { box-shadow: var(--shadow-card); }
+.code-editor .cm-editor { min-height: 220px; }
+.code-editor-tab {
+  display: flex;
+  padding: 0;
+  letter-spacing: normal;
+  text-transform: none;
+}
+.code-editor-tab > span {
+  padding: 6px 14px;
+  border-right: var(--border-w) solid var(--ink);
+  background: var(--yellow);
+  font-family: var(--font-mono);
+  font-size: 13px;
+}
+
+/* The card of a lesson: a reading column in the middle. */
+.theory-card {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 20px;
+  font-size: 17px;
+  line-height: 1.6;
+}
+.theory-card .code-block { font-size: 15px; }
+
+/* The output of a run: a box whose body is a code block. */
+.output { margin-top: 12px; }
+.output pre {
+  margin: 0;
+  padding: 10px 12px;
+  background: var(--code-bg);
+  color: var(--code-text);
+  font-family: var(--font-mono);
+  font-size: 15px;
+  white-space: pre-wrap;
+  overflow-x: auto;
+}
+.output p {
+  margin: 0;
+  padding: 6px 12px;
+  border-top: var(--border-w) solid var(--ink);
+  color: var(--muted);
+  font-size: 13px;
+}
+
+/* Robo's bubble: Robo on the left and a bubble with a solid ink tail that points at Robo. */
+.robot-bubble {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-top: 16px;
+}
+.robot-bubble > svg { flex: none; }
+.bubble {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  padding: 10px 14px;
+  border: var(--border-w) solid var(--ink);
+  background: var(--bg);
+  box-shadow: var(--shadow);
+}
+.bubble::after {
+  content: "";
+  position: absolute;
+  top: 14px;
+  left: -12px;
+  width: 12px;
+  height: 16px;
+  background: var(--ink);
+  clip-path: polygon(100% 0, 0 50%, 100% 100%);
+}
+.bubble p { margin: 0; }
+.bubble p + p,
+.bubble details { margin-top: 8px; }
+.bubble-hint { color: var(--muted); }
+/* The original Python error, shown on request. */
+.bubble pre {
+  margin: 8px 0 0;
+  padding: 8px 10px;
+  border: var(--border-w) solid var(--ink);
+  background: var(--code-bg);
+  color: var(--code-text);
+  font-family: var(--font-mono);
+  font-size: 14px;
+  white-space: pre-wrap;
+  overflow-x: auto;
+}
+
+/* The "common misconception" card that Robo offers after a mistake. */
+.misconception-card {
+  margin-top: 12px;
+  background: var(--chip-xu);
+}
+.misconception-card h4 { margin: 0 0 8px; }

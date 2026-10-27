@@ -5,6 +5,10 @@ import { EditorState, StateEffect, StateField } from "@codemirror/state";
 import { Decoration, keymap, type DecorationSet } from "@codemirror/view";
 import { basicSetup, EditorView } from "codemirror";
 import { useEffect, useLayoutEffect, useRef } from "react";
+import { editorTheme } from "./editorTheme";
+
+/** The tab above the editor shows this file name; the child's code always runs as `main.py`, so it is not translated. */
+export const EDITOR_FILE_NAME = "main.py";
 
 const setErrorLine = StateEffect.define<number | null>();
 
@@ -53,6 +57,7 @@ export function CodeEditor({ value, onChange, errorLine, ariaLabel }: CodeEditor
           indentUnit.of("    "),
           keymap.of([indentWithTab]),
           errorLineField,
+          editorTheme,
           EditorView.contentAttributes.of({ "aria-label": ariaLabel }),
           EditorView.updateListener.of((update) => {
             if (update.docChanged) onChangeRef.current(update.state.doc.toString());
@@ -80,5 +85,12 @@ export function CodeEditor({ value, onChange, errorLine, ariaLabel }: CodeEditor
     view.current?.dispatch({ effects: setErrorLine.of(errorLine) });
   }, [errorLine]);
 
-  return <div ref={host} className="code-editor" />;
+  return (
+    <div className="code-editor box">
+      <div className="code-editor-tab box-head" aria-hidden="true">
+        <span>{EDITOR_FILE_NAME}</span>
+      </div>
+      <div ref={host} />
+    </div>
+  );
 }

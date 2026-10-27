@@ -11,6 +11,17 @@ import { OUTPUT_DISPLAY_LIMIT, OutputPanel } from "./OutputPanel";
 const card = fixtureLesson.cards[0]!;
 
 describe("CardView", () => {
+  test("the card is a theory card", () => {
+    renderWithApp(<CardView card={card} />);
+    expect(screen.getByText("Thẻ một").closest(".card")).toHaveClass("card", "theory-card");
+  });
+
+  test("the Run button shows a play icon", () => {
+    renderWithApp(<CardView card={card} />);
+    const run = screen.getByRole("button", { name: "Chạy thử" });
+    expect(run.querySelector('svg[data-icon="play"]')).not.toBeNull();
+  });
+
   test("renders text and runs an example", async () => {
     const runner = fakeRunner(() => okResult("Xin chào\n"));
     renderWithApp(<CardView card={card} />, { runner });
