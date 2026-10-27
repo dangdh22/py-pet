@@ -1,4 +1,4 @@
-/* Page frames and navigation (UI revamp spec, section 6): the logo, the side menu, the rail layout and the focus layout. The landing bar adds its rules here later. */
+/* Page frames and navigation (UI revamp spec, section 6): the logo, the side menu, the rail layout, the focus layout and the landing page. */
 
 /* Logo: the yellow "Py" box and the app name. */
 .logo {
@@ -182,4 +182,186 @@
     border-left: 0;
     border-top: var(--border-w) solid var(--ink);
   }
+}
+
+/* Landing page (spec 6.3 and 7.1, option C "bold sticker"): a top bar, then the copy on the left and a sticker stage on the right. */
+.landing-page { min-height: 100vh; background: var(--bg); }
+.landing-nav {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  min-height: 62px;
+  padding: 8px 36px;
+  border-bottom: var(--border-w) solid var(--ink);
+  background: var(--surface);
+}
+.landing-menu {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-left: auto;
+}
+/* A bar item is a link, or a button when there is no profile yet; both look like plain text with a box on the current page. */
+.landing-link {
+  padding: 7px 12px;
+  border: var(--border-w) solid transparent;
+  background: transparent;
+  box-shadow: none;
+  color: var(--ink);
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+}
+.landing-link[aria-current="page"] { border-color: var(--ink); background: var(--bg); }
+.landing-link:hover:not(:disabled),
+.landing-link:active:not(:disabled) { transform: none; box-shadow: none; background: var(--bg); }
+.landing-link[aria-expanded="true"] { border-color: var(--ink); background: var(--mint-soft); }
+
+.landing {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 44px 56px;
+}
+.landing h1 {
+  margin: 0 0 16px;
+  font-size: 48px;
+  font-weight: 800;
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+.landing h1 mark { padding: 0 6px; background: var(--yellow); color: inherit; }
+.landing-lead {
+  max-width: 420px;
+  margin: 0 0 28px;
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+/* The 3 actions: one under the other, 330 px wide; a link or a button, the same box. */
+.landing-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-width: 330px;
+}
+.landing-btn {
+  justify-content: space-between;
+  padding: 14px 18px;
+  box-shadow: var(--shadow-card);
+  font-size: 16px;
+  text-align: left;
+}
+.landing-btn small { color: var(--muted); font-size: 12px; font-weight: 500; }
+.landing-btn:hover:not(:disabled) { box-shadow: 5px 5px 0 var(--ink); }
+.landing-btn:active:not(:disabled) { box-shadow: 1px 1px 0 var(--ink); }
+
+/* The card that explains the parent area before a profile exists. */
+.landing-parent-info {
+  max-width: 420px;
+  margin-top: 24px;
+  background: var(--mint-bg);
+}
+.landing-parent-info p { margin: 0 0 14px; line-height: 1.5; }
+.landing-parent-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+
+/* The stage: the mint block with Robo, the tilted speech bubble and the tilted code window overlap on purpose. */
+.landing-stage { position: relative; align-self: start; height: 380px; }
+.landing-robo {
+  position: absolute;
+  top: 0;
+  right: 10px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  width: 270px;
+  height: 280px;
+  padding-bottom: 14px;
+  border: var(--border-w) solid var(--ink);
+  background: var(--mint);
+  box-shadow: var(--shadow-lg);
+}
+.landing-bubble {
+  position: absolute;
+  top: 20px;
+  right: 200px;
+  padding: 8px 12px;
+  border: var(--border-w) solid var(--ink);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  font-size: 14px;
+  font-weight: 600;
+  transform: rotate(-3deg);
+}
+/* The solid tail (spec 5.5), pointing down at Robo. */
+.landing-bubble::after {
+  content: "";
+  position: absolute;
+  right: 18px;
+  bottom: -12px;
+  border-style: solid;
+  border-width: 10px 8px 0;
+  border-color: var(--ink) transparent transparent;
+}
+.landing-code {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 300px;
+  border: var(--border-w) solid var(--ink);
+  background: var(--surface);
+  box-shadow: var(--shadow-card);
+  transform: rotate(-1.5deg);
+}
+.landing-code-bar {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 8px;
+  border-bottom: var(--border-w) solid var(--ink);
+  background: var(--yellow);
+  font-size: 12px;
+  font-weight: 700;
+}
+.landing-code-bar i {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border: var(--border-w) solid var(--ink);
+  background: var(--surface);
+}
+.landing-code-bar span { margin-left: 6px; }
+.landing-code pre {
+  margin: 0;
+  padding: 10px 12px;
+  background: var(--code-bg);
+  font: 13px/1.6 var(--font-mono);
+}
+.landing-code-out {
+  padding: 8px 12px;
+  border-top: var(--border-w) dashed var(--ink);
+  background: var(--mint-bg);
+  font: 13px var(--font-mono);
+}
+.landing-code-out::before { content: "> "; }
+
+/* Narrow windows: the copy and the stage stack. The page must not scroll sideways. */
+@media (max-width: 899px) {
+  .landing-nav { padding: 8px 20px; }
+  .landing-menu { margin-left: 0; }
+  .landing { grid-template-columns: minmax(0, 1fr); padding: 32px 24px 40px; }
+  .landing h1 { font-size: 40px; }
+}
+@media (max-width: 479px) {
+  .landing h1 { font-size: 34px; }
+  .landing-stage { height: 400px; }
+  .landing-robo { right: 0; }
+  .landing-bubble { right: 150px; }
 }
