@@ -270,7 +270,6 @@
 }
 
 /* M4b: parent area */
-.parent-top { display: flex; justify-content: space-between; align-items: center; }
 .parent-gate form { display: grid; gap: 8px; max-width: 360px; }
 .alerts { color: #8a4b00; }
 .minutes-chart { list-style: none; padding: 0; display: grid; gap: 4px; max-width: 480px; }

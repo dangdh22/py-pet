@@ -1,7 +1,9 @@
 import { useEffect, useRef, useState, type FormEvent } from "react";
+import { conceptsNeedingHelp } from "../game/parentStats";
 import { useLang } from "../i18n/LangProvider";
 import type { MessageKey } from "../i18n/vi";
 import { isValidPin } from "../storage/pin";
+import { ErrorBoundary } from "./ErrorBoundary";
 import { formatDateTime } from "./format";
 import { useGame } from "./GameProvider";
 import { ParentHelp } from "./ParentHelp";
@@ -9,6 +11,7 @@ import { ParentOverview } from "./ParentOverview";
 import { ParentProgress } from "./ParentProgress";
 import { ParentRewards } from "./ParentRewards";
 import { ParentSettings } from "./ParentSettings";
+import { PARENT_PANEL_ID, PARENT_TABS, ParentNav, type ParentTab } from "./shell/ParentNav";
 import { RailLayout } from "./shell/RailLayout";
 import { SideNav } from "./shell/SideNav";
 
@@ -16,38 +19,29 @@ import { SideNav } from "./shell/SideNav";
 export const LOCK_AFTER_MS = 5 * 60_000;
 const LOCK_CHECK_MS = 10_000;
 
-type Tab = "overview" | "help" | "progress" | "rewards" | "settings";
-
-const TABS: { id: Tab; label: MessageKey }[] = [
-  { id: "overview", label: "parent.tabOverview" },
-  { id: "help", label: "parent.tabHelp" },
-  { id: "progress", label: "parent.tabProgress" },
-  { id: "rewards", label: "parent.tabRewards" },
-  { id: "settings", label: "parent.tabSettings" },
-];
-
+/** The gate has the side menu of the child's pages; once open, the menu turns into the parent tabs. */
 export function ParentScreen() {
   const [open, setOpen] = useState(false);
   const [autoLocked, setAutoLocked] = useState(false);
-  // A temporary frame, until this screen builds its own.
+  if (open) {
+    return (
+      <ParentArea
+        onLock={(auto) => {
+          setOpen(false);
+          setAutoLocked(auto);
+        }}
+      />
+    );
+  }
   return (
     <RailLayout nav={<SideNav current="parent" />}>
-      {open ? (
-        <ParentArea
-          onLock={(auto) => {
-            setOpen(false);
-            setAutoLocked(auto);
-          }}
-        />
-      ) : (
-        <ParentGate
-          autoLocked={autoLocked}
-          onOpen={() => {
-            setOpen(true);
-            setAutoLocked(false);
-          }}
-        />
-      )}
+      <ParentGate
+        autoLocked={autoLocked}
+        onOpen={() => {
+          setOpen(true);
+          setAutoLocked(false);
+        }}
+      />
     </RailLayout>
   );
 }
@@ -150,7 +144,6 @@ function ParentGate({ autoLocked, onOpen }: { autoLocked: boolean; onOpen(): voi
         </form>
       )}
       {error && <p role="alert">{t(error)}</p>}
-      <a href="#/">{t("nav.room")}</a>
     </main>
   );
 }
@@ -158,7 +151,7 @@ function ParentGate({ autoLocked, onOpen }: { autoLocked: boolean; onOpen(): voi
 function ParentArea({ onLock }: { onLock(auto: boolean): void }) {
   const { t } = useLang();
   const game = useGame();
-  const [tab, setTab] = useState<Tab>("overview");
+  const [tab, setTab] = useState<ParentTab>("overview");
   const lockRef = useRef(onLock);
   useEffect(() => {
     lockRef.current = onLock;
@@ -180,30 +173,38 @@ function ParentArea({ onLock }: { onLock(auto: boolean): void }) {
     };
   }, []);
 
+  const helpCount = conceptsNeedingHelp(game.state).length;
+  const rewardCount = game.state.rewards.requests.filter((r) => r.status === "pending").length;
+  const tabLabel = PARENT_TABS.find((item) => item.id === tab)?.label ?? "parent.title";
+  // Lock, then leave for the room: the area locks as the Lock button did, and the route changes.
+  const leave = () => {
+    onLock(false);
+    window.location.hash = "#/";
+  };
+
   return (
-    <main className="parent">
-      <div className="parent-top">
-        <h1>{t("parent.title")}</h1>
-        <button onClick={() => onLock(false)}>{t("parent.lock")}</button>
-      </div>
-      {game.pinResetAt && (
-        <p role="status" className="banner">
-          {t("parent.resetAt", { time: formatDateTime(game.pinResetAt) })}
-        </p>
-      )}
-      <div role="tablist" className="tabs">
-        {TABS.map((item) => (
-          <button key={item.id} role="tab" aria-selected={tab === item.id} onClick={() => setTab(item.id)}>
-            {t(item.label)}
-          </button>
-        ))}
-      </div>
-      {tab === "overview" && <ParentOverview />}
-      {tab === "help" && <ParentHelp />}
-      {tab === "progress" && <ParentProgress />}
-      {tab === "rewards" && <ParentRewards />}
-      {tab === "settings" && <ParentSettings />}
-      <a href="#/">{t("nav.room")}</a>
-    </main>
+    <RailLayout
+      mode="parent"
+      nav={<ParentNav tab={tab} onTab={setTab} onLock={leave} helpCount={helpCount} rewardCount={rewardCount} />}
+    >
+      <main className="parent">
+        <h1>{t(tabLabel)}</h1>
+        {game.pinResetAt && (
+          <p role="status" className="banner">
+            {t("parent.resetAt", { time: formatDateTime(game.pinResetAt) })}
+          </p>
+        )}
+        <div role="tabpanel" id={PARENT_PANEL_ID} aria-labelledby={`parent-tab-${tab}`}>
+          {/* A tab that crashes shows the crash message here and keeps the side menu; choosing another tab starts clean. */}
+          <ErrorBoundary key={tab}>
+            {tab === "overview" && <ParentOverview />}
+            {tab === "help" && <ParentHelp />}
+            {tab === "progress" && <ParentProgress />}
+            {tab === "rewards" && <ParentRewards />}
+            {tab === "settings" && <ParentSettings />}
+          </ErrorBoundary>
+        </div>
+      </main>
+    </RailLayout>
   );
 }
