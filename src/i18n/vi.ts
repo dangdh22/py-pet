@@ -401,6 +401,10 @@ export const vi = {
   "settings.exportLog": "Xuất nhật ký lỗi",
   "app.exportRaw": "Xuất dữ liệu để gửi hỗ trợ",
   "app.exportRawFailed": "Chưa xuất được dữ liệu.",
+  "rail.label": "Menu chính",
+  "rail.room": "Phòng Robo",
+  "rail.guide": "Hướng dẫn",
+  "focus.pin": "Pin: {n}/{max}",
 } as const;
 
 export type MessageKey = keyof typeof vi;

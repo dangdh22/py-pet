@@ -1,1 +1,185 @@
-/* Page frames and navigation (side bar, focus bar, landing). The R1 tasks that build them add the rules here. */
+/* Page frames and navigation (UI revamp spec, section 6): the logo, the side menu, the rail layout and the focus layout. The landing bar adds its rules here later. */
+
+/* Logo: the yellow "Py" box and the app name. */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--ink);
+  font-size: 19px;
+  font-weight: 800;
+  text-decoration: none;
+}
+.logo-mark {
+  padding: 2px 7px;
+  border: var(--border-w) solid var(--ink);
+  background: var(--yellow);
+  font-size: 13px;
+}
+
+/* Python status: a small square (yellow while starting, green when ready) and the text. Scoped to the 2 places that show it. */
+.side-nav .runner-status,
+.focus-bar .runner-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+.side-nav .runner-status::before,
+.focus-bar .runner-status::before {
+  content: "";
+  flex: none;
+  width: 10px;
+  height: 10px;
+  border: var(--border-w) solid var(--ink);
+  background: var(--yellow);
+}
+.side-nav .runner-ready::before,
+.focus-bar .runner-ready::before { background: var(--stat-pin); }
+
+/* Rail layout (frame with a side menu): the menu is 220 px wide and stays in view; the main column scrolls with the page. */
+.rail-layout {
+  --rail-w: 220px;
+  display: grid;
+  grid-template-columns: var(--rail-w) minmax(0, 1fr);
+  min-height: 100vh;
+}
+.rail-main { min-width: 0; }
+
+.side-nav {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  align-self: start;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  height: 100vh;
+  padding: 18px 14px;
+  overflow-y: auto;
+  border-right: var(--border-w) solid var(--ink);
+  background: var(--surface);
+}
+.rail-layout[data-mode="parent"] .side-nav { background: var(--mint-bg); }
+.side-nav .logo { padding: 0 6px 20px; }
+
+.side-nav-group { display: flex; flex-direction: column; gap: 4px; }
+.side-nav-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border: var(--border-w) solid transparent;
+  color: var(--ink);
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+}
+.side-nav-item:not([aria-current]):hover { background: var(--bg); }
+/* The page being shown: a yellow box with a 3 px shadow (mint in the parent area). */
+.side-nav-item[aria-current="page"] {
+  border-color: var(--ink);
+  background: var(--yellow);
+  box-shadow: var(--shadow);
+}
+.rail-layout[data-mode="parent"] .side-nav-item[aria-current="page"] { background: var(--mint); }
+
+.side-nav-sep {
+  height: var(--border-w);
+  margin: 10px 4px;
+  border: 0;
+  background: #f0eadb;
+}
+.rail-layout[data-mode="parent"] .side-nav-sep { background: var(--mint); }
+
+.side-nav-bottom {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: auto;
+  padding-top: 12px;
+}
+.side-nav-bottom .runner-status { margin-left: 6px; }
+.side-nav-bottom .lang-switch { margin-left: 6px; }
+.side-nav-parent {
+  position: relative;
+  justify-content: flex-start;
+  gap: 10px;
+  padding: 10px 12px;
+  font-size: 14px;
+}
+.side-nav-parent[aria-current="page"] { background: var(--mint); }
+
+/* Focus layout (study screens): a 60 px bar with the way back, the Python status and the chips; no side menu. */
+.focus-layout { min-height: 100vh; }
+.focus-bar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  height: 60px;
+  padding: 0 24px;
+  border-bottom: var(--border-w) solid var(--ink);
+  background: var(--surface);
+}
+.focus-chips {
+  display: flex;
+  gap: 10px;
+  margin-left: auto;
+}
+
+/* Narrow windows (spec 6.4): the menu shrinks to 64 px of icons. The text of an item stays in the page, so it still names the
+   link; it shows as a floating caption while the item has the pointer or the keyboard focus. */
+@media (max-width: 1099px) {
+  .rail-layout { --rail-w: 64px; }
+  .side-nav {
+    align-items: center;
+    padding: 14px 9px;
+    overflow: visible;
+  }
+  .side-nav .logo { padding-bottom: 14px; }
+  /* Hidden from sight but not from assistive technology. */
+  .side-nav .logo-text {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+  .side-nav-group,
+  .side-nav-bottom { align-items: center; }
+  .side-nav-item,
+  .side-nav-parent {
+    justify-content: center;
+    padding: 10px;
+  }
+  .side-nav-sep { width: 40px; margin: 8px 0; }
+  .side-nav-label {
+    position: absolute;
+    left: calc(100% + 12px);
+    top: 50%;
+    z-index: 20;
+    padding: 4px 10px;
+    transform: translateY(-50%);
+    border: var(--border-w) solid var(--ink);
+    background: var(--ink);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .side-nav a:hover > .side-nav-label,
+  .side-nav a:focus-visible > .side-nav-label { opacity: 1; }
+  /* The status keeps its square; the words stay for assistive technology. */
+  .side-nav-bottom .runner-status { margin-left: 0; gap: 0; font-size: 0; }
+  .side-nav-bottom .lang-switch { margin-left: 0; flex-direction: column; }
+  .side-nav-bottom .lang-switch button + button {
+    border-left: 0;
+    border-top: var(--border-w) solid var(--ink);
+  }
+}

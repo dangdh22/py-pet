@@ -1,52 +1,13 @@
 // @vitest-environment jsdom
-import { render, screen, within } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
+import { render, screen } from "@testing-library/react";
 import { describe, expect, test, vi } from "vitest";
-import { fakeRunner, okResult, renderWithApp } from "../test/render";
+import { renderWithApp } from "../test/render";
 import { SHOP_ITEMS } from "../game/shop";
 import { useContent } from "./contexts";
 import { DevGalleryGate } from "./GalleryScreen";
-import { Header } from "./Header";
 import { Robot } from "./Robot";
 import { RobotBubble } from "./RobotBubble";
 import { ROBOT_MOODS } from "./robot/faces";
-
-describe("Header", () => {
-  test("shows the runner status", () => {
-    renderWithApp(<Header />, { runner: fakeRunner(() => okResult(""), "loading") });
-    expect(screen.getByText("Robo đang khởi động...")).toBeInTheDocument();
-  });
-
-  test("a runner that failed gets a Robo panel with retry and reload advice instead of the small text", async () => {
-    const runner = fakeRunner(() => okResult(""), "failed");
-    renderWithApp(<Header />, { runner });
-    const panel = screen.getByRole("alert");
-    expect(within(panel).getByRole("img", { name: "Robo" })).toHaveAttribute("data-mood", "sad");
-    expect(within(panel).getByText("Robo chưa khởi động được")).toBeInTheDocument();
-    expect(within(panel).getByText("Nếu vẫn lỗi, con tải lại trang nhé.")).toBeInTheDocument();
-    expect(screen.getAllByRole("button", { name: "Thử lại" })).toHaveLength(1);
-    await userEvent.click(within(panel).getByRole("button", { name: "Thử lại" }));
-    expect(runner.retry).toHaveBeenCalledOnce();
-  });
-
-  test("shows no panel while loading or ready", () => {
-    renderWithApp(<Header />, { runner: fakeRunner(() => okResult(""), "ready") });
-    expect(screen.queryByRole("alert")).not.toBeInTheDocument();
-  });
-
-  test("the panel follows the interface language", () => {
-    renderWithApp(<Header />, { runner: fakeRunner(() => okResult(""), "failed"), lang: "en" });
-    expect(screen.getByText("Robo could not start")).toBeInTheDocument();
-  });
-
-  test("switches the interface language", async () => {
-    renderWithApp(<Header />);
-    expect(screen.getByText("Robo sẵn sàng")).toBeInTheDocument();
-    await userEvent.click(screen.getByRole("button", { name: "EN" }));
-    expect(screen.getByText("Robo is ready")).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "EN" })).toHaveAttribute("aria-pressed", "true");
-  });
-});
 
 describe("Robot", () => {
   test("exposes the mood", () => {

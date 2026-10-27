@@ -403,4 +403,8 @@ export const en: Record<MessageKey, string> = {
   "settings.exportLog": "Export the error log",
   "app.exportRaw": "Export the data for support",
   "app.exportRawFailed": "The data could not be exported.",
+  "rail.label": "Main menu",
+  "rail.room": "Robo's room",
+  "rail.guide": "Guide",
+  "focus.pin": "Battery: {n}/{max}",
 };
