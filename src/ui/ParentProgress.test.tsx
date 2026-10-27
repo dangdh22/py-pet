@@ -45,3 +45,17 @@ test("lesson and exercise names follow the interface language (vi fallback) and 
   expect(screen.getAllByText(/^Exercise 1: /)).toHaveLength(2);
   expect(document.body.textContent).not.toMatch(/x\.l1\./);
 });
+
+test("the 3 parts are cards, and the topic table is a square table inside the first one", async () => {
+  await renderWithGame(<ParentProgress />, { bundle: examBundle() });
+  const table = screen.getByRole("table");
+  expect(table).toHaveClass("table");
+  expect(table.closest(".card")).not.toBeNull();
+  const headings = screen.getAllByRole("heading", { level: 2 });
+  expect(headings.map((heading) => heading.textContent)).toEqual([
+    "Theo chủ đề",
+    "Lịch sử kiểm tra tiến hóa",
+    "Chi tiết bài học",
+  ]);
+  for (const heading of headings) expect(heading.closest("section")).toHaveClass("card");
+});

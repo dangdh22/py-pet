@@ -200,3 +200,270 @@
   font-size: 12px;
   font-weight: 400;
 }
+
+/* The 4 other sections (help, progress, rewards, settings): a stack of cards 16 px apart, each card a stack of its own parts. */
+.parent-help,
+.parent-progress,
+.parent-rewards,
+.parent-settings {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 16px;
+  align-content: start;
+}
+.parent-help > p { margin: 0; }
+:is(.parent-help, .parent-progress, .parent-rewards, .parent-settings) .card,
+.parent-settings form {
+  display: grid;
+  gap: 10px;
+  min-width: 0;
+}
+.parent-settings form > button { justify-self: start; }
+/* The shared type of a card: a bold title, small capitals for the groups in it. `:where` keeps these rules weak, so the classes below win. */
+:where(.parent-help, .parent-progress, .parent-rewards, .parent-settings) h2 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 800;
+}
+:where(.parent-help, .parent-progress, .parent-rewards, .parent-settings) h3 {
+  margin: 6px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+:where(.parent-help, .parent-progress, .parent-rewards, .parent-settings) p { margin: 0; }
+:where(.parent-help, .parent-progress, .parent-rewards, .parent-settings) :where(ul, ol) {
+  margin: 0;
+  padding-left: 20px;
+}
+/* A button in a card keeps its own width instead of filling the row of the grid. */
+:is(.parent-help, .parent-progress, .parent-rewards, .parent-settings) .card > button,
+:is(.parent-help, .parent-progress, .parent-rewards, .parent-settings) .card > .button { justify-self: start; }
+:is(.parent-help, .parent-progress, .parent-rewards, .parent-settings) [role="status"],
+:is(.parent-help, .parent-progress, .parent-rewards, .parent-settings) [role="alert"] { font-weight: 600; }
+
+/* A row of buttons under a list or a form. */
+.help-actions,
+.form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/* Help: the numbers of a concept as square chips, the tip as a yellow block, the work of the child as code blocks. */
+.help-numbers {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.help-numbers li {
+  padding: 4px 10px;
+  border: var(--border-w) solid var(--ink);
+  background: var(--bg);
+  font-size: 13px;
+  font-weight: 600;
+}
+.help-evidence {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.help-evidence li {
+  display: grid;
+  gap: 6px;
+  font-size: 14px;
+}
+.help-evidence .code-block { margin: 0; }
+.help-tip {
+  padding: 8px 12px;
+  border: var(--border-w) solid var(--ink);
+  background: var(--chip-xu);
+}
+
+/* Progress: the table fills its card; in the list of lessons the name is bold, its state grey and the exercises 14 px. */
+.parent-progress .table { width: 100%; }
+/* The count of lessons ("2/5") stays on one line; a narrow phone takes the room from the other columns. */
+.parent-progress .table td:nth-child(2) { white-space: nowrap; }
+@media (max-width: 759px) {
+  .parent-progress .table th,
+  .parent-progress .table td {
+    padding: 6px;
+    font-size: 14px;
+  }
+}
+.lesson-details {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.lesson-details > li {
+  padding-top: 8px;
+  border-top: var(--border-w) solid color-mix(in srgb, var(--ink) 15%, var(--surface));
+  color: var(--muted);
+}
+.lesson-details > li:first-child {
+  padding-top: 0;
+  border-top: 0;
+}
+.lesson-details strong { color: var(--ink); }
+.lesson-details ul {
+  margin: 4px 0 0;
+  color: var(--ink);
+  font-size: 14px;
+}
+
+/* Rewards: a request is a row with the text on the left and the buttons on the right; a reward is a row of 3 fields and "Remove". */
+.requests {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.requests li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 10px;
+  padding: 10px 12px;
+  border: var(--border-w) solid var(--ink);
+  background: var(--bg);
+}
+.requests li > span:first-child {
+  flex: 1 1 14em;
+  min-width: 0;
+}
+/* Why "Approve" is off: a line of its own under the row, in the danger color (more than 5:1 on the cream). */
+.request-short {
+  flex: 0 0 100%;
+  color: var(--danger);
+  font-size: 14px;
+  font-weight: 600;
+}
+.reward-rows {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.reward-rows li {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: end;
+}
+/* On a phone a row is 3 lines tall, so a light rule tells the rows apart. */
+.reward-rows li + li {
+  padding-top: 12px;
+  border-top: var(--border-w) solid color-mix(in srgb, var(--ink) 15%, var(--surface));
+}
+.reward-rows label {
+  display: grid;
+  gap: 4px;
+  font-size: 13px;
+  font-weight: 600;
+}
+.reward-rows input {
+  width: 100%;
+  min-width: 0;
+  font-size: 16px;
+  font-weight: 400;
+}
+@media (max-width: 759px) {
+  .reward-rows li { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .reward-rows li > label:first-child,
+  .reward-rows li > button {
+    grid-column: 1 / -1;
+    justify-self: start;
+  }
+}
+
+/* Settings: a label on the left and its field on the right; one column on a phone. */
+.settings-row {
+  display: grid;
+  grid-template-columns: minmax(12em, 18em) minmax(0, 1fr);
+  gap: 6px 16px;
+  align-items: center;
+  width: 100%;
+  font-weight: 600;
+}
+.settings-row input,
+.settings-row select {
+  width: 100%;
+  max-width: 20em;
+  font-weight: 400;
+}
+@media (max-width: 759px) {
+  .settings-row { grid-template-columns: minmax(0, 1fr); }
+}
+/* The form that schedules a vacation: the 2 dates side by side, the button level with their fields. */
+.parent-settings .schedule-form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 10px 14px;
+  margin-top: 6px;
+}
+.schedule-form label {
+  display: grid;
+  gap: 4px;
+  font-size: 13px;
+  font-weight: 600;
+}
+.schedule-form input { font-weight: 400; }
+/* The planned vacations: the dates and a small "Cancel" button on one line. */
+.vacation-list {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.vacation-list li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+}
+/* The groups inside a card (change the PIN, delete, the logs) are told apart by a light rule above their title. */
+.parent-settings h3 {
+  margin-top: 8px;
+  padding-top: 14px;
+  border-top: var(--border-w) solid color-mix(in srgb, var(--ink) 15%, var(--surface));
+}
+.parent-settings h2 + h3 {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: 0;
+}
+button.danger {
+  background: var(--danger);
+  color: var(--on-primary);
+}
+.error-log {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-family: var(--font-mono);
+  font-variant-ligatures: none;
+  font-feature-settings: "calt" 0, "liga" 0;
+  font-size: 13px;
+}
+.error-log li {
+  padding: 6px 10px;
+  border: var(--border-w) solid var(--ink);
+  background: var(--code-bg);
+  overflow-wrap: anywhere;
+}

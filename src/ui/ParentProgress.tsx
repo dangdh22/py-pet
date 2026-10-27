@@ -23,84 +23,90 @@ export function ParentProgress() {
   const stats = state.progress.exerciseStats ?? {};
   return (
     <section className="parent-progress">
-      <h2>{t("progress.topicsTitle")}</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>{t("progress.topic")}</th>
-            <th>{t("progress.lessons")}</th>
-            <th>{t("progress.mastery")}</th>
-            <th>{t("progress.topicTest")}</th>
-          </tr>
-        </thead>
-        <tbody>
-          {topics.map((topic) => {
-            const mastery = topicMastery(topic, state);
-            const record = state.progress.topicTests[topic.id];
-            return (
-              <tr key={topic.id}>
-                <td>{pick(topic.title, uiLang)}</td>
-                <td>
-                  {t("progress.count", {
-                    done: topic.lessons.filter((lesson) => done.has(lesson.id)).length,
-                    total: topic.lessons.length,
-                  })}
-                </td>
-                <td>{mastery === null ? t("progress.none") : mastery}</td>
-                <td>
-                  {record
-                    ? t("progress.count", { done: formatScore(record.best, uiLang), total: record.max })
-                    : t("progress.none")}
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+      <section className="card">
+        <h2>{t("progress.topicsTitle")}</h2>
+        <table className="table">
+          <thead>
+            <tr>
+              <th>{t("progress.topic")}</th>
+              <th>{t("progress.lessons")}</th>
+              <th>{t("progress.mastery")}</th>
+              <th>{t("progress.topicTest")}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {topics.map((topic) => {
+              const mastery = topicMastery(topic, state);
+              const record = state.progress.topicTests[topic.id];
+              return (
+                <tr key={topic.id}>
+                  <td>{pick(topic.title, uiLang)}</td>
+                  <td>
+                    {t("progress.count", {
+                      done: topic.lessons.filter((lesson) => done.has(lesson.id)).length,
+                      total: topic.lessons.length,
+                    })}
+                  </td>
+                  <td>{mastery === null ? t("progress.none") : mastery}</td>
+                  <td>
+                    {record
+                      ? t("progress.count", { done: formatScore(record.best, uiLang), total: record.max })
+                      : t("progress.none")}
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </section>
 
-      <h2>{t("progress.evolutionTitle")}</h2>
-      {state.progress.evolutionTests.length === 0 ? (
-        <p>{t("progress.evolutionNone")}</p>
-      ) : (
-        <ul>
-          {state.progress.evolutionTests.map((attempt) => (
-            <li key={attempt.at}>
-              {t("progress.evolutionItem", {
-                time: formatDateTime(attempt.at),
-                stage: attempt.stage,
-                score: formatScore(attempt.score, uiLang),
-                max: attempt.max,
-                verdict: t(attempt.passed ? "progress.passed" : "progress.failed"),
-              })}
-            </li>
-          ))}
-        </ul>
-      )}
-
-      <h2>{t("progress.lessonsTitle")}</h2>
-      <ul className="lesson-details">
-        {topics.flatMap((topic) =>
-          topic.lessons.map((lesson) => (
-            <li key={lesson.id}>
-              <strong>{pick(lesson.title, uiLang)}</strong>{" "}
-              {t(done.has(lesson.id) ? "progress.lessonDone" : "progress.lessonNotDone")}
-              <ul>
-                {lesson.exercises.flatMap((exercise, index) => {
-                  const s = stats[exercise.id];
-                  if (!s) return [];
-                  const parts = [t("progress.fails", { n: s.fails }), t("progress.hints", { n: s.hints })];
-                  if (s.viewedSolution) parts.push(t("progress.solution"));
-                  return [
-                    <li key={exercise.id}>
-                      {t("progress.exercise", { n: index + 1 })}: {parts.join(", ")}
-                    </li>,
-                  ];
+      <section className="card">
+        <h2>{t("progress.evolutionTitle")}</h2>
+        {state.progress.evolutionTests.length === 0 ? (
+          <p>{t("progress.evolutionNone")}</p>
+        ) : (
+          <ul>
+            {state.progress.evolutionTests.map((attempt) => (
+              <li key={attempt.at}>
+                {t("progress.evolutionItem", {
+                  time: formatDateTime(attempt.at),
+                  stage: attempt.stage,
+                  score: formatScore(attempt.score, uiLang),
+                  max: attempt.max,
+                  verdict: t(attempt.passed ? "progress.passed" : "progress.failed"),
                 })}
-              </ul>
-            </li>
-          )),
+              </li>
+            ))}
+          </ul>
         )}
-      </ul>
+      </section>
+
+      <section className="card">
+        <h2>{t("progress.lessonsTitle")}</h2>
+        <ul className="lesson-details">
+          {topics.flatMap((topic) =>
+            topic.lessons.map((lesson) => (
+              <li key={lesson.id}>
+                <strong>{pick(lesson.title, uiLang)}</strong>{" "}
+                {t(done.has(lesson.id) ? "progress.lessonDone" : "progress.lessonNotDone")}
+                <ul>
+                  {lesson.exercises.flatMap((exercise, index) => {
+                    const s = stats[exercise.id];
+                    if (!s) return [];
+                    const parts = [t("progress.fails", { n: s.fails }), t("progress.hints", { n: s.hints })];
+                    if (s.viewedSolution) parts.push(t("progress.solution"));
+                    return [
+                      <li key={exercise.id}>
+                        {t("progress.exercise", { n: index + 1 })}: {parts.join(", ")}
+                      </li>,
+                    ];
+                  })}
+                </ul>
+              </li>
+            )),
+          )}
+        </ul>
+      </section>
     </section>
   );
 }

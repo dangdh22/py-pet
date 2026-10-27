@@ -13,6 +13,21 @@ vi.mock("./download", () => ({ downloadText: vi.fn() }));
 const section = (heading: string) => screen.getByRole("heading", { name: heading }).parentElement as HTMLElement;
 
 describe("ParentSettings", () => {
+  test("5 cards, each with 1 heading of level 2", async () => {
+    const { container } = await renderWithGame(<ParentSettings />);
+    const cards = [...container.querySelectorAll<HTMLElement>("section.card")];
+    expect(cards).toHaveLength(5);
+    expect(cards.map((card) => within(card).getAllByRole("heading", { level: 2 }).map((h) => h.textContent))).toEqual([
+      ["Chế độ nghỉ"],
+      ["Mục tiêu và ngưỡng"],
+      ["Ngôn ngữ"],
+      ["Dữ liệu"],
+      ["Nhật ký"],
+    ]);
+    // The goals form sits inside its card.
+    expect(cards[1]!.querySelector("form")).not.toBeNull();
+  });
+
   test("starts and ends a vacation, schedules one and cancels it", async () => {
     const { store } = await renderWithGame(<ParentSettings />);
     const vacation = section("Chế độ nghỉ");

@@ -35,6 +35,20 @@ describe("ParentRewards", () => {
     expect(screen.getByText("Con kiếm trung bình 10 xu/ngày trong 14 ngày qua.")).toBeInTheDocument();
   });
 
+  test("the 3 parts are cards, and the reward rows are the only ordered list", async () => {
+    const { container } = await renderWithGame(<ParentRewards />, { state: stateWithRequests() });
+    const headings = screen.getAllByRole("heading", { level: 2 });
+    expect(headings.map((heading) => heading.textContent)).toEqual([
+      "Yêu cầu chờ duyệt",
+      "Danh sách phần thưởng",
+      "Lịch sử",
+    ]);
+    for (const heading of headings) expect(heading.closest("section")).toHaveClass("card");
+    expect(container.querySelectorAll("ol")).toHaveLength(1);
+    expect(container.querySelector("ol")).toHaveClass("reward-rows");
+    expect(container.querySelector("ul.requests")).not.toBeNull();
+  });
+
   test("edits and saves the reward list", async () => {
     const { store } = await renderWithGame(<ParentRewards newId={() => "new"} />, { state: stateWithRequests() });
     await userEvent.click(screen.getByRole("button", { name: "Thêm phần thưởng" }));

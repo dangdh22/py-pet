@@ -37,14 +37,14 @@ export function ParentHelp({ newId = () => crypto.randomUUID(), rng = Math.rando
         flagged.map(([id, m]) => <HelpCard key={id} conceptId={id} mastery={m} newId={newId} rng={rng} />)
       )}
       {practising.length > 0 && (
-        <>
+        <section className="card">
           <h2>{t("help.practising")}</h2>
           <ul>
             {practising.map(([id, m]) => (
               <li key={id}>{t("help.practisingItem", { name: name(id), n: Math.round(m.score) })}</li>
             ))}
           </ul>
-        </>
+        </section>
       )}
     </section>
   );
@@ -108,7 +108,7 @@ function HelpCard({
   }
 
   return (
-    <article className="help-card">
+    <article className="card help-card">
       <h2>{concept ? pick(concept.name, uiLang) : conceptId}</h2>
       <ul className="help-numbers">
         <li>{t("help.score", { n: Math.round(mastery.score) })}</li>
@@ -151,6 +151,7 @@ function HelpCard({
       )}
       <div className="help-actions">
         <button
+          className="primary"
           disabled={!canPractice || assigned}
           onClick={() => {
             const items = buildPracticeSet(bundle, game.state, conceptId, rng).map((item) => item.id);

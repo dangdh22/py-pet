@@ -57,14 +57,14 @@ function VacationSettings() {
   }
   const on = state.vacation.since !== null;
   return (
-    <div>
+    <section className="card">
       <h2>{t("settings.vacationTitle")}</h2>
       <p>{on ? t("settings.vacationOn", { day: state.vacation.since as string }) : t("settings.vacationOff")}</p>
       <button onClick={() => game.dispatch({ type: "VacationToggled", on: !on })}>
         {t(on ? "settings.vacationStop" : "settings.vacationStart")}
       </button>
       {/* noValidate: the app checks the dates and shows its own message. */}
-      <form onSubmit={schedule} className="settings-row" noValidate>
+      <form onSubmit={schedule} className="schedule-form" noValidate>
         <label>
           {t("settings.scheduleFrom")}
           <input type="date" value={start} min={today} onChange={(e) => setStart(e.target.value)} />
@@ -77,18 +77,21 @@ function VacationSettings() {
       </form>
       {bad && <p role="alert">{t("settings.scheduleBad")}</p>}
       {upcoming.length > 0 && (
-        <ul>
+        <ul className="vacation-list">
           {upcoming.map((range) => (
             <li key={`${range.start}-${range.end}`}>
               {t("settings.scheduled", { start: range.start, end: range.end })}{" "}
-              <button onClick={() => game.dispatch({ type: "VacationCancelled", start: range.start })}>
+              <button
+                className="small"
+                onClick={() => game.dispatch({ type: "VacationCancelled", start: range.start })}
+              >
                 {t("settings.cancel")}
               </button>
             </li>
           ))}
         </ul>
       )}
-    </div>
+    </section>
   );
 }
 
@@ -121,29 +124,31 @@ function NumberSettings() {
     setSaved(true);
   }
   return (
-    // noValidate: values outside the limits are brought inside them (cleanSettings).
-    <form onSubmit={save} noValidate>
+    <section className="card">
       <h2>{t("settings.goalsTitle")}</h2>
-      {NUMBER_FIELDS.map(({ key, label }) => (
-        <label key={key} className="settings-row">
-          {t(label)}
-          <input
-            type="number"
-            min={SETTING_LIMITS[key].min}
-            max={SETTING_LIMITS[key].max}
-            value={values[key]}
-            onChange={(e) => {
-              setSaved(false);
-              setValues((current) => ({ ...current, [key]: e.target.value }));
-            }}
-          />
-        </label>
-      ))}
-      <button className="primary" type="submit">
-        {t("settings.save")}
-      </button>
-      {saved && <p role="status">{t("settings.saved")}</p>}
-    </form>
+      {/* noValidate: values outside the limits are brought inside them (cleanSettings). */}
+      <form onSubmit={save} noValidate>
+        {NUMBER_FIELDS.map(({ key, label }) => (
+          <label key={key} className="settings-row">
+            {t(label)}
+            <input
+              type="number"
+              min={SETTING_LIMITS[key].min}
+              max={SETTING_LIMITS[key].max}
+              value={values[key]}
+              onChange={(e) => {
+                setSaved(false);
+                setValues((current) => ({ ...current, [key]: e.target.value }));
+              }}
+            />
+          </label>
+        ))}
+        <button className="primary" type="submit">
+          {t("settings.save")}
+        </button>
+        {saved && <p role="status">{t("settings.saved")}</p>}
+      </form>
+    </section>
   );
 }
 
@@ -151,7 +156,7 @@ function LanguageSettings() {
   const { t, uiLang, setUiLang } = useLang();
   const game = useGame();
   return (
-    <div>
+    <section className="card">
       <h2>{t("settings.langTitle")}</h2>
       <label className="settings-row">
         {t("settings.uiLang")}
@@ -176,7 +181,7 @@ function LanguageSettings() {
           ))}
         </select>
       </label>
-    </div>
+    </section>
   );
 }
 
@@ -213,7 +218,7 @@ function DataSettings() {
     }
   }
   return (
-    <div>
+    <section className="card">
       <h2>{t("settings.dataTitle")}</h2>
       <a className="button" href="#/backup">
         {t("settings.backupLink")}
@@ -241,7 +246,7 @@ function DataSettings() {
         {t("settings.eraseButton")}
       </button>
       {eraseError && <p role="alert">{t("banner.writeFailed")}</p>}
-    </div>
+    </section>
   );
 }
 
@@ -250,7 +255,7 @@ function Logs() {
   const game = useGame();
   const { warnings } = game.state;
   return (
-    <div>
+    <section className="card">
       <h2>{t("settings.logsTitle")}</h2>
       <h3>{t("settings.warnings")}</h3>
       {warnings.length === 0 ? (
@@ -283,6 +288,6 @@ function Logs() {
           </button>
         </>
       )}
-    </div>
+    </section>
   );
 }

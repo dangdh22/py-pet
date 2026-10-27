@@ -28,100 +28,106 @@ export function ParentRewards({ newId = () => crypto.randomUUID() }: { newId?: (
 
   return (
     <section className="parent-rewards">
-      <h2>{t("rewardsTab.pending")}</h2>
-      {pending.length === 0 ? (
-        <p>{t("rewardsTab.noPending")}</p>
-      ) : (
-        <ul className="requests">
-          {pending.map((r) => {
-            const short = state.wallet.xu < r.price;
-            return (
-              <li key={r.id}>
-                <span>{t("rewardsTab.request", { name: r.name, price: r.price, time: formatDateTime(r.at) })}</span>
-                <button
-                  className="primary"
-                  disabled={short}
-                  aria-label={`${t("rewardsTab.approve")} ${r.name}`}
-                  onClick={() => game.dispatch({ type: "RewardApproved", requestId: r.id })}
-                >
-                  {t("rewardsTab.approve")}
-                </button>
-                <button
-                  aria-label={`${t("rewardsTab.reject")} ${r.name}`}
-                  onClick={() => game.dispatch({ type: "RewardRejected", requestId: r.id })}
-                >
-                  {t("rewardsTab.reject")}
-                </button>
-                {short && <span>{t("rewardsTab.notEnough", { xu: state.wallet.xu })}</span>}
-              </li>
-            );
-          })}
-        </ul>
-      )}
+      <section className="card">
+        <h2>{t("rewardsTab.pending")}</h2>
+        {pending.length === 0 ? (
+          <p>{t("rewardsTab.noPending")}</p>
+        ) : (
+          <ul className="requests">
+            {pending.map((r) => {
+              const short = state.wallet.xu < r.price;
+              return (
+                <li key={r.id}>
+                  <span>{t("rewardsTab.request", { name: r.name, price: r.price, time: formatDateTime(r.at) })}</span>
+                  <button
+                    className="primary"
+                    disabled={short}
+                    aria-label={`${t("rewardsTab.approve")} ${r.name}`}
+                    onClick={() => game.dispatch({ type: "RewardApproved", requestId: r.id })}
+                  >
+                    {t("rewardsTab.approve")}
+                  </button>
+                  <button
+                    aria-label={`${t("rewardsTab.reject")} ${r.name}`}
+                    onClick={() => game.dispatch({ type: "RewardRejected", requestId: r.id })}
+                  >
+                    {t("rewardsTab.reject")}
+                  </button>
+                  {short && <span className="request-short">{t("rewardsTab.notEnough", { xu: state.wallet.xu })}</span>}
+                </li>
+              );
+            })}
+          </ul>
+        )}
+      </section>
 
-      <h2>{t("rewardsTab.listTitle")}</h2>
-      <p>{t("rewardsTab.average", { avg: averageXuPerDay(state, today) })}</p>
-      <ol className="reward-rows">
-        {rows.map((row, index) => (
-          <li key={row.id}>
-            <label>
-              {t("rewardsTab.name")}
-              <input value={row.name} onChange={(e) => edit(index, { name: e.target.value })} />
-            </label>
-            <label>
-              {t("rewardsTab.price")}
-              <input
-                type="number"
-                min={0}
-                max={REWARD_MAX_PRICE}
-                value={row.price}
-                onChange={(e) => edit(index, { price: Number(e.target.value) })}
-              />
-            </label>
-            <label>
-              {t("rewardsTab.limit")}
-              <input
-                type="number"
-                min={0}
-                max={REWARD_MAX_PER_WEEK}
-                value={row.weeklyLimit}
-                onChange={(e) => edit(index, { weeklyLimit: Number(e.target.value) })}
-              />
-            </label>
-            <button
-              onClick={() => {
-                setSaved(false);
-                setRows((current) => current.filter((_, i) => i !== index));
-              }}
-            >
-              {t("rewardsTab.remove")}
-            </button>
-          </li>
-        ))}
-      </ol>
-      <button
-        onClick={() => {
-          setSaved(false);
-          setRows((current) => [...current, { id: newId(), name: "", price: 50, weeklyLimit: 1 }]);
-        }}
-      >
-        {t("rewardsTab.add")}
-      </button>
-      <button
-        className="primary"
-        onClick={() => {
-          const cleaned = cleanCatalog(rows);
-          game.dispatch({ type: "RewardsEdited", catalog: cleaned });
-          setRows(cleaned);
-          setSaved(true);
-        }}
-      >
-        {t("rewardsTab.save")}
-      </button>
-      {saved && <p role="status">{t("rewardsTab.saved")}</p>}
+      <section className="card">
+        <h2>{t("rewardsTab.listTitle")}</h2>
+        <p>{t("rewardsTab.average", { avg: averageXuPerDay(state, today) })}</p>
+        <ol className="reward-rows">
+          {rows.map((row, index) => (
+            <li key={row.id}>
+              <label>
+                {t("rewardsTab.name")}
+                <input value={row.name} onChange={(e) => edit(index, { name: e.target.value })} />
+              </label>
+              <label>
+                {t("rewardsTab.price")}
+                <input
+                  type="number"
+                  min={0}
+                  max={REWARD_MAX_PRICE}
+                  value={row.price}
+                  onChange={(e) => edit(index, { price: Number(e.target.value) })}
+                />
+              </label>
+              <label>
+                {t("rewardsTab.limit")}
+                <input
+                  type="number"
+                  min={0}
+                  max={REWARD_MAX_PER_WEEK}
+                  value={row.weeklyLimit}
+                  onChange={(e) => edit(index, { weeklyLimit: Number(e.target.value) })}
+                />
+              </label>
+              <button
+                onClick={() => {
+                  setSaved(false);
+                  setRows((current) => current.filter((_, i) => i !== index));
+                }}
+              >
+                {t("rewardsTab.remove")}
+              </button>
+            </li>
+          ))}
+        </ol>
+        <div className="form-actions">
+          <button
+            onClick={() => {
+              setSaved(false);
+              setRows((current) => [...current, { id: newId(), name: "", price: 50, weeklyLimit: 1 }]);
+            }}
+          >
+            {t("rewardsTab.add")}
+          </button>
+          <button
+            className="primary"
+            onClick={() => {
+              const cleaned = cleanCatalog(rows);
+              game.dispatch({ type: "RewardsEdited", catalog: cleaned });
+              setRows(cleaned);
+              setSaved(true);
+            }}
+          >
+            {t("rewardsTab.save")}
+          </button>
+        </div>
+        {saved && <p role="status">{t("rewardsTab.saved")}</p>}
+      </section>
 
       {decided.length > 0 && (
-        <>
+        <section className="card">
           <h2>{t("rewardsTab.historyTitle")}</h2>
           <ul>
             {decided.map((r) => (
@@ -135,7 +141,7 @@ export function ParentRewards({ newId = () => crypto.randomUUID() }: { newId?: (
               </li>
             ))}
           </ul>
-        </>
+        </section>
       )}
     </section>
   );

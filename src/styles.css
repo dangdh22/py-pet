@@ -206,19 +206,6 @@
   .evolution-show, .evolution-show * { animation: none !important; }
 }
 
-/* M4b: parent area */
-.help-card { border: 1px solid #dde3ef; border-radius: 0; padding: 12px 16px; margin: 12px 0; }
-.help-numbers { display: flex; flex-wrap: wrap; gap: 16px; list-style: none; padding: 0; }
-.help-tip { background: #fff8ea; padding: 8px 12px; border-radius: 0; }
-.help-actions { display: flex; gap: 8px; }
-.requests li, .reward-rows li { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 4px 0; }
-.reward-rows input { width: 10em; }
-.parent-progress table { border-collapse: collapse; }
-.parent-progress th, .parent-progress td { border: 1px solid #dde3ef; padding: 4px 8px; text-align: left; }
-.settings-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 6px 0; }
-.parent-settings h2 { margin-top: 24px; }
-button.danger { background: var(--danger); color: #fff; }
-
 /* M6a: the room scene (spec 8.3, design decisions 4 and 6) and the stat bars (spec 8.2.1) */
 .room-scene {
   container: scene / inline-size;

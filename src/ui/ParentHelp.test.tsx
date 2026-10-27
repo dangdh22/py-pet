@@ -29,6 +29,16 @@ describe("ParentHelp", () => {
     expect(screen.getByText("Hiện không có khái niệm nào cần hỗ trợ.")).toBeInTheDocument();
   });
 
+  test("each help card is a card, and the concepts being practised sit in a card of their own", async () => {
+    await renderWithGame(<ParentHelp />, { bundle, state: helpState() });
+    const article = screen.getByRole("heading", { name: "Khái niệm c1" }).closest("article") as HTMLElement;
+    expect(article).toHaveClass("card");
+    const practising = screen.getByRole("heading", { name: /^Đang luyện/ }).closest("section") as HTMLElement;
+    expect(practising).toHaveClass("card");
+    // The primary action of the card is the blue button.
+    expect(within(article).getByRole("button", { name: "Giao thêm bài luyện" })).toHaveClass("primary");
+  });
+
   test("a flagged concept: numbers, real work, tip, practice and coached", async () => {
     const store = new MemoryStore({ persistent: true });
     const state = helpState();
