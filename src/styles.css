@@ -2,7 +2,7 @@
 @import "./styles/base.css";
 @import "./styles/shell.css";
 
-.runner-status { margin-left: auto; font-size: 0.9rem; }
+.app-loading { padding: 40px 20px; text-align: center; }
 .unsupported h1 { font-size: 1.4rem; }
 
 .home, .lesson { max-width: 1200px; margin: 0 auto; padding: 20px; }

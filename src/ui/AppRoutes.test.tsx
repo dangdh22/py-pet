@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { act, render, screen, waitFor } from "@testing-library/react";
+import { render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, test, vi } from "vitest";
 import { GAME_STATE_VERSION, initialGameState, type GameState } from "../game/state";
@@ -42,6 +42,53 @@ describe("AppRoutes", () => {
     expect(await screen.findByText("Thẻ 1/2")).toBeInTheDocument();
   });
 
+  test("the room has the side menu with its own link marked as the current page", async () => {
+    await renderWithGame(<AppRoutes />);
+    const nav = screen.getByRole("navigation", { name: "Menu chính" });
+    expect(within(nav).getByRole("link", { name: "Phòng Robo" })).toHaveAttribute("aria-current", "page");
+  });
+
+  test("a lesson has the focus frame: no side menu, a way back to the room", async () => {
+    window.location.hash = "#/lesson/t.l1";
+    await renderWithGame(<AppRoutes />);
+    expect(screen.queryByRole("navigation", { name: "Menu chính" })).not.toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Về phòng" })).toHaveAttribute("href", "#/");
+  });
+
+  test("a message for an unknown lesson also has the focus frame", async () => {
+    window.location.hash = "#/lesson/khong-co";
+    await renderWithGame(<AppRoutes />);
+    expect(screen.queryByRole("navigation", { name: "Menu chính" })).not.toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Về phòng" })).toBeInTheDocument();
+  });
+
+  test.each([
+    ["#/map", "Bản đồ học"],
+    ["#/shop", "Cửa hàng"],
+    ["#/achievements", "Sổ thành tích"],
+    ["#/backup", "Sao lưu"],
+  ])("%s has the side menu with its own item as the current page", async (hash, item) => {
+    window.location.hash = hash;
+    await renderWithGame(<AppRoutes />);
+    const nav = screen.getByRole("navigation", { name: "Menu chính" });
+    expect(within(nav).getByRole("link", { name: item })).toHaveAttribute("aria-current", "page");
+    expect(within(nav).getAllByRole("link").filter((link) => link.hasAttribute("aria-current"))).toHaveLength(1);
+  });
+
+  test("the welcome route has no frame, only the navigation of the landing page", async () => {
+    window.location.hash = "#/welcome";
+    await renderWithGame(<AppRoutes />);
+    expect(screen.queryByRole("navigation", { name: "Menu chính" })).not.toBeInTheDocument();
+    expect(screen.getByRole("navigation", { name: "Trang giới thiệu" })).toBeInTheDocument();
+    expect(screen.getAllByRole("main")).toHaveLength(1);
+  });
+
+  test.each(["#/", "#/lesson/t.l1"])("%s shows the panel of a runner that failed once, in either frame", async (hash) => {
+    window.location.hash = hash;
+    await renderWithGame(<AppRoutes />, { runner: fakeRunner(() => okResult(""), "failed") });
+    expect(screen.getAllByText("Robo chưa khởi động được")).toHaveLength(1);
+  });
+
   test("a finished lesson is saved and counted in today's goal", async () => {
     const state = initialGameState(TODAY);
     state.progress.completedLessons = ["t.l1"];
@@ -61,7 +108,7 @@ describe("AppRoutes", () => {
 
   test("the map opens from the room and a locked lesson cannot be opened by URL", async () => {
     await renderWithGame(<AppRoutes />);
-    await userEvent.click(screen.getByRole("link", { name: "Bản đồ học" }));
+    await userEvent.click(within(screen.getByRole("navigation", { name: "Menu chính" })).getByRole("link", { name: "Bản đồ học" }));
     expect(await screen.findByRole("heading", { name: "Bản đồ học" })).toBeInTheDocument();
     window.location.hash = "#/lesson/t.l2";
     expect(await screen.findByText("Bài này chưa mở. Con học các bài trước đã nhé.")).toBeInTheDocument();
@@ -105,13 +152,40 @@ describe("ErrorBoundary", () => {
 });
 
 describe("App", () => {
-  test("first run: loading, then the onboarding screen and the runner status", async () => {
-    const { client, workers } = makeClient();
-    render(<App bundle={testBundle()} runnerClient={client} store={new MemoryStore()} clock={() => FIXED_NOW} />);
-    expect(screen.getByText("Robo đang khởi động...")).toBeInTheDocument();
-    expect(await screen.findByRole("heading", { name: "Chào mừng đến với Py-Pet!" })).toBeInTheDocument();
-    act(() => workers[0]!.emit({ type: "ready" }));
-    expect(await screen.findByText("Robo sẵn sàng")).toBeInTheDocument();
+  test("first run: loading, then the landing page, then the onboarding screen", async () => {
+    render(<App bundle={testBundle()} runnerClient={makeClient().client} store={new MemoryStore()} clock={() => FIXED_NOW} />);
+    expect(screen.getByText("Đang mở hồ sơ...")).toBeInTheDocument();
+    await userEvent.click(await screen.findByRole("button", { name: "Bắt đầu học" }));
+    expect(screen.getByRole("heading", { name: "Chào mừng đến với Py-Pet!" })).toBeInTheDocument();
+  });
+
+  test("without a profile every hash opens the landing page, not a screen of the game", async () => {
+    window.location.hash = "#/shop";
+    render(<App bundle={testBundle()} runnerClient={makeClient().client} store={new MemoryStore()} clock={() => FIXED_NOW} />);
+    expect(await screen.findByRole("button", { name: "Bắt đầu học" })).toBeInTheDocument();
+    expect(screen.queryByRole("heading", { name: "Cửa hàng" })).not.toBeInTheDocument();
+  });
+
+  test("creating a profile from #/welcome opens the room at #/", async () => {
+    window.location.hash = "#/welcome";
+    render(<App bundle={testBundle()} runnerClient={makeClient().client} store={new MemoryStore()} clock={() => FIXED_NOW} />);
+    await userEvent.click(await screen.findByRole("button", { name: "Bắt đầu học" }));
+    await userEvent.type(screen.getByLabelText("Tên của con"), "An");
+    await userEvent.type(screen.getByLabelText("Mã PIN của bố mẹ (4 đến 6 chữ số)"), "1234");
+    await userEvent.type(screen.getByLabelText("Nhập lại mã PIN"), "1234");
+    await userEvent.click(screen.getByRole("button", { name: "Bắt đầu" }));
+    expect(await screen.findByRole("heading", { name: "Phòng của Robo" })).toBeInTheDocument();
+    expect(window.location.hash).toBe("#/");
+  });
+
+  test("with a profile, #/welcome opens the landing page whose start link goes to the room", async () => {
+    window.location.hash = "#/welcome";
+    const store = new MemoryStore({ persistent: true });
+    await store.createProfile(testProfile(), initialGameState(TODAY));
+    render(<App bundle={testBundle()} runnerClient={makeClient().client} store={store} clock={() => FIXED_NOW} />);
+    expect(await screen.findByRole("link", { name: "Bắt đầu học" })).toHaveAttribute("href", "#/");
+    expect(screen.getByRole("navigation", { name: "Trang giới thiệu" })).toBeInTheDocument();
+    expect(screen.queryByRole("navigation", { name: "Menu chính" })).not.toBeInTheDocument();
   });
 
   test("an existing profile opens the app directly", async () => {

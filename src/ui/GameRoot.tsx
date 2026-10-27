@@ -5,8 +5,8 @@ import { useLang } from "../i18n/LangProvider";
 import type { GameStore, LoadedGame } from "../storage/types";
 import { AppRoutes } from "./AppRoutes";
 import { GameProvider } from "./GameProvider";
-import { Header } from "./Header";
 import { downloadText } from "./download";
+import { LandingScreen } from "./LandingScreen";
 import { OnboardingScreen } from "./OnboardingScreen";
 import { Robot } from "./Robot";
 
@@ -14,6 +14,8 @@ export function GameRoot({ store, clock, onReplaced }: { store: GameStore; clock
   const { t } = useLang();
   const [loaded, setLoaded] = useState<LoadedGame | null | undefined>(undefined);
   const [loadProblem, setLoadProblem] = useState<StateProblem | "unreadable" | null>(null);
+  // Without a profile: false shows the landing page, true the onboarding form.
+  const [onboarding, setOnboarding] = useState(false);
 
   useEffect(() => {
     let alive = true;
@@ -47,33 +49,32 @@ export function GameRoot({ store, clock, onReplaced }: { store: GameStore; clock
 
   if (loadProblem !== null) {
     return (
-      <>
-        <Header />
-        <main className="crash" role="alert">
-          <Robot mood="sad" size={80} />
-          <p>{t(loadProblem === "newer-version" ? "app.newerData" : "app.crash")}</p>
-          <button onClick={() => window.location.reload()}>{t("app.reload")}</button>
-          {loadProblem !== "newer-version" && <RawExport store={store} clock={clock} />}
-        </main>
-      </>
+      <main className="crash" role="alert">
+        <Robot mood="sad" size={80} />
+        <p>{t(loadProblem === "newer-version" ? "app.newerData" : "app.crash")}</p>
+        <button onClick={() => window.location.reload()}>{t("app.reload")}</button>
+        {loadProblem !== "newer-version" && <RawExport store={store} clock={clock} />}
+      </main>
     );
   }
   if (loaded === undefined) {
     return (
-      <>
-        <Header />
-        <main className="room">
-          <p>{t("app.loading")}</p>
-        </main>
-      </>
+      <main className="app-loading">
+        <p>{t("app.loading")}</p>
+      </main>
     );
   }
   if (loaded === null) {
+    if (!onboarding) return <LandingScreen onStart={() => setOnboarding(true)} />;
     return (
-      <>
-        <Header />
-        <OnboardingScreen store={store} clock={clock} onCreated={setLoaded} />
-      </>
+      <OnboardingScreen
+        store={store}
+        clock={clock}
+        onCreated={(created) => {
+          window.location.hash = "#/";
+          setLoaded(created);
+        }}
+      />
     );
   }
   return (

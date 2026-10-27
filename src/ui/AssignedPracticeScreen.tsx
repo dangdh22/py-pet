@@ -22,7 +22,6 @@ export function AssignedPracticeScreen({ id, onExit }: { id: string; onExit(): v
     return (
       <main className="room">
         <p>{t("assigned.notFound")}</p>
-        <a href="#/">{t("nav.room")}</a>
       </main>
     );
   }

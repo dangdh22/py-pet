@@ -6,12 +6,11 @@ import { useLang } from "../i18n/LangProvider";
 import { AchievementsScreen } from "./AchievementsScreen";
 import { AssignedPracticeScreen } from "./AssignedPracticeScreen";
 import { BackupScreen } from "./BackupScreen";
-import { Banners } from "./Banners";
 import { useContent } from "./contexts";
 import { ErrorBoundary } from "./ErrorBoundary";
 import { EvolutionTestScreen } from "./EvolutionTestScreen";
 import { useGame } from "./GameProvider";
-import { Header } from "./Header";
+import { LandingScreen } from "./LandingScreen";
 import { LessonScreen } from "./LessonScreen";
 import { MapScreen } from "./MapScreen";
 import { ParentScreen } from "./ParentScreen";
@@ -20,6 +19,9 @@ import { RemedialScreen } from "./RemedialScreen";
 import { ReviewScreen } from "./ReviewScreen";
 import { RoomScreen } from "./RoomScreen";
 import { routeToHash, useHashRoute, type Route } from "./routing";
+import { FocusLayout } from "./shell/FocusLayout";
+import { RailLayout } from "./shell/RailLayout";
+import { SideNav, type RailItem } from "./shell/SideNav";
 import { ShopScreen } from "./ShopScreen";
 import { TopicTestScreen } from "./TopicTestScreen";
 import { useStudyTimer } from "./useStudyTimer";
@@ -35,6 +37,19 @@ const STUDY_ROUTES: ReadonlySet<Route["name"]> = new Set([
   "assigned",
 ]);
 
+/** The item of the side menu that names the page; the room is the page of every route that has no item of its own. */
+function railItem(route: Route): RailItem {
+  switch (route.name) {
+    case "map":
+    case "shop":
+    case "achievements":
+    case "backup":
+      return route.name;
+    default:
+      return "room";
+  }
+}
+
 export function AppRoutes() {
   const [route, navigate] = useHashRoute();
   const bundle = useContent();
@@ -44,7 +59,9 @@ export function AppRoutes() {
   useStudyTimer(STUDY_ROUTES.has(route.name));
   const goHome = () => navigate({ name: "home" });
   let screen;
-  if (route.name === "map") {
+  if (route.name === "welcome") {
+    screen = <LandingScreen />;
+  } else if (route.name === "map") {
     screen = <MapScreen />;
   } else if (route.name === "shop") {
     screen = <ShopScreen />;
@@ -102,13 +119,11 @@ export function AppRoutes() {
     screen = <RoomScreen />;
   }
 
-  return (
-    <>
-      <Header />
-      <Banners />
-      <ErrorBoundary key={routeToHash(route)}>{screen}</ErrorBoundary>
-    </>
-  );
+  const guarded = <ErrorBoundary key={routeToHash(route)}>{screen}</ErrorBoundary>;
+  // The welcome page and the parent area bring their own frame (or none); the study screens get the focus frame.
+  if (route.name === "welcome" || route.name === "parent") return guarded;
+  if (STUDY_ROUTES.has(route.name)) return <FocusLayout>{guarded}</FocusLayout>;
+  return <RailLayout nav={<SideNav current={railItem(route)} />}>{guarded}</RailLayout>;
 }
 
 /**

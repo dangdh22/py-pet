@@ -25,7 +25,6 @@ export function ReviewScreen({ stationId, onExit, rng = Math.random }: { station
     return (
       <main className="room">
         <p>{t("review.empty")}</p>
-        <a href="#/">{t("nav.room")}</a>
       </main>
     );
   }

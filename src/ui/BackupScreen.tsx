@@ -186,7 +186,6 @@ export function BackupScreen() {
           )}
         </section>
       )}
-      <a href="#/">{t("nav.room")}</a>
     </main>
   );
 }

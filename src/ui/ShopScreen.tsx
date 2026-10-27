@@ -28,7 +28,6 @@ export function ShopScreen({ newId = () => crypto.randomUUID() }: { newId?: () =
         </button>
       </div>
       {tab === "robot" ? <RobotShop /> : <RewardShop newId={newId} />}
-      <a href="#/">{t("nav.room")}</a>
     </main>
   );
 }

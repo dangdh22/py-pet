@@ -9,6 +9,8 @@ import { ParentOverview } from "./ParentOverview";
 import { ParentProgress } from "./ParentProgress";
 import { ParentRewards } from "./ParentRewards";
 import { ParentSettings } from "./ParentSettings";
+import { RailLayout } from "./shell/RailLayout";
+import { SideNav } from "./shell/SideNav";
 
 /** Spec 9: the parent area locks itself after 5 minutes without use, and when the parent leaves it. */
 export const LOCK_AFTER_MS = 5 * 60_000;
@@ -27,24 +29,26 @@ const TABS: { id: Tab; label: MessageKey }[] = [
 export function ParentScreen() {
   const [open, setOpen] = useState(false);
   const [autoLocked, setAutoLocked] = useState(false);
-  if (!open) {
-    return (
-      <ParentGate
-        autoLocked={autoLocked}
-        onOpen={() => {
-          setOpen(true);
-          setAutoLocked(false);
-        }}
-      />
-    );
-  }
+  // A temporary frame, until this screen builds its own.
   return (
-    <ParentArea
-      onLock={(auto) => {
-        setOpen(false);
-        setAutoLocked(auto);
-      }}
-    />
+    <RailLayout nav={<SideNav current="parent" />}>
+      {open ? (
+        <ParentArea
+          onLock={(auto) => {
+            setOpen(false);
+            setAutoLocked(auto);
+          }}
+        />
+      ) : (
+        <ParentGate
+          autoLocked={autoLocked}
+          onOpen={() => {
+            setOpen(true);
+            setAutoLocked(false);
+          }}
+        />
+      )}
+    </RailLayout>
   );
 }
 

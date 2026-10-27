@@ -20,7 +20,6 @@ export function PracticeScreen({ conceptId, onExit, rng = Math.random }: { conce
     return (
       <main className="room">
         <p>{t(concept ? "practice.empty" : "practice.notFound")}</p>
-        <a href="#/">{t("nav.room")}</a>
       </main>
     );
   }

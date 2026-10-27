@@ -77,7 +77,6 @@ function EvolutionAttempt({
         <a className="button primary" href={routeToHash({ name: "remedial" })}>
           {t("evolution.startRemedial")}
         </a>
-        <a href="#/">{t("nav.room")}</a>
       </main>
     );
   }

@@ -16,7 +16,6 @@ test("shows done, next and locked lessons", async () => {
   expect(within(items[0]!).getByText("Bài tiếp theo")).toBeInTheDocument();
   expect(within(items[1]!).queryByRole("link")).not.toBeInTheDocument();
   expect(within(items[1]!).getByText("Chưa mở")).toBeInTheDocument();
-  expect(screen.getByRole("link", { name: "Về phòng" })).toHaveAttribute("href", "#/");
 });
 
 test("a done lesson stays open", async () => {

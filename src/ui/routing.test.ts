@@ -18,6 +18,12 @@ describe("routing", () => {
     expect(parseHash(routeToHash(route))).toEqual(route);
     expect(routeToHash({ name: "home" })).toBe("#/");
   });
+  test("parses the welcome hash and round-trips it", () => {
+    expect(parseHash("#/welcome")).toEqual({ name: "welcome" });
+    expect(routeToHash({ name: "welcome" })).toBe("#/welcome");
+    expect(parseHash(routeToHash({ name: "welcome" }))).toEqual({ name: "welcome" });
+  });
+
   test("parses the map and backup hashes", () => {
     expect(parseHash("#/map")).toEqual({ name: "map" });
     expect(parseHash("#/backup")).toEqual({ name: "backup" });

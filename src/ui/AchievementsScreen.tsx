@@ -56,7 +56,6 @@ export function AchievementsScreen() {
         <p>{t("achievements.concepts", { n: masteredConcepts(state) })}</p>
         <p>{t("achievements.practising", { n: practisingConcepts(state) })}</p>
       </section>
-      <a href="#/">{t("nav.room")}</a>
     </main>
   );
 }

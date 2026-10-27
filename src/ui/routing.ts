@@ -3,6 +3,8 @@ import type { NextStep, PathNode } from "../game/path";
 
 export type Route =
   | { name: "home" }
+  /** The welcome page (design spec 6.3). It has no frame and needs no game. */
+  | { name: "welcome" }
   | { name: "map" }
   | { name: "backup" }
   | { name: "lesson"; lessonId: string }
@@ -32,6 +34,7 @@ function decode(raw: string): string {
 /** `dev` is false in a production build, so "#/gallery" opens the room there. */
 export function parseHash(hash: string, dev: boolean = import.meta.env.DEV): Route {
   if (dev && hash === "#/gallery") return { name: "gallery" };
+  if (hash === "#/welcome") return { name: "welcome" };
   if (hash === "#/map") return { name: "map" };
   if (hash === "#/backup") return { name: "backup" };
   if (hash === "#/review") return { name: "review", stationId: null };
@@ -80,6 +83,8 @@ export function routeToHash(route: Route): string {
       return "#/achievements";
     case "parent":
       return "#/parent";
+    case "welcome":
+      return "#/welcome";
     case "map":
       return "#/map";
     case "backup":

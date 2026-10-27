@@ -53,7 +53,6 @@ export function MapScreen() {
           </ol>
         </section>
       ))}
-      <a href="#/">{t("nav.room")}</a>
     </main>
   );
 }

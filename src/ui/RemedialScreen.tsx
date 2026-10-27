@@ -22,7 +22,6 @@ export function RemedialScreen({ onExit }: { onExit(): void }) {
     return (
       <main className="room">
         <p>{t("remedial.none")}</p>
-        <a href="#/">{t("nav.room")}</a>
       </main>
     );
   }
