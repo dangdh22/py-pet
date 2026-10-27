@@ -15,13 +15,17 @@ test("a Pyodide that cannot download shows the failed panel, and Thử lại sta
   await expect(panel).toBeVisible();
   await expect(page.getByText("Robo sẵn sàng")).toHaveCount(0);
 
-  // The child can still read the lesson while Python is down; the focus frame of the lesson shows the panel and its retry button too.
+  // The child can still read the lesson while Python is down. The route change is asynchronous and the room shows the same
+  // panel, so first wait for what only the focus frame of the lesson has: the lesson URL and the "Về phòng" link of its top bar.
   await page.getByRole("link", { name: "Học tiếp" }).click();
+  await expect(page).toHaveURL(/#\/lesson\//);
+  await expect(page.getByRole("link", { name: "Về phòng" })).toBeVisible();
   await expect(panel).toBeVisible();
-  await expect(panel.getByRole("button", { name: "Thử lại" })).toBeVisible();
+  const retry = panel.getByRole("button", { name: "Thử lại" });
+  await expect(retry).toBeVisible();
 
   await page.unroute(WASM);
-  await page.getByRole("button", { name: "Thử lại" }).click();
+  await retry.click();
   await expect(panel).toBeHidden({ timeout: 60_000 });
   await expect(page.getByText("Robo sẵn sàng")).toBeVisible({ timeout: 60_000 });
 
