@@ -16,6 +16,19 @@ describe("design tokens", () => {
     expect(tokens).toContain(`${name}: ${value};`);
   });
 
+  // The browser sheet sets `monospace` on `pre` and `code`; a `<code>` inside a `<pre>` would show the system font, not the code font.
+  test("base.css sets the code font on pre and code, with font-family and not the font shorthand", () => {
+    const plain = components.base.replace(/\/\*[\s\S]*?\*\//g, "");
+    const rule = [...plain.matchAll(/([^{}]+)\{([^{}]*)\}/g)].find((match) =>
+      match[1]!.split(",").map((selector) => selector.trim()).includes("code"),
+    );
+    expect(rule).toBeDefined();
+    const selectors = rule![1]!.split(",").map((selector) => selector.trim());
+    expect(selectors).toEqual(expect.arrayContaining(["pre", "code"]));
+    expect(rule![2]).toContain("font-family: var(--font-mono);");
+    expect(rule![2]).not.toMatch(/(?:^|[;\s])font:/);
+  });
+
   test("the unused --radius token is gone", () => {
     expect(tokens).not.toContain("--radius");
   });

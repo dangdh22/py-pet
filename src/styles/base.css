@@ -11,6 +11,12 @@ body {
      so this one line covers every mono text; a rule with the `font` shorthand resets it and sets it again. */
   font-variant-ligatures: none;
 }
+/* The browser sheet sets `monospace` on these elements, so a `<code>` inside a `<pre>` (or inside a text) would not take the code font
+   of its block. 1 element rule gives every code the same font; it is not a `font:` shorthand, so the ligatures stay off. */
+pre,
+code,
+kbd,
+samp { font-family: var(--font-mono); }
 
 /* Buttons. `.button` gives a link (`<a class="button">`) the same look as a `<button>`. */
 button,

@@ -365,9 +365,6 @@
   white-space: pre-wrap;
   overflow-x: auto;
 }
-/* A `code` element has its own `monospace` in the browser sheet, which would hide the font of its block. */
-.fill-template code,
-.question-card .code-block code { font-family: inherit; }
 .puzzle-card .fill-template input {
   height: 1.6em;
   margin: 0 2px;
