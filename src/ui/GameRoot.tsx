@@ -14,7 +14,7 @@ export function GameRoot({ store, clock, onReplaced }: { store: GameStore; clock
   const { t } = useLang();
   const [loaded, setLoaded] = useState<LoadedGame | null | undefined>(undefined);
   const [loadProblem, setLoadProblem] = useState<StateProblem | "unreadable" | null>(null);
-  // Without a profile: false shows the landing page, true the onboarding form.
+  // Without a profile: false shows the landing page, true the 4-step welcome.
   const [onboarding, setOnboarding] = useState(false);
 
   useEffect(() => {
@@ -70,6 +70,7 @@ export function GameRoot({ store, clock, onReplaced }: { store: GameStore; clock
       <OnboardingScreen
         store={store}
         clock={clock}
+        onBack={() => setOnboarding(false)}
         onCreated={(created) => {
           window.location.hash = "#/";
           setLoaded(created);

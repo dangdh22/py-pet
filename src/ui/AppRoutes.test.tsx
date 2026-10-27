@@ -157,6 +157,15 @@ describe("App", () => {
     expect(screen.getByText("Đang mở hồ sơ...")).toBeInTheDocument();
     await userEvent.click(await screen.findByRole("button", { name: "Bắt đầu học" }));
     expect(screen.getByRole("heading", { name: "Chào mừng đến với Py-Pet!" })).toBeInTheDocument();
+    expect(screen.getByText("Bước 1/4")).toBeInTheDocument();
+  });
+
+  test("Back on the first step of the welcome returns to the landing page", async () => {
+    render(<App bundle={testBundle()} runnerClient={makeClient().client} store={new MemoryStore()} clock={() => FIXED_NOW} />);
+    await userEvent.click(await screen.findByRole("button", { name: "Bắt đầu học" }));
+    await userEvent.click(screen.getByRole("button", { name: "Quay lại" }));
+    expect(screen.queryByRole("heading", { name: "Chào mừng đến với Py-Pet!" })).not.toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Bắt đầu học" })).toBeInTheDocument();
   });
 
   test("without a profile every hash opens the landing page, not a screen of the game", async () => {
@@ -170,7 +179,10 @@ describe("App", () => {
     window.location.hash = "#/welcome";
     render(<App bundle={testBundle()} runnerClient={makeClient().client} store={new MemoryStore()} clock={() => FIXED_NOW} />);
     await userEvent.click(await screen.findByRole("button", { name: "Bắt đầu học" }));
+    await userEvent.click(screen.getByRole("button", { name: "Tiếp" }));
     await userEvent.type(screen.getByLabelText("Tên của con"), "An");
+    await userEvent.click(screen.getByRole("button", { name: "Tiếp" }));
+    await userEvent.click(screen.getByRole("button", { name: "Tiếp" }));
     await userEvent.type(screen.getByLabelText("Mã PIN của bố mẹ (4 đến 6 chữ số)"), "1234");
     await userEvent.type(screen.getByLabelText("Nhập lại mã PIN"), "1234");
     await userEvent.click(screen.getByRole("button", { name: "Bắt đầu" }));

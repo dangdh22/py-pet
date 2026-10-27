@@ -365,3 +365,148 @@
   .landing-robo { right: 0; }
   .landing-bubble { right: 150px; }
 }
+
+/* Welcome (spec 7.2): 4 steps, 1 question each. The mint column on the left has the logo, Robo and what he says; the right column has the question. */
+.ob {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  min-height: 100vh;
+}
+.ob-left {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+  padding: 80px 24px 40px;
+  border-right: var(--border-w) solid var(--ink);
+  background: var(--mint);
+}
+.ob-left .logo {
+  position: absolute;
+  top: 20px;
+  left: 24px;
+}
+/* Robo's line: a bubble with the solid tail (spec 5.5) pointing down at him. */
+.ob-say {
+  position: relative;
+  max-width: 340px;
+  margin: 0;
+  padding: 12px 16px;
+  border: var(--border-w) solid var(--ink);
+  background: var(--surface);
+  box-shadow: var(--shadow-card);
+  font-size: 17px;
+  font-weight: 700;
+  text-align: center;
+}
+.ob-say::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -12px;
+  margin-left: -8px;
+  border-style: solid;
+  border-width: 10px 8px 0;
+  border-color: var(--ink) transparent transparent;
+}
+
+.ob-right {
+  display: flex;
+  justify-content: center;
+  padding: 56px 70px;
+}
+.ob-panel {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 520px;
+}
+.ob-panel h1 {
+  margin: 0 0 24px;
+  font-size: 26px;
+  font-weight: 800;
+  line-height: 1.2;
+}
+/* The 4 step squares: ink when done, blue for the current step. */
+.ob-steps {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+  margin-bottom: 8px;
+}
+.ob-steps i {
+  height: 8px;
+  border: var(--border-w) solid var(--ink);
+  background: var(--surface);
+}
+.ob-steps .done { background: var(--ink); }
+.ob-steps .current { background: var(--primary); }
+.ob-step {
+  margin: 0 0 28px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.ob-form {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+.ob-question,
+.ob-field > span {
+  display: block;
+  margin: 0 0 14px;
+  font-size: 24px;
+  font-weight: 800;
+}
+.ob-field { display: block; }
+.ob-field input {
+  width: 100%;
+  padding: 14px 16px;
+  box-shadow: var(--shadow-card);
+  font-size: 22px;
+  font-weight: 600;
+}
+.ob-pins { display: grid; gap: 22px; }
+.ob-pins .ob-field > span {
+  margin-bottom: 10px;
+  font-size: 17px;
+}
+.ob-lang { box-shadow: var(--shadow-card); }
+.ob-lang button {
+  padding: 12px 24px;
+  font-size: 18px;
+}
+.ob-help {
+  margin: 14px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+.ob-form [role="alert"] {
+  margin: 14px 0 0;
+  font-weight: 600;
+}
+.ob-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: auto;
+  padding-top: 32px;
+}
+.ob-next { margin-left: auto; }
+
+/* Narrow windows: Robo's column goes above the question. */
+@media (max-width: 799px) {
+  .ob {
+    grid-template-columns: minmax(0, 1fr);
+    min-height: 0;
+  }
+  .ob-left {
+    padding: 76px 20px 40px;
+    border-right: 0;
+    border-bottom: var(--border-w) solid var(--ink);
+  }
+  .ob-right { padding: 28px 20px 36px; }
+}
