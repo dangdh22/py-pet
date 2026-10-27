@@ -29,3 +29,17 @@ describe("design tokens", () => {
     }
   });
 });
+
+// The R3 files take their colors from the tokens (a tint is a color-mix of a token) and have square corners only.
+describe.each(["pages", "parent", "errors"])("%s.css", (name) => {
+  const css = read(name);
+
+  test("has no hex color", () => {
+    expect(css).not.toMatch(/#[0-9a-f]{3,8}\b/i);
+  });
+
+  test("has square corners only", () => {
+    const radii = [...css.matchAll(/border-radius:\s*([^;}]+)/g)].map((match) => match[1].trim());
+    expect(radii.filter((value) => value !== "0")).toEqual([]);
+  });
+});

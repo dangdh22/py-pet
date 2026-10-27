@@ -27,7 +27,69 @@ describe("names", () => {
   });
 });
 
+describe("ShopScreen: the page and its tabs", () => {
+  test("has 1 level-1 heading and a labelled tab list with 2 tabs", async () => {
+    await renderWithGame(<ShopScreen />);
+    expect(screen.getAllByRole("heading", { level: 1 }).map((h) => h.textContent)).toEqual(["Cửa hàng"]);
+    expect(screen.getByRole("tablist", { name: "Các ngăn của cửa hàng" })).toBeInTheDocument();
+    const robotTab = screen.getByRole("tab", { name: "Đồ cho Robo" });
+    const rewardsTab = screen.getByRole("tab", { name: "Phần thưởng từ bố mẹ" });
+    expect(robotTab).toHaveAttribute("aria-selected", "true");
+    expect(robotTab).toHaveAttribute("tabindex", "0");
+    expect(rewardsTab).toHaveAttribute("aria-selected", "false");
+    expect(rewardsTab).toHaveAttribute("tabindex", "-1");
+    expect(screen.getByRole("tabpanel", { name: "Đồ cho Robo" })).toBeInTheDocument();
+  });
+
+  test("the arrow keys, Home and End change the tab and move the focus", async () => {
+    await renderWithGame(<ShopScreen />);
+    screen.getByRole("tab", { name: "Đồ cho Robo" }).focus();
+    await userEvent.keyboard("{ArrowRight}");
+    const rewardsTab = screen.getByRole("tab", { name: "Phần thưởng từ bố mẹ" });
+    expect(rewardsTab).toHaveAttribute("aria-selected", "true");
+    expect(rewardsTab).toHaveFocus();
+    expect(screen.getByRole("tabpanel", { name: "Phần thưởng từ bố mẹ" })).toHaveTextContent(
+      "Bố mẹ chưa đặt phần thưởng nào.",
+    );
+    await userEvent.keyboard("{Home}");
+    const robotTab = screen.getByRole("tab", { name: "Đồ cho Robo" });
+    expect(robotTab).toHaveAttribute("aria-selected", "true");
+    expect(robotTab).toHaveFocus();
+    await userEvent.keyboard("{End}");
+    expect(screen.getByRole("tab", { name: "Phần thưởng từ bố mẹ" })).toHaveFocus();
+  });
+
+  test("the item groups are headings of level 2", async () => {
+    await renderWithGame(<ShopScreen />);
+    expect(screen.getAllByRole("heading", { level: 2 }).map((h) => h.textContent)).toEqual([
+      "Pin và Vui",
+      "Phụ kiện",
+      "Trang trí phòng",
+    ]);
+  });
+});
+
 describe("ShopScreen: things for the robot", () => {
+  test("a card tells what an item does", async () => {
+    await renderWithGame(<ShopScreen />, { state: richState(100) });
+    expect(within(row("Kính râm")).getByText("Đeo ở mặt")).toBeInTheDocument();
+    expect(within(row("Kính râm")).getByText("60 xu")).toBeInTheDocument();
+    expect(within(row("Chậu cây")).getByText("Đặt trong phòng")).toBeInTheDocument();
+    expect(within(row("Pin sạc nhanh")).getByText("Pin +2")).toBeInTheDocument();
+  });
+
+  test("a worn accessory has the class wearing and says so in words", async () => {
+    await renderWithGame(<ShopScreen />, { state: richState(100) });
+    expect(row("Kính râm")).not.toHaveClass("wearing");
+    await userEvent.click(screen.getByRole("button", { name: "Mua Kính râm" }));
+    await userEvent.click(screen.getByRole("button", { name: "Đeo Kính râm" }));
+    expect(row("Kính râm")).toHaveClass("wearing");
+    expect(within(row("Kính râm")).getByText("Đang đeo")).toBeInTheDocument();
+    await userEvent.click(screen.getByRole("button", { name: "Tháo Kính râm" }));
+    expect(row("Kính râm")).not.toHaveClass("wearing");
+    expect(within(row("Kính râm")).queryByText("Đang đeo")).not.toBeInTheDocument();
+  });
+
   test("buys and uses a Pin item", async () => {
     const { store } = await renderWithGame(<ShopScreen />, { state: richState(100) });
     expect(screen.getByText("Con có 100 xu")).toBeInTheDocument();
@@ -55,7 +117,8 @@ describe("ShopScreen: things for the robot", () => {
   test("each accessory and decoration has a picture beside its name", async () => {
     await renderWithGame(<ShopScreen />, { state: richState(100) });
     for (const item of SHOP_ITEMS.filter((i) => i.kind === "accessory" || i.kind === "decor")) {
-      const icons = row(vi[itemKey(item.id)]).querySelectorAll("svg");
+      // The price carries a coin, so the picture is the svg in the picture box.
+      const icons = row(vi[itemKey(item.id)]).querySelectorAll(".shop-pic svg");
       expect(icons).toHaveLength(1);
       expect(icons[0]).toHaveAttribute("aria-hidden", "true");
     }
@@ -88,6 +151,21 @@ describe("ShopScreen: things for the robot", () => {
     expect(within(charger).getByText("Đã có đủ 9 món")).toBeInTheDocument();
     expect(within(charger).getByText("Pin đã đầy")).toBeInTheDocument();
     expect(within(row("Quả bóng")).getByText("Chưa có món này")).toBeInTheDocument();
+  });
+
+  // The reason is a line of text near the buttons, not the text of the (dimmed) button: the button points at it.
+  test("a disabled button is described by its reason", async () => {
+    const poor = await renderWithGame(<ShopScreen />, { state: richState(20) });
+    expect(screen.getByRole("button", { name: "Mua Kệ sách" })).toHaveAccessibleDescription("Chưa đủ xu");
+    expect(screen.getByRole("button", { name: "Mua Dầu nhớt" })).not.toHaveAccessibleDescription();
+    poor.unmount();
+
+    const state = richState(100);
+    state.pet.pin = 5;
+    state.inventory.consumables = { "pin-sac": 9 };
+    await renderWithGame(<ShopScreen />, { state });
+    expect(screen.getByRole("button", { name: "Dùng Pin sạc nhanh" })).toHaveAccessibleDescription("Pin đã đầy");
+    expect(screen.getByRole("button", { name: "Mua Pin sạc nhanh" })).toHaveAccessibleDescription("Đã có đủ 9 món");
   });
 });
 
