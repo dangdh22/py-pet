@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { startApp } from "./helpers";
 
 const WASM = "**/pyodide.asm.wasm";
 
@@ -8,19 +9,16 @@ const WASM = "**/pyodide.asm.wasm";
 test("a Pyodide that cannot download shows the failed panel, and Thử lại starts it", async ({ page }) => {
   await page.route(WASM, (route) => route.abort());
 
-  await page.goto("./");
-  await expect(page.getByRole("heading", { name: "Chào mừng đến với Py-Pet!" })).toBeVisible();
-  await page.getByLabel("Tên của con").fill("An");
-  await page.getByLabel("Mã PIN của bố mẹ (4 đến 6 chữ số)").fill("1234");
-  await page.getByLabel("Nhập lại mã PIN").fill("1234");
-  await page.getByRole("button", { name: "Bắt đầu" }).click();
+  await startApp(page);
 
   const panel = page.getByRole("alert").filter({ hasText: "Robo chưa khởi động được" });
   await expect(panel).toBeVisible();
   await expect(page.getByText("Robo sẵn sàng")).toHaveCount(0);
 
-  // The child can still read the lesson while Python is down.
+  // The child can still read the lesson while Python is down; the focus frame of the lesson shows the panel and its retry button too.
   await page.getByRole("link", { name: "Học tiếp" }).click();
+  await expect(panel).toBeVisible();
+  await expect(panel.getByRole("button", { name: "Thử lại" })).toBeVisible();
 
   await page.unroute(WASM);
   await page.getByRole("button", { name: "Thử lại" }).click();

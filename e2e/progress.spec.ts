@@ -1,17 +1,8 @@
 import { expect, test, type Page } from "@playwright/test";
-
-async function startApp(page: Page, name = "An", pin = "1234") {
-  await page.goto("./");
-  await expect(page.getByRole("heading", { name: "Chào mừng đến với Py-Pet!" })).toBeVisible();
-  await page.getByLabel("Tên của con").fill(name);
-  await page.getByLabel("Mã PIN của bố mẹ (4 đến 6 chữ số)").fill(pin);
-  await page.getByLabel("Nhập lại mã PIN").fill(pin);
-  await page.getByRole("button", { name: "Bắt đầu" }).click();
-  await expect(page.getByRole("heading", { name: "Phòng của Robo" })).toBeVisible();
-}
+import { startApp, waitForPython } from "./helpers";
 
 async function finishLessonOne(page: Page) {
-  await expect(page.getByText("Robo sẵn sàng")).toBeVisible({ timeout: 60_000 });
+  await waitForPython(page);
   await page.getByRole("link", { name: "Học tiếp" }).click();
   await page.getByRole("button", { name: "Tiếp" }).click();
   await page.getByRole("button", { name: "Tiếp" }).click();

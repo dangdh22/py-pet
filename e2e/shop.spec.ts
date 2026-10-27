@@ -1,13 +1,5 @@
 import { expect, test, type Page } from "@playwright/test";
-
-async function startApp(page: Page) {
-  await page.goto("./");
-  await page.getByLabel("Tên của con").fill("An");
-  await page.getByLabel("Mã PIN của bố mẹ (4 đến 6 chữ số)").fill("1234");
-  await page.getByLabel("Nhập lại mã PIN").fill("1234");
-  await page.getByRole("button", { name: "Bắt đầu" }).click();
-  await expect(page.getByText("Robo sẵn sàng")).toBeVisible({ timeout: 60_000 });
-}
+import { startApp, waitForPython } from "./helpers";
 
 async function submitCode(page: Page, code: string) {
   const editor = page.getByRole("textbox", { name: "Trình soạn code" });
@@ -32,6 +24,7 @@ async function lesson(page: Page, code: string) {
 
 test("xu from 2 lessons buy an item in the shop; the achievement book shows the first badge", async ({ page }) => {
   await startApp(page);
+  await waitForPython(page);
   await lesson(page, 'print("Xin chào Robo")');
   await lesson(page, 'print("Robo đang học Python")');
   await expect(page.getByText("Xu: 16")).toBeVisible();
@@ -45,7 +38,7 @@ test("xu from 2 lessons buy an item in the shop; the achievement book shows the 
   await page.getByRole("tab", { name: "Phần thưởng từ bố mẹ" }).click();
   await expect(page.getByText("Bố mẹ chưa đặt phần thưởng nào.")).toBeVisible();
 
-  await page.getByRole("link", { name: "Về phòng" }).click();
+  await page.getByRole("link", { name: "Phòng Robo" }).click();
   await page.getByRole("link", { name: "Sổ thành tích" }).click();
   await expect(page.getByRole("listitem").filter({ hasText: "Bài học đầu tiên" })).toContainText("Nhận ngày");
 });

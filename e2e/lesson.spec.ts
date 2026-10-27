@@ -1,17 +1,9 @@
 import { expect, test, type Page } from "@playwright/test";
-
-async function startApp(page: Page) {
-  await page.goto("./");
-  await expect(page.getByRole("heading", { name: "Chào mừng đến với Py-Pet!" })).toBeVisible();
-  await page.getByLabel("Tên của con").fill("An");
-  await page.getByLabel("Mã PIN của bố mẹ (4 đến 6 chữ số)").fill("1234");
-  await page.getByLabel("Nhập lại mã PIN").fill("1234");
-  await page.getByRole("button", { name: "Bắt đầu" }).click();
-}
+import { startApp, waitForPython } from "./helpers";
 
 async function openFirstExercise(page: Page) {
   await startApp(page);
-  await expect(page.getByText("Robo sẵn sàng")).toBeVisible({ timeout: 60_000 });
+  await waitForPython(page);
   await page.getByRole("link", { name: "Học tiếp" }).click();
   await page.getByRole("button", { name: "Tiếp" }).click();
   await page.getByRole("button", { name: "Tiếp" }).click();
@@ -27,7 +19,7 @@ async function typeCode(page: Page, code: string) {
 
 test("runs an example on a card with real Pyodide", async ({ page }) => {
   await startApp(page);
-  await expect(page.getByText("Robo sẵn sàng")).toBeVisible({ timeout: 60_000 });
+  await waitForPython(page);
   await page.getByRole("link", { name: "Học tiếp" }).click();
   await page.getByRole("button", { name: "Chạy thử" }).click();
   await expect(page.getByRole("region", { name: "Kết quả" })).toContainText("Xin chào, mình là Robo!");
@@ -58,15 +50,19 @@ test("stops an endless loop and stays usable", async ({ page }) => {
   await typeCode(page, "while True:\npass");
   await page.getByRole("button", { name: "Chạy thử" }).click();
   await expect(page.getByText("Code chạy lâu quá nên Robo đã dừng lại.", { exact: false })).toBeVisible();
-  await expect(page.getByText("Robo sẵn sàng")).toBeVisible({ timeout: 60_000 });
+  await waitForPython(page);
   await typeCode(page, 'print("Xin chào Robo")');
   await page.getByRole("button", { name: "Nộp bài" }).click();
   await expect(page.getByText("Đúng hết 1/1 test!")).toBeVisible();
 });
 
 test("switches the interface to English", async ({ page }) => {
-  await openFirstExercise(page);
+  await startApp(page);
+  // The language switch is in the side menu of the room; the study screens have no side menu.
   await page.getByRole("group", { name: "Ngôn ngữ giao diện" }).getByRole("button", { name: "EN" }).click();
+  await page.getByRole("link", { name: "Continue learning" }).click();
+  await page.getByRole("button", { name: "Next" }).click();
+  await page.getByRole("button", { name: "Next" }).click();
   await expect(page.getByRole("button", { name: "Submit" })).toBeVisible();
   await expect(page.getByText("Write a program that prints this text: Xin chào Robo")).toBeVisible();
 });

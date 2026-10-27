@@ -1,14 +1,5 @@
-import { expect, test, type Page } from "@playwright/test";
-
-async function startApp(page: Page) {
-  await page.goto("./");
-  await expect(page.getByRole("heading", { name: "Chào mừng đến với Py-Pet!" })).toBeVisible();
-  await page.getByLabel("Tên của con").fill("An");
-  await page.getByLabel("Mã PIN của bố mẹ (4 đến 6 chữ số)").fill("1234");
-  await page.getByLabel("Nhập lại mã PIN").fill("1234");
-  await page.getByRole("button", { name: "Bắt đầu" }).click();
-  await expect(page.getByRole("heading", { name: "Phòng của Robo" })).toBeVisible();
-}
+import { expect, test } from "@playwright/test";
+import { startApp } from "./helpers";
 
 test("a backup of a drained Robo of form 3 shows the charger, the crown and leads to the review", async ({ page }) => {
   await startApp(page);

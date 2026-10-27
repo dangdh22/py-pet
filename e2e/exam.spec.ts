@@ -1,13 +1,5 @@
 import { expect, test, type Page } from "@playwright/test";
-
-async function startApp(page: Page) {
-  await page.goto("./");
-  await page.getByLabel("Tên của con").fill("An");
-  await page.getByLabel("Mã PIN của bố mẹ (4 đến 6 chữ số)").fill("1234");
-  await page.getByLabel("Nhập lại mã PIN").fill("1234");
-  await page.getByRole("button", { name: "Bắt đầu" }).click();
-  await expect(page.getByText("Robo sẵn sàng")).toBeVisible({ timeout: 60_000 });
-}
+import { startApp, waitForPython } from "./helpers";
 
 async function submitCode(page: Page, code: string, last: boolean) {
   const editor = page.getByRole("textbox", { name: "Trình soạn code" });
@@ -63,6 +55,7 @@ async function answerPaper(page: Page) {
 test("after the lessons of the first topic come its test and then the next topic", async ({ page }) => {
   test.setTimeout(120_000);
   await startApp(page);
+  await waitForPython(page);
   await readCards(page);
   await submitCode(page, 'print("Xin chào Robo")', false);
   await answerFirstChoice(page, true);
@@ -92,7 +85,7 @@ test("after the lessons of the first topic come its test and then the next topic
 
   await page.getByRole("link", { name: "Học tiếp" }).click();
   await expect(page.getByRole("heading", { name: "Chuỗi là gì?" })).toBeVisible();
-  await page.getByRole("link", { name: "Py-Pet" }).click();
+  await page.getByRole("link", { name: "Về phòng" }).click();
   await page.getByRole("link", { name: "Bản đồ học" }).click();
   // The map lists the topics in order: the first topic test is the one of topic 1.
   await expect(page.getByRole("listitem").filter({ hasText: "Kiểm tra chủ đề" }).first()).toContainText("Đã xong");

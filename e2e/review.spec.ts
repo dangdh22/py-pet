@@ -1,13 +1,5 @@
 import { expect, test, type Page } from "@playwright/test";
-
-async function startApp(page: Page) {
-  await page.goto("./");
-  await page.getByLabel("Tên của con").fill("An");
-  await page.getByLabel("Mã PIN của bố mẹ (4 đến 6 chữ số)").fill("1234");
-  await page.getByLabel("Nhập lại mã PIN").fill("1234");
-  await page.getByRole("button", { name: "Bắt đầu" }).click();
-  await expect(page.getByText("Robo sẵn sàng")).toBeVisible({ timeout: 60_000 });
-}
+import { startApp, waitForPython } from "./helpers";
 
 async function submitCode(page: Page, code: string) {
   const editor = page.getByRole("textbox", { name: "Trình soạn code" });
@@ -28,6 +20,7 @@ async function answerFirstChoice(page: Page, last: boolean) {
 
 test("after 2 lessons the review station opens, pays and unlocks lesson 3", async ({ page }) => {
   await startApp(page);
+  await waitForPython(page);
   await page.getByRole("link", { name: "Học tiếp" }).click();
   await page.getByRole("button", { name: "Tiếp" }).click();
   await page.getByRole("button", { name: "Tiếp" }).click();
@@ -61,6 +54,7 @@ test("after 2 lessons the review station opens, pays and unlocks lesson 3", asyn
 
 test("the room offers a free review after the first lesson", async ({ page }) => {
   await startApp(page);
+  await waitForPython(page);
   await page.getByRole("link", { name: "Học tiếp" }).click();
   await page.getByRole("button", { name: "Tiếp" }).click();
   await page.getByRole("button", { name: "Tiếp" }).click();
