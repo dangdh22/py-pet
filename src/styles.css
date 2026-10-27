@@ -85,8 +85,8 @@
 .backup label { display: grid; gap: 4px; font-weight: 600; }
 [role="alert"] { color: var(--danger); }
 
+/* The narrow centered box of the review, remedial and evolution test screens; the room itself is `.room-page` (shell.css). */
 .room { max-width: 900px; margin: 0 auto; padding: 20px; text-align: center; }
-.room-goals { list-style: none; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 20px; }
 .room-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 12px; }
 
 .map { max-width: 900px; margin: 0 auto; padding: 20px; }
@@ -293,10 +293,12 @@ button.danger { background: var(--danger); color: #fff; }
 /* M6a: the room scene (spec 8.3, design decisions 4 and 6) and the stat bars (spec 8.2.1) */
 .room-scene {
   container: scene / inline-size;
-  margin: 12px 0 6px;
+  margin: 0 0 14px;
   border-radius: 0;
   overflow: hidden;
-  border: 1px solid var(--border);
+  /* The frame of the scene (spec 9): a 2 px ink border and the big hard shadow; the drawing inside stays as it is. */
+  border: var(--border-w) solid var(--ink);
+  box-shadow: var(--shadow-lg);
   --wall: #eaf1ff;
   --wall-stripe: #e0e9fb;
   --baseboard: #c9a983;
@@ -358,27 +360,32 @@ button.danger { background: var(--danger); color: #fff; }
 .scene-umbrella { left: 7%; bottom: 18px; width: 120px; }
 .scene-ball { right: 12%; bottom: 22px; width: 38px; }
 
+/* Robo's speech bubble (spec 5.5): a square box with a 2 px ink border, the 3 px hard shadow and a solid ink tail. */
 .scene-bubble {
   position: relative;
   z-index: 3;
   max-width: min(340px, 46%);
-  padding: 8px 14px;
+  padding: 10px 14px;
   background: var(--surface);
-  border: 2px solid var(--scene-ink);
-  border-radius: 16px;
-  box-shadow: 0 2px 0 rgba(29, 36, 64, 0.15);
+  border: var(--border-w) solid var(--ink);
+  border-radius: 0;
+  box-shadow: var(--shadow);
+  font-size: 15px;
+  font-weight: 700;
 }
 .scene-bubble p { margin: 0; }
-.scene-bubble::before, .scene-bubble::after {
+/* The tail points down at Robo. */
+.scene-bubble::before {
   content: "";
   position: absolute;
   left: 50%;
-  border-style: solid;
-  border-color: transparent;
+  bottom: -12px;
+  width: 20px;
+  height: 12px;
+  margin-left: -10px;
+  background: var(--ink);
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
 }
-/* The tail points down at Robo. */
-.scene-bubble::before { bottom: -14px; margin-left: -11px; border-width: 13px 11px 0; border-top-color: var(--scene-ink); }
-.scene-bubble::after { bottom: -10px; margin-left: -8px; border-width: 10px 8px 0; border-top-color: var(--surface); }
 
 .scene-stage { position: relative; z-index: 2; display: flex; align-items: flex-end; gap: 6px; }
 .robot-pose { position: relative; line-height: 0; }
@@ -436,40 +443,36 @@ button.danger { background: var(--danger); color: #fff; }
 }
 
 .room-wearing, .room-decor { margin: 2px 0; font-size: 0.9rem; color: var(--muted); }
-.room-stats {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 10px 20px;
-  max-width: 640px;
-  margin: 14px auto 6px;
-  text-align: left;
-}
-.stat-bar { display: grid; gap: 4px; --stat: var(--stat-pin); }
+.room-stats { display: grid; gap: 12px; }
+/* A bar: the name and the number on the left, the track on the right. */
+.stat-bar { display: grid; grid-template-columns: 11em minmax(0, 1fr); align-items: center; gap: 10px; --stat: var(--stat-pin); }
 .stat-vui { --stat: var(--stat-vui); }
 .stat-growth { --stat: var(--stat-growth); }
 .stat-pin.stat-low,
 .stat-vui.stat-low { --stat: var(--stat-low); }
-.stat-head { display: flex; align-items: center; gap: 6px; font-weight: 600; }
+.stat-head { display: flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 700; }
 .stat-icon { flex: none; color: var(--stat); }
+/* The 2 px ink frame keeps the edge of the bar visible whatever the fill color is (the green is under 3:1 on white). */
 .stat-track {
   position: relative;
   display: block;
-  height: 14px;
+  height: 20px;
+  padding: 2px;
+  border: var(--border-w) solid var(--ink);
   border-radius: 0;
   background: var(--stat-track);
   overflow: hidden;
-  box-shadow: inset 0 1px 2px rgba(29, 36, 64, 0.15);
 }
 .stat-fill { display: block; height: 100%; background: var(--stat); border-radius: 0; }
-/* One segment per point of Pin and Vui. */
+/* One segment per point of Pin and Vui, with a 2 px gap between segments and none at the 2 ends: this layer is 2 px wider than the
+   area of the fill, so N segments and N - 1 gaps fit it exactly. */
 .stat-segmented::after {
   content: "";
   position: absolute;
-  inset: 0;
-  background-image: linear-gradient(90deg, transparent calc(100% - 2px), var(--surface) 0);
+  top: 2px;
+  right: 0;
+  bottom: 2px;
+  left: 2px;
+  background-image: linear-gradient(90deg, transparent calc(100% - 2px), var(--stat-track) 0);
   background-size: calc(100% / var(--segments)) 100%;
-}
-@media (max-width: 520px) {
-  .room-stats { grid-template-columns: 1fr; }
-  .stat-bar { grid-template-columns: 9.5em 1fr; align-items: center; }
 }

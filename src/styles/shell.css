@@ -510,3 +510,143 @@
   }
   .ob-right { padding: 28px 20px 36px; }
 }
+
+/* Room (spec 7.3, option B of 2-room.html): a title row with the chips, then the scene on the left and a 340 px column of cards on the right. */
+.room-page {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 24px 32px 40px;
+}
+.room-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+  margin-bottom: 18px;
+}
+.room-title {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+}
+.room-title h1 {
+  margin: 0;
+  font-size: 30px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+.room-title p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 16px;
+}
+.room-chips {
+  display: flex;
+  gap: 10px;
+}
+.room-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  align-items: start;
+  gap: 28px;
+}
+.room-side {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.room-side .card-title { margin-bottom: 12px; }
+
+/* The main card: the next step with its name, or the charging card. White text on --primary is 5.5:1, so the small label keeps full white. */
+.next-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 18px;
+  border: var(--border-w) solid var(--ink);
+  background: var(--primary);
+  color: #fff;
+  box-shadow: var(--shadow-card);
+  text-decoration: none;
+  transition: transform 0.08s ease-out, box-shadow 0.08s ease-out;
+}
+.next-card:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 5px 5px 0 var(--ink);
+}
+.next-card:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 var(--ink);
+}
+.next-card-text {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+.next-card-kicker {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.next-card-title {
+  font-size: 22px;
+  font-weight: 800;
+}
+.next-card-step {
+  font-size: 13px;
+  overflow-wrap: anywhere;
+}
+
+/* The review button: the label on the left, the hint on the right. */
+.room-review {
+  justify-content: space-between;
+  padding: 12px 18px;
+  box-shadow: var(--shadow-card);
+  font-size: 16px;
+}
+.room-review small {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 500;
+}
+.room-review:hover { box-shadow: 5px 5px 0 var(--ink); }
+.room-review:active { box-shadow: 1px 1px 0 var(--ink); }
+
+.room-all-done {
+  margin: 0;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+/* The goals: each row is the text (the numbers are in it) and a picture made of squares. */
+.room-goals {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 14px;
+}
+.room-goals li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .next-card { transition: none; }
+  .next-card:hover,
+  .next-card:active { transform: none; }
+}
+
+/* Narrow windows: the cards go under the scene. */
+@media (max-width: 899px) {
+  .room-page { padding: 16px 20px 32px; }
+  .room-body { grid-template-columns: minmax(0, 1fr); }
+}

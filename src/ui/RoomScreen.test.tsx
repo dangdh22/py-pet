@@ -2,10 +2,14 @@
 import { screen } from "@testing-library/react";
 import { describe, expect, test } from "vitest";
 import { addDays, weekStart } from "../game/dates";
+import { nextStep } from "../game/path";
 import { initialGameState } from "../game/state";
+import { pick } from "../i18n/lang";
 import { examBundle } from "../test/examBundle";
+import { testBundle } from "../test/fixtures";
 import { renderWithGame, TODAY } from "../test/renderGame";
 import { reviewBundle } from "../test/reviewBundle";
+import { nextStepLabel } from "./nextStepLabel";
 import { RoomScreen } from "./RoomScreen";
 
 describe("RoomScreen", () => {
@@ -30,10 +34,74 @@ describe("RoomScreen", () => {
     expect(screen.getByText("Thẻ giữ chuỗi: 0")).toBeInTheDocument();
     expect(screen.getByText("Xu: 0")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Học tiếp" })).toHaveAttribute("href", "#/lesson/t.l1");
-    expect(screen.getByRole("link", { name: "Bản đồ học" })).toHaveAttribute("href", "#/map");
-    expect(screen.getByRole("link", { name: "Sao lưu" })).toHaveAttribute("href", "#/backup");
+    expect(screen.getByRole("heading", { name: "Robo hôm nay" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Mục tiêu" })).toBeInTheDocument();
     expect(screen.queryByRole("link", { name: "Ôn tập" })).not.toBeInTheDocument();
     expect(screen.queryByRole("link", { name: "Sạc cho Robo" })).not.toBeInTheDocument();
+    // The side menu has these links; the room does not repeat them.
+    for (const name of ["Bản đồ học", "Cửa hàng", "Sổ thành tích", "Khu phụ huynh", "Sao lưu"]) {
+      expect(screen.queryByRole("link", { name })).not.toBeInTheDocument();
+    }
+  });
+
+  test("the card of the next step is named \"Học tiếp\" and describes the step and the stage", async () => {
+    const bundle = testBundle();
+    const step = nextStep(bundle, initialGameState(TODAY));
+    if (!step) throw new Error("the fixture has a lesson to do");
+    await renderWithGame(<RoomScreen />, { bundle });
+    const link = screen.getByRole("link", { name: "Học tiếp" });
+    expect(link).toHaveClass("next-card");
+    expect(link).toHaveAccessibleDescription(`${nextStepLabel(bundle, step, "vi")} · ${pick(bundle.stages[0]!.title, "vi")}`);
+    expect(link).toHaveAccessibleDescription("Bài thử · Giai đoạn thử");
+  });
+
+  test("the card of the next step follows the interface language", async () => {
+    await renderWithGame(<RoomScreen />, { lang: "en" });
+    const link = screen.getByRole("link", { name: "Continue learning" });
+    expect(link).toHaveAttribute("href", "#/lesson/t.l1");
+    expect(link).toHaveAccessibleDescription("Test lesson · Test stage");
+  });
+
+  test("the next step of the map names a review station", async () => {
+    const state = initialGameState(TODAY);
+    state.progress.completedLessons = ["r.l1", "r.l2"];
+    await renderWithGame(<RoomScreen />, { state, bundle: reviewBundle() });
+    expect(screen.getByRole("link", { name: "Học tiếp" })).toHaveAccessibleDescription("Trạm ôn · Giai đoạn ôn");
+  });
+
+  test("the review button shows its hint beside the label without changing its name", async () => {
+    const state = initialGameState(TODAY);
+    state.progress.completedLessons = ["t.l1"];
+    await renderWithGame(<RoomScreen />, { state });
+    const review = screen.getByRole("link", { name: "Ôn tập" });
+    expect(review).toHaveClass("button", "mint");
+    expect(review).toHaveTextContent("5 câu, sạc Pin cho Robo");
+  });
+
+  test("the goals show a square for each point and each lesson of the plan", async () => {
+    const state = initialGameState(TODAY);
+    state.streak.pointsDay = TODAY;
+    state.streak.points = 1;
+    state.week = { ...state.week, start: weekStart(TODAY), lessonsDone: 3 };
+    await renderWithGame(<RoomScreen />, { state });
+    const [today, week] = [...document.querySelectorAll(".room-goals .squares")];
+    expect(today?.children).toHaveLength(2);
+    expect(today?.querySelectorAll(".on")).toHaveLength(1);
+    expect(week?.children).toHaveLength(10);
+    expect(week?.querySelectorAll(".on")).toHaveLength(3);
+    expect(today).toHaveAttribute("aria-hidden", "true");
+    expect(week).toHaveAttribute("aria-hidden", "true");
+  });
+
+  test("a long week plan shows at most 10 squares and fills them in proportion", async () => {
+    const state = initialGameState(TODAY);
+    state.settings.weeklyTarget = 28;
+    state.week = { ...state.week, start: weekStart(TODAY), lessonsDone: 14 };
+    await renderWithGame(<RoomScreen />, { state });
+    const week = document.querySelectorAll(".room-goals .squares")[1];
+    expect(screen.getByText("Tuần này: 14/28 bài")).toBeInTheDocument();
+    expect(week?.children).toHaveLength(10);
+    expect(week?.querySelectorAll(".on")).toHaveLength(5);
   });
 
   test("offers a free review once a lesson is done, and the next node of the map", async () => {
@@ -62,6 +130,16 @@ describe("RoomScreen", () => {
     expect(screen.queryByRole("link", { name: "Học tiếp" })).not.toBeInTheDocument();
     expect(screen.getByText("Con đã học hết các bài hiện có. Robo chờ bài mới nhé!")).toBeInTheDocument();
   });
+
+  test("with every lesson done the card says so and there is nothing to continue", async () => {
+    const state = initialGameState(TODAY);
+    state.progress.completedLessons = ["t.l1", "t.l2"];
+    await renderWithGame(<RoomScreen />, { state });
+    expect(screen.getByText("Con đã học hết các bài hiện có. Robo chờ bài mới nhé!")).toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: "Học tiếp" })).not.toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Ôn tập" })).toBeInTheDocument();
+  });
+
   test("a drained robot before the first lesson offers no charging and keeps learning first", async () => {
     const state = initialGameState(TODAY);
     state.pet.pin = 0;
@@ -69,7 +147,7 @@ describe("RoomScreen", () => {
     await renderWithGame(<RoomScreen />, { state });
     expect(screen.getByRole("img", { name: "Robo" })).toHaveAttribute("data-mood", "drained");
     expect(screen.queryByRole("link", { name: "Sạc cho Robo" })).not.toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "Học tiếp" })).toHaveClass("button", "primary");
+    expect(screen.getByRole("link", { name: "Học tiếp" })).toHaveClass("next-card");
   });
 
   test("a robot with battery but no joy asks for 3 right answers in a row", async () => {
@@ -80,7 +158,15 @@ describe("RoomScreen", () => {
     await renderWithGame(<RoomScreen />, { state });
     expect(screen.getByText("Robo buồn quá. Con trả lời đúng 3 câu liên tiếp để Robo vui lại nhé!")).toBeInTheDocument();
     expect(screen.queryByText(/hết pin/)).not.toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "Sạc cho Robo" })).toHaveAttribute("href", "#/review");
+    const charge = screen.getByRole("link", { name: "Sạc cho Robo" });
+    expect(charge).toHaveAttribute("href", "#/review");
+    expect(charge).toHaveClass("next-card");
+    // "Học tiếp" steps down to a plain button under the charging card.
+    const next = screen.getByRole("link", { name: "Học tiếp" });
+    expect(next).toHaveAttribute("href", "#/lesson/t.l2");
+    expect(next).toHaveClass("button");
+    expect(next).not.toHaveClass("next-card", "primary");
+    expect(screen.queryByRole("link", { name: "Ôn tập" })).not.toBeInTheDocument();
   });
 
   test("an empty battery wins over an empty joy in the message", async () => {
@@ -141,7 +227,7 @@ describe("RoomScreen", () => {
     expect(screen.queryByText(/Tuần này: /)).not.toBeInTheDocument();
   });
 
-  test("shows what the robot wears and the room decorations, and links to the shop and the book", async () => {
+  test("shows what the robot wears and the room decorations", async () => {
     const state = initialGameState(TODAY);
     state.inventory = { consumables: {}, owned: ["kinh-ram", "tranh", "chau-cay"], equipped: ["kinh-ram"] };
     await renderWithGame(<RoomScreen />, { state });
@@ -151,9 +237,6 @@ describe("RoomScreen", () => {
       expect.arrayContaining(["chau-cay", "tranh"]),
     );
     expect(document.querySelectorAll(".room-scene [data-decor]")).toHaveLength(2);
-    expect(screen.getByRole("link", { name: "Cửa hàng" })).toHaveAttribute("href", "#/shop");
-    expect(screen.getByRole("link", { name: "Sổ thành tích" })).toHaveAttribute("href", "#/achievements");
-    expect(screen.getByRole("link", { name: "Khu phụ huynh" })).toHaveAttribute("href", "#/parent");
   });
 
   test("practice from the parents comes first", async () => {
