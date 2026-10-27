@@ -1,0 +1,46 @@
+/* Design tokens of the "bold sticker" look (UI revamp spec, section 5): cream page, 2 px ink borders, hard offset shadows, square corners. */
+:root {
+  /* Colors (spec 5.1). Every text and background pair used with them passes WCAG AA. */
+  --bg: #fff8e8;
+  --surface: #ffffff;
+  --ink: #141414;
+  --muted: #555555;
+  --primary: #2f5bea;
+  --yellow: #ffd43b;
+  --mint: #9be3c0;
+  --mint-soft: #c9f0dc;
+  --mint-bg: #eefaf3;
+  --pink: #ff9fb8;
+  --coral: #ff6b6b;
+  --danger: #b42318;
+  /* Light red behind error banners and the failed-start panel (ink text: 14.2:1, danger text: 5.1:1). */
+  --danger-bg: #ffd9d9;
+  --stat-pin: #2fbf71;
+  --stat-vui: #ff6fa5;
+  --chip-streak: #ffe0cc;
+  --chip-xu: #fff1a8;
+  --code-bg: #fffdf6;
+
+  /* Type (spec 5.2). The font files come from public/fonts.css. */
+  --font-ui: "Lexend", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+
+  /* Shape (spec 5.3): hard shadows with no blur. */
+  --border-w: 2px;
+  --shadow-sm: 2px 2px 0 var(--ink);
+  --shadow: 3px 3px 0 var(--ink);
+  --shadow-card: 4px 4px 0 var(--ink);
+  --shadow-lg: 6px 6px 0 var(--ink);
+
+  /* Old names that screens not yet restyled still use; they point at the new look. */
+  --text: var(--ink);
+  --border: var(--ink);
+  /* Green text on the cream page and on white: 4.7:1 and above (the old #2a9d4a gave 3.3:1). */
+  --success: #15803d;
+  --code-text: var(--ink);
+  --mono: var(--font-mono);
+  --radius: 0;
+  --stat-growth: var(--primary);
+  --stat-low: var(--coral);
+  --stat-track: #f1ede3;
+}

@@ -1,0 +1,173 @@
+/* Shared square components (UI revamp spec, sections 5.3 and 5.5). Colors, type and shadows come from tokens.css. */
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-ui);
+}
+
+/* Buttons. `.button` gives a link (`<a class="button">`) the same look as a `<button>`. */
+button,
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border: var(--border-w) solid var(--ink);
+  border-radius: 0;
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow: var(--shadow);
+  font: inherit;
+  font-weight: 700;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.08s ease-out, box-shadow 0.08s ease-out;
+}
+/* Variants: `button.primary`, `a.button.primary` and `a.button` of the existing screens use these classes. */
+.primary { background: var(--primary); color: #fff; }
+.mint { background: var(--mint-soft); }
+.small { padding: 5px 10px; font-size: 13px; box-shadow: var(--shadow-sm); }
+
+/* States (spec 5.3): hover lifts by 1 px and grows the shadow by 1 px; press sinks by 2 px with a 1 px shadow. */
+button:hover:not(:disabled),
+.button:hover { transform: translate(-1px, -1px); box-shadow: var(--shadow-card); }
+button:active:not(:disabled),
+.button:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--ink); }
+.small:hover:not(:disabled) { box-shadow: var(--shadow); }
+.small:active:not(:disabled) { box-shadow: 1px 1px 0 var(--ink); }
+button:disabled { opacity: 0.45; box-shadow: none; cursor: not-allowed; }
+/* A pressed toggle (language switches) is the inverted button. */
+button[aria-pressed="true"] { background: var(--ink); color: #fff; }
+
+/* Keyboard focus: a 3 px ring that stays visible next to the 2 px border. */
+:focus-visible { outline: 3px solid var(--primary); outline-offset: 2px; }
+
+input:not([type="checkbox"], [type="radio"]),
+textarea,
+select {
+  padding: 8px 10px;
+  border: var(--border-w) solid var(--ink);
+  border-radius: 0;
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+}
+input[aria-invalid="true"],
+textarea[aria-invalid="true"],
+select[aria-invalid="true"] { border-color: var(--danger); }
+
+/* Chip: a small boxed label with an icon (streak, coins, battery). */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border: var(--border-w) solid var(--ink);
+  background: var(--surface);
+  font-size: 14px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.chip-streak { background: var(--chip-streak); }
+.chip-xu { background: var(--chip-xu); }
+.chip-pin { background: #d9f5e6; }
+/* The 2 filled icons: a dark orange flame and a dark gold coin. Both are above 3:1 on their chip. */
+.chip-streak .icon-solid { color: #e2541b; }
+.chip-xu .icon-solid { color: #a77b00; }
+
+/* Card: white box with a 4 px shadow and a small caps title. */
+.card {
+  padding: 14px 16px;
+  border: var(--border-w) solid var(--ink);
+  background: var(--surface);
+  box-shadow: var(--shadow-card);
+}
+.card-title {
+  margin: 0 0 12px;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* A row of 16 px squares (daily and weekly goals); a filled one has the class `on`. */
+.squares { display: inline-flex; gap: 4px; }
+.squares > * {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: var(--border-w) solid var(--ink);
+  background: var(--surface);
+}
+.squares > .on { background: var(--yellow); }
+
+/* Banner: a band at the top of the content area; yellow reminds, light red reports an error. */
+.banner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0;
+  padding: 10px 16px;
+  border-bottom: var(--border-w) solid var(--ink);
+  background: var(--chip-xu);
+  color: var(--ink);
+}
+.banner-danger { background: var(--danger-bg); }
+.banner > button,
+.banner > .button { margin-left: auto; }
+
+/* Icons (spec 5.4): 18 x 18 frame, 2 px square strokes, no fill unless the icon is solid. */
+.icon {
+  flex: none;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: square;
+  stroke-linejoin: miter;
+}
+.icon-solid { fill: currentColor; }
+
+/* The panel shown when Python could not start (design decision 5): a light red banner with Robo and a retry button. */
+.runner-failed {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  max-width: 760px;
+  margin: 12px auto;
+  padding: 12px 16px;
+  border: var(--border-w) solid var(--ink);
+  background: var(--danger-bg);
+  box-shadow: var(--shadow-card);
+}
+.runner-failed[role="alert"] { color: var(--ink); }
+.runner-failed h2 { margin: 0 0 4px; font-size: 1.1rem; }
+.runner-failed p { margin: 0 0 8px; }
+
+/* A group of toggle buttons joined into one bordered strip (question language, interface language). */
+.lang-switch {
+  display: flex;
+  width: max-content;
+  border: var(--border-w) solid var(--ink);
+  background: var(--surface);
+}
+.lang-switch button { padding: 4px 10px; border: 0; box-shadow: none; font-size: 13px; }
+.lang-switch button + button { border-left: var(--border-w) solid var(--ink); }
+.lang-switch button:hover:not(:disabled),
+.lang-switch button:active:not(:disabled) { transform: none; box-shadow: none; }
+
+/* Reduced motion: no sliding buttons and no transitions. */
+@media (prefers-reduced-motion: reduce) {
+  button,
+  .button { transition: none; }
+  button:hover:not(:disabled),
+  button:active:not(:disabled),
+  .button:hover,
+  .button:active { transform: none; }
+}

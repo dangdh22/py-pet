@@ -8,8 +8,9 @@
   "scripts": {
     "test": "npm run content:build && vitest run",
     "pyodide:copy": "node tools/copy_pyodide.mjs",
-    "dev": "npm run pyodide:copy && npm run content:build && vite",
-    "build": "npm run pyodide:copy && npm run content:build && tsc --noEmit && vite build",
+    "fonts:copy": "node tools/copy_fonts.mjs",
+    "dev": "npm run pyodide:copy && npm run fonts:copy && npm run content:build && vite",
+    "build": "npm run pyodide:copy && npm run fonts:copy && npm run content:build && tsc --noEmit && vite build",
     "preview": "vite preview --port 4173 --strictPort",
     "typecheck": "npm run content:build && tsc --noEmit",
     "test:py": ".venv/bin/python -m pytest tools/tests -q",
@@ -36,6 +37,8 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@fontsource-variable/jetbrains-mono": "^5.3.0",
+    "@fontsource-variable/lexend": "^5.3.0",
     "@playwright/test": "^1.63.0",
     "@testing-library/jest-dom": "^7.0.1",
     "@testing-library/react": "^16.3.3",

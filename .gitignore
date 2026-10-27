@@ -30,6 +30,7 @@ ref/
 # Node / build
 node_modules/
 public/pyodide/
+public/fonts/
 src/generated/
 test-results/
 playwright-report/
