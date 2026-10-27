@@ -2,6 +2,7 @@
 @import "./styles/base.css";
 @import "./styles/shell.css";
 @import "./styles/study.css";
+@import "./styles/map.css";
 
 .app-loading { padding: 40px 20px; text-align: center; }
 .unsupported h1 { font-size: 1.4rem; }
@@ -72,8 +73,6 @@
 .choice-correct { border-color: var(--success); background: #e6f7ea; }
 .choice-wrong { border-color: var(--danger); background: #fdecec; }
 
-.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
-
 @media (max-width: 900px) {
   .exercise-split { grid-template-columns: 1fr; }
 }
@@ -86,13 +85,6 @@
 /* The row of buttons at the end of a result screen. */
 .room-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 12px; }
 
-.map { max-width: 900px; margin: 0 auto; padding: 20px; }
-.map-path { list-style: none; padding: 0; display: grid; gap: 8px; justify-items: center; }
-.map-node { min-width: 260px; display: flex; justify-content: space-between; gap: 12px; padding: 8px 14px; border-radius: 0; border: 2px solid var(--border); background: var(--surface); }
-.node-done { border-color: var(--success); background: #e6f7ea; }
-.node-next { border-color: var(--primary); font-weight: 700; }
-.node-locked { color: var(--muted); }
-.node-review { border-style: dashed; }
 .puzzle { background: var(--surface); border: 1px solid var(--border); border-radius: 0; padding: 16px; }
 .parsons-lines { list-style: none; padding: 0; display: grid; gap: 6px; }
 .parsons-lines li { display: flex; gap: 6px; align-items: center; }

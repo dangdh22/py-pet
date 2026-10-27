@@ -1,0 +1,321 @@
+/* The learning map (UI revamp spec, section 7.4): 1 tab per stage, 1 row of square steps per topic joined by a line, and the evolution test at the end. */
+
+.map-page {
+  /* The gap between 2 squares; the line between them fills it. */
+  --map-gap: 24px;
+  /* A soft grey made from the ink, for the dividers and the stripes of a locked square (tokens.css has no grey for them). */
+  --map-soft: color-mix(in srgb, var(--ink) 14%, var(--surface));
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 24px 32px 40px;
+}
+
+.map-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+  margin-bottom: 18px;
+}
+.map-head h1 {
+  margin: 0;
+  font-size: 30px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+/* The legend is a picture of the 5 kinds of square; the state of each square is in its name. */
+.map-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  color: var(--muted);
+  font-size: 12px;
+}
+.map-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.map-key {
+  display: inline-block;
+  flex: none;
+  width: 12px;
+  height: 12px;
+  border: var(--border-w) solid var(--ink);
+  background: var(--surface);
+}
+.map-key-done { background: var(--mint); }
+.map-key-next { background: var(--primary); }
+.map-key-review {
+  margin: 0 3px;
+  background: var(--yellow);
+  transform: rotate(45deg);
+}
+.map-key-test { background: var(--pink); }
+.map-key-locked {
+  border-color: var(--muted);
+  background: repeating-linear-gradient(45deg, var(--surface) 0 3px, var(--map-soft) 3px 6px);
+}
+
+/* The stage tabs: a bordered strip with a 3 px shadow; the chosen tab is ink with white text. */
+.map-stages { margin-bottom: 18px; }
+.map-tabs {
+  display: flex;
+  width: max-content;
+  max-width: 100%;
+  overflow-x: auto;
+  border: var(--border-w) solid var(--ink);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+.map-tab {
+  flex: none;
+  gap: 6px;
+  padding: 8px 14px;
+  border: 0;
+  border-right: var(--border-w) solid var(--ink);
+  background: transparent;
+  box-shadow: none;
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.map-tab:last-child { border-right: 0; }
+.map-tab:hover:not(:disabled),
+.map-tab:active:not(:disabled) {
+  transform: none;
+  box-shadow: none;
+}
+.map-tab:hover:not(:disabled, [aria-selected="true"]) { background: var(--bg); }
+.map-tab[aria-selected="true"] {
+  background: var(--ink);
+  color: var(--surface);
+}
+/* The strip scrolls sideways when it is too wide, so the focus ring sits inside the tab. */
+.map-tab:focus-visible { outline-offset: -5px; }
+.map-tab[aria-selected="true"]:focus-visible { outline-color: var(--yellow); }
+.map-tab .icon {
+  color: var(--success);
+  stroke-width: 3;
+}
+.map-tab[aria-selected="true"] .icon { color: var(--mint); }
+
+/* A topic: its title on the left, its row of squares on the right. */
+.map-topic {
+  display: grid;
+  grid-template-columns: 200px minmax(0, 1fr);
+  align-items: center;
+  gap: 18px;
+  padding: 14px 0;
+  border-bottom: var(--border-w) dashed var(--map-soft);
+}
+.map-topic-head .kicker { margin: 0 0 2px; }
+.map-topic-head h2 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+}
+.map-topic-count {
+  margin: 2px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+}
+/* A topic that is not open: muted text (not faded, so it stays readable) and fainter squares. */
+.map-topic-locked .kicker,
+.map-topic-locked h2 { color: var(--muted); }
+.map-topic-locked .map-node-box,
+.map-topic-locked .map-track li::after { opacity: 0.6; }
+
+/* The squares wrap when the window is narrow. The line to the next square is the `::after` of each item but the last, so it stays right
+   at every wrap; the row gap leaves room for the "Next" label above a square. */
+.map-track {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 40px var(--map-gap);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.map-track-has-next { padding-top: 36px; }
+.map-track li {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 44px;
+}
+.map-track li:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  top: calc(50% - var(--border-w) / 2);
+  left: 100%;
+  width: var(--map-gap);
+  border-top: var(--border-w) solid var(--ink);
+}
+
+/* A square. The link (or the span of a locked one) holds a box that carries the look, so a review station can turn its box without
+   turning the caption and the label. */
+.map-node {
+  position: relative;
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  color: var(--ink);
+  font-size: 15px;
+  font-weight: 800;
+  text-decoration: none;
+}
+.map-node-box {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  border: var(--border-w) solid var(--ink);
+  background: var(--surface);
+}
+.map-node-face {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+/* The focus ring is drawn around the box, so it follows the diamond of a review station. */
+.map-node:focus-visible { outline: none; }
+.map-node:focus-visible > .map-node-box {
+  outline: 3px solid var(--primary);
+  outline-offset: 3px;
+}
+
+/* A review station is a diamond; its face turns back. A test is a wide square. */
+.map-node-review {
+  width: 34px;
+  height: 34px;
+  margin: 0 7px;
+}
+.map-node-review > .map-node-box { transform: rotate(45deg); }
+.map-node-review .map-node-face { transform: rotate(-45deg); }
+.map-node-test {
+  width: 56px;
+  font-size: 13px;
+}
+
+/* The 3 states: mint with a check, blue with a ring around it (the next step), grey stripes with a lock. */
+.map-node-done > .map-node-box { background: var(--mint); }
+.map-node-done .icon { stroke-width: 3; }
+.map-node-next > .map-node-box {
+  background: var(--primary);
+  color: var(--on-primary);
+  box-shadow: 0 0 0 4px var(--bg), 0 0 0 6px var(--primary);
+}
+/* The blue ring would hide a blue focus ring: the focus ring of the next step is ink, outside the blue ring. */
+.map-node-next:focus-visible > .map-node-box {
+  outline-color: var(--ink);
+  outline-offset: 8px;
+}
+.map-node-locked > .map-node-box {
+  border-color: var(--muted);
+  background: repeating-linear-gradient(45deg, var(--surface) 0 6px, var(--map-soft) 6px 12px);
+  color: var(--muted);
+}
+
+/* The label above the next step, and the caption (the name of the step) under a square while it has the pointer or the focus: the same
+   technique as the captions of the narrow side menu. */
+.map-node-flag {
+  position: absolute;
+  bottom: calc(100% + 12px);
+  left: 50%;
+  z-index: 2;
+  padding: 3px 8px;
+  transform: translateX(-50%);
+  background: var(--ink);
+  color: var(--surface);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.3;
+  white-space: nowrap;
+}
+.map-node-caption {
+  position: absolute;
+  top: calc(100% + 12px);
+  left: 50%;
+  z-index: 20;
+  width: max-content;
+  max-width: 220px;
+  padding: 4px 10px;
+  transform: translateX(-50%);
+  border: var(--border-w) solid var(--ink);
+  background: var(--ink);
+  color: var(--surface);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.3;
+  text-align: center;
+  opacity: 0;
+  pointer-events: none;
+}
+/* The corners of the diamond reach out 7 px further than its frame. */
+.map-node-review > .map-node-flag { bottom: calc(100% + 18px); }
+.map-node-review > .map-node-caption { top: calc(100% + 18px); }
+.map-node:hover > .map-node-caption,
+.map-node:focus-visible > .map-node-caption { opacity: 1; }
+
+/* The evolution test: a card with a dashed border at the end of the stage. */
+.map-evo {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px 18px;
+  margin-top: 18px;
+  padding: 14px 18px;
+  border: var(--border-w) dashed var(--ink);
+  background: var(--surface);
+}
+.map-evo > div {
+  flex: 1 1 320px;
+  min-width: 0;
+}
+.map-evo h2 {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 700;
+}
+.map-evo p {
+  margin: 2px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+.map-evo .map-evo-passed {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--ink);
+  font-size: 14px;
+  font-weight: 700;
+}
+.map-evo-passed .icon {
+  color: var(--success);
+  stroke-width: 3;
+}
+.map-evo-state {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+/* Narrow windows: the title of a topic goes above its squares. */
+@media (max-width: 899px) {
+  .map-page { padding: 16px 20px 32px; }
+  .map-topic {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+  }
+}

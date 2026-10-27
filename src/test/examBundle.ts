@@ -1,5 +1,5 @@
 import type { ChoiceQuestion, CodeExercise, Concept, ContentBundle, Lesson } from "../content/types";
-import { fixtureErrors } from "./fixtures";
+import { fixtureErrors, testBundle } from "./fixtures";
 
 function question(id: string, lesson: string, concept: string): ChoiceQuestion {
   return {
@@ -96,4 +96,13 @@ export function examBundle(): ContentBundle {
     ],
     errors: fixtureErrors,
   };
+}
+
+/**
+ * 2 stages: the stage "x" of `examBundle()` (2 lessons, a topic test, an evolution test), then the stage "t" of
+ * `testBundle()` (topic "t.topic" with the lessons t.l1 and t.l2, no tests). The errors are those of `examBundle()`.
+ */
+export function twoStageBundle(): ContentBundle {
+  const exam = examBundle();
+  return { stages: [...exam.stages, ...testBundle().stages], errors: exam.errors };
 }
