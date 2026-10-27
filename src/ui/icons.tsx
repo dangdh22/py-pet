@@ -11,6 +11,7 @@ const PATHS = {
   next: "M8 3 L14 9 L8 15 M14 9 H2",
   play: "M5 3 L14 9 L5 15 Z",
   check: "M3 9 L7 13 L15 5",
+  cross: "M4 4 L14 14 M14 4 L4 14",
   chart: "M2 16 H16 M4 16 V9 M8 16 V4 M12 16 V11",
   alert: "M9 2 L16 15 H2 Z M9 7 V11 M9 13 V14",
   list: "M2 3 H16 M2 9 H12 M2 15 H8",

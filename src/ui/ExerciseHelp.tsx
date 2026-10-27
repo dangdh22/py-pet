@@ -1,3 +1,4 @@
+import { useId } from "react";
 import type { LocalizedText } from "../content/types";
 import { pick } from "../i18n/lang";
 import { useLang } from "../i18n/LangProvider";
@@ -7,7 +8,9 @@ export const FAILED_SUBMITS_BEFORE_SOLUTION = 3;
 /**
  * The help of an exercise: the hints opened so far, the buttons for the next hint and for the solution, and the solution
  * once it is shown. The solution button is always there until the solution is shown, but it stays off until the child
- * has failed enough submits. A finished exercise (solved) needs no more help, so both buttons go away.
+ * has failed enough submits, and says why in a note that the button points at, so assistive technology reads the reason
+ * while the name of the button stays the same. A finished exercise (solved) needs no more help, so both buttons go away,
+ * and when nothing is left to show the block renders nothing.
  */
 export function ExerciseHelp({
   hints,
@@ -29,9 +32,11 @@ export function ExerciseHelp({
   finished?: boolean;
 }) {
   const { t, uiLang } = useLang();
+  const reasonId = useId();
   const canHint = shown < hints.length && !finished;
   const canShowSolution = !solutionShown && !finished;
   const solutionLocked = failedSubmits < FAILED_SUBMITS_BEFORE_SOLUTION;
+  if (shown === 0 && !canHint && !canShowSolution && !solutionShown) return null;
   return (
     <div className="exercise-help">
       {hints.slice(0, shown).map((hint, i) => (
@@ -47,9 +52,18 @@ export function ExerciseHelp({
             </button>
           )}
           {canShowSolution && (
-            <button className="small" onClick={onShowSolution} disabled={solutionLocked}>
+            <button
+              className="small"
+              onClick={onShowSolution}
+              disabled={solutionLocked}
+              aria-describedby={solutionLocked ? reasonId : undefined}
+            >
               {t("solution.show")}
-              {solutionLocked && <small aria-hidden="true">{t("solution.after", { n: FAILED_SUBMITS_BEFORE_SOLUTION })}</small>}
+              {solutionLocked && (
+                <small id={reasonId} aria-hidden="true">
+                  {t("solution.after", { n: FAILED_SUBMITS_BEFORE_SOLUTION })}
+                </small>
+              )}
             </button>
           )}
         </div>

@@ -15,6 +15,7 @@ const ICON_NAMES: IconName[] = [
   "next",
   "play",
   "check",
+  "cross",
   "chart",
   "alert",
   "list",

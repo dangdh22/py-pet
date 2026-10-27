@@ -176,6 +176,8 @@ select[aria-invalid="true"] { border-color: var(--danger); }
 .lang-switch button + button { border-left: var(--border-w) solid var(--ink); }
 .lang-switch button:hover:not(:disabled),
 .lang-switch button:active:not(:disabled) { transform: none; box-shadow: none; }
+/* A button that is not chosen gets the page color under the pointer; the chosen one keeps the ink. */
+.lang-switch button:hover:not(:disabled, [aria-pressed="true"]) { background: var(--bg); }
 
 /* Visually hidden, still read by assistive technology (a description that a control points to with aria-describedby). */
 .sr-only {

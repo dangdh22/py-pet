@@ -143,6 +143,25 @@ describe("CodeExerciseView", () => {
     expect(onComplete).toHaveBeenCalledWith("viewed-solution");
   });
 
+  test("the disabled solution button is described by its reason, and its name stays the same", () => {
+    renderWithApp(<CodeExerciseView exercise={fixtureCodeExercise} onComplete={() => {}} />);
+    const button = screen.getByRole("button", { name: "Xem lời giải" });
+    expect(button).toBeDisabled();
+    expect(button).toHaveAccessibleDescription("sau 3 lần sai");
+  });
+
+  test("the solution button is gone once the solution is shown", async () => {
+    renderWithApp(<CodeExerciseView exercise={fixtureCodeExercise} onComplete={() => {}} />, {
+      runner: fakeRunner(() => okResult("x\n")),
+    });
+    await submitOnce();
+    await submitOnce();
+    await submitOnce();
+    await userEvent.click(screen.getByRole("button", { name: "Xem lời giải" }));
+    expect(screen.getByText("Lời giải mẫu")).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Xem lời giải" })).not.toBeInTheDocument();
+  });
+
   test("disables Run and Submit until the runner is ready", () => {
     renderWithApp(<CodeExerciseView exercise={fixtureCodeExercise} onComplete={() => {}} />, {
       runner: fakeRunner(() => okResult(""), "loading"),

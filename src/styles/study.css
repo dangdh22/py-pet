@@ -145,17 +145,21 @@
   .exercise-split { grid-template-columns: minmax(0, 1fr); }
 }
 
-/* The problem card is a column; Robo's bubble sits at the bottom, whatever the height of the right side. */
-.problem-card {
+/* The problem card is a column; Robo's bubble sits at the bottom, whatever the height of the right side. The puzzle card (below) is the
+   same column. */
+.problem-card,
+.puzzle-card {
   display: flex;
   flex-direction: column;
   gap: 14px;
   min-width: 0;
   padding: 16px 18px;
 }
-.problem-card > * { margin: 0; }
+.problem-card > *,
+.puzzle-card > * { margin: 0; }
 .problem-card > .robot-bubble { margin-top: auto; }
 .problem-card .exercise-prompt,
+.puzzle-card .exercise-prompt,
 .problem-card .question-prompt {
   font-size: 17px;
   line-height: 1.6;
@@ -244,7 +248,8 @@
 .io-result { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
 .io-result > p { margin: 0; }
 .io-result .output { margin-top: 0; }
-.ide > .actions { display: flex; justify-content: flex-end; gap: 12px; }
+.ide > .actions,
+.puzzle-card > .actions { display: flex; justify-content: flex-end; gap: 12px; }
 /* The note that a test answer is in (under the buttons of a code answer; also used by a test question). */
 .exam-answered { color: var(--muted); font-style: italic; }
 .ide > .exam-answered { margin: 0; text-align: right; }
@@ -310,3 +315,116 @@
   font-weight: 700;
   cursor: pointer;
 }
+
+/* The puzzle card (put the lines in order, fill the blanks): a reading column in the middle, with the same parts as the problem card. */
+.puzzle-card { max-width: 760px; margin: 0 auto; }
+
+/* Put the lines in order: each line is a block with a 2 px border and the 3 px shadow. The block that holds the focus (its arrows are
+   in use) is the chosen one: yellow. After a move, the focus follows the line, so the moved line stays yellow. */
+.parsons-lines {
+  display: grid;
+  /* The column may be narrower than the longest line, which then scrolls inside its block. */
+  grid-template-columns: minmax(0, 1fr);
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.parsons-lines li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px 6px 12px;
+  border: var(--border-w) solid var(--ink);
+  background: var(--code-bg);
+  box-shadow: var(--shadow);
+}
+.parsons-lines li:focus-within { background: var(--yellow); }
+.parsons-line {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 15px;
+  line-height: 1.6;
+  white-space: pre;
+  overflow-x: auto;
+}
+
+/* Fill in the blanks: a light code block; a blank is a square box in the line. The line is taller than the box (1.8 against 1.6), so a
+   blank does not push the lines apart. The input takes the font of the code (`font: inherit` in base.css). */
+.fill-template {
+  margin: 0;
+  padding: 12px 14px;
+  border: var(--border-w) solid var(--ink);
+  background: var(--code-bg);
+  color: var(--code-text);
+  font-family: var(--font-mono);
+  font-size: 15px;
+  line-height: 1.8;
+  white-space: pre-wrap;
+  overflow-x: auto;
+}
+/* A `code` element has its own `monospace` in the browser sheet, which would hide the font of its block. */
+.fill-template code,
+.question-card .code-block code { font-family: inherit; }
+.puzzle-card .fill-template input {
+  height: 1.6em;
+  margin: 0 2px;
+  padding: 0 4px;
+  border: var(--border-w) solid var(--ink);
+  vertical-align: baseline;
+}
+
+/* The card of a question (predict, multiple choice): a reading column in the middle. Its head has the kind on the left and the language
+   buttons on the right. */
+.question-card {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 20px;
+  font-size: 17px;
+  line-height: 1.6;
+}
+.question-card .code-block { font-size: 15px; }
+.question-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.question-head > .kicker { margin: 0; }
+.question-card fieldset {
+  display: grid;
+  gap: 10px;
+  min-width: 0;
+  margin: 16px 0;
+  padding: 0;
+  border: 0;
+}
+
+/* A choice is a block as wide as the card. Chosen: yellow with the shadow. After the check, the right one is mint and the wrong one that
+   was chosen is light red; each also has an icon at the end, so the state is not only a color. A test shows the chosen one only. */
+.choice {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border: var(--border-w) solid var(--ink);
+  background: var(--surface);
+  cursor: pointer;
+}
+.question-card fieldset:disabled .choice { cursor: default; }
+.choice input {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  accent-color: var(--ink);
+}
+.choice:has(input:focus-visible) { outline: 3px solid var(--primary); outline-offset: 2px; }
+.choice-text { flex: 1; min-width: 0; white-space: pre-wrap; }
+.choice-text.code { font-family: var(--font-mono); font-size: 15px; }
+.choice-selected { background: var(--yellow); box-shadow: var(--shadow); }
+.choice-correct { background: var(--mint); }
+.choice-wrong { background: var(--danger-bg); }
