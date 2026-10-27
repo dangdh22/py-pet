@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type FormEvent } from "react";
+import { useEffect, useId, useRef, useState, type FormEvent } from "react";
 import { localDay } from "../game/dates";
 import { initialGameState } from "../game/state";
 import { useLang } from "../i18n/LangProvider";
@@ -23,6 +23,14 @@ const STEPS = 4;
 /** What Robo says on each step (spec 7.2). */
 const SAY: readonly MessageKey[] = ["onboarding.say1", "onboarding.say2", "onboarding.say3", "onboarding.say4"];
 
+type Field = "name" | "pin" | "pinAgain";
+/** The field each error is about; a save error is about none of them. */
+const ERROR_FIELD: Partial<Record<MessageKey, Field>> = {
+  "onboarding.errorName": "name",
+  "onboarding.errorPin": "pin",
+  "onboarding.errorPinMatch": "pinAgain",
+};
+
 /** The welcome (spec 7.2): 4 steps, 1 question each: language, the child's name, the robot's name, the parents' PIN. */
 export function OnboardingScreen({ store, clock, onCreated, onBack, requestPersist = requestPersistence }: OnboardingProps) {
   const { t, uiLang, setUiLang } = useLang();
@@ -35,6 +43,14 @@ export function OnboardingScreen({ store, clock, onCreated, onBack, requestPersi
   const [busy, setBusy] = useState(false);
   const nextButton = useRef<HTMLButtonElement>(null);
   const firstInput = useRef<HTMLInputElement>(null);
+  const errorId = useId();
+
+  /** The red border and the error text for a screen reader on the field the error is about; `helpId` keeps its help text. */
+  function errorAttributes(field: Field, helpId?: string) {
+    const marked = error !== null && ERROR_FIELD[error] === field;
+    const described = [marked ? errorId : undefined, helpId].filter(Boolean).join(" ");
+    return { "aria-invalid": marked || undefined, "aria-describedby": described || undefined };
+  }
 
   // A new step puts the focus on its first control, so the child lands on the new question and Enter goes on. Step 1 has no
   // text field, so its focus goes to "Next" (Enter submits it); the language buttons stay 1 Tab away.
@@ -93,7 +109,7 @@ export function OnboardingScreen({ store, clock, onCreated, onBack, requestPersi
   return (
     <main className="ob">
       <div className="ob-left">
-        <Logo />
+        <Logo link={false} />
         <p className="ob-say">{t(SAY[step - 1])}</p>
         <Robot mood="happy" size={200} />
       </div>
@@ -130,7 +146,7 @@ export function OnboardingScreen({ store, clock, onCreated, onBack, requestPersi
                     ref={firstInput}
                     value={childName}
                     maxLength={30}
-                    aria-describedby="ob-name-help"
+                    {...errorAttributes("name", "ob-name-help")}
                     onChange={(e) => setChildName(e.target.value)}
                   />
                 </label>
@@ -155,7 +171,7 @@ export function OnboardingScreen({ store, clock, onCreated, onBack, requestPersi
                       type="password"
                       inputMode="numeric"
                       autoComplete="new-password"
-                      aria-describedby="ob-pin-help"
+                      {...errorAttributes("pin", "ob-pin-help")}
                       value={pin}
                       onChange={(e) => setPin(e.target.value)}
                     />
@@ -166,6 +182,7 @@ export function OnboardingScreen({ store, clock, onCreated, onBack, requestPersi
                       type="password"
                       inputMode="numeric"
                       autoComplete="new-password"
+                      {...errorAttributes("pinAgain")}
                       value={pinAgain}
                       onChange={(e) => setPinAgain(e.target.value)}
                     />
@@ -176,7 +193,11 @@ export function OnboardingScreen({ store, clock, onCreated, onBack, requestPersi
                 </p>
               </>
             )}
-            {error && <p role="alert">{t(error)}</p>}
+            {error && (
+              <p id={errorId} role="alert">
+                {t(error)}
+              </p>
+            )}
             <div className="ob-nav">
               {(step > 1 || onBack) && (
                 <button type="button" onClick={goBack} disabled={busy}>

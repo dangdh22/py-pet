@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLang } from "../i18n/LangProvider";
 import { Icon } from "./icons";
 import { Robot } from "./Robot";
@@ -16,6 +16,16 @@ export function LandingScreen({ onStart }: { onStart?: () => void }) {
   const { t } = useLang();
   const [parentInfoOpen, setParentInfoOpen] = useState(false);
   const toggleParentInfo = () => setParentInfoOpen((open) => !open);
+  const parentInfo = useRef<HTMLElement>(null);
+  const parentInfoTitle = useRef<HTMLHeadingElement>(null);
+
+  // The card opens below the 3 actions, maybe out of view on a short window: the focus goes to its heading and the card scrolls
+  // into view. Closing it leaves the focus on the button that was pressed.
+  useEffect(() => {
+    if (!parentInfoOpen) return;
+    parentInfoTitle.current?.focus({ preventScroll: true });
+    parentInfo.current?.scrollIntoView?.({ block: "nearest" });
+  }, [parentInfoOpen]);
 
   return (
     <div className="landing-page">
@@ -87,8 +97,8 @@ export function LandingScreen({ onStart }: { onStart?: () => void }) {
             )}
           </div>
           {onStart && parentInfoOpen && (
-            <section className="card landing-parent-info" aria-labelledby={PARENT_INFO_TITLE_ID}>
-              <h2 id={PARENT_INFO_TITLE_ID} className="card-title">
+            <section ref={parentInfo} className="card landing-parent-info" aria-labelledby={PARENT_INFO_TITLE_ID}>
+              <h2 ref={parentInfoTitle} id={PARENT_INFO_TITLE_ID} tabIndex={-1} className="card-title">
                 {t("landing.parentInfoTitle")}
               </h2>
               <p>{t("landing.parentInfoText")}</p>

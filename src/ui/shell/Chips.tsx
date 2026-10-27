@@ -3,6 +3,7 @@ import { STAT_MAX } from "../../game/state";
 import { useLang } from "../../i18n/LangProvider";
 import { useGame } from "../GameProvider";
 import { Icon } from "../icons";
+import { StatIcon } from "../StatBar";
 
 export function StreakChip() {
   const { t } = useLang();
@@ -29,5 +30,10 @@ export function XuChip() {
 export function PinChip() {
   const { t } = useLang();
   const { state } = useGame();
-  return <span className="chip chip-pin">{t("focus.pin", { n: state.pet.pin, max: STAT_MAX })}</span>;
+  return (
+    <span className="chip chip-pin">
+      <StatIcon tone="pin" size={18} />
+      {t("focus.pin", { n: state.pet.pin, max: STAT_MAX })}
+    </span>
+  );
 }

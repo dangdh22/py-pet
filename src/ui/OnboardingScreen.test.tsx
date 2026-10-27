@@ -119,6 +119,40 @@ describe("OnboardingScreen", () => {
     expect(screen.queryByRole("alert")).not.toBeInTheDocument();
   });
 
+  test("an empty name marks its field as invalid and ties it to the error text", async () => {
+    renderOnboarding();
+    await next();
+    expect(screen.getByLabelText(NAME)).not.toHaveAttribute("aria-invalid");
+    await next();
+    const field = screen.getByLabelText(NAME);
+    expect(field).toHaveAttribute("aria-invalid", "true");
+    expect(field).toHaveAccessibleDescription(/Con hãy nhập tên nhé\./);
+    // The help text stays in the description of the field.
+    expect(field).toHaveAccessibleDescription(/Robo sẽ gọi con bằng tên này\./);
+    // The next step starts clean.
+    await userEvent.type(field, "An");
+    await next();
+    expect(screen.getByLabelText(ROBOT)).not.toHaveAttribute("aria-invalid");
+  });
+
+  test.each([
+    ["12", "12", PIN, PIN_AGAIN, "Mã PIN phải gồm 4 đến 6 chữ số."],
+    ["1234", "4321", PIN_AGAIN, PIN, "Hai mã PIN chưa giống nhau."],
+  ])("the PINs %j and %j mark the field %s as invalid, and not the other", async (pin, again, marked, other, message) => {
+    renderOnboarding();
+    await goThrough("An", pin, again);
+    await userEvent.click(screen.getByRole("button", { name: "Bắt đầu" }));
+    expect(screen.getByLabelText(marked)).toHaveAttribute("aria-invalid", "true");
+    expect(screen.getByLabelText(marked)).toHaveAccessibleDescription(new RegExp(message));
+    expect(screen.getByLabelText(other)).not.toHaveAttribute("aria-invalid");
+  });
+
+  test("the welcome shows the logo as plain text: no link that leads nowhere", () => {
+    renderOnboarding();
+    expect(screen.queryByRole("link")).not.toBeInTheDocument();
+    expect(screen.getByText("Py-Pet")).toBeInTheDocument();
+  });
+
   test.each([
     ["12", "12", "Mã PIN phải gồm 4 đến 6 chữ số."],
     ["1234", "4321", "Hai mã PIN chưa giống nhau."],

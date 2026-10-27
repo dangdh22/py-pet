@@ -165,7 +165,8 @@ describe("RoomScreen", () => {
     const next = screen.getByRole("link", { name: "Học tiếp" });
     expect(next).toHaveAttribute("href", "#/lesson/t.l2");
     expect(next).toHaveClass("button");
-    expect(next).not.toHaveClass("next-card", "primary");
+    expect(next).not.toHaveClass("next-card");
+    expect(next).not.toHaveClass("primary");
     expect(screen.queryByRole("link", { name: "Ôn tập" })).not.toBeInTheDocument();
   });
 

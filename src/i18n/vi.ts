@@ -420,6 +420,7 @@ export const vi = {
   "rail.label": "Menu chính",
   "rail.room": "Phòng Robo",
   "rail.guide": "Hướng dẫn",
+  "rail.skip": "Bỏ qua menu",
   "focus.pin": "Pin: {n}/{max}",
   "landing.navLabel": "Trang giới thiệu",
   "landing.home": "Trang chủ",

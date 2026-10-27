@@ -13,12 +13,18 @@ export function Banners() {
       )}
       {game.writeFailed && (
         <p role="alert" className="banner banner-danger">
-          {t("banner.writeFailed")} <a href="#/backup">{t("banner.backupNow")}</a>
+          {t("banner.writeFailed")}{" "}
+          <a href="#/backup" className="button small">
+            {t("banner.backupNow")}
+          </a>
         </p>
       )}
       {game.needsBackupReminder && (
         <p className="banner">
-          {t("banner.backupReminder")} <a href="#/backup">{t("banner.backupNow")}</a>
+          {t("banner.backupReminder")}{" "}
+          <a href="#/backup" className="button small">
+            {t("banner.backupNow")}
+          </a>
         </p>
       )}
     </div>

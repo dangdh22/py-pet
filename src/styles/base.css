@@ -30,7 +30,7 @@ button,
   transition: transform 0.08s ease-out, box-shadow 0.08s ease-out;
 }
 /* Variants: `button.primary`, `a.button.primary` and `a.button` of the existing screens use these classes. */
-.primary { background: var(--primary); color: #fff; }
+.primary { background: var(--primary); color: var(--on-primary); }
 .mint { background: var(--mint-soft); }
 .small { padding: 5px 10px; font-size: 13px; box-shadow: var(--shadow-sm); }
 
@@ -38,12 +38,12 @@ button,
 button:hover:not(:disabled),
 .button:hover { transform: translate(-1px, -1px); box-shadow: var(--shadow-card); }
 button:active:not(:disabled),
-.button:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--ink); }
+.button:active { transform: translate(2px, 2px); box-shadow: var(--shadow-press); }
 .small:hover:not(:disabled) { box-shadow: var(--shadow); }
-.small:active:not(:disabled) { box-shadow: 1px 1px 0 var(--ink); }
+.small:active:not(:disabled) { box-shadow: var(--shadow-press); }
 button:disabled { opacity: 0.45; box-shadow: none; cursor: not-allowed; }
-/* A pressed toggle (language switches) is the inverted button. */
-button[aria-pressed="true"] { background: var(--ink); color: #fff; }
+/* A pressed toggle (language switches) is the inverted button: the surface color on ink. */
+button[aria-pressed="true"] { background: var(--ink); color: var(--surface); }
 
 /* Keyboard focus: a 3 px ring that stays visible next to the 2 px border. */
 :focus-visible { outline: 3px solid var(--primary); outline-offset: 2px; }
@@ -76,10 +76,12 @@ select[aria-invalid="true"] { border-color: var(--danger); }
 }
 .chip-streak { background: var(--chip-streak); }
 .chip-xu { background: var(--chip-xu); }
-.chip-pin { background: #d9f5e6; }
+.chip-pin { background: var(--chip-pin); }
 /* The 2 filled icons: a dark orange flame and a dark gold coin. Both are above 3:1 on their chip. */
-.chip-streak .icon-solid { color: #e2541b; }
-.chip-xu .icon-solid { color: #a77b00; }
+.chip-streak .icon-solid { color: var(--icon-flame); }
+.chip-xu .icon-solid { color: var(--icon-coin); }
+/* The battery is drawn by the stat icon, which takes its color from a stat bar; on a chip it takes the ink. */
+.chip-pin .stat-icon { color: var(--ink); }
 
 /* Card: white box with a 4 px shadow and a small caps title. */
 .card {

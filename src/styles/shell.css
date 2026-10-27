@@ -47,6 +47,25 @@
   min-height: 100vh;
 }
 .rail-main { min-width: 0; }
+/* The main column takes the focus from script (the skip link): a ring around the whole column would only be noise. */
+.rail-main:focus { outline: none; }
+/* The skip link is out of sight until the keyboard reaches it; then it floats in the top left corner, above the menu. */
+.skip-link {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  z-index: 50;
+}
+.skip-link:not(:focus) {
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  box-shadow: none;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
 
 .side-nav {
   position: sticky;
@@ -229,7 +248,7 @@
     transform: translateY(-50%);
     border: var(--border-w) solid var(--ink);
     background: var(--ink);
-    color: #fff;
+    color: var(--surface);
     font-size: 13px;
     font-weight: 600;
     white-space: nowrap;
@@ -324,7 +343,7 @@
 }
 .landing-btn small { color: var(--muted); font-size: 12px; font-weight: 500; }
 .landing-btn:hover:not(:disabled) { box-shadow: 5px 5px 0 var(--ink); }
-.landing-btn:active:not(:disabled) { box-shadow: 1px 1px 0 var(--ink); }
+.landing-btn:active:not(:disabled) { box-shadow: var(--shadow-press); }
 
 /* The card that explains the parent area before a profile exists. */
 .landing-parent-info {
@@ -620,6 +639,12 @@
   flex-direction: column;
   gap: 18px;
 }
+/* Side by side with the cards, the scene is at least 400 px tall at every width. Under about 1300 px of window the scene column is
+   under 640 px wide and the scene takes its compact layout, which has no minimum height: it would stand short next to the cards.
+   The compact layout keeps its smaller pictures; only the height changes, and only on this page. */
+@media (min-width: 900px) {
+  .room-page .scene-inner { min-height: 400px; }
+}
 .room-side .card-title { margin-bottom: 12px; }
 
 /* The main card: the next step with its name, or the charging card. White text on --primary is 5.5:1, so the small label keeps full white. */
@@ -631,7 +656,7 @@
   padding: 16px 18px;
   border: var(--border-w) solid var(--ink);
   background: var(--primary);
-  color: #fff;
+  color: var(--on-primary);
   box-shadow: var(--shadow-card);
   text-decoration: none;
   transition: transform 0.08s ease-out, box-shadow 0.08s ease-out;
@@ -642,7 +667,7 @@
 }
 .next-card:active {
   transform: translate(2px, 2px);
-  box-shadow: 1px 1px 0 var(--ink);
+  box-shadow: var(--shadow-press);
 }
 .next-card-text {
   display: grid;
@@ -677,7 +702,7 @@
   font-weight: 500;
 }
 .room-review:hover { box-shadow: 5px 5px 0 var(--ink); }
-.room-review:active { box-shadow: 1px 1px 0 var(--ink); }
+.room-review:active { box-shadow: var(--shadow-press); }
 
 .room-all-done {
   margin: 0;

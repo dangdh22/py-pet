@@ -94,6 +94,35 @@ describe("LandingScreen without a profile", () => {
     expect(onStart).toHaveBeenCalledTimes(1);
   });
 
+  test("opening the card moves the focus to its heading, where there is no scrollIntoView to call", async () => {
+    renderWithApp(<LandingScreen onStart={vi.fn()} />);
+    expect(Element.prototype.scrollIntoView).toBeUndefined();
+    await userEvent.click(within(screen.getByRole("main")).getByRole("button", { name: "Khu phụ huynh" }));
+    const card = screen.getByRole("region", { name: "Khu phụ huynh" });
+    expect(within(card).getByRole("heading", { level: 2 })).toHaveFocus();
+  });
+
+  test("opening the card also brings it into view", async () => {
+    const scrollIntoView = vi.fn();
+    Object.defineProperty(Element.prototype, "scrollIntoView", { configurable: true, value: scrollIntoView });
+    try {
+      renderWithApp(<LandingScreen onStart={vi.fn()} />);
+      await userEvent.click(within(screen.getByRole("main")).getByRole("button", { name: "Khu phụ huynh" }));
+      expect(scrollIntoView).toHaveBeenCalledWith({ block: "nearest" });
+      expect(scrollIntoView.mock.contexts[0]).toBe(screen.getByRole("region", { name: "Khu phụ huynh" }));
+    } finally {
+      delete (Element.prototype as { scrollIntoView?: unknown }).scrollIntoView;
+    }
+  });
+
+  test("closing the card does not move the focus away from the button", async () => {
+    renderWithApp(<LandingScreen onStart={vi.fn()} />);
+    const opener = within(screen.getByRole("main")).getByRole("button", { name: "Khu phụ huynh" });
+    await userEvent.click(opener);
+    await userEvent.click(opener);
+    expect(opener).toHaveFocus();
+  });
+
   test("the Parent area button of the bar opens the same card, and a second press closes it", async () => {
     renderWithApp(<LandingScreen onStart={vi.fn()} />);
     const nav = screen.getByRole("navigation", { name: "Trang giới thiệu" });

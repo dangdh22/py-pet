@@ -1,13 +1,14 @@
 // @vitest-environment jsdom
 import { screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { describe, expect, test } from "vitest";
+import { beforeEach, describe, expect, test } from "vitest";
 import { initialGameState } from "../../game/state";
 import { MemoryStore } from "../../storage/memoryStore";
 import { fakeRunner, okResult, renderWithApp } from "../../test/render";
 import { renderWithGame, TODAY } from "../../test/renderGame";
-import { StreakChip, XuChip } from "./Chips";
+import { PinChip, StreakChip, XuChip } from "./Chips";
 import { FocusLayout } from "./FocusLayout";
+import { Logo } from "./Logo";
 import { RailLayout } from "./RailLayout";
 import { RunnerAlert, RunnerStatus } from "./RunnerStatus";
 import { SideNav, type RailItem } from "./SideNav";
@@ -89,6 +90,35 @@ describe("Chips", () => {
     );
     expect(screen.getByText("Chuỗi: 6 ngày")).toBeInTheDocument();
     expect(screen.getByText("Xu: 120")).toBeInTheDocument();
+  });
+
+  test("the battery chip has the battery icon, like the streak and coin chips have theirs", async () => {
+    const { container } = await renderWithGame(
+      <>
+        <StreakChip />
+        <XuChip />
+        <PinChip />
+      </>,
+    );
+    for (const chip of container.querySelectorAll(".chip")) {
+      expect(chip.querySelector("svg[aria-hidden='true']")).not.toBeNull();
+    }
+    expect(container.querySelectorAll(".chip")).toHaveLength(3);
+    expect(screen.getByText("Pin: 4/5")).toHaveClass("chip-pin");
+  });
+});
+
+describe("Logo", () => {
+  test("is a link to the landing page, named by the app name", () => {
+    renderWithApp(<Logo />);
+    expect(screen.getByRole("link", { name: "Py-Pet" })).toHaveAttribute("href", "#/welcome");
+  });
+
+  test("renders plain text, with the same look, when it is not a link", () => {
+    const { container } = renderWithApp(<Logo link={false} />);
+    expect(screen.queryByRole("link")).not.toBeInTheDocument();
+    expect(screen.getByText("Py-Pet")).toBeInTheDocument();
+    expect(container.querySelector(".logo")).not.toBeNull();
   });
 });
 
@@ -172,6 +202,54 @@ describe("RailLayout", () => {
     expect(within(main as HTMLElement).getByRole("alert")).toHaveTextContent(NOT_PERSISTENT);
     expect(within(main as HTMLElement).getByText("page")).toBeInTheDocument();
     expect(screen.getByRole("navigation", { name: "Menu chính" }).parentElement).toBe(layout);
+  });
+
+  describe("skip link", () => {
+    beforeEach(() => {
+      window.location.hash = "";
+    });
+
+    function renderRail(lang?: "en") {
+      return renderWithGame(
+        <RailLayout nav={<SideNav current="room" />}>
+          <p>page</p>
+        </RailLayout>,
+        { lang },
+      );
+    }
+
+    test("is the first link and the first stop of the keyboard, before the menu", async () => {
+      await renderRail();
+      const skip = screen.getByRole("link", { name: "Bỏ qua menu" });
+      expect(screen.getAllByRole("link")[0]).toBe(skip);
+      await userEvent.tab();
+      expect(skip).toHaveFocus();
+    });
+
+    test("moves the focus to the main column and keeps the route", async () => {
+      window.location.hash = "#/shop";
+      const { container } = await renderRail();
+      const main = container.querySelector<HTMLElement>(".rail-main");
+      expect(main).toHaveAttribute("id", "main-content");
+      expect(main).toHaveAttribute("tabindex", "-1");
+      await userEvent.click(screen.getByRole("link", { name: "Bỏ qua menu" }));
+      expect(main).toHaveFocus();
+      expect(window.location.hash).toBe("#/shop");
+    });
+
+    test("works with the keyboard: Tab, then Enter", async () => {
+      window.location.hash = "#/map";
+      const { container } = await renderRail();
+      await userEvent.tab();
+      await userEvent.keyboard("{Enter}");
+      expect(container.querySelector(".rail-main")).toHaveFocus();
+      expect(window.location.hash).toBe("#/map");
+    });
+
+    test("follows the interface language", async () => {
+      await renderRail("en");
+      expect(screen.getByRole("link", { name: "Skip the menu" })).toBeInTheDocument();
+    });
   });
 
   test("takes the parent mode", async () => {

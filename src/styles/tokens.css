@@ -19,7 +19,13 @@
   --stat-vui: #ff6fa5;
   --chip-streak: #ffe0cc;
   --chip-xu: #fff1a8;
+  --chip-pin: #d9f5e6;
   --code-bg: #fffdf6;
+  /* Text on the primary blue: 5.5:1. */
+  --on-primary: #ffffff;
+  /* The flame and the coin are drawn filled; these 2 are their colors on their chips (3.04:1 and above, do not lower them). */
+  --icon-flame: #e2541b;
+  --icon-coin: #a77b00;
 
   /* Type (spec 5.2). The font files come from public/fonts.css. */
   --font-ui: "Lexend", system-ui, sans-serif;
@@ -31,6 +37,8 @@
   --shadow: 3px 3px 0 var(--ink);
   --shadow-card: 4px 4px 0 var(--ink);
   --shadow-lg: 6px 6px 0 var(--ink);
+  /* The shadow of a pressed button or card, after it sank by 2 px. */
+  --shadow-press: 1px 1px 0 var(--ink);
 
   /* Old names that screens not yet restyled still use; they point at the new look. */
   --text: var(--ink);
@@ -39,7 +47,6 @@
   --success: #15803d;
   --code-text: var(--ink);
   --mono: var(--font-mono);
-  --radius: 0;
   --stat-growth: var(--primary);
   --stat-low: var(--coral);
   --stat-track: #f1ede3;

@@ -422,6 +422,7 @@ export const en: Record<MessageKey, string> = {
   "rail.label": "Main menu",
   "rail.room": "Robo's room",
   "rail.guide": "Guide",
+  "rail.skip": "Skip the menu",
   "focus.pin": "Battery: {n}/{max}",
   "landing.navLabel": "Welcome page",
   "landing.home": "Home",

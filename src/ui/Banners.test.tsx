@@ -15,6 +15,13 @@ test("shows the storage banners", async () => {
   expect(screen.getByRole("link", { name: "Sao lưu ngay" })).toHaveAttribute("href", "#/backup");
 });
 
+test("the backup action of a banner is a small button, which the banner puts at its right", async () => {
+  await renderWithGame(<Banners />, { meta: { lastBackupAt: new Date(2026, 8, 20, 9).toISOString() } });
+  const action = screen.getByRole("link", { name: "Sao lưu ngay" });
+  expect(action).toHaveClass("button", "small");
+  expect(action.parentElement).toHaveClass("banner");
+});
+
 test("shows nothing when everything is fine", async () => {
   const { container } = await renderWithGame(<Banners />, { meta: { lastBackupAt: new Date(2026, 9, 5, 9).toISOString() } });
   expect(container.querySelector(".banner")).toBeNull();
