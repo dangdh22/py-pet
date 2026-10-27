@@ -12,6 +12,7 @@ import {
 } from "../storage/backup";
 import { downloadText } from "./download";
 import { useGame } from "./GameProvider";
+import { PageHead } from "./shell/PageHead";
 
 type ImportStep =
   | { kind: "locked" }
@@ -118,71 +119,94 @@ export function BackupScreen() {
   }
 
   return (
-    <main className="backup">
-      <h1>{t("backup.title")}</h1>
-      <section>
-        <p>{game.lastBackupAt ? t("backup.lastBackup", { date: localDay(new Date(game.lastBackupAt)) }) : t("backup.never")}</p>
-        <button className="primary" onClick={onExport}>
-          {t("backup.export")}
-        </button>
-        {exported && <p role="status">{t("backup.exported", { file: exported })}</p>}
-        {exportFailed && <p role="alert">{t("backup.exportFailed")}</p>}
-      </section>
-      <section>
-        <h2>{t("backup.import")}</h2>
-        {step.kind === "locked" && (
-          <form onSubmit={onPin}>
-            <p>{t("backup.pinPrompt")}</p>
-            <label>
-              {t("backup.pinLabel")}
-              <input type="password" inputMode="numeric" value={pin} onChange={(e) => setPin(e.target.value)} />
+    <main className="page backup-page">
+      <PageHead title={t("backup.title")} />
+      <div className="backup-cards">
+        <section className="card">
+          <h2 className="card-title">{t("backup.export")}</h2>
+          <p>{game.lastBackupAt ? t("backup.lastBackup", { date: localDay(new Date(game.lastBackupAt)) }) : t("backup.never")}</p>
+          <button className="primary" onClick={onExport}>
+            {t("backup.export")}
+          </button>
+          {exported && <p role="status">{t("backup.exported", { file: exported })}</p>}
+          {exportFailed && <p role="alert">{t("backup.exportFailed")}</p>}
+        </section>
+        <section className="card">
+          <h2 className="card-title">{t("backup.import")}</h2>
+          {step.kind === "locked" && (
+            <form className="pin-form" onSubmit={onPin}>
+              <p>{t("backup.pinPrompt")}</p>
+              <label>
+                {t("backup.pinLabel")}
+                <input type="password" inputMode="numeric" value={pin} onChange={(e) => setPin(e.target.value)} />
+              </label>
+              <button type="submit">{t("backup.pinCheck")}</button>
+              {pinWrong && <p role="alert">{t("backup.pinWrong")}</p>}
+            </form>
+          )}
+          {(step.kind === "choose" || step.kind === "error") && (
+            <label className="backup-file">
+              {t("backup.chooseFile")}
+              <input type="file" accept=".pypet" onChange={onFile} />
             </label>
-            <button type="submit">{t("backup.pinCheck")}</button>
-            {pinWrong && <p role="alert">{t("backup.pinWrong")}</p>}
-          </form>
-        )}
-        {(step.kind === "choose" || step.kind === "error") && (
-          <label>
-            {t("backup.chooseFile")}
-            <input type="file" accept=".pypet" onChange={onFile} />
-          </label>
-        )}
-        {step.kind === "error" && <p role="alert">{t(step.message)}</p>}
-        {step.kind === "preview" && (
-          <div>
-            {step.tampered && <p role="alert">{t("backup.tampered")}</p>}
-            <p>
-              {t("backup.preview", {
-                name: step.preview.childName,
-                stage: step.preview.stage,
-                xu: step.preview.xu,
-                day: step.preview.lastActiveDay ?? "-",
-              })}
-            </p>
-            {importFailed && <p role="alert">{t("banner.writeFailed")}</p>}
-            <button className="primary" disabled={importing} onClick={() => void onImport(step.payload)}>
-              {t("backup.confirmImport")}
-            </button>
-            <button disabled={importing} onClick={() => setStep({ kind: "choose" })}>{t("backup.cancel")}</button>
-          </div>
-        )}
-      </section>
+          )}
+          {step.kind === "error" && <p role="alert">{t(step.message)}</p>}
+          {step.kind === "preview" && (
+            <div className="backup-preview">
+              {step.tampered && (
+                <p role="alert" className="banner banner-danger">
+                  {t("backup.tampered")}
+                </p>
+              )}
+              <p>
+                {t("backup.preview", {
+                  name: step.preview.childName,
+                  stage: step.preview.stage,
+                  xu: step.preview.xu,
+                  day: step.preview.lastActiveDay ?? "-",
+                })}
+              </p>
+              {importFailed && <p role="alert">{t("banner.writeFailed")}</p>}
+              <div className="backup-actions">
+                <button className="primary" disabled={importing} onClick={() => void onImport(step.payload)}>
+                  {t("backup.confirmImport")}
+                </button>
+                <button disabled={importing} onClick={() => setStep({ kind: "choose" })}>{t("backup.cancel")}</button>
+              </div>
+            </div>
+          )}
+        </section>
+      </div>
       {step.kind !== "locked" && autoItems !== null && (
-        <section>
-          <h2>{t("backup.autoTitle")}</h2>
+        <section className="card">
+          <h2 className="card-title">{t("backup.autoTitle")}</h2>
           {autoItems.length === 0 ? (
             <p>{t("backup.autoNone")}</p>
           ) : (
-            <ul>
-              {autoItems.map((item, i) => (
-                <li key={i}>
-                  <span>{t("backup.autoItem", { date: item.day, name: item.childName })}</span>{" "}
-                  <button onClick={() => downloadText(backupFileName(item.childName, item.day), item.text)}>
-                    {t("backup.autoDownload")}
-                  </button>
-                </li>
-              ))}
-            </ul>
+            <table className="table">
+              <thead>
+                <tr>
+                  <th>{t("backup.autoDate")}</th>
+                  <th>{t("backup.autoProfile")}</th>
+                  <th>
+                    <span className="sr-only">{t("backup.autoDownload")}</span>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {autoItems.map((item, i) => (
+                  <tr key={i}>
+                    <td>{item.day}</td>
+                    <td>{item.childName}</td>
+                    <td>
+                      <button className="small" onClick={() => downloadText(backupFileName(item.childName, item.day), item.text)}>
+                        {t("backup.autoDownload")}
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           )}
         </section>
       )}

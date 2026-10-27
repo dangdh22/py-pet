@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { screen, waitFor } from "@testing-library/react";
+import { screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, test, vi } from "vitest";
 import { decodeBackup, encodeBackup } from "../storage/backup";
@@ -23,6 +23,19 @@ function fileOf(text: string) {
 }
 
 describe("BackupScreen", () => {
+  test("has a title, an export card and an import card, and no table before the PIN", async () => {
+    await renderWithGame(<BackupScreen />, { meta: { pin: await hashPin("1234", 1000) } });
+    expect(screen.getByRole("heading", { level: 1, name: "Sao lưu" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { level: 2, name: "Xuất file sao lưu" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { level: 2, name: "Nhập file sao lưu" })).toBeInTheDocument();
+    expect(screen.queryByRole("table")).not.toBeInTheDocument();
+  });
+
+  test("the PIN step is a form with the pin-form class", async () => {
+    await renderWithGame(<BackupScreen />, { meta: { pin: await hashPin("1234", 1000) } });
+    expect(screen.getByLabelText("Mã PIN").closest("form")).toHaveClass("pin-form");
+  });
+
   test("exports a decodable file and shows the last backup day", async () => {
     await renderWithGame(<BackupScreen />);
     expect(screen.getByText("Chưa sao lưu lần nào")).toBeInTheDocument();
@@ -67,9 +80,12 @@ describe("BackupScreen", () => {
     expect(screen.queryByText("Bản sao lưu tự động")).not.toBeInTheDocument();
     await unlock("1234");
     expect(await screen.findByText("Bản sao lưu tự động")).toBeInTheDocument();
-    expect(await screen.findByText("2026-10-05 — Bình")).toBeInTheDocument();
+    const row = await screen.findByRole("row", { name: /2026-10-05/ });
+    expect(within(row).getByRole("cell", { name: "Bình" })).toBeInTheDocument();
+    expect(screen.getByRole("columnheader", { name: "Ngày" })).toBeInTheDocument();
+    expect(screen.getByRole("columnheader", { name: "Hồ sơ" })).toBeInTheDocument();
     vi.mocked(downloadText).mockClear();
-    await userEvent.click(screen.getByRole("button", { name: "Tải về" }));
+    await userEvent.click(within(row).getByRole("button", { name: "Tải về" }));
     expect(downloadText).toHaveBeenCalledWith("py-pet-binh-2026-10-05.pypet", text);
   });
 

@@ -45,6 +45,55 @@
   text-transform: uppercase;
 }
 
+/* A table: 2 px ink lines round every cell, and the header row sits on the cream of the page. */
+.table { border-collapse: collapse; }
+.table th,
+.table td {
+  padding: 8px 12px;
+  border: var(--border-w) solid var(--ink);
+  text-align: left;
+}
+.table th {
+  background: var(--bg);
+  font-weight: 700;
+}
+
+/* The form that asks for the parent's PIN: a prompt, the field with its label, a button and a line for a wrong PIN. */
+.pin-form {
+  display: grid;
+  gap: 12px;
+  width: 100%;
+  max-width: 360px;
+}
+.pin-form p { margin: 0; }
+.pin-form label {
+  display: grid;
+  gap: 4px;
+  font-weight: 600;
+}
+.pin-form input { width: 100%; }
+.pin-form button { justify-self: start; }
+
+/* The file picker: the box of the field is dropped and its button looks like a small button, so it does not sit in a frame inside a frame. */
+input[type="file"] {
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+input[type="file"]::file-selector-button {
+  margin-right: 10px;
+  padding: 5px 10px;
+  border: var(--border-w) solid var(--ink);
+  border-radius: 0;
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow: var(--shadow-sm);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
 /* Square tabs on a rule: the chosen tab is white with an ink border and sits on top of the rule. On a phone the labels wrap inside their tabs. */
 .page-tabs {
   display: flex;
@@ -376,3 +425,45 @@
   font-weight: 800;
   line-height: 1;
 }
+
+/* The backup screen: the export card and the import card side by side, the table of automatic backups under them. */
+.backup-cards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+  align-items: start;
+}
+@media (max-width: 900px) {
+  .backup-cards { grid-template-columns: 1fr; }
+}
+.backup-cards + .card { margin-top: 20px; }
+.backup-page .card {
+  display: grid;
+  gap: 12px;
+  justify-items: start;
+}
+.backup-page .card > .card-title { margin: 0; }
+.backup-page p { margin: 0; }
+.backup-file {
+  display: grid;
+  gap: 6px;
+  font-weight: 600;
+}
+.backup-preview {
+  display: grid;
+  gap: 12px;
+  width: 100%;
+}
+.backup-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+/* The warning that the file was changed is a banner inside the card: a frame on all sides and ink text (the red of an alert is not needed on light red). */
+.backup-page .banner {
+  border: var(--border-w) solid var(--ink);
+  color: var(--ink);
+  font-weight: 700;
+}
+.backup-page .table { width: 100%; }
+.backup-page .table td:last-child { text-align: right; }
