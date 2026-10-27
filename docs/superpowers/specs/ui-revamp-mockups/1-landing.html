@@ -1,0 +1,237 @@
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Lexend:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  .lp-list { display: flex; flex-direction: column; gap: 28px; }
+  .lp-pick { cursor: pointer; border: 2px solid transparent; padding: 14px; background: var(--bg-secondary); }
+  .lp-pick.selected { border-color: var(--selected-border, #2f5bea); }
+  .lp-pick-head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 12px; }
+  .lp-pick-head .lp-letter { font-weight: 700; font-size: 1.1rem; width: 30px; height: 30px; display: inline-flex; align-items: center; justify-content: center; background: #1d2440; color: #fff; }
+  .lp-pick-head h3 { margin: 0; font-size: 1.05rem; }
+  .lp-pick-head p { margin: 0; color: var(--text-secondary); font-size: 0.88rem; }
+
+  .lp-frame { width: 1200px; border: 1px solid #cfd6e4; background: #fff; overflow: hidden; color: #1d2440; }
+  .lp-frame * { box-sizing: border-box; border-radius: 0 !important; }
+  .lp-chrome { height: 28px; display: flex; align-items: center; gap: 6px; padding: 0 10px; background: #eef1f6; border-bottom: 1px solid #cfd6e4; font: 12px/1 ui-monospace, Menlo, monospace; color: #6b7487; }
+  .lp-chrome i { width: 9px; height: 9px; background: #c9cfdb; display: inline-block; }
+  .lp-chrome span { margin-left: 10px; background: #fff; border: 1px solid #d8dee9; padding: 4px 10px; flex: 1; max-width: 340px; }
+  .lp-page { height: 540px; position: relative; overflow: hidden; }
+  .lp-mono { font-family: "JetBrains Mono", ui-monospace, Menlo, monospace; }
+
+  /* ---------- A: Blueprint grid ---------- */
+  .lpA { font-family: "Be Vietnam Pro", system-ui, sans-serif; background-color: #fff;
+    background-image: linear-gradient(#edf1f9 1px, transparent 1px), linear-gradient(90deg, #edf1f9 1px, transparent 1px);
+    background-size: 24px 24px; }
+  .lpA-nav { height: 60px; display: flex; align-items: center; padding: 0 36px; background: #fff; border-bottom: 1px solid #e1e6f0; }
+  .lpA-logo { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 18px; }
+  .lpA-logo b { width: 28px; height: 28px; background: #2f5bea; color: #fff; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; }
+  .lpA-menu { margin-left: auto; display: flex; gap: 28px; font-size: 14px; font-weight: 500; color: #4a5470; align-items: center; }
+  .lpA-menu .on { color: #1d2440; box-shadow: inset 0 -2px 0 #2f5bea; padding: 20px 0; }
+  .lpA-lang { border: 1px solid #cfd6e4; display: flex; font-size: 12px; }
+  .lpA-lang span { padding: 4px 8px; } .lpA-lang .on2 { background: #1d2440; color: #fff; }
+  .lpA-hero { display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 24px; padding: 48px 56px 0; }
+  .lpA-eyebrow { color: #2f5bea; font-size: 13px; letter-spacing: .02em; }
+  .lpA h1 { font-size: 50px; line-height: 1.05; margin: 14px 0 16px; font-weight: 800; letter-spacing: -0.02em; }
+  .lpA-lead { font-size: 16px; line-height: 1.6; color: #4a5470; max-width: 440px; margin: 0 0 28px; }
+  .lpA-actions { display: flex; align-items: center; gap: 14px; }
+  .lpA-btn { padding: 14px 22px; font-weight: 700; font-size: 15px; border: 1.5px solid #1d2440; background: #fff; }
+  .lpA-btn.primary { background: #2f5bea; border-color: #2f5bea; color: #fff; }
+  .lpA-link { font-size: 14px; font-weight: 600; color: #4a5470; text-decoration: underline; text-underline-offset: 4px; display: inline-flex; gap: 6px; align-items: center; margin-left: 6px; }
+  .lpA-figure { position: relative; height: 330px; background: #fff; border: 1px solid #d5dcea; display: flex; align-items: center; justify-content: center; }
+  .lpA-figure .tick { position: absolute; width: 14px; height: 14px; border-color: #2f5bea; border-style: solid; }
+  .lpA-figure .t1 { top: -1px; left: -1px; border-width: 2px 0 0 2px; } .lpA-figure .t2 { top: -1px; right: -1px; border-width: 2px 2px 0 0; }
+  .lpA-figure .t3 { bottom: -1px; left: -1px; border-width: 0 0 2px 2px; } .lpA-figure .t4 { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; }
+  .lpA-figure svg { width: 210px; height: auto; }
+  .lpA-figure .cap { position: absolute; bottom: 10px; left: 14px; font-size: 11px; color: #6b7487; }
+  .lpA-figure .dim { position: absolute; top: 10px; right: 14px; font-size: 11px; color: #2f5bea; }
+  .lpA-strip { position: absolute; left: 0; right: 0; bottom: 0; display: grid; grid-template-columns: repeat(3, 1fr); background: #fff; border-top: 1px solid #e1e6f0; }
+  .lpA-strip div { padding: 16px 56px; border-right: 1px solid #e1e6f0; font-size: 13px; color: #4a5470; }
+  .lpA-strip b { display: block; font-size: 22px; color: #1d2440; font-weight: 800; }
+
+  /* ---------- B: Colour blocks ---------- */
+  .lpB { font-family: "Be Vietnam Pro", system-ui, sans-serif; background: #fff; display: flex; flex-direction: column; }
+  .lpB-nav { height: 60px; display: flex; align-items: center; padding: 0 36px; border-bottom: 1px solid #e6e8ee; }
+  .lpB-logo { font-weight: 800; font-size: 19px; letter-spacing: -0.01em; }
+  .lpB-logo em { font-style: normal; color: #2f5bea; }
+  .lpB-menu { margin-left: auto; display: flex; gap: 26px; font-size: 14px; color: #4a5470; font-weight: 500; align-items: center; }
+  .lpB-hero { flex: 1; display: grid; grid-template-columns: 1fr 1fr; }
+  .lpB-copy { padding: 52px 40px 0 56px; }
+  .lpB-copy .k { font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: #2f5bea; }
+  .lpB-copy h1 { font-size: 46px; line-height: 1.08; margin: 14px 0 16px; font-weight: 800; letter-spacing: -0.02em; }
+  .lpB-copy p { font-size: 16px; line-height: 1.6; color: #4a5470; margin: 0; max-width: 420px; }
+  .lpB-block { background: #ffe27a; position: relative; display: flex; align-items: flex-end; justify-content: center; gap: 18px; padding: 0 24px 34px; }
+  .lpB-block svg { height: auto; }
+  .lpB-block .arrow { font-size: 18px; color: #7a6420; padding-bottom: 40px; }
+  .lpB-block .cap { position: absolute; top: 22px; left: 26px; font-size: 13px; font-weight: 600; color: #5c4a10; }
+  .lpB-block .floor { position: absolute; left: 0; right: 0; bottom: 0; height: 34px; background: #f5cf4a; }
+  .lpB-block .forms { position: relative; display: flex; align-items: flex-end; gap: 14px; z-index: 1; margin-bottom: -6px; }
+  .lpB-tiles { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid #1d2440; }
+  .lpB-tile { padding: 20px 24px 22px 56px; border-right: 1px solid #1d2440; position: relative; height: 136px; }
+  .lpB-tile:last-child { border-right: 0; background: #f3f5fa; }
+  .lpB-tile .n { font-size: 12px; color: #6b7487; }
+  .lpB-tile h4 { margin: 8px 0 6px; font-size: 20px; font-weight: 800; }
+  .lpB-tile p { margin: 0; font-size: 13px; line-height: 1.5; color: #4a5470; max-width: 220px; }
+  .lpB-tile .go { position: absolute; right: 22px; top: 20px; font-size: 22px; }
+  .lpB-tile.primary { background: #2f5bea; color: #fff; }
+  .lpB-tile.primary .n, .lpB-tile.primary p { color: #dbe4ff; }
+
+  /* ---------- C: Bold sticker (light neo-brutal) ---------- */
+  .lpC { font-family: "Lexend", system-ui, sans-serif; background: #fff8e8; }
+  .lpC-nav { height: 62px; display: flex; align-items: center; padding: 0 36px; border-bottom: 2px solid #141414; background: #fff; }
+  .lpC-logo { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 19px; }
+  .lpC-logo b { background: #ffd43b; border: 2px solid #141414; padding: 2px 7px; font-size: 13px; }
+  .lpC-menu { margin-left: auto; display: flex; gap: 8px; font-size: 14px; font-weight: 600; }
+  .lpC-menu span { padding: 7px 12px; border: 2px solid transparent; }
+  .lpC-menu .on { border-color: #141414; background: #fff8e8; }
+  .lpC-hero { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; padding: 44px 56px; }
+  .lpC h1 { font-size: 48px; line-height: 1.08; margin: 0 0 16px; font-weight: 800; letter-spacing: -0.02em; }
+  .lpC h1 mark { background: #ffd43b; padding: 0 6px; color: inherit; }
+  .lpC-lead { font-size: 16px; line-height: 1.6; color: #3c3c3c; margin: 0 0 28px; max-width: 420px; }
+  .lpC-actions { display: flex; flex-direction: column; gap: 14px; max-width: 330px; }
+  .lpC-btn { display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; font-weight: 700; font-size: 16px; border: 2px solid #141414; background: #fff; box-shadow: 4px 4px 0 #141414; }
+  .lpC-btn.primary { background: #3d6bff; color: #fff; }
+  .lpC-btn.parent { background: #c9f0dc; }
+  .lpC-btn small { font-weight: 500; font-size: 12px; opacity: .8; }
+  .lpC-stage { position: relative; height: 380px; }
+  .lpC-robo { position: absolute; right: 10px; top: 0; width: 270px; height: 280px; background: #9be3c0; border: 2px solid #141414; box-shadow: 6px 6px 0 #141414; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 14px; }
+  .lpC-robo svg { width: 190px; height: auto; }
+  .lpC-bubble { position: absolute; right: 200px; top: 20px; background: #fff; border: 2px solid #141414; padding: 8px 12px; font-size: 14px; font-weight: 600; transform: rotate(-3deg); }
+  .lpC-code { position: absolute; left: 0; bottom: 0; width: 300px; background: #fff; border: 2px solid #141414; box-shadow: 5px 5px 0 #141414; transform: rotate(-1.5deg); }
+  .lpC-code .bar { display: flex; gap: 5px; padding: 6px 8px; border-bottom: 2px solid #141414; background: #ffd43b; font-size: 12px; font-weight: 700; align-items: center; }
+  .lpC-code .bar i { width: 9px; height: 9px; border: 1.5px solid #141414; background: #fff; display: inline-block; }
+  .lpC-code pre { margin: 0; padding: 10px 12px; font-size: 13px; line-height: 1.6; }
+  .lpC-code .out { border-top: 2px dashed #141414; padding: 8px 12px; font-size: 13px; background: #f4fbf7; }
+  .k1 { color: #c2410c; } .k2 { color: #15803d; } .k3 { color: #1d4ed8; }
+
+  .lp-note { font-size: 0.88rem; color: var(--text-secondary); margin: -8px 0 18px; }
+</style>
+
+<h2>Landing page: 3 hướng thiết kế</h2>
+<p class="subtitle">Cả 3 đều dùng nền sáng, góc vuông và 1 thanh menu trên cùng thay cho hàng nút ở phòng Robo. Hình Robo là hình thật lấy từ code hiện tại. Bấm vào phương án anh thích (chọn được nhiều).</p>
+<p class="lp-note">Font chữ và màu chỉ là bản nháp để thấy cảm giác; bản thật sẽ tự chứa font, không tải từ mạng.</p>
+
+<div class="lp-list options" data-multiselect>
+
+  <!-- ================= A ================= -->
+  <div class="lp-pick option" data-choice="a" onclick="toggleSelect(this)" style="display:block">
+    <div class="lp-pick-head"><span class="lp-letter">A</span><div><h3>Lưới kỹ thuật</h3><p>Gọn, chuyên nghiệp như trang sản phẩm công nghệ. Nút "Bắt đầu học" nổi bật nhất, "Khu phụ huynh" chỉ là đường link nhỏ.</p></div></div>
+    <div class="lp-frame">
+      <div class="lp-chrome"><i></i><i></i><i></i><span>dangdh22.github.io/py-pet/</span></div>
+      <div class="lp-page lpA">
+        <div class="lpA-nav">
+          <div class="lpA-logo"><b>Py</b>Py-Pet</div>
+          <div class="lpA-menu"><span class="on">Trang chủ</span><span>Bài học</span><span>Hướng dẫn</span><span>Khu phụ huynh</span><div class="lpA-lang"><span class="on2">VI</span><span>EN</span></div></div>
+        </div>
+        <div class="lpA-hero">
+          <div>
+            <div class="lpA-eyebrow lp-mono"># Python cho học sinh lớp 6</div>
+            <h1>Nuôi Robo.<br>Học Python.</h1>
+            <p class="lpA-lead">Mỗi ngày 15 đến 30 phút. Con làm bài thì Robo lớn lên, qua bài kiểm tra thì Robo tiến hóa. Không cần cài đặt, chạy ngay trong trình duyệt.</p>
+            <div class="lpA-actions">
+              <span class="lpA-btn primary">Bắt đầu học &rarr;</span>
+              <span class="lpA-btn">Hướng dẫn</span>
+              <span class="lpA-link"><svg width="12" height="13" viewBox="0 0 12 13"><rect x="1" y="5.5" width="10" height="7" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M3.5 5.5V3.5h5v2" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>Khu phụ huynh</span>
+            </div>
+          </div>
+          <div class="lpA-figure">
+            <span class="tick t1"></span><span class="tick t2"></span><span class="tick t3"></span><span class="tick t4"></span>
+            <span class="dim lp-mono">form = 4</span>
+            <svg viewBox="0 0 64 72"><g data-part="legs"><rect x="23" y="57" width="6" height="9" fill="#5f6f99"></rect><rect x="35" y="57" width="6" height="9" fill="#5f6f99"></rect></g><g data-part="feet"><rect x="20" y="64" width="10" height="6" rx="3.5" fill="#5f6f99"></rect><rect x="34" y="64" width="10" height="6" rx="3.5" fill="#5f6f99"></rect></g><rect x="28" y="31" width="8" height="7" fill="#5f6f99"></rect><rect data-part="body" x="16" y="35" width="32" height="25" rx="7" fill="#7b8bb3"></rect><g data-part="chest"><rect x="21" y="40" width="22" height="12" rx="3" fill="#1d2440" stroke="#5f6f99" stroke-width="0.8"></rect><path d="M23.5 46 h4.5 l1.8 -3.6 l2.6 7.2 l1.8 -3.6 h5.3" fill="none" stroke="#6ff" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"></path></g><g data-part="antenna"><line x1="32" y1="10" x2="32" y2="5.9" stroke="#5f6f99" stroke-width="2" stroke-linecap="round"></line><circle cx="32" cy="3.2" r="2.7" fill="#ff5c7a"></circle><circle cx="31.055" cy="2.255" r="0.81" fill="#fff" opacity="0.7"></circle></g><g data-part="head"><circle cx="14" cy="21.5" r="2.6" fill="#5f6f99"></circle><circle cx="50" cy="21.5" r="2.6" fill="#5f6f99"></circle><rect x="14" y="9" width="36" height="25" rx="10" fill="#9aa8cc"></rect><ellipse cx="23" cy="13" rx="4.5" ry="1.8" fill="#c3cde6" transform="rotate(-18 23 13)"></ellipse></g><g data-part="arms"><g><polyline points="18,39 10,34 7,26" fill="none" stroke="#7b8bb3" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></polyline><circle cx="7" cy="26" r="3" fill="#9aa8cc" stroke="#5f6f99" stroke-width="0.8"></circle></g><g><polyline points="46,39 54,34 57,26" fill="none" stroke="#7b8bb3" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></polyline><circle cx="57" cy="26" r="3" fill="#9aa8cc" stroke="#5f6f99" stroke-width="0.8"></circle></g></g><rect data-part="face-screen" x="17.5" y="12.5" width="29" height="18.2" rx="6" fill="#1d2440"></rect><g transform="translate(18.5 13.5) scale(0.9)"><path d="M6.5 9 q3 -5.5 6 0 M17.5 9 q3 -5.5 6 0" fill="none" stroke="#6ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path><path d="M11 11.5 h8 q-0.4 5 -4 5 q-3.6 0 -4 -5 z" fill="#6ff"></path><ellipse cx="4.5" cy="12.5" rx="2.2" ry="1.3" fill="#ff8fb0" opacity="0.85"></ellipse><ellipse cx="25.5" cy="12.5" rx="2.2" ry="1.3" fill="#ff8fb0" opacity="0.85"></ellipse></g></svg>
+            <span class="cap lp-mono">ROBO / DẠNG 4: THIẾU NIÊN</span>
+          </div>
+        </div>
+        <div class="lpA-strip">
+          <div><b>94 bài học</b>4 giai đoạn, từ print tới vòng lặp</div>
+          <div><b>Không cần cài</b>Python chạy ngay trong trình duyệt</div>
+          <div><b>Song ngữ</b>Giao diện và đề kiểm tra Việt / Anh</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= B ================= -->
+  <div class="lp-pick option" data-choice="b" onclick="toggleSelect(this)" style="display:block">
+    <div class="lp-pick-head"><span class="lp-letter">B</span><div><h3>Khối màu</h3><p>Nửa phải là mảng màu vàng kể chuyện Robo lớn lên qua 4 dạng. 3 lựa chọn là 3 ô lớn chạy ngang cuối trang, mỗi ô có 1 dòng giải thích.</p></div></div>
+    <div class="lp-frame">
+      <div class="lp-chrome"><i></i><i></i><i></i><span>dangdh22.github.io/py-pet/</span></div>
+      <div class="lp-page lpB">
+        <div class="lpB-nav">
+          <div class="lpB-logo">Py<em>-</em>Pet</div>
+          <div class="lpB-menu"><span>Bài học</span><span>Hướng dẫn</span><span>Khu phụ huynh</span><span class="lp-mono" style="font-size:12px">VI / EN</span></div>
+        </div>
+        <div class="lpB-hero">
+          <div class="lpB-copy">
+            <div class="k">Học Python từ con số 0</div>
+            <h1>Học càng nhiều,<br>Robo càng lớn.</h1>
+            <p>App dạy Python cho học sinh lớp 6. Mỗi bài học là 1 bữa ăn cho Robo; mỗi bài kiểm tra tiến hóa là 1 lần Robo lên dạng mới.</p>
+          </div>
+          <div class="lpB-block">
+            <span class="cap">Viên nang &rarr; Sơ sinh &rarr; Bé con &rarr; Thiếu niên</span>
+            <div class="floor"></div>
+            <div class="forms">
+              <svg width="62" viewBox="0 0 64 72"><g><rect x="19" y="61" width="10" height="9" rx="3.5" fill="#5f6f99"></rect><rect x="35" y="61" width="10" height="9" rx="3.5" fill="#5f6f99"></rect></g><g><rect x="10" y="22" width="44" height="44" rx="20" fill="#7b8bb3"></rect><path d="M10 50 V42 A20 20 0 0 1 30 22 H34 A20 20 0 0 1 54 42 V50 Z" fill="#9aa8cc"></path><path d="M10 50 H54" stroke="#5f6f99" stroke-width="1"></path><ellipse cx="20" cy="29" rx="4.5" ry="2" fill="#c3cde6" transform="rotate(-35 20 29)"></ellipse></g><rect x="16" y="28" width="32" height="20" rx="6" fill="#1d2440"></rect><g transform="translate(17 29) scale(1)"><path d="M6.5 9 q3 -5.5 6 0 M17.5 9 q3 -5.5 6 0" fill="none" stroke="#6ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path><path d="M11 11.5 h8 q-0.4 5 -4 5 q-3.6 0 -4 -5 z" fill="#6ff"></path><ellipse cx="4.5" cy="12.5" rx="2.2" ry="1.3" fill="#ff8fb0" opacity="0.85"></ellipse><ellipse cx="25.5" cy="12.5" rx="2.2" ry="1.3" fill="#ff8fb0" opacity="0.85"></ellipse></g></svg>
+              <svg width="84" viewBox="0 0 64 72"><g><rect x="20" y="61" width="10" height="9" rx="3.5" fill="#5f6f99"></rect><rect x="34" y="61" width="10" height="9" rx="3.5" fill="#5f6f99"></rect></g><rect x="19" y="46" width="26" height="17" rx="7" fill="#7b8bb3"></rect><g><line x1="32" y1="18" x2="32" y2="11.5" stroke="#5f6f99" stroke-width="2" stroke-linecap="round"></line><circle cx="32" cy="8" r="3.5" fill="#ff5c7a"></circle><circle cx="30.775" cy="6.775" r="1.05" fill="#fff" opacity="0.7"></circle></g><g><circle cx="9" cy="33.5" r="3" fill="#5f6f99"></circle><circle cx="55" cy="33.5" r="3" fill="#5f6f99"></circle><rect x="9" y="17" width="46" height="33" rx="13" fill="#9aa8cc"></rect><ellipse cx="18" cy="21" rx="4.5" ry="1.8" fill="#c3cde6" transform="rotate(-18 18 21)"></ellipse></g><rect x="14.5" y="23" width="35" height="21.8" rx="6" fill="#1d2440"></rect><g transform="translate(15.5 24) scale(1.1)"><path d="M6.5 9 q3 -5.5 6 0 M17.5 9 q3 -5.5 6 0" fill="none" stroke="#6ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path><path d="M11 11.5 h8 q-0.4 5 -4 5 q-3.6 0 -4 -5 z" fill="#6ff"></path><ellipse cx="4.5" cy="12.5" rx="2.2" ry="1.3" fill="#ff8fb0" opacity="0.85"></ellipse><ellipse cx="25.5" cy="12.5" rx="2.2" ry="1.3" fill="#ff8fb0" opacity="0.85"></ellipse></g></svg>
+              <svg width="108" viewBox="0 0 64 72"><g><rect x="20" y="61" width="10" height="9" rx="3.5" fill="#5f6f99"></rect><rect x="34" y="61" width="10" height="9" rx="3.5" fill="#5f6f99"></rect></g><rect x="17" y="43" width="30" height="20" rx="7" fill="#7b8bb3"></rect><g><line x1="32" y1="16" x2="32" y2="9.2" stroke="#5f6f99" stroke-width="2" stroke-linecap="round"></line><circle cx="32" cy="6" r="3.2" fill="#ff5c7a"></circle><circle cx="30.88" cy="4.88" r="0.96" fill="#fff" opacity="0.7"></circle></g><g><circle cx="11" cy="30" r="3" fill="#5f6f99"></circle><circle cx="53" cy="30" r="3" fill="#5f6f99"></circle><rect x="11" y="15" width="42" height="30" rx="13" fill="#9aa8cc"></rect><ellipse cx="20" cy="19" rx="4.5" ry="1.8" fill="#c3cde6" transform="rotate(-18 20 19)"></ellipse></g><g><g><polyline points="19,49 11,46 8,38" fill="none" stroke="#7b8bb3" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></polyline><circle cx="8" cy="38" r="3.2" fill="#9aa8cc" stroke="#5f6f99" stroke-width="0.8"></circle></g><g><polyline points="45,49 53,46 56,38" fill="none" stroke="#7b8bb3" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></polyline><circle cx="56" cy="38" r="3.2" fill="#9aa8cc" stroke="#5f6f99" stroke-width="0.8"></circle></g></g><rect x="16" y="20" width="32" height="20" rx="6" fill="#1d2440"></rect><g transform="translate(17 21) scale(1)"><path d="M6.5 9 q3 -5.5 6 0 M17.5 9 q3 -5.5 6 0" fill="none" stroke="#6ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path><path d="M11 11.5 h8 q-0.4 5 -4 5 q-3.6 0 -4 -5 z" fill="#6ff"></path><ellipse cx="4.5" cy="12.5" rx="2.2" ry="1.3" fill="#ff8fb0" opacity="0.85"></ellipse><ellipse cx="25.5" cy="12.5" rx="2.2" ry="1.3" fill="#ff8fb0" opacity="0.85"></ellipse></g></svg>
+              <svg width="138" viewBox="0 0 64 72"><g><rect x="23" y="57" width="6" height="9" fill="#5f6f99"></rect><rect x="35" y="57" width="6" height="9" fill="#5f6f99"></rect></g><g><rect x="20" y="64" width="10" height="6" rx="3.5" fill="#5f6f99"></rect><rect x="34" y="64" width="10" height="6" rx="3.5" fill="#5f6f99"></rect></g><rect x="28" y="31" width="8" height="7" fill="#5f6f99"></rect><rect x="16" y="35" width="32" height="25" rx="7" fill="#7b8bb3"></rect><g><rect x="21" y="40" width="22" height="12" rx="3" fill="#1d2440" stroke="#5f6f99" stroke-width="0.8"></rect><path d="M23.5 46 h4.5 l1.8 -3.6 l2.6 7.2 l1.8 -3.6 h5.3" fill="none" stroke="#6ff" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"></path></g><g><line x1="32" y1="10" x2="32" y2="5.9" stroke="#5f6f99" stroke-width="2" stroke-linecap="round"></line><circle cx="32" cy="3.2" r="2.7" fill="#ff5c7a"></circle><circle cx="31.055" cy="2.255" r="0.81" fill="#fff" opacity="0.7"></circle></g><g><circle cx="14" cy="21.5" r="2.6" fill="#5f6f99"></circle><circle cx="50" cy="21.5" r="2.6" fill="#5f6f99"></circle><rect x="14" y="9" width="36" height="25" rx="10" fill="#9aa8cc"></rect><ellipse cx="23" cy="13" rx="4.5" ry="1.8" fill="#c3cde6" transform="rotate(-18 23 13)"></ellipse></g><g><g><polyline points="18,39 10,34 7,26" fill="none" stroke="#7b8bb3" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></polyline><circle cx="7" cy="26" r="3" fill="#9aa8cc" stroke="#5f6f99" stroke-width="0.8"></circle></g><g><polyline points="46,39 54,34 57,26" fill="none" stroke="#7b8bb3" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></polyline><circle cx="57" cy="26" r="3" fill="#9aa8cc" stroke="#5f6f99" stroke-width="0.8"></circle></g></g><rect x="17.5" y="12.5" width="29" height="18.2" rx="6" fill="#1d2440"></rect><g transform="translate(18.5 13.5) scale(0.9)"><path d="M6.5 9 q3 -5.5 6 0 M17.5 9 q3 -5.5 6 0" fill="none" stroke="#6ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path><path d="M11 11.5 h8 q-0.4 5 -4 5 q-3.6 0 -4 -5 z" fill="#6ff"></path><ellipse cx="4.5" cy="12.5" rx="2.2" ry="1.3" fill="#ff8fb0" opacity="0.85"></ellipse><ellipse cx="25.5" cy="12.5" rx="2.2" ry="1.3" fill="#ff8fb0" opacity="0.85"></ellipse></g></svg>
+            </div>
+          </div>
+        </div>
+        <div class="lpB-tiles">
+          <div class="lpB-tile primary"><span class="n lp-mono">01</span><h4>Bắt đầu học</h4><p>Vào phòng của Robo và học tiếp bài hôm nay.</p><span class="go">&rarr;</span></div>
+          <div class="lpB-tile"><span class="n lp-mono">02</span><h4>Hướng dẫn</h4><p>Cách học, cách chăm Robo và cách sao lưu tiến độ.</p><span class="go">&rarr;</span></div>
+          <div class="lpB-tile"><span class="n lp-mono">03</span><h4>Khu phụ huynh</h4><p>Xem con đang vướng ở đâu. Cần mã PIN của bố mẹ.</p><span class="go">&rarr;</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= C ================= -->
+  <div class="lp-pick option" data-choice="c" onclick="toggleSelect(this)" style="display:block">
+    <div class="lp-pick-head"><span class="lp-letter">C</span><div><h3>Nhãn dán đậm</h3><p>Viền đen dày, bóng đổ cứng, màu tươi; vui và hợp trẻ con hơn. Có 1 cửa sổ code nhỏ cho thấy ngay app dạy Python.</p></div></div>
+    <div class="lp-frame">
+      <div class="lp-chrome"><i></i><i></i><i></i><span>dangdh22.github.io/py-pet/</span></div>
+      <div class="lp-page lpC">
+        <div class="lpC-nav">
+          <div class="lpC-logo"><b>Py</b>Py-Pet</div>
+          <div class="lpC-menu"><span class="on">Trang chủ</span><span>Bài học</span><span>Hướng dẫn</span><span>Khu phụ huynh</span><span>VI | EN</span></div>
+        </div>
+        <div class="lpC-hero">
+          <div>
+            <h1>Nuôi Robo<br>bằng <mark>Python</mark>.</h1>
+            <p class="lpC-lead">Mỗi bài code đúng là 1 bữa ăn cho Robo. Học đều mỗi ngày, Robo sẽ lớn và tiến hóa qua 4 dạng.</p>
+            <div class="lpC-actions">
+              <span class="lpC-btn primary">Bắt đầu học <span>&rarr;</span></span>
+              <span class="lpC-btn">Hướng dẫn <small>cho con và bố mẹ</small></span>
+              <span class="lpC-btn parent">Khu phụ huynh <small>cần mã PIN</small></span>
+            </div>
+          </div>
+          <div class="lpC-stage">
+            <div class="lpC-robo">
+              <svg viewBox="0 0 64 72"><g><rect x="20" y="61" width="10" height="9" rx="3.5" fill="#5f6f99"></rect><rect x="34" y="61" width="10" height="9" rx="3.5" fill="#5f6f99"></rect></g><rect x="17" y="43" width="30" height="20" rx="7" fill="#7b8bb3"></rect><g><line x1="32" y1="16" x2="32" y2="9.2" stroke="#5f6f99" stroke-width="2" stroke-linecap="round"></line><circle cx="32" cy="6" r="3.2" fill="#ff5c7a"></circle><circle cx="30.88" cy="4.88" r="0.96" fill="#fff" opacity="0.7"></circle></g><g><circle cx="11" cy="30" r="3" fill="#5f6f99"></circle><circle cx="53" cy="30" r="3" fill="#5f6f99"></circle><rect x="11" y="15" width="42" height="30" rx="13" fill="#9aa8cc"></rect><ellipse cx="20" cy="19" rx="4.5" ry="1.8" fill="#c3cde6" transform="rotate(-18 20 19)"></ellipse></g><g><g><polyline points="19,49 11,46 8,38" fill="none" stroke="#7b8bb3" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></polyline><circle cx="8" cy="38" r="3.2" fill="#9aa8cc" stroke="#5f6f99" stroke-width="0.8"></circle></g><g><polyline points="45,49 53,46 56,38" fill="none" stroke="#7b8bb3" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></polyline><circle cx="56" cy="38" r="3.2" fill="#9aa8cc" stroke="#5f6f99" stroke-width="0.8"></circle></g></g><rect x="16" y="20" width="32" height="20" rx="6" fill="#1d2440"></rect><g transform="translate(17 21) scale(1)"><path d="M6.5 9 q3 -5.5 6 0 M17.5 9 q3 -5.5 6 0" fill="none" stroke="#6ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path><path d="M11 11.5 h8 q-0.4 5 -4 5 q-3.6 0 -4 -5 z" fill="#6ff"></path><ellipse cx="4.5" cy="12.5" rx="2.2" ry="1.3" fill="#ff8fb0" opacity="0.85"></ellipse><ellipse cx="25.5" cy="12.5" rx="2.2" ry="1.3" fill="#ff8fb0" opacity="0.85"></ellipse></g></svg>
+            </div>
+            <div class="lpC-bubble">Chào bạn! Mình là Robo.</div>
+            <div class="lpC-code">
+              <div class="bar"><i></i><i></i><i></i><span style="margin-left:6px">robo.py</span></div>
+              <pre class="lp-mono"><span class="k3">ten</span> = <span class="k2">"Robo"</span>
+<span class="k1">print</span>(<span class="k2">"Xin chào,"</span>, <span class="k3">ten</span>)</pre>
+              <div class="out lp-mono">&gt; Xin chào, Robo</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // Draw each mockup at a 1200px laptop width, then scale it to fit the column.
+  function lpFit() {
+    document.querySelectorAll('.lp-frame').forEach(function (f) {
+      var p = f.parentElement, cs = getComputedStyle(p);
+      var w = p.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+      f.style.zoom = Math.min(1, w / 1200);
+    });
+  }
+  window.addEventListener('resize', lpFit);
+  lpFit();
+</script>
