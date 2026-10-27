@@ -34,7 +34,8 @@ function CrashFallback() {
   );
 }
 
-export class ErrorBoundary extends Component<{ children: ReactNode }, { failed: boolean }> {
+/** Catches a crash below it and shows the crash screen, or `fallback` where a smaller stand-in suits the place (a side menu). */
+export class ErrorBoundary extends Component<{ children: ReactNode; fallback?: ReactNode }, { failed: boolean }> {
   static contextType = ErrorLogContext;
   declare context: LogError;
   state = { failed: false };
@@ -49,6 +50,6 @@ export class ErrorBoundary extends Component<{ children: ReactNode }, { failed: 
   }
 
   render(): ReactNode {
-    return this.state.failed ? <CrashFallback /> : this.props.children;
+    return this.state.failed ? (this.props.fallback ?? <CrashFallback />) : this.props.children;
   }
 }

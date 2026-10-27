@@ -7,6 +7,7 @@ import { emptyMastery } from "../game/mastery";
 import { initialGameState } from "../game/state";
 import { hashPin } from "../storage/pin";
 import { FIXED_NOW, renderWithGame, TODAY } from "../test/renderGame";
+import { AppRoutes } from "./AppRoutes";
 import { LOCK_AFTER_MS, ParentScreen } from "./ParentScreen";
 
 // One tab that always crashes, to check that the parent frame survives it.
@@ -16,8 +17,36 @@ vi.mock("./ParentProgress", () => ({
   },
 }));
 
+// The PIN gate is the only screen that shows this text. While the flag is on, the gate throws as it renders.
+const gateCrash = vi.hoisted(() => ({ on: false }));
+vi.mock("../i18n/translate", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("../i18n/translate")>();
+  return {
+    ...actual,
+    translate: (...args: Parameters<typeof actual.translate>) => {
+      if (gateCrash.on && args[1] === "parent.pinPrompt") throw new Error("boom");
+      return actual.translate(...args);
+    },
+  };
+});
+
+// The side menu counts the concepts that need help. While the flag is on, that count throws (so does the tab that lists them).
+const countCrash = vi.hoisted(() => ({ on: false }));
+vi.mock("../game/parentStats", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("../game/parentStats")>();
+  return {
+    ...actual,
+    conceptsNeedingHelp: (...args: Parameters<typeof actual.conceptsNeedingHelp>) => {
+      if (countCrash.on) throw new Error("boom");
+      return actual.conceptsNeedingHelp(...args);
+    },
+  };
+});
+
 beforeEach(() => {
   window.location.hash = "";
+  gateCrash.on = false;
+  countCrash.on = false;
 });
 
 afterEach(() => {
@@ -55,8 +84,6 @@ describe("ParentScreen gate", () => {
     await userEvent.clear(screen.getByLabelText("Mã PIN"));
     await openWith("1234");
     expect(await screen.findByRole("tab", { name: "Tổng quan" })).toBeInTheDocument();
-    await userEvent.click(screen.getByRole("button", { name: "Khóa và quay lại" }));
-    expect(screen.getByLabelText("Mã PIN")).toBeInTheDocument();
   });
 
   test("a forgotten PIN is reset, and the area then shows when", async () => {
@@ -175,14 +202,51 @@ describe("ParentScreen frame", () => {
     expect(within(screen.getByRole("tab", { name: "Tiến độ" })).queryByText(/\d/)).not.toBeInTheDocument();
   });
 
-  test("Lock and go back locks the area and goes to the room", async () => {
+  test("Lock and go back only changes the route: the PIN form does not flash before the room", async () => {
     window.location.hash = "#/parent";
     await openArea();
     expect(screen.getByText("Tự khóa sau 5 phút không dùng")).toBeInTheDocument();
     await userEvent.click(screen.getByRole("button", { name: "Khóa và quay lại" }));
-    expect(screen.getByLabelText("Mã PIN")).toBeInTheDocument();
-    expect(screen.queryByRole("tablist")).not.toBeInTheDocument();
     expect(window.location.hash).toBe("#/");
+    // This screen alone does not follow the route; leaving it is what locks the area, so the form must not appear in between.
+    expect(screen.queryByLabelText("Mã PIN")).not.toBeInTheDocument();
+  });
+
+  test("Lock and go back leaves for the room, and the area is locked when the parent returns", async () => {
+    window.location.hash = "#/parent";
+    await renderWithGame(<AppRoutes />, { meta: { pin: await hashPin("1234", 1000) } });
+    await openWith("1234");
+    await screen.findByRole("tablist");
+    await userEvent.click(screen.getByRole("button", { name: "Khóa và quay lại" }));
+    expect(await screen.findByRole("heading", { name: "Phòng của Robo" })).toBeInTheDocument();
+    expect(window.location.hash).toBe("#/");
+    window.location.hash = "#/parent";
+    expect(await screen.findByLabelText("Mã PIN")).toBeInTheDocument();
+    expect(screen.queryByRole("tablist")).not.toBeInTheDocument();
+  });
+
+  test("the focus moves to the heading of the area once the PIN opens it", async () => {
+    await openArea();
+    expect(screen.getByRole("heading", { level: 1, name: "Tổng quan" })).toHaveFocus();
+  });
+
+  test("a PIN gate that crashes keeps the side menu", async () => {
+    vi.spyOn(console, "error").mockImplementation(() => {});
+    gateCrash.on = true;
+    await renderWithGame(<ParentScreen />, { meta: { pin: await hashPin("1234", 1000) } });
+    expect(screen.getByRole("alert")).toHaveTextContent("Robo bị trục trặc rồi.");
+    expect(screen.getByRole("navigation", { name: "Menu chính" })).toBeInTheDocument();
+  });
+
+  test("numbers that cannot be counted leave the tabs without numbers, not a crashed page", async () => {
+    vi.spyOn(console, "error").mockImplementation(() => {});
+    await renderWithGame(<ParentScreen />, { meta: { pin: await hashPin("1234", 1000) } });
+    countCrash.on = true;
+    await openWith("1234");
+    const tablist = await screen.findByRole("tablist");
+    expect(within(tablist).getAllByRole("tab")).toHaveLength(5);
+    expect(screen.getByRole("button", { name: "Khóa và quay lại" })).toBeInTheDocument();
+    expect(screen.getByRole("navigation", { name: "Khu phụ huynh" })).toBeInTheDocument();
   });
 
   test("a tab that crashes keeps the parent side menu; another tab recovers", async () => {

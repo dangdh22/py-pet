@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type ComponentProps, type FormEvent } from "react";
 import { conceptsNeedingHelp } from "../game/parentStats";
 import { useLang } from "../i18n/LangProvider";
 import type { MessageKey } from "../i18n/vi";
@@ -35,13 +35,16 @@ export function ParentScreen() {
   }
   return (
     <RailLayout nav={<SideNav current="parent" />}>
-      <ParentGate
-        autoLocked={autoLocked}
-        onOpen={() => {
-          setOpen(true);
-          setAutoLocked(false);
-        }}
-      />
+      {/* A gate that crashes shows the crash message in the main column and keeps the side menu. */}
+      <ErrorBoundary>
+        <ParentGate
+          autoLocked={autoLocked}
+          onOpen={() => {
+            setOpen(true);
+            setAutoLocked(false);
+          }}
+        />
+      </ErrorBoundary>
     </RailLayout>
   );
 }
@@ -148,6 +151,14 @@ function ParentGate({ autoLocked, onOpen }: { autoLocked: boolean; onOpen(): voi
   );
 }
 
+/** The parent menu with the numbers of the tabs that have something to look at. */
+function CountedParentNav(props: Omit<ComponentProps<typeof ParentNav>, "helpCount" | "rewardCount">) {
+  const game = useGame();
+  const helpCount = conceptsNeedingHelp(game.state).length;
+  const rewardCount = game.state.rewards.requests.filter((r) => r.status === "pending").length;
+  return <ParentNav {...props} helpCount={helpCount} rewardCount={rewardCount} />;
+}
+
 function ParentArea({ onLock }: { onLock(auto: boolean): void }) {
   const { t } = useLang();
   const game = useGame();
@@ -173,22 +184,33 @@ function ParentArea({ onLock }: { onLock(auto: boolean): void }) {
     };
   }, []);
 
-  const helpCount = conceptsNeedingHelp(game.state).length;
-  const rewardCount = game.state.rewards.requests.filter((r) => r.status === "pending").length;
+  const heading = useRef<HTMLHeadingElement>(null);
+  // The PIN form is gone once the area opens: the focus goes to the heading, so a keyboard or screen reader user lands on the area.
+  useEffect(() => {
+    heading.current?.focus();
+  }, []);
+
   const tabLabel = PARENT_TABS.find((item) => item.id === tab)?.label ?? "parent.title";
-  // Lock, then leave for the room: the area locks as the Lock button did, and the route changes.
+  // Leaving the route unmounts the area, and that locks it: the PIN form must not show up for a moment on the way out.
   const leave = () => {
-    onLock(false);
     window.location.hash = "#/";
   };
+  const navProps = { tab, onTab: setTab, onLock: leave };
 
   return (
     <RailLayout
       mode="parent"
-      nav={<ParentNav tab={tab} onTab={setTab} onLock={leave} helpCount={helpCount} rewardCount={rewardCount} />}
+      nav={
+        // If the numbers cannot be counted, the menu stays and shows no numbers.
+        <ErrorBoundary fallback={<ParentNav {...navProps} helpCount={0} rewardCount={0} />}>
+          <CountedParentNav {...navProps} />
+        </ErrorBoundary>
+      }
     >
       <main className="parent">
-        <h1>{t(tabLabel)}</h1>
+        <h1 ref={heading} tabIndex={-1}>
+          {t(tabLabel)}
+        </h1>
         {game.pinResetAt && (
           <p role="status" className="banner">
             {t("parent.resetAt", { time: formatDateTime(game.pinResetAt) })}

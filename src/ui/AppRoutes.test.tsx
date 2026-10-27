@@ -1,6 +1,7 @@
 // @vitest-environment jsdom
 import { render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import type { ComponentProps } from "react";
 import { beforeEach, describe, expect, test, vi } from "vitest";
 import { GAME_STATE_VERSION, initialGameState, type GameState } from "../game/state";
 import { RunnerClient } from "../runner/client";
@@ -20,8 +21,32 @@ import { ErrorBoundary } from "./ErrorBoundary";
 
 vi.mock("./download", () => ({ downloadText: vi.fn() }));
 
+// The screens a crash test can break: a screen listed here throws when it renders; every other test gets the real screen.
+const crashing = vi.hoisted(() => new Set<string>());
+vi.mock("./ShopScreen", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("./ShopScreen")>();
+  const { createElement } = await import("react");
+  return {
+    ShopScreen: (props: ComponentProps<typeof actual.ShopScreen>) => {
+      if (crashing.has("shop")) throw new Error("boom");
+      return createElement(actual.ShopScreen, props);
+    },
+  };
+});
+vi.mock("./RemedialScreen", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("./RemedialScreen")>();
+  const { createElement } = await import("react");
+  return {
+    RemedialScreen: (props: ComponentProps<typeof actual.RemedialScreen>) => {
+      if (crashing.has("remedial")) throw new Error("boom");
+      return createElement(actual.RemedialScreen, props);
+    },
+  };
+});
+
 beforeEach(() => {
   window.location.hash = "";
+  crashing.clear();
 });
 
 function makeClient() {
@@ -60,6 +85,22 @@ describe("AppRoutes", () => {
     await renderWithGame(<AppRoutes />);
     expect(screen.queryByRole("navigation", { name: "Menu chính" })).not.toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Về phòng" })).toBeInTheDocument();
+  });
+
+  // All 7 study routes, whether they show a screen or a message: no side menu, the way back to the room in the top bar.
+  test.each([
+    "#/lesson/t.l1",
+    "#/review",
+    "#/practice/khong-co",
+    "#/topic-test/khong-co",
+    "#/evolution/khong-co",
+    "#/remedial",
+    "#/assigned/khong-co",
+  ])("%s has the focus frame", async (hash) => {
+    window.location.hash = hash;
+    await renderWithGame(<AppRoutes />);
+    expect(screen.queryByRole("navigation", { name: "Menu chính" })).not.toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Về phòng" })).toHaveAttribute("href", "#/");
   });
 
   test.each([
@@ -112,6 +153,27 @@ describe("AppRoutes", () => {
     expect(await screen.findByRole("heading", { name: "Bản đồ học" })).toBeInTheDocument();
     window.location.hash = "#/lesson/t.l2";
     expect(await screen.findByText("Bài này chưa mở. Con học các bài trước đã nhé.")).toBeInTheDocument();
+  });
+});
+
+describe("a screen that crashes keeps its frame", () => {
+  test("a screen with the side menu: the crash message and the side menu", async () => {
+    vi.spyOn(console, "error").mockImplementation(() => {});
+    crashing.add("shop");
+    window.location.hash = "#/shop";
+    await renderWithGame(<AppRoutes />);
+    expect(screen.getByRole("alert")).toHaveTextContent("Robo bị trục trặc rồi.");
+    expect(screen.getByRole("navigation", { name: "Menu chính" })).toBeInTheDocument();
+  });
+
+  test("a study screen: the crash message and the way back to the room", async () => {
+    vi.spyOn(console, "error").mockImplementation(() => {});
+    crashing.add("remedial");
+    window.location.hash = "#/remedial";
+    await renderWithGame(<AppRoutes />);
+    expect(screen.getByRole("alert")).toHaveTextContent("Robo bị trục trặc rồi.");
+    expect(screen.getByRole("link", { name: "Về phòng" })).toBeInTheDocument();
+    expect(screen.queryByRole("navigation", { name: "Menu chính" })).not.toBeInTheDocument();
   });
 });
 
