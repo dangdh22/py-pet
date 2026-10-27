@@ -95,7 +95,7 @@ describe("OnboardingScreen", () => {
 
   test("the first control of each step has the focus", async () => {
     renderOnboarding();
-    expect(screen.getByRole("button", { name: "Tiếng Việt" })).toHaveFocus();
+    expect(screen.getByRole("button", { name: "Tiếp" })).toHaveFocus();
     await next();
     expect(screen.getByLabelText(NAME)).toHaveFocus();
     await userEvent.type(screen.getByLabelText(NAME), "An");
@@ -131,12 +131,23 @@ describe("OnboardingScreen", () => {
     expect(onCreated).not.toHaveBeenCalled();
   });
 
-  test("Enter in the name field goes on to step 3", async () => {
+  test("Enter on step 1 goes on to step 2", async () => {
     renderOnboarding();
-    await next();
+    await userEvent.keyboard("{Enter}");
+    expect(screen.getByText("Bước 2/4")).toBeInTheDocument();
+    expect(screen.getByLabelText(NAME)).toHaveFocus();
+  });
+
+  test("Enter in the name field goes on to step 3, and Enter there to step 4, without saving", async () => {
+    const { onCreated } = renderOnboarding();
+    await userEvent.keyboard("{Enter}");
     await userEvent.type(screen.getByLabelText(NAME), "An{Enter}");
     expect(screen.getByText("Bước 3/4")).toBeInTheDocument();
     expect(screen.getByLabelText(ROBOT)).toBeInTheDocument();
+    expect(onCreated).not.toHaveBeenCalled();
+    await userEvent.keyboard("{Enter}");
+    expect(screen.getByText("Bước 4/4")).toBeInTheDocument();
+    expect(onCreated).not.toHaveBeenCalled();
   });
 
   test("Enter in the last step saves the profile", async () => {

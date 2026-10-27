@@ -33,12 +33,13 @@ export function OnboardingScreen({ store, clock, onCreated, onBack, requestPersi
   const [pinAgain, setPinAgain] = useState("");
   const [error, setError] = useState<MessageKey | null>(null);
   const [busy, setBusy] = useState(false);
-  const languageButton = useRef<HTMLButtonElement>(null);
+  const nextButton = useRef<HTMLButtonElement>(null);
   const firstInput = useRef<HTMLInputElement>(null);
 
-  // A new step puts the focus on its first control, so the child lands on the new question and Enter keeps working.
+  // A new step puts the focus on its first control, so the child lands on the new question and Enter goes on. Step 1 has no
+  // text field, so its focus goes to "Next" (Enter submits it); the language buttons stay 1 Tab away.
   useEffect(() => {
-    (step === 1 ? languageButton : firstInput).current?.focus();
+    (step === 1 ? nextButton : firstInput).current?.focus();
   }, [step]);
 
   function goTo(target: number) {
@@ -112,7 +113,7 @@ export function OnboardingScreen({ store, clock, onCreated, onBack, requestPersi
                   {t("onboarding.language")}
                 </p>
                 <div role="group" aria-labelledby="ob-language-question" className="lang-switch ob-lang">
-                  <button ref={languageButton} type="button" aria-pressed={uiLang === "vi"} onClick={() => setUiLang("vi")}>
+                  <button type="button" aria-pressed={uiLang === "vi"} onClick={() => setUiLang("vi")}>
                     {t("onboarding.langVi")}
                   </button>
                   <button type="button" aria-pressed={uiLang === "en"} onClick={() => setUiLang("en")}>
@@ -183,7 +184,7 @@ export function OnboardingScreen({ store, clock, onCreated, onBack, requestPersi
                   {t("onboarding.back")}
                 </button>
               )}
-              <button className="primary ob-next" type="submit" disabled={busy}>
+              <button ref={nextButton} className="primary ob-next" type="submit" disabled={busy}>
                 {t(step < STEPS ? "onboarding.next" : "onboarding.start")}
                 {step < STEPS && <Icon name="next" />}
               </button>
