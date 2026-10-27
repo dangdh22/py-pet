@@ -1,4 +1,4 @@
-/* The child pages restyled in R3 (UI revamp spec, section 7): the page frame and what the pages share, then the shop. */
+/* The child pages restyled in R3 (UI revamp spec, section 7): the page frame and what the pages share, then the shop and the achievement book. */
 
 /* The page frame: the `main` of a child page, as wide as the map. */
 .page {
@@ -198,3 +198,181 @@
   padding-left: 20px;
 }
 .shop .card p { margin: 10px 0 0; }
+
+/* The achievement book: the 4 forms of Robo, the badges, then 2 counts. */
+
+/* The forms: white cards, 2 on a phone and 4 on a wider screen. The picture stands on the floor of its stage. */
+.forms {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+@media (min-width: 760px) {
+  .forms { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12px 10px 10px;
+  border: var(--border-w) solid var(--ink);
+  background: var(--surface);
+  box-shadow: var(--shadow-card);
+  text-align: center;
+}
+/* The form Robo has now: an inner frame in the primary color; the stage line says it in words too. */
+.form-current {
+  outline: 3px solid var(--primary);
+  outline-offset: -1px;
+}
+.form-stage {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  width: 100%;
+  height: 120px;
+  margin-bottom: 8px;
+  border: var(--border-w) solid var(--ink);
+  background: color-mix(in srgb, var(--primary) 12%, var(--surface));
+}
+.form-name {
+  font-size: 15px;
+  font-weight: 700;
+}
+.form small {
+  display: block;
+  color: var(--muted);
+  font-size: 12px;
+}
+/* A form not reached: a grey shape with a "?" on a striped stage, and no name. */
+.form-locked .form-name {
+  color: var(--muted);
+  font-weight: 400;
+}
+.form-locked .form-stage {
+  background: repeating-linear-gradient(
+    45deg,
+    var(--surface) 0 8px,
+    color-mix(in srgb, var(--ink) 10%, var(--surface)) 8px 16px
+  );
+}
+.form-locked .form-stage svg {
+  filter: grayscale(1) brightness(0.6);
+  opacity: 0.55;
+}
+.form-locked .form-stage::after {
+  content: "?";
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding-top: 12px;
+  color: var(--surface);
+  font: 800 2.6rem/1 var(--font-ui);
+  -webkit-text-stroke: 1.5px var(--ink);
+  paint-order: stroke fill;
+}
+
+/* The badges: square cards on a grid that fills the row. */
+.badges {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.badge {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 6px;
+  border: var(--border-w) solid var(--ink);
+  background: var(--surface);
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.3;
+  text-align: center;
+}
+/* The mark: a number, a few letters or an icon on the tint of the badge's group. */
+.badge-mark {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  margin-bottom: 6px;
+  border: var(--border-w) solid var(--ink);
+  font-size: 13px;
+  font-weight: 800;
+}
+.badge-lessons .badge-mark { background: var(--mint); }
+.badge-streak .badge-mark { background: var(--chip-streak); }
+.badge-practice .badge-mark { background: var(--chip-xu); }
+.badge-test .badge-mark { background: var(--pink); }
+.badge-concepts .badge-mark { background: color-mix(in srgb, var(--primary) 20%, var(--surface)); }
+.badge-evolution .badge-mark { background: var(--yellow); }
+/* A badge not earned: grey, with a lock on the corner of its mark and "Not yet" for the screen reader. */
+.badge-locked {
+  border-color: var(--muted);
+  background: var(--bg);
+  color: var(--muted);
+}
+.badge-locked .badge-mark {
+  border-color: var(--muted);
+  background: var(--surface);
+  color: var(--muted);
+}
+.badge-lock {
+  position: absolute;
+  right: -8px;
+  bottom: -8px;
+  box-sizing: content-box;
+  padding: 2px;
+  border: var(--border-w) solid var(--muted);
+  background: var(--surface);
+  color: var(--muted);
+}
+/* The note of an earned badge, with the date: it floats under the badge while it has the pointer or the focus. Only its opacity
+   hides it, so it stays in the accessibility tree, as the captions of the narrow side menu do. */
+.badge-day {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  left: 0;
+  z-index: 20;
+  padding: 4px 6px;
+  background: var(--ink);
+  color: var(--surface);
+  font-size: 12px;
+  font-weight: 600;
+  opacity: 0;
+  pointer-events: none;
+}
+.badge:hover > .badge-day,
+.badge:focus-visible > .badge-day { opacity: 1; }
+
+/* The 2 numbers under the badges. */
+.concept-counts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 22px;
+}
+.concept-counts .card {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 12px;
+}
+.concept-counts .big {
+  font-size: 34px;
+  font-weight: 800;
+  line-height: 1;
+}
