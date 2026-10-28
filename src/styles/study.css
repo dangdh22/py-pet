@@ -34,6 +34,26 @@
 }
 .study-notice .card > :last-child { margin-bottom: 0; }
 
+/* The card that takes the place of a broken item (`ItemBoundary`): like the card of a message above, 560 px at most and in the middle,
+   with Robo, the line and the skip button one under the other. It sits where the item would, so it has no top margin. The ink wins over
+   the red of its `role="alert"`, as in every card. */
+.item-broken {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  max-width: 560px;
+  margin: 0 auto;
+  text-align: center;
+}
+.item-broken[role="alert"] { color: var(--ink); }
+.item-broken p {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 700;
+  line-height: 1.45;
+}
+
 /* The result of a lesson, a session or a test: 1 card in the middle, with everything centered. The evolution test uses the same card
    for a pass (Robo 200 px) and for a fail (the concepts to review). */
 .result-page { padding: 0 24px 24px; }

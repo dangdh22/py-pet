@@ -67,6 +67,27 @@ button:disabled { opacity: 0.45; box-shadow: none; cursor: not-allowed; }
 /* A pressed toggle (language switches) is the inverted button: the surface color on ink. */
 button[aria-pressed="true"] { background: var(--ink); color: var(--surface); }
 
+/* A button that looks like a link: no frame, no shadow and no sliding, the primary color with an underline. */
+.link-button,
+.link-button:hover:not(:disabled),
+.link-button:active:not(:disabled) {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  transform: none;
+}
+.link-button {
+  justify-self: start;
+  color: var(--primary);
+  text-decoration: underline;
+}
+/* A button that destroys something (erase the data): the danger color with white text. */
+button.danger {
+  background: var(--danger);
+  color: var(--on-primary);
+}
+
 /* Keyboard focus: a 3 px ring that stays visible next to the 2 px border. */
 :focus-visible { outline: 3px solid var(--primary); outline-offset: 2px; }
 
@@ -83,6 +104,32 @@ select {
 input[aria-invalid="true"],
 textarea[aria-invalid="true"],
 select[aria-invalid="true"] { border-color: var(--danger); }
+
+/* The file picker: the box of the field is dropped and its button looks like a small button, so it does not sit in a frame inside a frame.
+   It stays after the generic field rule above (same specificity), so the dropped box wins. */
+input[type="file"] {
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+input[type="file"]::file-selector-button {
+  margin-right: 10px;
+  padding: 5px 10px;
+  border: var(--border-w) solid var(--ink);
+  border-radius: 0;
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow: var(--shadow-sm);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.08s ease-out, box-shadow 0.08s ease-out;
+}
+/* The 3 states of a `.small` button: hover lifts by 1 px, press sinks by 2 px, the keyboard focus is a 3 px ring. */
+input[type="file"]:not(:disabled)::file-selector-button:hover { transform: translate(-1px, -1px); box-shadow: var(--shadow); }
+input[type="file"]:not(:disabled)::file-selector-button:active { transform: translate(2px, 2px); box-shadow: var(--shadow-press); }
+input[type="file"]:focus-visible { outline: 3px solid var(--primary); outline-offset: 2px; }
 
 /* Chip: a small boxed label with an icon (streak, coins, battery). */
 .chip {
@@ -130,6 +177,47 @@ select[aria-invalid="true"] { border-color: var(--danger); }
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
+
+/* The title of a group inside a page: a small line of capitals. */
+.section-title {
+  margin: 22px 0 10px;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* A table: 2 px ink lines round every cell, and the header row sits on the cream of the page. */
+.table { border-collapse: collapse; }
+/* The table scrolls inside its own box on a phone, so the page itself never scrolls sideways (spec 6.4). */
+.table-scroll { overflow-x: auto; }
+.table th,
+.table td {
+  padding: 8px 12px;
+  border: var(--border-w) solid var(--ink);
+  text-align: left;
+}
+.table th {
+  background: var(--bg);
+  font-weight: 700;
+}
+
+/* The form that asks for the parent's PIN: a prompt, the field with its label, a button and a line for a wrong PIN. */
+.pin-form {
+  display: grid;
+  gap: 12px;
+  width: 100%;
+  max-width: 360px;
+}
+.pin-form p { margin: 0; }
+.pin-form label {
+  display: grid;
+  gap: 4px;
+  font-weight: 600;
+}
+.pin-form input { width: 100%; }
+.pin-form button { justify-self: start; }
 
 /* A row of 16 px squares (daily and weekly goals); a filled one has the class `on`. */
 .squares { display: inline-flex; gap: 4px; }
@@ -216,4 +304,7 @@ select[aria-invalid="true"] { border-color: var(--danger); }
   button:active:not(:disabled),
   .button:hover,
   .button:active { transform: none; }
+  input[type="file"]::file-selector-button { transition: none; }
+  input[type="file"]:not(:disabled)::file-selector-button:hover,
+  input[type="file"]:not(:disabled)::file-selector-button:active { transform: none; }
 }

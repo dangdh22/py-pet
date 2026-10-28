@@ -55,22 +55,6 @@
   background: var(--chip-xu);
 }
 
-/* A button that looks like a link: no frame, no shadow and no sliding, the primary color with an underline. */
-.link-button,
-.link-button:hover:not(:disabled),
-.link-button:active:not(:disabled) {
-  padding: 0;
-  border: 0;
-  background: transparent;
-  box-shadow: none;
-  transform: none;
-}
-.link-button {
-  justify-self: start;
-  color: var(--primary);
-  text-decoration: underline;
-}
-
 /* The overview: alert cards, then the chart and the 4 figures. */
 .parent-overview > .section-title:first-child { margin-top: 0; }
 .parent-overview > p { margin: 0 0 18px; }
@@ -456,10 +440,6 @@
   margin-top: 0;
   padding-top: 0;
   border-top: 0;
-}
-button.danger {
-  background: var(--danger);
-  color: var(--on-primary);
 }
 .error-log {
   display: grid;

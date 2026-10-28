@@ -65,6 +65,6 @@
   font-weight: 600;
 }
 
-/* Every alert is red, except where a rule with a stronger selector gives it the ink (a card, a panel). Keep this the last rule of this
-   sheet, so it stays after the ink-colored `.banner` and every other rule of the same specificity. */
+/* Every alert is red, except where a rule with a stronger selector gives it the ink (a card, a panel). Keep this sheet imported after
+   `base.css` (the ink-colored `.banner`) and keep this the last rule of this sheet. */
 [role="alert"] { color: var(--danger); }

@@ -59,8 +59,10 @@ describe("design tokens", () => {
 });
 
 const RAW_COLOR = /#[0-9a-f]{3,8}\b|\b(?:rgba?|hsla?)\(/i;
-// The room scene is a drawing: its palette (`--wall`, `--floor`...) is declared in `room.css`, as variables, with raw colors.
-const COLOR_VARIABLE = /^\s*--[a-z-]+:\s*#[0-9a-f]{3,8};/i;
+// The room scene is a drawing: its palette is declared in `room.css`, as variables, with raw colors. The line may only declare 1 of these
+// 11 names, and nothing but a comment may follow it.
+const SCENE_PALETTE = "wall|wall-stripe|baseboard|floor|floor-seam|sky|sky-low|sea|sea-deep|sand|scene-ink";
+const COLOR_VARIABLE = new RegExp(`^\\s*--(?:${SCENE_PALETTE}):\\s*#[0-9a-f]{3,8};\\s*(?:\\/\\*.*)?$`, "i");
 // The only round shape: the glow behind the new form in the evolution show (a sheet and a selector).
 const ROUND_SHAPES = [["evolution.css", ".evo-halo"]];
 
@@ -80,7 +82,8 @@ describe.each(cssFiles().filter((file) => basename(file) !== "tokens.css"))("%s"
     expect(round.filter(([name, selector]) => !ROUND_SHAPES.some(([sheet, allowed]) => sheet === name && allowed === selector))).toEqual([]);
   });
 
-  // The soft grey line is 1 token. A sheet that mixes it again, or keeps its own copy, would drift from the others.
+  // The soft grey line is 1 token. This forbids the old `--map-soft` and the 14% and 15% mixes of ink on surface that `--line-soft`
+  // replaced; it does not catch another mix with a different share.
   test("reads the soft grey line from --line-soft", () => {
     expect(css).not.toContain("--map-soft");
     expect(css).not.toMatch(/color-mix\(\s*in srgb,\s*var\(--ink\)\s*1[45]%,\s*var\(--surface\)\s*\)/);

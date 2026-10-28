@@ -1,4 +1,5 @@
-/* Page frames and navigation (UI revamp spec, section 6): the logo, the side menu, the rail layout, the focus layout and the landing page. */
+/* Page frames and navigation (UI revamp spec, section 6): the logo, the side menu, the rail layout, the focus layout, the landing page and
+   the frame of the child pages. */
 
 /* Logo: the yellow "Py" box and the app name. */
 .logo {
@@ -785,4 +786,67 @@
 @media (max-width: 899px) {
   .room-page { padding: 16px 20px 32px; }
   .room-body { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* The page frame: the `main` of a child page, as wide as the map. */
+.page {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 24px 32px 40px;
+}
+@media (max-width: 899px) {
+  .page { padding: 16px 20px 32px; }
+}
+
+/* The head of a page: the title on the left, a chip or a line about the child on the right. */
+.page-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+  margin-bottom: 18px;
+}
+.page-head h1 {
+  margin: 0;
+  font-size: 30px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+.page-head-side {
+  display: flex;
+  align-items: center;
+  margin: 0;
+  gap: 10px;
+  color: var(--muted);
+  font-size: 14px;
+}
+/* A chip keeps its own ink text, not the grey of the line around it. */
+.page-head-side .chip { color: var(--ink); }
+
+/* Square tabs on a rule: the chosen tab is white with an ink border and sits on top of the rule. On a phone the labels wrap inside their tabs. */
+.page-tabs {
+  display: flex;
+  margin-bottom: 18px;
+  border-bottom: var(--border-w) solid var(--ink);
+}
+.page-tabs [role="tab"] {
+  padding: 10px 16px;
+  border: var(--border-w) solid transparent;
+  border-bottom: 0;
+  margin-bottom: calc(-1 * var(--border-w));
+  background: transparent;
+  box-shadow: none;
+  font-size: 15px;
+  font-weight: 700;
+}
+.page-tabs [role="tab"]:hover:not(:disabled),
+.page-tabs [role="tab"]:active:not(:disabled) {
+  transform: none;
+  box-shadow: none;
+}
+.page-tabs [role="tab"]:hover:not(:disabled, [aria-selected="true"]) { background: var(--surface); }
+.page-tabs [role="tab"][aria-selected="true"] {
+  border-color: var(--ink);
+  background: var(--surface);
 }

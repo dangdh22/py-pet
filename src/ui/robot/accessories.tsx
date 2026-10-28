@@ -402,7 +402,7 @@ export function ItemIcon({ id, size = 40 }: { id: string; size?: number }) {
   const content = art ? <g data-accessory={id}>{art.icon}</g> : decorIcon(id);
   if (!content) return null;
   return (
-    <svg className="item-icon" aria-hidden="true" focusable="false" width={size} height={size} viewBox="0 0 40 40">
+    <svg aria-hidden="true" focusable="false" width={size} height={size} viewBox="0 0 40 40">
       {content}
     </svg>
   );

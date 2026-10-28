@@ -49,15 +49,15 @@ export function AchievementsScreen() {
       <PageHead title={t("achievements.title")} />
       <section>
         <h2 className="section-title">{t("achievements.forms", { name: profile.robotName })}</h2>
-        <ol className="forms">
+        <ol className="robo-forms">
           {forms.map((stage) => {
             const reached = stage <= state.pet.stage;
             const current = stage === currentForm;
-            const classes = ["form", reached ? "form-reached" : "form-locked", current ? "form-current" : ""];
+            const classes = ["robo-form", reached ? "robo-form-reached" : "robo-form-locked", current ? "robo-form-current" : ""];
             return (
               <li key={stage} data-form={stage} className={classes.filter(Boolean).join(" ")}>
                 {/* The name below says it all; the picture (and its "?") is left out of the screen reader. */}
-                <span className="form-stage" aria-hidden="true">
+                <span className="robo-form-stage" aria-hidden="true">
                   <Robot
                     form={formOf(stage)}
                     mood={reached ? "happy" : "neutral"}
@@ -65,7 +65,7 @@ export function AchievementsScreen() {
                     graduated={reached && stage === FORM_COUNT && state.pet.stage > FORM_COUNT}
                   />
                 </span>
-                <span className="form-name">{reached ? t(formKey(stage)) : t("achievements.locked")}</span>
+                <span className="robo-form-name">{reached ? t(formKey(stage)) : t("achievements.locked")}</span>
                 <small>{t(current ? "achievements.formCurrent" : "achievements.formStage", { n: stage })}</small>
               </li>
             );
@@ -74,7 +74,7 @@ export function AchievementsScreen() {
       </section>
       <section>
         <h2 className="section-title">{t("achievements.badgesCount", { n: earnedCount, total: BADGES.length })}</h2>
-        <ul className="badges">
+        <ul className="ach-badges">
           {BADGES.map((id) => {
             const day = state.badges[id];
             const { mark, group } = BADGE_LOOK[id];
@@ -82,16 +82,16 @@ export function AchievementsScreen() {
               // An earned badge takes the focus so the keyboard can show the date of the note, as the pointer does.
               <li
                 key={id}
-                className={`badge badge-${group} ${day ? "badge-earned" : "badge-locked"}`}
+                className={`ach-badge ach-badge-${group} ${day ? "ach-badge-earned" : "ach-badge-locked"}`}
                 tabIndex={day ? 0 : undefined}
               >
-                <span className="badge-mark" aria-hidden="true">
+                <span className="ach-badge-mark" aria-hidden="true">
                   {"text" in mark ? mark.text : <Icon name={mark.icon} size={22} />}
-                  {!day && <Icon name="lock" size={12} className="badge-lock" />}
+                  {!day && <Icon name="lock" size={12} className="ach-badge-lock" />}
                 </span>
-                <span className="badge-name">{t(badgeKey(id))}</span>
+                <span className="ach-badge-name">{t(badgeKey(id))}</span>
                 {day ? (
-                  <span className="badge-day">{t("achievements.earned", { day })}</span>
+                  <span className="ach-badge-day">{t("achievements.earned", { day })}</span>
                 ) : (
                   <span className="sr-only">{t("achievements.locked")}</span>
                 )}
@@ -102,11 +102,11 @@ export function AchievementsScreen() {
       </section>
       <div className="concept-counts">
         <div className="card">
-          <span className="big">{masteredConcepts(state)}</span>
+          <span className="concept-count-number">{masteredConcepts(state)}</span>
           {t("achievements.masteredLabel")}
         </div>
         <div className="card">
-          <span className="big">{practisingConcepts(state)}</span>
+          <span className="concept-count-number">{practisingConcepts(state)}</span>
           {t("achievements.practisingLabel")}
         </div>
       </div>

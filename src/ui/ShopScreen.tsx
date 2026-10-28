@@ -228,7 +228,7 @@ function ShopRow({ item, state }: { item: ShopItem; state: GameState }) {
     >
       <span className="shop-name">{name}</span>
       {detail && <span className="shop-detail">{detail}</span>}
-      {worn && <span className="tag">{t("shop.wearing")}</span>}
+      {worn && <span className="shop-tag">{t("shop.wearing")}</span>}
       {consumable && <span className="shop-have">{t("shop.have", { n: count })}</span>}
       {buyReason && (
         <p className="shop-reason" id={buyReasonId}>

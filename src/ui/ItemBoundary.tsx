@@ -6,7 +6,7 @@ import { Robot } from "./Robot";
 function BrokenItem({ onSkip }: { onSkip(): void }) {
   const { t } = useLang();
   return (
-    <div role="alert" className="item-broken">
+    <div role="alert" className="card item-broken">
       <Robot mood="sad" size={64} />
       <p>{t("item.broken")}</p>
       <button className="primary" onClick={onSkip}>

@@ -28,7 +28,8 @@
   --line-soft: color-mix(in srgb, var(--ink) 14%, var(--surface));
   /* The divider between the groups of the side bar. */
   --divider: #f0eadb;
-  /* The head strip of a box in the study screens (ink text on it: 16.0:1). */
+  /* The head strip of a box in the study screens (ink text on it: 16.0:1). `src/ui/editorTheme.ts` uses the same `#f6efdc` for the
+     editor gutter, so a change is made in both. */
   --box-head: #f6efdc;
 
   /* Type (spec 5.2). The font files come from public/fonts.css. */
