@@ -1,1 +1,60 @@
 /* The error screens (UI revamp spec, section 8): a crash, a second tab, a profile that did not load. */
+
+/* A whole page: the browser is not supported, another tab owns the app, the profile did not load. */
+.error-page {
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+  padding: 24px;
+  background: var(--bg);
+}
+
+/* A crash inside a frame: the side menu stays, the card takes the main column. */
+.error-panel {
+  display: grid;
+  place-items: center;
+  padding: 48px 24px;
+}
+
+/* The ink color wins over the red `[role="alert"]` of the page or the panel around the card. */
+.error-card {
+  display: grid;
+  justify-items: center;
+  gap: 12px;
+  width: 100%;
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 28px 24px;
+  color: var(--ink);
+  text-align: center;
+}
+.error-card h1,
+.error-card h2 {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+.error-card p {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.5;
+}
+/* A failed export inside the card keeps the red of an alert. */
+.error-card p[role="alert"] {
+  color: var(--danger);
+  font-weight: 600;
+}
+
+.error-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+/* The note of a failed raw export (load failure screen) takes its own row under the buttons. */
+.error-card .error-actions p {
+  flex: 1 0 100%;
+  color: var(--danger);
+  font-weight: 600;
+}

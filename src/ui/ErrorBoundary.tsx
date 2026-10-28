@@ -2,34 +2,38 @@ import { Component, useState, type ReactNode } from "react";
 import { useLang } from "../i18n/LangProvider";
 import { ErrorLogContext, type LogError } from "./contexts";
 import { downloadText } from "./download";
+import { ErrorCard } from "./ErrorCard";
 import { useOptionalGame } from "./GameProvider";
-import { Robot } from "./Robot";
 
-function CrashFallback() {
+/** The crash message as an error card; `level` 2 where the place already has its own `h1` (a section of the parent area). */
+export function CrashFallback({ level = 1 }: { level?: 1 | 2 }) {
   const { t } = useLang();
   const game = useOptionalGame();
   const [exportFailed, setExportFailed] = useState(false);
   return (
-    <div role="alert" className="crash">
-      <Robot mood="sad" size={80} />
-      <p>{t("app.crash")}</p>
-      <button onClick={() => window.location.reload()}>{t("app.reload")}</button>
-      {game && (
-        <button
-          onClick={async () => {
-            try {
-              const { fileName, text } = await game.exportBackup();
-              downloadText(fileName, text);
-              setExportFailed(false);
-            } catch {
-              setExportFailed(true);
-            }
-          }}
-        >
-          {t("backup.export")}
-        </button>
-      )}
-      {exportFailed && <p role="alert">{t("backup.exportFailed")}</p>}
+    <div role="alert" className="error-panel">
+      <ErrorCard title={t("app.crashTitle")} level={level}>
+        <p>{t("app.crash")}</p>
+        <div className="error-actions">
+          <button onClick={() => window.location.reload()}>{t("app.reload")}</button>
+          {game && (
+            <button
+              onClick={async () => {
+                try {
+                  const { fileName, text } = await game.exportBackup();
+                  downloadText(fileName, text);
+                  setExportFailed(false);
+                } catch {
+                  setExportFailed(true);
+                }
+              }}
+            >
+              {t("backup.export")}
+            </button>
+          )}
+        </div>
+        {exportFailed && <p role="alert">{t("backup.exportFailed")}</p>}
+      </ErrorCard>
     </div>
   );
 }

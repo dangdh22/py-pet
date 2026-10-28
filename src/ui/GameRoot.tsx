@@ -6,9 +6,9 @@ import type { GameStore, LoadedGame } from "../storage/types";
 import { AppRoutes } from "./AppRoutes";
 import { GameProvider } from "./GameProvider";
 import { downloadText } from "./download";
+import { ErrorCard } from "./ErrorCard";
 import { LandingScreen } from "./LandingScreen";
 import { OnboardingScreen } from "./OnboardingScreen";
-import { Robot } from "./Robot";
 
 export function GameRoot({ store, clock, onReplaced }: { store: GameStore; clock: () => Date; onReplaced(): void }) {
   const { t } = useLang();
@@ -49,11 +49,14 @@ export function GameRoot({ store, clock, onReplaced }: { store: GameStore; clock
 
   if (loadProblem !== null) {
     return (
-      <main className="crash" role="alert">
-        <Robot mood="sad" size={80} />
-        <p>{t(loadProblem === "newer-version" ? "app.newerData" : "app.crash")}</p>
-        <button onClick={() => window.location.reload()}>{t("app.reload")}</button>
-        {loadProblem !== "newer-version" && <RawExport store={store} clock={clock} />}
+      <main className="error-page" role="alert">
+        <ErrorCard title={t("app.loadFailedTitle")}>
+          <p>{t(loadProblem === "newer-version" ? "app.newerData" : "app.crash")}</p>
+          <div className="error-actions">
+            <button onClick={() => window.location.reload()}>{t("app.reload")}</button>
+            {loadProblem !== "newer-version" && <RawExport store={store} clock={clock} />}
+          </div>
+        </ErrorCard>
       </main>
     );
   }

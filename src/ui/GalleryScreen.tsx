@@ -57,7 +57,7 @@ const SMALL_PHONE = 280;
 const cell: CSSProperties = {
   padding: 6,
   background: "var(--surface)",
-  border: "1px solid var(--border)",
+  border: "var(--border-w) solid var(--ink)",
   textAlign: "center",
   verticalAlign: "bottom",
 };
@@ -69,7 +69,7 @@ const floor: CSSProperties = {
   gap: 12,
   padding: 8,
   background: "var(--surface)",
-  borderBottom: "3px solid var(--border)",
+  borderBottom: "var(--border-w) solid var(--ink)",
 };
 const figure: CSSProperties = { margin: 0, textAlign: "center" };
 const caption: CSSProperties = { fontSize: "0.75rem", color: "var(--muted)" };
@@ -117,8 +117,8 @@ function EvolutionShows() {
 
 export function GalleryScreen() {
   return (
-    <main style={{ padding: 20 }}>
-      <h1>Robo gallery (dev only)</h1>
+    <main style={{ padding: "24px 32px" }}>
+      <h1 style={{ fontSize: 30, fontWeight: 800 }}>Robo gallery (dev only)</h1>
       <EvolutionShows />
       <section>
         <h2>Forms × faces, 112 px</h2>

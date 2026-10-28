@@ -296,6 +296,9 @@ describe("ParentScreen frame", () => {
     await openArea();
     await userEvent.click(screen.getByRole("tab", { name: "Tiến độ" }));
     expect(screen.getByRole("alert")).toHaveTextContent("Robo bị trục trặc rồi.");
+    // The name of the section stays the 1 title of the page; the card inside the panel is an h2.
+    expect(screen.getAllByRole("heading", { level: 1 }).map((h) => h.textContent)).toEqual(["Tiến độ"]);
+    expect(screen.getByRole("heading", { level: 2, name: "Robo gặp sự cố" })).toBeInTheDocument();
     expect(screen.getByRole("navigation", { name: "Khu phụ huynh" })).toBeInTheDocument();
     expect(screen.getByRole("tablist")).toBeInTheDocument();
     await userEvent.click(screen.getByRole("tab", { name: "Tổng quan" }));

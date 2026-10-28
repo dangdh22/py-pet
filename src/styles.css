@@ -8,7 +8,6 @@
 @import "./styles/errors.css";
 
 .app-loading { padding: 40px 20px; text-align: center; }
-.unsupported h1 { font-size: 1.4rem; }
 
 .lesson-list a { color: var(--primary); font-size: 1.1rem; }
 .badge-done { margin-left: 8px; color: var(--success); font-weight: 600; }

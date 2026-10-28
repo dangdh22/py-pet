@@ -1,12 +1,13 @@
 import { useLang } from "../i18n/LangProvider";
-import { Robot } from "./Robot";
+import { ErrorCard } from "./ErrorCard";
 
 export function SecondTabScreen() {
   const { t } = useLang();
   return (
-    <main className="crash">
-      <Robot mood="neutral" size={80} />
-      <p>{t("app.otherTab")}</p>
+    <main className="error-page">
+      <ErrorCard title={t("app.otherTabTitle")}>
+        <p>{t("app.otherTab")}</p>
+      </ErrorCard>
     </main>
   );
 }

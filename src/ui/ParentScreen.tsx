@@ -3,7 +3,7 @@ import { conceptsNeedingHelp } from "../game/parentStats";
 import { useLang } from "../i18n/LangProvider";
 import type { MessageKey } from "../i18n/vi";
 import { isValidPin } from "../storage/pin";
-import { ErrorBoundary } from "./ErrorBoundary";
+import { CrashFallback, ErrorBoundary } from "./ErrorBoundary";
 import { formatDateTime } from "./format";
 import { useGame } from "./GameProvider";
 import { Icon } from "./icons";
@@ -249,8 +249,8 @@ function ParentArea({ onLock }: { onLock(auto: boolean): void }) {
           </p>
         )}
         <div role="tabpanel" id={PARENT_PANEL_ID} aria-labelledby={parentTabId(tab)}>
-          {/* A tab that crashes shows the crash message here and keeps the side menu; choosing another tab starts clean. */}
-          <ErrorBoundary key={tab}>
+          {/* A tab that crashes shows the crash message here and keeps the side menu; choosing another tab starts clean. The title of the section stays the h1, so the card is an h2. */}
+          <ErrorBoundary key={tab} fallback={<CrashFallback level={2} />}>
             {tab === "overview" && <ParentOverview onShow={show} />}
             {tab === "help" && <ParentHelp />}
             {tab === "progress" && <ParentProgress />}
