@@ -169,3 +169,30 @@ describe("page classes", () => {
     expect(unused).toEqual([]);
   });
 });
+
+// WCAG 1.4.13 (content on hover or focus): a floating note must go away with Escape, with no move of the pointer or the focus. The hook
+// `useEscapeHidesTips` puts `data-tips-hidden` on the root. Every selector that shows a note starts with `:root:not([data-tips-hidden])`,
+// so the base rule of the note (`opacity: 0`) applies again while the attribute is there.
+describe("the floating notes", () => {
+  const TIPS_SHOWN = ":root:not([data-tips-hidden])";
+
+  test.each([".side-nav-label", ".ach-badge-day", ".map-node-caption"])(
+    "the rule that shows %s starts with :root:not([data-tips-hidden])",
+    (name) => {
+      // A whole name: `.map-node-caption` is not `.map-node-caption-x`.
+      const named = new RegExp(`${escapeRegExp(name)}(?![\\w-])`);
+      const shows = cssFiles().flatMap((file) =>
+        rules(read(file))
+          .filter((rule) => /(?<![\w-])opacity:\s*1\s*(?:;|$)/.test(rule.body) && named.test(rule.selector))
+          .map((rule) => ({ file: sheetName(file), selectors: selectorList(rule.selector) })),
+      );
+      // A guard that finds no rule would pass for nothing: the note has a rule that shows it.
+      expect(shows.length).toBeGreaterThan(0);
+      // Every selector of the list counts (the `:hover` one and the `:focus-visible` one), inside `@media` or not.
+      const bare = shows.flatMap(({ file, selectors }) =>
+        selectors.filter((selector) => !selector.startsWith(TIPS_SHOWN)).map((selector) => `${file}: ${selector}`),
+      );
+      expect(bare).toEqual([]);
+    },
+  );
+});

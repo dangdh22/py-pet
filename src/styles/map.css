@@ -259,8 +259,9 @@
 /* The corners of the diamond reach out 7 px further than its frame. */
 .map-node-review > .map-node-flag { bottom: calc(100% + 18px); }
 .map-node-review > .map-node-caption { top: calc(100% + 18px); }
-.map-node:hover > .map-node-caption,
-.map-node:focus-visible > .map-node-caption { opacity: 1; }
+/* The caption shows on hover or focus; Escape hides it (data-tips-hidden on the root, from useEscapeHidesTips). */
+:root:not([data-tips-hidden]) .map-node:hover > .map-node-caption,
+:root:not([data-tips-hidden]) .map-node:focus-visible > .map-node-caption { opacity: 1; }
 
 /* The evolution test: a card with a dashed border at the end of the stage. */
 .map-evo {

@@ -2,6 +2,7 @@ import { useRef, type MouseEvent, type ReactNode } from "react";
 import { useLang } from "../../i18n/LangProvider";
 import { Banners } from "../Banners";
 import { RunnerAlert } from "./RunnerStatus";
+import { useEscapeHidesTips } from "./useEscapeHidesTips";
 
 const MAIN_ID = "main-content";
 
@@ -20,6 +21,8 @@ export function RailLayout({
 }) {
   const { t } = useLang();
   const main = useRef<HTMLDivElement>(null);
+  // The floating notes (the narrow menu's labels, the badge dates, the map captions) only exist inside this frame.
+  useEscapeHidesTips();
   // The pages are chosen by the hash of the address, so the link cannot go to "#main-content": it would open another page.
   // It moves the focus instead and the address stays as it is.
   const skip = (event: MouseEvent) => {

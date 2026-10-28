@@ -243,7 +243,8 @@
 .squares.steps > .current { background: var(--primary); }
 
 /* Narrow windows (spec 6.4): the menu shrinks to 64 px of icons. The text of an item stays in the page, so it still names the
-   link; it shows as a floating caption while the item has the pointer or the keyboard focus. */
+   link; it shows as a floating caption while the item has the pointer or the keyboard focus, and Escape hides it. The labels of the
+   wide menu are always in view and have no such rule. */
 @media (max-width: 1099px) {
   .rail-layout { --rail-w: 64px; }
   .side-nav {
@@ -298,8 +299,9 @@
     opacity: 0;
     pointer-events: none;
   }
-  .side-nav :is(a, button):hover > .side-nav-label,
-  .side-nav :is(a, button):focus-visible > .side-nav-label { opacity: 1; }
+  /* Escape puts data-tips-hidden on the root (useEscapeHidesTips): the caption goes while the pointer and the focus stay. */
+  :root:not([data-tips-hidden]) .side-nav :is(a, button):hover > .side-nav-label,
+  :root:not([data-tips-hidden]) .side-nav :is(a, button):focus-visible > .side-nav-label { opacity: 1; }
   /* The status keeps its square; the words stay for assistive technology. */
   .side-nav-bottom .runner-status { margin-left: 0; gap: 0; font-size: 0; }
   .side-nav-bottom .lang-switch { margin-left: 0; flex-direction: column; }

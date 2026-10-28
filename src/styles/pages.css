@@ -268,8 +268,9 @@
   background: var(--surface);
   color: var(--muted);
 }
-/* The note of an earned badge, with the date: it floats under the badge while it has the pointer or the focus. Only its opacity
-   hides it, so it stays in the accessibility tree, as the captions of the narrow side menu do. */
+/* The note of an earned badge, with the date: it floats under the badge while it has the pointer or the focus, and Escape hides it
+   (data-tips-hidden on the root, from useEscapeHidesTips). Only its opacity hides it, so it stays in the accessibility tree, as the
+   captions of the narrow side menu do. */
 .ach-badge-day {
   position: absolute;
   top: calc(100% + 6px);
@@ -284,8 +285,8 @@
   opacity: 0;
   pointer-events: none;
 }
-.ach-badge:hover > .ach-badge-day,
-.ach-badge:focus-visible > .ach-badge-day { opacity: 1; }
+:root:not([data-tips-hidden]) .ach-badge:hover > .ach-badge-day,
+:root:not([data-tips-hidden]) .ach-badge:focus-visible > .ach-badge-day { opacity: 1; }
 
 /* The 2 numbers under the badges. */
 .concept-counts {
