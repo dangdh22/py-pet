@@ -39,6 +39,10 @@ test("explains an error in Vietnamese and marks the line", async ({ page }) => {
   await page.getByRole("button", { name: "Chạy thử" }).click();
   await expect(page.getByText('Dòng 1: Python không biết "Robo" là gì.', { exact: false })).toBeVisible();
   await expect(page.locator(".cm-error-line")).toHaveCount(1);
+  // The error line has a 4 px left bar in --coral, drawn with an inset box-shadow (jsdom has no computed styles).
+  const shadow = await page.locator(".cm-error-line").evaluate((line) => getComputedStyle(line).boxShadow);
+  expect(shadow).toContain("rgb(255, 107, 107)");
+  await expect(page.locator(".code-editor-tab")).toContainText("main.py");
   await expect(page.getByText("Xem lỗi gốc")).toBeVisible();
   // The long explanation must not squash Robo in the flex row (jsdom cannot see this).
   const robo = page.locator(".robot-bubble").getByRole("img", { name: "Robo" });
@@ -65,4 +69,26 @@ test("switches the interface to English", async ({ page }) => {
   await page.getByRole("button", { name: "Next" }).click();
   await expect(page.getByRole("button", { name: "Submit" })).toBeVisible();
   await expect(page.getByText("Write a program that prints this text: Xin chào Robo")).toBeVisible();
+});
+
+test("keeps the title and the chips inside the 60 px focus bar at 800 px", async ({ page }) => {
+  await page.setViewportSize({ width: 800, height: 700 });
+  await startApp(page);
+  await page.getByRole("link", { name: "Học tiếp" }).click();
+  const title = page.getByRole("heading", { level: 1 });
+  await expect(title).toBeVisible();
+
+  const bar = await page.locator(".focus-bar").boundingBox();
+  expect(bar?.height).toBe(60);
+  const chip = page.locator(".focus-bar").getByText("Xu: 0");
+  await expect(chip).toBeVisible();
+  for (const part of [await title.boundingBox(), await chip.boundingBox()]) {
+    expect(part).not.toBeNull();
+    expect(part!.y).toBeGreaterThanOrEqual(bar!.y);
+    expect(part!.y + part!.height).toBeLessThanOrEqual(bar!.y + bar!.height);
+    expect(part!.x + part!.width).toBeLessThanOrEqual(800);
+  }
+  // Nothing pushes the page wider than the window.
+  const widths = await page.evaluate(() => ({ scroll: document.documentElement.scrollWidth, inner: window.innerWidth }));
+  expect(widths.scroll).toBeLessThanOrEqual(widths.inner);
 });

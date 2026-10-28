@@ -7,8 +7,10 @@ import type { ExerciseStats } from "../game/state";
 import { pick } from "../i18n/lang";
 import { useLang } from "../i18n/LangProvider";
 import { judge, type JudgeResult } from "../runner/judge";
-import { FAILED_SUBMITS_BEFORE_SOLUTION, type ExerciseOutcome, type JudgedInfo } from "./CodeExerciseView";
+import type { ExerciseOutcome, JudgedInfo } from "./CodeExerciseView";
 import { useRunner } from "./contexts";
+import { ExampleTable } from "./ExampleTable";
+import { ExerciseHelp } from "./ExerciseHelp";
 import { crashFeedback, feedbackForProblem, type Feedback } from "./feedback";
 import { RobotBubble } from "./RobotBubble";
 import { TestResultList } from "./TestResultList";
@@ -126,27 +128,17 @@ export function PuzzleExerciseView({
   }
 
   return (
-    <div className="puzzle">
+    <div className="card puzzle-card">
+      <p className="kicker">{t(exercise.type === "parsons" ? "exercise.kindParsons" : "exercise.kindFill")}</p>
       <p className="exercise-prompt">{pick(exercise.prompt, uiLang)}</p>
-      {example && (
-        <div className="example">
-          <h4>{t("exercise.example")}</h4>
-          {example.input !== "" && (
-            <>
-              <span>{t("judge.input")}</span>
-              <pre>{example.input.trimEnd()}</pre>
-            </>
-          )}
-          <span>{t("exercise.expectedOutput")}</span>
-          <pre>{example.output.trimEnd()}</pre>
-        </div>
-      )}
+      {example && <ExampleTable input={example.input} output={example.output} />}
       {exercise.type === "parsons" ? (
         <ol className="parsons-lines" aria-label={t("parsons.lines")} ref={linesRef}>
           {lines.map((line, i) => (
             <li key={i}>
               <pre className="parsons-line">{line}</pre>
               <button
+                className="small"
                 data-dir="up"
                 aria-label={t("parsons.up", { n: i + 1 })}
                 disabled={busy || solved || i === 0}
@@ -155,6 +147,7 @@ export function PuzzleExerciseView({
                 ↑
               </button>
               <button
+                className="small"
                 data-dir="down"
                 aria-label={t("parsons.down", { n: i + 1 })}
                 disabled={busy || solved || i === lines.length - 1}
@@ -189,24 +182,17 @@ export function PuzzleExerciseView({
           </code>
         </pre>
       )}
-      {exercise.hints.slice(0, hintsShown).map((hint, i) => (
-        <p key={i} className="hint">
-          {t("hint.title", { n: i + 1 })}: {pick(hint, uiLang)}
-        </p>
-      ))}
-      {hintsShown < exercise.hints.length && !solved && (
-        <button onClick={showHint}>{hintsShown === 0 ? t("hint.show") : t("hint.next")}</button>
-      )}
-      {failedSubmits >= FAILED_SUBMITS_BEFORE_SOLUTION && !solutionShown && !solved && (
-        <button onClick={showSolution}>{t("solution.show")}</button>
-      )}
-      {solutionShown && (
-        <div className="solution">
-          <h4>{t("solution.title")}</h4>
-          <pre>{exercise.solution.trimEnd()}</pre>
-        </div>
-      )}
-      <div className="exercise-actions">
+      <ExerciseHelp
+        hints={exercise.hints}
+        shown={hintsShown}
+        onHint={showHint}
+        failedSubmits={failedSubmits}
+        solution={exercise.solution}
+        solutionShown={solutionShown}
+        onShowSolution={showSolution}
+        finished={solved}
+      />
+      <div className="actions">
         <button className="primary" onClick={handleSubmit} disabled={busy || solved || runner.status !== "ready"}>
           {t("code.submit")}
         </button>

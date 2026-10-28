@@ -52,9 +52,7 @@ describe("CodeEditor", () => {
   test("shows the code as typed: no font ligatures, so `!=` is not drawn as a single sign", () => {
     const { container } = renderEditor();
     const scroller = container.querySelector(".cm-scroller") as HTMLElement;
-    const style = getComputedStyle(scroller);
-    expect(style.getPropertyValue("font-variant-ligatures")).toBe("none");
-    expect(style.getPropertyValue("font-feature-settings")).toBe('"calt" 0, "liga" 0');
+    expect(getComputedStyle(scroller).getPropertyValue("font-variant-ligatures")).toBe("none");
   });
 
   test("marks the error line, and removes the mark when the line is null", () => {

@@ -26,6 +26,22 @@ describe("scrambleLines", () => {
   });
 });
 
+describe("PuzzleExerciseView: card", () => {
+  test("a parsons exercise is a card with the kind label", () => {
+    const { container } = renderWithApp(<PuzzleExerciseView exercise={reviewParsons} onComplete={() => {}} rng={seededRng(1)} />, {
+      runner: echoRunner(),
+    });
+    expect(container.firstElementChild).toHaveClass("card", "puzzle-card");
+    expect(screen.getByText("Sắp xếp dòng code")).toHaveClass("kicker");
+    expect(screen.getByText("Kết quả mong đợi")).toBeInTheDocument();
+  });
+
+  test("a fill exercise has the kind label", () => {
+    renderWithApp(<PuzzleExerciseView exercise={reviewFill} onComplete={() => {}} />, { runner: echoRunner() });
+    expect(screen.getByText("Điền chỗ trống")).toHaveClass("kicker");
+  });
+});
+
 describe("PuzzleExerciseView: parsons", () => {
   test("moves lines and submits them in the new order", async () => {
     const onComplete = vi.fn();
@@ -60,12 +76,25 @@ describe("PuzzleExerciseView: parsons", () => {
       await waitFor(() => expect(submit()).toBeEnabled());
     }
     expect(screen.getByText("Đúng 0/1 test. Xem test bị sai ở bên dưới nhé.")).toBeInTheDocument();
-    await userEvent.click(screen.getByRole("button", { name: "Gợi ý" }));
+    await userEvent.click(screen.getByRole("button", { name: "Gợi ý 1/1" }));
     expect(screen.getByText("Gợi ý 1: Hi đứng trước.")).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: /^Gợi ý/ })).not.toBeInTheDocument();
     await userEvent.click(screen.getByRole("button", { name: "Xem lời giải" }));
     expect(screen.getByText("Lời giải mẫu")).toBeInTheDocument();
     expect(onSolutionViewed).toHaveBeenCalledOnce();
     expect(onComplete).toHaveBeenCalledWith("viewed-solution");
+    expect(screen.queryByRole("button", { name: "Xem lời giải" })).not.toBeInTheDocument();
+  });
+
+  test("a right order takes the hint and solution buttons away", async () => {
+    renderWithApp(<PuzzleExerciseView exercise={reviewParsons} onComplete={() => {}} rng={seededRng(1)} />, { runner: echoRunner() });
+    expect(screen.getByRole("button", { name: "Gợi ý 1/1" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Xem lời giải" })).toBeDisabled();
+    await userEvent.click(screen.getByRole("button", { name: "Đưa dòng 2 lên" }));
+    await userEvent.click(submit());
+    expect(await screen.findByText("Đúng hết 1/1 test!")).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Gợi ý 1/1" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Xem lời giải" })).not.toBeInTheDocument();
   });
 });
 

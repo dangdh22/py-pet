@@ -46,6 +46,14 @@ describe("ExamCodeView", () => {
     expect(screen.getByRole("textbox", { name: "Trình soạn code" })).toHaveAttribute("data-error-line", "");
   });
 
+  test("has no hints, no solution and no test results area", () => {
+    renderWithApp(<ExamCodeView exercise={exercise} onSubmitted={() => {}} />);
+    expect(screen.queryByRole("button", { name: /^Gợi ý/ })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Xem lời giải" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("list", { name: "Kết quả chấm" })).not.toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Chạy thử" })).toBeInTheDocument();
+  });
+
   test("a failed submit asks the child to submit again, not to reload", async () => {
     const onSubmitted = vi.fn();
     const runner = fakeRunner(() => {

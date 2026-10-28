@@ -11,9 +11,11 @@ import { pick } from "../i18n/lang";
 import { useLang } from "../i18n/LangProvider";
 import { useContent } from "./contexts";
 import { EvolutionShow, prefersReducedMotion } from "./EvolutionShow";
-import { ExamRunner, formatScore } from "./ExamRunner";
+import { ExamRunner } from "./ExamRunner";
+import { formatScore } from "./format";
 import { useGame } from "./GameProvider";
 import { PetRobot } from "./PetRobot";
+import { RewardChips } from "./ResultView";
 import { routeToHash, stepRoute } from "./routing";
 import { StudyNotice } from "./StudyNotice";
 
@@ -148,27 +150,26 @@ export function EvolutionPassed({
     );
   }
   return (
-    <main className="evolution-done">
-      <div className="evolve">
-        <PetRobot mood="happy" size={200} />
-      </div>
-      <h1 ref={headingRef} tabIndex={-1}>
-        {t("evolution.title", { name: profile.robotName })}
-      </h1>
-      <p>{t("evolution.body", { name: profile.robotName })}</p>
-      <p>{t("exam.score", { score: formatScore(grade.score, uiLang), max: grade.max })}</p>
-      <ul className="result-rewards">
-        {xu > 0 && <li>{t("result.xu", { n: xu })}</li>}
-        {vui > 0 && <li>{t("result.vui", { n: vui })}</li>}
-      </ul>
-      <nav className="room-actions">
-        {next && (
-          <a className="button primary" href={routeToHash(stepRoute(next))}>
-            {t("room.continue")}
-          </a>
-        )}
-        <button onClick={onExit}>{t("nav.room")}</button>
-      </nav>
+    <main className="result-page">
+      <section className="card result-card">
+        <div className="evolve">
+          <PetRobot mood="happy" size={200} />
+        </div>
+        <h1 ref={headingRef} tabIndex={-1}>
+          {t("evolution.title", { name: profile.robotName })}
+        </h1>
+        <p>{t("evolution.body", { name: profile.robotName })}</p>
+        <p>{t("exam.score", { score: formatScore(grade.score, uiLang), max: grade.max })}</p>
+        <RewardChips xu={xu} vui={vui} />
+        <div className="result-actions">
+          {next && (
+            <a className="button primary" href={routeToHash(stepRoute(next))}>
+              {t("room.continue")}
+            </a>
+          )}
+          <button onClick={onExit}>{t("nav.room")}</button>
+        </div>
+      </section>
     </main>
   );
 }
@@ -192,40 +193,44 @@ function EvolutionFailed({
     .map((id) => findConcept(bundle, id))
     .filter((concept): concept is Concept => concept !== undefined);
   return (
-    <main className="lesson-done">
-      <PetRobot mood="thinking" size={96} />
-      <h2>{t("evolution.failTitle")}</h2>
-      <p>{t("evolution.failBody")}</p>
-      <p>{t("exam.score", { score: formatScore(grade.score, uiLang), max: grade.max })}</p>
-      {weak.length > 0 && (
-        <section>
-          <h3>{t("evolution.weakTitle")}</h3>
-          <ul>
-            {weak.map((concept) => (
-              <li key={concept.id}>{pick(concept.name, uiLang)}</li>
-            ))}
-          </ul>
-        </section>
-      )}
-      <nav className="room-actions">
-        {after.remedial ? (
-          <a className="button primary" href={routeToHash({ name: "remedial" })}>
-            {t("evolution.startRemedial")}
-          </a>
-        ) : (
-          <a
-            className="button primary"
-            href={routeToHash({ name: "evolution", stageId })}
-            onClick={(event) => {
-              event.preventDefault();
-              onRetake();
-            }}
-          >
-            {t("evolution.retake")}
-          </a>
+    <main className="result-page">
+      <section className="card result-card">
+        <PetRobot mood="thinking" size={96} />
+        <h1>{t("evolution.failTitle")}</h1>
+        <p>{t("evolution.failBody")}</p>
+        <p>{t("exam.score", { score: formatScore(grade.score, uiLang), max: grade.max })}</p>
+        {weak.length > 0 && (
+          <section className="result-weak">
+            <h2>{t("evolution.weakTitle")}</h2>
+            <ul className="concept-chips">
+              {weak.map((concept) => (
+                <li key={concept.id} className="chip">
+                  {pick(concept.name, uiLang)}
+                </li>
+              ))}
+            </ul>
+          </section>
         )}
-        <button onClick={onExit}>{t("nav.room")}</button>
-      </nav>
+        <div className="result-actions">
+          {after.remedial ? (
+            <a className="button primary" href={routeToHash({ name: "remedial" })}>
+              {t("evolution.startRemedial")}
+            </a>
+          ) : (
+            <a
+              className="button primary"
+              href={routeToHash({ name: "evolution", stageId })}
+              onClick={(event) => {
+                event.preventDefault();
+                onRetake();
+              }}
+            >
+              {t("evolution.retake")}
+            </a>
+          )}
+          <button onClick={onExit}>{t("nav.room")}</button>
+        </div>
+      </section>
     </main>
   );
 }

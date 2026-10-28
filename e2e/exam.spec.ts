@@ -88,6 +88,6 @@ test("after the lessons of the first topic come its test and then the next topic
   await page.getByRole("link", { name: "Về phòng" }).click();
   await page.getByRole("link", { name: "Bản đồ học" }).click();
   // The map lists the topics in order: the first topic test is the one of topic 1.
-  await expect(page.getByRole("listitem").filter({ hasText: "Kiểm tra chủ đề" }).first()).toContainText("Đã xong");
-  await expect(page.getByRole("listitem").filter({ hasText: "Chuỗi là gì?" })).toContainText("Bài tiếp theo");
+  await expect(page.getByRole("link", { name: "Kiểm tra chủ đề: Đã xong" }).first()).toBeVisible();
+  await expect(page.getByRole("link", { name: "Chuỗi là gì?: Tiếp theo" })).toBeVisible();
 });

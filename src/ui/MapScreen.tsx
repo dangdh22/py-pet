@@ -2,7 +2,7 @@ import { useRef, useState, type KeyboardEvent } from "react";
 import { pick } from "../i18n/lang";
 import { useLang } from "../i18n/LangProvider";
 import { useContent } from "./contexts";
-import { formatScore } from "./ExamRunner";
+import { formatScore } from "./format";
 import { useGame } from "./GameProvider";
 import { Icon } from "./icons";
 import { mapModel, type MapNodeView, type MapStageView, type MapTopicView } from "./mapModel";
@@ -120,6 +120,12 @@ function EvolutionCard({ stage, evolution }: { stage: MapStageView; evolution: M
   );
 }
 
+/** The panel of a stage holds something to focus: a square that is not locked is a link, and so is the start of an open evolution test. */
+function hasFocusable(stage: MapStageView): boolean {
+  const openSquare = stage.topics.some(({ nodes }) => nodes.some(({ status }) => status !== "locked"));
+  return openSquare || stage.evolution?.status === "next";
+}
+
 /** The learning map (design spec 7.4): 1 tab per stage, 1 row of square steps per topic, the evolution test at the end of the stage. */
 export function MapScreen() {
   const bundle = useContent();
@@ -140,6 +146,8 @@ export function MapScreen() {
     tabs.current[index]?.focus();
   };
   const onKeyDown = (event: KeyboardEvent) => {
+    // A key with a modifier belongs to the browser (Alt+Arrow is back and forward in history).
+    if (event.altKey || event.metaKey || event.ctrlKey) return;
     const count = model.stages.length;
     const keys: Record<string, number> = {
       ArrowRight: (active + 1) % count,
@@ -199,7 +207,7 @@ export function MapScreen() {
               onClick={() => select(index)}
             >
               {view.passed && <Icon name="check" size={14} />}
-              <span>{view.number}</span> {pick(view.stage.title, uiLang)}
+              {pick(view.stage.title, uiLang)}
             </button>
           ))}
         </div>
@@ -210,7 +218,13 @@ export function MapScreen() {
         )}
       </div>
       {shown && (
-        <section role="tabpanel" id={PANEL_ID} aria-labelledby={tabId(shown.stage.id)}>
+        <section
+          role="tabpanel"
+          id={PANEL_ID}
+          aria-labelledby={tabId(shown.stage.id)}
+          // A panel with nothing to focus is a tab stop itself, so the keyboard can reach it from the tabs (WAI-ARIA APG).
+          tabIndex={hasFocusable(shown) ? undefined : 0}
+        >
           {shown.topics.map((topic) => (
             <MapTopic key={topic.topic.id} view={topic} />
           ))}

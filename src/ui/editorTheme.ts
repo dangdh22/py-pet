@@ -5,16 +5,20 @@ import { tags } from "@lezer/highlight";
 
 /**
  * The colors of the light code editor (UI revamp plan, design decision 9). Every syntax color has at least 4.5:1
- * with the editor background, the current line, the error line and the selection (`editorTheme.test.ts` checks this).
- * The error line is not `--danger-bg`: that color would drop 3 syntax colors under 4.5:1.
+ * with the editor background, the selection and the 2 line tints, also when a tint is over the selection
+ * (`editorTheme.test.ts` checks this). The error line is not `--danger-bg`: that color would drop 3 syntax colors under 4.5:1.
+ *
+ * `activeLine` and `errorLine` are translucent on purpose. CodeMirror draws the selection in a layer behind the text,
+ * and the background of a line is painted over that layer: an opaque tint would hide the selection on the line with
+ * the cursor and on the error line. Over `background` they look like the plan's `#f8f1de` and `#ffecec`.
  */
 export const EDITOR_COLORS = {
   background: "#fffdf6",
   gutterBackground: "#f6efdc",
   gutterText: "#6b6455",
-  activeLine: "#f8f1de",
+  activeLine: "rgba(238, 223, 186, 0.4)",
   selection: "#dbe4ff",
-  errorLine: "#ffecec",
+  errorLine: "rgba(255, 211, 221, 0.4)",
   syntax: {
     keyword: "#b03a0a",
     string: "#146c34",
@@ -43,7 +47,6 @@ const theme = EditorView.theme(
       fontFamily: "var(--font-mono)",
       // The code is shown as typed: `!=`, `==`, `<=` and `->` must not turn into one sign (the font joins them).
       fontVariantLigatures: "none",
-      fontFeatureSettings: '"calt" 0, "liga" 0',
       lineHeight: "1.6",
     },
     ".cm-content": {
@@ -71,7 +74,7 @@ const theme = EditorView.theme(
       {
         backgroundColor: EDITOR_COLORS.selection,
       },
-    // After `.cm-activeLine`, so the error line wins when the cursor is on it.
+    // `.cm-line.cm-error-line` is more specific than `.cm-activeLine`, so the error line wins when the cursor is on it.
     ".cm-line.cm-error-line": {
       backgroundColor: EDITOR_COLORS.errorLine,
       boxShadow: "inset 4px 0 0 var(--coral)",

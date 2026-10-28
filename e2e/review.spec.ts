@@ -48,8 +48,8 @@ test("after 2 lessons the review station opens, pays and unlocks lesson 3", asyn
 
   await page.getByRole("button", { name: "Về phòng" }).click();
   await page.getByRole("link", { name: "Bản đồ học" }).click();
-  await expect(page.getByRole("listitem").filter({ hasText: "Trạm ôn" }).first()).toContainText("Đã xong");
-  await expect(page.getByRole("listitem").filter({ hasText: "Lệnh chạy từ trên xuống" })).toContainText("Bài tiếp theo");
+  await expect(page.getByRole("link", { name: "Trạm ôn: Đã xong" }).first()).toBeVisible();
+  await expect(page.getByRole("link", { name: "Lệnh chạy từ trên xuống: Tiếp theo" })).toBeVisible();
 });
 
 test("the room offers a free review after the first lesson", async ({ page }) => {

@@ -3,8 +3,7 @@ import { useLang } from "../i18n/LangProvider";
 import type { GameState } from "../game/state";
 import type { Topic } from "../content/types";
 import { useContent } from "./contexts";
-import { formatScore } from "./ExamRunner";
-import { formatDateTime } from "./format";
+import { formatDateTime, formatScore } from "./format";
 import { useGame } from "./GameProvider";
 
 /** The average mastery of a topic's concepts that have a record, or null. */

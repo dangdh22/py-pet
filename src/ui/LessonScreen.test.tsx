@@ -107,7 +107,7 @@ test("a reload keeps the viewed solution, so a later correct submit pays only 3 
     await userEvent.click(screen.getByRole("button", { name: "Nộp bài" }));
     await waitFor(() => expect(screen.getByRole("button", { name: "Nộp bài" })).toBeEnabled());
   }
-  await userEvent.click(screen.getByRole("button", { name: "Gợi ý" }));
+  await userEvent.click(screen.getByRole("button", { name: "Gợi ý 1/2" }));
   await userEvent.click(screen.getByRole("button", { name: "Xem lời giải" }));
   await waitFor(async () =>
     expect((await first.store.loadActive())?.state.progress.exerciseStats?.["t.l1.ex1"]).toEqual({

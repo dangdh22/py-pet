@@ -87,6 +87,34 @@ describe("AppRoutes", () => {
     expect(screen.getAllByRole("heading", { level: 1 })).toHaveLength(1);
   });
 
+  // Review Focus 2: the page has 1 h1 at each moment: in the top bar while the child works, on the result card after it, and in the
+  // top bar again after "Học tiếp" opens the next lesson.
+  test("the page keeps exactly 1 h1 from the room's next lesson to the result card and on to the next lesson", async () => {
+    await renderWithGame(<AppRoutes />, { runner: fakeRunner(() => okResult("Hi\n")) });
+    const onlyHeading = (name: string) => {
+      expect(screen.getAllByRole("heading", { level: 1 })).toHaveLength(1);
+      expect(screen.getByRole("heading", { level: 1, name })).toBeInTheDocument();
+    };
+
+    await userEvent.click(screen.getByRole("link", { name: "Học tiếp" }));
+    expect(await screen.findByText("Thẻ 1/2")).toBeInTheDocument();
+    onlyHeading("Bài 1 · Bài thử");
+
+    await userEvent.click(screen.getByRole("button", { name: "Tiếp" }));
+    await userEvent.click(screen.getByRole("button", { name: "Tiếp" }));
+    await userEvent.click(screen.getByRole("button", { name: "Nộp bài" }));
+    expect(await screen.findByText("Đúng hết 2/2 test!")).toBeInTheDocument();
+    await userEvent.click(screen.getByRole("button", { name: "Tiếp" }));
+    await userEvent.click(screen.getByRole("radio", { name: "A" }));
+    await userEvent.click(screen.getByRole("button", { name: "Kiểm tra" }));
+    await userEvent.click(screen.getByRole("button", { name: "Hoàn thành" }));
+    onlyHeading("Hoàn thành bài học!");
+
+    await userEvent.click(screen.getByRole("link", { name: "Học tiếp" }));
+    expect(await screen.findByText("Thẻ 1/1")).toBeInTheDocument();
+    onlyHeading("Bài 2 · Bài thử 2");
+  });
+
   test("the message for an unknown lesson is a card with a link to the map", async () => {
     window.location.hash = "#/lesson/khong-co";
     const { container } = await renderWithGame(<AppRoutes />);
@@ -543,6 +571,9 @@ describe("M4a routes", () => {
     const main = screen.getByRole("main");
     expect(main).toHaveClass("study-notice");
     expect(within(main).getByText(message)).toBeInTheDocument();
+    // The message is the h1 of the page, and the only one.
+    expect(screen.getAllByRole("heading", { level: 1 })).toHaveLength(1);
+    expect(screen.getByRole("heading", { level: 1, name: message })).toBeInTheDocument();
     expect(within(screen.getByRole("banner")).getByRole("link", { name: "Về phòng" })).toBeInTheDocument();
   });
 });

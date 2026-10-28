@@ -12,6 +12,12 @@
   justify-content: space-between;
   margin-top: 16px;
 }
+/* Under a card of 760 px (a lesson card, a question, a puzzle) the row is as wide as the card, so Next sits under the card's right
+   edge. The code step is a split as wide as the page, and its row keeps the full width. */
+.study-page:has(> :is(.theory-card, .question-card, .puzzle-card)) > .study-nav {
+  max-width: 760px;
+  margin-inline: auto;
+}
 
 /* A message instead of a screen (not found, not open, nothing to review): 1 card in the middle. */
 .study-notice { padding: 0 24px; }
@@ -19,8 +25,64 @@
   max-width: 560px;
   margin: 48px auto 0;
 }
-.study-notice .card > p { margin: 0 0 16px; }
+/* The message is the h1: bold body text, a little larger than the text under it. */
+.study-notice h1 {
+  margin: 0 0 16px;
+  font-size: 1.15rem;
+  font-weight: 700;
+  line-height: 1.45;
+}
 .study-notice .card > :last-child { margin-bottom: 0; }
+
+/* The result of a lesson, a session or a test: 1 card in the middle, with everything centered. The evolution test uses the same card
+   for a pass (Robo 200 px) and for a fail (the concepts to review). */
+.result-page { padding: 0 24px 24px; }
+.result-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  max-width: 560px;
+  margin: 32px auto 0;
+  padding: 24px 20px;
+  text-align: center;
+}
+.result-card > * { margin: 0; }
+.result-card h1 { font-size: 1.6rem; line-height: 1.25; }
+
+/* The rewards: big chips, 18 px bold. XP is the primary blue; the colors of the others come from the chip tokens. */
+.reward-chips {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.chip-big { padding: 8px 16px; font-size: 18px; font-weight: 800; }
+.chip-xp { background: var(--primary); color: var(--on-primary); }
+.chip-vui { background: var(--chip-streak); }
+
+/* The goal of the day: the text beside its squares. */
+.result-goal { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px; }
+
+/* The concepts to review after a failed evolution test: small chips that may wrap onto 2 lines. */
+.result-weak { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.result-weak h2 { margin: 0; font-size: 1.1rem; }
+.concept-chips {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.concept-chips .chip { white-space: normal; }
+
+/* The buttons at the end: the way on first, the way back to the room last. */
+.result-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 6px; }
 
 /* A box: a white frame with a 2 px border. Its head is a strip of small capitals (the output of a run, the input, the test results). */
 .box {
@@ -51,8 +113,6 @@
   border-right: var(--border-w) solid var(--ink);
   background: var(--yellow);
   font-family: var(--font-mono);
-  font-variant-ligatures: none;
-  font-feature-settings: "calt" 0, "liga" 0;
   font-size: 13px;
 }
 
@@ -74,8 +134,6 @@
   background: var(--code-bg);
   color: var(--code-text);
   font-family: var(--font-mono);
-  font-variant-ligatures: none;
-  font-feature-settings: "calt" 0, "liga" 0;
   font-size: 15px;
   white-space: pre-wrap;
   overflow-x: auto;
@@ -127,16 +185,315 @@
   background: var(--code-bg);
   color: var(--code-text);
   font-family: var(--font-mono);
-  font-variant-ligatures: none;
-  font-feature-settings: "calt" 0, "liga" 0;
   font-size: 14px;
   white-space: pre-wrap;
   overflow-x: auto;
 }
 
-/* The "common misconception" card that Robo offers after a mistake. */
+/* The "common misconception" help that Robo offers after a mistake: the button, then the card. It sits under the card it belongs to,
+   so it has the same width and the same place. Under the code split it keeps its left edge and a reading width. */
+.misconception { margin-top: 16px; }
+:is(.question-card, .puzzle-card) ~ .misconception {
+  max-width: 760px;
+  margin-inline: auto;
+}
+.exercise-split ~ .misconception { max-width: 760px; }
 .misconception-card {
   margin-top: 12px;
   background: var(--chip-xu);
 }
 .misconception-card h4 { margin: 0 0 8px; }
+
+/* The code exercise: the problem on the left, the editor and the results on the right (about 45 : 55). Under 900 px it is 1 column. */
+.exercise-split {
+  display: grid;
+  grid-template-columns: minmax(0, 45fr) minmax(0, 55fr);
+  gap: 22px;
+}
+@media (max-width: 899px) {
+  .exercise-split { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* The problem card is a column; Robo's bubble sits at the bottom, whatever the height of the right side. The puzzle card (below) is the
+   same column. */
+.problem-card,
+.puzzle-card {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 0;
+  padding: 16px 18px;
+}
+.problem-card > *,
+.puzzle-card > * { margin: 0; }
+.problem-card > .robot-bubble { margin-top: auto; }
+.problem-card .exercise-prompt,
+.puzzle-card .exercise-prompt,
+.problem-card .question-prompt {
+  font-size: 17px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+/* The example of an exercise: the input (when there is one) and the expected output side by side. */
+.example-table {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+  border: var(--border-w) solid var(--ink);
+  background: var(--surface);
+}
+.example-table > div { min-width: 0; padding: 8px 12px; }
+.example-table > div + div { border-left: var(--border-w) solid var(--ink); }
+.example-label {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 12px;
+  font-weight: 700;
+}
+.example-table pre {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  overflow-x: auto;
+}
+
+/* The help of an exercise: hints like sticky notes, then the buttons for the next hint and the solution. */
+.exercise-help { display: flex; flex-direction: column; gap: 10px; }
+.exercise-help > * { margin: 0; }
+.hint {
+  padding: 8px 12px;
+  border: var(--border-w) solid var(--ink);
+  background: var(--chip-xu);
+}
+.exercise-help-buttons { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.exercise-help-buttons small { font-size: 12px; font-weight: 500; }
+/* The solution button is off, not faded: its reason ("after 3 wrong submits") must stay readable, so the dim of a disabled button
+   gives way to a dashed border and the muted color. */
+.exercise-help-buttons button:disabled {
+  background: var(--bg);
+  color: var(--muted);
+  border-style: dashed;
+  opacity: 1;
+}
+.solution h4 { margin: 0 0 6px; }
+.solution pre {
+  margin: 0;
+  padding: 8px 12px;
+  border: var(--border-w) solid var(--ink);
+  background: var(--code-bg);
+  font-family: var(--font-mono);
+  font-size: 14px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  overflow-x: auto;
+}
+
+/* The right side: the editor, then the input and the results in 2 columns, then the buttons at the right end. */
+.ide { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.io {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
+  gap: 14px;
+}
+/* The input box is a label: its head names the textarea, and 1 focus ring goes around the whole box. */
+.input-box { display: flex; flex-direction: column; }
+.input-box:focus-within { outline: 3px solid var(--primary); outline-offset: 2px; }
+.input-box textarea {
+  flex: 1;
+  width: 100%;
+  min-height: 5em;
+  padding: 8px 10px;
+  border: 0;
+  background: var(--code-bg);
+  font-family: var(--font-mono);
+  font-size: 14px;
+  line-height: 1.6;
+  resize: vertical;
+}
+.input-box textarea:focus-visible { outline: none; }
+.io-result { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.io-result > p { margin: 0; }
+.io-result .output { margin-top: 0; }
+.ide > .actions,
+.puzzle-card > .actions { display: flex; justify-content: flex-end; gap: 12px; }
+/* The note that a test answer is in (under the buttons of a code answer; also used by a test question). */
+.exam-answered { color: var(--muted); font-style: italic; }
+.ide > .exam-answered { margin: 0; text-align: right; }
+
+/* The test results: a head with the count, then 1 row per test with a square mark. Under the mark, the state is also a word. */
+.test-box ol {
+  margin: 0;
+  padding: 6px 10px;
+  list-style: none;
+  font-size: 14px;
+}
+.test-box li { padding: 4px 0; }
+.test-row { display: flex; align-items: center; gap: 8px; }
+.test-mark {
+  flex: none;
+  width: 14px;
+  height: 14px;
+  border: var(--border-w) solid var(--ink);
+  background: color-mix(in srgb, var(--ink) 14%, var(--surface));
+}
+.test-box .pass .test-mark { background: var(--stat-pin); }
+.test-box .fail .test-mark { background: var(--coral); }
+
+/* The comparison of a failed test: the input above, then what Robo expected beside what the code printed. */
+.diff {
+  /* Under the mark: the width of the mark and the gap of the row. */
+  margin: 6px 0 4px 22px;
+}
+.diff-input { margin-bottom: 8px; }
+.diff-columns {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+/* Both code blocks are as tall as the taller one. */
+.diff-columns > div { display: flex; flex-direction: column; min-width: 0; }
+.diff-columns pre { flex: 1; }
+.diff-label {
+  display: block;
+  margin-bottom: 2px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+}
+.diff pre {
+  margin: 0;
+  padding: 6px 0;
+  border: var(--border-w) solid var(--ink);
+  background: var(--code-bg);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  overflow-x: auto;
+}
+.diff pre > span { display: block; padding: 0 8px; }
+.diff-input pre { padding: 6px 8px; }
+.diff pre > .diff-line { background: var(--danger-bg); }
+.test-box summary {
+  margin: 4px 0 0 22px;
+  color: var(--primary);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* The puzzle card (put the lines in order, fill the blanks): a reading column in the middle, with the same parts as the problem card. */
+.puzzle-card { max-width: 760px; margin: 0 auto; }
+
+/* Put the lines in order: each line is a block with a 2 px border and the 3 px shadow. The block that holds the focus (its arrows are
+   in use) is the chosen one: yellow. After a move, the focus follows the line, so the moved line stays yellow. */
+.parsons-lines {
+  display: grid;
+  /* The column may be narrower than the longest line, which then scrolls inside its block. */
+  grid-template-columns: minmax(0, 1fr);
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.parsons-lines li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px 6px 12px;
+  border: var(--border-w) solid var(--ink);
+  background: var(--code-bg);
+  box-shadow: var(--shadow);
+}
+.parsons-lines li:focus-within { background: var(--yellow); }
+.parsons-line {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 15px;
+  line-height: 1.6;
+  white-space: pre;
+  overflow-x: auto;
+}
+
+/* Fill in the blanks: a light code block; a blank is a square box in the line. The line is taller than the box (1.8 against 1.6), so a
+   blank does not push the lines apart. The input takes the font of the code (`font: inherit` in base.css). */
+.fill-template {
+  margin: 0;
+  padding: 12px 14px;
+  border: var(--border-w) solid var(--ink);
+  background: var(--code-bg);
+  color: var(--code-text);
+  font-family: var(--font-mono);
+  font-size: 15px;
+  line-height: 1.8;
+  white-space: pre-wrap;
+  overflow-x: auto;
+}
+.puzzle-card .fill-template input {
+  height: 1.6em;
+  margin: 0 2px;
+  padding: 0 4px;
+  border: var(--border-w) solid var(--ink);
+  vertical-align: baseline;
+}
+
+/* The card of a question (predict, multiple choice): a reading column in the middle. Its head has the kind on the left and the language
+   buttons on the right. */
+.question-card {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 20px;
+  font-size: 17px;
+  line-height: 1.6;
+}
+.question-card .code-block { font-size: 15px; }
+.question-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.question-head > .kicker { margin: 0; }
+.question-card fieldset {
+  display: grid;
+  gap: 10px;
+  min-width: 0;
+  margin: 16px 0;
+  padding: 0;
+  border: 0;
+}
+
+/* A choice is a block as wide as the card. Chosen: yellow with the shadow. After the check, the right one is mint and the wrong one that
+   was chosen is light red; each also has an icon at the end, so the state is not only a color. A test shows the chosen one only. */
+.choice {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border: var(--border-w) solid var(--ink);
+  background: var(--surface);
+  cursor: pointer;
+}
+.question-card fieldset:disabled .choice { cursor: default; }
+.choice input {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  accent-color: var(--ink);
+}
+.choice:has(input:focus-visible) { outline: 3px solid var(--primary); outline-offset: 2px; }
+.choice-text { flex: 1; min-width: 0; white-space: pre-wrap; }
+.choice-text.code { font-family: var(--font-mono); font-size: 15px; }
+.choice-selected { background: var(--yellow); box-shadow: var(--shadow); }
+/* After the check no choice is raised: the chosen one gives up its shadow, so a wrong choice does not look lifted next to the right one. */
+.choice-correct,
+.choice-wrong { box-shadow: none; }
+.choice-correct { background: var(--mint); }
+.choice-wrong { background: var(--danger-bg); }

@@ -467,8 +467,8 @@
   padding: 10px 12px;
   background: var(--code-bg);
   font: 13px/1.6 var(--font-mono);
+  /* The `font` shorthand resets the ligatures that `body` turns off. */
   font-variant-ligatures: none;
-  font-feature-settings: "calt" 0, "liga" 0;
 }
 .landing-code-out {
   padding: 8px 12px;
@@ -476,7 +476,6 @@
   background: var(--mint-bg);
   font: 13px var(--font-mono);
   font-variant-ligatures: none;
-  font-feature-settings: "calt" 0, "liga" 0;
 }
 .landing-code-out::before { content: "> "; }
 

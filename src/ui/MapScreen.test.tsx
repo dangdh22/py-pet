@@ -4,6 +4,7 @@ import userEvent from "@testing-library/user-event";
 import { describe, expect, test } from "vitest";
 import { initialGameState } from "../game/state";
 import { examBundle, twoStageBundle } from "../test/examBundle";
+import { testBundle } from "../test/fixtures";
 import { renderWithGame, TODAY } from "../test/renderGame";
 import { reviewBundle } from "../test/reviewBundle";
 import { MapScreen } from "./MapScreen";
@@ -23,7 +24,7 @@ describe("MapScreen", () => {
     expect(screen.getByRole("heading", { level: 1, name: "Bản đồ học" })).toBeInTheDocument();
     const tabs = within(screen.getByRole("tablist", { name: "Các giai đoạn" })).getAllByRole("tab");
     expect(tabs).toHaveLength(1);
-    expect(tabs[0]).toHaveAccessibleName("1 Giai đoạn thử");
+    expect(tabs[0]).toHaveAccessibleName("Giai đoạn thử");
     expect(tabs[0]).toHaveAttribute("aria-selected", "true");
     expect(screen.getByRole("link", { name: "Bài thử: Tiếp theo" })).toHaveAttribute("href", "#/lesson/t.l1");
     const locked = screen.getByRole("link", { name: "Bài thử 2: Chưa mở" });
@@ -115,8 +116,8 @@ describe("MapScreen", () => {
 describe("MapScreen stage tabs", () => {
   test("the arrow keys, Home and End change the tab and move the focus", async () => {
     await renderWithGame(<MapScreen />, { state: initialGameState(TODAY), bundle: twoStageBundle() });
-    const first = screen.getByRole("tab", { name: "1 Giai đoạn thi" });
-    const second = screen.getByRole("tab", { name: "2 Giai đoạn thử" });
+    const first = screen.getByRole("tab", { name: "Giai đoạn thi" });
+    const second = screen.getByRole("tab", { name: "Giai đoạn thử" });
     expect(first).toHaveAttribute("aria-selected", "true");
     expect(first).toHaveAttribute("tabindex", "0");
     expect(second).toHaveAttribute("tabindex", "-1");
@@ -145,9 +146,9 @@ describe("MapScreen stage tabs", () => {
 
   test("a click on a tab shows the panel of that stage, named by the tab", async () => {
     await renderWithGame(<MapScreen />, { state: initialGameState(TODAY), bundle: twoStageBundle() });
-    expect(screen.getByRole("tabpanel")).toHaveAccessibleName("1 Giai đoạn thi");
-    await userEvent.click(screen.getByRole("tab", { name: "2 Giai đoạn thử" }));
-    expect(screen.getByRole("tabpanel")).toHaveAccessibleName("2 Giai đoạn thử");
+    expect(screen.getByRole("tabpanel")).toHaveAccessibleName("Giai đoạn thi");
+    await userEvent.click(screen.getByRole("tab", { name: "Giai đoạn thử" }));
+    expect(screen.getByRole("tabpanel")).toHaveAccessibleName("Giai đoạn thử");
     expect(screen.getByRole("heading", { level: 2, name: "Chủ đề thử" })).toBeInTheDocument();
     expect(screen.queryByRole("heading", { name: "Chủ đề thi" })).not.toBeInTheDocument();
   });
@@ -160,11 +161,53 @@ describe("MapScreen stage tabs", () => {
       { at: "2026-10-06T09:00:00.000Z", stage: 1, score: 7, max: 7, passed: true, items: [], wrongConcepts: [] },
     ];
     await renderWithGame(<MapScreen />, { state, bundle: twoStageBundle() });
-    const first = screen.getByRole("tab", { name: "1 Giai đoạn thi" });
-    const second = screen.getByRole("tab", { name: "2 Giai đoạn thử" });
+    const first = screen.getByRole("tab", { name: "Giai đoạn thi" });
+    const second = screen.getByRole("tab", { name: "Giai đoạn thử" });
     expect(second).toHaveAttribute("aria-selected", "true");
     expect(first).toHaveAccessibleDescription("Con đã qua giai đoạn này");
     expect(second).not.toHaveAccessibleDescription();
     expect(screen.getByRole("link", { name: "Bài thử: Tiếp theo" })).toBeInTheDocument();
+  });
+
+  test("the tab name is the stage title alone: a title that starts with its number is not numbered twice", async () => {
+    const bundle = testBundle();
+    bundle.stages[0]!.title = { vi: "Giai đoạn 1: Khởi động", en: "Stage 1: Getting started" };
+    const { unmount } = await renderWithGame(<MapScreen />, { state: initialGameState(TODAY), bundle });
+    expect(screen.getByRole("tab")).toHaveAccessibleName("Giai đoạn 1: Khởi động");
+    expect(screen.getByRole("tab")).toHaveTextContent(/^Giai đoạn 1: Khởi động$/);
+    unmount();
+    await renderWithGame(<MapScreen />, { state: initialGameState(TODAY), bundle, lang: "en" });
+    expect(screen.getByRole("tab")).toHaveAccessibleName("Stage 1: Getting started");
+  });
+
+  test("a key with Alt, Meta or Ctrl is left to the browser: Alt+ArrowRight (history forward) does not change the tab", async () => {
+    await renderWithGame(<MapScreen />, { state: initialGameState(TODAY), bundle: twoStageBundle() });
+    const first = screen.getByRole("tab", { name: "Giai đoạn thi" });
+    first.focus();
+    for (const modifier of ["Alt", "Meta", "Control"]) {
+      await userEvent.keyboard(`{${modifier}>}{ArrowRight}{/${modifier}}`);
+      await userEvent.keyboard(`{${modifier}>}{End}{/${modifier}}`);
+      expect(first).toHaveAttribute("aria-selected", "true");
+      expect(first).toHaveFocus();
+    }
+    await userEvent.keyboard("{ArrowRight}");
+    expect(screen.getByRole("tab", { name: "Giai đoạn thử" })).toHaveAttribute("aria-selected", "true");
+  });
+
+  test("the panel takes the focus order only when it holds nothing to focus (a stage with every square locked)", async () => {
+    await renderWithGame(<MapScreen />, { state: initialGameState(TODAY), bundle: twoStageBundle() });
+    // Stage 1 has an open lesson (a link), so the panel is not a tab stop.
+    expect(screen.getByRole("tabpanel")).not.toHaveAttribute("tabindex");
+    await userEvent.click(screen.getByRole("tab", { name: "Giai đoạn thử" }));
+    expect(screen.queryByRole("link", { name: /: (Tiếp theo|Đã xong)$/ })).not.toBeInTheDocument();
+    expect(screen.getByRole("tabpanel")).toHaveAttribute("tabindex", "0");
+  });
+
+  test("a panel whose only link is the evolution test is not a tab stop", async () => {
+    const state = lessonsDone();
+    state.progress.topicTests["x.t"] = TEST_DONE;
+    await renderWithGame(<MapScreen />, { state, bundle: examBundle() });
+    expect(screen.getByRole("link", { name: "Làm bài kiểm tra" })).toBeInTheDocument();
+    expect(screen.getByRole("tabpanel")).not.toHaveAttribute("tabindex");
   });
 });

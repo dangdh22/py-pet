@@ -9,84 +9,23 @@
 
 .app-loading { padding: 40px 20px; text-align: center; }
 
-.lesson-list a { color: var(--primary); font-size: 1.1rem; }
-.badge-done { margin-left: 8px; color: var(--success); font-weight: 600; }
-.lesson-done, .crash { text-align: center; padding: 40px; }
+.crash { text-align: center; padding: 40px; }
 
-.question-card {
-  background: var(--surface);
-  border: var(--border-w) solid var(--ink);
-  box-shadow: var(--shadow-card);
-}
-/* The wide reading box of a question; the box of a lesson card is `.theory-card` (study.css). */
-.question-card {
-  max-width: 760px;
-  margin: 0 auto;
-  padding: 20px;
-  font-size: 1.1rem;
-  line-height: 1.6;
-}
-
-.code-block, .exercise-left pre, .diff pre {
+.code-block {
   background: var(--code-bg);
   color: var(--code-text);
   padding: 10px 12px;
   border: var(--border-w) solid var(--ink);
   border-radius: 0;
   font-family: var(--mono);
-  font-variant-ligatures: none;
-  font-feature-settings: "calt" 0, "liga" 0;
   font-size: 1rem;
   white-space: pre-wrap;
   overflow-x: auto;
 }
 
-.exercise-split { display: grid; grid-template-columns: minmax(280px, 1fr) minmax(360px, 1.3fr); gap: 20px; }
-.exercise-left, .exercise-right {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 0;
-  padding: 16px;
-}
-.exercise-prompt { white-space: pre-wrap; font-size: 1.1rem; }
-.input-label { display: block; margin-top: 8px; }
-.input-label textarea { display: block; width: 100%; font-family: var(--mono); font-variant-ligatures: none; font-feature-settings: "calt" 0, "liga" 0; font-size: 1rem; }
-.exercise-actions { display: flex; gap: 8px; margin: 8px 0; }
-.hint { color: var(--muted); }
-
-.test-results { padding-left: 20px; }
-.test-results .pass { color: var(--success); }
-.test-results .fail { color: var(--danger); }
-.diff { color: var(--text); }
-.diff-line { display: block; background: rgba(211, 58, 58, 0.35); }
-
-.question-card fieldset { border: none; padding: 0; margin: 12px 0; display: grid; gap: 8px; }
-.choice { display: flex; gap: 8px; align-items: flex-start; border: 1px solid var(--border); border-radius: 0; padding: 8px 12px; }
-.choice-text { white-space: pre-wrap; }
-.choice-text.code { font-family: var(--mono); font-variant-ligatures: none; font-feature-settings: "calt" 0, "liga" 0; }
-.choice-correct { border-color: var(--success); background: #e6f7ea; }
-.choice-wrong { border-color: var(--danger); background: #fdecec; }
-
-@media (max-width: 900px) {
-  .exercise-split { grid-template-columns: 1fr; }
-}
-
 [role="alert"] { color: var(--danger); }
 
-/* The row of buttons at the end of a result screen. */
-.room-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 12px; }
-
-.puzzle { background: var(--surface); border: 1px solid var(--border); border-radius: 0; padding: 16px; }
-.parsons-lines { list-style: none; padding: 0; display: grid; gap: 6px; }
-.parsons-lines li { display: flex; gap: 6px; align-items: center; }
-.parsons-line { flex: 1; margin: 0; padding: 8px 12px; border: var(--border-w) solid var(--ink); border-radius: 0; background: var(--code-bg); color: var(--code-text); font-family: var(--mono); font-variant-ligatures: none; font-feature-settings: "calt" 0, "liga" 0; font-size: 1rem; white-space: pre; }
-.fill-template { background: var(--code-bg); color: var(--code-text); padding: 10px 12px; border: var(--border-w) solid var(--ink); border-radius: 0; font-family: var(--mono); font-variant-ligatures: none; font-feature-settings: "calt" 0, "liga" 0; font-size: 1rem; white-space: pre-wrap; }
-.fill-template input { font-family: var(--mono); font-variant-ligatures: none; font-feature-settings: "calt" 0, "liga" 0; font-size: 1rem; margin: 0 2px; }
-.result-rewards { list-style: none; padding: 0; display: flex; justify-content: center; gap: 16px; font-size: 1.3rem; font-weight: 700; color: var(--success); }
-
 /* M3b: tests and evolution */
-.exam-answered { color: var(--muted); font-style: italic; }
-.evolution-done { text-align: center; padding: 40px; }
 .evolve { display: inline-block; animation: evolve 1.2s ease-out both; }
 @keyframes evolve {
   0% { transform: scale(0.6); filter: brightness(2); opacity: 0; }
@@ -94,7 +33,7 @@
   100% { transform: scale(1); filter: none; }
 }
 @media (prefers-reduced-motion: reduce) { .evolve { animation: none; } }
-.evolution-done h1:focus { outline: none; }
+.result-card h1:focus { outline: none; }
 
 /* M6a: the evolution show (design decision 7). Each part's own style is its last frame; keyframes fill both ways. */
 .evolution-show {
@@ -108,8 +47,8 @@
   gap: 20px;
   padding: 64px 16px 32px;
   overflow: hidden;
-  background: radial-gradient(circle at 50% 45%, #2a3563 0%, #0b1022 70%);
-  color: #fff;
+  background: var(--ink);
+  color: var(--surface);
   text-align: center;
   animation: evo-dim 0.4s ease-out both;
   /* Robo (160 to 220 px on a phone) grows with big screens: the teen is about 320 px on a laptop. */
@@ -144,12 +83,12 @@
 }
 .evo-lines { display: grid; min-height: 4.2em; align-items: start; }
 .evo-lines > * { grid-area: 1 / 1; margin: 0; max-width: 28ch; font-size: 1.5rem; font-weight: 700; line-height: 1.35; text-wrap: balance; }
-.evo-from { opacity: 0; color: #c3cde6; animation: evo-from 1.6s ease-out both; }
-.evo-part { color: #ffc83d; animation: evo-part 2s ease-out 2.3s both; }
+.evo-from { opacity: 0; color: #d6d6d6; animation: evo-from 1.6s ease-out both; }
+.evo-part { color: var(--yellow); animation: evo-part 2s ease-out 2.3s both; }
 .evo-flash {
   position: absolute;
   inset: 0;
-  background: #fff;
+  background: var(--surface);
   opacity: 0;
   pointer-events: none;
   animation: evo-flash 0.7s ease-out 1.3s both;
@@ -160,13 +99,16 @@
   right: 16px;
   z-index: 1;
   padding: 8px 18px;
-  border-color: rgba(255, 255, 255, 0.6);
-  background: rgba(255, 255, 255, 0.12);
-  color: #fff;
-  font-weight: 600;
+  border: var(--border-w) solid var(--surface);
+  background: var(--surface);
+  color: var(--ink);
+  /* The shadow is yellow: an ink shadow would vanish on the ink screen. The hover and press rules of the base buttons are
+     stronger than the rule above, so the same 2 states are set again here. */
+  box-shadow: 3px 3px 0 var(--yellow);
 }
-.evo-skip:hover { background: rgba(255, 255, 255, 0.24); }
-.evo-skip:focus-visible { outline: 3px solid #ffc83d; outline-offset: 2px; }
+.evo-skip:hover:not(:disabled) { box-shadow: 4px 4px 0 var(--yellow); }
+.evo-skip:active:not(:disabled) { box-shadow: 1px 1px 0 var(--yellow); }
+.evo-skip:focus-visible { outline: 3px solid var(--yellow); outline-offset: 2px; }
 @keyframes evo-dim { from { opacity: 0; } to { opacity: 1; } }
 @keyframes evo-shake {
   0%, 100% { transform: translateX(0) rotate(0); }
@@ -175,8 +117,8 @@
 }
 @keyframes evo-glow {
   0% { opacity: 1; filter: brightness(1); }
-  80% { opacity: 1; filter: brightness(2.4) drop-shadow(0 0 22px #fff); }
-  100% { opacity: 0; filter: brightness(3.5) drop-shadow(0 0 40px #fff); }
+  80% { opacity: 1; filter: brightness(2.4) drop-shadow(0 0 22px var(--surface)); }
+  100% { opacity: 0; filter: brightness(3.5) drop-shadow(0 0 40px var(--surface)); }
 }
 @keyframes evo-flash {
   0% { opacity: 0; }
