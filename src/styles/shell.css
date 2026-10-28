@@ -144,7 +144,7 @@
 .side-nav-parent[aria-current="page"] { background: var(--mint); }
 
 /* Parent mode (spec 6.2): the logo mark turns mint, the area label sits under it, the 5 tabs are buttons that look like the menu
-   links (they do not lift), a red number marks a tab with something to look at, and the note and the way out are at the bottom. */
+   links (they do not lift), a coral number marks a tab with something to look at, and the note and the way out are at the bottom. */
 .rail-layout[data-mode="parent"] .logo-mark { background: var(--mint); }
 .side-nav-zone {
   display: flex;
@@ -244,6 +244,28 @@
 .squares.steps > .done { background: var(--ink); }
 .squares.steps > .current { background: var(--primary); }
 
+/* A phone, or a window zoomed to 400% (spec 6.4, WCAG 1.4.10): 1 row has no room for the way back, the title, the status and the 2 chips,
+   so the bar wraps. The way back, the status and the chips share the first row (the chips wrap to a row of their own when even that is
+   too narrow), and the title takes a full row under them, where it can wrap instead of being cut. */
+@media (max-width: 599px) {
+  .focus-bar {
+    flex-wrap: wrap;
+    gap: 8px 10px;
+    height: auto;
+    padding: 8px 12px;
+  }
+  .focus-title-slot {
+    order: 1;
+    flex-basis: 100%;
+  }
+  .focus-title h1,
+  .focus-kicker {
+    overflow: visible;
+    text-overflow: clip;
+    white-space: normal;
+  }
+}
+
 /* Narrow windows (spec 6.4): the menu shrinks to 64 px of icons. The text of an item stays in the page, so it still names the
    link; it shows as a floating caption while the item has the pointer or the keyboard focus, and Escape hides it. The labels of the
    wide menu are always in view and have no such rule. */
@@ -301,9 +323,23 @@
     opacity: 0;
     pointer-events: none;
   }
-  /* Escape puts data-tips-hidden on the root (useEscapeHidesTips): the caption goes while the pointer and the focus stay. */
+  /* The strip that fills the 12 px between the item and its caption, so the pointer can go from the item to the caption without the caption
+     going away (WCAG 1.4.13: the note can be hovered). The caption is a child of the item, so the item keeps its hover. */
+  .side-nav-label::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 100%;
+    bottom: 0;
+    width: 14px;
+  }
+  /* Escape puts data-tips-hidden on the root (useEscapeHidesTips): the caption goes while the pointer and the focus stay. It takes the
+     pointer only while it shows: a hidden one would catch the pointer over the item next to it. */
   :root:not([data-tips-hidden]) .side-nav :is(a, button):hover > .side-nav-label,
-  :root:not([data-tips-hidden]) .side-nav :is(a, button):focus-visible > .side-nav-label { opacity: 1; }
+  :root:not([data-tips-hidden]) .side-nav :is(a, button):focus-visible > .side-nav-label {
+    opacity: 1;
+    pointer-events: auto;
+  }
   /* The status keeps its square; the words stay for assistive technology. */
   .side-nav-bottom .runner-status { margin-left: 0; gap: 0; font-size: 0; }
   .side-nav-bottom .lang-switch { margin-left: 0; flex-direction: column; }
@@ -359,7 +395,10 @@
 .landing-link[aria-current="page"] { border-color: var(--ink); background: var(--bg); }
 .landing-link:hover:not(:disabled),
 .landing-link:active:not(:disabled) { transform: none; box-shadow: none; background: var(--bg); }
-.landing-link[aria-expanded="true"] { border-color: var(--ink); background: var(--mint-soft); }
+/* The open toggle keeps its mint on hover: the hover rule above has the higher specificity, so the open state repeats its selectors. */
+.landing-link[aria-expanded="true"],
+.landing-link[aria-expanded="true"]:hover:not(:disabled),
+.landing-link[aria-expanded="true"]:active:not(:disabled) { border-color: var(--ink); background: var(--mint-soft); }
 
 .landing {
   display: grid;
@@ -456,6 +495,7 @@
   bottom: 0;
   left: 0;
   width: 300px;
+  max-width: 100%;
   border: var(--border-w) solid var(--ink);
   background: var(--surface);
   box-shadow: var(--shadow-card);
@@ -689,6 +729,7 @@
 }
 .room-chips {
   display: flex;
+  flex-wrap: wrap;
   gap: 10px;
 }
 .room-body {
@@ -708,7 +749,6 @@
 @media (min-width: 900px) {
   .room-page .scene-inner { min-height: 400px; }
 }
-.room-side .card-title { margin-bottom: 12px; }
 
 /* The main card: the next step with its name, or the charging card. White text on --primary is 5.5:1, so the small label keeps full white. */
 .next-card {

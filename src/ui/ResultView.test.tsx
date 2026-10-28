@@ -48,6 +48,12 @@ describe("ResultView", () => {
     ]);
   });
 
+  test("the focus goes to the title when the result shows: the button that ended the step is gone", async () => {
+    const { before, after } = states();
+    await renderResult(before, after);
+    expect(screen.getByRole("heading", { level: 1, name: "Hoàn thành bài học!" })).toHaveFocus();
+  });
+
   test("no list of rewards when nothing was earned", async () => {
     const { before } = states();
     await renderResult(before, structuredClone(before));

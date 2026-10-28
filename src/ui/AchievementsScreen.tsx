@@ -101,13 +101,14 @@ export function AchievementsScreen() {
         </ul>
       </section>
       <div className="concept-counts">
+        {/* The label is a title above the number: after a number, the English "1 concepts known well" does not read right. */}
         <div className="card">
+          <h2 className="card-title">{t("achievements.masteredLabel")}</h2>
           <span className="concept-count-number">{masteredConcepts(state)}</span>
-          {t("achievements.masteredLabel")}
         </div>
         <div className="card">
+          <h2 className="card-title">{t("achievements.practisingLabel")}</h2>
           <span className="concept-count-number">{practisingConcepts(state)}</span>
-          {t("achievements.practisingLabel")}
         </div>
       </div>
     </main>

@@ -291,6 +291,8 @@ describe("ParentScreen frame", () => {
     await renderWithGame(<ParentScreen />, { meta: { pin: await hashPin("1234", 1000) } });
     expect(screen.getByRole("alert")).toHaveTextContent("Robo bị trục trặc rồi.");
     expect(screen.getByRole("navigation", { name: "Menu chính" })).toBeInTheDocument();
+    // The gate took its own `main` with it: the crash card brings the 1 `main` of the page.
+    expect(within(screen.getByRole("main")).getByRole("alert")).toBeInTheDocument();
   });
 
   test("numbers that cannot be counted leave the tabs without numbers, not a crashed page", async () => {
@@ -312,6 +314,8 @@ describe("ParentScreen frame", () => {
     // The name of the section stays the 1 title of the page; the card inside the panel is an h2.
     expect(screen.getAllByRole("heading", { level: 1 }).map((h) => h.textContent)).toEqual(["Tiến độ"]);
     expect(screen.getByRole("heading", { level: 2, name: "Robo gặp sự cố" })).toBeInTheDocument();
+    // The card sits inside the `main` of the area: no second `main`.
+    expect(screen.getAllByRole("main")).toHaveLength(1);
     expect(screen.getByRole("navigation", { name: "Khu phụ huynh" })).toBeInTheDocument();
     expect(screen.getByRole("tablist")).toBeInTheDocument();
     await userEvent.click(screen.getByRole("tab", { name: "Tổng quan" }));

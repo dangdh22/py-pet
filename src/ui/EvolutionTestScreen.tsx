@@ -202,7 +202,8 @@ function EvolutionFailed({
         {weak.length > 0 && (
           <section className="result-weak">
             <h2>{t("evolution.weakTitle")}</h2>
-            <ul className="concept-chips">
+            {/* role="list": Safari and VoiceOver drop the list role of a list that has `list-style: none`. */}
+            <ul className="concept-chips" role="list">
               {weak.map((concept) => (
                 <li key={concept.id} className="chip">
                   {pick(concept.name, uiLang)}

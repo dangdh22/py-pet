@@ -1,4 +1,4 @@
-import { useState, type ChangeEvent, type FormEvent } from "react";
+import { useId, useState, type ChangeEvent, type FormEvent } from "react";
 import { localDay } from "../game/dates";
 import { useLang } from "../i18n/LangProvider";
 import type { MessageKey } from "../i18n/vi";
@@ -58,6 +58,8 @@ export function BackupScreen() {
   const [importing, setImporting] = useState(false);
   const [importFailed, setImportFailed] = useState(false);
   const [autoItems, setAutoItems] = useState<AutoBackupItem[] | null>(null);
+  // The ids of the date cells: every row has a button named "Tải về", and the date tells them apart.
+  const dateIdPrefix = useId();
 
   async function onImport(payload: BackupPayload) {
     setImporting(true);
@@ -197,10 +199,14 @@ export function BackupScreen() {
                 <tbody>
                   {autoItems.map((item, i) => (
                     <tr key={i}>
-                      <td>{item.day}</td>
+                      <td id={`${dateIdPrefix}-${i}`}>{item.day}</td>
                       <td>{item.childName}</td>
                       <td>
-                        <button className="small" onClick={() => downloadText(backupFileName(item.childName, item.day), item.text)}>
+                        <button
+                          className="small"
+                          aria-describedby={`${dateIdPrefix}-${i}`}
+                          onClick={() => downloadText(backupFileName(item.childName, item.day), item.text)}
+                        >
                           {t("backup.autoDownload")}
                         </button>
                       </td>

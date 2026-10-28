@@ -61,7 +61,8 @@ export function TestResultList({ result }: { result: JudgeResult }) {
   return (
     <div className="box test-box">
       <div className="box-head">{t("judge.summary", { passed: result.passedCount, total: result.total })}</div>
-      <ol aria-label={t("judge.results")}>
+      {/* role="list": Safari and VoiceOver drop the list role of a list that has `list-style: none`. */}
+      <ol role="list" aria-label={t("judge.results")}>
         {result.tests.map((test, position) => (
           <li key={test.index} className={!test.ran ? "not-run" : test.passed ? "pass" : "fail"}>
             <div className="test-row">

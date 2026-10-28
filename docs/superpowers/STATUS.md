@@ -85,10 +85,15 @@ Các finding nhỏ khác đã hoãn nằm trong các file ledger (tìm dòng `mi
 11. Dữ liệu và sao lưu, mục 3 (đổi máy): "Đổi máy hoặc trình duyệt: mở Py-Pet trên máy mới, vào Sao lưu, nhập file .pypet bằng mã PIN." → "Đổi máy hoặc trình duyệt: mở Py-Pet trên máy mới và tạo hồ sơ trước, theo các bước ở phần Bắt đầu lần đầu. Sau đó vào Sao lưu ở menu bên trái và nhập file .pypet bằng mã PIN vừa đặt. Dữ liệu trong file thay dữ liệu hiện tại của máy mới."
 12. Chân trang: "Py-Pet bản đầu, cập nhật 2026-10-07." → "Py-Pet bản đầu, cập nhật 2026-10-27."
 
+Hai câu dưới đây được sửa ở mốc R4 (review cuối trước khi push), sau khi các câu trên đã được viết:
+
+13. Chuẩn bị, mục 3 (thêm 1 vế vào câu của mục 1 ở trên, vì thanh bên thu gọn dưới 1100 px chỉ còn ô vuông, không còn dòng chữ): "Khi dòng Robo sẵn sàng hiện ở đáy menu bên trái (hoặc ở thanh trên khi con làm bài) là con bắt đầu được." → "Khi dòng Robo sẵn sàng hiện ở đáy menu bên trái (hoặc ở thanh trên khi con làm bài) là con bắt đầu được (trên cửa sổ hẹp chỉ có 1 ô vuông, ô chuyển xanh khi Robo sẵn sàng)."
+14. Dữ liệu và sao lưu, mục 3 (đổi máy; thêm 1 câu, vì sau khi nhập mã PIN đổi theo file, xem `GameProvider.tsx`, `payload.meta.pin ?? existing.pin`): "Dữ liệu trong file thay dữ liệu hiện tại của máy mới." → "Dữ liệu trong file thay dữ liệu hiện tại của máy mới. Sau khi nhập, mã PIN là mã PIN trong file (mã của máy cũ)."
+
 ## Môi trường
 
 - Máy phát triển ban đầu dùng Node 24.18, npm 12.2, Python 3.14.2 với `pytest` (trong `.venv`), Chromium của Playwright. `package.json` khai báo `engines.node` là `^22.22.2 || ^24.15.0 || >=26.0.0`, theo yêu cầu của jsdom 30 (bản Node tối thiểu để chạy Vitest).
 - npm 12 chặn script cài đặt của esbuild/fsevents và in cảnh báo; cảnh báo này vô hại.
 - Cài lần đầu: xem `README.md` mục "Cài đặt lần đầu".
 - Phiên cloud (kiểm tra 2026-10-06): Node 22.22.0, npm 10.9.4, Python 3.13. npm in cảnh báo `EBADENGINE` (jsdom 30 cần Node 22.22.2 trở lên) nhưng `npm run check` vẫn xanh. Hook SessionStart tự cài môi trường; e2e dùng Chromium có sẵn qua `PW_CHROMIUM_PATH` (xem `CLAUDE.md`).
-- `npm run check` phải xanh trước mọi merge: lint, typecheck, Vitest (1818 test sau R4; số test tăng theo số mục nội dung), pytest (21), kiểm tra nội dung, Playwright e2e (23, gồm 1 test chạy dưới đường dẫn `/py-pet/`). CI trên GitHub chạy cùng lệnh cho mỗi lần push.
+- `npm run check` phải xanh trước mọi merge: lint, typecheck, Vitest (1833 test sau R4 và đợt sửa cuối trước khi push; số test tăng theo số mục nội dung), pytest (21), kiểm tra nội dung, Playwright e2e (33, gồm 1 test chạy dưới đường dẫn `/py-pet/`). CI trên GitHub chạy cùng lệnh cho mỗi lần push.

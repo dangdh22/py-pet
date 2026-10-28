@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import { findConcept } from "../content/lookup";
 import type { Concept } from "../content/types";
 import { nextStep } from "../game/path";
@@ -26,7 +27,8 @@ export function RewardChips({ xp = 0, xu = 0, pin = 0, vui = 0 }: { xp?: number;
   ).filter(([, amount]) => amount > 0);
   if (rewards.length === 0) return null;
   return (
-    <ul className="reward-chips" aria-label={t("result.rewards")}>
+    // role="list": Safari and VoiceOver drop the list role of a list that has `list-style: none`.
+    <ul className="reward-chips" role="list" aria-label={t("result.rewards")}>
       {rewards.map(([kind, amount, key]) => (
         <li key={kind} className={`chip chip-big chip-${kind}`}>
           {t(key, { n: amount })}
@@ -55,6 +57,12 @@ export function ResultView({
   const { t, uiLang } = useLang();
   const bundle = useContent();
   const { today } = useGame();
+  // The button that ended the last step ("Hoàn thành", "Nộp bài kiểm tra", "Kiểm tra") is gone: the focus goes to the title, as on
+  // the congratulation of an evolution test, not to the page.
+  const headingRef = useRef<HTMLHeadingElement>(null);
+  useEffect(() => {
+    headingRef.current?.focus();
+  }, []);
   const xp = after.pet.xp - before.pet.xp;
   const xu = after.wallet.xu - before.wallet.xu;
   const pin = after.pet.pin - before.pet.pin;
@@ -69,7 +77,9 @@ export function ResultView({
     <main className="result-page">
       <section className="card result-card">
         <PetRobot mood="happy" size={96} />
-        <h1>{title}</h1>
+        <h1 ref={headingRef} tabIndex={-1}>
+          {title}
+        </h1>
         <p>{message}</p>
         <RewardChips xp={xp} xu={xu} pin={pin} vui={vui} />
         <div className="result-goal">

@@ -9,6 +9,7 @@ import { downloadText } from "./download";
 import { ErrorCard } from "./ErrorCard";
 import { LandingScreen } from "./LandingScreen";
 import { OnboardingScreen } from "./OnboardingScreen";
+import { scrollToTop } from "./routing";
 
 export function GameRoot({ store, clock, onReplaced }: { store: GameStore; clock: () => Date; onReplaced(): void }) {
   const { t } = useLang();
@@ -79,6 +80,8 @@ export function GameRoot({ store, clock, onReplaced }: { store: GameStore; clock
         onBack={() => setOnboarding(false)}
         onCreated={(created) => {
           window.location.hash = "#/";
+          // The hash may already be "#/" (no change event), so the room does not wait for one to start at the top.
+          scrollToTop();
           setLoaded(created);
         }}
       />

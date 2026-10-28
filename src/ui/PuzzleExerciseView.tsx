@@ -133,7 +133,8 @@ export function PuzzleExerciseView({
       <p className="exercise-prompt">{pick(exercise.prompt, uiLang)}</p>
       {example && <ExampleTable input={example.input} output={example.output} />}
       {exercise.type === "parsons" ? (
-        <ol className="parsons-lines" aria-label={t("parsons.lines")} ref={linesRef}>
+        // role="list": Safari and VoiceOver drop the list role of a list that has `list-style: none`.
+        <ol className="parsons-lines" role="list" aria-label={t("parsons.lines")} ref={linesRef}>
           {lines.map((line, i) => (
             <li key={i}>
               <pre className="parsons-line">{line}</pre>

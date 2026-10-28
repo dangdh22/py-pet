@@ -32,3 +32,21 @@ export async function startApp(page: Page, name = "An", pin = "1234"): Promise<v
 export async function waitForPython(page: Page): Promise<void> {
   await expect(page.getByText("Robo sẵn sàng")).toBeVisible({ timeout: 60_000 });
 }
+
+/** Does lesson 1 from the room to the result card: the card, the exercise and the check question (needs Pyodide, so it waits for it first). */
+export async function finishLessonOne(page: Page) {
+  await waitForPython(page);
+  await page.getByRole("link", { name: "Học tiếp" }).click();
+  await page.getByRole("button", { name: "Tiếp" }).click();
+  await page.getByRole("button", { name: "Tiếp" }).click();
+  const editor = page.getByRole("textbox", { name: "Trình soạn code" });
+  await editor.click();
+  await page.keyboard.press("ControlOrMeta+A");
+  await page.keyboard.type('print("Xin chào Robo")');
+  await page.getByRole("button", { name: "Nộp bài" }).click();
+  await expect(page.getByText("Đúng hết 1/1 test!")).toBeVisible();
+  await page.getByRole("button", { name: "Tiếp" }).click();
+  await page.getByRole("radio", { name: 'print("Hello")', exact: true }).check();
+  await page.getByRole("button", { name: "Kiểm tra" }).click();
+  await page.getByRole("button", { name: "Hoàn thành" }).click();
+}

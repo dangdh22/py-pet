@@ -93,6 +93,24 @@ describe("OnboardingScreen", () => {
     expect(screen.queryByRole("button", { name: "Tiếp" })).not.toBeInTheDocument();
   });
 
+  test("on step 1 the focus is on \"Tiếp\", which the question of the step describes", () => {
+    renderOnboarding();
+    const button = screen.getByRole("button", { name: "Tiếp" });
+    expect(button).toHaveFocus();
+    expect(button).toHaveAccessibleDescription("Chọn ngôn ngữ");
+  });
+
+  test("on each step \"Tiếp\" (or \"Bắt đầu\") is described by the question of the step", async () => {
+    renderOnboarding();
+    await next();
+    expect(screen.getByRole("button", { name: "Tiếp" })).toHaveAccessibleDescription(NAME);
+    await userEvent.type(screen.getByLabelText(NAME), "An");
+    await next();
+    expect(screen.getByRole("button", { name: "Tiếp" })).toHaveAccessibleDescription(ROBOT);
+    await next();
+    expect(screen.getByRole("button", { name: "Bắt đầu" })).toHaveAccessibleDescription(PIN);
+  });
+
   test("the first control of each step has the focus", async () => {
     renderOnboarding();
     expect(screen.getByRole("button", { name: "Tiếp" })).toHaveFocus();

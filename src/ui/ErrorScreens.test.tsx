@@ -54,6 +54,9 @@ describe("error screens: 1 card with Robo drained", () => {
     expect(within(alert).getByRole("img", { name: "Robo" })).toHaveAttribute("data-form", "1");
     expect(screen.getAllByRole("heading", { level: 1 })).toHaveLength(1);
     expect(screen.getByRole("navigation", { name: "Menu chính" })).toBeInTheDocument();
+    // The crashed screen took its own `main` with it: the card is inside the 1 `main` of the page, and the frame adds no other.
+    expect(screen.getAllByRole("main")).toHaveLength(1);
+    expect(within(screen.getByRole("main")).getByRole("alert")).toBe(alert);
   });
 
   test("the card sits in a white box, not on the bare page", async () => {

@@ -91,6 +91,20 @@ describe("BackupScreen", () => {
     expect(downloadText).toHaveBeenCalledWith("py-pet-binh-2026-10-05.pypet", text);
   });
 
+  test("the buttons of the automatic backups have the same name; the date of their row describes each one", async () => {
+    const first = await encodeBackup({ ...sampleBackupPayload("Bình"), exportedAt: new Date(2026, 9, 5, 9).toISOString() });
+    const second = await encodeBackup({ ...sampleBackupPayload("Bình"), exportedAt: new Date(2026, 9, 12, 9).toISOString() });
+    await renderWithGame(<BackupScreen />, { meta: { pin: await hashPin("1234", 1000), autoBackups: [first, second] } });
+    await unlock("1234");
+    const buttons = await screen.findAllByRole("button", { name: "Tải về" });
+    expect(buttons).toHaveLength(2);
+    expect(buttons.map((button) => button.getAttribute("aria-describedby"))).toSatisfy(
+      (ids: (string | null)[]) => ids.every((id) => id !== null) && new Set(ids).size === 2,
+    );
+    expect(buttons[0]).toHaveAccessibleDescription("2026-10-05");
+    expect(buttons[1]).toHaveAccessibleDescription("2026-10-12");
+  });
+
   test("says when there is no automatic backup", async () => {
     await renderWithGame(<BackupScreen />, { meta: { pin: await hashPin("1234", 1000) } });
     await unlock("1234");

@@ -202,6 +202,26 @@ describe("AppRoutes", () => {
   });
 });
 
+// The window keeps its scroll position when the hash changes: without this a page would open where the last one was scrolled to.
+describe("scroll position", () => {
+  test("a new route scrolls the window to the top; a tab inside a page keeps its place", async () => {
+    const scrollTo = vi.spyOn(window, "scrollTo");
+    window.location.hash = "#/map";
+    await renderWithGame(<AppRoutes />);
+    await screen.findByRole("heading", { name: "Bản đồ học" });
+    scrollTo.mockClear();
+
+    // A stage tab changes no hash.
+    await userEvent.click(screen.getAllByRole("tab")[0]!);
+    expect(scrollTo).not.toHaveBeenCalled();
+
+    window.location.hash = "#/shop";
+    expect(await screen.findByRole("heading", { name: "Cửa hàng" })).toBeInTheDocument();
+    expect(scrollTo).toHaveBeenCalledWith(0, 0);
+    scrollTo.mockRestore();
+  });
+});
+
 describe("a screen that crashes keeps its frame", () => {
   test("a screen with the side menu: the crash message and the side menu", async () => {
     vi.spyOn(console, "error").mockImplementation(() => {});
@@ -210,6 +230,8 @@ describe("a screen that crashes keeps its frame", () => {
     await renderWithGame(<AppRoutes />);
     expect(screen.getByRole("alert")).toHaveTextContent("Robo bị trục trặc rồi.");
     expect(screen.getByRole("navigation", { name: "Menu chính" })).toBeInTheDocument();
+    // The screen took its own `main` with it: the crash card brings the 1 `main` of the page.
+    expect(within(screen.getByRole("main")).getByRole("alert")).toBeInTheDocument();
   });
 
   test("a study screen: the crash message and the way back to the room", async () => {
@@ -220,6 +242,7 @@ describe("a screen that crashes keeps its frame", () => {
     expect(screen.getByRole("alert")).toHaveTextContent("Robo bị trục trặc rồi.");
     expect(screen.getByRole("link", { name: "Về phòng" })).toBeInTheDocument();
     expect(screen.queryByRole("navigation", { name: "Menu chính" })).not.toBeInTheDocument();
+    expect(within(screen.getByRole("main")).getByRole("alert")).toBeInTheDocument();
   });
 });
 
@@ -296,6 +319,26 @@ describe("App", () => {
     await userEvent.click(screen.getByRole("button", { name: "Bắt đầu" }));
     expect(await screen.findByRole("heading", { name: "Phòng của Robo" })).toBeInTheDocument();
     expect(window.location.hash).toBe("#/");
+  });
+
+  test("creating a profile scrolls to the top, also when the hash is already #/ and no hash change follows", async () => {
+    window.location.hash = "#/";
+    // The change event of the line above is delivered before the spy is set.
+    await new Promise((resolve) => setTimeout(resolve));
+    const scrollTo = vi.spyOn(window, "scrollTo");
+    render(<App bundle={testBundle()} runnerClient={makeClient().client} store={new MemoryStore()} clock={() => FIXED_NOW} />);
+    await userEvent.click(await screen.findByRole("button", { name: "Bắt đầu học" }));
+    await userEvent.click(screen.getByRole("button", { name: "Tiếp" }));
+    await userEvent.type(screen.getByLabelText("Tên của con"), "An");
+    await userEvent.click(screen.getByRole("button", { name: "Tiếp" }));
+    await userEvent.click(screen.getByRole("button", { name: "Tiếp" }));
+    await userEvent.type(screen.getByLabelText("Mã PIN của bố mẹ (4 đến 6 chữ số)"), "1234");
+    await userEvent.type(screen.getByLabelText("Nhập lại mã PIN"), "1234");
+    scrollTo.mockClear();
+    await userEvent.click(screen.getByRole("button", { name: "Bắt đầu" }));
+    expect(await screen.findByRole("heading", { name: "Phòng của Robo" })).toBeInTheDocument();
+    expect(scrollTo).toHaveBeenCalledWith(0, 0);
+    scrollTo.mockRestore();
   });
 
   test("with a profile, #/welcome opens the landing page whose start link goes to the room", async () => {

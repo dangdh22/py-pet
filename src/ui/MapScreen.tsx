@@ -5,6 +5,7 @@ import { useContent } from "./contexts";
 import { formatScore } from "./format";
 import { useGame } from "./GameProvider";
 import { Icon } from "./icons";
+import { fitCaption } from "./mapCaption";
 import { mapModel, type MapNodeView, type MapStageView, type MapTopicView } from "./mapModel";
 import { nodeRoute, routeToHash } from "./routing";
 import { useRovingTabs } from "./useRovingTabs";
@@ -21,6 +22,9 @@ function MapNode({ view, step }: { view: MapNodeView; step: string }) {
   const props = {
     className: `map-node map-node-${shape} map-node-${status}`,
     "aria-label": t("map.nodeName", { step, status: t(`map.${status}`) }),
+    // The caption shows on hover or focus; it moves back into the page when the square is near a side.
+    onPointerEnter: fitCaption,
+    onFocus: fitCaption,
   };
   let face = null;
   if (status === "done") face = <Icon name="check" />;
@@ -77,7 +81,8 @@ function MapTopic({ view }: { view: MapTopicView }) {
         <h2>{title}</h2>
         <p className="map-topic-count">{count + best}</p>
       </div>
-      <ol className={hasNext ? "map-track map-track-has-next" : "map-track"} aria-label={title}>
+      {/* role="list": Safari and VoiceOver drop the list role of a list that has `list-style: none`. */}
+      <ol className={hasNext ? "map-track map-track-has-next" : "map-track"} role="list" aria-label={title}>
         {view.nodes.map((node) => (
           <MapNode key={node.node.id} view={node} step={stepName(node)} />
         ))}

@@ -23,6 +23,9 @@ const STEPS = 4;
 /** What Robo says on each step (spec 7.2). */
 const SAY: readonly MessageKey[] = ["onboarding.say1", "onboarding.say2", "onboarding.say3", "onboarding.say4"];
 
+/** The id of the question of each step: the language question, then the labels of the first field of steps 2 to 4. "Next" is described by it. */
+const QUESTION_ID = ["ob-language-question", "ob-child-name-question", "ob-robot-name-question", "ob-pin-question"] as const;
+
 type Field = "name" | "pin" | "pinAgain";
 /** The field each error is about; a save error is about none of them. */
 const ERROR_FIELD: Partial<Record<MessageKey, Field>> = {
@@ -53,7 +56,9 @@ export function OnboardingScreen({ store, clock, onCreated, onBack, requestPersi
   }
 
   // A new step puts the focus on its first control, so the child lands on the new question and Enter goes on. Step 1 has no
-  // text field, so its focus goes to "Next" (Enter submits it); the language buttons stay 1 Tab away.
+  // text field, so its focus goes to "Next" (Enter submits it); the language buttons are 2 or 3 Shift+Tab presses away (the Back
+  // button, when there is one, is between them). A screen reader would say only "Next, button" there, so "Next" is described by
+  // the question of the step (`aria-describedby`).
   useEffect(() => {
     (step === 1 ? nextButton : firstInput).current?.focus();
   }, [step]);
@@ -125,10 +130,10 @@ export function OnboardingScreen({ store, clock, onCreated, onBack, requestPersi
           <form key={step} className="ob-form" onSubmit={handleSubmit}>
             {step === 1 && (
               <>
-                <p id="ob-language-question" className="ob-question">
+                <p id={QUESTION_ID[0]} className="ob-question">
                   {t("onboarding.language")}
                 </p>
-                <div role="group" aria-labelledby="ob-language-question" className="lang-switch ob-lang">
+                <div role="group" aria-labelledby={QUESTION_ID[0]} className="lang-switch ob-lang">
                   <button type="button" aria-pressed={uiLang === "vi"} onClick={() => setUiLang("vi")}>
                     {t("onboarding.langVi")}
                   </button>
@@ -141,7 +146,7 @@ export function OnboardingScreen({ store, clock, onCreated, onBack, requestPersi
             {step === 2 && (
               <>
                 <label className="ob-field">
-                  <span>{t("onboarding.childName")}</span>
+                  <span id={QUESTION_ID[1]}>{t("onboarding.childName")}</span>
                   <input
                     ref={firstInput}
                     value={childName}
@@ -157,7 +162,7 @@ export function OnboardingScreen({ store, clock, onCreated, onBack, requestPersi
             )}
             {step === 3 && (
               <label className="ob-field">
-                <span>{t("onboarding.robotName")}</span>
+                <span id={QUESTION_ID[2]}>{t("onboarding.robotName")}</span>
                 <input ref={firstInput} value={robotName} maxLength={20} onChange={(e) => setRobotName(e.target.value)} />
               </label>
             )}
@@ -165,7 +170,7 @@ export function OnboardingScreen({ store, clock, onCreated, onBack, requestPersi
               <>
                 <div className="ob-pins">
                   <label className="ob-field">
-                    <span>{t("onboarding.pin")}</span>
+                    <span id={QUESTION_ID[3]}>{t("onboarding.pin")}</span>
                     <input
                       ref={firstInput}
                       type="password"
@@ -205,7 +210,13 @@ export function OnboardingScreen({ store, clock, onCreated, onBack, requestPersi
                   {t("onboarding.back")}
                 </button>
               )}
-              <button ref={nextButton} className="primary ob-next" type="submit" disabled={busy}>
+              <button
+                ref={nextButton}
+                className="primary ob-next"
+                type="submit"
+                aria-describedby={QUESTION_ID[step - 1]}
+                disabled={busy}
+              >
                 {t(step < STEPS ? "onboarding.next" : "onboarding.start")}
                 {step < STEPS && <Icon name="next" />}
               </button>

@@ -15,6 +15,8 @@ test("shows the forms of Robo, then the badges, then the 2 concept counts", asyn
   expect(screen.getAllByRole("heading", { level: 2 }).map((h) => h.textContent)).toEqual([
     "Các dạng của Robo",
     "Huy hiệu · 1/17",
+    "Khái niệm đã vững",
+    "Khái niệm đang luyện",
   ]);
   const forms = screen.getByRole("heading", { name: "Các dạng của Robo" }).nextElementSibling as HTMLElement;
   expect(within(forms).getAllByRole("listitem").map((li) => li.textContent)).toEqual([
@@ -26,9 +28,23 @@ test("shows the forms of Robo, then the badges, then the 2 concept counts", asyn
   const cards = document.querySelectorAll<HTMLElement>(".concept-counts .card");
   expect(cards).toHaveLength(2);
   expect(cards[0].querySelector(".concept-count-number")).toHaveTextContent("1");
-  expect(cards[0]).toHaveTextContent("khái niệm đã vững");
+  expect(within(cards[0]).getByRole("heading", { level: 2, name: "Khái niệm đã vững" })).toHaveClass("card-title");
   expect(cards[1].querySelector(".concept-count-number")).toHaveTextContent("1");
-  expect(cards[1]).toHaveTextContent("khái niệm đang luyện");
+  expect(within(cards[1]).getByRole("heading", { level: 2, name: "Khái niệm đang luyện" })).toHaveClass("card-title");
+});
+
+// The label stood after the number, which in English read "1 concepts known well". It is a title above the number now.
+test("the English counts are a title above the number, not a sentence after it", async () => {
+  const state = initialGameState(TODAY);
+  state.mastery = { a: { ...emptyMastery(), score: 90 } };
+  await renderWithGame(<AchievementsScreen />, { state, lang: "en" });
+  const cards = document.querySelectorAll<HTMLElement>(".concept-counts .card");
+  expect(cards).toHaveLength(2);
+  const known = within(cards[0]).getByRole("heading", { level: 2, name: "Concepts known well" });
+  expect(known).toHaveClass("card-title");
+  // The title comes first in the card, the number after it.
+  expect(known.nextElementSibling).toHaveClass("concept-count-number");
+  expect(within(cards[1]).getByRole("heading", { level: 2, name: "Concepts in practice" })).toBeInTheDocument();
 });
 
 test("a badge earned is a square you can focus to read its date; one not earned is grey with a lock", async () => {

@@ -5,12 +5,16 @@ import { downloadText } from "./download";
 import { ErrorCard } from "./ErrorCard";
 import { useOptionalGame } from "./GameProvider";
 
-/** The crash message as an error card; `level` 2 where the place already has its own `h1` (a section of the parent area). */
+/**
+ * The crash message as an error card; `level` 2 where the place already has its own `h1` (a section of the parent area).
+ * At level 1 the card is the whole screen, and the screen that crashed took its `main` with it, so the card brings a `main` landmark.
+ * At level 2 it sits inside the `main` of the parent area, so a `main` there would be a second one.
+ */
 export function CrashFallback({ level = 1 }: { level?: 1 | 2 }) {
   const { t } = useLang();
   const game = useOptionalGame();
   const [exportFailed, setExportFailed] = useState(false);
-  return (
+  const panel = (
     <div role="alert" className="error-panel">
       <ErrorCard title={t("app.crashTitle")} level={level}>
         <p>{t("app.crash")}</p>
@@ -36,6 +40,7 @@ export function CrashFallback({ level = 1 }: { level?: 1 | 2 }) {
       </ErrorCard>
     </div>
   );
+  return level === 1 ? <main>{panel}</main> : panel;
 }
 
 /** Catches a crash below it and shows the crash screen, or `fallback` where a smaller stand-in suits the place (a side menu). */

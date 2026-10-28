@@ -139,7 +139,10 @@
 
 /* The code editor: a box with a file tab on top. The colors inside come from `editorTheme.ts`. */
 .code-editor { box-shadow: var(--shadow-card); }
-.code-editor .cm-editor { min-height: 220px; }
+/* The height goes on the content and the gutter (the idiom of CodeMirror), not on `.cm-editor`: the scroller is `height: 100%` of an editor
+   with an automatic height, which has nothing to resolve against, so the pale column of the line numbers would stop after the last line. */
+.code-editor .cm-content,
+.code-editor .cm-gutter { min-height: 220px; }
 .code-editor-tab {
   display: flex;
   padding: 0;

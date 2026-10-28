@@ -13,7 +13,9 @@ for (const name of PACKAGES) {
   let packageDir;
   try {
     packageDir = dirname(require.resolve(`@fontsource-variable/${name}/LICENSE`));
-  } catch {
+  } catch (error) {
+    // Only a missing package is the expected case. Any other error (a changed "exports" map, a read error) must not hide behind that message.
+    if (error?.code !== "MODULE_NOT_FOUND") throw error;
     console.error(`Không tìm thấy gói @fontsource-variable/${name}`);
     process.exit(1);
   }

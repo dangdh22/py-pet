@@ -122,10 +122,22 @@ export function stepRoute(step: NextStep): Route {
   }
 }
 
+/**
+ * A page opens at its top. The window keeps its scroll position when the hash changes, so a new route would open where the old page was
+ * scrolled to (for example the room, after the welcome page was scrolled down on a phone). A tab inside a page changes no hash, so it
+ * keeps its place.
+ */
+export function scrollToTop(): void {
+  window.scrollTo(0, 0);
+}
+
 export function useHashRoute(): [Route, (route: Route) => void] {
   const [route, setRoute] = useState<Route>(() => parseHash(window.location.hash));
   useEffect(() => {
-    const onChange = () => setRoute(parseHash(window.location.hash));
+    const onChange = () => {
+      setRoute(parseHash(window.location.hash));
+      scrollToTop();
+    };
     window.addEventListener("hashchange", onChange);
     return () => window.removeEventListener("hashchange", onChange);
   }, []);

@@ -3,6 +3,11 @@
 /* The content next to the tab menu, and the screen with the PIN card. */
 .parent,
 .parent-gate { padding: 24px 32px 40px; }
+/* The open area stops growing at the width of the child pages (`.page`), so a wide screen does not stretch the tables and the cards. */
+.parent {
+  max-width: 1180px;
+  margin: 0 auto;
+}
 .parent .banner {
   margin-bottom: 16px;
   border: var(--border-w) solid var(--ink);

@@ -285,23 +285,32 @@
   opacity: 0;
   pointer-events: none;
 }
+/* The strip that fills the 6 px between the badge and its note, so the pointer can go from the badge to the note without the note going
+   away (WCAG 1.4.13: the note can be hovered). The note is a child of the badge, so the badge keeps its hover. */
+.ach-badge-day::before {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 100%;
+  left: 0;
+  height: 8px;
+}
+/* The note takes the pointer only while it shows: a hidden one would catch the pointer over what lies under it. */
 :root:not([data-tips-hidden]) .ach-badge:hover > .ach-badge-day,
-:root:not([data-tips-hidden]) .ach-badge:focus-visible > .ach-badge-day { opacity: 1; }
+:root:not([data-tips-hidden]) .ach-badge:focus-visible > .ach-badge-day {
+  opacity: 1;
+  pointer-events: auto;
+}
 
-/* The 2 numbers under the badges. */
+/* The 2 numbers under the badges: a title (`.card-title`) above the number. */
 .concept-counts {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 16px;
   margin-top: 22px;
 }
-.concept-counts .card {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 4px 12px;
-}
 .concept-counts .concept-count-number {
+  display: block;
   font-size: 34px;
   font-weight: 800;
   line-height: 1;
@@ -315,7 +324,8 @@
   align-items: start;
 }
 @media (max-width: 899px) {
-  .backup-cards { grid-template-columns: 1fr; }
+  /* `minmax(0, 1fr)`, not `1fr`: the column of `1fr` is never narrower than its widest content (the file picker), so on a phone it grew past the page. */
+  .backup-cards { grid-template-columns: minmax(0, 1fr); }
 }
 .backup-cards + .card { margin-top: 20px; }
 .backup-page .card {
@@ -328,7 +338,13 @@
 .backup-file {
   display: grid;
   gap: 6px;
+  max-width: 100%;
   font-weight: 600;
+}
+/* The picker has a width of its own (about 350 px); in a narrow card it shrinks to the card and cuts the name of the file. */
+.backup-file input {
+  min-width: 0;
+  max-width: 100%;
 }
 .backup-preview {
   display: grid;

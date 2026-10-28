@@ -1,22 +1,5 @@
-import { expect, test, type Page } from "@playwright/test";
-import { startApp, waitForPython } from "./helpers";
-
-async function finishLessonOne(page: Page) {
-  await waitForPython(page);
-  await page.getByRole("link", { name: "Học tiếp" }).click();
-  await page.getByRole("button", { name: "Tiếp" }).click();
-  await page.getByRole("button", { name: "Tiếp" }).click();
-  const editor = page.getByRole("textbox", { name: "Trình soạn code" });
-  await editor.click();
-  await page.keyboard.press("ControlOrMeta+A");
-  await page.keyboard.type('print("Xin chào Robo")');
-  await page.getByRole("button", { name: "Nộp bài" }).click();
-  await expect(page.getByText("Đúng hết 1/1 test!")).toBeVisible();
-  await page.getByRole("button", { name: "Tiếp" }).click();
-  await page.getByRole("radio", { name: 'print("Hello")', exact: true }).check();
-  await page.getByRole("button", { name: "Kiểm tra" }).click();
-  await page.getByRole("button", { name: "Hoàn thành" }).click();
-}
+import { expect, test } from "@playwright/test";
+import { finishLessonOne, startApp } from "./helpers";
 
 test("progress survives a reload", async ({ page }) => {
   await startApp(page);

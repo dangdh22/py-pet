@@ -146,16 +146,14 @@ describe("page classes", () => {
     "ach-badge-test",
     "ach-badge-concepts",
     "ach-badge-evolution",
-    // `chip-${kind}` (ResultView, `RewardChips`).
+    // `chip-${kind}` (ResultView, `RewardChips`). `chip-xu` and `chip-pin` are also spelled whole in the code, so they need no entry.
     "chip-xp",
-    "chip-xu",
-    "chip-pin",
     "chip-vui",
     // `choice-${mark}` (QuestionCard, `markOf`).
     "choice-correct",
     "choice-wrong",
     // `runner-${status}` (RunnerStatus; a failed runner shows no status line, so `runner-failed` is the alert panel's own class).
-    "runner-loading",
+    // The loading status has no rule of its own: the yellow square is the default, so only `runner-ready` has a sheet rule.
     "runner-ready",
   ];
 
@@ -253,4 +251,15 @@ test("the row under the card of a broken item is as wide as the card", () => {
   );
   expect(rule?.body).toContain("max-width: 560px;");
   expect(rule?.body).toContain("margin-inline: auto;");
+});
+
+// The pale column of the line numbers must run the full height of the editor, also when the code has 1 or 2 lines. The scroller is `height: 100%`
+// of an editor whose height is automatic, which cannot resolve, so the minimum height is on the content and on the gutter (the idiom of
+// CodeMirror), and not on `.cm-editor`. A browser test would need real layout; this only keeps the rule where it works.
+test("the editor takes its minimum height on the content and the gutter, not on .cm-editor", () => {
+  const rule = sheet("study").find((candidate) => selectorList(candidate.selector).includes(".code-editor .cm-gutter"));
+  expect(rule && selectorList(rule.selector)).toContain(".code-editor .cm-content");
+  expect(rule?.body).toContain("min-height: 220px;");
+  const onEditor = sheet("study").filter((candidate) => /\.cm-editor(?![\w-])/.test(candidate.selector) && /min-height/.test(candidate.body));
+  expect(onEditor.map((candidate) => candidate.selector)).toEqual([]);
 });
