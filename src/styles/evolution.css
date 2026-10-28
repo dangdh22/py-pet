@@ -76,7 +76,8 @@
 }
 .evo-skip:hover:not(:disabled) { box-shadow: 4px 4px 0 var(--yellow); }
 .evo-skip:active:not(:disabled) { box-shadow: 1px 1px 0 var(--yellow); }
-.evo-skip:focus-visible { outline: 3px solid var(--yellow); outline-offset: 2px; }
+/* The ring is clear of the yellow shadow (3 px, 4 px on hover): at 2 px it would run into it, both being yellow. */
+.evo-skip:focus-visible { outline: 3px solid var(--yellow); outline-offset: 6px; }
 @keyframes evo-dim { from { opacity: 0; } to { opacity: 1; } }
 @keyframes evo-shake {
   0%, 100% { transform: translateX(0) rotate(0); }

@@ -134,21 +134,29 @@ describe("page classes", () => {
     expect(found).toEqual([]);
   });
 
-  // The classes that the code builds from a prefix and a variable (`decor-${id}`, `ach-badge-${group}`...): they never appear whole in the
-  // code. The last 3 are `chip-${kind}` (ResultView), `choice-${mark}` (QuestionCard) and `runner-${status}` (RunnerStatus).
-  const DYNAMIC_PREFIXES = [
-    "decor-",
-    "robot-pose-",
-    "scene-",
-    "stat-",
-    "map-node-",
-    "map-key-",
-    "shop-pic-",
-    "ach-badge-",
-    "cm-",
-    "chip-",
-    "choice-",
-    "runner-",
+  // The classes that the code builds from a prefix and a variable (`decor-${id}`, `scene-${where}`...): they never appear whole in the code.
+  // A prefix is kept only where the names come from data or from a long list; a short fixed list is spelled out in `DYNAMIC_NAMES`, so
+  // the other classes with that prefix (`ach-badge-mark`, `chip-big`...) still have to be found in the code.
+  const DYNAMIC_PREFIXES = ["decor-", "robot-pose-", "scene-", "stat-", "map-node-", "shop-pic-", "cm-"];
+  const DYNAMIC_NAMES = [
+    // `ach-badge-${group}` (AchievementsScreen, `BadgeGroup`).
+    "ach-badge-lessons",
+    "ach-badge-streak",
+    "ach-badge-practice",
+    "ach-badge-test",
+    "ach-badge-concepts",
+    "ach-badge-evolution",
+    // `chip-${kind}` (ResultView, `RewardChips`).
+    "chip-xp",
+    "chip-xu",
+    "chip-pin",
+    "chip-vui",
+    // `choice-${mark}` (QuestionCard, `markOf`).
+    "choice-correct",
+    "choice-wrong",
+    // `runner-${status}` (RunnerStatus; a failed runner shows no status line, so `runner-failed` is the alert panel's own class).
+    "runner-loading",
+    "runner-ready",
   ];
 
   /** The code of the app: every `.ts` and `.tsx` file of `src` but the tests, the test helpers and the sheets' own tests. */
@@ -162,7 +170,7 @@ describe("page classes", () => {
   test("every class in the style sheets is used in src", () => {
     const code = appCode();
     const unused = classesInSheets().filter((name) => {
-      if (DYNAMIC_PREFIXES.some((prefix) => name.startsWith(prefix))) return false;
+      if (DYNAMIC_NAMES.includes(name) || DYNAMIC_PREFIXES.some((prefix) => name.startsWith(prefix))) return false;
       // A whole name, so `badge` is not found inside `ach-badge`.
       return !new RegExp(`(?<![\\w-])${escapeRegExp(name)}(?![\\w-])`).test(code);
     });
@@ -195,4 +203,54 @@ describe("the floating notes", () => {
       expect(bare).toEqual([]);
     },
   );
+});
+
+// `body` turns the ligatures off for all the mono text (see `ligatures.test.ts`), so no sheet needs a `font-feature-settings` line.
+test("no sheet sets font-feature-settings", () => {
+  const found = cssFiles().flatMap((file) =>
+    rules(read(file))
+      .filter((rule) => /(?<![\w-])font-feature-settings\s*:/.test(rule.body))
+      .map((rule) => `${sheetName(file)}: ${rule.selector}`),
+  );
+  expect(found).toEqual([]);
+});
+
+// `100vh` is the height of the window as if the bars of a phone browser were out of it, so a page of that height is taller than what the
+// child sees. `100dvh` follows the bars. A browser that does not know `dvh` drops that line and keeps the `100vh` line before it.
+test("every 100vh height has a 100dvh line after it in the same rule", () => {
+  const missing: string[] = [];
+  for (const file of cssFiles()) {
+    for (const rule of rules(read(file))) {
+      const declarations = rule.body
+        .split(";")
+        .map((declaration) => declaration.trim())
+        .filter((declaration) => declaration !== "")
+        .map((declaration) => {
+          const colon = declaration.indexOf(":");
+          return { property: declaration.slice(0, colon).trim(), value: declaration.slice(colon + 1).trim() };
+        });
+      declarations.forEach(({ property, value }, index) => {
+        if (value !== "100vh") return;
+        const fallbackFollows = declarations.slice(index + 1).some((later) => later.property === property && later.value === "100dvh");
+        if (!fallbackFollows) missing.push(`${sheetName(file)}: ${rule.selector} { ${property}: 100vh }`);
+      });
+    }
+  }
+  expect(missing).toEqual([]);
+});
+
+// `.study-nav` puts Back at the left end and Next at the right end (`space-between`). A row with 1 button (a review, a practice set or a
+// test has no Back) would put it at the left end, so a lone button takes the auto margin that pushes it to the right.
+test(".study-nav pushes a lone button to the right end", () => {
+  const rule = sheet("study").find((candidate) => selectorList(candidate.selector).includes(".study-nav > :only-child"));
+  expect(rule?.body).toContain("margin-left: auto;");
+});
+
+// The card of a broken item is 560 px at most; the row under it is as wide, as the row under a 760 px card is as wide as that card.
+test("the row under the card of a broken item is as wide as the card", () => {
+  const rule = sheet("study").find((candidate) =>
+    selectorList(candidate.selector).includes(".study-page:has(> .item-broken) > .study-nav"),
+  );
+  expect(rule?.body).toContain("max-width: 560px;");
+  expect(rule?.body).toContain("margin-inline: auto;");
 });

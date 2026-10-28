@@ -5,6 +5,7 @@
   display: grid;
   place-items: center;
   min-height: 100vh;
+  min-height: 100dvh;
   padding: 24px;
   background: var(--bg);
 }
@@ -46,11 +47,9 @@
   font-size: 16px;
   line-height: 1.5;
 }
-/* A failed export inside the card keeps the red of an alert. */
-.error-card p[role="alert"] {
-  color: var(--danger);
-  font-weight: 600;
-}
+/* A failed export inside the card keeps the red of an alert (the `[role="alert"]` rule at the end of this sheet sets it on the line itself,
+   so the ink of the card does not reach it); only the weight is set here. */
+.error-card p[role="alert"] { font-weight: 600; }
 
 .error-actions {
   display: flex;

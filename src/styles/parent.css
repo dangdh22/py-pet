@@ -195,7 +195,6 @@
   gap: 16px;
   align-content: start;
 }
-.parent-help > p { margin: 0; }
 :is(.parent-help, .parent-progress, .parent-rewards, .parent-settings) .card,
 .parent-settings form {
   display: grid;
@@ -354,7 +353,7 @@
   gap: 10px;
   align-items: end;
 }
-/* On a phone a row is 3 lines tall, so a light rule tells the rows apart. */
+/* A light rule tells the rows apart (under 760 px a row is 3 lines tall: the name, then the price and the limit, then the button). */
 .reward-rows li + li {
   padding-top: 12px;
   border-top: var(--border-w) solid var(--line-soft);
@@ -448,8 +447,6 @@
   padding: 0;
   list-style: none;
   font-family: var(--font-mono);
-  font-variant-ligatures: none;
-  font-feature-settings: "calt" 0, "liga" 0;
   font-size: 13px;
 }
 .error-log li {

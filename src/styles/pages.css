@@ -350,3 +350,5 @@
 .backup-page .table-scroll { width: 100%; }
 .backup-page .table { width: 100%; }
 .backup-page .table td:last-child { text-align: right; }
+/* The name cell (the 2nd one) is the child's own text. A long name breaks anywhere, so it does not push the table past the card on a phone. */
+.backup-page .table td:nth-child(2) { overflow-wrap: anywhere; }
