@@ -9,8 +9,6 @@
 
 .app-loading { padding: 40px 20px; text-align: center; }
 
-.crash { text-align: center; padding: 40px; }
-
 .code-block {
   background: var(--code-bg);
   color: var(--code-text);

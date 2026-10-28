@@ -56,6 +56,23 @@ Tài liệu:
 
 Các finding nhỏ khác đã hoãn nằm trong các file ledger (tìm dòng `minor (deferred)` và `parked`).
 
+## Trang Hướng dẫn: câu đã sửa ở mốc R3 (chờ phụ huynh duyệt lời văn)
+
+`public/huong-dan.html` được trình bày lại theo kiểu mới (thanh trên có nút "Mở app", mục lục dạng thẻ). Nội dung giữ nguyên, trừ các câu tả cách đi lại trong app mà bản mới làm sai. Mỗi dòng dưới đây ghi tên phần, câu cũ và câu mới (1 câu mới được thêm không có câu cũ). Phụ huynh xem lại lời văn của các câu này.
+
+1. Chuẩn bị, mục 3: "Khi đầu trang hiện Robo sẵn sàng là con bắt đầu được." → "Khi dòng Robo sẵn sàng hiện ở đáy menu bên trái (hoặc ở thanh trên khi con làm bài) là con bắt đầu được."
+2. Bắt đầu lần đầu, bước 1: "Mở trang Py-Pet." → "Mở trang Py-Pet. Lần đầu mở, app hiện trang giới thiệu có 3 nút: Bắt đầu học, Hướng dẫn và Khu phụ huynh. Bấm Bắt đầu học."
+3. Bắt đầu lần đầu, bước 2: "Chọn ngôn ngữ: Tiếng Việt hoặc English." → "App mở phần chào hỏi gồm 4 bước, mỗi bước 1 câu hỏi. Bấm Tiếp để sang bước sau, bấm Quay lại để về bước trước. Bước 1: chọn ngôn ngữ, Tiếng Việt hoặc English."
+4. Bắt đầu lần đầu, bước 3: "Nhập tên của con và đặt tên cho robot." → "Bước 2: nhập tên của con. Bước 3: đặt tên cho robot (tên có sẵn là Robo)."
+5. Bắt đầu lần đầu, bước 4: "Bố mẹ đặt mã PIN gồm 4 đến 6 chữ số. Mã PIN dùng để vào Khu phụ huynh, duyệt phần thưởng và nhập file sao lưu." → "Bước 4: bố mẹ đặt mã PIN gồm 4 đến 6 chữ số và nhập lại lần nữa. Mã PIN dùng để vào Khu phụ huynh, duyệt phần thưởng và nhập file sao lưu."
+6. Một buổi học, đoạn mới đầu phần (không có câu cũ): "Ở Phòng của Robo và các trang khác của con, menu bên trái có các mục Phòng Robo, Bản đồ học, Cửa hàng, Sổ thành tích, Sao lưu và Hướng dẫn. Khi con làm bài, menu này ẩn đi để con tập trung. Thanh trên lúc đó có nút Về phòng, tên bài đang làm, các ô bước, trạng thái của Python, Pin và xu."
+7. Dành cho bố mẹ, đoạn đầu: "Vào Khu phụ huynh từ Phòng của Robo bằng mã PIN. Khu này tự khóa sau 5 phút không thao tác." → "Bấm nút Khu phụ huynh ở đáy menu bên trái (hoặc ở trang giới thiệu), rồi nhập mã PIN để vào. Khu này tự khóa sau 5 phút không thao tác. Bấm Khóa và quay lại ở đáy menu để khóa ngay và về Phòng của Robo. Trong khu này, menu bên trái có 5 mục:"
+8. Dành cho bố mẹ, tiêu đề cột đầu của bảng: "Tab" → "Mục".
+9. Dành cho bố mẹ, câu cuối: "Quên mã PIN thì bấm Quên mã PIN? ở cửa vào." → "Quên mã PIN thì bấm Quên mã PIN? ở màn hình nhập PIN."
+10. Dữ liệu và sao lưu, mục 2: "Mỗi tuần, vào Sao lưu và bấm Xuất file sao lưu để lưu file .pypet." → "Mỗi tuần, vào Sao lưu ở menu bên trái và bấm Xuất file sao lưu để lưu file .pypet."
+11. Dữ liệu và sao lưu, mục 3 (đổi máy): "Đổi máy hoặc trình duyệt: mở Py-Pet trên máy mới, vào Sao lưu, nhập file .pypet bằng mã PIN." → "Đổi máy hoặc trình duyệt: mở Py-Pet trên máy mới và tạo hồ sơ trước, theo các bước ở phần Bắt đầu lần đầu. Sau đó vào Sao lưu ở menu bên trái và nhập file .pypet bằng mã PIN vừa đặt. Dữ liệu trong file thay dữ liệu hiện tại của máy mới."
+12. Chân trang: "Py-Pet bản đầu, cập nhật 2026-10-07." → "Py-Pet bản đầu, cập nhật 2026-10-27."
+
 ## Môi trường
 
 - Máy phát triển ban đầu dùng Node 24.18, npm 12.2, Python 3.14.2 với `pytest` (trong `.venv`), Chromium của Playwright. `package.json` khai báo `engines.node` là `^22.22.2 || ^24.15.0 || >=26.0.0`, theo yêu cầu của jsdom 30 (bản Node tối thiểu để chạy Vitest).
