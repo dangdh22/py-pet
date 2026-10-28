@@ -1,4 +1,4 @@
-import { useRef, useState, type KeyboardEvent } from "react";
+import { useState } from "react";
 import { pick } from "../i18n/lang";
 import { useLang } from "../i18n/LangProvider";
 import { useContent } from "./contexts";
@@ -7,6 +7,7 @@ import { useGame } from "./GameProvider";
 import { Icon } from "./icons";
 import { mapModel, type MapNodeView, type MapStageView, type MapTopicView } from "./mapModel";
 import { nodeRoute, routeToHash } from "./routing";
+import { useRovingTabs } from "./useRovingTabs";
 
 const PANEL_ID = "map-panel";
 const PASSED_ID = "map-stage-passed";
@@ -134,32 +135,16 @@ export function MapScreen() {
   const model = mapModel(bundle, state);
   // Until the child picks a tab, the map shows the stage of the next step.
   const [chosen, setChosen] = useState<string | null>(null);
-  const tabs = useRef<(HTMLButtonElement | null)[]>([]);
   const picked = model.stages.findIndex(({ stage }) => stage.id === chosen);
   const active = picked >= 0 ? picked : model.current;
   const shown = model.stages[active];
 
-  const select = (index: number) => {
-    const target = model.stages[index];
-    if (!target) return;
-    setChosen(target.stage.id);
-    tabs.current[index]?.focus();
-  };
-  const onKeyDown = (event: KeyboardEvent) => {
-    // A key with a modifier belongs to the browser (Alt+Arrow is back and forward in history).
-    if (event.altKey || event.metaKey || event.ctrlKey) return;
-    const count = model.stages.length;
-    const keys: Record<string, number> = {
-      ArrowRight: (active + 1) % count,
-      ArrowLeft: (active + count - 1) % count,
-      Home: 0,
-      End: count - 1,
-    };
-    const target = keys[event.key];
-    if (target === undefined) return;
-    event.preventDefault();
-    select(target);
-  };
+  const { tabRef, select, onKeyDown } = useRovingTabs({
+    count: model.stages.length,
+    current: active,
+    orientation: "horizontal",
+    onSelect: (index) => setChosen(model.stages[index].stage.id),
+  });
 
   return (
     <main className="map-page">
@@ -193,9 +178,7 @@ export function MapScreen() {
           {model.stages.map((view, index) => (
             <button
               key={view.stage.id}
-              ref={(element) => {
-                tabs.current[index] = element;
-              }}
+              ref={tabRef(index)}
               type="button"
               role="tab"
               id={tabId(view.stage.id)}

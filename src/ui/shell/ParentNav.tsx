@@ -1,8 +1,7 @@
-import { useRef, type KeyboardEvent } from "react";
 import { useLang } from "../../i18n/LangProvider";
 import type { MessageKey } from "../../i18n/vi";
 import { Icon, type IconName } from "../icons";
-import { tabKeyTarget } from "../tabKeys";
+import { useRovingTabs } from "../useRovingTabs";
 import { Logo } from "./Logo";
 
 export type ParentTab = "overview" | "help" | "progress" | "rewards" | "settings";
@@ -43,21 +42,12 @@ export function ParentNav({
 }) {
   const { t } = useLang();
   const counts: Partial<Record<ParentTab, number>> = { help: helpCount, rewards: rewardCount };
-  const tabButtons = useRef<(HTMLButtonElement | null)[]>([]);
-
-  const select = (index: number) => {
-    onTab(PARENT_TABS[index].id);
-    tabButtons.current[index]?.focus();
-  };
-  const onKeyDown = (event: KeyboardEvent) => {
-    // A key with Alt, Ctrl or Cmd held belongs to the browser (Alt+ArrowLeft is "Back" in some), not to the tabs.
-    if (event.altKey || event.ctrlKey || event.metaKey) return;
-    const current = PARENT_TABS.findIndex((item) => item.id === tab);
-    const target = tabKeyTarget(event.key, current, PARENT_TABS.length, "vertical");
-    if (target === null) return;
-    event.preventDefault();
-    select(target);
-  };
+  const { tabRef, select, onKeyDown } = useRovingTabs({
+    count: PARENT_TABS.length,
+    current: PARENT_TABS.findIndex((item) => item.id === tab),
+    orientation: "vertical",
+    onSelect: (index) => onTab(PARENT_TABS[index].id),
+  });
   return (
     <nav aria-label={t("parent.title")} className="side-nav">
       <Logo />
@@ -77,9 +67,7 @@ export function ParentNav({
           return (
             <button
               key={item.id}
-              ref={(element) => {
-                tabButtons.current[index] = element;
-              }}
+              ref={tabRef(index)}
               type="button"
               role="tab"
               id={parentTabId(item.id)}

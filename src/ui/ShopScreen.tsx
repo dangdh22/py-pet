@@ -1,4 +1,4 @@
-import { useId, useRef, useState, type KeyboardEvent, type ReactNode } from "react";
+import { useId, useState, type ReactNode } from "react";
 import { freeXu, requestBlock } from "../game/realRewards";
 import { isConsumable, MAX_CONSUMABLES, SHOP_ITEMS, STREAK_GIFTS, type AccessorySlot, type ShopItem } from "../game/shop";
 import { STAT_MAX, type GameState, type RewardItem } from "../game/state";
@@ -10,7 +10,7 @@ import { itemKey } from "./names";
 import { PageHead } from "./shell/PageHead";
 import { StatIcon } from "./StatBar";
 import { ItemIcon } from "./robot/accessories";
-import { tabKeyTarget } from "./tabKeys";
+import { useRovingTabs } from "./useRovingTabs";
 
 type Tab = "robot" | "rewards";
 
@@ -29,25 +29,18 @@ export function ShopScreen({ newId = () => crypto.randomUUID() }: { newId?: () =
   const { t } = useLang();
   const game = useGame();
   const [tab, setTab] = useState<Tab>("robot");
-  const tabButtons = useRef<(HTMLButtonElement | null)[]>([]);
   const labels: Record<Tab, string> = {
     robot: t("shop.tabRobot", { name: game.profile.robotName }),
     rewards: t("shop.tabRewards"),
   };
 
   // The tabs follow the focus: an arrow key shows the tab it moves to.
-  const select = (index: number) => {
-    setTab(TABS[index]);
-    tabButtons.current[index]?.focus();
-  };
-  const onKeyDown = (event: KeyboardEvent) => {
-    // Alt+ArrowLeft is "Back" in some browsers, Ctrl and Cmd keys have meanings of their own: they are not tab keys.
-    if (event.altKey || event.ctrlKey || event.metaKey) return;
-    const target = tabKeyTarget(event.key, TABS.indexOf(tab), TABS.length, "horizontal");
-    if (target === null) return;
-    event.preventDefault();
-    select(target);
-  };
+  const { tabRef, select, onKeyDown } = useRovingTabs({
+    count: TABS.length,
+    current: TABS.indexOf(tab),
+    orientation: "horizontal",
+    onSelect: (index) => setTab(TABS[index]),
+  });
 
   return (
     <main className="page shop">
@@ -61,9 +54,7 @@ export function ShopScreen({ newId = () => crypto.randomUUID() }: { newId?: () =
         {TABS.map((id, index) => (
           <button
             key={id}
-            ref={(element) => {
-              tabButtons.current[index] = element;
-            }}
+            ref={tabRef(index)}
             type="button"
             role="tab"
             id={tabId(id)}
