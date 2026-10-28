@@ -18,6 +18,19 @@ code,
 kbd,
 samp { font-family: var(--font-mono); }
 
+/* A block of code in a text (a card, a question, the help of the parent area): a `<pre>` on the light code background with a 2 px border. */
+.code-block {
+  background: var(--code-bg);
+  color: var(--ink);
+  padding: 10px 12px;
+  border: var(--border-w) solid var(--ink);
+  border-radius: 0;
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  white-space: pre-wrap;
+  overflow-x: auto;
+}
+
 /* Buttons. `.button` gives a link (`<a class="button">`) the same look as a `<button>`. */
 button,
 .button {

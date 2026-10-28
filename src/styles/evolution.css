@@ -1,0 +1,111 @@
+/* M6a: the evolution show (design decision 7). Each part's own style is its last frame; keyframes fill both ways. */
+.evolution-show {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 64px 16px 32px;
+  overflow: hidden;
+  background: var(--ink);
+  color: var(--surface);
+  text-align: center;
+  animation: evo-dim 0.4s ease-out both;
+  /* Robo (160 to 220 px on a phone) grows with big screens: the teen is about 320 px on a laptop. */
+  --evo-scale: 1;
+}
+@media (min-width: 720px) and (min-height: 600px) { .evolution-show { --evo-scale: 1.2; } }
+@media (min-width: 720px) and (min-height: 760px) { .evolution-show { --evo-scale: 1.45; } }
+.evo-stage { position: relative; isolation: isolate; display: grid; place-items: end center; }
+.evo-stage > * { grid-area: 1 / 1; }
+.evo-stage svg { display: block; width: calc(var(--evo-size) * var(--evo-scale)); height: auto; }
+/* Centred on the robots and behind them, without making the stage taller than the new form. */
+.evo-halo {
+  position: absolute;
+  z-index: -1;
+  left: 50%;
+  top: 50%;
+  width: calc(320px * var(--evo-scale));
+  height: calc(320px * var(--evo-scale));
+  margin: calc(-160px * var(--evo-scale)) 0 0 calc(-160px * var(--evo-scale));
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 200, 61, 0.55) 0%, rgba(255, 200, 61, 0.15) 45%, transparent 70%);
+  animation: evo-halo 1.2s ease-out 1.6s both;
+}
+.evo-old {
+  opacity: 0;
+  animation: evo-shake 0.1s linear 0.4s 11, evo-glow 1.55s ease-in both;
+}
+.evo-new {
+  transform-origin: 50% 100%;
+  filter: drop-shadow(0 0 14px rgba(255, 200, 61, 0.7));
+  animation: evo-appear 0.9s cubic-bezier(0.3, 1.4, 0.5, 1) 1.6s both;
+}
+.evo-lines { display: grid; min-height: 4.2em; align-items: start; }
+.evo-lines > * { grid-area: 1 / 1; margin: 0; max-width: 28ch; font-size: 1.5rem; font-weight: 700; line-height: 1.35; text-wrap: balance; }
+.evo-from { opacity: 0; color: #d6d6d6; animation: evo-from 1.6s ease-out both; }
+.evo-part { color: var(--yellow); animation: evo-part 2s ease-out 2.3s both; }
+.evo-flash {
+  position: absolute;
+  inset: 0;
+  background: var(--surface);
+  opacity: 0;
+  pointer-events: none;
+  animation: evo-flash 0.7s ease-out 1.3s both;
+}
+.evo-skip {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 1;
+  padding: 8px 18px;
+  border: var(--border-w) solid var(--surface);
+  background: var(--surface);
+  color: var(--ink);
+  /* The shadow is yellow: an ink shadow would vanish on the ink screen. The hover and press rules of the base buttons are
+     stronger than the rule above, so the same 2 states are set again here. */
+  box-shadow: 3px 3px 0 var(--yellow);
+}
+.evo-skip:hover:not(:disabled) { box-shadow: 4px 4px 0 var(--yellow); }
+.evo-skip:active:not(:disabled) { box-shadow: 1px 1px 0 var(--yellow); }
+.evo-skip:focus-visible { outline: 3px solid var(--yellow); outline-offset: 2px; }
+@keyframes evo-dim { from { opacity: 0; } to { opacity: 1; } }
+@keyframes evo-shake {
+  0%, 100% { transform: translateX(0) rotate(0); }
+  25% { transform: translateX(-5px) rotate(-2deg); }
+  75% { transform: translateX(5px) rotate(2deg); }
+}
+@keyframes evo-glow {
+  0% { opacity: 1; filter: brightness(1); }
+  80% { opacity: 1; filter: brightness(2.4) drop-shadow(0 0 22px var(--surface)); }
+  100% { opacity: 0; filter: brightness(3.5) drop-shadow(0 0 40px var(--surface)); }
+}
+@keyframes evo-flash {
+  0% { opacity: 0; }
+  25% { opacity: 1; }
+  100% { opacity: 0; }
+}
+@keyframes evo-halo {
+  0% { opacity: 0; transform: scale(0.3); }
+  100% { opacity: 1; transform: scale(1); }
+}
+@keyframes evo-appear {
+  0% { opacity: 0; transform: scale(0.35); }
+  55% { opacity: 1; transform: scale(1.15); }
+  100% { opacity: 1; transform: scale(1); }
+}
+@keyframes evo-from {
+  0% { opacity: 0; }
+  20%, 75% { opacity: 1; }
+  100% { opacity: 0; }
+}
+@keyframes evo-part {
+  0% { opacity: 0; transform: translateY(12px); }
+  25%, 100% { opacity: 1; transform: translateY(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .evolution-show, .evolution-show * { animation: none !important; }
+}

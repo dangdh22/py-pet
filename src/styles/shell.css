@@ -39,6 +39,9 @@
 .side-nav .runner-ready::before,
 .focus-bar .runner-ready::before { background: var(--stat-pin); }
 
+/* The line shown while the profile loads, before the first screen. */
+.app-loading { padding: 40px 20px; text-align: center; }
+
 /* Rail layout (frame with a side menu): the menu is 220 px wide and stays in view; the main column scrolls with the page. */
 .rail-layout {
   --rail-w: 220px;

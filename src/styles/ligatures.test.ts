@@ -1,20 +1,12 @@
 import { readdirSync, readFileSync } from "node:fs";
 import { describe, expect, test } from "vitest";
+import { rules } from "./cssRules";
 
 // JetBrains Mono joins `!=`, `==`, `<=`, `>=` and `->` into single signs. A child who learns Python must see the
 // characters as typed. `font-variant-ligatures` is inherited, so 1 rule on `body` covers all the mono text; only a
 // rule with the `font` shorthand resets it, and that rule has to turn the ligatures off again after the shorthand.
 
 const files = ["src/styles.css", ...readdirSync("src/styles").filter((name) => name.endsWith(".css")).map((name) => `src/styles/${name}`)];
-
-/** The rules (selector and declarations) of a style sheet; a rule inside `@media` counts as 1 rule. */
-function rules(css: string): { selector: string; body: string }[] {
-  const plain = css.replace(/\/\*[\s\S]*?\*\//g, "");
-  return [...plain.matchAll(/([^{}]+)\{([^{}]*)\}/g)].map((match) => ({
-    selector: match[1]!.trim(),
-    body: match[2]!,
-  }));
-}
 
 describe("code is shown without font ligatures", () => {
   test("body turns the ligatures off for everything", () => {

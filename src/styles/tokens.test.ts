@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { readdirSync, readFileSync } from "node:fs";
 import { describe, expect, test } from "vitest";
 
 const read = (name: string) => readFileSync(`src/styles/${name}.css`, "utf8");
@@ -31,6 +31,16 @@ describe("design tokens", () => {
 
   test("the unused --radius token is gone", () => {
     expect(tokens).not.toContain("--radius");
+  });
+
+  // R1 kept 4 old names for the screens that were not restyled yet. Every screen is restyled now: the names are gone and the sheets
+  // read `--ink` and `--font-mono` themselves.
+  test.each(["--text", "--border", "--code-text", "--mono"])("the old token %s is gone", (name) => {
+    // The name is a whole name: `--border` is not `--border-w` and `--mono` is not `--font-mono`.
+    expect(tokens).not.toMatch(new RegExp(`(?<![\\w-])${name}\\s*:`));
+    for (const file of ["src/styles.css", ...readdirSync("src/styles").filter((entry) => entry.endsWith(".css")).map((entry) => `src/styles/${entry}`)]) {
+      expect(readFileSync(file, "utf8"), `${file} reads ${name}`).not.toMatch(new RegExp(`var\\(\\s*${name}\\s*[,)]`));
+    }
   });
 
   // The components read these values from the tokens, so a change is made in 1 place.

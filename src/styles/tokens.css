@@ -40,13 +40,9 @@
   /* The shadow of a pressed button or card, after it sank by 2 px. */
   --shadow-press: 1px 1px 0 var(--ink);
 
-  /* Old names that screens not yet restyled still use; they point at the new look. */
-  --text: var(--ink);
-  --border: var(--ink);
+  /* Stat bars and success text. */
   /* Green text on the cream page and on white: 4.7:1 and above (the old #2a9d4a gave 3.3:1). */
   --success: #15803d;
-  --code-text: var(--ink);
-  --mono: var(--font-mono);
   --stat-growth: var(--primary);
   --stat-low: var(--coral);
   --stat-track: #f1ede3;

@@ -49,6 +49,16 @@
 }
 .result-card > * { margin: 0; }
 .result-card h1 { font-size: 1.6rem; line-height: 1.25; }
+/* The title takes the focus from script when the card shows; a ring round a heading would only be noise. */
+.result-card h1:focus { outline: none; }
+/* The Robo of a passed evolution test grows in (M3b). */
+.evolve { display: inline-block; animation: evolve 1.2s ease-out both; }
+@keyframes evolve {
+  0% { transform: scale(0.6); filter: brightness(2); opacity: 0; }
+  60% { transform: scale(1.1); filter: brightness(1.4); opacity: 1; }
+  100% { transform: scale(1); filter: none; }
+}
+@media (prefers-reduced-motion: reduce) { .evolve { animation: none; } }
 
 /* The rewards: big chips, 18 px bold. XP is the primary blue; the colors of the others come from the chip tokens. */
 .reward-chips {
@@ -132,7 +142,7 @@
   margin: 0;
   padding: 10px 12px;
   background: var(--code-bg);
-  color: var(--code-text);
+  color: var(--ink);
   font-family: var(--font-mono);
   font-size: 15px;
   white-space: pre-wrap;
@@ -183,7 +193,7 @@
   padding: 8px 10px;
   border: var(--border-w) solid var(--ink);
   background: var(--code-bg);
-  color: var(--code-text);
+  color: var(--ink);
   font-family: var(--font-mono);
   font-size: 14px;
   white-space: pre-wrap;
@@ -427,7 +437,7 @@
   padding: 12px 14px;
   border: var(--border-w) solid var(--ink);
   background: var(--code-bg);
-  color: var(--code-text);
+  color: var(--ink);
   font-family: var(--font-mono);
   font-size: 15px;
   line-height: 1.8;
