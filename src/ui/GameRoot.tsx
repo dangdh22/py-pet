@@ -49,14 +49,17 @@ export function GameRoot({ store, clock, onReplaced }: { store: GameStore; clock
 
   if (loadProblem !== null) {
     return (
-      <main className="error-page" role="alert">
-        <ErrorCard title={t("app.loadFailedTitle")}>
-          <p>{t(loadProblem === "newer-version" ? "app.newerData" : "app.crash")}</p>
-          <div className="error-actions">
-            <button onClick={() => window.location.reload()}>{t("app.reload")}</button>
-            {loadProblem !== "newer-version" && <RawExport store={store} clock={clock} />}
-          </div>
-        </ErrorCard>
+      // The `main` landmark stays; the alert is the wrapper round the card.
+      <main className="error-page">
+        <div role="alert" className="error-alert">
+          <ErrorCard title={t("app.loadFailedTitle")}>
+            <p>{t(loadProblem === "newer-version" ? "app.newerData" : "app.crash")}</p>
+            <div className="error-actions">
+              <button onClick={() => window.location.reload()}>{t("app.reload")}</button>
+              {loadProblem !== "newer-version" && <RawExport store={store} clock={clock} />}
+            </div>
+          </ErrorCard>
+        </div>
       </main>
     );
   }

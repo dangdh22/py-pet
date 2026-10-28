@@ -50,6 +50,8 @@ export function ParentNav({
     tabButtons.current[index]?.focus();
   };
   const onKeyDown = (event: KeyboardEvent) => {
+    // A key with Alt, Ctrl or Cmd held belongs to the browser (Alt+ArrowLeft is "Back" in some), not to the tabs.
+    if (event.altKey || event.ctrlKey || event.metaKey) return;
     const current = PARENT_TABS.findIndex((item) => item.id === tab);
     const target = tabKeyTarget(event.key, current, PARENT_TABS.length, "vertical");
     if (target === null) return;

@@ -59,6 +59,19 @@ describe("ShopScreen: the page and its tabs", () => {
     expect(screen.getByRole("tab", { name: "Phần thưởng từ bố mẹ" })).toHaveFocus();
   });
 
+  // Alt+ArrowLeft is "Back" in some browsers: a key with a modifier is not a tab key.
+  test("a key with Alt, Ctrl or Cmd held does not change the tab", async () => {
+    await renderWithGame(<ShopScreen />);
+    const robotTab = screen.getByRole("tab", { name: "Đồ cho Robo" });
+    robotTab.focus();
+    await userEvent.keyboard("{Alt>}{ArrowRight}{/Alt}");
+    await userEvent.keyboard("{Control>}{ArrowRight}{/Control}");
+    await userEvent.keyboard("{Meta>}{ArrowRight}{/Meta}");
+    expect(robotTab).toHaveAttribute("aria-selected", "true");
+    expect(robotTab).toHaveFocus();
+    expect(screen.getByRole("tab", { name: "Phần thưởng từ bố mẹ" })).toHaveAttribute("aria-selected", "false");
+  });
+
   test("the item groups are headings of level 2", async () => {
     await renderWithGame(<ShopScreen />);
     expect(screen.getAllByRole("heading", { level: 2 }).map((h) => h.textContent)).toEqual([

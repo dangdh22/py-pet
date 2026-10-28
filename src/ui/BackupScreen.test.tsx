@@ -84,6 +84,8 @@ describe("BackupScreen", () => {
     expect(within(row).getByRole("cell", { name: "Bình" })).toBeInTheDocument();
     expect(screen.getByRole("columnheader", { name: "Ngày" })).toBeInTheDocument();
     expect(screen.getByRole("columnheader", { name: "Hồ sơ" })).toBeInTheDocument();
+    // On a phone the table scrolls inside its own box, not the page (spec 6.4).
+    expect(screen.getByRole("table").parentElement).toHaveClass("table-scroll");
     vi.mocked(downloadText).mockClear();
     await userEvent.click(within(row).getByRole("button", { name: "Tải về" }));
     expect(downloadText).toHaveBeenCalledWith("py-pet-binh-2026-10-05.pypet", text);

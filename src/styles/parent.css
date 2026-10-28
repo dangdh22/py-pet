@@ -225,6 +225,14 @@
   font-size: 18px;
   font-weight: 800;
 }
+/* In progress, rewards and settings a card title is a label like `.card-title` (spec 5.2); the title of a help card is the name of a concept the parent reads, so it keeps the larger type above. */
+:is(.parent-progress, .parent-rewards, .parent-settings) h2 {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
 :where(.parent-help, .parent-progress, .parent-rewards, .parent-settings) h3 {
   margin: 6px 0 0;
   color: var(--muted);
@@ -420,7 +428,10 @@
   font-size: 13px;
   font-weight: 600;
 }
-.schedule-form input { font-weight: 400; }
+.schedule-form input {
+  font-size: 16px;
+  font-weight: 400;
+}
 /* The planned vacations: the dates and a small "Cancel" button on one line. */
 .vacation-list {
   display: grid;

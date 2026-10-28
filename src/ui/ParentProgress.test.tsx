@@ -51,6 +51,8 @@ test("the 3 parts are cards, and the topic table is a square table inside the fi
   const table = screen.getByRole("table");
   expect(table).toHaveClass("table");
   expect(table.closest(".card")).not.toBeNull();
+  // On a phone the table scrolls inside its own box, not the page (spec 6.4).
+  expect(table.parentElement).toHaveClass("table-scroll");
   const headings = screen.getAllByRole("heading", { level: 2 });
   expect(headings.map((heading) => heading.textContent)).toEqual([
     "Theo chủ đề",

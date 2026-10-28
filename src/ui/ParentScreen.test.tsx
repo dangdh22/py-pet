@@ -221,6 +221,19 @@ describe("ParentScreen frame", () => {
     expect(screen.getByRole("tab", { name: "Cài đặt" })).toHaveAttribute("aria-selected", "true");
   });
 
+  // Alt+ArrowLeft is "Back" in some browsers: a key with a modifier is not a tab key.
+  test("a key with Alt, Ctrl or Cmd held does not change the tab", async () => {
+    await openArea();
+    const overview = screen.getByRole("tab", { name: "Tổng quan" });
+    act(() => overview.focus());
+    await userEvent.keyboard("{Alt>}{ArrowDown}{/Alt}");
+    await userEvent.keyboard("{Control>}{ArrowDown}{/Control}");
+    await userEvent.keyboard("{Meta>}{End}{/Meta}");
+    expect(overview).toHaveAttribute("aria-selected", "true");
+    expect(overview).toHaveFocus();
+    expect(screen.getByRole("heading", { level: 1, name: "Tổng quan" })).toBeInTheDocument();
+  });
+
   test("a tab shows its panel, and the panel and the heading take its name", async () => {
     await openArea();
     await userEvent.click(screen.getByRole("tab", { name: "Cài đặt" }));

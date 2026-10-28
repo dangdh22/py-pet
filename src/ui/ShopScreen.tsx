@@ -41,6 +41,8 @@ export function ShopScreen({ newId = () => crypto.randomUUID() }: { newId?: () =
     tabButtons.current[index]?.focus();
   };
   const onKeyDown = (event: KeyboardEvent) => {
+    // Alt+ArrowLeft is "Back" in some browsers, Ctrl and Cmd keys have meanings of their own: they are not tab keys.
+    if (event.altKey || event.ctrlKey || event.metaKey) return;
     const target = tabKeyTarget(event.key, TABS.indexOf(tab), TABS.length, "horizontal");
     if (target === null) return;
     event.preventDefault();

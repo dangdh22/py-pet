@@ -209,6 +209,11 @@ function ParentArea({ onLock }: { onLock(auto: boolean): void }) {
     heading.current?.focus();
   }, [tab]);
   const show = (next: ParentTab) => {
+    // The same tab again: no effect will run, so the focus goes now and no flag is left behind for a later key press.
+    if (next === tab) {
+      heading.current?.focus();
+      return;
+    }
     focusHeadingAfterShow.current = true;
     setTab(next);
   };

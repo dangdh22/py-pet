@@ -24,39 +24,41 @@ export function ParentProgress() {
     <section className="parent-progress">
       <section className="card">
         <h2>{t("progress.topicsTitle")}</h2>
-        <table className="table">
-          <thead>
-            <tr>
-              <th>{t("progress.topic")}</th>
-              <th>{t("progress.lessons")}</th>
-              <th>{t("progress.mastery")}</th>
-              <th>{t("progress.topicTest")}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {topics.map((topic) => {
-              const mastery = topicMastery(topic, state);
-              const record = state.progress.topicTests[topic.id];
-              return (
-                <tr key={topic.id}>
-                  <td>{pick(topic.title, uiLang)}</td>
-                  <td>
-                    {t("progress.count", {
-                      done: topic.lessons.filter((lesson) => done.has(lesson.id)).length,
-                      total: topic.lessons.length,
-                    })}
-                  </td>
-                  <td>{mastery === null ? t("progress.none") : mastery}</td>
-                  <td>
-                    {record
-                      ? t("progress.count", { done: formatScore(record.best, uiLang), total: record.max })
-                      : t("progress.none")}
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+        <div className="table-scroll">
+          <table className="table">
+            <thead>
+              <tr>
+                <th>{t("progress.topic")}</th>
+                <th>{t("progress.lessons")}</th>
+                <th>{t("progress.mastery")}</th>
+                <th>{t("progress.topicTest")}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {topics.map((topic) => {
+                const mastery = topicMastery(topic, state);
+                const record = state.progress.topicTests[topic.id];
+                return (
+                  <tr key={topic.id}>
+                    <td>{pick(topic.title, uiLang)}</td>
+                    <td>
+                      {t("progress.count", {
+                        done: topic.lessons.filter((lesson) => done.has(lesson.id)).length,
+                        total: topic.lessons.length,
+                      })}
+                    </td>
+                    <td>{mastery === null ? t("progress.none") : mastery}</td>
+                    <td>
+                      {record
+                        ? t("progress.count", { done: formatScore(record.best, uiLang), total: record.max })
+                        : t("progress.none")}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
       </section>
 
       <section className="card">

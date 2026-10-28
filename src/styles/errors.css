@@ -9,6 +9,12 @@
   background: var(--bg);
 }
 
+/* The `alert` round the card of a full-page error sits between the `main` and the card: it takes the width the card has, so the card stays in the middle. */
+.error-page > .error-alert {
+  width: 100%;
+  max-width: 520px;
+}
+
 /* A crash inside a frame: the side menu stays, the card takes the main column. */
 .error-panel {
   display: grid;

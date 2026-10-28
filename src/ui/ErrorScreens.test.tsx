@@ -88,4 +88,17 @@ describe("error screens: 1 card with Robo drained", () => {
     expect(within(alert).getByRole("button", { name: "Xuất dữ liệu để gửi hỗ trợ" })).toBeInTheDocument();
     expect(within(alert).getByRole("img", { name: "Robo" })).toHaveAttribute("data-mood", "drained");
   });
+
+  test("a profile that does not load keeps the main landmark: the alert is inside it and holds the heading", async () => {
+    class UnreadableStore extends MemoryStore {
+      override async loadActive(): Promise<never> {
+        throw new Error("read failed");
+      }
+    }
+    render(<App bundle={testBundle()} runnerClient={makeClient()} store={new UnreadableStore()} clock={() => FIXED_NOW} />);
+    const main = await screen.findByRole("main");
+    expect(main).not.toHaveAttribute("role");
+    const alert = within(main).getByRole("alert");
+    expect(within(alert).getByRole("heading", { level: 1, name: "Chưa mở được hồ sơ" })).toBeInTheDocument();
+  });
 });

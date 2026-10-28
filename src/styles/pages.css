@@ -6,7 +6,7 @@
   margin: 0 auto;
   padding: 24px 32px 40px;
 }
-@media (max-width: 900px) {
+@media (max-width: 899px) {
   .page { padding: 16px 20px 32px; }
 }
 
@@ -28,6 +28,7 @@
 .page-head-side {
   display: flex;
   align-items: center;
+  margin: 0;
   gap: 10px;
   color: var(--muted);
   font-size: 14px;
@@ -47,6 +48,8 @@
 
 /* A table: 2 px ink lines round every cell, and the header row sits on the cream of the page. */
 .table { border-collapse: collapse; }
+/* The table scrolls inside its own box on a phone, so the page itself never scrolls sideways (spec 6.4). */
+.table-scroll { overflow-x: auto; }
 .table th,
 .table td {
   padding: 8px 12px;
@@ -433,7 +436,7 @@ input[type="file"]::file-selector-button {
   gap: 20px;
   align-items: start;
 }
-@media (max-width: 900px) {
+@media (max-width: 899px) {
   .backup-cards { grid-template-columns: 1fr; }
 }
 .backup-cards + .card { margin-top: 20px; }
@@ -465,5 +468,7 @@ input[type="file"]::file-selector-button {
   color: var(--ink);
   font-weight: 700;
 }
+/* The card is a grid whose items sit at the start: the scroll box and the table in it take the whole width. */
+.backup-page .table-scroll { width: 100%; }
 .backup-page .table { width: 100%; }
 .backup-page .table td:last-child { text-align: right; }

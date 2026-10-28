@@ -183,30 +183,32 @@ export function BackupScreen() {
           {autoItems.length === 0 ? (
             <p>{t("backup.autoNone")}</p>
           ) : (
-            <table className="table">
-              <thead>
-                <tr>
-                  <th>{t("backup.autoDate")}</th>
-                  <th>{t("backup.autoProfile")}</th>
-                  <th>
-                    <span className="sr-only">{t("backup.autoDownload")}</span>
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {autoItems.map((item, i) => (
-                  <tr key={i}>
-                    <td>{item.day}</td>
-                    <td>{item.childName}</td>
-                    <td>
-                      <button className="small" onClick={() => downloadText(backupFileName(item.childName, item.day), item.text)}>
-                        {t("backup.autoDownload")}
-                      </button>
-                    </td>
+            <div className="table-scroll">
+              <table className="table">
+                <thead>
+                  <tr>
+                    <th>{t("backup.autoDate")}</th>
+                    <th>{t("backup.autoProfile")}</th>
+                    <th>
+                      <span className="sr-only">{t("backup.autoDownload")}</span>
+                    </th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {autoItems.map((item, i) => (
+                    <tr key={i}>
+                      <td>{item.day}</td>
+                      <td>{item.childName}</td>
+                      <td>
+                        <button className="small" onClick={() => downloadText(backupFileName(item.childName, item.day), item.text)}>
+                          {t("backup.autoDownload")}
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           )}
         </section>
       )}
