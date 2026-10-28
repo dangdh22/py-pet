@@ -78,7 +78,7 @@ export const DECOR_COLORS = {
   books: ["#e5533d", "#3b82f6", "#f2c14e", "#43a852", "#8e6bd8", "#2ab3a6"],
 } as const;
 
-/** The room and the beach around Robo (Task 4). Walls, floor, sky and sand are CSS variables in styles.css. */
+/** The room and the beach around Robo (Task 4). Walls, floor, sky and sand are CSS variables in room.css. */
 export const SCENE_COLORS = {
   frame: "#ffffff",
   frameShade: "#cdd6ea",

@@ -32,7 +32,12 @@
   height: calc(320px * var(--evo-scale));
   margin: calc(-160px * var(--evo-scale)) 0 0 calc(-160px * var(--evo-scale));
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(255, 200, 61, 0.55) 0%, rgba(255, 200, 61, 0.15) 45%, transparent 70%);
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--yellow) 55%, transparent) 0%,
+    color-mix(in srgb, var(--yellow) 15%, transparent) 45%,
+    transparent 70%
+  );
   animation: evo-halo 1.2s ease-out 1.6s both;
 }
 .evo-old {
@@ -41,12 +46,12 @@
 }
 .evo-new {
   transform-origin: 50% 100%;
-  filter: drop-shadow(0 0 14px rgba(255, 200, 61, 0.7));
+  filter: drop-shadow(0 0 14px color-mix(in srgb, var(--yellow) 70%, transparent));
   animation: evo-appear 0.9s cubic-bezier(0.3, 1.4, 0.5, 1) 1.6s both;
 }
 .evo-lines { display: grid; min-height: 4.2em; align-items: start; }
 .evo-lines > * { grid-area: 1 / 1; margin: 0; max-width: 28ch; font-size: 1.5rem; font-weight: 700; line-height: 1.35; text-wrap: balance; }
-.evo-from { opacity: 0; color: #d6d6d6; animation: evo-from 1.6s ease-out both; }
+.evo-from { opacity: 0; color: color-mix(in srgb, var(--surface) 84%, var(--ink)); animation: evo-from 1.6s ease-out both; }
 .evo-part { color: var(--yellow); animation: evo-part 2s ease-out 2.3s both; }
 .evo-flash {
   position: absolute;

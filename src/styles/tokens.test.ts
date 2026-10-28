@@ -1,5 +1,7 @@
-import { readdirSync, readFileSync } from "node:fs";
+import { readFileSync } from "node:fs";
+import { basename } from "node:path";
 import { describe, expect, test } from "vitest";
+import { cssFiles, rules } from "./cssRules";
 
 const read = (name: string) => readFileSync(`src/styles/${name}.css`, "utf8");
 const tokens = read("tokens");
@@ -12,6 +14,9 @@ describe("design tokens", () => {
     ["--icon-flame", "#e2541b"],
     ["--icon-coin", "#a77b00"],
     ["--shadow-press", "1px 1px 0 var(--ink)"],
+    ["--line-soft", "color-mix(in srgb, var(--ink) 14%, var(--surface))"],
+    ["--divider", "#f0eadb"],
+    ["--box-head", "#f6efdc"],
   ])("%s is defined as %s", (name, value) => {
     expect(tokens).toContain(`${name}: ${value};`);
   });
@@ -38,7 +43,7 @@ describe("design tokens", () => {
   test.each(["--text", "--border", "--code-text", "--mono"])("the old token %s is gone", (name) => {
     // The name is a whole name: `--border` is not `--border-w` and `--mono` is not `--font-mono`.
     expect(tokens).not.toMatch(new RegExp(`(?<![\\w-])${name}\\s*:`));
-    for (const file of ["src/styles.css", ...readdirSync("src/styles").filter((entry) => entry.endsWith(".css")).map((entry) => `src/styles/${entry}`)]) {
+    for (const file of cssFiles()) {
       expect(readFileSync(file, "utf8"), `${file} reads ${name}`).not.toMatch(new RegExp(`var\\(\\s*${name}\\s*[,)]`));
     }
   });
@@ -53,16 +58,31 @@ describe("design tokens", () => {
   });
 });
 
-// The R3 files take their colors from the tokens (a tint is a color-mix of a token) and have square corners only.
-describe.each(["pages", "parent", "errors"])("%s.css", (name) => {
-  const css = read(name);
+const RAW_COLOR = /#[0-9a-f]{3,8}\b|\b(?:rgba?|hsla?)\(/i;
+// The room scene is a drawing: its palette (`--wall`, `--floor`...) is declared in `room.css`, as variables, with raw colors.
+const COLOR_VARIABLE = /^\s*--[a-z-]+:\s*#[0-9a-f]{3,8};/i;
+// The only round shape: the glow behind the new form in the evolution show (a sheet and a selector).
+const ROUND_SHAPES = [["evolution.css", ".evo-halo"]];
 
-  test("has no hex color", () => {
-    expect(css).not.toMatch(/#[0-9a-f]{3,8}\b/i);
+// Every sheet but `tokens.css` takes its colors from the tokens (a tint is a color-mix of a token) and has square corners only.
+describe.each(cssFiles().filter((file) => basename(file) !== "tokens.css"))("%s", (file) => {
+  const css = readFileSync(file, "utf8");
+
+  test("has no raw color", () => {
+    const raw = css.split("\n").filter((line) => RAW_COLOR.test(line));
+    expect(basename(file) === "room.css" ? raw.filter((line) => !COLOR_VARIABLE.test(line)) : raw).toEqual([]);
   });
 
   test("has square corners only", () => {
-    const radii = [...css.matchAll(/border-radius:\s*([^;}]+)/g)].map((match) => match[1].trim());
-    expect(radii.filter((value) => value !== "0")).toEqual([]);
+    const round = rules(css)
+      .filter((rule) => [...rule.body.matchAll(/border-radius:\s*([^;}]+)/g)].some((match) => match[1]!.trim() !== "0"))
+      .map((rule) => [basename(file), rule.selector]);
+    expect(round.filter(([name, selector]) => !ROUND_SHAPES.some(([sheet, allowed]) => sheet === name && allowed === selector))).toEqual([]);
+  });
+
+  // The soft grey line is 1 token. A sheet that mixes it again, or keeps its own copy, would drift from the others.
+  test("reads the soft grey line from --line-soft", () => {
+    expect(css).not.toContain("--map-soft");
+    expect(css).not.toMatch(/color-mix\(\s*in srgb,\s*var\(--ink\)\s*1[45]%,\s*var\(--surface\)\s*\)/);
   });
 });

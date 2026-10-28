@@ -3,8 +3,6 @@
 .map-page {
   /* The gap between 2 squares; the line between them fills it. */
   --map-gap: 24px;
-  /* A soft grey made from the ink, for the dividers and the stripes of a locked square (tokens.css has no grey for them). */
-  --map-soft: color-mix(in srgb, var(--ink) 14%, var(--surface));
   max-width: 1180px;
   margin: 0 auto;
   padding: 24px 32px 40px;
@@ -55,7 +53,7 @@
 }
 .map-key-locked {
   border-color: var(--muted);
-  background: repeating-linear-gradient(45deg, var(--surface) 0 3px, var(--map-soft) 3px 6px);
+  background: repeating-linear-gradient(45deg, var(--surface) 0 3px, var(--line-soft) 3px 6px);
 }
 
 /* The stage tabs: a bordered strip with a 3 px shadow; the chosen tab is ink with white text. */
@@ -108,7 +106,7 @@
   align-items: center;
   gap: 18px;
   padding: 14px 0;
-  border-bottom: var(--border-w) dashed var(--map-soft);
+  border-bottom: var(--border-w) dashed var(--line-soft);
 }
 .map-topic-head .kicker { margin: 0 0 2px; }
 .map-topic-head h2 {
@@ -219,7 +217,7 @@
 }
 .map-node-locked > .map-node-box {
   border-color: var(--muted);
-  background: repeating-linear-gradient(45deg, var(--surface) 0 6px, var(--map-soft) 6px 12px);
+  background: repeating-linear-gradient(45deg, var(--surface) 0 6px, var(--line-soft) 6px 12px);
   color: var(--muted);
 }
 

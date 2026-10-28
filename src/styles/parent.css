@@ -315,7 +315,7 @@
 }
 .lesson-details > li {
   padding-top: 8px;
-  border-top: var(--border-w) solid color-mix(in srgb, var(--ink) 15%, var(--surface));
+  border-top: var(--border-w) solid var(--line-soft);
   color: var(--muted);
 }
 .lesson-details > li:first-child {
@@ -373,7 +373,7 @@
 /* On a phone a row is 3 lines tall, so a light rule tells the rows apart. */
 .reward-rows li + li {
   padding-top: 12px;
-  border-top: var(--border-w) solid color-mix(in srgb, var(--ink) 15%, var(--surface));
+  border-top: var(--border-w) solid var(--line-soft);
 }
 .reward-rows label {
   display: grid;
@@ -450,7 +450,7 @@
 .parent-settings h3 {
   margin-top: 8px;
   padding-top: 14px;
-  border-top: var(--border-w) solid color-mix(in srgb, var(--ink) 15%, var(--surface));
+  border-top: var(--border-w) solid var(--line-soft);
 }
 .parent-settings h2 + h3 {
   margin-top: 0;

@@ -65,6 +65,6 @@
   font-weight: 600;
 }
 
-/* Every alert is red, except where a rule with a stronger selector gives it the ink (a card, a panel). This is the last rule of the
-   sheets before room.css, as it was the first rule after the imports in styles.css, so it still comes after every other sheet. */
+/* Every alert is red, except where a rule with a stronger selector gives it the ink (a card, a panel). Keep this the last rule of this
+   sheet, so it stays after the ink-colored `.banner` and every other rule of the same specificity. */
 [role="alert"] { color: var(--danger); }

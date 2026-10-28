@@ -115,8 +115,8 @@
   position: absolute;
   left: 82%;
   top: 4%;
-  font: 700 22px/1 system-ui, sans-serif;
-  color: #fff;
+  font: 700 22px/1 var(--font-ui);
+  color: var(--surface);
   -webkit-text-stroke: 1px var(--scene-ink);
   opacity: 0;
   animation: robo-z 3.6s ease-out infinite;

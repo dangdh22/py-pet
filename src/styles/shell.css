@@ -118,7 +118,7 @@
   height: var(--border-w);
   margin: 10px 4px;
   border: 0;
-  background: #f0eadb;
+  background: var(--divider);
 }
 .rail-layout[data-mode="parent"] .side-nav-sep { background: var(--mint); }
 

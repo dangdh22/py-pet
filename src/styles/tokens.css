@@ -15,8 +15,6 @@
   --danger: #b42318;
   /* Light red behind error banners and the failed-start panel (ink text: 14.2:1, danger text: 5.1:1). */
   --danger-bg: #ffd9d9;
-  --stat-pin: #2fbf71;
-  --stat-vui: #ff6fa5;
   --chip-streak: #ffe0cc;
   --chip-xu: #fff1a8;
   --chip-pin: #d9f5e6;
@@ -26,6 +24,12 @@
   /* The flame and the coin are drawn filled; these 2 are their colors on their chips (3.04:1 and above, do not lower them). */
   --icon-flame: #e2541b;
   --icon-coin: #a77b00;
+  /* Thin grey lines and stripes: the dividers of the map and of the parent panels, the stripes of a locked square, the empty test mark (muted text on it: 5.5:1). */
+  --line-soft: color-mix(in srgb, var(--ink) 14%, var(--surface));
+  /* The divider between the groups of the side bar. */
+  --divider: #f0eadb;
+  /* The head strip of a box in the study screens (ink text on it: 16.0:1). */
+  --box-head: #f6efdc;
 
   /* Type (spec 5.2). The font files come from public/fonts.css. */
   --font-ui: "Lexend", system-ui, sans-serif;
@@ -40,9 +44,10 @@
   /* The shadow of a pressed button or card, after it sank by 2 px. */
   --shadow-press: 1px 1px 0 var(--ink);
 
-  /* Stat bars and success text. */
-  /* Green text on the cream page and on white: 4.7:1 and above (the old #2a9d4a gave 3.3:1). */
+  /* Stat bars and success text. The success green on the cream page and on white: 4.7:1 and above (the old #2a9d4a gave 3.3:1). */
   --success: #15803d;
+  --stat-pin: #2fbf71;
+  --stat-vui: #ff6fa5;
   --stat-growth: var(--primary);
   --stat-low: var(--coral);
   --stat-track: #f1ede3;

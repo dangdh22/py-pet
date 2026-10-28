@@ -7,7 +7,7 @@ import { PALETTE as C, SCENE_COLORS as S } from "./palette";
 /*
  * Spec 8.3 and design decisions 4 and 6: Robo in the room (wall, floor, window, decorations at fixed spots) or, on
  * vacation, on the beach without decorations. Sleepy and drained make the room darker with night in the window; a
- * drained Robo lies on its side beside the charger. Walls, floor, sky and sand are CSS backgrounds (styles.css);
+ * drained Robo lies on its side beside the charger. Walls, floor, sky and sand are CSS backgrounds (room.css);
  * the drawings here are aria-hidden, Robo keeps its role="img".
  */
 

@@ -36,7 +36,7 @@ function showSize(form: RobotForm): number {
   return 140 + 20 * form;
 }
 
-/** styles.css scales this size up on big screens (--evo-scale), the same for both forms. */
+/** evolution.css scales this size up on big screens (--evo-scale), the same for both forms. */
 function sizeStyle(form: RobotForm): CSSProperties {
   return { "--evo-size": `${showSize(form)}px` } as CSSProperties;
 }

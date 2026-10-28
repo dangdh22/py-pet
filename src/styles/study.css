@@ -102,7 +102,7 @@
 .box-head {
   padding: 6px 10px;
   border-bottom: var(--border-w) solid var(--ink);
-  background: #f6efdc;
+  background: var(--box-head);
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.04em;
@@ -347,7 +347,7 @@
   width: 14px;
   height: 14px;
   border: var(--border-w) solid var(--ink);
-  background: color-mix(in srgb, var(--ink) 14%, var(--surface));
+  background: var(--line-soft);
 }
 .test-box .pass .test-mark { background: var(--stat-pin); }
 .test-box .fail .test-mark { background: var(--coral); }
