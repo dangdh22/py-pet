@@ -1,6 +1,6 @@
 # Trạng thái dự án Py-Pet
 
-Cập nhật lần cuối: 2026-10-07.
+Cập nhật lần cuối: 2026-10-28.
 
 ## Các mốc
 
@@ -18,11 +18,15 @@ Cập nhật lần cuối: 2026-10-07.
 | M5d | Nội dung giai đoạn 4 "Vòng lặp" (5 chủ đề, 28 bài), luật 8 và 9 của spec 3.9 thành lỗi khi build nội dung, nhận ra `+=` khi biến chưa được gán | Xong, đã merge vào `main` và push (2026-10-07). Phụ huynh chưa duyệt lời văn (`docs/superpowers/content-stage-4.md`) |
 | M6a | Hình robot 4 dạng × 3 cỡ × 5 trạng thái, 10 phụ kiện trên người Robo, cảnh phòng (đồ trang trí, buồn ngủ, hết pin cạnh ổ sạc, bãi biển), thanh Pin/Vui/Lớn lên, hoạt cảnh tiến hóa toàn màn hình, Sổ thành tích có hình, trang `#/gallery` ở bản dev | Xong, đã merge vào `main` và push (2026-10-07). Người bảo trì chưa thử bằng mắt (mở `#/gallery` khi chạy `npm run dev`) |
 | M6b | CI/CD (GitHub Actions chạy `npm run check`, deploy GitHub Pages khi push vào `main`), ESLint, trình duyệt không hỗ trợ, Pyodide khởi động lỗi hoặc treo (120 giây) có nút Thử lại, bài lỗi lúc chạy bỏ qua được và không tính điểm, bài luyện mở theo khái niệm đã học, khu phụ huynh hiện tên bài và hiểu lầm hay gặp, mục lỗi số thực, danh sách kiểm tra thủ công | Xong, đã merge vào `main` và push (2026-10-07). Người bảo trì cần bật GitHub Pages (README mục "CI và deploy") |
+| R1 | Thiết kế lại giao diện, nền tảng: màu, font tự chứa, biểu tượng, thành phần vuông, 3 khung trang, thanh bên (cả chế độ phụ huynh), Landing, Chào hỏi 4 bước, Phòng robot | Xong trên nhánh `feat/ui-revamp`, merge vào `main` cùng R3 (2026-10-28), chưa push |
+| R2 | Thiết kế lại giao diện, màn hình học: Bản đồ học, thẻ lý thuyết, mọi dạng bài, theme CodeMirror sáng, trạm ôn, ôn tập, bài luyện, kiểm tra, kết quả, hoạt cảnh tiến hóa | Xong trên nhánh `feat/ui-revamp`, merge vào `main` cùng R3 (2026-10-28), chưa push |
+| R3 | Thiết kế lại giao diện, màn hình còn lại: Cửa hàng, Sổ thành tích, Sao lưu, màn hình PIN và 5 mục khu phụ huynh, màn hình lỗi, gallery, trang Hướng dẫn | Xong, người bảo trì đã thử bằng mắt và merge vào `main` (2026-10-28), chưa push |
 
 Tài liệu:
 
 - Spec (bắt buộc tuân theo): `docs/superpowers/specs/2026-10-06-py-pet-design.md`
 - Kế hoạch đã chạy: `docs/superpowers/plans/2026-10-06-m1-lat-cat-doc.md`, `docs/superpowers/plans/2026-10-06-m2-vong-choi-pet.md`, `docs/superpowers/plans/2026-10-06-m3a-on-tap-thanh-thao.md`, `docs/superpowers/plans/2026-10-06-m3b-kiem-tra-tien-hoa.md`, `docs/superpowers/plans/2026-10-06-m4a-cua-hang-nghi.md`, `docs/superpowers/plans/2026-10-06-m4b-khu-phu-huynh.md`, `docs/superpowers/plans/2026-10-06-m5a-noi-dung-giai-doan-1.md`, `docs/superpowers/plans/2026-10-07-m5b-noi-dung-giai-doan-2.md`, `docs/superpowers/plans/2026-10-07-m5c-noi-dung-giai-doan-3.md`, `docs/superpowers/plans/2026-10-07-m5d-noi-dung-giai-doan-4.md`, `docs/superpowers/plans/2026-10-07-m6a-hinh-robot.md`, `docs/superpowers/plans/2026-10-07-m6b-ci-loi.md`
+- Thiết kế lại giao diện: tài liệu thiết kế `docs/superpowers/specs/2026-10-27-ui-revamp-design.md` (mockup trong `docs/superpowers/specs/ui-revamp-mockups/`); kế hoạch `docs/superpowers/plans/2026-10-27-r1-nen-tang-giao-dien.md`, `docs/superpowers/plans/2026-10-27-r2-man-hinh-hoc.md`, `docs/superpowers/plans/2026-10-27-r3-man-hinh-con-lai.md`; ledger `docs/superpowers/ledgers/r1-sdd-ledger.md`, `docs/superpowers/ledgers/r2-sdd-ledger.md`, `docs/superpowers/ledgers/r3-sdd-ledger.md`
 - Sổ ghi (ledger) của từng mốc, gồm mọi phán quyết và finding nhỏ đã hoãn: `docs/superpowers/ledgers/m1-sdd-ledger.md`, `docs/superpowers/ledgers/m2-sdd-ledger.md`, `docs/superpowers/ledgers/m3a-sdd-ledger.md`, `docs/superpowers/ledgers/m3b-sdd-ledger.md`, `docs/superpowers/ledgers/m4a-sdd-ledger.md`, `docs/superpowers/ledgers/m4b-sdd-ledger.md`, `docs/superpowers/ledgers/m5a-sdd-ledger.md`, `docs/superpowers/ledgers/m5b-sdd-ledger.md`, `docs/superpowers/ledgers/m5c-sdd-ledger.md`, `docs/superpowers/ledgers/m5d-sdd-ledger.md`, `docs/superpowers/ledgers/m6a-sdd-ledger.md`, `docs/superpowers/ledgers/m6b-sdd-ledger.md`
 - Quyết định Claude tự chốt khi chạy liên tục các mốc, cần người bảo trì xem lại: `docs/superpowers/DECISIONS.md`
 
@@ -40,6 +44,13 @@ Tài liệu:
 ## Bản đầu đã đủ các mốc M1 đến M6. Việc tiếp theo
 
 - Người bảo trì: thử app bằng mắt (`npm run dev`, trang `#/gallery` ở bản dev), duyệt lời văn nội dung (`docs/superpowers/content-stage-1.md` đến `-4.md`), xem lại `docs/superpowers/DECISIONS.md`, bật GitHub Pages, rồi cho học sinh dùng thử theo `docs/manual-test-checklist.md` (spec 11.6).
+
+## Thiết kế lại giao diện (R1 đến R3) đã xong. Việc tiếp theo
+
+1. Dọn CSS chung: các quy tắc cũ còn lại trong `src/styles.css`; 1 hook tab dùng chung cho Cửa hàng, khu phụ huynh và Bản đồ học (Bản đồ chưa bỏ qua Alt, Ctrl, Cmd khi bấm mũi tên); chú thích nổi của huy hiệu và ô bản đồ đóng được bằng Esc (WCAG 1.4.13); chuyển các quy tắc dùng chung (`.table`, `.table-scroll`, `.tag`, `.link-button`, `button.danger`, ô chọn file) vào `src/styles/base.css` và thêm tiền tố cho các lớp trang (`.form`, `.forms`, `.badge`, `.big`, `.page`). Danh sách đủ ở cuối `docs/superpowers/ledgers/r3-sdd-ledger.md` và các dòng `minor (deferred)` của ledger R1, R2, R3.
+2. Phụ huynh duyệt lời văn các câu đã sửa trong trang Hướng dẫn (mục "Trang Hướng dẫn: câu đã sửa ở mốc R3" bên dưới).
+3. Người bảo trì xem lại các quyết định Claude tự chốt: mục 13 của tài liệu thiết kế và mục "Quyết định thiết kế" của 3 kế hoạch R1, R2, R3.
+4. Push `main` khi người bảo trì yêu cầu (push vào `main` sẽ deploy GitHub Pages).
 
 ## Việc tồn đọng cho bản sau
 
