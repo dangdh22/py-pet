@@ -51,7 +51,8 @@ describe("useRovingTabs", () => {
   test("ArrowRight selects and focuses the next tab and wraps from the last to the first", () => {
     render(<Tabs />);
     tab("One").focus();
-    fireEvent.keyDown(tab("One"), { key: "ArrowRight" });
+    // `false` is "the default action was prevented": the browser does not scroll the page with the arrow.
+    expect(fireEvent.keyDown(tab("One"), { key: "ArrowRight" })).toBe(false);
     expect(tab("Two")).toHaveAttribute("aria-selected", "true");
     expect(tab("Two")).toHaveFocus();
     expect(tab("Two")).toHaveAttribute("tabindex", "0");
@@ -68,12 +69,23 @@ describe("useRovingTabs", () => {
   test("Home and End go to the first and the last tab", () => {
     render(<Tabs />);
     tab("One").focus();
-    fireEvent.keyDown(tab("One"), { key: "End" });
+    expect(fireEvent.keyDown(tab("One"), { key: "End" })).toBe(false);
     expect(tab("Three")).toHaveAttribute("aria-selected", "true");
     expect(tab("Three")).toHaveFocus();
-    fireEvent.keyDown(tab("Three"), { key: "Home" });
+    expect(fireEvent.keyDown(tab("Three"), { key: "Home" })).toBe(false);
     expect(tab("One")).toHaveAttribute("aria-selected", "true");
     expect(tab("One")).toHaveFocus();
+  });
+
+  test("a click on a tab selects it and moves the focus to it", () => {
+    render(<Tabs />);
+    // A click on a button does not focus it in jsdom: the focus comes from `select`.
+    expect(tab("One")).not.toHaveFocus();
+    fireEvent.click(tab("Three"));
+    expect(tab("Three")).toHaveAttribute("aria-selected", "true");
+    expect(tab("Three")).toHaveFocus();
+    expect(tab("Three")).toHaveAttribute("tabindex", "0");
+    expect(tab("One")).toHaveAttribute("aria-selected", "false");
   });
 
   test("a vertical list answers to ArrowDown and ArrowUp and ignores ArrowRight", () => {

@@ -1,7 +1,8 @@
 /**
- * The tab that a key moves to in a tab list that follows the focus (the shop tabs, the parent tabs), or null when the key
- * is not one of the list's keys. A row of tabs answers to ArrowLeft and ArrowRight, a column to ArrowUp and ArrowDown;
- * both wrap around, and Home and End go to the first and the last tab.
+ * The tab that a key moves to in a tab list that follows the focus, or null when the key is not one of the list's keys.
+ * `useRovingTabs` uses it for the shop tabs, the tabs of the parent area and the stage tabs of the map. A row of tabs
+ * answers to ArrowLeft and ArrowRight, a column to ArrowUp and ArrowDown; both wrap around, and Home and End go to the
+ * first and the last tab.
  */
 export function tabKeyTarget(
   key: string,

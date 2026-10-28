@@ -60,11 +60,26 @@ describe("design tokens", () => {
 
 const RAW_COLOR = /#[0-9a-f]{3,8}\b|\b(?:rgba?|hsla?)\(/i;
 // The room scene is a drawing: its palette is declared in `room.css`, as variables, with raw colors. The line may only declare 1 of these
-// 11 names, and nothing but a comment may follow it.
+// 11 names, and nothing but 1 closed comment may follow it (a `/*` that stays open, or a declaration after the comment, is refused).
 const SCENE_PALETTE = "wall|wall-stripe|baseboard|floor|floor-seam|sky|sky-low|sea|sea-deep|sand|scene-ink";
-const COLOR_VARIABLE = new RegExp(`^\\s*--(?:${SCENE_PALETTE}):\\s*#[0-9a-f]{3,8};\\s*(?:\\/\\*.*)?$`, "i");
+const COLOR_VARIABLE = new RegExp(`^\\s*--(?:${SCENE_PALETTE}):\\s*#[0-9a-f]{3,8};\\s*(?:\\/\\*(?:(?!\\*\\/).)*\\*\\/)?\\s*$`, "i");
 // The only round shape: the glow behind the new form in the evolution show (a sheet and a selector).
 const ROUND_SHAPES = [["evolution.css", ".evo-halo"]];
+
+describe("the line that may hold a raw color in room.css", () => {
+  test.each(["  --wall: #fff;", "  --floor: #d9c8a9; /* the planks */", "  --sky: #aee3f9;   "])("accepts %j", (line) => {
+    expect(COLOR_VARIABLE.test(line)).toBe(true);
+  });
+
+  test.each([
+    ["a declaration after the comment", "  --wall: #fff; /* x */ color: #000;"],
+    ["a comment that stays open", "  --wall: #fff; /* x"],
+    ["a declaration after the value", "  --wall: #fff; color: #000;"],
+    ["a name outside the palette", "  --color: #fff;"],
+  ])("refuses %s", (_name, line) => {
+    expect(COLOR_VARIABLE.test(line)).toBe(false);
+  });
+});
 
 // Every sheet but `tokens.css` takes its colors from the tokens (a tint is a color-mix of a token) and has square corners only.
 describe.each(cssFiles().filter((file) => basename(file) !== "tokens.css"))("%s", (file) => {

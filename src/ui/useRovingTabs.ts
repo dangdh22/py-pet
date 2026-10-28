@@ -17,6 +17,7 @@ export function useRovingTabs({
   /** The index of the tab that is shown. */
   current: number;
   orientation: "horizontal" | "vertical";
+  /** Shows the tab at `index`. It is called only with an index in `0..count-1` (MapScreen relies on this: it reads `model.stages[index]`). */
   onSelect(index: number): void;
 }) {
   const tabs = useRef<(HTMLButtonElement | null)[]>([]);

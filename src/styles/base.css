@@ -126,7 +126,9 @@ input[type="file"]::file-selector-button {
   cursor: pointer;
   transition: transform 0.08s ease-out, box-shadow 0.08s ease-out;
 }
-/* The 3 states of a `.small` button: hover lifts by 1 px, press sinks by 2 px, the keyboard focus is a 3 px ring. */
+/* The 3 states of a `.small` button: hover lifts by 1 px, press sinks by 2 px, the keyboard focus is a 3 px ring. The focus rule repeats
+   the global `:focus-visible` ring on purpose: the file button sits inside the input, so the ring is set here, with the other 2 states of
+   the button. */
 input[type="file"]:not(:disabled)::file-selector-button:hover { transform: translate(-1px, -1px); box-shadow: var(--shadow); }
 input[type="file"]:not(:disabled)::file-selector-button:active { transform: translate(2px, 2px); box-shadow: var(--shadow-press); }
 input[type="file"]:focus-visible { outline: 3px solid var(--primary); outline-offset: 2px; }
